@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+env/
+ENV/
+.venv
+data/
+*.log
+logs/
+.DS_Store
+chrome_debug/
+.env
+parsed/
+README.md
+.idea
+.vscode
