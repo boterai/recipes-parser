@@ -27,7 +27,7 @@ class Page(BaseModel):
     dish_name: Optional[str] = None  # VARCHAR(500) - название блюда
     image_blob: Optional[bytes] = None  # BLOB - бинарные данные изображения
     nutrition_info: Optional[str] = None  # TEXT - JSON с питательной ценностью
-    rating: Optional[Decimal] = Field(None, decimal_places=2)  # DECIMAL(3,2)
+    rating: Optional[Decimal] = None  # DECIMAL(3,2)
     author: Optional[str] = None  # VARCHAR(255)
     category: Optional[str] = None  # VARCHAR(255)
     prep_time: Optional[str] = None  # VARCHAR(100) - "30 minutes"
@@ -37,7 +37,7 @@ class Page(BaseModel):
     difficulty_level: Optional[str] = None  # VARCHAR(50) - "easy", "medium", "hard"
     
     # Оценка достоверности
-    confidence_score: Optional[Decimal] = Field(default=Decimal('0.00'), decimal_places=2)
+    confidence_score: Optional[Decimal] = Field(default=Decimal('0.00'))
     is_recipe: bool = False
     
     # Метаданные
@@ -48,4 +48,3 @@ class Page(BaseModel):
         json_encoders = {
             Decimal: lambda v: float(v) if v is not None else None
         }
-

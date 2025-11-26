@@ -4,13 +4,12 @@
 """
 
 import sys
-import argparse
 from pathlib import Path
 
 # Добавление корневой директории в PYTHONPATH
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.stage2_analyse.analyse import RecipeAnalyzer
+from src.stages.analyse import RecipeAnalyzer
 
 
 def main():

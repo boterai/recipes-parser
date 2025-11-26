@@ -2,24 +2,24 @@
 Анализ HTML страниц с использованием ChatGPT API для определения полноты данных рецепта
 """
 
+import json
 import os
 import logging
-import json
 import time
 from pathlib import Path
 from typing import Optional, Any
 from decimal import Decimal
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
-import requests
 from dotenv import load_dotenv
 import sqlalchemy
 
 if __name__ == "__main__":
     import sys
-    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 from src.common.database import DatabaseManager
+from src.common.gpt_client import GPTClient
 
 # Загрузка переменных окружения
 load_dotenv()
@@ -31,13 +31,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# OpenAI API настройки
-GPT_API_KEY = os.getenv('GPT_API_KEY')
-GPT_PROXY = os.getenv('PROXY', None)
-GPT_MODEL_MINI = os.getenv('GPT_MODEL_MINI', 'gpt-4o-mini') # gpt-4o-mini
-
-GPT_API_URL = "https://api.openai.com/v1/chat/completions"
-
 
 class RecipeAnalyzer:
     """Анализатор HTML страниц для извлечения данных рецептов"""
@@ -48,84 +41,76 @@ class RecipeAnalyzer:
         if not self.db.connect():
             raise ConnectionError("Не удалось подключиться к БД")
         
+        self.gpt_client = GPTClient()
         logger.info("RecipeAnalyzer инициализирован")
     
-    def analyze_title_with_gpt(self, title: str, url: str) -> dict[str, Any]: # TODO: отпарвить на анлиз сразу все ссылки, а не по одной
+    def analyze_titles_with_gpt(self, pages: dict[int, dict[str, str]]) -> list[int]:
         """
-        Быстрый анализ заголовка страницы для определения вероятности рецепта
+        Быстрый анализ заголовков страниц для определения вероятности рецепта
         
         Args:
-            title: Заголовок страницы
-            url: URL страницы
+            pages: Словарь формата {page_id: {"url": url, "title": title}}
             
         Returns:
-            Словарь с результатами: is_likely_recipe, confidence
+            Список page_id, которые вероятно являются рецептами
         """
-        prompt = f"""Проанализируй заголовок веб-страницы и определи, является ли это страницей с рецептом блюда (только одного блюда, а не короткий список).
+        if not pages:
+            logger.warning("Пустой список страниц для анализа")
+            return []
+    
+        
+        # Создаем текст для анализа (построчно для лучшей читаемости)
+        pages_text = json.dumps(pages, indent=2, ensure_ascii=False)
+        
+        system_prompt = """Ты эксперт по классификации веб-страниц кулинарных сайтов. 
+Твоя задача - определить, какие страницы содержат РЕЦЕПТ ОДНОГО КОНКРЕТНОГО БЛЮДА.
+Отвечаешь ТОЛЬКО валидным JSON."""
+        
+        user_prompt = f"""Проанализируй заголовки и URL веб-страниц. Определи, какие страницы являются рецептами ОДНОГО блюда.
 
-URL: {url}
-ЗАГОЛОВОК: {title}
+СТРАНИЦЫ ДЛЯ АНАЛИЗА:
+{pages_text}
 
-Верни ответ ТОЛЬКО в формате JSON:
+КРИТЕРИИ РЕЦЕПТА (должно быть название конкретного блюда):
+✓ ДА - это РЕЦЕПТ:
+  - "Chocolate Chip Cookies Recipe"
+  - "How to Make Perfect Lasagna"
+  - "Beef Stew - Easy Recipe"
+  - "Пирог с яблоками - рецепт"
+  - URL содержит: /recipe/, /recipes/dish-name
+
+✗ НЕТ - это НЕ рецепт:
+  - "10 Best Desserts" (список рецептов)
+  - "Dessert Recipes" (категория)
+  - "About Us", "Contact", "Blog"
+  - "Gallery", "News", "Article"
+  - URL содержит: /category/, /about, /contact, /tag/, /author/
+
+Верни ТОЛЬКО JSON с ID страниц, которые являются рецептами:
 {{
-    "is_likely_recipe": true/false,
-    "confidence": 0-100,
+    "recipe_ids": [1, 5, 12]
 }}
 
-Признаки рецепта:
-- Название блюда в заголовке
-- Слова: recipe, рецепт, how to make, cook, приготовить
-- НЕ рецепт: about, contact, login, category, gallery, news, article"""
+ВАЖНО: 
+- Возвращай массив чисел (ID)
+- Если НЕТ рецептов - верни пустой массив []
+- НЕ включай списки рецептов, категории, служебные страницы"""
 
         try:
-            headers = {
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {GPT_API_KEY}"
-            }
-            
-            payload = {
-                "model": GPT_MODEL_MINI,
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": "Ты эксперт по классификации веб-страниц с рецептами. Отвечаешь только валидным JSON."
-                    },
-                    {
-                        "role": "user",
-                        "content": prompt
-                    }
-                ],
-                "temperature": 0.1,
-                "max_tokens": 200
-            }
-            
-            proxies = {"http": GPT_PROXY, "https": GPT_PROXY} if GPT_PROXY else None
-            response = requests.post(
-                GPT_API_URL,
-                headers=headers,
-                json=payload,
-                timeout=30,
-                proxies=proxies
+            result = self.gpt_client.request(
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                temperature=0.1,
             )
             
-            response.raise_for_status()
-            response_data = response.json()
-            result_text = response_data['choices'][0]['message']['content'].strip()
+            recipe_ids = result.get("recipe_ids", [])
+            logger.info(f"GPT определил {len(recipe_ids)} рецептов из {len(pages)} страниц: {recipe_ids}")
             
-            # Очистка от markdown
-            if result_text.startswith('```json'):
-                result_text = result_text[7:]
-            if result_text.startswith('```'):
-                result_text = result_text[3:]
-            if result_text.endswith('```'):
-                result_text = result_text[:-3]
-            
-            result = json.loads(result_text.strip())
-            return result
+            return recipe_ids
             
         except Exception as e:
-            logger.error(f"Ошибка анализа заголовка: {e}")
-            return {"is_likely_recipe": False, "confidence": 0, "reason": f"Error: {str(e)}"}
+            logger.error(f"Ошибка анализа заголовков: {e}")
+            return []
     
     def extract_text_from_html(self, html_path: str) -> Optional[str]:
         """
@@ -172,7 +157,9 @@ URL: {url}
         Returns:
             Словарь с результатами анализа
         """
-        prompt = f"""Проанализируй HTML страницу и определи, является ли это страницей рецепта.
+        system_prompt = "Ты эксперт по анализу веб-страниц с рецептами. Возвращаешь только валидный JSON."
+        
+        user_prompt = f"""Проанализируй HTML страницу и определи, является ли это страницей рецепта.
 Если это рецепт, извлеки следующие данные:
 
 URL: {url}
@@ -187,83 +174,33 @@ URL: {url}
     "dish_name": "название блюда или null",
     "ingredients": "список ингредиентов в текстовом формате или null",
     "step_by_step": "пошаговая инструкция приготовления или null",
+    "prep_time": "время подготовки (например, '15 minutes') или null",
+    "cook_time": "время приготовления (например, '30 minutes') или null",
+    "total_time": "общее время (например, '45 minutes') или null",
+    "difficulty_level": "уровень сложности (Easy/Medium/Hard) или null",
+    "category": "категория/тип блюда (например, 'Dessert', 'Main Course') или null",
+    "nutrition_info": "информация о питательной ценности в текстовом формате или null"
 }}
 
 ВАЖНО:
 - Если поле не найдено, ставь null
 - is_recipe = true только если есть ingredients И step_by_step
-- confidence_score зависит от полноты данных (100 = все поля заполнены полоностью и это является рецептом)
+- confidence_score зависит от полноты данных (100 = все поля заполнены полностью и это является рецептом)
+- Для времени используй единицы измерения из текста (minutes, hours и т.д.)
+- rating должен быть числом (не строкой), если найден
 - Возвращай ТОЛЬКО валидный JSON без комментариев"""
 
         try:
-            headers = {
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {GPT_API_KEY}"
-            }
-            
-            payload = {
-                "model": "gpt-4o-mini",
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": "Ты эксперт по анализу веб-страниц с рецептами. Возвращаешь только валидный JSON."
-                    },
-                    {
-                        "role": "user",
-                        "content": prompt
-                    }
-                ],
-                "temperature": 0.1,
-            }
-
-            proxies = None
-            if GPT_PROXY:
-                proxies = {
-                    "http": GPT_PROXY,
-                    "https": GPT_PROXY
-                }
-            
-            response = requests.post(
-                GPT_API_URL,
-                headers=headers,
-                json=payload,
-                proxies=proxies
+            result = self.gpt_client.request(
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                model="gpt-4o-mini"
             )
-            
-            response.raise_for_status()
-            
-            response_data = response.json()
-            result_text = response_data['choices'][0]['message']['content'].strip()
-            
-            # Очистка от markdown форматирования если есть
-            if result_text.startswith('```json'):
-                result_text = result_text[7:]
-            if result_text.startswith('```'):
-                result_text = result_text[3:]
-            if result_text.endswith('```'):
-                result_text = result_text[:-3]
-            
-            result = json.loads(result_text.strip())
             
             logger.info(f"GPT анализ завершен: is_recipe={result.get('is_recipe')}, confidence={result.get('confidence_score')}%")
             
             return result
             
-        except json.JSONDecodeError as e:
-            logger.error(f"Ошибка парсинга JSON от GPT: {e}")
-            logger.error(f"Ответ GPT: {result_text if 'result_text' in locals() else 'N/A'}")
-            return {
-                "is_recipe": False,
-                "confidence_score": 0,
-                "error": "JSON decode error"
-            }
-        except requests.exceptions.RequestException as e:
-            logger.error(f"Ошибка HTTP запроса к GPT: {e}")
-            return {
-                "is_recipe": False,
-                "confidence_score": 0,
-                "error": str(e)
-            }
         except Exception as e:
             logger.error(f"Ошибка запроса к GPT: {e}")
             return {
@@ -364,14 +301,16 @@ URL: {url}
         # Обновление БД
         return self.update_page_analysis(page_id, analysis)
     
-    # TODO  make filtrarion with one request, not multiple
-    def filter_pages_by_titles(self, site_id: Optional[int] = None, limit: Optional[int] = None) -> list[int]:
+    def filter_pages_by_titles(self, site_id: Optional[int] = None, limit: Optional[int] = None) -> tuple[list[int], list[int]]:
         """
         Предварительная фильтрация страниц по заголовкам
         
         Args:
             site_id: ID сайта (опционально)
             limit: Максимальное количество страниц для анализа
+        Returns:
+            Список page_id, которые вероятно являются рецептами, которые не являются рецептами
+        
         """
         session = self.db.get_session()
         
@@ -396,33 +335,69 @@ URL: {url}
             
             total = len(pages)
             logger.info(f"Найдено {total} страниц для анализа заголовков")
+
+            pages_to_analyze = {}
+            recipe_ids = []
+            not_recipe_ids = set()
+
             
-            receipes = []
-            
-            for idx, (page_id, url, title) in enumerate(pages, 1):
-                logger.info(f"\n[{idx}/{total}] Анализ заголовка: {title}")
-                
-                # Анализ заголовка
-                result = self.analyze_title_with_gpt(title, url)
-                
-                if result.get('is_likely_recipe'):
-                    receipes.append(page_id)
-                    logger.info(f"  ✓ ВЕРОЯТНО РЕЦЕПТ (уверенность: {result.get('confidence')}%) - {result.get('reason')}")
-                else:
-                    logger.info(f"  ✗ Не рецепт (уверенность: {result.get('confidence')}%) - {result.get('reason')}")
-                
-                # Пауза между запросами
-                if idx < total:
-                    time.sleep(1)
+            for page_id, url, title in pages:
+                not_recipe_ids.add(page_id)
+                pages_to_analyze[page_id] = {"title": title, "url": url}
+                if len(pages_to_analyze) >= 15: # анализируем загоовки батчами по 15 штук
+                    ids = self.analyze_titles_with_gpt(pages_to_analyze)
+                    recipe_ids.extend(ids)
+                    not_recipe_ids.difference_update(ids)
+                    pages_to_analyze = {}
+
+            logger.info(f"После фильтрации по заголовкам осталось {len(recipe_ids)} вероятных рецептов")
+            return recipe_ids, list(not_recipe_ids)
             
         except Exception as e:
             logger.error(f"Ошибка при анализе заголовков: {e}")
         finally:
             session.close()
 
-        return receipes
-    # [15, 18, 19, 24, 29]
-    def analyze_all_pages(self, site_id: Optional[int] = None, limit: Optional[int] = None, filter_by_title: bool = False):
+        return [], list(not_recipe_ids)
+
+    def mark_as_non_recipes(self, page_ids: list[int]) -> int:
+        """
+        Пометка страниц как не являющихся рецептами
+        пометка is_recipe = FALSE, confidence_score = 10 тк вывод сделан только на оснвоании заглоовка
+        
+        Args:
+            page_ids: Список ID страниц
+            
+        Returns:
+            Количество обновленных записей
+        """
+        if not page_ids:
+            return 0
+        
+        session = self.db.get_session()
+        
+        try:
+            sql = """
+                UPDATE pages
+                SET is_recipe = FALSE,
+                    confidence_score = 10
+                WHERE id IN :page_ids
+            """
+            result = session.execute(sqlalchemy.text(sql), {"page_ids": tuple(page_ids)})
+            session.commit()
+            
+            updated_count = result.rowcount
+            logger.info(f"Помечено {updated_count} страниц как не рецепты")
+            return updated_count
+            
+        except Exception as e:
+            session.rollback()
+            logger.error(f"Ошибка при пометке не рецептов: {e}")
+            return 0
+        finally:
+            session.close()
+
+    def analyze_all_pages(self, site_id: Optional[int] = None, limit: Optional[int] = None, filter_by_title: bool = False) -> int:
         """
         Анализ всех страниц (или только указанного сайта)
         
@@ -430,11 +405,16 @@ URL: {url}
             site_id: ID сайта (опционально)
             limit: Максимальное количество страниц для анализа
             filter_by_title: Если True, сначала фильтрует по заголовкам
+
+        Returns:
+            Количество страниц с рецептами после анализа
         """
         session = self.db.get_session()
+        recipe_page_ids = []
+        no_recipe_ids = []
         if filter_by_title:
             logger.info("Начинается фильтрация страниц по заголовкам...")
-            recipe_page_ids = self.filter_pages_by_titles(site_id=site_id, limit=limit)
+            recipe_page_ids, no_recipe_ids = self.filter_pages_by_titles(site_id=site_id, limit=limit)
             logger.info(f"Фильтрация завершена. Найдено {len(recipe_page_ids)} вероятных рецептов по заголовкам.")
         
         try:
@@ -450,10 +430,10 @@ URL: {url}
             if site_id:
                 sql += f" AND site_id = {site_id}"
             
-            if limit:
+            if limit and not recipe_page_ids:
                 sql += f" LIMIT {limit}"
 
-            if filter_by_title and recipe_page_ids:
+            if filter_by_title and recipe_page_ids: # фильтрация по ID из заголовков если не удаось получить из заголовка хоть 1 рецепт, то првоеряем все подярд
                 ids_str = ','.join(map(str, recipe_page_ids))
                 sql += f" AND id IN ({ids_str})"
             
@@ -478,6 +458,7 @@ URL: {url}
                 if self.analyze_page(page_id, html_path, url):
                     success_count += 1
                     
+                    session.commit()
                     # Проверка, является ли рецептом
                     check_sql = "SELECT is_recipe FROM pages WHERE id = :page_id"
                     is_recipe = session.execute(
@@ -492,16 +473,19 @@ URL: {url}
                 if idx < total:
                     time.sleep(2)  # 2 секунды между запросами
             
+            self.mark_as_non_recipes(no_recipe_ids)
             logger.info(f"\n{'='*60}")
-            logger.info(f"Анализ завершен:")
             logger.info(f"  Обработано: {success_count}/{total}")
             logger.info(f"  Найдено рецептов: {recipe_count}")
             logger.info(f"{'='*60}")
+            return recipe_count
             
         except Exception as e:
             logger.error(f"Ошибка при анализе страниц: {e}")
         finally:
             session.close()
+        
+        return 0
 
     def analyse_recipe_page_pattern(self, site_id: int, recalculate: bool = False) -> str:
         """
@@ -509,6 +493,7 @@ URL: {url}
         
         Args:
             site_id: ID сайта
+            recalculate: Пересчитать паттерн, даже если он уже есть
             
         Returns:
             Regex паттерн для поиска страниц с рецептами или пустая строка если невозможно
@@ -555,7 +540,9 @@ URL: {url}
             # Формирование запроса к GPT
             urls_text = "\n".join(paths)
             
-            prompt = f"""Проанализируй список URL страниц с рецептами и создай универсальные regex паттерны для их поиска.
+            system_prompt = "Ты эксперт по regex и анализу URL структур. Создаёшь точные паттерны для поиска страниц."
+            
+            user_prompt = f"""Проанализируй список URL страниц с рецептами и создай универсальные regex паттерны для их поиска.
 
 ПРИМЕРЫ URL С РЕЦЕПТАМИ:
 {urls_text}
@@ -583,61 +570,24 @@ URL: {url}
 - Если есть разные структуры - возвращай несколько паттернов
 - Возвращай ТОЛЬКО валидный JSON без markdown"""
 
-            headers = {
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {GPT_API_KEY}"
-            }
-            
-            payload = {
-                "model": "gpt-4.1",
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": "Ты эксперт по regex и анализу URL структур. Создаёшь точные паттерны для поиска страниц."
-                    },
-                    {
-                        "role": "user",
-                        "content": prompt
-                    }
-                ],
-                "temperature": 0.1,
-                "max_tokens": 500
-            }
-            
-            proxies = {"http": GPT_PROXY, "https": GPT_PROXY} if GPT_PROXY else None
-            response = requests.post(
-                GPT_API_URL,
-                headers=headers,
-                json=payload,
-                timeout=60,
-                proxies=proxies
+            result = self.gpt_client.request(
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                model="gpt-4.1",
+                max_tokens=500,
+                timeout=60
             )
-            
-            response.raise_for_status()
-            response_data = response.json()
-            result_text = response_data['choices'][0]['message']['content'].strip()
-            
-            # Очистка от markdown
-            if result_text.startswith('```json'):
-                result_text = result_text[7:]
-            if result_text.startswith('```'):
-                result_text = result_text[3:]
-            if result_text.endswith('```'):
-                result_text = result_text[:-3]
-            
-            result = json.loads(result_text.strip())
             
             patterns = result.get('patterns', [])
             if not patterns:
                 logger.warning("GPT: Не удалось создать паттерны")
-                return []
+                return ""
             
             confidence = result.get('confidence', 0)
             explanation = result.get('explanation', '')
             
             logger.info(f"Создано {len(patterns)} regex паттернов (уверенность {confidence}%)")
             logger.info(f"Общее объяснение: {explanation}")
-            
             
             # Объединяем паттерны в один через | (OR)
             pattern = '|'.join(f'({p})' for p in patterns)
@@ -657,10 +607,6 @@ URL: {url}
             session.commit()
             logger.info(f"Паттерн сохранён в БД для сайта ID {site_id}")
             
-        except json.JSONDecodeError as e:
-            logger.error(f"Ошибка парсинга JSON от GPT: {e}")
-        except requests.exceptions.RequestException as e:
-            logger.error(f"Ошибка запроса к GPT: {e}")
         except Exception as e:
             logger.error(f"Ошибка при анализе шаблона страниц с рецептами: {e}")
             import traceback
@@ -670,7 +616,7 @@ URL: {url}
             
         return pattern
 
-    def delete_unused_data(self, site_id: int):
+    def cleanup_non_recipe_pages(self, site_id: int):
         """
         Удаление неиспользуемых данных из БД (например, страниц без HTML)
         """
@@ -679,7 +625,7 @@ URL: {url}
         try:
             # получить страницы, которые надо удалить 
             select_paths = "SELECT html_path, metadata_path FROM pages WHERE is_recipe = FALSE AND site_id = :site_id"
-            result = session.execute(sqlalchemy.text(select_paths, {"site_id": site_id}))
+            result = session.execute(sqlalchemy.text(select_paths), {"site_id": site_id})
             pages = result.fetchall()
 
             for html_path, metadata_path in pages:
@@ -720,8 +666,9 @@ def main():
     analyzer = RecipeAnalyzer()
 
     try:
-        #analyzer.delete_unused_data()
-        pattern = analyzer.analyse_recipe_page_pattern(site_id=1)
+        #analyzer.cleanup_non_recipe_pages(5)
+        #pages = analyzer.filter_pages_by_titles(4)
+        analyzer.analyze_all_pages(site_id=5, limit=15, filter_by_title=True)
         analyzer.analyze_all_pages(limit=None, filter_by_title=True)
     except KeyboardInterrupt:
         logger.info("\nПрервано пользователем")

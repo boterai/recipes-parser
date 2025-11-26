@@ -9,7 +9,7 @@ from pathlib import Path
 # Добавление корневой директории в PYTHONPATH
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.stage1_exploration import SiteExplorer
+from src.stages.parse import SiteExplorer
 
 # Настройка логирования
 logging.basicConfig(
@@ -32,7 +32,11 @@ def main():
     
     try:
         explorer.connect_to_chrome()
-        explorer.explore(max_urls=max_urls, max_depth=max_depth)
+        explorer.load_state()
+        explorer.explore(max_urls=3, max_depth=max_depth)
+
+        explorer.explore(max_urls=3, max_depth=max_depth)
+
     except KeyboardInterrupt:
         logger.info("\nПрервано пользователем")
     except Exception as e:

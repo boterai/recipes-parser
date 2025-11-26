@@ -13,6 +13,7 @@ class Site(BaseModel):
     id: Optional[int] = None
     name: str
     base_url: str
+    patterns: Optional[str] = None  # JSON строка с паттернами для страниц
     language: Optional[str] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
