@@ -93,6 +93,8 @@ class DatabaseManager:
                         total_time VARCHAR(100),
                         servings VARCHAR(50),
                         difficulty_level VARCHAR(50),
+                        description TEXT,
+                        notes TEXT,
                         
                         -- Оценка
                         confidence_score DECIMAL(5,2) DEFAULT 0.00,

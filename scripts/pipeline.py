@@ -32,11 +32,11 @@ def run_explorer(explorer:SiteExplorer, max_urls: int, max_depth: int):
     finally:
         explorer.close()
     
-MAX_PAGES = 150	
+MAX_PAGES = 100	
 BATCH_SIZE = 30
 # Добавить сохранения состояния между запусками
 def main():
-	url = "https://www.recipetineats.com/"
+	url = "https://www.marmiton.org/"
 	explorer = SiteExplorer(url, debug_mode=True, use_db=True)
 	
 	# предварительный запуск для просмотра сайта и получения хоть каких-то ссылок 

@@ -24,8 +24,8 @@ logger = logging.getLogger(__name__)
 
 def main():
     
-    url = "https://www.allrecipes.com/"
-    max_urls = 30
+    url = "https://www.gastronom.ru/"
+    max_urls = 50
     max_depth = 3
     
     explorer = SiteExplorer(url, debug_mode=True, use_db=True)
@@ -33,10 +33,7 @@ def main():
     try:
         explorer.connect_to_chrome()
         explorer.load_state()
-        explorer.explore(max_urls=3, max_depth=max_depth)
-
-        explorer.explore(max_urls=3, max_depth=max_depth)
-
+        explorer.explore(max_urls=max_urls, max_depth=max_depth)
     except KeyboardInterrupt:
         logger.info("\nПрервано пользователем")
     except Exception as e:

@@ -15,3 +15,4 @@ parsed/
 README.md
 .idea
 .vscode
+recipes/*

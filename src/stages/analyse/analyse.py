@@ -172,6 +172,7 @@ URL: {url}
     "is_recipe": true/false,
     "confidence_score": 0-100 (процент уверенности),
     "dish_name": "название блюда или null",
+    "description": "краткое описание рецепта/блюда или null",
     "ingredients": "список ингредиентов в текстовом формате или null",
     "step_by_step": "пошаговая инструкция приготовления или null",
     "prep_time": "время подготовки (например, '15 minutes') или null",
@@ -179,7 +180,8 @@ URL: {url}
     "total_time": "общее время (например, '45 minutes') или null",
     "difficulty_level": "уровень сложности (Easy/Medium/Hard) или null",
     "category": "категория/тип блюда (например, 'Dessert', 'Main Course') или null",
-    "nutrition_info": "информация о питательной ценности в текстовом формате или null"
+    "nutrition_info": "информация о питательной ценности в текстовом формате или null",
+    "notes": "дополнительные заметки, советы, замены ингредиентов или null"
 }}
 
 ВАЖНО:
@@ -194,7 +196,6 @@ URL: {url}
             result = self.gpt_client.request(
                 system_prompt=system_prompt,
                 user_prompt=user_prompt,
-                model="gpt-4o-mini"
             )
             
             logger.info(f"GPT анализ завершен: is_recipe={result.get('is_recipe')}, confidence={result.get('confidence_score')}%")
@@ -229,6 +230,7 @@ URL: {url}
                 "is_recipe": analysis.get("is_recipe", False),
                 "confidence_score": Decimal(str(analysis.get("confidence_score", 0))),
                 "dish_name": analysis.get("dish_name"),
+                "description": analysis.get("description"),
                 "ingredients": analysis.get("ingredients"),
                 "step_by_step": analysis.get("step_by_step"),
                 "prep_time": analysis.get("prep_time"),
@@ -239,7 +241,8 @@ URL: {url}
                 "author": analysis.get("author"),
                 "category": analysis.get("category"),
                 "rating": Decimal(str(analysis["rating"])) if analysis.get("rating") else None,
-                "nutrition_info": analysis.get("nutrition_info")
+                "nutrition_info": analysis.get("nutrition_info"),
+                "notes": analysis.get("notes")
             }
             
             # SQL запрос на обновление
@@ -248,6 +251,7 @@ URL: {url}
                     is_recipe = :is_recipe,
                     confidence_score = :confidence_score,
                     dish_name = :dish_name,
+                    description = :description,
                     ingredients = :ingredients,
                     step_by_step = :step_by_step,
                     prep_time = :prep_time,
@@ -258,7 +262,8 @@ URL: {url}
                     author = :author,
                     category = :category,
                     rating = :rating,
-                    nutrition_info = :nutrition_info
+                    nutrition_info = :nutrition_info,
+                    notes = :notes
                 WHERE id = :page_id
             """
             
@@ -397,7 +402,9 @@ URL: {url}
         finally:
             session.close()
 
-    def analyze_all_pages(self, site_id: Optional[int] = None, limit: Optional[int] = None, filter_by_title: bool = False) -> int:
+    def analyze_all_pages(self, site_id: Optional[int] = None, limit: Optional[int] = None, 
+                          filter_by_title: bool = False, recalculate: bool = False,
+                          page_ids: list = None) -> int:
         """
         Анализ всех страниц (или только указанного сайта)
         
@@ -405,7 +412,8 @@ URL: {url}
             site_id: ID сайта (опционально)
             limit: Максимальное количество страниц для анализа
             filter_by_title: Если True, сначала фильтрует по заголовкам
-
+            recalculate: Если True, пересчитывает анализ для уже обработанных страниц
+            page_ids: Список конкретных page_id для анализа (опционально)
         Returns:
             Количество страниц с рецептами после анализа
         """
@@ -423,14 +431,19 @@ URL: {url}
                 SELECT id, url, html_path
                 FROM pages
                 WHERE html_path IS NOT NULL
-                AND is_recipe = FALSE
-                AND confidence_score = 0
             """
+
+            if page_ids is not None:
+                ids_str = ','.join(map(str, page_ids))
+                sql += f" AND id IN ({ids_str})"
+
+            if recalculate is False:
+                sql += " AND is_recipe = FALSE AND confidence_score = 0"  # анализируем только неанализированные или помеченные как не рецепты
             
             if site_id:
                 sql += f" AND site_id = {site_id}"
             
-            if limit and not recipe_page_ids:
+            if limit and not recipe_page_ids and not page_ids:
                 sql += f" LIMIT {limit}"
 
             if filter_by_title and recipe_page_ids: # фильтрация по ID из заголовков если не удаось получить из заголовка хоть 1 рецепт, то првоеряем все подярд
@@ -661,14 +674,17 @@ URL: {url}
 
 
 def main():
-    """Главная функция"""
-    
-    analyzer = RecipeAnalyzer()
 
+    site_id = 5  # пример site_id для анализа
+    analyzer = RecipeAnalyzer()
+    session = analyzer.db.get_session()
+    results = session.execute(sqlalchemy.text("SELECT id from pages WHERE site_id = 5 AND is_recipe = TRUE AND id not in (139, 147) LIMIT 1"))
+    page_ids = [row[0] for row in results.fetchall()]
+    ids = [139, 147, 231]
     try:
-        #analyzer.cleanup_non_recipe_pages(5)
-        #pages = analyzer.filter_pages_by_titles(4)
-        analyzer.analyze_all_pages(site_id=5, limit=15, filter_by_title=True)
+        analyzer.analyze_all_pages(site_id=site_id, page_ids=page_ids, recalculate=True)
+
+        analyzer.analyze_all_pages(site_id=site_id, limit=15, filter_by_title=True)
         analyzer.analyze_all_pages(limit=None, filter_by_title=True)
     except KeyboardInterrupt:
         logger.info("\nПрервано пользователем")

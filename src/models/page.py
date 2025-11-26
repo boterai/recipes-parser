@@ -23,11 +23,12 @@ class Page(BaseModel):
     
     # Данные рецепта (NULL = отсутствует)
     ingredients: Optional[str] = None  # TEXT - JSON или список ингредиентов
+    description: Optional[str] = None  # TEXT - описание рецепта
     step_by_step: Optional[str] = None  # TEXT - JSON или текст с шагами
     dish_name: Optional[str] = None  # VARCHAR(500) - название блюда
     image_blob: Optional[bytes] = None  # BLOB - бинарные данные изображения
     nutrition_info: Optional[str] = None  # TEXT - JSON с питательной ценностью
-    rating: Optional[Decimal] = None  # DECIMAL(3,2)
+    rating: Optional[float] = None  # DECIMAL(3,2)
     author: Optional[str] = None  # VARCHAR(255)
     category: Optional[str] = None  # VARCHAR(255)
     prep_time: Optional[str] = None  # VARCHAR(100) - "30 minutes"
@@ -35,13 +36,30 @@ class Page(BaseModel):
     total_time: Optional[str] = None  # VARCHAR(100) - "1 hour 15 minutes"
     servings: Optional[str] = None  # VARCHAR(50) - "4 servings"
     difficulty_level: Optional[str] = None  # VARCHAR(50) - "easy", "medium", "hard"
+    notes: Optional[str] = None  # TEXT - дополнительные заметки или советы
+
     
     # Оценка достоверности
-    confidence_score: Optional[Decimal] = Field(default=Decimal('0.00'))
+    confidence_score: Optional[float] = Field(default=float('0.00'))
     is_recipe: bool = False
     
     # Метаданные
     created_at: Optional[datetime] = None
+
+    def to_json(self) -> dict:
+        """Преобразование модели в JSON-совместимый словарь"""
+        data = self.model_dump(mode='json', exclude_none=True)
+        return data
+        
+    def receipt_to_json(self) -> dict:
+        """Преобразование данных рецепта в JSON-совместимый словарь"""
+        recipe_fields = [
+            'dish_name', 'description', 'ingredients', 'step_by_step', 'nutrition_info',
+            'rating', 'category', 'prep_time', 'cook_time',
+            'total_time', 'servings', 'difficulty_level', 'notes'
+        ]
+        data = {field: getattr(self, field) for field in recipe_fields if getattr(self, field) is not None}
+        return data
     
     class Config:
         from_attributes = True
