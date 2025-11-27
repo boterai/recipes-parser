@@ -19,9 +19,9 @@ CREATE TABLE IF NOT EXISTS pages (
     title TEXT,
     language VARCHAR(10),
     html_path VARCHAR(500),
-    metadata_path VARCHAR(500),
     
     -- Данные рецепта (NULL = отсутствует)
+    ingredients_names TEXT, -- 100% обязательное поле
     ingredients TEXT, -- 100% обязательное поле
     step_by_step TEXT, -- 100% обязательное поле
     dish_name VARCHAR(500), -- 100 % обязательное поле
@@ -35,7 +35,10 @@ CREATE TABLE IF NOT EXISTS pages (
     total_time VARCHAR(100),
     servings VARCHAR(50),
     difficulty_level VARCHAR(50),
+    image_urls VARCHAR(1000),
     description TEXT,
+    notes TEXT,
+
     
     -- Оценка
     confidence_score DECIMAL(5,2) DEFAULT 0.00,

@@ -23,6 +23,7 @@ class Page(BaseModel):
     
     # Данные рецепта (NULL = отсутствует)
     ingredients: Optional[str] = None  # TEXT - JSON или список ингредиентов
+    ingredients_names: Optional[str] = None  # список названий ингредиентов
     description: Optional[str] = None  # TEXT - описание рецепта
     step_by_step: Optional[str] = None  # TEXT - JSON или текст с шагами
     dish_name: Optional[str] = None  # VARCHAR(500) - название блюда
@@ -37,6 +38,7 @@ class Page(BaseModel):
     servings: Optional[str] = None  # VARCHAR(50) - "4 servings"
     difficulty_level: Optional[str] = None  # VARCHAR(50) - "easy", "medium", "hard"
     notes: Optional[str] = None  # TEXT - дополнительные заметки или советы
+    image_url: Optional[str] = None  # TEXT - URL изображения
 
     
     # Оценка достоверности
@@ -56,7 +58,7 @@ class Page(BaseModel):
         recipe_fields = [
             'dish_name', 'description', 'ingredients', 'step_by_step', 'nutrition_info',
             'rating', 'category', 'prep_time', 'cook_time',
-            'total_time', 'servings', 'difficulty_level', 'notes'
+            'total_time', 'servings', 'difficulty_level', 'notes', 'ingredients_names'
         ]
         data = {field: getattr(self, field) for field in recipe_fields if getattr(self, field) is not None}
         return data

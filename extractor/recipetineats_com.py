@@ -4,41 +4,16 @@
 
 import sys
 from pathlib import Path
-import json
 import re
 from typing import Optional
-from bs4 import BeautifulSoup
 import os
-
+from extractor.base import BaseRecipeExtractor, process_directory
 # Добавление корневой директории в PYTHONPATH
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 
-class RecipeTinEatsExtractor:
+class RecipeTinEatsExtractor(BaseRecipeExtractor):
     """Экстрактор для recipetineats.com"""
-    
-    def __init__(self, html_path: str):
-        """
-        Args:
-            html_path: Путь к HTML файлу
-        """
-        self.html_path = html_path
-        with open(html_path, 'r', encoding='utf-8') as f:
-            self.soup = BeautifulSoup(f.read(), 'lxml')
-    
-    @staticmethod
-    def clean_text(text: str) -> str:
-        """Очистка текста от нечитаемых символов и нормализация"""
-        if not text:
-            return text
-        
-        # Удаляем Unicode символы типа ▢, □, ✓ и другие специальные символы
-        text = re.sub(r'[▢□✓✔▪▫●○■]', '', text)
-        # Удаляем лишние пробелы
-        text = re.sub(r'\s+', ' ', text)
-        # Убираем пробелы в начале и конце
-        text = text.strip()
-        return text
     
     @staticmethod
     def normalize_time(time_str: str) -> str:
@@ -215,7 +190,7 @@ class RecipeTinEatsExtractor:
         """Извлечение уровня сложности"""
         # На этом сайте обычно нет явного указания сложности
         # Можем попробовать определить по времени или оставить как "Easy"
-        return "Easy"
+        return None
     
     def extract_description(self) -> Optional[str]:
         """Извлечение описания рецепта"""
@@ -272,68 +247,17 @@ class RecipeTinEatsExtractor:
         }
 
 
-def process_html_file(html_path: str, output_path: Optional[str] = None) -> dict:
-    """
-    Обработка одного HTML файла
-    
-    Args:
-        html_path: Путь к HTML файлу
-        output_path: Путь для сохранения JSON (если None, то рядом с HTML)
-    
-    Returns:
-        Извлеченные данные
-    """
-    extractor = RecipeTinEatsExtractor(html_path)
-    data = extractor.extract_all()
-    
-    # Определяем путь для сохранения
-    if output_path is None:
-        output_path = html_path.replace('.html', '_extracted.json')
-    
-    # Сохраняем результат
-    with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
-    
-    print(f"✓ Обработан: {html_path}")
-    print(f"  Сохранен: {output_path}")
-    
-    return data
-
-
-def process_directory(directory_path: str):
-    """
-    Обработка всех HTML файлов в директории
-    
-    Args:
-        directory_path: Путь к директории с HTML файлами
-    """
-    from pathlib import Path
-    
-    dir_path = Path(directory_path)
-    html_files = list(dir_path.glob('*.html'))
-    
-    print(f"Найдено {len(html_files)} HTML файлов")
-    print("=" * 60)
-    
-    for html_file in html_files:
-        try:
-            process_html_file(str(html_file))
-        except Exception as e:
-            print(f"✗ Ошибка при обработке {html_file.name}: {e}")
-    
-    print("=" * 60)
-    print(f"Обработка завершена!")
-
 
 def main():
     """Пример использования"""
     
     recipes_dir = os.path.join("recipes", "recipetineats_com")
     if os.path.exists(recipes_dir) and os.path.isdir(recipes_dir):
-        process_directory(str(recipes_dir))
-    else:
-        print(f"Директория не найдена: {recipes_dir}")
-        print("Использование: python site_6.py [путь_к_файлу_или_директории]")
+        process_directory(RecipeTinEatsExtractor, str(recipes_dir))
+        return
+    
+    print(f"Директория не найдена: {recipes_dir}")
+    print("Использование: python site_6.py [путь_к_файлу_или_директории]")
 
 
 if __name__ == "__main__":

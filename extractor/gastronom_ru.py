@@ -8,35 +8,12 @@ import json
 import re
 from typing import Optional
 from bs4 import BeautifulSoup
-
+from extractor.base import BaseRecipeExtractor, process_directory
 # Добавление корневой директории в PYTHONPATH
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 
-class GastronomRuExtractor:
-    """Экстрактор для gastronom.ru"""
-    
-    def __init__(self, html_path: str):
-        """
-        Args:
-            html_path: Путь к HTML файлу
-        """
-        self.html_path = html_path
-        with open(html_path, 'r', encoding='utf-8') as f:
-            self.soup = BeautifulSoup(f.read(), 'lxml')
-    
-    @staticmethod
-    def clean_text(text: str) -> str:
-        """Очистка текста от лишних символов и нормализация"""
-        if not text:
-            return text
-        
-        # Удаляем лишние пробелы и неразрывные пробелы
-        text = re.sub(r'\s+', ' ', text)
-        text = text.replace('\xa0', ' ')
-        # Убираем пробелы в начале и конце
-        text = text.strip()
-        return text
+class GastronomRuExtractor(BaseRecipeExtractor):
     
     def extract_from_json_ld(self) -> dict:
         """Извлечение данных из JSON-LD схемы (наиболее надежный способ)"""
@@ -338,71 +315,16 @@ class GastronomRuExtractor:
         }
 
 
-def process_html_file(html_path: str, output_path: Optional[str] = None) -> dict:
-    """
-    Обработка одного HTML файла
-    
-    Args:
-        html_path: Путь к HTML файлу
-        output_path: Путь для сохранения JSON (если None, то рядом с HTML)
-    
-    Returns:
-        Извлеченные данные
-    """
-    extractor = GastronomRuExtractor(html_path)
-    data = extractor.extract_all()
-    
-    # Определяем путь для сохранения
-    if output_path is None:
-        output_path = html_path.replace('.html', '_extracted.json')
-    
-    # Сохраняем результат
-    with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
-    
-    print(f"✓ Обработан: {html_path}")
-    print(f"  Сохранен: {output_path}")
-    
-    return data
-
-
-def process_directory(directory_path: str):
-    """
-    Обработка всех HTML файлов в директории
-    
-    Args:
-        directory_path: Путь к директории с HTML файлами
-    """
-    from pathlib import Path
-    
-    dir_path = Path(directory_path)
-    html_files = list(dir_path.glob('*.html'))
-    
-    print(f"Найдено {len(html_files)} HTML файлов")
-    print("=" * 60)
-    
-    for html_file in html_files:
-        try:
-            process_html_file(str(html_file))
-        except Exception as e:
-            print(f"✗ Ошибка при обработке {html_file.name}: {e}")
-            import traceback
-            traceback.print_exc()
-    
-    print("=" * 60)
-    print("Обработка завершена!")
-
-
 def main():
-    """Пример использования"""
     import os
 
     recipes_dir = os.path.join("recipes", "gastronom_ru")
     if os.path.exists(recipes_dir) and os.path.isdir(recipes_dir):
-        process_directory(str(recipes_dir))
-    else:
-        print(f"Директория не найдена: {recipes_dir}")
-        print("Использование: python gastronom_ru.py [путь_к_файлу_или_директории]")
+        process_directory(GastronomRuExtractor, str(recipes_dir))
+        return
+
+    print(f"Директория не найдена: {recipes_dir}")
+    print("Использование: python gastronom_ru.py [путь_к_файлу_или_директории]")
 
 
 if __name__ == "__main__":

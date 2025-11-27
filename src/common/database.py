@@ -230,6 +230,35 @@ class DatabaseManager:
         finally:
             session.close()
     
+    def get_page_by_id(self, page_id: int) -> Optional[Page]:
+        """
+        Получение страницы по ID
+        
+        Args:
+            page_id: ID страницы
+            
+        Returns:
+            Объект Page или None если не найдена
+        """
+        session = self.get_session()
+        
+        try:
+            result = session.execute(
+                sqlalchemy.text("SELECT * FROM pages WHERE id = :page_id"),{"page_id": page_id}).fetchone()
+            
+            if not result:
+                logger.warning(f"Страница с ID {page_id} не найдена")
+                return None
+            
+            page = Page.model_validate(dict(result._mapping))
+            return page
+            
+        except SQLAlchemyError as e:
+            logger.error(f"Ошибка получения страницы по ID: {e}")
+            return None
+        finally:
+            session.close()
+    
     def close(self):
         """Закрытие подключения"""
         if self.engine:

@@ -7,25 +7,34 @@ import importlib.util
 
 from src.common.database import DatabaseManager
 from src.models.page import Page
-from src.models import Site
+from src.models.site import Site
 import sqlalchemy
+from typing import Optional, Dict, Any, Type
+from extractor.base import BaseRecipeExtractor
 
 class RecipeExtractor:
     """Выбирает и использует подходящий экстрактор для сайта"""
     
     def __init__(self, db_manager: DatabaseManager):
         self.db = db_manager
-        self.extractors_cache: Dict[int, Any] = {}
+        self.extractors_cache: Dict[int, Type[BaseRecipeExtractor]] = {}
         self.output_dir = "extracted_recipes"
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir, exist_ok=True)
+
+        # получаем маппинг site_id -> домен из базы данных
+        sql = "SELECT id, name, base_url FROM sites"
+        with self.db.get_session() as session:
+            result = session.execute(sqlalchemy.text(sql))
+            rows = result.fetchall()
+            sites = [Site.model_validate(dict(row._mapping)) for row in rows]
+                
         
         # Маппинг site_id -> имя модуля экстрактора
-        self.extractor_map = {
-            1: 'allrecipes_com',      
-            5: 'gastronom_ru',     
-            6: 'recipetineats_com',
-        }
+        self.extractor_map: Dict[int, str] = {}
+        for site in sites:
+            self.extractor_map[site.id] = site.name
+
 
     def _get_output_filename(self, html_path: str) -> str:
         return os.path.join(
@@ -42,9 +51,8 @@ class RecipeExtractor:
         
         return None
     
-    def _load_extractor_class(self, module_name: str):
+    def _load_extractor_class(self, module_name: str) -> Type[BaseRecipeExtractor]:
         """Динамически загружает класс экстрактора из модуля"""
-        
         # Путь к файлу экстрактора
         extractor_path = os.path.join('extractor', f'{module_name}.py')
         
@@ -69,7 +77,7 @@ class RecipeExtractor:
         
         raise ImportError(f"No Extractor class found in module: {module_name}")
     
-    def _get_extractor(self, site_id: int):
+    def _get_extractor(self, site_id: int) -> Type[BaseRecipeExtractor]:
         """Получает экземпляр экстрактора для сайта (с кешированием)"""
         
         if site_id in self.extractors_cache:
@@ -164,6 +172,7 @@ class RecipeExtractor:
                     dish_name = :dish_name,
                     description = :description,
                     ingredients = :ingredients,
+                    ingredients_names = :ingredients_names,
                     step_by_step = :step_by_step,
                     prep_time = :prep_time,
                     cook_time = :cook_time,
@@ -172,7 +181,8 @@ class RecipeExtractor:
                     difficulty_level = :difficulty_level,
                     category = :category,
                     nutrition_info = :nutrition_info,
-                    notes = :notes
+                    notes = :notes,
+                    rating = :rating
                 WHERE id = :page_id
             """
         
@@ -199,7 +209,7 @@ class RecipeExtractor:
         
         with self.db.get_session() as session:
             # Получаем страницы с рецептами без извлеченных данных
-            query = "SELECT * FROM pages WHERE site_id = :site_id AND confidence_score = 0"
+            query = "SELECT * FROM pages WHERE site_id = :site_id AND confidence_score = 50"
             if limit:
                 query += f" LIMIT {limit}"
 

@@ -174,6 +174,7 @@ URL: {url}
     "dish_name": "название блюда или null",
     "description": "краткое описание рецепта/блюда или null",
     "ingredients": "список ингредиентов в текстовом формате или null",
+    "ingredients_names": "список названий ингредиентов без количества или null",
     "step_by_step": "пошаговая инструкция приготовления или null",
     "prep_time": "время подготовки (например, '15 minutes') или null",
     "cook_time": "время приготовления (например, '30 minutes') или null",
@@ -181,7 +182,8 @@ URL: {url}
     "difficulty_level": "уровень сложности (Easy/Medium/Hard) или null",
     "category": "категория/тип блюда (например, 'Dessert', 'Main Course') или null",
     "nutrition_info": "информация о питательной ценности в текстовом формате или null",
-    "notes": "дополнительные заметки, советы, замены ингредиентов или null"
+    "rating": число чаще всего от 0 до 5 (рейтинг рецепта) или null,
+    "notes": "дополнительные заметки, советы, замены ингредиентов или null",
 }}
 
 ВАЖНО:
@@ -224,8 +226,12 @@ URL: {url}
         session = self.db.get_session()
         
         try:
+            ingredients_names = analysis.get("ingredients_names")
+            if isinstance(ingredients_names, list):
+                ingredients_names = json.dumps(ingredients_names)
             # Подготовка данных
             update_data = {
+                "ingredients_names": ingredients_names,
                 "page_id": page_id,
                 "is_recipe": analysis.get("is_recipe", False),
                 "confidence_score": Decimal(str(analysis.get("confidence_score", 0))),
@@ -253,6 +259,7 @@ URL: {url}
                     dish_name = :dish_name,
                     description = :description,
                     ingredients = :ingredients,
+                    ingredients_names = :ingredients_names,
                     step_by_step = :step_by_step,
                     prep_time = :prep_time,
                     cook_time = :cook_time,
@@ -675,12 +682,11 @@ URL: {url}
 
 def main():
 
-    site_id = 5  # пример site_id для анализа
+    site_id = 1  # пример site_id для анализа
     analyzer = RecipeAnalyzer()
     session = analyzer.db.get_session()
-    results = session.execute(sqlalchemy.text("SELECT id from pages WHERE site_id = 5 AND is_recipe = TRUE AND id not in (139, 147) LIMIT 1"))
+    results = session.execute(sqlalchemy.text("SELECT id from pages WHERE site_id = 1 AND is_recipe = TRUE LIMIT 2"))
     page_ids = [row[0] for row in results.fetchall()]
-    ids = [139, 147, 231]
     try:
         analyzer.analyze_all_pages(site_id=site_id, page_ids=page_ids, recalculate=True)
 

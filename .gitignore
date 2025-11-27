@@ -12,7 +12,8 @@ logs/
 chrome_debug/
 .env
 parsed/
-README.md
 .idea
 .vscode
 recipes/*
+vector_db/*
+tests/*

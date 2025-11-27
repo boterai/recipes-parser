@@ -24,9 +24,9 @@ logger = logging.getLogger(__name__)
 
 def main():
     
-    url = "https://www.gastronom.ru/"
-    max_urls = 50
-    max_depth = 3
+    url = "https://www.allrecipes.com/"
+    max_urls = 400
+    max_depth = 4
     
     explorer = SiteExplorer(url, debug_mode=True, use_db=True)
     
