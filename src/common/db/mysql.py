@@ -3,14 +3,13 @@
 """
 
 import logging
-from typing import Optional, List
-from datetime import datetime
+from typing import Optional
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.exc import SQLAlchemyError
 
-from config.db_config import DBConfig
-from src.models import Site, Page
+from config.db_config import MySQLConfig
+from src.models import Page
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +25,7 @@ class DatabaseManager:
     def connect(self):
         """Установка подключения к БД"""
         try:
-            connection_url = DBConfig.get_connection_url()
+            connection_url = MySQLConfig.get_connection_url()
             self.engine = sqlalchemy.create_engine(
                 connection_url,
                 pool_pre_ping=True,

@@ -8,7 +8,7 @@ from pathlib import Path
 # Добавляем корневую директорию в путь
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.common.database import DatabaseManager
+from src.common.db.mysql import DatabaseManager
 from src.stages.extract import RecipeExtractor
 
 def main():

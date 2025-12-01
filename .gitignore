@@ -17,3 +17,4 @@ parsed/
 recipes/*
 vector_db/*
 tests/*
+qdrant_storage/*

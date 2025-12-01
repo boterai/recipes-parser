@@ -18,7 +18,7 @@ if __name__ == "__main__":
     import sys
     sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
-from src.common.database import DatabaseManager
+from src.common.db.mysql import DatabaseManager
 from src.common.gpt_client import GPTClient
 
 # Загрузка переменных окружения

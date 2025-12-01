@@ -1,5 +1,5 @@
 """
-Скрипт для векторизации рецептов из БД в ChromaDB
+Скрипт для векторизации рецептов из БД в Qdrant
 """
 
 import sys
@@ -8,13 +8,38 @@ from pathlib import Path
 # Добавляем корневую директорию в путь
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.common.database import DatabaseManager
+from src.common.db.mysql import DatabaseManager
 from src.stages.vectorise.vectorise import RecipeVectorizer
 from src.models.page import Page
 import sqlalchemy
+from sentence_transformers import SentenceTransformer
+from typing import Optional
+
+def get_embedding_function():
+    """
+    Получение функции для создания эмбеддингов
+    Модели
+    - 'all-MiniLM-L6-v2' (384 dim)
+    - 'all-mpnet-base-v2' (768 dim)
+    - 'paraphrase-multilingual-MiniLM-L12-v2' (384 dim)
+    
+    Returns:
+        tuple: (embedding_function, embedding_dim)
+    """
+    
+    model = SentenceTransformer('all-MiniLM-L6-v2')
+    
+    # Автоматически определяем размерность
+    embedding_dim = model.get_sentence_embedding_dimension()
+    print(f"  Модель: {model._model_card_vars.get('model_name', 'all-MiniLM-L6-v2')}")
+    print(f"  Размерность векторов: {embedding_dim}")
+    
+    embedding_func = lambda text: model.encode(text, convert_to_tensor=False).tolist()
+    
+    return embedding_func, embedding_dim
 
 
-def vectorize_all_recipes(db: DatabaseManager, limit: int = None, batch_size: int = 100, site_id: int = None) -> RecipeVectorizer:
+def vectorize_all_recipes(db: DatabaseManager, vectorizer: RecipeVectorizer, limit: Optional[int] = None, batch_size: Optional[int] = 100, site_id: Optional[int] = None):
     """
     Векторизация всех рецептов из БД
     
@@ -22,9 +47,9 @@ def vectorize_all_recipes(db: DatabaseManager, limit: int = None, batch_size: in
         db: Менеджер базы данных
         limit: Ограничение количества рецептов (None = все)
         batch_size: Размер батча для обработки
+        site_id: ID сайта для фильтрации
     """
-    # Создаем векторизатор
-    vectorizer = RecipeVectorizer(persist_directory="./vector_db")
+
     
     with db.get_session() as session:
         # Получаем рецепты из БД
@@ -64,8 +89,6 @@ def vectorize_all_recipes(db: DatabaseManager, limit: int = None, batch_size: in
         print(f"  Всего добавлено: {total_added}/{len(pages)}")
         print(f"{'=' * 60}\n")
     
-    return vectorizer
-
 def search_examples(vectorizer: RecipeVectorizer, db: DatabaseManager):
     """Search examples"""
     print(f"\n{'=' * 60}")
@@ -78,7 +101,7 @@ def search_examples(vectorizer: RecipeVectorizer, db: DatabaseManager):
     for r in results:
         page = db.get_page_by_id(int(r['page_id']))
         print(f"   Dish Name: {page.dish_name if page else 'N/A'}")
-        print(f"   [{r['similarity']:.2f}] {r['page_id']} - {r['matched_text'][:50]}...")
+        print(f"   [{r['score']:.2f}] {r['page_id']} - {page.description[:50]}...")
     
     # 2. Search in ingredients collection
     print("\n2. Search in ingredients: 'chicken, rice, vegetables'")
@@ -86,7 +109,7 @@ def search_examples(vectorizer: RecipeVectorizer, db: DatabaseManager):
     for r in results:
         page = db.get_page_by_id(int(r['page_id']))
         print(f"   Dish Name: {page.dish_name if page else 'N/A'}")
-        print(f"   [{r['similarity']:.2f}] {r['page_id']} - {r['matched_text'][:50]}...")
+        print(f"   [{r['score']:.2f}] {r['page_id']} - {page.description[:50]}...")
     
     # 3. Search in instructions collection
     print("\n3. Search in instructions: 'bake in oven'")
@@ -94,7 +117,7 @@ def search_examples(vectorizer: RecipeVectorizer, db: DatabaseManager):
     for r in results:
         page = db.get_page_by_id(int(r['page_id']))
         print(f"   Dish Name: {page.dish_name if page else 'N/A'}")
-        print(f"   [{r['similarity']:.2f}] {r['page_id']} - {r['matched_text'][:50]}...")
+        print(f"   [{r['score']:.2f}] {r['page_id']} - {page.description[:50]}...")
     
     # 4. Search in descriptions
     print("\n4. Search in descriptions: 'easy quick meal'")
@@ -102,7 +125,7 @@ def search_examples(vectorizer: RecipeVectorizer, db: DatabaseManager):
     for r in results:
         page = db.get_page_by_id(int(r['page_id']))
         print(f"   Dish Name: {page.dish_name if page else 'N/A'}")
-        print(f"   [{r['similarity']:.2f}] {r['page_id']} - {r['matched_text'][:50]}...")
+        print(f"   [{r['score']:.2f}] {r['page_id']} - {page.description[:50]}...")
 
     print("\nSearch similar recipes to a given recipe:")
     # 5. Search similar recipes to a given recipe
@@ -114,29 +137,29 @@ def search_examples(vectorizer: RecipeVectorizer, db: DatabaseManager):
         for r in results:
             page = db.get_page_by_id(int(r['page_id']))
             print(f"   Dish Name: {page.dish_name if page else 'N/A'}")
-            print(f"   [{r['similarity']:.2f}] {r['page_id']} - {r['matched_text'][:50]}...")
-    
-    # Statistics
-    print(f"\n{'=' * 60}")
-    print("STATISTICS")
-    print(f"{'=' * 60}")
-    stats = vectorizer.get_stats()
-    print(f"Total recipes in vector DB: {stats['total_recipes']}")
-    print(f"Collections: {stats['collections']}")
-    print(f"Data path: {stats['persist_directory']}")
+            print(f"   [{r['score']:.2f}] {r['page_id']} - {page.description[:50]}...")
 
 
 def main():
+    lim = 1  # Ограничение количества рецептов (None = все)
     db = DatabaseManager()
     if not db.connect():
         print("Не удалось подключиться к базе данных")
         return
     
+    # Устанавливаем функцию эмбеддингов
+    print("Загрузка модели эмбеддингов...")
+    embedding_func, embedding_dim = get_embedding_function()
+    print("✓ Модель загружена\n")
+    
     # Векторизация
-    vectorizer = RecipeVectorizer(persist_directory="./vector_db")
-    if vectorizer.get_stats()['total_recipes'] == 0:
-        print("Векторная база пуста. Запускаем векторизацию...")
-        vectorizer = vectorize_all_recipes(db, site_id=1)
+    vectorizer = RecipeVectorizer(embedding_dim=embedding_dim)
+    if vectorizer.connect() is False:
+        print("Не удалось подключиться к векторной базе данных")
+        return
+    
+    vectorizer.set_embedding_function(embedding_func)
+    vectorize_all_recipes(db, vectorizer=vectorizer, site_id=1, limit=lim)
     
     # Примеры поиска
     search_examples(vectorizer, db)
@@ -144,13 +167,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-"""
-стандартное описание рецепта
-Что входит в стандартное описание рецепта?
-Добавить отдлеьно столбец ингредиенты 
-И еще один столбец ингредиенты с массой
-
-
-"""

@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Optional, Dict, Any
 import importlib.util
 
-from src.common.database import DatabaseManager
+from src.common.db.mysql import DatabaseManager
 from src.models.page import Page
 from src.models.site import Site
 import sqlalchemy

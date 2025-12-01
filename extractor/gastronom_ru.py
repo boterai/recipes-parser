@@ -7,10 +7,9 @@ from pathlib import Path
 import json
 import re
 from typing import Optional
-from bs4 import BeautifulSoup
-from extractor.base import BaseRecipeExtractor, process_directory
-# Добавление корневой директории в PYTHONPATH
 sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from extractor.base import BaseRecipeExtractor, process_directory
 
 
 class GastronomRuExtractor(BaseRecipeExtractor):
@@ -94,8 +93,30 @@ class GastronomRuExtractor(BaseRecipeExtractor):
         
         return None
     
+    def extract_ingredients_names(self) -> Optional[str]:
+        """Извлечение списка названий ингредиентов (без количества)"""
+        # Из JSON-LD получаем массив названий ингредиентов
+        json_ld = self.extract_from_json_ld()
+        ingredients_list = json_ld.get('recipeIngredient', [])
+        
+        if ingredients_list:
+            # Удаляем дубликаты, сохраняя порядок
+            seen = set()
+            unique_ingredients = []
+            for ing in ingredients_list:
+                ing_clean = self.clean_text(ing)
+                if ing_clean and ing_clean not in seen:
+                    ing_clean = ing_clean.lower()
+                    seen.add(ing_clean)
+                    unique_ingredients.append(ing_clean)
+            
+            if unique_ingredients:
+                return ', '.join(unique_ingredients)
+        
+        return None
+    
     def extract_ingredients(self) -> Optional[str]:
-        """Извлечение ингредиентов"""
+        """Извлечение ингредиентов с количеством"""
         ingredient_items = []
         
         # Ищем элементы с itemprop="recipeIngredient" - они уже содержат название + количество
@@ -104,7 +125,7 @@ class GastronomRuExtractor(BaseRecipeExtractor):
         if ingredients:
             for ing in ingredients:
                 # Полный текст уже содержит название и количество
-                text = self.clean_text(ing.get_text())
+                text = self.clean_text(ing.get_text()).lower()
                 if text:
                     ingredient_items.append(text)
         
@@ -302,6 +323,7 @@ class GastronomRuExtractor(BaseRecipeExtractor):
         return {
             "dish_name": self.extract_dish_name(),
             "description": self.extract_description(),
+            "ingredients_names": self.extract_ingredients_names(),
             "ingredients": self.extract_ingredients(),
             "step_by_step": self.extract_steps(),
             "nutrition_info": self.extract_nutrition_info(),
