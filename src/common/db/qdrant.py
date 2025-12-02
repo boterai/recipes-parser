@@ -3,9 +3,9 @@
 """
 
 import logging
-from typing import List, Dict, Any, Optional
-import uuid
+from typing import Any, Optional
 
+from src.common.embedding import prepare_text
 from config.db_config import QdrantConfig
 from src.models.page import Page
 from qdrant_client import QdrantClient
@@ -126,50 +126,11 @@ class QdrantManager:
         except Exception as e:
             logger.error(f"Ошибка создания коллекций Qdrant: {e}")
     
-    def _prepare_text(self, page: Page, collection_type: str = "main") -> str:
-        """
-        Подготовка текста для эмбеддинга в зависимости от типа коллекции
-        
-        Args:
-            page: Объект страницы с рецептом
-            collection_type: Тип коллекции (main, ingredients, instructions, descriptions)
-            
-        Returns:
-            Подготовленный текст
-        """
-        if collection_type == "ingredients":
-            return page.ingredients_names or page.ingredients or ""
-        
-        elif collection_type == "instructions":
-            return page.step_by_step or ""
-        
-        elif collection_type == "descriptions":
-            parts = []
-            if page.dish_name:
-                parts.append(page.dish_name)
-            if page.description:
-                parts.append(page.description)
-            return ". ".join(parts)
-        
-        else:  # main
-            parts = []
-            if page.dish_name:
-                parts.append(page.dish_name)
-            if page.description:
-                parts.append(page.description)
-            if page.ingredients_names:
-                parts.append(f"Ingredients: {page.ingredients_names}")
-            elif page.ingredients:
-                parts.append(f"Ingredients: {page.ingredients[:300]}")
-            if page.notes:
-                parts.append(page.notes[:100])
-            return ". ".join(parts)
-    
     def add_recipe(
         self,
         page: Page,
         embedding_function,
-        collections: Optional[List[str]] = None
+        collections: Optional[list[str]] = None
     ) -> bool:
         """
         Добавление рецепта в Qdrant
@@ -202,10 +163,8 @@ class QdrantManager:
             
             # Базовые метаданные
             payload = {
-                "page_id": page.id,
-                "site_id": page.site_id,
                 "dish_name": page.dish_name,
-                "url": page.url
+                "site_id": page.site_id,
             }
             
             # Добавляем в каждую коллекцию
@@ -214,20 +173,20 @@ class QdrantManager:
                 if collection_name == self.COLLECTION_INGREDIENTS:
                     if not page.ingredients_names and not page.ingredients:
                         continue
-                    text = self._prepare_text(page, "ingredients")
+                    text = prepare_text(page, "ingredients")
                     
                 elif collection_name == self.COLLECTION_INSTRUCTIONS:
                     if not page.step_by_step:
                         continue
-                    text = self._prepare_text(page, "instructions")
+                    text = prepare_text(page, "instructions")
                     
                 elif collection_name == self.COLLECTION_DESCRIPTIONS:
                     if not page.description:
                         continue
-                    text = self._prepare_text(page, "descriptions")
+                    text = prepare_text(page, "descriptions")
                     
                 else:  # COLLECTION_RECIPES
-                    text = self._prepare_text(page, "main")
+                    text = prepare_text(page, "main")
                 
                 if not text:
                     continue
@@ -237,7 +196,7 @@ class QdrantManager:
                 
                 # Добавляем точку
                 point = PointStruct(
-                    id=str(uuid.uuid4()),
+                    id=page.id,
                     vector=vector,
                     payload=payload
                 )
@@ -256,7 +215,7 @@ class QdrantManager:
     
     def add_recipes_batch(
         self,
-        pages: List[Page],
+        pages: list[Page],
         embedding_function,
         batch_size: int = 100
     ) -> int:
@@ -291,45 +250,43 @@ class QdrantManager:
             
             try:
                 payload = {
-                    "page_id": page.id,
-                    "site_id": page.site_id,
                     "dish_name": page.dish_name,
-                    "url": page.url
+                    "site_id": page.site_id,
                 }
                 
                 # Основная коллекция
-                text_main = self._prepare_text(page, "main")
+                text_main = prepare_text(page, "main")
                 if text_main:
                     vector = embedding_function(text_main)
                     batches[self.COLLECTION_RECIPES].append(
-                        PointStruct(id=str(uuid.uuid4()), vector=vector, payload=payload)
+                        PointStruct(id=page.id, vector=vector, payload=payload)
                     )
                 
                 # Ингредиенты
                 if page.ingredients_names or page.ingredients:
-                    text_ing = self._prepare_text(page, "ingredients")
+                    text_ing = prepare_text(page, "ingredients")
                     if text_ing:
                         vector = embedding_function(text_ing)
                         batches[self.COLLECTION_INGREDIENTS].append(
-                            PointStruct(id=str(uuid.uuid4()), vector=vector, payload=payload)
+                            PointStruct(id=page.id, vector=vector, payload=payload)
                         )
                 
                 # Инструкции
                 if page.step_by_step:
-                    text_inst = self._prepare_text(page, "instructions")
+                    text_inst = prepare_text(page, "instructions")
                     if text_inst:
                         vector = embedding_function(text_inst)
                         batches[self.COLLECTION_INSTRUCTIONS].append(
-                            PointStruct(id=str(uuid.uuid4()), vector=vector, payload=payload)
+                            PointStruct(id=page.id, vector=vector, payload=payload)
                         )
                 
                 # Описания
                 if page.description:
-                    text_desc = self._prepare_text(page, "descriptions")
+                    text_desc = prepare_text(page, "descriptions")
                     if text_desc:
                         vector = embedding_function(text_desc)
                         batches[self.COLLECTION_DESCRIPTIONS].append(
-                            PointStruct(id=str(uuid.uuid4()), vector=vector, payload=payload)
+                            PointStruct(id=page.id, vector=vector, payload=payload)
                         )
                 
                 added_count += 1
@@ -351,7 +308,7 @@ class QdrantManager:
         logger.info(f"✓ Всего добавлено {added_count} рецептов")
         return added_count
     
-    def _upload_batches(self, batches: Dict[str, List[PointStruct]]):
+    def _upload_batches(self, batches: dict[str, list[PointStruct]]):
         """Загрузка батчей в Qdrant"""
         for collection_name, points in batches.items():
             if points:
@@ -365,12 +322,12 @@ class QdrantManager:
     
     def search(
         self,
-        query_vector: List[float],
+        query_vector: list[float],
         collection_name: str = None,
         limit: int = 10,
         site_id: Optional[int] = None,
         score_threshold: float = 0.0
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         Поиск похожих рецептов
         
@@ -418,9 +375,8 @@ class QdrantManager:
                 {
                     "id": hit.id,
                     "score": hit.score,
-                    "page_id": hit.payload.get("page_id"),
+                    "page_id": hit.id,
                     "dish_name": hit.payload.get("dish_name"),
-                    "url": hit.payload.get("url"),
                     "site_id": hit.payload.get("site_id"),
                     "collection": collection_name
                 }
@@ -473,7 +429,7 @@ class QdrantManager:
             logger.error(f"Ошибка удаления векторов: {e}")
             return False
     
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """
         Получение статистики по коллекциям
         
@@ -510,11 +466,7 @@ class QdrantManager:
             logger.error(f"Ошибка получения статистики: {e}")
             return {}
     
-    def add_recipe_multi_vector(
-        self,
-        page: Page,
-        embedding_function
-    ) -> bool:
+    def add_recipe_multi_vector(self,page: Page, embedding_function) -> bool:
         """
         Добавление рецепта в мультивекторную коллекцию
         
@@ -620,7 +572,7 @@ class QdrantManager:
         limit: int = 10,
         site_id: Optional[int] = None,
         score_threshold: float = 0.0
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         Поиск в мультивекторной коллекции по конкретному вектору
         

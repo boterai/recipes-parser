@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Optional, Dict, Any
 import importlib.util
 
-from src.common.db.mysql import DatabaseManager
+from src.common.db.mysql import MySQlManager
 from src.models.page import Page
 from src.models.site import Site
 import sqlalchemy
@@ -15,7 +15,7 @@ from extractor.base import BaseRecipeExtractor
 class RecipeExtractor:
     """Выбирает и использует подходящий экстрактор для сайта"""
     
-    def __init__(self, db_manager: DatabaseManager):
+    def __init__(self, db_manager: MySQlManager):
         self.db = db_manager
         self.extractors_cache: Dict[int, Type[BaseRecipeExtractor]] = {}
         self.output_dir = "extracted_recipes"
@@ -209,7 +209,7 @@ class RecipeExtractor:
         
         with self.db.get_session() as session:
             # Получаем страницы с рецептами без извлеченных данных
-            query = "SELECT * FROM pages WHERE site_id = :site_id AND confidence_score = 50"
+            query = "SELECT * FROM pages WHERE site_id = :site_id AND confidence_score = 0"
             if limit:
                 query += f" LIMIT {limit}"
 

@@ -14,7 +14,7 @@ from src.models import Page
 logger = logging.getLogger(__name__)
 
 
-class DatabaseManager:
+class MySQlManager:
     """Менеджер для работы с MySQL"""
     
     def __init__(self):
@@ -41,79 +41,38 @@ class DatabaseManager:
             logger.info("Успешное подключение к MySQL")
             
             # Создание таблиц если их нет
-            self.create_tables()
-            
-            return True
-            
+            return self.create_tables()
+                        
         except SQLAlchemyError as e:
             logger.error(f"Ошибка подключения к MySQL: {e}")
-            return False
+        
+        return False
     
-    def create_tables(self):
+    def create_tables(self) -> bool:
         """Создание таблиц если их не существует"""
         try:
+            with open("db/schemas/mysql.sql", "r", encoding="utf-8") as f:
+                migration_schema = f.read()
+            
+            # Разделяем SQL-выражения по точке с запятой
+            statements = [
+                stmt.strip() 
+                for stmt in migration_schema.split(';') 
+                if stmt.strip()
+            ]
+            
             with self.engine.connect() as conn:
-                # Создание таблицы sites
-                conn.execute(sqlalchemy.text("""
-                    CREATE TABLE IF NOT EXISTS sites (
-                        id INT AUTO_INCREMENT PRIMARY KEY,
-                        name VARCHAR(255) NOT NULL,
-                        base_url VARCHAR(500) NOT NULL UNIQUE,
-                        language VARCHAR(10),
-                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                        INDEX idx_name (name)
-                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-                """))
-                
-                # Создание таблицы pages
-                conn.execute(sqlalchemy.text("""
-                    CREATE TABLE IF NOT EXISTS pages (
-                        id INT AUTO_INCREMENT PRIMARY KEY,
-                        site_id INT NOT NULL,
-                        url VARCHAR(1000) NOT NULL,
-                        pattern VARCHAR(500),
-                        title TEXT,
-                        language VARCHAR(10),
-                        html_path VARCHAR(500),
-                        metadata_path VARCHAR(500),
-                        
-                        -- Данные рецепта (NULL = отсутствует)
-                        ingredients TEXT,
-                        step_by_step TEXT,
-                        dish_name VARCHAR(500),
-                        image_blob BLOB,
-                        nutrition_info TEXT,
-                        rating DECIMAL(3,2),
-                        author VARCHAR(255),
-                        category VARCHAR(255),
-                        prep_time VARCHAR(100),
-                        cook_time VARCHAR(100),
-                        total_time VARCHAR(100),
-                        servings VARCHAR(50),
-                        difficulty_level VARCHAR(50),
-                        description TEXT,
-                        notes TEXT,
-                        
-                        -- Оценка
-                        confidence_score DECIMAL(5,2) DEFAULT 0.00,
-                        is_recipe BOOLEAN DEFAULT FALSE,
-                        
-                        -- Метаданные
-                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        
-                        FOREIGN KEY (site_id) REFERENCES sites(id) ON DELETE CASCADE,
-                        UNIQUE KEY unique_site_url (site_id, url(500)),
-                        INDEX idx_is_recipe (is_recipe),
-                        INDEX idx_confidence (confidence_score)
-                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-                """))
-                
+                for statement in statements:
+                    if statement:  # Пропускаем пустые
+                        conn.execute(sqlalchemy.text(statement))
                 conn.commit()
-                logger.info("Таблицы созданы или уже существуют")
                 
+            logger.info("Таблицы созданы или уже существуют")
+            return True
         except SQLAlchemyError as e:
             logger.error(f"Ошибка создания таблиц: {e}")
+
+        return False
     
     def get_session(self) -> Session:
         """Получение сессии БД"""
@@ -257,6 +216,40 @@ class DatabaseManager:
             return None
         finally:
             session.close()
+    
+    def get_pages_by_site_id(self, site_id: int, limit: Optional[int] = None, is_recipe: bool|None = None) -> list[Page]:
+        """
+        Получение страниц по ID сайта
+        
+        Args:
+            site_id: ID сайта
+            limit: Максимальное количество страниц (None = все)
+            
+        Returns:
+            Список объектов Page
+        """
+        session = self.get_session()
+        pages: list[Page] = []
+        
+        try:
+            sql = "SELECT * FROM pages WHERE site_id = :site_id"
+            if is_recipe is not None:
+                sql += " AND is_recipe = :is_recipe"
+            if limit:
+                sql += f" LIMIT {limit}"
+            
+            result = session.execute(sqlalchemy.text(sql), {"site_id": site_id, "is_recipe": is_recipe} if is_recipe is not None else {"site_id": site_id})
+            rows = result.fetchall()
+            pages = [Page.model_validate(dict(row._mapping)) for row in rows]
+            
+            return pages
+            
+        except SQLAlchemyError as e:
+            logger.error(f"Ошибка получения страниц по site_id: {e}")
+        finally:
+            session.close()
+        
+        return pages
     
     def close(self):
         """Закрытие подключения"""

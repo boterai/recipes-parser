@@ -6,6 +6,6 @@ pydantic==2.5.0
 sqlalchemy==2.0.23
 pymysql==1.1.0
 python-dotenv==1.0.0
-clickhouse-driver==0.2.6
+clickhouse_connect
 qdrant-client==1.7.0
 sentence-transformers==2.2.2

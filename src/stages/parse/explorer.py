@@ -24,7 +24,7 @@ if __name__ == "__main__":
     sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 import config.config as config
-from src.common.db.mysql import DatabaseManager
+from src.common.db.mysql import MySQlManager
 import sqlalchemy
 
 # Настройка логирования
@@ -38,13 +38,15 @@ logger = logging.getLogger(__name__)
 class SiteExplorer:
     """Исследователь структуры сайта"""
     
-    def __init__(self, base_url: str, debug_mode: bool = True, use_db: bool = True, recipe_pattern: str = None):
+    def __init__(self, base_url: str, debug_mode: bool = True, use_db: bool = True, recipe_pattern: str = None,
+                 max_errors: int = 3):
         """
         Args:
             base_url: Базовый URL сайта
             debug_mode: Если True, подключается к открытому Chrome с отладкой
             use_db: Если True, сохраняет данные в MySQL
             recipe_pattern: Regex паттерн для поиска URL с рецептами (опционально)
+            max_errors: Максимальное количество ошибок подряд перед остановкой
         """
         self.base_url = base_url
         self.debug_mode = debug_mode
@@ -55,6 +57,7 @@ class SiteExplorer:
         self.recipe_pattern = recipe_pattern
         self.recipe_regex = None
         self.request_count = 0  # Счетчик запросов для адаптивных пауз
+        self.max_errors = max_errors
         
         # Компиляция regex паттерна если передан
         if recipe_pattern:
@@ -86,7 +89,7 @@ class SiteExplorer:
         
         # Подключение к БД
         if self.use_db:
-            self.db = DatabaseManager()
+            self.db = MySQlManager()
             if self.db.connect():
                 self.site_id = self.db.create_or_get_site(
                     name=self.site_name,
@@ -477,7 +480,7 @@ class SiteExplorer:
             logger.error(f"Ошибка извлечения ссылок: {e}")
             return []
     
-    def export_state(self) -> dict:
+    def  export_state(self) -> dict:
         """Экспорт состояния для передачи в другой экземпляр
         
         Returns:
@@ -570,7 +573,7 @@ class SiteExplorer:
             logger.error(f"Ошибка загрузки состояния: {e}")
             return False
     
-    def explore(self, max_urls: int = 100, max_depth: int = 3, session_urls: bool = True):
+    def explore(self, max_urls: int = 100, max_depth: int = 3, session_urls: bool = True) -> int:
         """
         Исследование структуры сайта
         
@@ -578,12 +581,11 @@ class SiteExplorer:
             max_urls: Максимальное количество URL для посещения
             max_depth: Максимальная глубина обхода
             session_urls: Если True, то не учитывает старые посещенные URL при подсчтее max urls
+        Returns:
+            urls_explored: Количество успешно посещенных URL в этой сессии
         """
         logger.info(f"Начало исследования сайта: {self.base_url}")
         logger.info(f"Цель: найти до {max_urls} уникальных паттернов URL")
-        
-        # Загрузка сохраненного состояния
-        #self.load_state()
         
         # Очередь URL для обхода: (url, depth)
         # Если есть сохраненная очередь - используем её, иначе начинаем с base_url
@@ -598,7 +600,9 @@ class SiteExplorer:
 
         if session_urls:
             urls_explored = 0  # Считаем только в этой сессии
-        
+
+        err_count = 0  # Счетчик ошибок подряд
+
         while queue and urls_explored < max_urls:
             current_url, depth = queue.pop(0)
             
@@ -698,6 +702,10 @@ class SiteExplorer:
                 self.failed_urls.add(current_url)
                 self.exploration_queue = queue  # Сохраняем очередь при ошибке
                 self.save_state()  # Сохранение при ошибке
+                err_count += 1
+                if err_count >= self.max_errors:
+                    logger.error(f"Превышено максимальное количество ошибок подряд ({self.max_errors}), остановка исследования.")
+                    break
                 continue
         
         # Финальное сохранение с текущей очередью
@@ -705,13 +713,14 @@ class SiteExplorer:
         self.save_state()
         
         logger.info(f"\n{'='*60}")
-        logger.info(f"Исследование завершено")
+        logger.info("Исследование завершено" if self.max_errors < err_count else "Исследование остановлено из-за ошибок")
         logger.info(f"Результаты сохранены в: {self.save_dir}")
         logger.info(f"  - {self.state_file} - состояние")
         logger.info(f"  - {self.patterns_file} - найденные паттерны")
         logger.info(f"  - *.html - сохраненные страницы ({sum(len(urls) for urls in self.url_patterns.values())} файлов)")
-        logger.info(f"Для продолжения используйте: explorer.load_state() или explorer.import_state(state)")
+        logger.info("Для продолжения используйте: explorer.load_state() или explorer.import_state(state)")
         logger.info(f"{'='*60}")
+        return urls_explored
 
     
     def close(self):
@@ -723,11 +732,37 @@ class SiteExplorer:
         logger.info("Готово")
 
 
+def explore_site(url: str, max_urls: int = 1000, max_depth: int = 4, recipe_pattern: str = None):
+    """
+    Функция для исследования сайта с обработкой ошибок и прерываний
+    
+    Args:
+        explorer: Объект SiteExplorer
+        max_urls: Максимальное количество URL для исследования
+        max_depth: Максимальная глубина исследования
+    """
+    urls_explored = 0
+    try:
+        # Цикл для продолжения исследования до достижения max_urls (на случай ошибок или прерываний)
+        while urls_explored < max_urls:
+            explorer = SiteExplorer(url, debug_mode=True, use_db=True, recipe_pattern=recipe_pattern)
+            explorer.connect_to_chrome()
+            explorer.load_state()
+            explored = explorer.explore(max_urls=max_urls, max_depth=max_depth)
+            urls_explored += explored
+            logger.info(f"Всего исследовано URL: {urls_explored}/{max_urls}")
+    except KeyboardInterrupt:
+        logger.info("\nПрервано пользователем")
+    except Exception as e:
+        logger.error(f"Критическая ошибка: {e}", exc_info=True)
+        sys.exit(1)
+    finally:
+        explorer.close()
+
 def main():
     url = "https://www.allrecipes.com/"
     # паттерн формируется после анализа несколкьих URL
     search_pattern = "(^/recipe/\d+/[a-z0-9-]+/?$)|(^/[a-z0-9-]+-recipe-\d+/?$)"
-    max_urls = 130
     max_depth = 3
     
     explorer = SiteExplorer(url, debug_mode=True, use_db=True, recipe_pattern=search_pattern)

@@ -10,12 +10,12 @@ import shutil
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import json
-from src.common.db.mysql import DatabaseManager
+from src.common.db.mysql import MySQlManager
 from src.models import Page
 
 def main():
     site_id = 1
-    db = DatabaseManager()
+    db = MySQlManager()
     if not db.connect():
         print("Не удалось подключиться к базе данных")
         return

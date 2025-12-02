@@ -8,38 +8,15 @@ from pathlib import Path
 # Добавляем корневую директорию в путь
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.common.db.mysql import DatabaseManager
+from src.common.db.mysql import MySQlManager
+from src.common.embedding import get_embedding_function, EmbeddingFunction
 from src.stages.vectorise.vectorise import RecipeVectorizer
 from src.models.page import Page
 import sqlalchemy
-from sentence_transformers import SentenceTransformer
 from typing import Optional
 
-def get_embedding_function():
-    """
-    Получение функции для создания эмбеддингов
-    Модели
-    - 'all-MiniLM-L6-v2' (384 dim)
-    - 'all-mpnet-base-v2' (768 dim)
-    - 'paraphrase-multilingual-MiniLM-L12-v2' (384 dim)
-    
-    Returns:
-        tuple: (embedding_function, embedding_dim)
-    """
-    
-    model = SentenceTransformer('all-MiniLM-L6-v2')
-    
-    # Автоматически определяем размерность
-    embedding_dim = model.get_sentence_embedding_dimension()
-    print(f"  Модель: {model._model_card_vars.get('model_name', 'all-MiniLM-L6-v2')}")
-    print(f"  Размерность векторов: {embedding_dim}")
-    
-    embedding_func = lambda text: model.encode(text, convert_to_tensor=False).tolist()
-    
-    return embedding_func, embedding_dim
 
-
-def vectorize_all_recipes(db: DatabaseManager, vectorizer: RecipeVectorizer, limit: Optional[int] = None, batch_size: Optional[int] = 100, site_id: Optional[int] = None):
+def vectorize_all_recipes(db: MySQlManager, vectorizer: RecipeVectorizer, limit: Optional[int] = None, batch_size: Optional[int] = 100, site_id: Optional[int] = None):
     """
     Векторизация всех рецептов из БД
     
@@ -61,7 +38,7 @@ def vectorize_all_recipes(db: DatabaseManager, vectorizer: RecipeVectorizer, lim
         """
         
         if site_id:
-            sql += f" AND site_id = {site_id}"
+            sql += f" AND site_id != {site_id}"
 
         if limit:
             sql += f" LIMIT {limit}"
@@ -80,7 +57,6 @@ def vectorize_all_recipes(db: DatabaseManager, vectorizer: RecipeVectorizer, lim
             batch = pages[i:i + batch_size]
             added = vectorizer.add_recipes_batch(batch)
             total_added += added
-            
             progress = min(i + batch_size, len(pages))
             print(f"Прогресс: {progress}/{len(pages)} ({progress * 100 / len(pages):.1f}%)")
         
@@ -89,7 +65,7 @@ def vectorize_all_recipes(db: DatabaseManager, vectorizer: RecipeVectorizer, lim
         print(f"  Всего добавлено: {total_added}/{len(pages)}")
         print(f"{'=' * 60}\n")
     
-def search_examples(vectorizer: RecipeVectorizer, db: DatabaseManager):
+def search_examples(vectorizer: RecipeVectorizer, db: MySQlManager):
     """Search examples"""
     print(f"\n{'=' * 60}")
     print("SEARCH EXAMPLES")
@@ -141,8 +117,8 @@ def search_examples(vectorizer: RecipeVectorizer, db: DatabaseManager):
 
 
 def main():
-    lim = 1  # Ограничение количества рецептов (None = все)
-    db = DatabaseManager()
+    lim = None  # Ограничение количества рецептов (None = все)
+    db = MySQlManager()
     if not db.connect():
         print("Не удалось подключиться к базе данных")
         return

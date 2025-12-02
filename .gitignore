@@ -10,7 +10,6 @@ data/
 logs/
 .DS_Store
 chrome_debug/
-.env
 parsed/
 .idea
 .vscode
@@ -18,3 +17,5 @@ recipes/*
 vector_db/*
 tests/*
 qdrant_storage/*
+docs/*
+.env
