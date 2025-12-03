@@ -184,6 +184,7 @@ URL: {url}
     "nutrition_info": "информация о питательной ценности в текстовом формате или null",
     "rating": число чаще всего от 0 до 5 (рейтинг рецепта) или null,
     "notes": "дополнительные заметки, советы, замены ингредиентов или null",
+    "tags": "теги через запятую или null"
 }}
 
 ВАЖНО:
@@ -248,7 +249,8 @@ URL: {url}
                 "category": analysis.get("category"),
                 "rating": Decimal(str(analysis["rating"])) if analysis.get("rating") else None,
                 "nutrition_info": analysis.get("nutrition_info"),
-                "notes": analysis.get("notes")
+                "notes": analysis.get("notes"),
+                "tags": analysis.get("tags")
             }
             
             # SQL запрос на обновление
@@ -270,7 +272,8 @@ URL: {url}
                     category = :category,
                     rating = :rating,
                     nutrition_info = :nutrition_info,
-                    notes = :notes
+                    notes = :notes,
+                    tags = :tags
                 WHERE id = :page_id
             """
             
@@ -334,6 +337,7 @@ URL: {url}
                 WHERE title IS NOT NULL
                 AND is_recipe = FALSE
                 AND confidence_score = 0
+                AND pattern != '/'
             """
             
             if site_id:
@@ -411,7 +415,7 @@ URL: {url}
 
     def analyze_all_pages(self, site_id: Optional[int] = None, limit: Optional[int] = None, 
                           filter_by_title: bool = False, recalculate: bool = False,
-                          page_ids: list = None) -> int:
+                          page_ids: list = None, stop_analyse: Optional[int] = None) -> int:
         """
         Анализ всех страниц (или только указанного сайта)
         
@@ -421,6 +425,7 @@ URL: {url}
             filter_by_title: Если True, сначала фильтрует по заголовкам
             recalculate: Если True, пересчитывает анализ для уже обработанных страниц
             page_ids: Список конкретных page_id для анализа (опционально)
+            stop_analyse: Максимальное количество страниц c цептами для анализа, после которых можно прекратить анализ (опционально)
         Returns:
             Количество страниц с рецептами после анализа
         """
@@ -488,6 +493,10 @@ URL: {url}
                     
                     if is_recipe:
                         recipe_count += 1
+
+                    if stop_analyse and recipe_count >= stop_analyse:
+                        logger.info(f"Достигнуто максимальное количество рецептов для анализа: {stop_analyse}. Прекращение анализа.")
+                        break
                 
                 # Пауза между запросами к API
                 if idx < total:

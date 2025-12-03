@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS pages (
     image_urls VARCHAR(1000),
     description TEXT,
     notes TEXT,
+    tags TEXT, -- теги через запятую
 
     
     -- Оценка

@@ -40,6 +40,8 @@ def prepare_text(page: Page, embedding_type: str = "main") -> str:
             parts.append(f"Ingredients: {page.ingredients_names}")
         elif page.ingredients:
             parts.append(f"Ingredients: {page.ingredients[:300]}")
+        if page.step_by_step:
+            parts.append(f"Instructions: {page.step_by_step[:100]}")
         if page.notes:
             parts.append(page.notes[:100])
         return ". ".join(parts)

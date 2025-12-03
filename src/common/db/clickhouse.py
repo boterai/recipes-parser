@@ -5,7 +5,6 @@
 
 import logging
 from typing import Any, Optional
-import re
 from config.db_config import ClickHouseConfig
 import clickhouse_connect
 from clickhouse_connect.driver import Client
@@ -170,7 +169,7 @@ class ClickHouseManager:
                     recipe_embedding = embedding_function(prepare_text(page, "main"))
                     ingredient_embedding = embedding_function(prepare_text(page, "ingredients"))
                     description_embedding = embedding_function(prepare_text(page, "description"))
-                    instructions_embedding = embedding_function(prepare_text(page, "instructions"))
+                    instruction_embedding = embedding_function(prepare_text(page, "instructions"))
                     ingredients = [i.removeprefix(",").removesuffix(",") for i in  page.ingredients_names.split(', ')]  # временно в качестве кейвордов только имена ингредиентов
                     rows.append([page.id, 
                                  page.dish_name,
@@ -179,7 +178,7 @@ class ClickHouseManager:
                                  recipe_embedding,
                                  ingredient_embedding,
                                  description_embedding,
-                                 instructions_embedding
+                                 instruction_embedding
                                  ]
                     )
                 
@@ -207,7 +206,7 @@ class ClickHouseManager:
     self,
     query_vector: list[float],
     collection_name: str = "recipes",
-    limit: int = 10,
+    limit: int = 5,
     site_id: Optional[int] = None,
     score_threshold: float = 0.0
 ) -> list[dict[str, Any]]:
@@ -234,7 +233,7 @@ class ClickHouseManager:
             embedding_column_map = {
                 "recipes": "recipe_embedding",
                 "ingredients": "ingredient_embedding",
-                "instructions": "instructions_embedding",
+                "instructions": "instruction_embedding",
                 "descriptions": "description_embedding"
             }
             
@@ -285,4 +284,53 @@ class ClickHouseManager:
         except Exception as e:
             logger.error(f"Ошибка поиска в ClickHouse: {e}")
             return []
+    
+    def get_stats(self) -> dict:
+        """
+        Получение статистики по векторным коллекциям
+        
+        Returns:
+            Словарь со статистикой
+        """
+        if not self.client:
+            logger.warning(CONNECTION_ERROR)
+            return {}
+        
+        try:
+            # Статистика по recipe_keywords
+            result = self.client.query("""
+                SELECT 
+                    count() as total_recipes,
+                    uniq(page_id) as unique_pages,
+                    uniq(language) as languages,
+                    avg(length(recipe_embedding)) as avg_recipe_emb_size,
+                    avg(length(ingredient_embedding)) as avg_ingredient_emb_size,
+                    avg(length(description_embedding)) as avg_description_emb_size,
+                    avg(length(instructions_embedding)) as avg_instructions_emb_size
+                FROM recipe_keywords
+            """)
+            
+            row = result.result_rows[0] if result.result_rows else None
+            
+            if row:
+                return {
+                    'recipe_keywords': {
+                        'total_recipes': row[0],
+                        'unique_pages': row[1],
+                        'languages': row[2],
+                        'avg_embedding_sizes': {
+                            'recipe': row[3],
+                            'ingredient': row[4],
+                            'description': row[5],
+                            'instructions': row[6]
+                        }
+                    }
+                }
+            
+            return {}
+            
+        except Exception as e:
+            logger.error(f"Ошибка получения статистики: {e}")
+            return {}
+
 

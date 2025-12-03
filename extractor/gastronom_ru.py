@@ -54,7 +54,7 @@ class GastronomRuExtractor(BaseRecipeExtractor):
                     except json.JSONDecodeError:
                         continue
                         
-            except (AttributeError, Exception):
+            except Exception:
                 continue
         
         return {}
@@ -159,29 +159,43 @@ class GastronomRuExtractor(BaseRecipeExtractor):
         return None
     
     def extract_nutrition_info(self) -> Optional[str]:
-        """Извлечение информации о питательности"""
+        """Извлечение информации о питательности в формате: 99 kcal; 4/3/18"""
         # Из JSON-LD
         json_ld = self.extract_from_json_ld()
         nutrition = json_ld.get('nutrition', {})
         
         if nutrition:
-            # Формируем строку с питательной информацией
-            parts = []
-            
+            # Извлекаем калории (только число)
+            calories = None
             if nutrition.get('calories'):
-                parts.append(nutrition['calories'])
+                cal_match = re.search(r'(\d+(?:\.\d+)?)', nutrition['calories'])
+                if cal_match:
+                    calories = cal_match.group(1)
             
-            # Белки/Жиры/Углеводы
-            protein = nutrition.get('proteinContent', '').replace(' г.', ' г')
-            fat = nutrition.get('fatContent', '').replace(' г.', ' г')
-            carbs = nutrition.get('carbohydrateContent', '').replace(' г.', ' г')
+            # Извлекаем белки/жиры/углеводы (только числа)
+            protein = None
+            if nutrition.get('proteinContent'):
+                prot_match = re.search(r'(\d+(?:\.\d+)?)', nutrition['proteinContent'])
+                if prot_match:
+                    protein = prot_match.group(1)
             
-            if protein or fat or carbs:
-                bzu = f"Б/Ж/У: {protein}/{fat}/{carbs}"
-                parts.append(bzu)
+            fat = None
+            if nutrition.get('fatContent'):
+                fat_match = re.search(r'(\d+(?:\.\d+)?)', nutrition['fatContent'])
+                if fat_match:
+                    fat = fat_match.group(1)
             
-            if parts:
-                return ', '.join(parts)
+            carbs = None
+            if nutrition.get('carbohydrateContent'):
+                carbs_match = re.search(r'(\d+(?:\.\d+)?)', nutrition['carbohydrateContent'])
+                if carbs_match:
+                    carbs = carbs_match.group(1)
+            
+            # Формат: "99 kcal; 4/3/18"
+            if calories and protein and fat and carbs:
+                return f"{calories} kcal; {protein}/{fat}/{carbs}"
+            elif calories:
+                return f"{calories} kcal"
         
         return None
     
@@ -208,13 +222,13 @@ class GastronomRuExtractor(BaseRecipeExtractor):
     
     def parse_time(self, iso_duration: str) -> Optional[str]:
         """
-        Парсинг ISO 8601 duration в читаемый формат
+        Парсинг ISO 8601 duration в минуты
         
         Args:
             iso_duration: Строка вида "PT2H30M" или "PT30M"
         
         Returns:
-            Строка вида "2 hours 30 minutes" или "30 minutes"
+            Строка с количеством минут: "150" для PT2H30M
         """
         if not iso_duration or iso_duration == 'PT':
             return None
@@ -226,13 +240,13 @@ class GastronomRuExtractor(BaseRecipeExtractor):
         
         hours, minutes = match.groups()
         
-        parts = []
+        total_minutes = 0
         if hours:
-            parts.append(f"{hours} hour{'s' if int(hours) > 1 else ''}")
+            total_minutes += int(hours) * 60
         if minutes:
-            parts.append(f"{minutes} minute{'s' if int(minutes) > 1 else ''}")
+            total_minutes += int(minutes)
         
-        return ' '.join(parts) if parts else None
+        return str(total_minutes) if total_minutes > 0 else None
     
     def extract_prep_time(self) -> Optional[str]:
         """Извлечение времени подготовки"""
@@ -275,25 +289,40 @@ class GastronomRuExtractor(BaseRecipeExtractor):
         return None
     
     def extract_difficulty_level(self) -> Optional[str]:
-        """Извлечение уровня сложности"""
-        # На gastronom.ru сложность можно попробовать определить по времени
-        total_time = self.extract_total_time()
+        """Извлечение уровня сложности из JSON структуры"""
+        scripts = self.soup.find_all('script', id='vite-plugin-ssr_pageContext')
         
-        if not total_time:
-            return "Medium"
+        for script in scripts:
+            if not script.string:
+                continue
+            
+            try:
+                data = json.loads(script.string)
+                
+                # Ищем complexity в pageProps.page.content
+                if 'pageProps' in data and 'page' in data['pageProps']:
+                    page = data['pageProps']['page']
+                    
+                    # Проверяем в content.complexity
+                    if 'content' in page and 'complexity' in page['content']:
+                        complexity = page['content']['complexity']
+                        
+                        if complexity and 'name' in complexity:
+                            # Переводим на английский для унификации
+                            complexity_map = {
+                                'просто': 'easy',
+                                'простые рецепты': 'easy',
+                                'легко': 'easy',
+                                'средне': 'medium',
+                                'сложно': 'hard'
+                            }
+                            russian_complexity = complexity['name'].lower()
+                            return complexity_map.get(russian_complexity, russian_complexity)
+                        
+            except (json.JSONDecodeError, KeyError):
+                continue
         
-        # Простая эвристика на основе времени
-        if 'hour' in total_time:
-            # Извлекаем количество часов
-            hours_match = re.search(r'(\d+)\s*hour', total_time)
-            if hours_match:
-                hours = int(hours_match.group(1))
-                if hours >= 2:
-                    return "Hard"
-                elif hours >= 1:
-                    return "Medium"
-        
-        return "Easy"
+        return None
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
@@ -309,7 +338,49 @@ class GastronomRuExtractor(BaseRecipeExtractor):
             note_text = re.sub(r'^(Особенности рецепта|Совет)[:.]?\s*', '', note_text, flags=re.IGNORECASE)
             
             if note_text:
-                return note_text
+                return note_text.lower()
+        
+        return None
+    
+    def extract_tags(self) -> Optional[str]:
+        """Извлечение тегов из JSON структуры pageContext"""
+        scripts = self.soup.find_all('script', id='vite-plugin-ssr_pageContext')
+        
+        for script in scripts:
+            if not script.string:
+                continue
+            
+            try:
+                data = json.loads(script.string)
+                
+                # Ищем tags в pageProps.page
+                if 'pageProps' in data and 'page' in data['pageProps']:
+                    tags = data['pageProps']['page'].get('tags', [])
+                    
+                    if tags:
+                        # Извлекаем имена тегов
+                        tag_names = [tag['name'] for tag in tags if 'name' in tag]
+                        return ', '.join(tag_names).lower() if tag_names else None
+                        
+            except (json.JSONDecodeError, KeyError):
+                continue
+        
+        return None
+    
+    def extract_rating(self) -> Optional[float]:
+        """Извлечение рейтинга рецепта"""
+        # Из JSON-LD
+        json_ld = self.extract_from_json_ld()
+        
+        if json_ld.get('aggregateRating'):
+            rating_data = json_ld['aggregateRating']
+            rating_value = rating_data.get('ratingValue')
+            
+            if rating_value:
+                try:
+                    return float(rating_value)
+                except (ValueError, TypeError):
+                    pass
         
         return None
     
@@ -320,20 +391,31 @@ class GastronomRuExtractor(BaseRecipeExtractor):
         Returns:
             Словарь с данными рецепта
         """
+        dish_name = self.extract_dish_name()
+        description = self.extract_description()
+        ingredients_names = self.extract_ingredients_names()
+        ingredients = self.extract_ingredients()
+        step_by_step = self.extract_steps()
+        category = self.extract_category()
+        notes = self.extract_notes()
+        tags = self.extract_tags()
+        
         return {
-            "dish_name": self.extract_dish_name(),
-            "description": self.extract_description(),
-            "ingredients_names": self.extract_ingredients_names(),
-            "ingredients": self.extract_ingredients(),
-            "step_by_step": self.extract_steps(),
-            "nutrition_info": self.extract_nutrition_info(),
-            "category": self.extract_category(),
-            "prep_time": self.extract_prep_time(),
-            "cook_time": self.extract_cook_time(),
-            "total_time": self.extract_total_time(),
+            "dish_name": dish_name.lower() if dish_name else None,
+            "description": description.lower() if description else None,
+            "ingredients_names": ingredients_names if ingredients_names else None,  # Уже lowercase
+            "ingredients": ingredients if ingredients else None,  # Уже lowercase
+            "step_by_step": step_by_step.lower() if step_by_step else None,
+            "nutrition_info": self.extract_nutrition_info(),  # Формат: "99 kcal; 4/3/18"
+            "category": category.lower() if category else None,
+            "prep_time": self.extract_prep_time(),  # Только минуты
+            "cook_time": self.extract_cook_time(),  # Только минуты
+            "total_time": self.extract_total_time(),  # Только минуты
             "servings": self.extract_servings(),
-            "difficulty_level": self.extract_difficulty_level(),
-            "notes": self.extract_notes()
+            "difficulty_level": self.extract_difficulty_level(),  # Уже lowercase
+            "notes": notes,  # Уже lowercase
+            "rating": self.extract_rating(),
+            "tags": tags  # Уже lowercase
         }
 
 

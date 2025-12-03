@@ -39,6 +39,7 @@ class Page(BaseModel):
     difficulty_level: Optional[str] = None  # VARCHAR(50) - "easy", "medium", "hard"
     notes: Optional[str] = None  # TEXT - дополнительные заметки или советы
     image_url: Optional[str] = None  # TEXT - URL изображения
+    tags: Optional[str] = None  # TEXT - теги через запятую
 
     
     # Оценка достоверности

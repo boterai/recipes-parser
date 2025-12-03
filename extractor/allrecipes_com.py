@@ -19,13 +19,13 @@ class AllRecipesExtractor(BaseRecipeExtractor):
     @staticmethod
     def parse_iso_duration(duration: str) -> Optional[str]:
         """
-        Конвертирует ISO 8601 duration в читаемый формат
+        Конвертирует ISO 8601 duration в минуты
         
         Args:
             duration: строка вида "PT20M" или "PT1H30M"
             
         Returns:
-            Читаемое время вида "20 mins" или "1 hr 30 mins"
+            Время в минутах, например "90"
         """
         if not duration or not duration.startswith('PT'):
             return None
@@ -45,19 +45,10 @@ class AllRecipesExtractor(BaseRecipeExtractor):
         if min_match:
             minutes = int(min_match.group(1))
         
-        # Конвертируем 60+ минут в часы
-        if minutes >= 60 and hours == 0:
-            hours = minutes // 60
-            minutes = minutes % 60
+        # Конвертируем все в минуты
+        total_minutes = hours * 60 + minutes
         
-        # Форматируем результат
-        parts = []
-        if hours > 0:
-            parts.append(f"{hours} hr" if hours == 1 else f"{hours} hrs")
-        if minutes > 0:
-            parts.append(f"{minutes} min" if minutes == 1 else f"{minutes} mins")
-        
-        return ' '.join(parts) if parts else None
+        return str(total_minutes) if total_minutes > 0 else None
     
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
@@ -199,8 +190,7 @@ class AllRecipesExtractor(BaseRecipeExtractor):
         return ' '.join(steps) if steps else None
     
     def extract_nutrition_info(self) -> Optional[str]:
-        """Извлечение информации о питательности"""
-        nutrition_data = []
+        """Извлечение информации о питательности в формате: 202 kcal; 2/11/27"""
         
         # Сначала пробуем извлечь из JSON-LD
         json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
@@ -229,55 +219,48 @@ class AllRecipesExtractor(BaseRecipeExtractor):
                 if recipe_data and 'nutrition' in recipe_data:
                     nutrition = recipe_data['nutrition']
                     
-                    # Извлекаем основные поля питательности
+                    # Извлекаем калории
+                    calories = None
                     if 'calories' in nutrition:
-                        nutrition_data.append(nutrition['calories'])
+                        cal_text = nutrition['calories']
+                        # Извлекаем только число
+                        cal_match = re.search(r'(\d+)', str(cal_text))
+                        if cal_match:
+                            calories = cal_match.group(1)
                     
-                    # Белки/Жиры/Углеводы
-                    components = []
+                    # Извлекаем БЖУ (белки/жиры/углеводы)
+                    protein = None
+                    fat = None
+                    carbs = None
+                    
                     if 'proteinContent' in nutrition:
-                        components.append(f"{nutrition['proteinContent']} Protein")
+                        prot_text = nutrition['proteinContent']
+                        prot_match = re.search(r'(\d+)', str(prot_text))
+                        if prot_match:
+                            protein = prot_match.group(1)
+                    
                     if 'fatContent' in nutrition:
-                        components.append(f"{nutrition['fatContent']} Fat")
+                        fat_text = nutrition['fatContent']
+                        fat_match = re.search(r'(\d+)', str(fat_text))
+                        if fat_match:
+                            fat = fat_match.group(1)
+                    
                     if 'carbohydrateContent' in nutrition:
-                        components.append(f"{nutrition['carbohydrateContent']} Carbs")
+                        carb_text = nutrition['carbohydrateContent']
+                        carb_match = re.search(r'(\d+)', str(carb_text))
+                        if carb_match:
+                            carbs = carb_match.group(1)
                     
-                    if components:
-                        nutrition_data.append(', '.join(components))
-                    
-                    # Форматируем как строку
-                    if nutrition_data:
-                        return '; '.join(nutrition_data)
+                    # Форматируем: "202 kcal; 2/11/27"
+                    if calories and protein and fat and carbs:
+                        return f"{calories} kcal; {protein}/{fat}/{carbs}"
+                    elif calories:
+                        return f"{calories} kcal"
                     
             except (json.JSONDecodeError, KeyError):
                 continue
         
-        # Если JSON-LD не помог, ищем в HTML
-        nutrition_container = self.soup.find('div', class_=re.compile(r'nutrition', re.I))
-        if not nutrition_container:
-            nutrition_container = self.soup.find('table', class_=re.compile(r'nutrition', re.I))
-        
-        if nutrition_container:
-            # Ищем строки с данными о питательности
-            rows = nutrition_container.find_all(['tr', 'div', 'p'])
-            
-            for row in rows:
-                text = row.get_text(separator=' ', strip=True)
-                text = self.clean_text(text)
-                
-                # Проверяем, содержит ли строка питательные данные
-                if re.search(r'\d+\s*(cal|g|mg|kcal)', text, re.I):
-                    nutrition_data.append(text)
-        
-        # Альтернативный поиск через span или dt/dd
-        if not nutrition_data:
-            nutrition_items = self.soup.find_all(['span', 'dt', 'dd'], class_=re.compile(r'nutrition', re.I))
-            for item in nutrition_items:
-                text = item.get_text(strip=True)
-                if text and re.search(r'\d', text):
-                    nutrition_data.append(text)
-        
-        return '; '.join(nutrition_data) if nutrition_data else None
+        return None
     
     def extract_category(self) -> Optional[str]:
         """Извлечение категории"""
@@ -430,7 +413,7 @@ class AllRecipesExtractor(BaseRecipeExtractor):
         """Извлечение уровня сложности"""
         # На allrecipes обычно нет явного указания сложности
         # Можно попробовать определить по времени или оставить как "Easy"
-        return "Easy"
+        return "N/A"
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
@@ -451,6 +434,71 @@ class AllRecipesExtractor(BaseRecipeExtractor):
             return text if text else None
         
         return None
+    
+    def extract_tags(self) -> Optional[str]:
+        """Извлечение тегов из meta-тега parsely-tags или JavaScript кода"""
+        # Список общих слов и фраз без смысловой нагрузки для фильтрации
+        stopwords = {
+            'recipe', 'recipes', 'how to make', 'how to', 'easy', 'cooking', 'quick',
+            'allrecipes', 'food', 'allrecipes.com', 'kitchen', 'simple', 'best',
+            'make', 'ingredients', 'video', 'meal', 'prep', 'ideas', 'tips',
+            'tricks', 'hacks', 'home', 'family', 'what to make', 'dinner party',
+            'prepare', 'friends', 'homemade', 'dish', 'perfect', 'favorite',
+            'delicious', 'tutorial', 'demo', 'how', 'to', 'you can cook that',
+            'ar', '16x9', 'td', '3play_asr', 'amazon ar batch 001', '5 star',
+            'best rated', 'fresh', 'chewy', 'soft', 'moist', 'community recipes',
+            'allrecipes allstar recipes', 'special collections', 'more meal ideas'
+        }
+        
+        tags_list = []
+        
+        # 1. Сначала пробуем извлечь из мета-тега parsely-tags (приоритет)
+        parsely_meta = self.soup.find('meta', attrs={'name': 'parsely-tags'})
+        if parsely_meta and parsely_meta.get('content'):
+            tags_string = parsely_meta['content']
+            tags_list = [tag.strip().lower() for tag in tags_string.split(',') if tag.strip()]
+        
+        # 2. Если не нашли в parsely-tags, ищем в JavaScript коде
+        if not tags_list:
+            scripts = self.soup.find_all('script', type='text/javascript')
+            
+            for script in scripts:
+                if not script.string:
+                    continue
+                
+                # Ищем строку с тегами в формате: custParams += '&tags=' + encodeURIComponent("...")
+                match = re.search(r"custParams\s*\+=\s*['\"]&tags=['\"]\s*\+\s*encodeURIComponent\([\"']([^\"']+)[\"']\)", script.string)
+                if match:
+                    tags_string = match.group(1)
+                    tags_list = [tag.strip().lower() for tag in tags_string.split(',') if tag.strip()]
+                    break
+        
+        if not tags_list:
+            return None
+        
+        # Фильтрация тегов
+        filtered_tags = []
+        for tag in tags_list:
+            # Пропускаем точные совпадения со стоп-словами
+            if tag in stopwords:
+                continue
+            
+            # Пропускаем теги короче 3 символов
+            if len(tag) < 3:
+                continue
+            
+            filtered_tags.append(tag)
+        
+        # Удаляем дубликаты, сохраняя порядок
+        seen = set()
+        unique_tags = []
+        for tag in filtered_tags:
+            if tag not in seen:
+                seen.add(tag)
+                unique_tags.append(tag)
+        
+        # Возвращаем как строку через запятую
+        return ', '.join(unique_tags) if unique_tags else None
     
     def extract_rating(self) -> Optional[float]:
         """Извлечение рейтинга рецепта"""
@@ -565,21 +613,31 @@ class AllRecipesExtractor(BaseRecipeExtractor):
         Returns:
             Словарь с данными рецепта
         """
+        dish_name = self.extract_dish_name()
+        description = self.extract_description()
+        ingredients = self.extract_ingredients()
+        ingredients_names = self.extract_ingredients_names()
+        step_by_step = self.extract_steps()
+        category = self.extract_category()
+        notes = self.extract_notes()
+        tags = self.extract_tags()
+        
         return {
-            "dish_name": self.extract_dish_name(),
-            "description": self.extract_description(),
-            "ingredients": self.extract_ingredients(),
-            "ingredients_names": self.extract_ingredients_names(),
-            "step_by_step": self.extract_steps(),
+            "dish_name": dish_name.lower() if dish_name else None,
+            "description": description.lower() if description else None,
+            "ingredients": ingredients.lower() if ingredients else None,
+            "ingredients_names": ingredients_names.lower() if ingredients_names else None,
+            "step_by_step": step_by_step.lower() if step_by_step else None,
             "nutrition_info": self.extract_nutrition_info(),
-            "category": self.extract_category(),
+            "category": category.lower() if category else None,
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
             "servings": self.extract_servings(),
             "difficulty_level": self.extract_difficulty_level(),
             "rating": self.extract_rating(),
-            "notes": self.extract_notes()
+            "notes": notes.lower() if notes else None,
+            "tags": tags
         }
 
 def main():

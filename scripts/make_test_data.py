@@ -14,12 +14,12 @@ from src.common.db.mysql import MySQlManager
 from src.models import Page
 
 def main():
-    site_id = 1
+    site_id = 12
     db = MySQlManager()
     if not db.connect():
         print("Не удалось подключиться к базе данных")
         return
-    ids = [15, 18]  # Пример списка ID страниц для экспорта, или None для всех
+    ids = None  # [1, 2, 3]  # Если нужно выбрать конкретные ID страниц, иначе None для всех
     session = db.get_session()
     sql = "SELECT * FROM pages WHERE site_id = :site_id and is_recipe = TRUE"
     if ids:

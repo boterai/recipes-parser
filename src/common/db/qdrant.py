@@ -5,16 +5,15 @@
 import logging
 from typing import Any, Optional
 
-from src.common.embedding import prepare_text
+from src.common.embedding import prepare_text, EmbeddingFunction
 from config.db_config import QdrantConfig
 from src.models.page import Page
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
     Distance, VectorParams, PointStruct,
     Filter, FieldCondition, MatchValue,
-    NamedVector
+    MultiVectorConfig, MultiVectorComparator, Document, Prefetch, HnswConfigDiff
     )
-
 
 logger = logging.getLogger(__name__)
 
@@ -23,11 +22,12 @@ class QdrantManager:
     """Менеджер для работы с Qdrant векторной БД"""
     
     # Названия коллекций
+    MODEL_COLBERT_ML = "jinaai/jina-colbert-v2"
     COLLECTION_RECIPES = "recipes"
     COLLECTION_INGREDIENTS = "ingredients"
     COLLECTION_INSTRUCTIONS = "instructions"
     COLLECTION_DESCRIPTIONS = "descriptions"
-    COLLECTION_MULTI_VECTOR = "recipes_multi_vector"  # Коллекция с несколькими векторами
+    COLLECTION_COLBERT = "recipes_colbert"  # ColBERT мультивекторная коллекция
     
     def __init__(self, embedding_dim: int = 384):
         """
@@ -94,34 +94,29 @@ class QdrantManager:
                     )
                     logger.info(f"Создана коллекция {collection_name}: {description}")
             
-            # Создаем мультивекторную коллекцию
+            # Создаем ColBERT мультивекторную коллекцию https://qdrant.tech/documentation/advanced-tutorials/using-multivector-representations/
             try:
-                self.client.get_collection(self.COLLECTION_MULTI_VECTOR)
-                logger.info(f"Коллекция {self.COLLECTION_MULTI_VECTOR} уже существует")
+                self.client.get_collection(self.COLLECTION_COLBERT)
+                logger.info(f"Коллекция {self.COLLECTION_COLBERT} уже существует")
             except Exception:
-                # Коллекция с несколькими именованными векторами
                 self.client.create_collection(
-                    collection_name=self.COLLECTION_MULTI_VECTOR,
+                    collection_name=self.COLLECTION_COLBERT,
                     vectors_config={
-                        "full_context": VectorParams(
+                        "recipe": VectorParams(
                             size=self.embedding_dim,
                             distance=Distance.COSINE
                         ),
-                        "ingredients_only": VectorParams(
-                            size=self.embedding_dim,
-                            distance=Distance.COSINE
-                        ),
-                        "technique_only": VectorParams(
-                            size=self.embedding_dim,
-                            distance=Distance.COSINE
-                        ),
-                        "flavor_profile": VectorParams(
-                            size=self.embedding_dim,
-                            distance=Distance.COSINE
+                        "colbert": VectorParams(
+                            size=128,  # ColBERT использует 128-размерные векторы
+                            distance=Distance.COSINE,
+                            multivector_config=MultiVectorConfig(
+                                comparator=MultiVectorComparator.MAX_SIM
+                            ),
+                            hnsw_config=HnswConfigDiff(m=0)
                         )
                     }
                 )
-                logger.info(f"Создана мультивекторная коллекция {self.COLLECTION_MULTI_VECTOR}")
+                logger.info(f"Создана ColBERT мультивекторная коллекция {self.COLLECTION_COLBERT}")
             
         except Exception as e:
             logger.error(f"Ошибка создания коллекций Qdrant: {e}")
@@ -158,7 +153,8 @@ class QdrantManager:
                     self.COLLECTION_RECIPES,
                     self.COLLECTION_INGREDIENTS,
                     self.COLLECTION_INSTRUCTIONS,
-                    self.COLLECTION_DESCRIPTIONS
+                    self.COLLECTION_DESCRIPTIONS,
+                    self.COLLECTION_COLBERT
                 ]
             
             # Базовые метаданные
@@ -184,6 +180,10 @@ class QdrantManager:
                     if not page.description:
                         continue
                     text = prepare_text(page, "descriptions")
+                elif collection_name == self.COLLECTION_COLBERT:
+                    # ColBERT мультивекторная коллекция
+                    self.add_recipe_colbert(page, embedding_function=embedding_function)
+                    continue
                     
                 else:  # COLLECTION_RECIPES
                     text = prepare_text(page, "main")
@@ -206,6 +206,8 @@ class QdrantManager:
                     points=[point]
                 )
             
+
+
             logger.info(f"✓ Добавлен рецепт: {page.dish_name} (ID: {page.id})")
             return True
             
@@ -216,7 +218,7 @@ class QdrantManager:
     def add_recipes_batch(
         self,
         pages: list[Page],
-        embedding_function,
+        embedding_function: EmbeddingFunction,
         batch_size: int = 100
     ) -> int:
         """
@@ -241,7 +243,8 @@ class QdrantManager:
             self.COLLECTION_RECIPES: [],
             self.COLLECTION_INGREDIENTS: [],
             self.COLLECTION_INSTRUCTIONS: [],
-            self.COLLECTION_DESCRIPTIONS: []
+            self.COLLECTION_DESCRIPTIONS: [],
+            self.COLLECTION_COLBERT: []
         }
         
         for page in pages:
@@ -260,6 +263,13 @@ class QdrantManager:
                     vector = embedding_function(text_main)
                     batches[self.COLLECTION_RECIPES].append(
                         PointStruct(id=page.id, vector=vector, payload=payload)
+                    )
+
+                    batches[self.COLLECTION_COLBERT].append(
+                        PointStruct(id=page.id, vector={
+                            "recipe": vector,
+                            "colbert": Document(text=text_main, model=self.MODEL_COLBERT_ML)
+                        }, payload=payload)
                     )
                 
                 # Ингредиенты
@@ -311,14 +321,27 @@ class QdrantManager:
     def _upload_batches(self, batches: dict[str, list[PointStruct]]):
         """Загрузка батчей в Qdrant"""
         for collection_name, points in batches.items():
-            if points:
+            if not points:
+                continue
+
+            if collection_name == self.COLLECTION_COLBERT:
+                # ColBERT мультивекторная коллекция
                 try:
-                    self.client.upsert(
+                    self.client.upload_points(
                         collection_name=collection_name,
                         points=points
                     )
                 except Exception as e:
                     logger.error(f"Ошибка загрузки батча в {collection_name}: {e}")
+                continue
+            
+            try:
+                self.client.upsert(
+                    collection_name=collection_name,
+                    points=points
+                )
+            except Exception as e:
+                logger.error(f"Ошибка загрузки батча в {collection_name}: {e}")
     
     def search(
         self,
@@ -343,6 +366,10 @@ class QdrantManager:
         """
         if not self.client:
             logger.warning("Qdrant не подключен")
+            return []
+        
+        if collection_name == self.COLLECTION_COLBERT:
+            logger.warning("Для ColBERT используйте search_colbert метод")
             return []
         
         if collection_name is None:
@@ -453,6 +480,8 @@ class QdrantManager:
             for collection_name in collections:
                 try:
                     info = self.client.get_collection(collection_name)
+                    if info.points_count == 0:
+                        continue
                     stats[collection_name] = {
                         "points_count": info.points_count,
                         "status": info.status
@@ -466,122 +495,72 @@ class QdrantManager:
             logger.error(f"Ошибка получения статистики: {e}")
             return {}
     
-    def add_recipe_multi_vector(self,page: Page, embedding_function) -> bool:
+    def add_recipe_colbert(self, page: Page, embedding_function: EmbeddingFunction) -> bool:
         """
-        Добавление рецепта в мультивекторную коллекцию
+        Добавление рецепта в ColBERT мультивекторную коллекцию
         
         Args:
             page: Объект страницы с рецептом
-            embedding_function: Функция для создания эмбеддингов
             
         Returns:
             True если успешно добавлено
         """
-        if not self.client:
-            logger.warning("Qdrant не подключен")
-            return False
-        
         if not page.is_recipe or not page.dish_name:
             logger.warning(f"Пропущен: не рецепт или нет названия (ID: {page.id})")
             return False
         
         try:
-            # Подготовка текстов для разных векторов
+            # Подготовка текста рецепта
+            text = prepare_text(page, "main")
+            if not text:
+                logger.warning(f"Пропущен: пустой текст (ID: {page.id})")
+                return False
             
-            # 1. Полный контекст (название + описание + ингредиенты + заметки)
-            full_context_parts = []
-            if page.dish_name:
-                full_context_parts.append(page.dish_name)
-            if page.description:
-                full_context_parts.append(page.description)
-            if page.ingredients_names:
-                full_context_parts.append(f"Ingredients: {page.ingredients_names}")
-            elif page.ingredients:
-                full_context_parts.append(f"Ingredients: {page.ingredients[:300]}")
-            if page.notes:
-                full_context_parts.append(page.notes[:100])
-            full_context_text = ". ".join(full_context_parts)
-            
-            # 2. Только ингредиенты
-            ingredients_text = page.ingredients_names or page.ingredients or ""
-            
-            # 3. Только техника приготовления
-            technique_text = page.step_by_step or ""
-            
-            # 4. Вкусовой профиль (название + описание + категория)
-            flavor_parts = []
-            if page.dish_name:
-                flavor_parts.append(page.dish_name)
-            if page.description:
-                flavor_parts.append(page.description)
-            if page.category:
-                flavor_parts.append(f"Category: {page.category}")
-            if page.notes:
-                flavor_parts.append(page.notes[:100])
-            flavor_text = ". ".join(flavor_parts)
-            
-            # Создаем эмбеддинги для всех векторов
-            vectors = {
-                "full_context": embedding_function(full_context_text),
-                "ingredients_only": embedding_function(ingredients_text) if ingredients_text else [0.0] * self.embedding_dim,
-                "technique_only": embedding_function(technique_text) if technique_text else [0.0] * self.embedding_dim,
-                "flavor_profile": embedding_function(flavor_text)
-            }
-            
-            # Расширенные метаданные
+            dense_vector = embedding_function(text) # основной вектор
+            colbert_vector = Document(text=text, model=self.MODEL_COLBERT_ML) # вспомогательный вектор для уточнения поиска
+
+            # Payload
             payload = {
                 "page_id": page.id,
-                "site_id": page.site_id,
                 "dish_name": page.dish_name,
+                "site_id": page.site_id,
                 "url": page.url,
-                "category": page.category or "",
-                "prep_time": page.prep_time or "",
-                "cook_time": page.cook_time or "",
-                "total_time": page.total_time or "",
-                "servings": page.servings or "",
-                "difficulty_level": page.difficulty_level or "",
-                "has_ingredients": bool(ingredients_text),
-                "has_technique": bool(technique_text),
-                "has_description": bool(page.description)
+                "language": page.language or "unknown"
             }
             
-            # Добавляем точку с несколькими векторами
-            point = PointStruct(
-                id=str(page.id),  # Используем page_id для уникальности
-                vector=vectors,
-                payload=payload
-            )
-            
+            # Добавляем точку с мультивектором
             self.client.upsert(
-                collection_name=self.COLLECTION_MULTI_VECTOR,
-                points=[point]
+                collection_name=self.COLLECTION_COLBERT,
+                points=[
+                    PointStruct(
+                        id=page.id,
+                        vector={"colbert": colbert_vector, "recipe": dense_vector},  # Список векторов
+                        payload=payload
+                    )
+                ]
             )
             
-            logger.info(f"✓ Добавлен рецепт в мультивекторную коллекцию: {page.dish_name} (ID: {page.id})")
+            logger.info(f"✓ Добавлен ColBERT мультивектор для: {page.dish_name} (ID: {page.id})")
             return True
             
         except Exception as e:
-            logger.error(f"✗ Ошибка добавления рецепта в мультивекторную коллекцию {page.id}: {e}")
+            logger.error(f"Ошибка добавления ColBERT мультивектора: {e}")
             return False
     
-    def search_multi_vector(
+    def search_colbert(
         self,
         query_text: str,
-        embedding_function,
-        vector_name: str = "full_context",
         limit: int = 10,
-        site_id: Optional[int] = None,
+        embedding_function: EmbeddingFunction = None, # для основного вектора 
         score_threshold: float = 0.0
     ) -> list[dict[str, Any]]:
         """
-        Поиск в мультивекторной коллекции по конкретному вектору
+        Поиск в ColBERT мультивекторной коллекции
         
         Args:
             query_text: Текст запроса
-            embedding_function: Функция для создания эмбеддинга
-            vector_name: Имя вектора для поиска (full_context, ingredients_only, technique_only, flavor_profile)
             limit: Количество результатов
-            site_id: Фильтр по сайту
+            embedding_function: Функция для создания основного эмбеддинга
             score_threshold: Минимальный порог схожести
             
         Returns:
@@ -592,51 +571,40 @@ class QdrantManager:
             return []
         
         try:
-            # Создаем вектор запроса
-            query_vector = embedding_function(query_text)
+            dense_query = embedding_function(query_text) if embedding_function else None
+            colbert_query = Document(text=query_text, model=self.MODEL_COLBERT_ML)
             
-            # Создаем фильтр если нужен
-            search_filter = None
-            if site_id is not None:
-                search_filter = Filter(
-                    must=[
-                        FieldCondition(
-                            key="site_id",
-                            match=MatchValue(value=site_id)
-                        )
-                    ]
-                )
-            
-            # Выполняем поиск по конкретному вектору
-            results = self.client.search(
-                collection_name=self.COLLECTION_MULTI_VECTOR,
-                query_vector=NamedVector(
-                    name=vector_name,
-                    vector=query_vector
+            # Выполняем поиск с мультивектором
+            # Qdrant автоматически применит MAX_SIM для сравнения
+            results = self.client.query_points(
+                collection_name=self.COLLECTION_COLBERT,
+                prefetch=Prefetch(
+                    query=dense_query,
+                    using="recipe"
                 ),
+                query=colbert_query,
+                using="colbert",
                 limit=limit,
-                query_filter=search_filter,
+                with_payload=True,
                 score_threshold=score_threshold
             )
             
             # Форматируем результаты
             return [
                 {
-                    "id": hit.id,
+                    "page_id": hit.id,
                     "score": hit.score,
-                    "page_id": hit.payload.get("page_id"),
                     "dish_name": hit.payload.get("dish_name"),
                     "url": hit.payload.get("url"),
                     "site_id": hit.payload.get("site_id"),
-                    "category": hit.payload.get("category"),
-                    "vector_searched": vector_name,
-                    "collection": self.COLLECTION_MULTI_VECTOR
+                    "language": hit.payload.get("language"),
+                    "method": "ColBERT"
                 }
-                for hit in results
+                for hit in results.points
             ]
             
         except Exception as e:
-            logger.error(f"Ошибка поиска в мультивекторной коллекции: {e}")
+            logger.error(f"Ошибка поиска в ColBERT коллекции: {e}")
             return []
     
     def close(self):

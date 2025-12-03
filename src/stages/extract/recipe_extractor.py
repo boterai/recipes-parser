@@ -70,7 +70,7 @@ class RecipeExtractor:
         
         # Находим класс экстрактора (ищем класс с "Extractor" в имени)
         for attr_name in dir(module):
-            if 'Extractor' in attr_name and not attr_name.startswith('_'):
+            if 'Extractor' in attr_name and not attr_name.startswith('_') and attr_name != 'BaseRecipeExtractor':
                 extractor_class = getattr(module, attr_name)
                 if isinstance(extractor_class, type):
                     return extractor_class
@@ -115,7 +115,7 @@ class RecipeExtractor:
             return recipe_data
             
         except Exception as e:
-            print(f"❌ Ошибка извлечения из {html_path}: {e}")
+            print(f"Ошибка извлечения из {html_path}: {e}")
             return None
     
     def extract_page(self, page: Page) -> Optional[Dict[str, Any]]:
@@ -135,71 +135,103 @@ class RecipeExtractor:
 
         return self.extract_from_html(page.html_path, page.site_id)
     
-    def extract_and_update_page(self, page: Page) -> bool:
+    def extract_and_update_page(self, page: Page) -> tuple[bool, Optional[dict]]:
         """
-        Извлекает данные рецепта и обновляет объект Page
+        Извлекает данные рецепта (без обновления БД)
         
         Args:
-            page: объект Page для обновления
+            page: объект Page для извлечения
             
         Returns:
-            True если успешно, False если ошибка
+            (True, recipe_data) если успешно, (False, None) если ошибка
         """
         
         recipe_data = self.extract_page(page)
         
         if recipe_data is None:
-            return False
+            return False, None
         
-        # если ключевые поля отсутствуют, обновляем данные как отсутсвие рецеплат
-
+        # если ключевые поля отсутствуют, помечаем как не рецепт
         key_fields = ['dish_name', 'ingredients', 'step_by_step']
         if not all(field in recipe_data and recipe_data[field] for field in key_fields):
-            with self.db.get_session() as session:
-                sql = "UPDATE pages SET confidence_score = 10, is_recipe = FALSE WHERE id = :page_id"
-                session.execute(sqlalchemy.text(sql), {"page_id": page.id})
-                session.commit()
-            return False
+            return False, {
+                "page_id": page.id,
+                "confidence_score": 10,
+                "is_recipe": False
+            }
         
-        # Обновляем поля в БД
-        with self.db.get_session() as session:
-            # Находим запись в БД
-
-            sql = """
-                UPDATE pages SET
-                    is_recipe = :is_recipe,
-                    confidence_score = :confidence_score,
-                    dish_name = :dish_name,
-                    description = :description,
-                    ingredients = :ingredients,
-                    ingredients_names = :ingredients_names,
-                    step_by_step = :step_by_step,
-                    prep_time = :prep_time,
-                    cook_time = :cook_time,
-                    total_time = :total_time,
-                    servings = :servings,
-                    difficulty_level = :difficulty_level,
-                    category = :category,
-                    nutrition_info = :nutrition_info,
-                    notes = :notes,
-                    rating = :rating
-                WHERE id = :page_id
-            """
+        # Подготавливаем данные для батч-обновления
+        recipe_data["page_id"] = page.id
+        recipe_data["confidence_score"] = 50
+        recipe_data["is_recipe"] = True
         
-            recipe_data["page_id"] = page.id
-            recipe_data["confidence_score"] = 50
-            recipe_data["is_recipe"] = True
-            session.execute(sqlalchemy.text(sql), recipe_data)
-            session.commit()        
-        return True
+        return True, recipe_data
     
-    def process_site_recipes(self, site_id: int, limit: Optional[int] = None) -> Dict[str, int]:
+    def batch_update_pages(self, recipes_data: list[dict], failed_pages: list[dict]) -> tuple[int, int]:
         """
-        Обрабатывает все рецепты для указанного сайта
+        Батч-обновление страниц в БД
+        
+        Args:
+            recipes_data: список словарей с данными успешных рецептов
+            failed_pages: список словарей с данными неудачных страниц
+            
+        Returns:
+            (success_count, failed_count)
+        """
+        success_count = 0
+        failed_count = 0
+        
+        with self.db.get_session() as session:
+            # Обновляем успешные рецепты батчем
+            if recipes_data:
+                sql_success = """
+                    UPDATE pages SET
+                        is_recipe = :is_recipe,
+                        confidence_score = :confidence_score,
+                        dish_name = :dish_name,
+                        description = :description,
+                        ingredients = :ingredients,
+                        ingredients_names = :ingredients_names,
+                        step_by_step = :step_by_step,
+                        prep_time = :prep_time,
+                        cook_time = :cook_time,
+                        total_time = :total_time,
+                        servings = :servings,
+                        difficulty_level = :difficulty_level,
+                        category = :category,
+                        nutrition_info = :nutrition_info,
+                        notes = :notes,
+                        rating = :rating,
+                        tags = :tags
+                    WHERE id = :page_id
+                """
+                session.execute(sqlalchemy.text(sql_success), recipes_data)
+                success_count = len(recipes_data)
+            
+            # Обновляем неудачные страницы батчем
+            if failed_pages:
+                sql_failed = """
+                    UPDATE pages SET
+                        confidence_score = :confidence_score,
+                        is_recipe = :is_recipe
+                    WHERE id = :page_id
+                """
+                session.execute(sqlalchemy.text(sql_failed), failed_pages)
+                failed_count = len(failed_pages)
+            
+            session.commit()
+        
+        return success_count, failed_count
+    
+    def process_site_recipes(self, site_id: int, limit: Optional[int] = None, confidence_score: int = 0, batch_size: int = 100) -> Dict[str, int]:
+        """
+        Обрабатывает все рецепты для указанного сайта с батч-обновлением
         
         Args:
             site_id: ID сайта
             limit: максимальное количество страниц (None = все)
+            confidence_score: минимальный балл достоверности для обработки
+            batch_size: размер батча для обновления БД (по умолчанию 100)
             
         Returns:
             Статистика: {'processed': N, 'success': N, 'failed': N}
@@ -209,31 +241,51 @@ class RecipeExtractor:
         
         with self.db.get_session() as session:
             # Получаем страницы с рецептами без извлеченных данных
-            query = "SELECT * FROM pages WHERE site_id = :site_id AND confidence_score = 0"
+            query = "SELECT * FROM pages WHERE site_id = :site_id AND confidence_score > :confidence_score"
             if limit:
                 query += f" LIMIT {limit}"
 
-
-            results = session.execute(sqlalchemy.text(query), {"site_id": site_id})
+            results = session.execute(sqlalchemy.text(query), {"site_id": site_id, "confidence_score": confidence_score})
             rows = results.fetchall()
             pages = [Page.model_validate(dict(row._mapping)) for row in rows]
             
             print(f"\n{'='*60}")
             print(f"Обработка рецептов для site_id={site_id}")
             print(f"Найдено страниц: {len(pages)}")
+            print(f"Размер батча: {batch_size}")
             print(f"{'='*60}\n")
+            
+            # Батч-обработка
+            recipes_batch = []
+            failed_batch = []
             
             for i, page in enumerate(pages, 1):
                 stats['processed'] += 1
                 
-                print(f"[{i}/{len(pages)}]")
+                print(f"[{i}/{len(pages)}] Извлечение из {page.id}...", end=' ')
                 
-                if self.extract_and_update_page(page):
+                success, data = self.extract_and_update_page(page)
+                
+                if success and data:
+                    recipes_batch.append(data)
                     stats['success'] += 1
-                    print(f"  ✓ Успешно извлечено id {page.id}")
+                    print("✓")
                 else:
+                    if data:  # Есть данные о неудаче
+                        failed_batch.append(data)
                     stats['failed'] += 1
-                    print(f"  ✗ Не удалось извлечь данные {page.id}")
+                    print("✗")
+                
+                # Обновляем БД когда накопили достаточно или это последняя страница
+                if len(recipes_batch) + len(failed_batch) >= batch_size or i == len(pages):
+                    if recipes_batch or failed_batch:
+                        print(f"\n  → Обновление БД: {len(recipes_batch)} успешных, {len(failed_batch)} неудачных...")
+                        success_count, failed_count = self.batch_update_pages(recipes_batch, failed_batch)
+                        print(f"  ✓ Обновлено в БД: {success_count + failed_count} записей\n")
+                        
+                        # Очищаем батчи
+                        recipes_batch = []
+                        failed_batch = []
         
         print(f"\n{'='*60}")
         print("Обработка завершена!")
