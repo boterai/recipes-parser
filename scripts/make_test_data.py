@@ -13,18 +13,13 @@ import json
 from src.common.db.mysql import MySQlManager
 from src.models import Page
 
-def main():
-    site_id = 12
+def make_test_data(site_id: int = 15):
     db = MySQlManager()
     if not db.connect():
         print("Не удалось подключиться к базе данных")
         return
-    ids = None  # [1, 2, 3]  # Если нужно выбрать конкретные ID страниц, иначе None для всех
     session = db.get_session()
     sql = "SELECT * FROM pages WHERE site_id = :site_id and is_recipe = TRUE"
-    if ids:
-        ids_str = ','.join(map(str, ids))
-        sql += f" AND id IN ({ids_str})"
     result = session.execute(sqlalchemy.text(sql), {"site_id": site_id})
     rows = result.fetchall()
     pages = [Page.model_validate(dict(row._mapping)) for row in rows]
@@ -63,4 +58,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    make_test_data()

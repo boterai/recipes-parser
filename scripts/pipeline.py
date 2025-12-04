@@ -9,6 +9,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.stages.parse import SiteExplorer
 from src.stages.analyse import RecipeAnalyzer
+from src.stages.parse import explore_site
+from scripts.make_test_data import make_test_data
 
 logging.basicConfig(
     level=logging.INFO,
@@ -32,22 +34,19 @@ def run_explorer(explorer:SiteExplorer, max_urls: int, max_depth: int, forbid_su
     finally:
         explorer.close()
     
-MAX_PAGES = 100	
+MAX_PREPAREPAGES = 100	
 BATCH_SIZE = 30
+SITE_ID = None
 # Добавить сохранения состояния между запусками
-def main():
-	# https://www.food.com
-	#url3 = "https://www.marmiton.org/"
-	#url2 = "https://food-guide.canada.ca"
-	url = "https://www.recetasgratis.net/"
-	max_depth = 5
+def prepare_data_for_parser_creation(url: str, max_depth: int):
 	explorer = SiteExplorer(url, debug_mode=True, use_db=True)
-	#explorer.add_helper_urls(["https://www.goodnes.com/es/recetas/"], depth=2)
+	#explorer.add_helper_urls(["https://www.ricardocuisine.com/recettes/10151-orge-au-canard-confit-et-oignons-rotis",
+	#					   "https://www.ricardocuisine.com/recettes/plats-principaux/canard"], depth=2)
 	# предварительный запуск для просмотра сайта и получения хоть каких-то ссылок 
-	#run_explorer(explorer, max_urls=BATCH_SIZE, max_depth=max_depth, forbid_success_mark=True)
+	run_explorer(explorer, max_urls=BATCH_SIZE, max_depth=max_depth, forbid_success_mark=True)
 	# Экспорт состояния после первого batch
-	#state = explorer.export_state()
-     
+	state = explorer.export_state()
+	SITE_ID = explorer.site_id
 	analyzer = RecipeAnalyzer()
 	pattern = analyzer.analyse_recipe_page_pattern(site_id=explorer.site_id)
 	try:
@@ -66,7 +65,7 @@ def main():
 		logger.error(f"Ошибка: {e}", exc_info=True)
 		sys.exit(1)
 	
-	for batch in range(0, MAX_PAGES, BATCH_SIZE):
+	for batch in range(0, MAX_PREPAREPAGES, BATCH_SIZE):
 
 		logger.info(f"\n=== Запуск основного исследования, страницы {batch+1} - {batch+BATCH_SIZE} ===")
 		run_explorer(explorer, max_urls=BATCH_SIZE, max_depth=max_depth)
@@ -86,9 +85,23 @@ def main():
 			pattern = analyzer.analyse_recipe_page_pattern(site_id=explorer.site_id)
 			if pattern:
 				explorer.set_pattern(pattern) # обновление паттерна в эксеплорере
+				logger.info(f"Найден паттерн страниц с рецептами: {pattern}")
+				return # если паттерн найден, завершаем работу, пробуем создать полноценный парсер из полученных данных
 
-	# очищаем не нужные данные
-	#analyzer.cleanup_non_recipe_pages(site_id=explorer.site_id)
+
+def parse_after_pattern_found(url: str, max_depth: int, max_urls: int):
+	# Продолжение парсинга после нахождения паттерна, можно убрать провреку url и тогда url обновится автоматически
+	explore_site(url, max_urls=max_urls, max_depth=max_depth, check_pages_with_extractor=True, check_url=True)
+
+
+def main():
+	url = "https://www.ricardocuisine.com/"
+	max_depth = 5
+	#prepare_data_for_parser_creation(url=url, max_depth=max_depth)
+	#make_test_data(SITE_ID) # создать тестовые данные для анализа и создания парсера (создается в папке recipes/)
+	# после создания парсера можно запустить полноценный парсинг
+	parse_after_pattern_found(url, max_depth=max_depth, max_urls=10000)
+	
 
 			
 if __name__ == "__main__":

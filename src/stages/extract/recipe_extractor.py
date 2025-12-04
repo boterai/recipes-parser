@@ -135,7 +135,7 @@ class RecipeExtractor:
 
         return self.extract_from_html(page.html_path, page.site_id)
     
-    def extract_and_update_page(self, page: Page) -> tuple[bool, Optional[dict]]:
+    def extract_and_update_page(self, page: Page) -> Optional[dict]:
         """
         Извлекает данные рецепта (без обновления БД)
         
@@ -149,12 +149,12 @@ class RecipeExtractor:
         recipe_data = self.extract_page(page)
         
         if recipe_data is None:
-            return False, None
+            return None
         
         # если ключевые поля отсутствуют, помечаем как не рецепт
         key_fields = ['dish_name', 'ingredients', 'step_by_step']
         if not all(field in recipe_data and recipe_data[field] for field in key_fields):
-            return False, {
+            return {
                 "page_id": page.id,
                 "confidence_score": 10,
                 "is_recipe": False
@@ -165,7 +165,7 @@ class RecipeExtractor:
         recipe_data["confidence_score"] = 50
         recipe_data["is_recipe"] = True
         
-        return True, recipe_data
+        return recipe_data
     
     def batch_update_pages(self, recipes_data: list[dict], failed_pages: list[dict]) -> tuple[int, int]:
         """
@@ -264,9 +264,9 @@ class RecipeExtractor:
                 
                 print(f"[{i}/{len(pages)}] Извлечение из {page.id}...", end=' ')
                 
-                success, data = self.extract_and_update_page(page)
+                data = self.extract_and_update_page(page)
                 
-                if success and data:
+                if data and data.get("is_recipe", False):
                     recipes_batch.append(data)
                     stats['success'] += 1
                     print("✓")

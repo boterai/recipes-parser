@@ -132,7 +132,7 @@ class MySQlManager:
             session.close()
     
     def save_page(self, site_id: int, url: str, pattern: str, title: str,
-                  language: str, html_path: str, metadata_path: str) -> Optional[int]:
+                  language: str, html_path: str) -> Optional[int]:
         """
         Сохранение информации о странице
         
@@ -143,7 +143,6 @@ class MySQlManager:
             title: Заголовок страницы
             language: Язык страницы
             html_path: Путь к HTML файлу
-            metadata_path: Путь к файлу метаданных
             
         Returns:
             ID страницы или None при ошибке
@@ -164,8 +163,8 @@ class MySQlManager:
             # Вставка новой страницы
             result = session.execute(
                 sqlalchemy.text("""
-                    INSERT INTO pages (site_id, url, pattern, title, language, html_path, metadata_path)
-                    VALUES (:site_id, :url, :pattern, :title, :language, :html_path, :metadata_path)
+                    INSERT INTO pages (site_id, url, pattern, title, language, html_path)
+                    VALUES (:site_id, :url, :pattern, :title, :language, :html_path)
                 """),
                 {
                     "site_id": site_id,
@@ -174,7 +173,6 @@ class MySQlManager:
                     "title": title,
                     "language": language,
                     "html_path": html_path,
-                    "metadata_path": metadata_path
                 }
             )
             session.commit()

@@ -23,11 +23,12 @@ logger = logging.getLogger(__name__)
 
 def main():
     
-    url = "https://www.allrecipes.com/"
+    url = "https://www.povarenok.ru/"
     max_urls = 1000
     max_depth = 4
     
-    explore_site(url, max_urls=max_urls, max_depth=max_depth)
+    # запуск исследования сайта с проверкой страниц экстрактором рецептов и проверкой URL по паттерну
+    explore_site(url, max_urls=max_urls, max_depth=max_depth, check_pages_with_extractor=True, check_url=True)
 
 
 if __name__ == "__main__":

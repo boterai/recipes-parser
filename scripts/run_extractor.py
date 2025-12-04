@@ -10,6 +10,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.common.db.mysql import MySQlManager
 from src.stages.extract import RecipeExtractor
+from src.stages.parse import explore_site
 
 def main():
     """Основная функция"""
@@ -22,7 +23,11 @@ def main():
     
     # Создаем экстрактор
     extractor = RecipeExtractor(db)
-    extractor.process_site_recipes(site_id=1)
+    extractor.process_site_recipes(
+        site_id=5, 
+        confidence_score=10,
+        batch_size=100  # Обновление БД каждые 100 страниц
+    )
 
 if __name__ == '__main__':
     main()
