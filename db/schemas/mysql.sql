@@ -21,8 +21,7 @@ CREATE TABLE IF NOT EXISTS pages (
     html_path VARCHAR(500),
     
     -- Данные рецепта (NULL = отсутствует)
-    ingredients_names TEXT, -- 100% обязательное поле
-    ingredients TEXT, -- 100% обязательное поле
+    ingredient JSON, -- 100% обязательное поле
     step_by_step TEXT, -- 100% обязательное поле
     dish_name VARCHAR(500), -- 100 % обязательное поле
     image_blob BLOB,

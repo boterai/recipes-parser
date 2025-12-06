@@ -54,23 +54,86 @@ class PovarenokRuExtractor(BaseRecipeExtractor):
         
         return None
     
-    def extract_ingredients(self) -> Optional[str]:
-        """Извлечение ингредиентов с количеством"""
-        ingredients = []
+    def parse_ingredient(self, ingredient_text: str) -> Optional[dict]:
+        """
+        Парсинг строки ингредиента в структурированный формат
         
-        # Способ 1: Ищем li с itemprop="recipeIngredient" (старый формат)
-        ingredient_items = self.soup.find_all('li', itemprop='recipeIngredient')
-        
-        # Способ 2: Если не найдены, ищем в div.ingredients-bl (новый формат)
-        if not ingredient_items:
-            ingredients_div = self.soup.find('div', class_='ingredients-bl')
-            if ingredients_div:
-                ingredient_items = ingredients_div.find_all('li')
-        
-        if not ingredient_items:
+        Args:
+            ingredient_text: Строка вида "курица гриль 1 шт." или "мука 200 г"
+            
+        Returns:
+            dict: {"name": "курица гриль", "amount": "1", "unit": "шт."} или None
+        """
+        if not ingredient_text:
             return None
         
-        for item in ingredient_items:
+        # Чистим текст
+        text = self.clean_text(ingredient_text).lower()
+        
+        # Паттерн для русских ингредиентов: "название количество единица"
+        # Примеры: "сыр плавленый 200 г", "яйцо куриное 3 шт.", "майонез 2 ст.л."
+        # Единицы: шт., г, кг, мл, л, ст.л., ч.л., зубч., по вкусу
+        pattern = r'^(.+?)\s+([\d.,]+)\s*(шт\.?|г\.?|кг\.?|мл\.?|л\.?|ст\.?\s*л\.?|ч\.?\s*л\.?|зубч\.?|зубчик(?:а|ов)?|стакан(?:а|ов)?|щепотк(?:а|и)|по вкусу)?$'
+        
+        match = re.match(pattern, text, re.IGNORECASE)
+        
+        if match:
+            name, amount, unit = match.groups()
+            # Обработка количества (заменяем запятую на точку)
+            amount = amount.replace(',', '.') if amount else None
+            return {
+                "name": name.strip(),
+                "amount": amount,
+                "unit": unit.strip() if unit else None
+            }
+        
+        # Проверяем специальный случай "по вкусу" в конце без количества
+        if 'по вкусу' in text:
+            name = re.sub(r'\s+по вкусу', '', text).strip()
+            return {
+                "name": name,
+                "amount": None,
+                "unit": "по вкусу"
+            }
+        
+        # Если паттерн не совпал, пробуем другой формат: "количество единица название"
+        # Примеры: "200 г муки", "3 шт. яйца"
+        reverse_pattern = r'^([\d.,]+)\s*(шт\.?|г\.?|кг\.?|мл\.?|л\.?|ст\.?\s*л\.?|ч\.?\s*л\.?|зубч\.?|зубчик(?:а|ов)?|стакан(?:а|ов)?|щепотк(?:а|и)?)\s*(.+)$'
+        reverse_match = re.match(reverse_pattern, text, re.IGNORECASE)
+        
+        if reverse_match:
+            amount, unit, name = reverse_match.groups()
+            # Убираем родительный падеж если есть ("муки" -> "муки", но оставляем как есть)
+            return {
+                "name": name.strip(),
+                "amount": amount.replace(',', '.') if amount else None,
+                "unit": unit.strip() if unit else None
+            }
+        
+        # Если ничего не подошло, возвращаем только название
+        return {
+            "name": text,
+            "amount": None,
+            "unit": None
+        }
+    
+    def extract_ingredients(self) -> Optional[str]:
+        """Извлечение ингредиентов в нормализованном JSON формате"""
+        ingredient_items_list = []
+        
+        # Способ 1: Ищем li с itemprop="recipeIngredient" (старый формат)
+        ingredient_elements = self.soup.find_all('li', itemprop='recipeIngredient')
+        
+        # Способ 2: Если не найдены, ищем в div.ingredients-bl (новый формат)
+        if not ingredient_elements:
+            ingredients_div = self.soup.find('div', class_='ingredients-bl')
+            if ingredients_div:
+                ingredient_elements = ingredients_div.find_all('li')
+        
+        if not ingredient_elements:
+            return None
+        
+        for item in ingredient_elements:
             # Название ингредиента в span
             # Сначала ищем с itemprop="name" (новый формат)
             name_elem = item.find('span', itemprop='name')
@@ -103,7 +166,7 @@ class PovarenokRuExtractor(BaseRecipeExtractor):
                     if amt and last_span != name_elem:
                         amounts.append(amt)
             
-            amount = ' '.join(amounts) if amounts else ''
+            amount_str = ' '.join(amounts) if amounts else ''
             
             # Также может быть текст между элементами (например, "(отварное)")
             # Собираем текст из всех текстовых узлов li
@@ -114,55 +177,25 @@ class PovarenokRuExtractor(BaseRecipeExtractor):
             for match in re.finditer(r'\(([^)]+)\)', item_text):
                 extra = match.group(1).strip()
                 # Пропускаем если это название или количество
-                if extra and extra not in [name, amount] and len(extra) < 50:
+                if extra and extra not in [name, amount_str] and len(extra) < 50:
                     extra_parts.append(extra)
             
             if name:
-                # Форматируем как "количество название (доп. текст)"
-                if amount and extra_parts:
+                # Форматируем полную строку ингредиента
+                if amount_str and extra_parts:
                     extra_text = ', '.join(extra_parts)
-                    ingredient = f"{amount} {name} ({extra_text})".lower()
-                elif amount:
-                    ingredient = f"{amount} {name}".lower()
+                    full_text = f"{amount_str} {name} ({extra_text})"
+                elif amount_str:
+                    full_text = f"{amount_str} {name}"
                 else:
-                    # Если количества нет, добавляем только название
-                    ingredient = name.lower()
-                ingredients.append(ingredient)
+                    full_text = name
+                
+                # Парсим через parse_ingredient
+                parsed = self.parse_ingredient(full_text)
+                if parsed:
+                    ingredient_items_list.append(parsed)
         
-        return ', '.join(ingredients) if ingredients else None
-    
-    def extract_ingredients_names(self) -> Optional[str]:
-        """Извлечение только названий ингредиентов без количества"""
-        names = []
-        
-        # Способ 1: Ищем li с itemprop="recipeIngredient" (старый формат)
-        ingredient_items = self.soup.find_all('li', itemprop='recipeIngredient')
-        
-        # Способ 2: Если не найдены, ищем в div.ingredients-bl (новый формат)
-        if not ingredient_items:
-            ingredients_div = self.soup.find('div', class_='ingredients-bl')
-            if ingredients_div:
-                ingredient_items = ingredients_div.find_all('li')
-        
-        if not ingredient_items:
-            return None
-        
-        for item in ingredient_items:
-            # Название ингредиента в span
-            # Сначала ищем с itemprop="name" (новый формат)
-            name_elem = item.find('span', itemprop='name')
-            # Если не найден, ищем первый span в ссылке (старый формат)
-            if not name_elem:
-                link = item.find('a')
-                if link:
-                    name_elem = link.find('span')
-            
-            if name_elem:
-                name = self.clean_text(name_elem.get_text()).lower()
-                if name and name not in names:
-                    names.append(name)
-        
-        return ', '.join(names) if names else None
+        return json.dumps(ingredient_items_list, ensure_ascii=False) if ingredient_items_list else None
     
     def extract_steps(self) -> Optional[str]:
         """Извлечение шагов приготовления"""
@@ -419,6 +452,32 @@ class PovarenokRuExtractor(BaseRecipeExtractor):
         
         return None
     
+    def extract_image_urls(self) -> Optional[str]:
+        """Извлечение URL изображений"""
+        image_urls = []
+        
+        # 1. Из тега img с itemprop="image"
+        img_tag = self.soup.find('img', itemprop='image')
+        if img_tag and img_tag.get('src'):
+            image_urls.append(img_tag['src'])
+        
+        # 2. Из meta тега og:image
+        og_image = self.soup.find('meta', property='og:image')
+        if og_image and og_image.get('content'):
+            image_urls.append(og_image['content'])
+        
+        # Убираем дубликаты, сохраняя порядок
+        if image_urls:
+            seen = set()
+            unique_urls = []
+            for url in image_urls:
+                if url and url not in seen:
+                    seen.add(url)
+                    unique_urls.append(url)
+            return ', '.join(unique_urls) if unique_urls else None
+        
+        return None
+    
     def extract_all(self) -> dict:
         """
         Извлечение всех данных рецепта
@@ -429,7 +488,6 @@ class PovarenokRuExtractor(BaseRecipeExtractor):
         dish_name = self.extract_dish_name()
         description = self.extract_description()
         ingredients = self.extract_ingredients()
-        ingredients_names = self.extract_ingredients_names()
         step_by_step = self.extract_steps()
         category = self.extract_category()
         notes = self.extract_notes()
@@ -439,7 +497,6 @@ class PovarenokRuExtractor(BaseRecipeExtractor):
             "dish_name": dish_name,
             "description": description,
             "ingredients": ingredients,
-            "ingredients_names": ingredients_names,
             "step_by_step": step_by_step,
             "nutrition_info": self.extract_nutrition_info(),
             "category": category,
@@ -450,7 +507,8 @@ class PovarenokRuExtractor(BaseRecipeExtractor):
             "difficulty_level": self.extract_difficulty_level(),
             "rating": self.extract_rating(),
             "notes": notes,
-            "tags": tags
+            "tags": tags,
+            "image_urls": self.extract_image_urls()
         }
 
 

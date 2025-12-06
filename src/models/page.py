@@ -3,10 +3,10 @@ Pydantic модель для страницы
 """
 
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Any
 from decimal import Decimal
 from pydantic import BaseModel, Field
-
+import json
 
 class Page(BaseModel):
     """Модель спарсенной страницы"""
@@ -22,12 +22,10 @@ class Page(BaseModel):
     metadata_path: Optional[str] = None
     
     # Данные рецепта (NULL = отсутствует)
-    ingredients: Optional[str] = None  # TEXT - JSON или список ингредиентов
-    ingredients_names: Optional[str] = None  # список названий ингредиентов
+    ingredient: Optional[str] = None  #  JSON список ингредиентов
     description: Optional[str] = None  # TEXT - описание рецепта
     step_by_step: Optional[str] = None  # TEXT - JSON или текст с шагами
     dish_name: Optional[str] = None  # VARCHAR(500) - название блюда
-    image_blob: Optional[bytes] = None  # BLOB - бинарные данные изображения
     nutrition_info: Optional[str] = None  # TEXT - JSON с питательной ценностью
     rating: Optional[float] = None  # DECIMAL(3,2)
     author: Optional[str] = None  # VARCHAR(255)
@@ -38,7 +36,7 @@ class Page(BaseModel):
     servings: Optional[str] = None  # VARCHAR(50) - "4 servings"
     difficulty_level: Optional[str] = None  # VARCHAR(50) - "easy", "medium", "hard"
     notes: Optional[str] = None  # TEXT - дополнительные заметки или советы
-    image_url: Optional[str] = None  # TEXT - URL изображения
+    image_urls: Optional[str] = None  # TEXT - URL изображения
     tags: Optional[str] = None  # TEXT - теги через запятую
 
     
@@ -59,10 +57,32 @@ class Page(BaseModel):
         recipe_fields = [
             'dish_name', 'description', 'ingredients', 'step_by_step', 'nutrition_info',
             'rating', 'category', 'prep_time', 'cook_time',
-            'total_time', 'servings', 'difficulty_level', 'notes', 'ingredients_names'
+            'total_time', 'servings', 'difficulty_level', 'notes', 'ingredients_names', 'tags', 'image_urls'
         ]
         data = {field: getattr(self, field) for field in recipe_fields if getattr(self, field) is not None}
         return data
+    
+    def ingredient_to_str(self, separator: str = ", ") -> str:
+        """возвращает все игредиенты через запятую"""
+        if not self.ingredient:
+            return ""
+        try:
+            ingredients: list[dict[str, Any]] = json.loads(self.ingredient)
+            names = [item.get('name', '').strip() for item in ingredients if 'name' in item]
+            return separator.join(names)
+        except json.JSONDecodeError:
+            return ""
+        
+    def ingredient_to_list(self) -> list[str]:
+        """возвращает все игредиенты списком строк"""
+        if not self.ingredient:
+            return []
+        try:
+            ingredients: list[dict[str, Any]] = json.loads(self.ingredient)
+            names = [item.get('name', '').strip() for item in ingredients if 'name' in item]
+            return names
+        except json.JSONDecodeError:
+            return []
     
     class Config:
         from_attributes = True

@@ -152,7 +152,7 @@ class RecipeExtractor:
             return None
         
         # если ключевые поля отсутствуют, помечаем как не рецепт
-        key_fields = ['dish_name', 'ingredients', 'step_by_step']
+        key_fields = ['dish_name', 'ingredient', 'step_by_step']
         if not all(field in recipe_data and recipe_data[field] for field in key_fields):
             return {
                 "page_id": page.id,
@@ -190,8 +190,7 @@ class RecipeExtractor:
                         confidence_score = :confidence_score,
                         dish_name = :dish_name,
                         description = :description,
-                        ingredients = :ingredients,
-                        ingredients_names = :ingredients_names,
+                        ingredient = :ingredient,
                         step_by_step = :step_by_step,
                         prep_time = :prep_time,
                         cook_time = :cook_time,
@@ -202,7 +201,8 @@ class RecipeExtractor:
                         nutrition_info = :nutrition_info,
                         notes = :notes,
                         rating = :rating,
-                        tags = :tags
+                        tags = :tags,
+                        image_urls = :image_urls
                     WHERE id = :page_id
                 """
                 session.execute(sqlalchemy.text(sql_success), recipes_data)

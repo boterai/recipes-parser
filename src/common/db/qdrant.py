@@ -167,7 +167,7 @@ class QdrantManager:
             for collection_name in collections:
                 # Определяем тип коллекции
                 if collection_name == self.COLLECTION_INGREDIENTS:
-                    if not page.ingredients_names and not page.ingredients:
+                    if not page.ingredient:
                         continue
                     text = prepare_text(page, "ingredients")
                     
@@ -273,7 +273,7 @@ class QdrantManager:
                     )
                 
                 # Ингредиенты
-                if page.ingredients_names or page.ingredients:
+                if page.ingredient:
                     text_ing = prepare_text(page, "ingredients")
                     if text_ing:
                         vector = embedding_function(text_ing)

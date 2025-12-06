@@ -36,8 +36,53 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+# Multilingual recipe-related keywords for URL and content detection
+RECIPE_KEYWORDS = {
+    'url': [
+        'recipe', 'recipes', 'recette', 'recettes', 'рецепт', 'рецепты', 
+        'ricetta', 'ricette', 'rezept', 'rezepte', 'receta', 'recetas',
+        'tarif', 'tarifler', 'レシピ', '食谱', '조리법', 'وصفة'
+    ],
+    'ingredients': [
+        'ingredients', 'ingredient', 'ингредиенты', 'ингредиент', 
+        'ingrédients', 'ingrédient', 'ingredientes', 'ingrediente',
+        'ingredienti', 'zutaten', 'malzemeler', '材料', '配料', '재료'
+    ],
+    'instructions': [
+        'instructions', 'steps', 'directions', 'method', 'preparation',
+        'шаги', 'приготовление', 'инструкции', 'étapes', 'préparation',
+        'paso', 'pasos', 'procedimento', 'zubereitung', 'hazırlanış',
+        '作り方', '手順', '步骤', '조리 방법'
+    ],
+    'cooking': [
+        'cooking', 'cook', 'cuisine', 'cuire', 'готовить', 'готовка',
+        'cocinar', 'cucinare', 'kochen', 'pişirmek', '料理', '烹饪', '요리'
+    ],
+    'time': [
+        'cooking time', 'prep time', 'время приготовления', 'время готовки',
+        'temps de préparation', 'tiempo de preparación', 'tempo di preparazione',
+        'vorbereitungszeit', 'hazırlama süresi', '調理時間', '准备时间', '조리 시간'
+    ],
+    'dish_types': [
+        'dinner', 'lunch', 'breakfast', 'dessert', 'appetizer', 'snack',
+        'обед', 'ужин', 'завтрак', 'десерт', 'закуска',
+        'dîner', 'déjeuner', 'petit-déjeuner', 'dessert', 'entrée',
+        'cena', 'comida', 'desayuno', 'postre', 'aperitivo',
+        'abendessen', 'mittagessen', 'frühstück', 'nachtisch',
+        'akşam yemeği', 'öğle yemeği', 'kahvaltı', 'tatlı'
+    ],
+    'common_foods': [
+        'chicken', 'fish', 'beef', 'pork', 'pasta', 'rice', 'salad', 'soup',
+        'курица', 'рыба', 'говядина', 'свинина', 'паста', 'рис', 'салат', 'суп',
+        'poulet', 'poisson', 'boeuf', 'porc', 'pâtes', 'riz', 'salade', 'soupe',
+        'pollo', 'pescado', 'carne', 'cerdo', 'arroz', 'ensalada', 'sopa',
+        'tavuk', 'balık', 'et', 'makarna', 'pilav', 'salata', 'çorba'
+    ]
+}
+
+
 class SiteExplorer:
-    """Исследователь структуры сайта"""
+    """Исследователь структуры сайта с поддержкой многоязычных рецептов"""
     
     def __init__(self, base_url: str, debug_mode: bool = True, use_db: bool = True, recipe_pattern: str = None,
                  max_errors: int = 3):
@@ -326,30 +371,27 @@ class SiteExplorer:
                 site_id, url, pattern, html_path,
                 is_recipe, confidence_score,
                 dish_name, description, 
-                ingredients, ingredients_names, 
-                step_by_step,
+                ingredient, step_by_step,
                 prep_time, cook_time, total_time,
                 servings, difficulty_level,
                 category, nutrition_info,
-                notes, rating, tags, title, language
+                notes, rating, tags, title, language, image_urls
             ) VALUES (
                 :site_id, :url, :pattern, :html_path,
                 :is_recipe, :confidence_score,
                 :dish_name, :description,
-                :ingredients, :ingredients_names,
-                :step_by_step,
+                :ingredient, :step_by_step,
                 :prep_time, :cook_time, :total_time,
                 :servings, :difficulty_level,
                 :category, :nutrition_info,
-                :notes, :rating, :tags, :title, :language
+                :notes, :rating, :tags, :title, :language, :image_urls
             )
             ON DUPLICATE KEY UPDATE
                 is_recipe = VALUES(is_recipe),
                 confidence_score = VALUES(confidence_score),
                 dish_name = VALUES(dish_name),
                 description = VALUES(description),
-                ingredients = VALUES(ingredients),
-                ingredients_names = VALUES(ingredients_names),
+                ingredient = VALUES(ingredient),
                 step_by_step = VALUES(step_by_step),
                 prep_time = VALUES(prep_time),
                 cook_time = VALUES(cook_time),
@@ -362,21 +404,23 @@ class SiteExplorer:
                 rating = VALUES(rating),
                 tags = VALUES(tags),
                 title = VALUES(title),
-                language = VALUES(language)
+                language = VALUES(language),
+                image_urls = VALUES(image_urls)
         """
 
         upsert_on_non_recipe = """
             INSERT INTO pages (
                 site_id, url, pattern, html_path,
-                is_recipe, confidence_score, title
+                is_recipe, confidence_score, title, language
             ) VALUES (
                 :site_id, :url, :pattern, :html_path,
-                :is_recipe, :confidence_score, :title
+                :is_recipe, :confidence_score, :title, :language
             )
             ON DUPLICATE KEY UPDATE
                 is_recipe = VALUES(is_recipe),
                 confidence_score = VALUES(confidence_score), 
-                title = VALUES(title)
+                title = VALUES(title),
+                language = VALUES(language)
             """
         
         # Подготовка данных
@@ -393,7 +437,7 @@ class SiteExplorer:
         if recipe_data.get("is_recipe", False) is True:
             self.mark_page_as_successful(url)
         else:
-            upsert_data = upsert_on_non_recipe
+            upsert_sql = upsert_on_non_recipe
 
         try:
             with self.db.get_session() as session:
@@ -407,6 +451,135 @@ class SiteExplorer:
         logger.info(f"  ✓ Рецепт '{dish_name}' сохранен в БД")
         return True
         
+
+    def get_recipe_likelihood_score(self, url: str, link_text: str = "", context_text: str = "") -> float:
+        """
+        Вычисляет вероятность того, что URL ведет к рецепту (0-100)
+        
+        Args:
+            url: URL для анализа
+            link_text: Текст ссылки (anchor text)
+            context_text: Окружающий текст вокруг ссылки
+            
+        Returns:
+            Оценка вероятности от 0 до 100
+        """
+        score = 0.0
+        url_lower = url.lower()
+        link_text_lower = link_text.lower()
+        context_lower = context_text.lower()
+        
+        # 1. Проверка URL (максимум 40 баллов)
+        # Прямые совпадения с recipe keywords в URL
+        url_recipe_matches = sum(1 for kw in RECIPE_KEYWORDS['url'] if kw in url_lower)
+        score += min(url_recipe_matches * 15, 40)  # До 40 баллов
+        
+        # Паттерны URL с номерами (часто рецепты)
+        if re.search(r'/\d{4,}', url) or re.search(r'recipe[-_]\d+', url_lower):
+            score += 10
+        
+        # 2. Проверка текста ссылки (максимум 30 баллов)
+        # Прямые совпадения с keywords в тексте ссылки
+        for category, keywords in RECIPE_KEYWORDS.items():
+            matches = sum(1 for kw in keywords if kw in link_text_lower)
+            if category == 'url':
+                score += min(matches * 10, 20)
+            elif category in ['ingredients', 'instructions']:
+                score += min(matches * 5, 10)
+        
+        # Названия блюд в тексте ссылки
+        dish_matches = sum(1 for kw in RECIPE_KEYWORDS['common_foods'] if kw in link_text_lower)
+        score += min(dish_matches * 3, 10)
+        
+        # 3. Проверка контекста (максимум 20 баллов)
+        context_recipe_score = 0
+        for category in ['ingredients', 'instructions', 'cooking', 'time']:
+            matches = sum(1 for kw in RECIPE_KEYWORDS[category] if kw in context_lower)
+            context_recipe_score += matches
+        score += min(context_recipe_score * 2, 20)
+        
+        # 4. Бонусы за комбинации (максимум 10 баллов)
+        # URL содержит recipe + текст ссылки содержит еду
+        if any(kw in url_lower for kw in RECIPE_KEYWORDS['url']):
+            if any(kw in link_text_lower for kw in RECIPE_KEYWORDS['common_foods']):
+                score += 10
+        
+        return min(score, 100)  # Ограничиваем максимумом 100
+    
+
+    def quick_recipe_check(self, soup: BeautifulSoup = None) -> tuple:
+        """
+        Быстрая проверка страницы на наличие рецепта без полной экстракции
+        
+        Args:
+            soup: BeautifulSoup объект (если None, парсит текущую страницу)
+            
+        Returns:
+            (has_recipe, confidence): True если вероятно рецепт, оценка уверенности 0-100
+        """
+        if soup is None:
+            html = self.driver.page_source
+            soup = BeautifulSoup(html, 'html.parser')
+        
+        confidence = 0
+        
+        # 1. Проверка JSON-LD schema (30 баллов)
+        scripts = soup.find_all('script', type='application/ld+json')
+        for script in scripts:
+            try:
+                data = json.loads(script.string)
+                if isinstance(data, dict):
+                    schema_type = data.get('@type', '')
+                    if 'Recipe' in str(schema_type):
+                        confidence += 30
+                        break
+                elif isinstance(data, list):
+                    for item in data:
+                        if isinstance(item, dict) and 'Recipe' in str(item.get('@type', '')):
+                            confidence += 30
+                            break
+            except (json.JSONDecodeError, AttributeError):
+                continue
+        
+        # 2. Проверка meta тегов (20 баллов)
+        og_type = soup.find('meta', property='og:type')
+        if og_type and 'recipe' in og_type.get('content', '').lower():
+            confidence += 20
+        
+        # 3. Проверка семантических тегов (20 баллов)
+        recipe_indicators = [
+            soup.find('div', class_=re.compile(r'recipe', re.I)),
+            soup.find('article', class_=re.compile(r'recipe', re.I)),
+            soup.find(attrs={'itemtype': re.compile(r'Recipe', re.I)}),
+        ]
+        if any(recipe_indicators):
+            confidence += 20
+        
+        # 4. Проверка структуры контента (30 баллов)
+        text = soup.get_text().lower()
+        
+        # Ингредиенты
+        has_ingredients = any(kw in text for kw in RECIPE_KEYWORDS['ingredients'][:5])
+        if has_ingredients:
+            confidence += 10
+        
+        # Инструкции
+        has_instructions = any(kw in text for kw in RECIPE_KEYWORDS['instructions'][:5])
+        if has_instructions:
+            confidence += 10
+        
+        # Время приготовления
+        has_time = any(kw in text for kw in RECIPE_KEYWORDS['time'][:5])
+        if has_time:
+            confidence += 5
+        
+        # Типичные продукты
+        food_count = sum(1 for kw in RECIPE_KEYWORDS['common_foods'][:20] if kw in text)
+        confidence += min(food_count, 5)
+        
+        # Решение: рецепт если уверенность >= 40
+        return (confidence >= 40, confidence)
+    
     
     def should_explore_url(self, url: str) -> bool:
         """
@@ -600,7 +773,10 @@ class SiteExplorer:
             logger.error(f"Ошибка сохранения страницы: {e}")
     
     def extract_links(self) -> List[str]:
-        """Извлечение всех ссылок со страницы"""
+        """
+        Извлечение всех ссылок со страницы (без приоритизации)
+        Для приоритизации используйте extract_links_with_priority()
+        """
         try:
             soup = BeautifulSoup(self.driver.page_source, 'lxml')
             links = []
@@ -620,6 +796,80 @@ class SiteExplorer:
         except Exception as e:
             logger.error(f"Ошибка извлечения ссылок: {e}")
             return []
+    
+
+    def extract_links_with_priority(self) -> List[tuple]:
+        """
+        Извлечение ссылок с приоритизацией на основе многоязычных признаков рецептов
+        
+        Returns:
+            Список кортежей (url, likelihood_score, link_text) отсортированных по убыванию вероятности
+        """
+        try:
+            soup = BeautifulSoup(self.driver.page_source, 'lxml')
+            links_with_scores = []
+            
+            for link in soup.find_all('a', href=True):
+                href = link['href']
+                absolute_url = urljoin(self.driver.current_url, href)
+                
+                # Очистка от якорей и параметров
+                clean_url = absolute_url.split('#')[0].split('?')[0]
+                
+                if not (clean_url and self.is_same_domain(clean_url)):
+                    continue
+                
+                # Извлечение контекста ссылки
+                link_text = link.get_text(strip=True)
+                
+                # Получение окружающего текста (родитель + соседи)
+                context_parts = []
+                
+                # Текст родительского элемента
+                parent = link.parent
+                if parent:
+                    # Текст до ссылки
+                    for sibling in parent.find_all_previous(string=True, limit=3):
+                        if sibling.strip():
+                            context_parts.insert(0, sibling.strip())
+                    
+                    # Текст после ссылки
+                    for sibling in parent.find_all_next(string=True, limit=3):
+                        if sibling.strip():
+                            context_parts.append(sibling.strip())
+                
+                context_text = ' '.join(context_parts)[:200]  # Ограничиваем длину
+                
+                # Вычисляем вероятность
+                score = self.get_recipe_likelihood_score(clean_url, link_text, context_text)
+                
+                links_with_scores.append((clean_url, score, link_text))
+            
+            # Удаляем дубликаты (оставляем с максимальным score)
+            unique_links = {}
+            for url, score, text in links_with_scores:
+                if url not in unique_links or score > unique_links[url][0]:
+                    unique_links[url] = (score, text)
+            
+            # Формируем финальный список
+            result = [(url, score, text) for url, (score, text) in unique_links.items()]
+            
+            # Сортируем по убыванию вероятности
+            result.sort(key=lambda x: x[1], reverse=True)
+            
+            logger.info(f"Найдено {len(result)} уникальных ссылок")
+            if result:
+                top_5 = result[:5]
+                logger.info("Топ-5 ссылок по вероятности:")
+                for url, score, text in top_5:
+                    logger.info(f"  [{score:.0f}] {text[:30]}... -> {url[:60]}...")
+            
+            return result
+            
+        except Exception as e:
+            logger.error(f"Ошибка извлечения ссылок с приоритетом: {e}")
+            return []
+    
     
     def  export_state(self) -> dict:
         """Экспорт состояния для передачи в другой экземпляр
@@ -765,12 +1015,169 @@ class SiteExplorer:
         """
         Отмечает страницу как успешную (с рецептом) и обновляет успешные источники
         """
-        logger.info("  ✓ URL соответствует паттерну рецепта")
-        # Отмечаем источник как успешный
         referrer = self.referrer_map.get(current_url)
         if referrer:
             self.successful_referrers.add(referrer)
             logger.info(f"  ✓ Источник отмечен как успешный: {referrer}")
+    
+
+    def explore_multilingual(self, max_urls: int = 100, max_depth: int = 3, 
+                            min_likelihood: float = 30.0, quick_check: bool = True) -> int:
+        """
+        Многоязычное исследование сайта с приоритизацией рецептов
+        
+        Args:
+            max_urls: Максимальное количество URL для посещения
+            max_depth: Максимальная глубина обхода
+            min_likelihood: Минимальная вероятность для посещения URL (0-100)
+            quick_check: Использовать быструю проверку на рецепт перед полной экстракцией
+            
+        Returns:
+            Количество успешно найденных рецептов
+        """
+        logger.info(f"🌍 Начало многоязычного исследования сайта: {self.base_url}")
+        logger.info(f"Параметры: max_urls={max_urls}, max_depth={max_depth}, min_likelihood={min_likelihood}")
+        
+        # Очередь с приоритетами: (priority_score, url, depth, link_text)
+        import heapq
+        priority_queue = []
+        
+        # Стартуем с базового URL
+        heapq.heappush(priority_queue, (-100, self.base_url, 0, "Home"))
+        
+        urls_explored = 0
+        recipes_found = 0
+        
+        while priority_queue and urls_explored < max_urls:
+            # Извлекаем URL с наивысшим приоритетом (heapq - min-heap, поэтому отрицательные)
+            neg_priority, current_url, depth, link_text = heapq.heappop(priority_queue)
+            priority = -neg_priority
+            
+            # Проверка глубины
+            if depth > max_depth:
+                continue
+            
+            # Проверка, нужно ли посещать
+            if current_url in self.visited_urls:
+                continue
+            
+            if not self.should_explore_url(current_url):
+                continue
+            
+            # Пропускаем URL с низкой вероятностью (кроме первого уровня)
+            if depth > 0 and priority < min_likelihood:
+                logger.debug(f"Пропущен URL с низкой вероятностью [{priority:.0f}]: {current_url}")
+                continue
+            
+            try:
+                logger.info(f"[{urls_explored + 1}/{max_urls}] [{priority:.0f}] {link_text[:30]}...")
+                logger.info(f"  URL: {current_url}")
+                logger.info(f"  Глубина: {depth}")
+                
+                # Переход на страницу
+                try:
+                    self.driver.get(current_url)
+                except TimeoutException:
+                    logger.warning(f"Timeout при загрузке {current_url}")
+                    continue
+                
+                # Ожидание загрузки
+                try:
+                    WebDriverWait(self.driver, 15).until(
+                        lambda d: d.execute_script('return document.readyState') == 'complete'
+                    )
+                except TimeoutException:
+                    logger.warning("Timeout при загрузке страницы, продолжаем")
+                
+                # Адаптивная задержка
+                self.request_count += 1
+                delay = random.uniform(1.0, 2.0) if self.request_count % 10 != 0 else random.uniform(3, 5)
+                time.sleep(delay)
+                
+                # Прокрутка страницы
+                self.slow_scroll_page(quick_mode=True)
+                
+                # Отмечаем как посещенный
+                self.visited_urls.add(current_url)
+                urls_explored += 1
+                
+                # Получение паттерна
+                pattern = self.get_url_pattern(current_url)
+                if pattern not in self.url_patterns:
+                    self.url_patterns[pattern] = []
+                
+                page_index = len(self.url_patterns[pattern]) + 1
+                self.url_patterns[pattern].append(current_url)
+                
+                # Быстрая проверка на рецепт (если включено)
+                is_recipe = False
+                confidence = 0
+                
+                if quick_check:
+                    is_recipe, confidence = self.quick_recipe_check()
+                    logger.info(f"  Быстрая проверка: {'✓ РЕЦЕПТ' if is_recipe else '✗ не рецепт'} (уверенность: {confidence})")
+                
+                # Если похоже на рецепт - делаем полную экстракцию
+                if is_recipe and self.recipe_extractor:
+                    if self.check_and_extract_recipe(current_url, pattern, page_index):
+                        recipes_found += 1
+                        logger.info(f"  🎯 Найдено рецептов: {recipes_found}")
+                        
+                        # Обновляем паттерн если нужно
+                        if self.recipe_regex is None or not self.is_recipe_url(current_url):
+                            logger.info("  📝 Обновление паттерна рецептов...")
+                            if self.analyzer is None:
+                                self.analyzer = RecipeAnalyzer(
+                                    site_id=self.site_id,
+                                    db_manager=self.db,
+                                    sample_size=10
+                                )
+                            new_pattern = self.analyzer.analyse_recipe_page_pattern(site_id=self.site_id)
+                            if new_pattern:
+                                self.set_pattern(new_pattern)
+                
+                # Извлечение новых ссылок с приоритетами
+                new_links = self.extract_links_with_priority()
+                logger.info(f"  Найдено ссылок: {len(new_links)}")
+                
+                # Добавляем в приоритетную очередь
+                added = 0
+                for link_url, link_score, link_txt in new_links:
+                    if link_url not in self.visited_urls and link_score >= min_likelihood:
+                        # Запоминаем источник
+                        if link_url not in self.referrer_map:
+                            self.referrer_map[link_url] = current_url
+                        
+                        # Добавляем в очередь (отрицательный приоритет для max-heap)
+                        heapq.heappush(priority_queue, (-link_score, link_url, depth + 1, link_txt))
+                        added += 1
+                
+                logger.info(f"  Добавлено в очередь: {added} ссылок (мин. вероятность {min_likelihood})")
+                
+                # Периодическое сохранение
+                if urls_explored % 10 == 0:
+                    self.save_state()
+                    logger.info(f"💾 Состояние сохранено: {urls_explored} URL, {recipes_found} рецептов")
+                
+            except Exception as e:
+                logger.error(f"Ошибка при обработке {current_url}: {e}")
+                self.failed_urls.add(current_url)
+                continue
+        
+        # Финальное сохранение
+        self.save_state()
+        
+        logger.info("\n" + "="*60)
+        logger.info("🎉 Многоязычное исследование завершено!")
+        logger.info(f"Посещено URL: {urls_explored}")
+        logger.info(f"Найдено рецептов: {recipes_found}")
+        logger.info(f"Найдено паттернов: {len(self.url_patterns)}")
+        logger.info(f"Успешных источников: {len(self.successful_referrers)}")
+        logger.info(f"Ошибок: {len(self.failed_urls)}")
+        logger.info("="*60 + "\n")
+        
+        return recipes_found
+    
     
     def explore(self, max_urls: int = 100, max_depth: int = 3, session_urls: bool = True, 
                 check_pages_with_extractor:bool = False,
@@ -912,7 +1319,7 @@ class SiteExplorer:
                 has_recipe_pattern = self.recipe_regex is not None
                 
                 for link in new_links:
-                    if self.should_explore_url(link):
+                    if self.should_explore_url(link) or len(queue) == 0:
                         # Запоминаем источник перехода
                         if link not in self.referrer_map:
                             self.referrer_map[link] = current_url
@@ -949,7 +1356,7 @@ class SiteExplorer:
         self.save_state()
         
         logger.info(f"\n{'='*60}")
-        logger.info("Исследование завершено" if self.max_errors < err_count else "Исследование остановлено из-за ошибок")
+        logger.info("Исследование завершено" if err_count < self.max_errors else "Исследование остановлено из-за ошибок")
         logger.info(f"Результаты сохранены в: {self.save_dir}")
         logger.info(f"  - {self.state_file} - состояние")
         logger.info(f"  - {self.patterns_file} - найденные паттерны")

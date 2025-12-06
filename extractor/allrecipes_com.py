@@ -107,12 +107,15 @@ class AllRecipesExtractor(BaseRecipeExtractor):
                 
                 # Пропускаем заголовки секций (часто содержат двоеточие)
                 if ingredient_text and not ingredient_text.endswith(':'):
-                    ingredients.append(ingredient_text)
+                    # Парсим в структурированный формат
+                    parsed = self.parse_ingredient(ingredient_text)
+                    if parsed:
+                        ingredients.append(parsed)
             
             if ingredients:
                 break
         
-        return ', '.join(ingredients) if ingredients else None
+        return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
     def extract_steps(self) -> Optional[str]:
         """Извлечение шагов приготовления"""
@@ -536,75 +539,176 @@ class AllRecipesExtractor(BaseRecipeExtractor):
         
         return None
     
-    def extract_ingredients_names(self) -> Optional[str]:
+    def parse_ingredient(self, ingredient_text: str) -> Optional[dict]:
         """
-        Извлечение только названий ингредиентов без количества
+        Парсинг строки ингредиента в структурированный формат
         
-        Returns:
-            Строка с названиями ингредиентов через запятую или None
-        """
-        import re
-        
-        names = []
-        
-        # Сначала пробуем извлечь из структурированных данных HTML
-        # Ищем элементы с атрибутом data-ingredient-name
-        ingredient_items = self.soup.find_all(attrs={'data-ingredient-name': True})
-        
-        if ingredient_items:
-            for item in ingredient_items:
-                name = item.get_text(strip=True)
-                if name:
-                    # Убираем "(Optional)" и другие уточнения в скобках
-                    name = re.sub(r'\s*\([^)]*\)', '', name)
-                    name = name.strip()
-                    if name:
-                        names.append(name)
+        Args:
+            ingredient_text: Строка вида "1 cup all-purpose flour" или "2 pounds chicken"
             
-            if names:
-                return ', '.join(names)
-        
-        # Если структурированные данные не найдены, используем fallback метод
-        ingredients_raw = self.extract_ingredients()
-        if not ingredients_raw:
+        Returns:
+            dict: {"name": "flour", "amount": "1", "unit": "cup"} или None
+        """
+        if not ingredient_text:
             return None
         
-        lines = ingredients_raw.split('\n')
-        names = []
+        # Чистим текст
+        text = self.clean_text(ingredient_text).lower()
         
-        for line in lines:
-            # Удаляем Unicode дроби
-            line = line.replace('½', '').replace('¼', '').replace('¾', '').replace('⅓', '').replace('⅔', '')
-            line = line.replace('⅛', '').replace('⅜', '').replace('⅝', '').replace('⅞', '')
-            
-            # Удаляем числа и дроби в начале строки (количество)
-            line = re.sub(r'^[\d\s/.,]+', '', line)
-            
-            # Удаляем единицы измерения с учетом множественного числа
-            units_pattern = r'\b(?:' + '|'.join([
-                'cups?', 'tablespoons?', 'teaspoons?', 'tbsp', 'tsp',
-                'pounds?', 'ounces?', 'lbs?', 'oz',
-                'grams?', 'kilograms?', 'g', 'kg',
-                'milliliters?', 'liters?', 'ml', 'l',
-                'pinch(?:es)?', 'dash(?:es)?', 'packages?', 'cans?', 'jars?', 'bottles?',
-                'inch(?:es)?', 'slices?', 'cloves?', 'bunches?', 'sprigs?',
-                'whole', 'halves?', 'quarters?', 'pieces?',
-                'to taste', 'as needed', 'or more', 'if needed', 'optional'
-            ]) + r')\b'
-            
-            line = re.sub(units_pattern, '', line, flags=re.IGNORECASE)
-            
-            # Удаляем скобки с содержимым (уточнения типа "(such as Granny Smith)")
-            line = re.sub(r'\([^)]*\)', '', line)
-            
-            # Удаляем лишние символы и пробелы
-            line = re.sub(r'[,;]+$', '', line)  # запятые/точки с запятой в конце
-            line = re.sub(r'\s+', ' ', line).strip()
-            
-            if line and len(line) > 1:  # пропускаем пустые и одиночные символы
-                names.append(line.lower())
+        # Заменяем Unicode дроби на числа
+        fraction_map = {
+            '½': '0.5', '¼': '0.25', '¾': '0.75',
+            '⅓': '0.33', '⅔': '0.67', '⅛': '0.125',
+            '⅜': '0.375', '⅝': '0.625', '⅞': '0.875',
+            '⅕': '0.2', '⅖': '0.4', '⅗': '0.6', '⅘': '0.8'
+        }
         
-        return json.dumps(names) if names else None
+        for fraction, decimal in fraction_map.items():
+            text = text.replace(fraction, decimal)
+        
+        # Паттерн для извлечения количества, единицы и названия
+        # Примеры: "1 cup flour", "2 tablespoons butter", "1/2 teaspoon salt"
+        pattern = r'^([\d\s/.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads)?\s*(.+)'
+        
+        match = re.match(pattern, text, re.IGNORECASE)
+        
+        if not match:
+            # Если паттерн не совпал, возвращаем только название
+            return {
+                "name": text,
+                "amount": None,
+                "unit": None
+            }
+        
+        amount_str, unit, name = match.groups()
+        
+        # Обработка количества
+        amount = None
+        if amount_str:
+            amount_str = amount_str.strip()
+            # Обработка дробей типа "1/2" или "1 1/2"
+            if '/' in amount_str:
+                parts = amount_str.split()
+                total = 0
+                for part in parts:
+                    if '/' in part:
+                        num, denom = part.split('/')
+                        total += float(num) / float(denom)
+                    else:
+                        total += float(part)
+                amount = str(total)
+            else:
+                amount = amount_str.replace(',', '.')
+        
+        # Обработка единицы измерения
+        unit = unit.strip() if unit else None
+        
+        # Очистка названия
+        # Удаляем скобки с содержимым
+        name = re.sub(r'\([^)]*\)', '', name)
+        # Удаляем фразы "to taste", "as needed", "optional"
+        name = re.sub(r'\b(to taste|as needed|or more|if needed|optional|for garnish)\b', '', name, flags=re.IGNORECASE)
+        # Удаляем лишние пробелы и запятые
+        name = re.sub(r'[,;]+$', '', name)
+        name = re.sub(r'\s+', ' ', name).strip()
+        
+        if not name or len(name) < 2:
+            return None
+        
+        return {
+            "name": name,
+            "amount": amount,
+            "unit": unit
+        }
+    
+    def extract_image_urls(self) -> Optional[str]:
+        """Извлечение URL изображений (первые 3 + большое изображение)"""
+        urls = []
+        
+        # 1. Ищем в мета-тегах
+        # og:image - обычно главное изображение (большое)
+        og_image = self.soup.find('meta', property='og:image')
+        if og_image and og_image.get('content'):
+            urls.append(og_image['content'])
+        
+        # twitter:image - часто другой размер/вариант
+        twitter_image = self.soup.find('meta', attrs={'name': 'twitter:image'})
+        if twitter_image and twitter_image.get('content'):
+            urls.append(twitter_image['content'])
+        
+        # 2. Ищем в JSON-LD
+        scripts = self.soup.find_all('script', type='application/ld+json')
+        for script in scripts:
+            try:
+                data = json.loads(script.string)
+                
+                # Если data - это список, обрабатываем каждый элемент
+                if isinstance(data, list):
+                    for item in data:
+                        if isinstance(item, dict) and item.get('@type') == 'Recipe' and 'image' in item:
+                            img = item['image']
+                            if isinstance(img, str):
+                                urls.append(img)
+                            elif isinstance(img, list):
+                                urls.extend([i for i in img if isinstance(i, str)])
+                            elif isinstance(img, dict):
+                                if 'url' in img:
+                                    urls.append(img['url'])
+                                elif 'contentUrl' in img:
+                                    urls.append(img['contentUrl'])
+                    continue
+                
+                # Если есть @graph
+                if '@graph' in data:
+                    for item in data['@graph']:
+                        # ImageObject
+                        if item.get('@type') == 'ImageObject':
+                            if 'url' in item:
+                                urls.append(item['url'])
+                            elif 'contentUrl' in item:
+                                urls.append(item['contentUrl'])
+                        # Recipe с image
+                        elif item.get('@type') == 'Recipe' and 'image' in item:
+                            img = item['image']
+                            if isinstance(img, str):
+                                urls.append(img)
+                            elif isinstance(img, list):
+                                urls.extend([i for i in img if isinstance(i, str)])
+                            elif isinstance(img, dict):
+                                if 'url' in img:
+                                    urls.append(img['url'])
+                                elif 'contentUrl' in img:
+                                    urls.append(img['contentUrl'])
+                
+                # Если Recipe напрямую
+                elif data.get('@type') == 'Recipe' and 'image' in data:
+                    img = data['image']
+                    if isinstance(img, str):
+                        urls.append(img)
+                    elif isinstance(img, list):
+                        urls.extend([i for i in img if isinstance(i, str)])
+                    elif isinstance(img, dict):
+                        if 'url' in img:
+                            urls.append(img['url'])
+                        elif 'contentUrl' in img:
+                            urls.append(img['contentUrl'])
+            
+            except (json.JSONDecodeError, KeyError):
+                continue
+        
+        # Убираем дубликаты, сохраняя порядок, берем первые 3
+        if urls:
+            seen = set()
+            unique_urls = []
+            for url in urls:
+                if url and url not in seen:
+                    seen.add(url)
+                    unique_urls.append(url)
+                    if len(unique_urls) >= 3:  # Ограничиваем до 3 изображений
+                        break
+            return ', '.join(unique_urls) if unique_urls else None
+        
+        return None
     
     def extract_all(self) -> dict:
         """
@@ -616,7 +720,6 @@ class AllRecipesExtractor(BaseRecipeExtractor):
         dish_name = self.extract_dish_name()
         description = self.extract_description()
         ingredients = self.extract_ingredients()
-        ingredients_names = self.extract_ingredients_names()
         step_by_step = self.extract_steps()
         category = self.extract_category()
         notes = self.extract_notes()
@@ -625,8 +728,7 @@ class AllRecipesExtractor(BaseRecipeExtractor):
         return {
             "dish_name": dish_name.lower() if dish_name else None,
             "description": description.lower() if description else None,
-            "ingredients": ingredients.lower() if ingredients else None,
-            "ingredients_names": ingredients_names.lower() if ingredients_names else None,
+            "ingredient": ingredients,
             "step_by_step": step_by_step.lower() if step_by_step else None,
             "nutrition_info": self.extract_nutrition_info(),
             "category": category.lower() if category else None,
@@ -637,7 +739,8 @@ class AllRecipesExtractor(BaseRecipeExtractor):
             "difficulty_level": self.extract_difficulty_level(),
             "rating": self.extract_rating(),
             "notes": notes.lower() if notes else None,
-            "tags": tags
+            "tags": tags,
+            "image_urls": self.extract_image_urls()
         }
 
 def main():

@@ -10,7 +10,6 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.common.db.mysql import MySQlManager
 from src.stages.extract import RecipeExtractor
-from src.stages.parse import explore_site
 
 def main():
     """Основная функция"""

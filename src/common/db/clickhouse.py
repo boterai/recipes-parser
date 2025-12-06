@@ -117,7 +117,7 @@ class ClickHouseManager:
                     page.id,
                     page.dish_name,
                     page.language,
-                    page.ingredients_names, # временно в качестве кейвордов только имена ингредиентов
+                    page.ingredient_to_list(), # временно в качестве кейвордов только имена ингредиентов
                     recipe_embedding,
                     ingredient_embedding,
                     description_embedding,
@@ -170,11 +170,10 @@ class ClickHouseManager:
                     ingredient_embedding = embedding_function(prepare_text(page, "ingredients"))
                     description_embedding = embedding_function(prepare_text(page, "description"))
                     instruction_embedding = embedding_function(prepare_text(page, "instructions"))
-                    ingredients = [i.removeprefix(",").removesuffix(",") for i in  page.ingredients_names.split(', ')]  # временно в качестве кейвордов только имена ингредиентов
                     rows.append([page.id, 
                                  page.dish_name,
                                  page.language,
-                                 ingredients,  # временно в качестве кейвордов только имена ингредиентов
+                                 page.ingredient_to_list(),  # временно в качестве кейвордов только имена ингредиентов
                                  recipe_embedding,
                                  ingredient_embedding,
                                  description_embedding,

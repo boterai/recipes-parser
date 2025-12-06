@@ -173,8 +173,7 @@ URL: {url}
     "confidence_score": 0-100 (процент уверенности),
     "dish_name": "название блюда или null",
     "description": "краткое описание рецепта/блюда или null",
-    "ingredients": "список ингредиентов в текстовом формате или null",
-    "ingredients_names": "список названий ингредиентов без количества или null",
+    "ingredient": "список ингредиентов в формате JSON спиком [name: name, amount: amount, units: units] или null",
     "step_by_step": "пошаговая инструкция приготовления или null",
     "prep_time": "время подготовки (например, '15 minutes') или null",
     "cook_time": "время приготовления (например, '30 minutes') или null",
@@ -189,7 +188,7 @@ URL: {url}
 
 ВАЖНО:
 - Если поле не найдено, ставь null
-- is_recipe = true только если есть ingredients И step_by_step
+- is_recipe = true только если есть ingredient И step_by_step
 - confidence_score зависит от полноты данных (100 = все поля заполнены полностью и это является рецептом)
 - Для времени используй единицы измерения из текста (minutes, hours и т.д.)
 - rating должен быть числом (не строкой), если найден
@@ -227,18 +226,16 @@ URL: {url}
         session = self.db.get_session()
         
         try:
-            ingredients_names = analysis.get("ingredients_names")
-            if isinstance(ingredients_names, list):
-                ingredients_names = json.dumps(ingredients_names)
             # Подготовка данных
+            ingredients = analysis.get("ingredient")
+            if ingredients and isinstance(ingredients, list):
+                ingredients = json.dumps(ingredients, ensure_ascii=False)
             update_data = {
-                "ingredients_names": ingredients_names,
                 "page_id": page_id,
                 "is_recipe": analysis.get("is_recipe", False),
                 "confidence_score": Decimal(str(analysis.get("confidence_score", 0))),
                 "dish_name": analysis.get("dish_name"),
                 "description": analysis.get("description"),
-                "ingredients": analysis.get("ingredients"),
                 "step_by_step": analysis.get("step_by_step"),
                 "prep_time": analysis.get("prep_time"),
                 "cook_time": analysis.get("cook_time"),
@@ -250,7 +247,8 @@ URL: {url}
                 "rating": Decimal(str(analysis["rating"])) if analysis.get("rating") else None,
                 "nutrition_info": analysis.get("nutrition_info"),
                 "notes": analysis.get("notes"),
-                "tags": analysis.get("tags")
+                "tags": analysis.get("tags"),
+                "ingredient": ingredients
             }
             
             # SQL запрос на обновление
@@ -260,8 +258,7 @@ URL: {url}
                     confidence_score = :confidence_score,
                     dish_name = :dish_name,
                     description = :description,
-                    ingredients = :ingredients,
-                    ingredients_names = :ingredients_names,
+                    ingredient = :ingredient,
                     step_by_step = :step_by_step,
                     prep_time = :prep_time,
                     cook_time = :cook_time,

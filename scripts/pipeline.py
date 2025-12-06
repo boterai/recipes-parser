@@ -39,6 +39,7 @@ BATCH_SIZE = 30
 SITE_ID = None
 # Добавить сохранения состояния между запусками
 def prepare_data_for_parser_creation(url: str, max_depth: int):
+	global SITE_ID
 	explorer = SiteExplorer(url, debug_mode=True, use_db=True)
 	#explorer.add_helper_urls(["https://www.ricardocuisine.com/recettes/10151-orge-au-canard-confit-et-oignons-rotis",
 	#					   "https://www.ricardocuisine.com/recettes/plats-principaux/canard"], depth=2)
@@ -48,7 +49,6 @@ def prepare_data_for_parser_creation(url: str, max_depth: int):
 	state = explorer.export_state()
 	SITE_ID = explorer.site_id
 	analyzer = RecipeAnalyzer()
-	pattern = analyzer.analyse_recipe_page_pattern(site_id=explorer.site_id)
 	try:
 		# анализ данных Stage 1 и получение паттерна страниц с рецептами
 		recipes = analyzer.analyze_all_pages(site_id=explorer.site_id, filter_by_title=True, stop_analyse=3)
@@ -81,7 +81,7 @@ def prepare_data_for_parser_creation(url: str, max_depth: int):
 			explorer.import_state(state)  # Восстанавливаем состояние
 			pattern = ""
 		
-		if results > 0 and not pattern:
+		if results > 0 and not explorer.recipe_pattern:
 			pattern = analyzer.analyse_recipe_page_pattern(site_id=explorer.site_id)
 			if pattern:
 				explorer.set_pattern(pattern) # обновление паттерна в эксеплорере
@@ -95,12 +95,12 @@ def parse_after_pattern_found(url: str, max_depth: int, max_urls: int):
 
 
 def main():
-	url = "https://www.ricardocuisine.com/"
-	max_depth = 5
-	#prepare_data_for_parser_creation(url=url, max_depth=max_depth)
-	#make_test_data(SITE_ID) # создать тестовые данные для анализа и создания парсера (создается в папке recipes/)
+	url = "https://www.nefisyemektarifleri.com/"
+	max_depth = 6
+	prepare_data_for_parser_creation(url=url, max_depth=max_depth)
+	make_test_data(SITE_ID) # создать тестовые данные для анализа и создания парсера (создается в папке recipes/)
 	# после создания парсера можно запустить полноценный парсинг
-	parse_after_pattern_found(url, max_depth=max_depth, max_urls=10000)
+	#parse_after_pattern_found(url, max_depth=max_depth, max_urls=10000)
 	
 
 			

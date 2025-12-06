@@ -2,6 +2,7 @@
 from sentence_transformers import SentenceTransformer
 from src.models.page import Page
 from typing import Callable
+import json
 
 EmbeddingFunction = Callable[[str], list[float]]
 
@@ -18,7 +19,7 @@ def prepare_text(page: Page, embedding_type: str = "main") -> str:
             Подготовленный текст
         """
         if embedding_type == "ingredients":
-            return page.ingredients_names or page.ingredients or ""
+            return page.ingredient_to_str()
         
         if embedding_type == "instructions":
             return page.step_by_step or ""
@@ -36,10 +37,8 @@ def prepare_text(page: Page, embedding_type: str = "main") -> str:
             parts.append(page.dish_name)
         if page.description:
             parts.append(page.description)
-        if page.ingredients_names:
-            parts.append(f"Ingredients: {page.ingredients_names}")
-        elif page.ingredients:
-            parts.append(f"Ingredients: {page.ingredients[:300]}")
+        if page.ingredient:
+            parts.append(f"Ingredients: {page.ingredient_to_str()}")
         if page.step_by_step:
             parts.append(f"Instructions: {page.step_by_step[:100]}")
         if page.notes:

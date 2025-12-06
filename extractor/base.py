@@ -6,6 +6,7 @@
 Для поиска все наследники должны иметь имя вида <SiteName>Extractor, например AllRecipesExtractor (ищем класс с "Extractor" в имени при импорте модуля)
 """
 
+import html
 import json
 import sys
 from pathlib import Path
@@ -35,6 +36,9 @@ class BaseRecipeExtractor(ABC):
         """Очистка текста от нечитаемых символов и нормализация"""
         if not text:
             return text
+        
+        # Декодируем HTML entities (&#039; -> ', &quot; -> ", etc.)
+        text = html.unescape(text)
         
         # Удаляем Unicode символы типа ▢, □, ✓ и другие специальные символы
         text = re.sub(r'[▢□✓✔▪▫●○■]', '', text)

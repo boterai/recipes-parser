@@ -14,6 +14,9 @@ from src.common.db.mysql import MySQlManager
 from src.models import Page
 
 def make_test_data(site_id: int = 15):
+    if site_id is None:
+        print("SITE_ID не задан. Невозможно создать тестовые данные.")
+        return
     db = MySQlManager()
     if not db.connect():
         print("Не удалось подключиться к базе данных")

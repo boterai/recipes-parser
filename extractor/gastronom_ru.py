@@ -93,6 +93,63 @@ class GastronomRuExtractor(BaseRecipeExtractor):
         
         return None
     
+    def parse_ingredient(self, ingredient_text: str) -> Optional[dict]:
+        """
+        Парсинг строки ингредиента в структурированный формат
+        
+        Args:
+            ingredient_text: Строка вида "курица гриль 1 шт." или "масло сливочное 40 г"
+            
+        Returns:
+            dict: {"name": "курица гриль", "amount": "1", "unit": "шт."} или None
+        """
+        if not ingredient_text:
+            return None
+        
+        # Чистим текст
+        text = self.clean_text(ingredient_text).lower()
+        
+        # Паттерн для извлечения названия, количества и единицы (русский формат)
+        # Примеры: "курица гриль 1 шт.", "масло сливочное 40 г", "соль по вкусу"
+        
+        # Сначала пробуем паттерн: название + количество + единица
+        pattern = r'^(.+?)\s+([\d.,]+)\s*(шт\.?|г\.?|кг\.?|мл\.?|л\.?|ст\.?\s*л\.?|ч\.?\s*л\.?|стак\.?|зубч?\.?(?:ик)?\(?а\)?|по вкусу)?$'
+        match = re.match(pattern, text, re.IGNORECASE)
+        
+        if match:
+            name, amount, unit = match.groups()
+            
+            # Очистка названия
+            name = name.strip()
+            
+            # Обработка количества
+            amount = amount.replace(',', '.') if amount else None
+            
+            # Обработка единицы
+            unit = unit.strip() if unit else None
+            
+            return {
+                "name": name,
+                "amount": amount,
+                "unit": unit
+            }
+        
+        # Если не совпал паттерн с количеством, проверяем "по вкусу"
+        if 'по вкусу' in text:
+            name = re.sub(r'\s+по вкусу', '', text).strip()
+            return {
+                "name": name,
+                "amount": None,
+                "unit": "по вкусу"
+            }
+        
+        # Иначе возвращаем только название
+        return {
+            "name": text,
+            "amount": None,
+            "unit": None
+        }
+    
     def extract_ingredients_names(self) -> Optional[str]:
         """Извлечение списка названий ингредиентов (без количества)"""
         # Из JSON-LD получаем массив названий ингредиентов
@@ -116,10 +173,70 @@ class GastronomRuExtractor(BaseRecipeExtractor):
         return None
     
     def extract_ingredients(self) -> Optional[str]:
-        """Извлечение ингредиентов с количеством"""
+        """Извлечение ингредиентов в нормализованном JSON формате"""
         ingredient_items = []
         
-        # Ищем элементы с itemprop="recipeIngredient" - они уже содержат название + количество
+        # Сначала пробуем извлечь из pageContext (самый надежный источник)
+        scripts = self.soup.find_all('script', id='vite-plugin-ssr_pageContext')
+        
+        for script in scripts:
+            if not script.string:
+                continue
+            
+            try:
+                data = json.loads(script.string)
+                
+                # Ищем ingredients в pageProps.page.content.ingredients
+                if 'pageProps' in data and 'page' in data['pageProps']:
+                    page = data['pageProps']['page']
+                    
+                    if 'content' in page and 'ingredients' in page['content']:
+                        ingredients = page['content']['ingredients']
+                        
+                        for ing in ingredients:
+                            if not isinstance(ing, dict):
+                                continue
+                            
+                            name = ing.get('name')
+                            if not name:
+                                continue
+                            
+                            # Извлекаем количество и единицу
+                            amount = ing.get('quantityInGramms') or ing.get('formattedQuantity')
+                            unit = ing.get('formattedUnit')
+                            
+                            # Если unit пустой, пробуем извлечь из legacyQuantity
+                            if not unit or unit == '':
+                                legacy_qty = ing.get('legacyQuantity', '')
+                                # Ищем единицу в legacyQuantity (например "1 ст.л", "по вкусу")
+                                if 'по вкусу' in legacy_qty.lower():
+                                    unit = 'по вкусу'
+                                    amount = None
+                                elif 'ст.л' in legacy_qty or 'ст. л' in legacy_qty:
+                                    unit = 'ст.л.'
+                                elif 'ч.л' in legacy_qty or 'ч. л' in legacy_qty:
+                                    unit = 'ч.л.'
+                                elif 'шт' in legacy_qty:
+                                    unit = 'шт.'
+                            
+                            # Преобразуем количество в строку
+                            if amount is not None:
+                                amount = str(amount)
+                            
+                            ingredient_items.append({
+                                "name": name.lower(),
+                                "amount": amount,
+                                "unit": unit if unit else None
+                            })
+                        
+                        # Если нашли ингредиенты, возвращаем их
+                        if ingredient_items:
+                            return json.dumps(ingredient_items, ensure_ascii=False)
+                        
+            except (json.JSONDecodeError, KeyError):
+                continue
+        
+        # Если не нашли в pageContext, пробуем старый метод с itemprop
         ingredients = self.soup.find_all(attrs={'itemprop': 'recipeIngredient'})
         
         if ingredients:
@@ -127,12 +244,12 @@ class GastronomRuExtractor(BaseRecipeExtractor):
                 # Полный текст уже содержит название и количество
                 text = self.clean_text(ing.get_text()).lower()
                 if text:
-                    ingredient_items.append(text)
+                    # Парсим в структурированный формат
+                    parsed = self.parse_ingredient(text)
+                    if parsed:
+                        ingredient_items.append(parsed)
         
-        if ingredient_items:
-            return ', '.join(ingredient_items)
-        
-        return None
+        return json.dumps(ingredient_items, ensure_ascii=False) if ingredient_items else None
     
     def extract_steps(self) -> Optional[str]:
         """Извлечение шагов приготовления"""
@@ -384,6 +501,41 @@ class GastronomRuExtractor(BaseRecipeExtractor):
         
         return None
     
+    def extract_image_urls(self) -> Optional[str]:
+        """Извлечение URL изображений"""
+        image_urls = []
+        
+        # 1. Из meta тега og:image
+        og_image = self.soup.find('meta', property='og:image')
+        if og_image and og_image.get('content'):
+            image_urls.append(og_image['content'])
+        
+        # 2. Из JSON-LD
+        json_ld = self.extract_from_json_ld()
+        if json_ld.get('image'):
+            img = json_ld['image']
+            if isinstance(img, str):
+                image_urls.append(img)
+            elif isinstance(img, list):
+                image_urls.extend([i for i in img if isinstance(i, str)])
+            elif isinstance(img, dict):
+                if 'url' in img:
+                    image_urls.append(img['url'])
+                elif 'contentUrl' in img:
+                    image_urls.append(img['contentUrl'])
+        
+        # Убираем дубликаты, сохраняя порядок
+        if image_urls:
+            seen = set()
+            unique_urls = []
+            for url in image_urls:
+                if url and url not in seen:
+                    seen.add(url)
+                    unique_urls.append(url)
+            return ', '.join(unique_urls) if unique_urls else None
+        
+        return None
+    
     def extract_all(self) -> dict:
         """
         Извлечение всех данных рецепта
@@ -393,7 +545,6 @@ class GastronomRuExtractor(BaseRecipeExtractor):
         """
         dish_name = self.extract_dish_name()
         description = self.extract_description()
-        ingredients_names = self.extract_ingredients_names()
         ingredients = self.extract_ingredients()
         step_by_step = self.extract_steps()
         category = self.extract_category()
@@ -403,8 +554,7 @@ class GastronomRuExtractor(BaseRecipeExtractor):
         return {
             "dish_name": dish_name.lower() if dish_name else None,
             "description": description.lower() if description else None,
-            "ingredients_names": ingredients_names if ingredients_names else None,  # Уже lowercase
-            "ingredients": ingredients if ingredients else None,  # Уже lowercase
+            "ingredient": ingredients,
             "step_by_step": step_by_step.lower() if step_by_step else None,
             "nutrition_info": self.extract_nutrition_info(),  # Формат: "99 kcal; 4/3/18"
             "category": category.lower() if category else None,
@@ -415,7 +565,8 @@ class GastronomRuExtractor(BaseRecipeExtractor):
             "difficulty_level": self.extract_difficulty_level(),  # Уже lowercase
             "notes": notes,  # Уже lowercase
             "rating": self.extract_rating(),
-            "tags": tags  # Уже lowercase
+            "tags": tags,  # Уже lowercase
+            "image_urls": self.extract_image_urls()
         }
 
 
