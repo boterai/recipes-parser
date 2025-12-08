@@ -28,7 +28,6 @@ class Page(BaseModel):
     dish_name: Optional[str] = None  # VARCHAR(500) - название блюда
     nutrition_info: Optional[str] = None  # TEXT - JSON с питательной ценностью
     rating: Optional[float] = None  # DECIMAL(3,2)
-    author: Optional[str] = None  # VARCHAR(255)
     category: Optional[str] = None  # VARCHAR(255)
     prep_time: Optional[str] = None  # VARCHAR(100) - "30 minutes"
     cook_time: Optional[str] = None  # VARCHAR(100) - "45 minutes"
@@ -55,9 +54,9 @@ class Page(BaseModel):
     def receipt_to_json(self) -> dict:
         """Преобразование данных рецепта в JSON-совместимый словарь"""
         recipe_fields = [
-            'dish_name', 'description', 'ingredients', 'step_by_step', 'nutrition_info',
+            'dish_name', 'description', 'ingredient', 'step_by_step', 'nutrition_info',
             'rating', 'category', 'prep_time', 'cook_time',
-            'total_time', 'servings', 'difficulty_level', 'notes', 'ingredients_names', 'tags', 'image_urls'
+            'total_time', 'servings', 'difficulty_level', 'notes', 'tags', 'image_urls'
         ]
         data = {field: getattr(self, field) for field in recipe_fields if getattr(self, field) is not None}
         return data

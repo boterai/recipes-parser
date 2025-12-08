@@ -230,6 +230,8 @@ URL: {url}
             ingredients = analysis.get("ingredient")
             if ingredients and isinstance(ingredients, list):
                 ingredients = json.dumps(ingredients, ensure_ascii=False)
+            if not isinstance(analysis.get("step_by_step"), str):
+                analysis["step_by_step"] = json.dumps(analysis.get("step_by_step"), ensure_ascii=False)
             update_data = {
                 "page_id": page_id,
                 "is_recipe": analysis.get("is_recipe", False),
@@ -242,7 +244,6 @@ URL: {url}
                 "total_time": analysis.get("total_time"),
                 "servings": analysis.get("servings"),
                 "difficulty_level": analysis.get("difficulty_level"),
-                "author": analysis.get("author"),
                 "category": analysis.get("category"),
                 "rating": Decimal(str(analysis["rating"])) if analysis.get("rating") else None,
                 "nutrition_info": analysis.get("nutrition_info"),
@@ -265,7 +266,6 @@ URL: {url}
                     total_time = :total_time,
                     servings = :servings,
                     difficulty_level = :difficulty_level,
-                    author = :author,
                     category = :category,
                     rating = :rating,
                     nutrition_info = :nutrition_info,

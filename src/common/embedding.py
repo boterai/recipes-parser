@@ -45,28 +45,21 @@ def prepare_text(page: Page, embedding_type: str = "main") -> str:
             parts.append(page.notes[:100])
         return ". ".join(parts)
 
-def get_embedding_function(model_name: str = 'paraphrase-multilingual-MiniLM-L12-v2') -> tuple[EmbeddingFunction, int]:
-    """
-    Получение функции для создания эмбеддингов
-    Примеры моделей:
-    - 'all-MiniLM-L6-v2' (384 dim)
-    - 'all-mpnet-base-v2' (768 dim)
-    - 'paraphrase-multilingual-MiniLM-L12-v2' (384 dim)
+def get_embedding_function():
+    # Варианты моделей (от меньшей к большей):
+    # 1. 'sentence-transformers/all-MiniLM-L6-v2' - 80MB, 384 dimensions, только английский
+    # 2. 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2' - 470MB, 384 dimensions, multilingual
+    # 3. 'intfloat/multilingual-e5-small' - 470MB, 384 dimensions
+    # 4. 'intfloat/multilingual-e5-base' - 1.1GB, 768 dimensions
+    # 5. 'intfloat/multilingual-e5-large' - 2.2GB, 1024 dimensions (текущая)
     
-    Returns:
-        tuple: (embedding_function, embedding_dim)
-    """
-
+    model = SentenceTransformer('intfloat/multilingual-e5-small')  # Меняем на small
     
-    model = SentenceTransformer(model_name)
+    def embedding_func(text: str, is_query: bool = False):
+        prefix = "query: " if is_query else "passage: "
+        return model.encode(
+            prefix + text,
+            normalize_embeddings=True
+        ).tolist()
     
-    # Автоматически определяем размерность
-    embedding_dim = model.get_sentence_embedding_dimension()
-    print(f"  Модель: {model._model_card_vars.get('model_name', model_name)}")
-    print(f"  Размерность векторов: {embedding_dim}")
-    
-    embedding_func:  EmbeddingFunction = lambda text: model.encode(text, convert_to_tensor=False).tolist()
-    
-    return embedding_func, embedding_dim
-
-
+    return embedding_func, 384  # Размерность для small модели

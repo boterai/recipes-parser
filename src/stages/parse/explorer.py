@@ -11,7 +11,7 @@ from pathlib import Path
 from urllib.parse import urlparse, urljoin
 from typing import Set, Dict, List
 import logging
-
+import heapq
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
@@ -84,19 +84,20 @@ RECIPE_KEYWORDS = {
 class SiteExplorer:
     """Исследователь структуры сайта с поддержкой многоязычных рецептов"""
     
-    def __init__(self, base_url: str, debug_mode: bool = True, use_db: bool = True, recipe_pattern: str = None,
-                 max_errors: int = 3):
+    def __init__(self, base_url: str, debug_mode: bool = True, recipe_pattern: str = None,
+                 max_errors: int = 3, max_urls_per_pattern: int = None, debug_port: int = None):
         """
         Args:
             base_url: Базовый URL сайта
             debug_mode: Если True, подключается к открытому Chrome с отладкой
-            use_db: Если True, сохраняет данные в MySQL
             recipe_pattern: Regex паттерн для поиска URL с рецептами (опционально)
             max_errors: Максимальное количество ошибок подряд перед остановкой
+            max_urls_per_pattern: Максимальное количество URL на один паттерн (None = без ограничений)
+            debug_port: Порт для подключения к Chrome (по умолчанию из config)
         """
         self.base_url = base_url
         self.debug_mode = debug_mode
-        self.use_db = use_db
+        self.debug_port = debug_port if debug_port is not None else config.CHROME_DEBUG_PORT
         self.driver = None
         self.db = None
         self.site_id = None
@@ -104,6 +105,7 @@ class SiteExplorer:
         self.recipe_regex = None
         self.request_count = 0  # Счетчик запросов для адаптивных пауз
         self.max_errors = max_errors
+        self.max_urls_per_pattern = max_urls_per_pattern  # Лимит URL на паттерн (рекомендуется использовать для первоначальной сборки рецептовв, чтобы не собирать кучи одинаковых страниц)
         self.analyzer = None
         
         # Компиляция regex паттерна если передан
@@ -136,33 +138,31 @@ class SiteExplorer:
         self.patterns_file = os.path.join(self.save_dir, "url_patterns.json")
         
         # Подключение к БД
-        if self.use_db:
-            self.db = MySQlManager()
-            if self.db.connect():
-                self.site_id = self.db.create_or_get_site(
-                    name=self.site_name,
-                    base_url=base_url,
-                    language=None  # Будет определен при парсинге
-                )
-                if self.site_id:
-                    logger.info(f"Работа с сайтом ID: {self.site_id}")
-                    
-                    # Если паттерн не задан, загружаем из БД
-                    if not recipe_pattern:
-                        self.load_pattern_from_db()
-                    
-                    # Загружаем посещенные URL из БД
-                    self.load_visited_urls_from_db()
-                else:
-                    logger.warning("Не удалось создать/получить ID сайта")
-                    self.use_db = False
+        self.db = MySQlManager()
+        if self.db.connect():
+            self.site_id = self.db.create_or_get_site(
+                name=self.site_name,
+                base_url=base_url,
+                language=None  # Будет определен при парсинге
+            )
+            if self.site_id:
+                logger.info(f"Работа с сайтом ID: {self.site_id}")
+                
+                # Если паттерн не задан, загружаем из БД
+                if not recipe_pattern:
+                    self.load_pattern_from_db()
+                
+                # Загружаем посещенные URL из БД
+                self.load_visited_urls_from_db()
             else:
-                logger.warning("Не удалось подключиться к БД, продолжаем без БД")
-                self.use_db = False
-        
+                logger.warning("Не удалось создать/получить ID сайта")
+        else:
+            logger.error("Не удалось подключиться к БД")
+            return
+
         # Инициализация экстрактора для проверки и извлечения рецептов
         self.recipe_extractor = None
-        if self.use_db and self.db:
+        if self.db:
             self.recipe_extractor = RecipeExtractor(self.db)
 
 
@@ -179,7 +179,7 @@ class SiteExplorer:
         """
         Загрузка regex паттерна рецептов из БД для данного сайта
         """
-        if not self.use_db or not self.site_id:
+        if not self.db or not self.site_id:
             return
         
         try:
@@ -210,7 +210,7 @@ class SiteExplorer:
         """
         Загрузка всех уже посещенных URL для данного сайта из БД
         """
-        if not self.use_db or not self.site_id:
+        if not self.db or not self.site_id:
             return
         
         try:
@@ -251,9 +251,9 @@ class SiteExplorer:
         if self.debug_mode:
             chrome_options.add_experimental_option(
                 "debuggerAddress", 
-                f"localhost:{config.CHROME_DEBUG_PORT}"
+                f"localhost:{self.debug_port}"
             )
-            logger.info(f"Подключение к Chrome на порту {config.CHROME_DEBUG_PORT}")
+            logger.info(f"Подключение к Chrome на порту {self.debug_port}")
         else:
             chrome_options.add_argument("--start-maximized")
             chrome_options.add_argument("--disable-blink-features=AutomationControlled")
@@ -275,8 +275,8 @@ class SiteExplorer:
             if self.debug_mode:
                 logger.error(
                     f"\nЗапустите Chrome командой:\n"
-                    f"google-chrome --remote-debugging-port={config.CHROME_DEBUG_PORT} "
-                    f"--user-data-dir=./chrome_debug\n"
+                    f"google-chrome --remote-debugging-port={self.debug_port} "
+                    f"--user-data-dir=./chrome_debug_{self.debug_port}\n"
                 )
             raise
     
@@ -305,10 +305,15 @@ class SiteExplorer:
         return pattern or '/'
     
     def is_same_domain(self, url: str) -> bool:
-        """Проверка, принадлежит ли URL тому же домену"""
+        """Проверка, принадлежит ли URL тому же домену и соответствует ли префиксу"""
         try:
             domain = urlparse(url).netloc.replace('www.', '')
-            return domain == self.base_domain
+            
+            # Проверка домена
+            if domain != self.base_domain:
+                return False
+            
+            return True
         except Exception:
             return False
     
@@ -335,7 +340,7 @@ class SiteExplorer:
     
     def check_and_extract_recipe(self, url: str, pattern: str, page_index: int) -> bool:
         """
-        Проверяет наличие рецепта на странице и извлекает полные данные с сохранением в БД
+        Проверяет наличие рецепта на странице и извлекает полные данные с сохранением в БД (сохраняет данные только если там есть рецепт)
         
         Args:
             html_content: HTML содержимое страницы
@@ -348,7 +353,7 @@ class SiteExplorer:
             - confidence_score: уровень уверенности (0-100)
             - recipe_data: извлеченные данные рецепта или None
         """
-        if not (self.use_db and self.site_id):
+        if not (self.db and self.site_id):
             logger.warning(" БД не используется, пропускаем проверку рецепта")
             return False
             # Создаем объект Page для БД
@@ -408,21 +413,6 @@ class SiteExplorer:
                 image_urls = VALUES(image_urls)
         """
 
-        upsert_on_non_recipe = """
-            INSERT INTO pages (
-                site_id, url, pattern, html_path,
-                is_recipe, confidence_score, title, language
-            ) VALUES (
-                :site_id, :url, :pattern, :html_path,
-                :is_recipe, :confidence_score, :title, :language
-            )
-            ON DUPLICATE KEY UPDATE
-                is_recipe = VALUES(is_recipe),
-                confidence_score = VALUES(confidence_score), 
-                title = VALUES(title),
-                language = VALUES(language)
-            """
-        
         # Подготовка данных
         upsert_data = {
             "site_id": self.site_id,
@@ -434,10 +424,9 @@ class SiteExplorer:
             **recipe_data
         }
 
-        if recipe_data.get("is_recipe", False) is True:
-            self.mark_page_as_successful(url)
-        else:
-            upsert_sql = upsert_on_non_recipe
+        if recipe_data.get("is_recipe", False) is False:
+            logger.info(f"  ✗ Рецепт не найден на {url}")
+            return False
 
         try:
             with self.db.get_session() as session:
@@ -506,80 +495,6 @@ class SiteExplorer:
         
         return min(score, 100)  # Ограничиваем максимумом 100
     
-
-    def quick_recipe_check(self, soup: BeautifulSoup = None) -> tuple:
-        """
-        Быстрая проверка страницы на наличие рецепта без полной экстракции
-        
-        Args:
-            soup: BeautifulSoup объект (если None, парсит текущую страницу)
-            
-        Returns:
-            (has_recipe, confidence): True если вероятно рецепт, оценка уверенности 0-100
-        """
-        if soup is None:
-            html = self.driver.page_source
-            soup = BeautifulSoup(html, 'html.parser')
-        
-        confidence = 0
-        
-        # 1. Проверка JSON-LD schema (30 баллов)
-        scripts = soup.find_all('script', type='application/ld+json')
-        for script in scripts:
-            try:
-                data = json.loads(script.string)
-                if isinstance(data, dict):
-                    schema_type = data.get('@type', '')
-                    if 'Recipe' in str(schema_type):
-                        confidence += 30
-                        break
-                elif isinstance(data, list):
-                    for item in data:
-                        if isinstance(item, dict) and 'Recipe' in str(item.get('@type', '')):
-                            confidence += 30
-                            break
-            except (json.JSONDecodeError, AttributeError):
-                continue
-        
-        # 2. Проверка meta тегов (20 баллов)
-        og_type = soup.find('meta', property='og:type')
-        if og_type and 'recipe' in og_type.get('content', '').lower():
-            confidence += 20
-        
-        # 3. Проверка семантических тегов (20 баллов)
-        recipe_indicators = [
-            soup.find('div', class_=re.compile(r'recipe', re.I)),
-            soup.find('article', class_=re.compile(r'recipe', re.I)),
-            soup.find(attrs={'itemtype': re.compile(r'Recipe', re.I)}),
-        ]
-        if any(recipe_indicators):
-            confidence += 20
-        
-        # 4. Проверка структуры контента (30 баллов)
-        text = soup.get_text().lower()
-        
-        # Ингредиенты
-        has_ingredients = any(kw in text for kw in RECIPE_KEYWORDS['ingredients'][:5])
-        if has_ingredients:
-            confidence += 10
-        
-        # Инструкции
-        has_instructions = any(kw in text for kw in RECIPE_KEYWORDS['instructions'][:5])
-        if has_instructions:
-            confidence += 10
-        
-        # Время приготовления
-        has_time = any(kw in text for kw in RECIPE_KEYWORDS['time'][:5])
-        if has_time:
-            confidence += 5
-        
-        # Типичные продукты
-        food_count = sum(1 for kw in RECIPE_KEYWORDS['common_foods'][:20] if kw in text)
-        confidence += min(food_count, 5)
-        
-        # Решение: рецепт если уверенность >= 40
-        return (confidence >= 40, confidence)
-    
     
     def should_explore_url(self, url: str) -> bool:
         """
@@ -593,6 +508,14 @@ class SiteExplorer:
         # Пропускаем если уже посещали
         if url in self.visited_urls:
             return False
+        
+        # Проверка лимита URL на паттерн
+        if self.max_urls_per_pattern is not None:
+            pattern = self.get_url_pattern(url)
+            current_count = len(self.url_patterns.get(pattern, []))
+            if current_count >= self.max_urls_per_pattern:
+                logger.debug(f"Пропуск URL: достигнут лимит {self.max_urls_per_pattern} для паттерна {pattern}")
+                return False
         
         # Пропускаем файлы
         if re.search(r'\.(jpg|jpeg|png|gif|pdf|zip|mp4|avi|css|js)$', url, re.IGNORECASE):
@@ -627,7 +550,6 @@ class SiteExplorer:
             r'/cart',
             r'/checkout',
             r'/order',
-            r'/search',
             r'/feedback',
             r'/help',
             r'/support',
@@ -635,6 +557,11 @@ class SiteExplorer:
             r'/advertise',
             r'/careers',
             r'/jobs',
+            r'/sitemap',
+            r'/404',
+            r'/500'
+            r'/products',
+
         ]
         
         parsed = urlparse(url)
@@ -649,7 +576,7 @@ class SiteExplorer:
     def get_url_priority(self, url: str) -> int:
         """
         Определение приоритета URL для обхода
-        TODO поудмать над логикой как-то тут не прям супер
+
         Args:
             url: URL для оценки
             
@@ -753,7 +680,7 @@ class SiteExplorer:
             filepath = self.save_page_as_file(pattern, page_index)
             filename = os.path.basename(filepath)
             # Сохранение в БД
-            if self.use_db and self.site_id:
+            if self.db and self.site_id:
                 page_id = self.db.save_page(
                     site_id=self.site_id,
                     url=url,
@@ -798,20 +725,33 @@ class SiteExplorer:
             return []
     
 
-    def extract_links_with_priority(self) -> List[tuple]:
+    def extract_links_with_priority(self) -> List[str]:
         """
-        Извлечение ссылок с приоритизацией на основе многоязычных признаков рецептов
+        Извлечение ссылок с приоритизацией успешных источников и разнообразия паттернов
+        
+        Приоритизация:
+        1. Ссылки от успешных источников
+        2. Ссылки с паттерном URL, отличным от текущей страницы (для разнообразия)
         
         Returns:
-            Список кортежей (url, likelihood_score, link_text) отсортированных по убыванию вероятности
+            Список URL (приоритетные ссылки в начале)
         """
         try:
             soup = BeautifulSoup(self.driver.page_source, 'lxml')
-            links_with_scores = []
+            priority_links = []  # От успешных источников
+            different_pattern_links = []  # С другим паттерном
+            regular_links = []  # Остальные
+            seen_urls = set()
+            
+            current_url = self.driver.current_url
+            is_successful_source = current_url in self.successful_referrers
+            
+            # Получаем паттерн текущего URL (числа заменены на #)
+            current_pattern = self.get_url_pattern(current_url)
             
             for link in soup.find_all('a', href=True):
                 href = link['href']
-                absolute_url = urljoin(self.driver.current_url, href)
+                absolute_url = urljoin(current_url, href)
                 
                 # Очистка от якорей и параметров
                 clean_url = absolute_url.split('#')[0].split('?')[0]
@@ -819,50 +759,30 @@ class SiteExplorer:
                 if not (clean_url and self.is_same_domain(clean_url)):
                     continue
                 
-                # Извлечение контекста ссылки
-                link_text = link.get_text(strip=True)
+                if clean_url in seen_urls:
+                    continue
                 
-                # Получение окружающего текста (родитель + соседи)
-                context_parts = []
+                seen_urls.add(clean_url)
                 
-                # Текст родительского элемента
-                parent = link.parent
-                if parent:
-                    # Текст до ссылки
-                    for sibling in parent.find_all_previous(string=True, limit=3):
-                        if sibling.strip():
-                            context_parts.insert(0, sibling.strip())
-                    
-                    # Текст после ссылки
-                    for sibling in parent.find_all_next(string=True, limit=3):
-                        if sibling.strip():
-                            context_parts.append(sibling.strip())
+                # Получаем паттерн ссылки
+                link_pattern = self.get_url_pattern(clean_url)
                 
-                context_text = ' '.join(context_parts)[:200]  # Ограничиваем длину
-                
-                # Вычисляем вероятность
-                score = self.get_recipe_likelihood_score(clean_url, link_text, context_text)
-                
-                links_with_scores.append((clean_url, score, link_text))
+                # Приоритет 1: Ссылки от успешных источников
+                if is_successful_source:
+                    priority_links.append(clean_url)
+                # Приоритет 2: Ссылки с другим паттерном (для разнообразия)
+                elif link_pattern != current_pattern:
+                    different_pattern_links.append(clean_url)
+                # Приоритет 3: Остальные (с таким же паттерном)
+                else:
+                    regular_links.append(clean_url)
             
-            # Удаляем дубликаты (оставляем с максимальным score)
-            unique_links = {}
-            for url, score, text in links_with_scores:
-                if url not in unique_links or score > unique_links[url][0]:
-                    unique_links[url] = (score, text)
+            # Собираем в порядке приоритета
+            result = priority_links + different_pattern_links + regular_links
             
-            # Формируем финальный список
-            result = [(url, score, text) for url, (score, text) in unique_links.items()]
-            
-            # Сортируем по убыванию вероятности
-            result.sort(key=lambda x: x[1], reverse=True)
-            
-            logger.info(f"Найдено {len(result)} уникальных ссылок")
-            if result:
-                top_5 = result[:5]
-                logger.info("Топ-5 ссылок по вероятности:")
-                for url, score, text in top_5:
-                    logger.info(f"  [{score:.0f}] {text[:30]}... -> {url[:60]}...")
+            # Логирование для отладки
+            if different_pattern_links:
+                logger.debug(f"  Приоритизировано {len(different_pattern_links)} ссылок с другим паттерном (текущий: {current_pattern})")
             
             return result
             
@@ -991,7 +911,6 @@ class SiteExplorer:
             logger.error(f"Ошибка загрузки состояния: {e}")
             return False
         
-    
     def should_extract_recipe(self, current_url: str) -> bool:
         """
         Проверка, нужно ли извлекать рецепт с текущей страницы
@@ -1010,179 +929,35 @@ class SiteExplorer:
         # Если паттерн задан - проверяем соответствие
         return self.is_recipe_url(current_url)
         
-    
     def mark_page_as_successful(self, current_url: str):
         """
         Отмечает страницу как успешную (с рецептом) и обновляет успешные источники
+        Переупорядочивает очередь, ставя URL от успешного источника в начало
         """
         referrer = self.referrer_map.get(current_url)
         if referrer:
             self.successful_referrers.add(referrer)
             logger.info(f"  ✓ Источник отмечен как успешный: {referrer}")
-    
-
-    def explore_multilingual(self, max_urls: int = 100, max_depth: int = 3, 
-                            min_likelihood: float = 30.0, quick_check: bool = True) -> int:
-        """
-        Многоязычное исследование сайта с приоритизацией рецептов
-        
-        Args:
-            max_urls: Максимальное количество URL для посещения
-            max_depth: Максимальная глубина обхода
-            min_likelihood: Минимальная вероятность для посещения URL (0-100)
-            quick_check: Использовать быструю проверку на рецепт перед полной экстракцией
             
-        Returns:
-            Количество успешно найденных рецептов
-        """
-        logger.info(f"🌍 Начало многоязычного исследования сайта: {self.base_url}")
-        logger.info(f"Параметры: max_urls={max_urls}, max_depth={max_depth}, min_likelihood={min_likelihood}")
-        
-        # Очередь с приоритетами: (priority_score, url, depth, link_text)
-        import heapq
-        priority_queue = []
-        
-        # Стартуем с базового URL
-        heapq.heappush(priority_queue, (-100, self.base_url, 0, "Home"))
-        
-        urls_explored = 0
-        recipes_found = 0
-        
-        while priority_queue and urls_explored < max_urls:
-            # Извлекаем URL с наивысшим приоритетом (heapq - min-heap, поэтому отрицательные)
-            neg_priority, current_url, depth, link_text = heapq.heappop(priority_queue)
-            priority = -neg_priority
-            
-            # Проверка глубины
-            if depth > max_depth:
-                continue
-            
-            # Проверка, нужно ли посещать
-            if current_url in self.visited_urls:
-                continue
-            
-            if not self.should_explore_url(current_url):
-                continue
-            
-            # Пропускаем URL с низкой вероятностью (кроме первого уровня)
-            if depth > 0 and priority < min_likelihood:
-                logger.debug(f"Пропущен URL с низкой вероятностью [{priority:.0f}]: {current_url}")
-                continue
-            
-            try:
-                logger.info(f"[{urls_explored + 1}/{max_urls}] [{priority:.0f}] {link_text[:30]}...")
-                logger.info(f"  URL: {current_url}")
-                logger.info(f"  Глубина: {depth}")
+            # Переупорядочиваем очередь: URL от успешного источника - в начало
+            if self.exploration_queue:
+                priority_urls = []
+                other_urls = []
                 
-                # Переход на страницу
-                try:
-                    self.driver.get(current_url)
-                except TimeoutException:
-                    logger.warning(f"Timeout при загрузке {current_url}")
-                    continue
+                for url_tuple in self.exploration_queue:
+                    url, depth = url_tuple
+                    if self.referrer_map.get(url) == referrer:
+                        priority_urls.append(url_tuple)
+                    else:
+                        other_urls.append(url_tuple)
                 
-                # Ожидание загрузки
-                try:
-                    WebDriverWait(self.driver, 15).until(
-                        lambda d: d.execute_script('return document.readyState') == 'complete'
-                    )
-                except TimeoutException:
-                    logger.warning("Timeout при загрузке страницы, продолжаем")
-                
-                # Адаптивная задержка
-                self.request_count += 1
-                delay = random.uniform(1.0, 2.0) if self.request_count % 10 != 0 else random.uniform(3, 5)
-                time.sleep(delay)
-                
-                # Прокрутка страницы
-                self.slow_scroll_page(quick_mode=True)
-                
-                # Отмечаем как посещенный
-                self.visited_urls.add(current_url)
-                urls_explored += 1
-                
-                # Получение паттерна
-                pattern = self.get_url_pattern(current_url)
-                if pattern not in self.url_patterns:
-                    self.url_patterns[pattern] = []
-                
-                page_index = len(self.url_patterns[pattern]) + 1
-                self.url_patterns[pattern].append(current_url)
-                
-                # Быстрая проверка на рецепт (если включено)
-                is_recipe = False
-                confidence = 0
-                
-                if quick_check:
-                    is_recipe, confidence = self.quick_recipe_check()
-                    logger.info(f"  Быстрая проверка: {'✓ РЕЦЕПТ' if is_recipe else '✗ не рецепт'} (уверенность: {confidence})")
-                
-                # Если похоже на рецепт - делаем полную экстракцию
-                if is_recipe and self.recipe_extractor:
-                    if self.check_and_extract_recipe(current_url, pattern, page_index):
-                        recipes_found += 1
-                        logger.info(f"  🎯 Найдено рецептов: {recipes_found}")
-                        
-                        # Обновляем паттерн если нужно
-                        if self.recipe_regex is None or not self.is_recipe_url(current_url):
-                            logger.info("  📝 Обновление паттерна рецептов...")
-                            if self.analyzer is None:
-                                self.analyzer = RecipeAnalyzer(
-                                    site_id=self.site_id,
-                                    db_manager=self.db,
-                                    sample_size=10
-                                )
-                            new_pattern = self.analyzer.analyse_recipe_page_pattern(site_id=self.site_id)
-                            if new_pattern:
-                                self.set_pattern(new_pattern)
-                
-                # Извлечение новых ссылок с приоритетами
-                new_links = self.extract_links_with_priority()
-                logger.info(f"  Найдено ссылок: {len(new_links)}")
-                
-                # Добавляем в приоритетную очередь
-                added = 0
-                for link_url, link_score, link_txt in new_links:
-                    if link_url not in self.visited_urls and link_score >= min_likelihood:
-                        # Запоминаем источник
-                        if link_url not in self.referrer_map:
-                            self.referrer_map[link_url] = current_url
-                        
-                        # Добавляем в очередь (отрицательный приоритет для max-heap)
-                        heapq.heappush(priority_queue, (-link_score, link_url, depth + 1, link_txt))
-                        added += 1
-                
-                logger.info(f"  Добавлено в очередь: {added} ссылок (мин. вероятность {min_likelihood})")
-                
-                # Периодическое сохранение
-                if urls_explored % 10 == 0:
-                    self.save_state()
-                    logger.info(f"💾 Состояние сохранено: {urls_explored} URL, {recipes_found} рецептов")
-                
-            except Exception as e:
-                logger.error(f"Ошибка при обработке {current_url}: {e}")
-                self.failed_urls.add(current_url)
-                continue
-        
-        # Финальное сохранение
-        self.save_state()
-        
-        logger.info("\n" + "="*60)
-        logger.info("🎉 Многоязычное исследование завершено!")
-        logger.info(f"Посещено URL: {urls_explored}")
-        logger.info(f"Найдено рецептов: {recipes_found}")
-        logger.info(f"Найдено паттернов: {len(self.url_patterns)}")
-        logger.info(f"Успешных источников: {len(self.successful_referrers)}")
-        logger.info(f"Ошибок: {len(self.failed_urls)}")
-        logger.info("="*60 + "\n")
-        
-        return recipes_found
-    
+                if priority_urls:
+                    # Приоритетные URL вперед, остальные после
+                    self.exploration_queue = priority_urls + other_urls
+                    logger.info(f"  ↑ {len(priority_urls)} URL от успешного источника передвинуты в начало очереди")
     
     def explore(self, max_urls: int = 100, max_depth: int = 3, session_urls: bool = True, 
-                check_pages_with_extractor:bool = False,
-                forbid_success_mark: bool = False,
-                check_url: bool = False) -> int:
+                check_pages_with_extractor:bool = False, check_url: bool = False) -> int:
         """
         Исследование структуры сайта
         
@@ -1190,7 +965,6 @@ class SiteExplorer:
             max_urls: Максимальное количество URL для посещения
             max_depth: Максимальная глубина обхода
             session_urls: Если True, то не учитывает старые посещенные URL при подсчтее max urls
-            forbid_success_mark: Если True, не отмечает успешные источники (для случаев отсутсвия паттерна)
             check_pages_with_extractor: Если True, проверяет каждую страницу экстрактором рецептов
             check_url: Если True, проверяет каждый на реджекс паттерн перед экстракцией (парамтер касается только экстракции)
         Returns:
@@ -1306,11 +1080,11 @@ class SiteExplorer:
                             
                 # Если задан regex паттерн - сохраняем рецепт, иначе сохраняем все страницы
                 elif self.should_extract_recipe(current_url):
-                    if not forbid_success_mark: self.mark_page_as_successful(current_url)
+                    if self.recipe_pattern: self.mark_page_as_successful(current_url) # Если паттерн задан - отмечаем как успешный тк иначе не можем знать был ли вообще успех
                     self.save_page_html(current_url, pattern, page_index)
 
                 # Извлечение новых ссылок
-                new_links = self.extract_links()
+                new_links = self.extract_links_with_priority()
                 logger.info(f"  Найдено ссылок: {len(new_links)}")
                 
                 # Добавление новых ссылок в очередь с отслеживанием источника
@@ -1318,18 +1092,18 @@ class SiteExplorer:
                 # Если паттерн найден - используем ширину (BFS)
                 has_recipe_pattern = self.recipe_regex is not None
                 
-                for link in new_links:
-                    if self.should_explore_url(link) or len(queue) == 0:
+                for link_url in new_links:
+                    if self.should_explore_url(link_url) or len(queue) == 0:
                         # Запоминаем источник перехода
-                        if link not in self.referrer_map:
-                            self.referrer_map[link] = current_url
+                        if link_url not in self.referrer_map:
+                            self.referrer_map[link_url] = current_url
                         
                         # DFS (вглубь): добавляем в начало очереди если паттерна нет
                         # BFS (вширь): добавляем в конец очереди если паттерн есть
-                        if has_recipe_pattern:
-                            queue.append((link, depth + 1))
+                        if has_recipe_pattern and check_url is True:
+                            queue.append((link_url, depth + 1))
                         else:
-                            queue.insert(0, (link, depth + 1))
+                            queue.insert(0, (link_url, depth + 1))
                 
                 # Сортируем очередь по приоритету только если паттерн найден
                 if has_recipe_pattern:
@@ -1377,24 +1151,31 @@ class SiteExplorer:
 
 def explore_site(url: str, max_urls: int = 1000, max_depth: int = 4, recipe_pattern: str = None,
                  check_pages_with_extractor: bool = False,
-                 forbid_success_mark: bool = False,
-                 check_url: bool = False):
+                 check_url: bool = False,
+                 max_urls_per_pattern: int = None, debug_port: int = 9222):
     """
     Функция для исследования сайта с обработкой ошибок и прерываний
     
     Args:
-        explorer: Объект SiteExplorer
+        url: Базовый URL сайта
         max_urls: Максимальное количество URL для исследования
         max_depth: Максимальная глубина исследования
+        recipe_pattern: Regex паттерн для поиска URL с рецептами
+        check_pages_with_extractor: Проверять ли каждую страницу экстрактором рецептов
+        check_url: Проверять ли URL на соответствие паттерну перед экстракцией
+        max_urls_per_pattern: Максимальное количество URL на один паттерн (None = без ограничений)
+        debug_port: Порт для подключения к Chrome
     """
     urls_explored = 0
     try:
         # Цикл для продолжения исследования до достижения max_urls (на случай ошибок или прерываний)
         while urls_explored < max_urls:
-            explorer = SiteExplorer(url, debug_mode=True, use_db=True, recipe_pattern=recipe_pattern)
+            explorer = SiteExplorer(url, debug_port=debug_port, debug_mode=True, 
+                                  recipe_pattern=recipe_pattern, 
+                                  max_urls_per_pattern=max_urls_per_pattern)
             explorer.connect_to_chrome()
             explorer.load_state()
-            explored = explorer.explore(max_urls=max_urls, max_depth=max_depth, check_url=check_url, check_pages_with_extractor=check_pages_with_extractor, forbid_success_mark=forbid_success_mark)
+            explored = explorer.explore(max_urls=max_urls, max_depth=max_depth, check_url=check_url, check_pages_with_extractor=check_pages_with_extractor)
             urls_explored += explored
             logger.info(f"Всего исследовано URL: {urls_explored}/{max_urls}")
     except KeyboardInterrupt:
@@ -1407,25 +1188,7 @@ def explore_site(url: str, max_urls: int = 1000, max_depth: int = 4, recipe_patt
 
 def main():
     url = "https://www.allrecipes.com/"
-    # паттерн формируется после анализа несколкьих URL
-    search_pattern = "(^/recipe/\d+/[a-z0-9-]+/?$)|(^/[a-z0-9-]+-recipe-\d+/?$)"
-    max_depth = 3
-    
-    explorer = SiteExplorer(url, debug_mode=True, use_db=True, recipe_pattern=search_pattern)
-    
-    try:
-        #isR = explorer.is_recipe_url("https://www.allrecipes.com/recipe/23439/perfect-pumpkin-pie/")
-        explorer.connect_to_chrome()
-        explorer.explore(max_urls=3, max_depth=max_depth)
-
-        explorer.explore(max_urls=3, max_depth=max_depth, session_urls=True)
-    except KeyboardInterrupt:
-        logger.info("\nПрервано пользователем")
-    except Exception as e:
-        logger.error(f"Критическая ошибка: {e}")
-        sys.exit(1)
-    finally:
-        explorer.close()
+    explore_site(url, max_urls=100, max_depth=3, recipe_pattern=r'/recipe/[\w-]+/\d+/')
 
 
 if __name__ == "__main__":
