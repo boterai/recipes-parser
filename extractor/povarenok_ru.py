@@ -496,7 +496,7 @@ class PovarenokRuExtractor(BaseRecipeExtractor):
         return {
             "dish_name": dish_name,
             "description": description,
-            "ingredients": ingredients,
+            "ingredient": ingredients,
             "step_by_step": step_by_step,
             "nutrition_info": self.extract_nutrition_info(),
             "category": category,
