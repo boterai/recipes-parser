@@ -7,13 +7,14 @@ from typing import Any, Optional
 from pathlib import Path
 import sys
 import logging
+import sqlalchemy
 
 # Добавляем корневую директорию в путь
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.models.page import Page
-from src.common.db.qdrant import QdrantManager
-from src.common.db.vector_db_interface import VectorDBInterface
+from src.common.db.qdrant import QdrantRecipeManager
+from src.common.db.mysql import MySQlManager
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +23,7 @@ NO_EMBEDDING_ERROR = "Embedding function не установлена. Испол
 class RecipeVectorizer:
     """Векторизатор рецептов на основе векторной БД"""
     
-    def __init__(self, vector_db: Optional[VectorDBInterface] = None, embedding_dim: int = 384):
+    def __init__(self, vector_db: QdrantRecipeManager = None, page_database: MySQlManager = None):
         """
         Инициализация векторизатора
         
@@ -31,132 +32,62 @@ class RecipeVectorizer:
             embedding_dim: Размерность векторов эмбеддингов
         """
         if vector_db is None:
-            self.vector_db = QdrantManager(embedding_dim=embedding_dim)
+            self.vector_db = QdrantRecipeManager()
         else:
             self.vector_db = vector_db
-        
-        self.embedding_function = None
-        
+
+        if page_database is None:
+            self.page_database = MySQlManager()
+        else:
+            self.page_database = page_database
+        self.connected = False
+                
     def connect(self) -> bool:
-        """Подключение к векторной БД"""
-        return self.vector_db.connect()
-    
-    def set_embedding_function(self, embedding_function):
-        """
-        Установка функции для создания эмбеддингов
-        
-        Args:
-            embedding_function: Функция, принимающая текст и возвращающая вектор
-        """
-        self.embedding_function = embedding_function
-    
-    def add_recipe(self, page: Page) -> bool:
-        """
-        Добавление одного рецепта в векторную БД
-        
-        Args:
-            page: Объект страницы с рецептом
-            
-        Returns:
-            True если успешно добавлено
-        """
-        if not self.embedding_function:
-            logger.error(NO_EMBEDDING_ERROR)
+        if self.connected:
+            return True
+        """Подключение к векторной БД и БД страниц"""
+        if self.vector_db.connect() is False:
+            logger.error("Не удалось подключиться к векторной БД")
             return False
         
-        return self.vector_db.add_recipe(page, self.embedding_function)
+        if self.page_database.connect() is False:
+            logger.error("Не удалось подключиться к базе данных страниц")
+            return False
+        self.connected = True
+        return True
     
-    def add_recipes_batch(self, pages: list[Page], batch_size: int = 100) -> int:
-        """
-        Массовое добавление рецептов
+    def get_pages(self, site_id: int = None, limit: int = None, ids: list[str] = None) -> list[Page]:
+        """Получение страниц с рецептами для сайта из БД страниц"""
+        sql_dict = {}
+        sql = "SELECT * FROM pages WHERE is_recipe = TRUE AND dish_name IS NOT NULL AND ingredient IS NOT NULL and step_by_step IS NOT NULL"
+        if site_id is not None:
+            sql += " AND site_id = :site_id"
+            sql_dict["site_id"] = site_id
+
+        if ids is not None and len(ids) > 0:
+            sql += " AND id IN :ids"
+            sql_dict["ids"] = tuple(ids)
+
+        if limit is not None:
+            sql += " LIMIT :limit"
+            sql_dict["limit"] = limit
+
+        pages = []
+        with self.page_database.get_session() as session:
+            result = session.execute(sqlalchemy.text(sql), sql_dict)
+            rows = result.fetchall()
+            pages = [Page.model_validate(dict(row._mapping)) for row in rows]
         
-        Args:
-            pages: Список объектов страниц с рецептами
-            batch_size: Размер батча
-            
-        Returns:
-            Количество успешно добавленных рецептов
-        """
-        if not self.embedding_function:
-            logger.error(NO_EMBEDDING_ERROR)
-            return 0
-        
-        return self.vector_db.add_recipes_batch(pages, self.embedding_function, batch_size)
-    
-    def search(
-        self,
-        query: str,
-        limit: int = 5,
-        site_id: Optional[int] = None,
-        collection_name: str = "recipes",
-        score_threshold: float = 0.0
-    ) -> list[dict[str, Any]]:
-        """
-        Поиск похожих рецептов
-        
-        Args:
-            query: Поисковый запрос (текст)
-            limit: Количество результатов
-            site_id: Фильтр по сайту
-            collection_name: Коллекция для поиска ("recipes", "ingredients", "instructions", "descriptions")
-            score_threshold: Минимальный порог схожести
-            
-        Returns:
-            Список найденных рецептов с метаданными
-        """
-        if not self.embedding_function:
-            logger.error(NO_EMBEDDING_ERROR)
-            return []
-        
-        # Создаем вектор запроса
-        query_vector = self.embedding_function(query)
-        
-        # Выполняем поиск через векторную БД
-        return self.vector_db.search(
-            query_vector=query_vector,
-            collection_name=collection_name,
-            limit=limit,
-            site_id=site_id,
-            score_threshold=score_threshold
-        )
-    
-    def delete_recipe(self, page_id: int) -> bool:
-        """
-        Удаление рецепта из векторной БД
-        
-        Args:
-            page_id: ID страницы в БД
-            
-        Returns:
-            True если успешно удалено
-        """
-        return self.vector_db.delete_by_page_id(page_id)
-    
-    def update_recipe(self, page: Page) -> bool:
-        """
-        Обновление рецепта (удаление + добавление)
-        
-        Args:
-            page: Обновленный объект страницы
-            
-        Returns:
-            True если успешно обновлено
-        """
-        self.delete_recipe(page.id)
-        return self.add_recipe(page)
-    
-    def get_stats(self) -> dict[str, Any]:
-        """
-        Получение статистики коллекции
-        
-        Returns:
-            Словарь со статистикой
-        """
-        return self.vector_db.get_stats()
+        return pages
     
     def close(self):
-        """Закрытие подключения"""
-        self.vector_db.close()
-
-
-
+        """Закрытие подключений к БД"""
+        if self.connected:
+            self.vector_db.close()
+            self.page_database.close()
+            self.connected = False
+        logger.info("Подключения к БД закрыты")
+        
+    
+    
+    

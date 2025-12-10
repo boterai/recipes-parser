@@ -82,6 +82,28 @@ class Page(BaseModel):
             return names
         except json.JSONDecodeError:
             return []
+        
+    def ingredients_to_full_str(self, separator: str = " ") -> str:
+        """возвращает все игредиенты в полном виде (кол-во, ед.изм., имя)"""
+        if not self.ingredient:
+            return ""
+        try:
+            ingredients: list[dict[str, Any]] = json.loads(self.ingredient)
+            lines = []
+            for item in ingredients:
+                parts = []
+                if (quantity := item.get('quantity')) is not None:
+                    parts.append(str(quantity).strip())
+                if (unit := item.get('unit')) is not None:
+                    parts.append(str(unit).strip())
+                if (name := item.get('name')) is not None:
+                    parts.append(str(name).strip())
+                line = " ".join(parts).strip()
+                if line:
+                    lines.append(line)
+            return separator.join(lines)
+        except json.JSONDecodeError:
+            return ""
     
     class Config:
         from_attributes = True

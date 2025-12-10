@@ -19,3 +19,4 @@ tests/*
 qdrant_storage/*
 docs/*
 .env
+scripts/words.py

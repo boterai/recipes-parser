@@ -35,52 +35,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-
-# Multilingual recipe-related keywords for URL and content detection
-RECIPE_KEYWORDS = {
-    'url': [
-        'recipe', 'recipes', 'recette', 'recettes', 'рецепт', 'рецепты', 
-        'ricetta', 'ricette', 'rezept', 'rezepte', 'receta', 'recetas',
-        'tarif', 'tarifler', 'レシピ', '食谱', '조리법', 'وصفة'
-    ],
-    'ingredients': [
-        'ingredients', 'ingredient', 'ингредиенты', 'ингредиент', 
-        'ingrédients', 'ingrédient', 'ingredientes', 'ingrediente',
-        'ingredienti', 'zutaten', 'malzemeler', '材料', '配料', '재료'
-    ],
-    'instructions': [
-        'instructions', 'steps', 'directions', 'method', 'preparation',
-        'шаги', 'приготовление', 'инструкции', 'étapes', 'préparation',
-        'paso', 'pasos', 'procedimento', 'zubereitung', 'hazırlanış',
-        '作り方', '手順', '步骤', '조리 방법'
-    ],
-    'cooking': [
-        'cooking', 'cook', 'cuisine', 'cuire', 'готовить', 'готовка',
-        'cocinar', 'cucinare', 'kochen', 'pişirmek', '料理', '烹饪', '요리'
-    ],
-    'time': [
-        'cooking time', 'prep time', 'время приготовления', 'время готовки',
-        'temps de préparation', 'tiempo de preparación', 'tempo di preparazione',
-        'vorbereitungszeit', 'hazırlama süresi', '調理時間', '准备时间', '조리 시간'
-    ],
-    'dish_types': [
-        'dinner', 'lunch', 'breakfast', 'dessert', 'appetizer', 'snack',
-        'обед', 'ужин', 'завтрак', 'десерт', 'закуска',
-        'dîner', 'déjeuner', 'petit-déjeuner', 'dessert', 'entrée',
-        'cena', 'comida', 'desayuno', 'postre', 'aperitivo',
-        'abendessen', 'mittagessen', 'frühstück', 'nachtisch',
-        'akşam yemeği', 'öğle yemeği', 'kahvaltı', 'tatlı'
-    ],
-    'common_foods': [
-        'chicken', 'fish', 'beef', 'pork', 'pasta', 'rice', 'salad', 'soup',
-        'курица', 'рыба', 'говядина', 'свинина', 'паста', 'рис', 'салат', 'суп',
-        'poulet', 'poisson', 'boeuf', 'porc', 'pâtes', 'riz', 'salade', 'soupe',
-        'pollo', 'pescado', 'carne', 'cerdo', 'arroz', 'ensalada', 'sopa',
-        'tavuk', 'balık', 'et', 'makarna', 'pilav', 'salata', 'çorba'
-    ]
-}
-
-
 class SiteExplorer:
     """Исследователь структуры сайта с поддержкой многоязычных рецептов"""
     
@@ -439,62 +393,6 @@ class SiteExplorer:
         dish_name = recipe_data.get('dish_name', 'Unknown')
         logger.info(f"  ✓ Рецепт '{dish_name}' сохранен в БД")
         return True
-        
-
-    def get_recipe_likelihood_score(self, url: str, link_text: str = "", context_text: str = "") -> float:
-        """
-        Вычисляет вероятность того, что URL ведет к рецепту (0-100)
-        
-        Args:
-            url: URL для анализа
-            link_text: Текст ссылки (anchor text)
-            context_text: Окружающий текст вокруг ссылки
-            
-        Returns:
-            Оценка вероятности от 0 до 100
-        """
-        score = 0.0
-        url_lower = url.lower()
-        link_text_lower = link_text.lower()
-        context_lower = context_text.lower()
-        
-        # 1. Проверка URL (максимум 40 баллов)
-        # Прямые совпадения с recipe keywords в URL
-        url_recipe_matches = sum(1 for kw in RECIPE_KEYWORDS['url'] if kw in url_lower)
-        score += min(url_recipe_matches * 15, 40)  # До 40 баллов
-        
-        # Паттерны URL с номерами (часто рецепты)
-        if re.search(r'/\d{4,}', url) or re.search(r'recipe[-_]\d+', url_lower):
-            score += 10
-        
-        # 2. Проверка текста ссылки (максимум 30 баллов)
-        # Прямые совпадения с keywords в тексте ссылки
-        for category, keywords in RECIPE_KEYWORDS.items():
-            matches = sum(1 for kw in keywords if kw in link_text_lower)
-            if category == 'url':
-                score += min(matches * 10, 20)
-            elif category in ['ingredients', 'instructions']:
-                score += min(matches * 5, 10)
-        
-        # Названия блюд в тексте ссылки
-        dish_matches = sum(1 for kw in RECIPE_KEYWORDS['common_foods'] if kw in link_text_lower)
-        score += min(dish_matches * 3, 10)
-        
-        # 3. Проверка контекста (максимум 20 баллов)
-        context_recipe_score = 0
-        for category in ['ingredients', 'instructions', 'cooking', 'time']:
-            matches = sum(1 for kw in RECIPE_KEYWORDS[category] if kw in context_lower)
-            context_recipe_score += matches
-        score += min(context_recipe_score * 2, 20)
-        
-        # 4. Бонусы за комбинации (максимум 10 баллов)
-        # URL содержит recipe + текст ссылки содержит еду
-        if any(kw in url_lower for kw in RECIPE_KEYWORDS['url']):
-            if any(kw in link_text_lower for kw in RECIPE_KEYWORDS['common_foods']):
-                score += 10
-        
-        return min(score, 100)  # Ограничиваем максимумом 100
-    
     
     def should_explore_url(self, url: str) -> bool:
         """
