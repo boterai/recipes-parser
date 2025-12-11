@@ -13,7 +13,7 @@ from src.models.page import Page
 
 
 EmbeddingFunctionReturn = tuple[list[float] | list[list[float]], Optional[list[list[float]]]] # (dense_vector, colbert_vectors) при том, что colbert_vectors может быть None и тогда его надо опредлять
-EmbeddingType = Literal["full", "ingredients", "instructions", "descriptions", "description+name"]
+ContentType = Literal["full", "ingredients", "instructions", "descriptions", "description+name"]
 
 class EmbeddingFunction(Protocol):
     """
@@ -37,9 +37,9 @@ class EmbeddingFunction(Protocol):
     ) -> EmbeddingFunctionReturn:
         ...
 
-def get_embedding_types() -> list[str]:
+def get_content_types() -> list[str]:
     """
-    get_embedding_types возвращает список доступных типов эмбеддингов
+    get_content_types возвращает список доступных типов эмбеддингов
     """
     return [
         "full",
@@ -50,16 +50,16 @@ def get_embedding_types() -> list[str]:
     ]
 
 
-def prepare_text(page: Page, embedding_type: EmbeddingType = "full") -> str:
+def prepare_text(page: Page, content_type: ContentType = "full") -> str:
     """
     prepare_text prepares the text for embedding based on the specified embedding type.
     Args:
         page: The Page object containing recipe data.
         embedding_type: The type of embedding to prepare.
     """
-    match embedding_type:
+    match content_type:
         case "ingredients":
-            return page.ingredients_to_full_str()
+            return page.ingredient_to_str()
         
         case "instructions":
             return page.step_by_step or ""
@@ -69,10 +69,10 @@ def prepare_text(page: Page, embedding_type: EmbeddingType = "full") -> str:
             if page.dish_name:
                 parts.append(page.dish_name)
             if page.description:
-                parts.append(page.description[:200])
+                parts.append(page.description[:150])
             if page.tags:
-                parts.append(page.tags[:150])
-            return " ".join(parts)  # Пробел вместо ". "
+                parts.append(page.tags[:100])
+            return " ".join(parts)
         
         case "description+name":
             parts = []
@@ -83,7 +83,7 @@ def prepare_text(page: Page, embedding_type: EmbeddingType = "full") -> str:
             if page.ingredient:
                 parts.append(page.ingredient_to_str())
             if page.tags:
-                parts.append(page.tags[:150])
+                parts.append(page.tags[:100])
             return " ".join(parts)
     
     # full - БЕЗ префиксов, tags в конце
@@ -97,9 +97,41 @@ def prepare_text(page: Page, embedding_type: EmbeddingType = "full") -> str:
     if page.step_by_step:
         parts.append(page.step_by_step[:500])
     if page.tags:
-        parts.append(page.tags[:150])  # В конце!
+        parts.append(page.tags[:150])
     
-    return " ".join(parts)  # Пробел лучше чем ". "
+    return " ".join(parts)
+
+
+def normalize_vector(vec: list[float]) -> list[float]:
+    """
+    normalize_vector нормализует вектор до единичной длины.
+    Args:
+        vec: Входной вектор.
+    Returns:
+        Нормализованный вектор.
+    """
+    norm = np.linalg.norm(vec)
+    if norm == 0:
+        return vec
+    normalized = (np.array(vec) / norm).tolist()
+    return normalized
+
+def normalize_colbert_vectors(colbert_vecs: list[list[float]]) -> list[list[float]]:
+    """
+    normalize_colbert_vectors нормализует каждый вектор в последовательности ColBERT до единичной длины.
+    Args:
+        colbert_vecs: Список векторов ColBERT.
+    Returns:
+        Список нормализованных векторов ColBERT.
+    """
+    normalized_vecs = []
+    for vec in colbert_vecs:
+        norm = np.linalg.norm(vec)
+        if norm == 0:
+            normalized_vecs.append(vec)
+        else:
+            normalized_vecs.append((np.array(vec) / norm).tolist())
+    return normalized_vecs
 
 def get_embedding_function_multilingual(model_name: str = 'intfloat/multilingual-e5-large') -> tuple[EmbeddingFunction, int]:
     # Варианты моделей (от меньшей к большей):
@@ -126,6 +158,7 @@ def get_embedding_function_multilingual(model_name: str = 'intfloat/multilingual
     """
     
     model = SentenceTransformer(model_name)
+    colbert_model = BGEM3FlagModel('BAAI/bge-m3')
     
     def embedding_func(texts: str, is_query: bool = False, use_colbert: bool = False) -> EmbeddingFunctionReturn:
         if isinstance(texts, str):
@@ -140,8 +173,16 @@ def get_embedding_function_multilingual(model_name: str = 'intfloat/multilingual
 
         colbert_vecs = None
         if use_colbert:
-            colbert_vecs = [Document(text=text, model="colbert-ir/colbertv2.0") for text in texts]
-
+            encoded_data = colbert_model.encode(
+                texts,
+                batch_size=8,
+                max_length=8192,
+                return_dense=False,
+                return_sparse=False,
+                return_colbert_vecs=True,
+            )
+            colbert_vecs = encoded_data['colbert_vecs']
+            
         return dense_vecs, colbert_vecs
     
     return embedding_func, 1024  # Размерность для small модели
@@ -188,7 +229,9 @@ def get_embedding_function_bge_m3() -> tuple[EmbeddingFunction, int]:
 if __name__ == "__main__":
     # предварительно перед передачец текст надо разбить на части по 8192 токенов, можно пока попробовать не нормализоавывать даныне и оставить так \
     # и лучше не разбивать, а передавать целиком, тк нужно сходвтсво именно цельного рецепта
-
+    ef, _ = get_embedding_function_multilingual()
+    emb, colbert = ef("Тесто для блинов: 2 яйца, 500 мл молока, 250 г муки, щепотка соли, 1 ст.л. сахара, 2 ст.л. растительного масла.",
+                      is_query=False, use_colbert=True)
     model = BGEM3FlagModel('BAAI/bge-m3')
     text = "Тесто для блинов: 2 яйца, 500 мл молока, 250 г муки, щепотка соли, 1 ст.л. сахара, 2 ст.л. растительного масла."
     encoded_data = model.encode(

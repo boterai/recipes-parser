@@ -5,14 +5,14 @@
 import logging
 from typing import Any, Optional
 from itertools import batched
-from src.common.embedding import prepare_text, EmbeddingFunction, EmbeddingType, get_embedding_types
+from src.common.embedding import prepare_text, EmbeddingFunction, ContentType, get_content_types
 from config.db_config import QdrantConfig
 from src.models.page import Page
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
     Distance, VectorParams, PointStruct,
-    Filter, FieldCondition, MatchValue,
-    MultiVectorConfig, MultiVectorComparator, Document, Prefetch, HnswConfigDiff
+    MultiVectorConfig, MultiVectorComparator,
+    Prefetch, HnswConfigDiff
     )
 
 logger = logging.getLogger(__name__)
@@ -40,7 +40,7 @@ class QdrantCollectionNotFoundError(QdrantError):
 class QdrantRecipeManager:
     """Менеджер для работы с Qdrant векторной БД"""
     
-    def __init__(self, embedding_types: list[str] = None, collection_prefix: str = "recipes"):
+    def __init__(self, content_types: list[str] = None, collection_prefix: str = "recipes"):
         """
         Инициализация подключения к Qdrant
         
@@ -48,7 +48,7 @@ class QdrantRecipeManager:
             dense_vectors: Список типов эмбеддингов для создания коллекций
         """
         self.client = None
-        self.embedding_types = embedding_types if embedding_types else get_embedding_types()
+        self.embedding_types = content_types if content_types else get_content_types()
         
         # Названия коллекций
         self.collections = {
@@ -67,7 +67,7 @@ class QdrantRecipeManager:
                 host=params.get('host', 'localhost'),
                 port=params.get('port', '6333'),
                 api_key=params.get('api_key'),
-                timeout=600 # увеличенный таймаут для больших операций
+                timeout=40 # увеличенный таймаут для больших операций
             )
             return True
             
@@ -176,7 +176,7 @@ class QdrantRecipeManager:
                         logger.warning(f"Батч {batch_num}, тип '{vector_type}': нет текстов")
                         continue
 
-                    use_colbert = (vector_type != "full" and vector_type != "instructions") # всегда True (таймаут на больших текстах, поэтому full иногда можно отключить)
+                    use_colbert = (vector_type not in ["full", "instructions", "description+name"]) # всегда True (таймаут на больших текстах, поэтому full иногда можно отключить)
                     dense_vecs, colbert_vecs = embedding_function(
                         texts,
                         is_query=False,
@@ -200,7 +200,6 @@ class QdrantRecipeManager:
                                 "page_id": page.id,
                                 "dish_name": page.dish_name,
                                 "site_id": page.site_id,
-                                "url": page.url,
                                 "language": page.language or "unknown",
                             }
                         )
@@ -285,7 +284,6 @@ class QdrantRecipeManager:
                     "page_id": hit.id,
                     "score": hit.score,
                     "dish_name": hit.payload.get("dish_name"),
-                    "url": hit.payload.get("url"),
                     "site_id": hit.payload.get("site_id"),
                     "language": hit.payload.get("language"),
                     "method": "ColBERT" if use_colbert else "Dense"

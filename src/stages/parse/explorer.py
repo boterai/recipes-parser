@@ -93,26 +93,34 @@ class SiteExplorer:
         
         # Подключение к БД
         self.db = MySQlManager()
-        if self.db.connect():
-            self.site_id = self.db.create_or_get_site(
-                name=self.site_name,
-                base_url=base_url,
-                language=None  # Будет определен при парсинге
-            )
-            if self.site_id:
-                logger.info(f"Работа с сайтом ID: {self.site_id}")
-                
-                # Если паттерн не задан, загружаем из БД
-                if not recipe_pattern:
-                    self.load_pattern_from_db()
-                
-                # Загружаем посещенные URL из БД
-                self.load_visited_urls_from_db()
+        for i in range(1, 4):  # Пытаемся подключиться 3 раза
+            if self.db.connect():
+                self.site_id = self.db.create_or_get_site(
+                    name=self.site_name,
+                    base_url=base_url,
+                    language=None  # Будет определен при парсинге
+                )
+                if self.site_id:
+                    logger.info(f"Работа с сайтом ID: {self.site_id}")
+                    
+                    # Если паттерн не задан, загружаем из БД
+                    if not recipe_pattern:
+                        self.load_pattern_from_db()
+                    
+                    # Загружаем посещенные URL из БД
+                    self.load_visited_urls_from_db()
+                else:
+                    logger.warning("Не удалось создать/получить ID сайта")
+                break
             else:
-                logger.warning("Не удалось создать/получить ID сайта")
-        else:
-            logger.error("Не удалось подключиться к БД")
-            return
+                logger.error("Не удалось подключиться к БД")
+            if i < 3:
+                logger.info("Повторная попытка подключения к БД через несколько секунд...")
+            if i == 3:
+                logger.error("Превышено количество попыток подключения к БД. Работа без БД невозможна")
+                self.db = None
+                raise RuntimeError("DB connection failed")
+            time.sleep(random.uniform(4, 6))
 
         # Инициализация экстрактора для проверки и извлечения рецептов
         self.recipe_extractor = None

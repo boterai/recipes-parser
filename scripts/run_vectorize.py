@@ -8,41 +8,46 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.common.db.mysql import MySQlManager
-from src.common.embedding import get_embedding_function_bge_m3, prepare_text
+from src.common.embedding import get_embedding_function_bge_m3, prepare_text, get_embedding_function_multilingual
 from src.stages.vectorise.vectorise import RecipeVectorizer
 from src.common.db.qdrant import QdrantRecipeManager
 
 def add_recipes():
     db = MySQlManager()
-    qm = QdrantRecipeManager(collection_prefix="bge-m3")
+    qm = QdrantRecipeManager(collection_prefix="ml-e5-large")
     rv = RecipeVectorizer(vector_db=qm, page_database=db)
     if not rv.connect():
         print("cant connect to dbs")
         return
     
-    pages = rv.get_pages(limit=2000)
-
-    embed_func, dims = get_embedding_function_bge_m3()
+    embed_func, dims = get_embedding_function_multilingual()
     qm.create_collections(colbert_dim=dims, dense_dim=dims)
-    addedd = qm.add_recipes(pages=pages, embedding_function=embed_func, batch_size=8)
-    print(f"Всего добавлено: {addedd}/{len(pages)}")
+    for i in range(1, 26):
+        pages = rv.get_pages(site_id=i)
+        if len(pages) < 10:
+            print("Нет страниц для векторизации для сайта {i}, пропускаем")
+            continue
+        print(f"Векторизуем партию из {len(pages)} страниц, сайт {i}")
+
+        addedd = qm.add_recipes(pages=pages, embedding_function=embed_func, batch_size=8)
+        print(f"Всего добавлено: {addedd}/{len(pages)}")
     qm.close()
 
 def search_similar():
     db = MySQlManager()
-    qm = QdrantRecipeManager(collection_prefix="bge-m3")
+    qm = QdrantRecipeManager(collection_prefix="ml-e5-large")
     rv = RecipeVectorizer(vector_db=qm, page_database=db)
     if not rv.connect():
         print("cant connect to dbs")
         return
     
-    embed_func, dims = get_embedding_function_bge_m3()
+    embed_func, dims = get_embedding_function_multilingual()
     qm.create_collections(colbert_dim=dims, dense_dim=dims)
 
     page = rv.get_pages(limit=1)[0]
     print("Ищем похожие на страницу:")
     print(f"{page.id} - {page.dish_name}")
-    query_text = prepare_text(page, embedding_type="full")
+    query_text = prepare_text(page, content_type="full")
     results = qm.search(
         query_text=query_text,
         embedding_function=embed_func,
@@ -59,7 +64,7 @@ def search_similar():
     qm.close()
 
 if __name__ == '__main__':
-    #add_recipes()
+    add_recipes()
     search_similar()
 
 """
