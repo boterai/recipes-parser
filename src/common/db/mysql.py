@@ -176,7 +176,7 @@ class MySQlManager:
                 }
             )
             session.commit()
-            
+            session.close()
             return result.lastrowid
             
         except SQLAlchemyError as e:

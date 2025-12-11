@@ -11,6 +11,15 @@ from qdrant_client.models import Document
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from src.models.page import Page
 
+""" TODO скорее всего рецепт следует разделить на несколько компонентов, а не объединять все в один большой текст
+Например:
+- Полный текст рецепта (full) (можно оставить для эксперимента)
+- Только ингредиенты (ingredients)
+- Только инструкции (instructions)
+- Только описание (descriptions)
+- теги, название, время приготволения, ккал
+- описание
+"""
 
 EmbeddingFunctionReturn = tuple[list[float] | list[list[float]], Optional[list[list[float]]]] # (dense_vector, colbert_vectors) при том, что colbert_vectors может быть None и тогда его надо опредлять
 ContentType = Literal["full", "ingredients", "instructions", "descriptions", "description+name"]
@@ -44,8 +53,6 @@ def get_content_types() -> list[str]:
     return [
         "full",
         "ingredients",
-        "instructions",
-        "descriptions",
         "description+name"
     ]
 
@@ -60,19 +67,6 @@ def prepare_text(page: Page, content_type: ContentType = "full") -> str:
     match content_type:
         case "ingredients":
             return page.ingredient_to_str()
-        
-        case "instructions":
-            return page.step_by_step or ""
-        
-        case "descriptions":
-            parts = []
-            if page.dish_name:
-                parts.append(page.dish_name)
-            if page.description:
-                parts.append(page.description[:150])
-            if page.tags:
-                parts.append(page.tags[:100])
-            return " ".join(parts)
         
         case "description+name":
             parts = []
@@ -95,7 +89,7 @@ def prepare_text(page: Page, content_type: ContentType = "full") -> str:
     if page.ingredient:
         parts.append(page.ingredient_to_str())
     if page.step_by_step:
-        parts.append(page.step_by_step[:500])
+        parts.append(page.step_by_step[:600])
     if page.tags:
         parts.append(page.tags[:150])
     

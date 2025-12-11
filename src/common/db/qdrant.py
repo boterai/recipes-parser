@@ -46,14 +46,15 @@ class QdrantRecipeManager:
         
         Args:
             dense_vectors: Список типов эмбеддингов для создания коллекций
+            collection_prefix: Префикс для названий коллекций (используется чтобы разделить два типа коллекций для тестов)
         """
         self.client = None
-        self.embedding_types = content_types if content_types else get_content_types()
+        self.content_types = content_types if content_types else get_content_types()
         
         # Названия коллекций
         self.collections = {
             vector_type: f"{collection_prefix}_{vector_type}" 
-            for vector_type in self.embedding_types
+            for vector_type in self.content_types
         }
         
         
@@ -159,7 +160,7 @@ class QdrantRecipeManager:
                     continue
                 
                 # Обрабатываем каждый тип эмбеддинга отдельно
-                for vector_type in self.embedding_types:
+                for vector_type in self.content_types:
                     collection_name = self.collections[vector_type]
                     
                     # Собираем тексты для этого типа
@@ -176,7 +177,7 @@ class QdrantRecipeManager:
                         logger.warning(f"Батч {batch_num}, тип '{vector_type}': нет текстов")
                         continue
 
-                    use_colbert = (vector_type not in ["full", "instructions", "description+name"]) # всегда True (таймаут на больших текстах, поэтому full иногда можно отключить)
+                    use_colbert = (vector_type not in ["description+name", "full"]) # всегда True (таймаут на больших текстах, поэтому full иногда можно отключить)
                     dense_vecs, colbert_vecs = embedding_function(
                         texts,
                         is_query=False,
@@ -230,8 +231,8 @@ class QdrantRecipeManager:
         limit: int = 10,
         embedding_function: EmbeddingFunction = None, # для основного вектора 
         score_threshold: float = 0.0,
-        use_colbert: bool = False,
-        embedding_type: str = "full"
+        use_colbert: Optional[bool] = None,
+        content_type: str = "full"
     ) -> list[dict[str, Any]]:
         """
         Поиск в ColBERT мультивекторной коллекции
@@ -242,11 +243,14 @@ class QdrantRecipeManager:
             embedding_function: Функция для создания основного эмбеддинга
             score_threshold: Минимальный порог схожести
             use_colbert: Использовать ColBERT вектор
-            embedding_type: Тип эмбеддинга для основного вектора
+            content_type: тип контента из рецепта для поиска
             
         Returns:
             Список найденных рецептов
         """
+        if use_colbert is None:
+            use_colbert = (content_type not in ["description+name", "full"])
+
         if not self.client:
             logger.warning("Qdrant не подключен")
             return []
@@ -258,7 +262,7 @@ class QdrantRecipeManager:
             # Выполняем поиск с мультивектором
             if use_colbert and colbert_query is not None:
                 results = self.client.query_points(
-                    collection_name=self.collections[embedding_type],
+                    collection_name=self.collections[content_type],
                     prefetch=Prefetch(
                         query=dense_query,
                         using="dense"
@@ -271,7 +275,7 @@ class QdrantRecipeManager:
                 )
             else:
                 results = self.client.query_points(
-                    collection_name=self.collections[embedding_type],
+                    collection_name=self.collections[content_type],
                     query=dense_query,
                     using="dense",
                     limit=limit,
