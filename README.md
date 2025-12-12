@@ -8,7 +8,7 @@
 
 ```bash
 # Запустить Chrome с отладкой
-google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug
+google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug_9222
 ```
 
 документация qdrant - https://qdrant.tech/documentation/quickstart/

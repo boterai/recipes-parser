@@ -8,8 +8,9 @@ import sqlalchemy
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from src.models.page import Page
 from src.common.db.mysql import MySQlManager
-from src.common.embedding import get_embedding_function_bge_m3, get_embedding_function_multilingual, get_content_types
+from src.common.embedding import get_embedding_function_bge_m3, get_embedding_function_multilingual
 from src.stages.vectorise.vectorise import RecipeVectorizer
 from src.common.db.qdrant import QdrantRecipeManager
 
@@ -28,7 +29,7 @@ def add_recipes(model_prefix: str = "ml-e5-large", site_id: int = None):
     
     rv.add_all_recipes(
         embedding_function=embed_func,
-        batch_size=8,
+        batch_size=10,
         dims=dims,
         site_id=site_id
     )
@@ -56,6 +57,7 @@ def save_similar_to_db(db: MySQlManager, model_prefix: str, similar_to_id: int, 
         session = db.get_session()
         for score, similar_page in similar_results:
             # Пропускаем сам рецепт
+            similar_page: Page
             if similar_page.id == similar_to_id:
                 continue
             
@@ -106,7 +108,7 @@ def save_similar_to_db(db: MySQlManager, model_prefix: str, similar_to_id: int, 
         traceback.print_exc()
         return 0
 
-def search_similar(model_prefix: str = "ml-e5-large", save_to_db: bool = True, recipe_id: str = "21427"):
+def search_similar(model_prefix: str = "ml-e5-large", save_to_db: bool = True, recipe_id: str = "21427", use_weighted: bool = True):
     if model_prefix == "bge-m3":
         embed_func, _ = get_embedding_function_bge_m3()
     else:
@@ -130,44 +132,47 @@ def search_similar(model_prefix: str = "ml-e5-large", save_to_db: bool = True, r
     print(f"Поиск похожих рецептов для: {page.dish_name or page.title} (ID: {page.id})")
     print(f"{'='*60}\n")
 
-    content_types = get_content_types()
-    
-    for content_type in content_types:
-        print(f"\n--- Content type: {content_type} ---")
-        results = rv.get_similar_recipes_as_pages(
+    if use_weighted:
+        results = rv.get_similar_recipes_weighted_as_pages(
             page=page,
             embed_function=embed_func,
-            content_type=content_type,
             limit=5,
             score_threshold=0.0
         )
-        
-        print(f"Найдено {len(results)} похожих рецептов:")
-        for score, similar_page in results:
-            print(f"  Score: {score:.4f} | ID: {similar_page.id} | {similar_page.dish_name or similar_page.title}")
-        
-        # Сохраняем результаты в БД
-        if save_to_db and len(results) > 0:
-            save_similar_to_db(
-                db=db, 
-                model_prefix=model_prefix,
-                similar_to_id=page.id,
-                similar_results=results,
-                content_type=content_type
-            )
+    else:
+        results = rv.get_similar_recipes_as_pages(
+            page=page,
+            embed_function=embed_func,
+            collection_type="full",
+            limit=5,
+            score_threshold=0.0,
+            use_colbert=False
+        )
+    
+    print(f"Найдено {len(results)} похожих рецептов:")
+    for score, similar_page in results:
+        print(f"  Score: {score:.4f} | ID: {similar_page.id} | {similar_page.dish_name or similar_page.title}")
+    
+    # Сохраняем результаты в БД
+    if save_to_db and len(results) > 0:
+        save_similar_to_db(
+            db=db, 
+            model_prefix=model_prefix,
+            similar_to_id=page.id,
+            similar_results=results,
+            content_type="weighted"
+        )
 
     rv.close()
 
 if __name__ == '__main__':
     # Векторизация рецептов (запускать один раз)
-    add_recipes(model_prefix="ml-e5-large")
-    add_recipes(model_prefix="bge-m3")
+    add_recipes(model_prefix="bge-m3", site_id=1)
     
     # Поиск похожих с сохранением в БД
-    search_similar(model_prefix="ml-e5-large", save_to_db=True)
-    search_similar(model_prefix="bge-m3", save_to_db=True)
+    search_similar(model_prefix="bge-m3", save_to_db=True, use_weighted=True)
 
     """
-    что выгодного
+    bge-m3 лучше c colbert получается на тестах как будто хуже, чем без него
     
     """

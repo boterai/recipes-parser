@@ -7,6 +7,9 @@ from typing import Optional, Any
 from decimal import Decimal
 from pydantic import BaseModel, Field
 import json
+from src.models.recipe import Recipe
+
+
 
 class Page(BaseModel):
     """Модель спарсенной страницы"""
@@ -104,6 +107,21 @@ class Page(BaseModel):
             return separator.join(lines)
         except json.JSONDecodeError:
             return ""
+    
+    def to_recipe(self) -> Recipe:
+        """Преобразование Page в модель Recipe"""
+        return Recipe(
+            id=self.id,
+            dish_name=self.dish_name or "",
+            description=self.description,
+            tags=self.tags,
+            ingredients=self.ingredients_to_full_str(separator=" "),
+            step_by_step=self.step_by_step or "",
+            cook_time_minutes=self.cook_time,
+            prep_time_minutes=self.prep_time,
+            total_time_minutes=self.total_time,
+            calories=self.nutrition_info
+        )   
     
     class Config:
         from_attributes = True

@@ -30,9 +30,15 @@ class MySQlManager:
                 connection_url,
                 pool_pre_ping=True,
                 pool_recycle=3600,
+                pool_size=5,
+                max_overflow=10,
+                pool_timeout=30,
                 echo=False
             )
-            self.local_session = sessionmaker(bind=self.engine)
+            self.local_session = sessionmaker(bind=self.engine,
+                                              expire_on_commit=False,
+                                              autoflush=True,
+                                              autocommit=False)
             
             # Проверка подключения
             with self.engine.connect() as conn:
@@ -76,8 +82,8 @@ class MySQlManager:
     
     def get_session(self) -> Session:
         """Получение сессии БД"""
-        if not self.local_session:
-            self.connect()
+        if not self.local_session and not self.connect():
+                raise RuntimeError("Не удалось подключиться к базе данных")
         return self.local_session()
     
     def create_or_get_site(self, name: str, base_url: str, language: str = None) -> Optional[int]:
@@ -176,7 +182,6 @@ class MySQlManager:
                 }
             )
             session.commit()
-            session.close()
             return result.lastrowid
             
         except SQLAlchemyError as e:

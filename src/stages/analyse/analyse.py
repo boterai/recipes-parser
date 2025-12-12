@@ -692,6 +692,7 @@ def main():
     analyzer = RecipeAnalyzer()
     session = analyzer.db.get_session()
     results = session.execute(sqlalchemy.text("SELECT id from pages WHERE site_id = 1 AND is_recipe = TRUE LIMIT 2"))
+    session.close()
     page_ids = [row[0] for row in results.fetchall()]
     try:
         analyzer.analyze_all_pages(site_id=site_id, page_ids=page_ids, recalculate=True)

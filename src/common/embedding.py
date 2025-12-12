@@ -5,24 +5,14 @@ from typing import Protocol, Literal, Optional
 import numpy as np
 from FlagEmbedding import BGEM3FlagModel
 from sentence_transformers import SentenceTransformer
-from qdrant_client.models import Document
 
-# Добавление корневой директории в PYTHONPATH
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-from src.models.page import Page
-
-""" TODO скорее всего рецепт следует разделить на несколько компонентов, а не объединять все в один большой текст
-Например:
-- Полный текст рецепта (full) (можно оставить для эксперимента)
-- Только ингредиенты (ingredients)
-- Только инструкции (instructions)
-- Только описание (descriptions)
-- теги, название, время приготволения, ккал
-- описание
-"""
 
 EmbeddingFunctionReturn = tuple[list[float] | list[list[float]], Optional[list[list[float]]]] # (dense_vector, colbert_vectors) при том, что colbert_vectors может быть None и тогда его надо опредлять
 ContentType = Literal["full", "ingredients", "instructions", "descriptions", "description+name"]
+BGEM3_MODEL = "BAAI/bge-m3"
+INFLOAT_MODEL = 'intfloat/multilingual-e5-large'
+
 
 class EmbeddingFunction(Protocol):
     """
@@ -45,56 +35,6 @@ class EmbeddingFunction(Protocol):
         use_colbert: bool = False
     ) -> EmbeddingFunctionReturn:
         ...
-
-def get_content_types() -> list[str]:
-    """
-    get_content_types возвращает список доступных типов эмбеддингов
-    """
-    return [
-        "full",
-        "ingredients",
-        "description+name"
-    ]
-
-
-def prepare_text(page: Page, content_type: ContentType = "full") -> str:
-    """
-    prepare_text prepares the text for embedding based on the specified embedding type.
-    Args:
-        page: The Page object containing recipe data.
-        embedding_type: The type of embedding to prepare.
-    """
-    match content_type:
-        case "ingredients":
-            return page.ingredient_to_str()
-        
-        case "description+name":
-            parts = []
-            if page.dish_name:
-                parts.append(page.dish_name)
-            if page.description:
-                parts.append(page.description[:200])
-            if page.ingredient:
-                parts.append(page.ingredient_to_str())
-            if page.tags:
-                parts.append(page.tags[:100])
-            return " ".join(parts)
-    
-    # full - БЕЗ префиксов, tags в конце
-    parts = []
-    if page.dish_name:
-        parts.append(page.dish_name)
-    if page.description:
-        parts.append(page.description[:300])
-    if page.ingredient:
-        parts.append(page.ingredient_to_str())
-    if page.step_by_step:
-        parts.append(page.step_by_step[:600])
-    if page.tags:
-        parts.append(page.tags[:150])
-    
-    return " ".join(parts)
-
 
 def normalize_vector(vec: list[float]) -> list[float]:
     """
@@ -127,17 +67,16 @@ def normalize_colbert_vectors(colbert_vecs: list[list[float]]) -> list[list[floa
             normalized_vecs.append((np.array(vec) / norm).tolist())
     return normalized_vecs
 
-def get_embedding_function_multilingual(model_name: str = 'intfloat/multilingual-e5-large') -> tuple[EmbeddingFunction, int]:
+def get_embedding_function_multilingual(model_name: str = INFLOAT_MODEL) -> tuple[EmbeddingFunction, int]:
     # Варианты моделей (от меньшей к большей):
     # 1. 'sentence-transformers/all-MiniLM-L6-v2' - 80MB, 384 dimensions, только английский
     # 2. 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2' - 470MB, 384 dimensions, multilingual
     # 3. 'intfloat/multilingual-e5-small' - 470MB, 384 dimensions
     # 4. 'intfloat/multilingual-e5-base' - 1.1GB, 768 dimensions
     # 5. 'intfloat/multilingual-e5-large' - 2.2GB, 1024 dimensions (текущая)
-    # 6. 'BAAI/bge-m3' - только для dense для ColBERT используй get_embedding_function_bge_m3
+    # 6. 'BAAI/bge-m3' - только для dense для ColBERT использовать get_embedding_function_bge_m3
     
     """
-    ! Похоже эта модель работает лучше для многоязычных рецептов !
     Что делать если модель автоматически не скачивается скачать в путь ~/.cache/huggingface/hub/model_name/snapshots/commit_id/
     Например для intfloat/multilingual-e5-large можно скачать здесь: https://huggingface.co/intfloat/multilingual-e5-large
 
@@ -152,7 +91,7 @@ def get_embedding_function_multilingual(model_name: str = 'intfloat/multilingual
     """
     
     model = SentenceTransformer(model_name)
-    colbert_model = BGEM3FlagModel('BAAI/bge-m3')
+    colbert_model = BGEM3FlagModel(BGEM3_MODEL)
     
     def embedding_func(texts: str, is_query: bool = False, use_colbert: bool = False) -> EmbeddingFunctionReturn:
         if isinstance(texts, str):
@@ -186,7 +125,7 @@ def get_embedding_function_bge_m3() -> tuple[EmbeddingFunction, int]:
     get_embedding_function_bge_m3 возвращает функцию эмбеддинга на основе модели BGE-M3 от BAAI.
     Модель поддерживает создание как dense векторов, так и ColBERT multi-vector эмбеддингов.
     """
-    model = BGEM3FlagModel('BAAI/bge-m3')
+    model = BGEM3FlagModel(BGEM3_MODEL)
     
     def embedding_func(texts: str|list[str], is_query: bool = False, use_colbert: bool = False) -> EmbeddingFunctionReturn:
         if isinstance(texts, str):
@@ -210,13 +149,8 @@ def get_embedding_function_bge_m3() -> tuple[EmbeddingFunction, int]:
         if not use_colbert or colbert_vecs is None:
             return dense_normalized.tolist(), None
         
-        # Нормализация ColBERT (каждого вектора в последовательности)
-        colbert_normalized = []
-        for colbert_seq in colbert_vecs:
-            norms = np.linalg.norm(colbert_seq, axis=1, keepdims=True)
-            colbert_normalized.append(colbert_seq / norms)
         
-        return dense_normalized.tolist(), [c.tolist() for c in colbert_normalized]
+        return dense_normalized.tolist(), colbert_vecs
 
     return embedding_func, 1024  # Размерность для bge-m3
 
@@ -226,7 +160,7 @@ if __name__ == "__main__":
     ef, _ = get_embedding_function_multilingual()
     emb, colbert = ef("Тесто для блинов: 2 яйца, 500 мл молока, 250 г муки, щепотка соли, 1 ст.л. сахара, 2 ст.л. растительного масла.",
                       is_query=False, use_colbert=True)
-    model = BGEM3FlagModel('BAAI/bge-m3')
+    model = BGEM3FlagModel(BGEM3_MODEL)
     text = "Тесто для блинов: 2 яйца, 500 мл молока, 250 г муки, щепотка соли, 1 ст.л. сахара, 2 ст.л. растительного масла."
     encoded_data = model.encode(
             [text],

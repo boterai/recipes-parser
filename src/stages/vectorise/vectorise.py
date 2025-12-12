@@ -13,9 +13,10 @@ import sqlalchemy
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.models.page import Page
+from src.models.page import Recipe
 from src.common.db.qdrant import QdrantRecipeManager
 from src.common.db.mysql import MySQlManager
-from src.common.embedding import EmbeddingFunction, prepare_text
+from src.common.embedding import EmbeddingFunction
 
 logger = logging.getLogger(__name__)
 
@@ -134,46 +135,52 @@ class RecipeVectorizer:
 
     def get_similar_recipes(
             self, 
-            page: Page, 
+            recipe: Recipe, 
             embed_function: EmbeddingFunction, 
-            content_type: str = "full", 
+            collection_type: str = "full", 
             limit: int = 6,
             score_threshold: float = 0.0,
+            use_colbert: bool = False
         ) -> list[dict[str, Any]]:
         """Поиск похожих рецептов в векторной БД"""
-
-        query_text = prepare_text(page, content_type=content_type)
+        
         return self.vector_db.search(
-            query_text=query_text,
+            query_recipe=recipe,
             embedding_function=embed_function,
             limit=limit,
-            content_type=content_type,
-            score_threshold=score_threshold
+            collection_type=collection_type,
+            score_threshold=score_threshold,
+            use_colbert=use_colbert
         )
     
     def get_similar_recipes_as_pages(
             self, 
             page: Page, 
             embed_function: EmbeddingFunction, 
-            content_type: str = "full", 
+            collection_type: str = "full", 
             limit: int = 6,
             score_threshold: float = 0.0,
+            use_colbert: bool = False
         ) -> list[float, Page]:
         """Поиск похожих рецептов в векторной БД и возврат их как объекты Page + score схожести c изначальным вариантом"""
 
+        # Конвертируем Page в Recipe
+        recipe = page.to_recipe()
+        
         results = self.get_similar_recipes(
-            page=page,
+            recipe=recipe,
             embed_function=embed_function,
-            content_type=content_type,
+            collection_type=collection_type,
             limit=limit,
-            score_threshold=score_threshold
+            score_threshold=score_threshold,
+            use_colbert=use_colbert
         )
         
         if len(results) == 0:
             return []
         
         # Создаем маппинг page_id -> score
-        score_map = {res['page_id']: res['score'] for res in results}
+        score_map = {res['recipe_id']: res['score'] for res in results}
         
         pages_with_scores: list[float, Page] = []
         with self.page_database.get_session() as session:
@@ -190,7 +197,61 @@ class RecipeVectorizer:
         pages_with_scores.sort(key=lambda x: x[0], reverse=True)
         
         return pages_with_scores
+    
+    def get_similar_recipes_weighted(
+            self, 
+            page: Page,
+            embed_function: EmbeddingFunction, 
+            limit: int = 6,
+            score_threshold: float = 0.0,
+            component_weights: Optional[dict[str, float]] = None
+        ) -> list[dict[str, Any]]:
+        """Поиск похожих рецептов в векторной БД с учетом типа контента"""
+        recipe = page.to_recipe()
+        return self.vector_db.search_multivector_weighted(
+            query_recipe=recipe,
+            embedding_function=embed_function,
+            limit=limit,
+            score_threshold=score_threshold,
+            component_weights=component_weights
+        )
+    
+    def get_similar_recipes_weighted_as_pages(
+            self, 
+            page: Page,
+            embed_function: EmbeddingFunction, 
+            limit: int = 6,
+            score_threshold: float = 0.0,
+            component_weights: Optional[dict[str, float]] = None
+        ) -> list[float, Page]:
+        """Поиск похожих рецептов в векторной БД с учетом типа контента и возврат их как объекты Page + score схожести c изначальным вариантом"""
+
+        results = self.get_similar_recipes_weighted(
+            page=page,
+            embed_function=embed_function,
+            limit=limit,
+            score_threshold=score_threshold,
+            component_weights=component_weights
+        )
         
-    
-    
-    
+        if len(results) == 0:
+            return []
+        
+        # Создаем маппинг page_id -> score
+        score_map = {res['recipe_id']: res['score'] for res in results}
+        
+        pages_with_scores: list[float, Page] = []
+        with self.page_database.get_session() as session:
+            sql = "SELECT * FROM pages WHERE id IN :ids"
+            result = session.execute(sqlalchemy.text(sql), {"ids": tuple(score_map.keys())})
+            rows = result.fetchall()
+            
+            # Возвращаем tuple (score, Page) для каждой страницы
+            for row in rows:
+                page_obj = Page.model_validate(dict(row._mapping))
+                score = score_map.get(page_obj.id, 0.0)
+                pages_with_scores.append((score, page_obj))
+        
+        pages_with_scores.sort(key=lambda x: x[0], reverse=True)
+        
+        return pages_with_scores

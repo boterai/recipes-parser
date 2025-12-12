@@ -56,9 +56,5 @@ def make_test_data(site_id: int = 15):
     print(f"Всего скопировано {len(pages)} рецептов в {recipes_path}")
     session.close()
 
-
-
-
-
 if __name__ == "__main__":
     make_test_data()
