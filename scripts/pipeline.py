@@ -40,15 +40,15 @@ MAX_PREPAREPAGES = 100
 BATCH_SIZE = 30
 SITE_ID = None
 # Добавить сохранения состояния между запусками
-def prepare_data_for_parser_creation(url: str, max_depth: int, debug_port: int = 9222):
+def prepare_data_for_parser_creation(url: str, max_depth: int, debug_port: int = 9222, helper_links: list[str] = None):
 	global SITE_ID
 	explorer = SiteExplorer(url, debug_mode=True, debug_port=debug_port, max_urls_per_pattern=3)
-	#explorer.add_helper_urls(["https://kitchen.sayidaty.net/node/36893/%D8%B1%D8%A7%D9%81%D9%8A%D9%88%D9%84%D9%8A-%D8%A8%D8%A7%D9%84%D8%B5%D9%8A%D9%86%D9%8A%D8%A9-%D8%A8%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%88%D8%B5%D9%81%D8%A7%D8%AA-%D8%B7%D8%A8%D8%AE/%D9%88%D8%B5%D9%81%D8%A7%D8%AA-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88",
-	#					   "https://kitchen.sayidaty.net/node/37135/%D9%85%D9%83%D8%B1%D9%88%D9%86%D8%A9-%D8%A7%D9%84%D9%81%D9%88%D8%AA%D8%B4%D9%8A%D9%86%D9%8A-%D8%A8%D8%A7%D9%84%D8%AF%D8%AC%D8%A7%D8%AC/%D9%88%D8%B5%D9%81%D8%A7%D8%AA-%D8%B7%D8%A8%D8%AE/%D9%88%D8%B5%D9%81%D8%A7%D8%AA"], depth=2)
+	if helper_links:
+		explorer.add_helper_urls(helper_links, depth=1)
 	# предварительный запуск для просмотра сайта и получения хоть каких-то ссылок 
-	#run_explorer(explorer, max_urls=BATCH_SIZE, max_depth=max_depth)
+	run_explorer(explorer, max_urls=BATCH_SIZE, max_depth=max_depth)
 	# Экспорт состояния после первого batch
-	#state = explorer.export_state()
+	state = explorer.export_state()
 	SITE_ID = explorer.site_id
 	analyzer = RecipeAnalyzer()
 	try:
@@ -90,11 +90,11 @@ def prepare_data_for_parser_creation(url: str, max_depth: int, debug_port: int =
 				logger.info(f"Найден паттерн страниц с рецептами: {pattern}")
 				return # если паттерн найден, завершаем работу, пробуем создать полноценный парсер из полученных данных
 
-def pipeline(debug_port: int = 9222, url: str = "", max_depth: int = 4, max_urls: int = 10000, check_url: bool = True):
-	#prepare_data_for_parser_creation(url=url, max_depth=max_depth, debug_port=debug_port)
-	#make_test_data(8) # создать тестовые данные для анализа и создания парсера (создается в папке recipes/)
+def pipeline(debug_port: int = 9222, url: str = "", max_depth: int = 4, max_urls: int = 10000, check_url: bool = True, helper_links: list[str] = None):
+	prepare_data_for_parser_creation(url=url, max_depth=max_depth, debug_port=debug_port, helper_links=helper_links)
+	make_test_data(28, folder="preprocessed") # создать тестовые данные для анализа и создания парсера (создается в папке recipes/)
 	# после создания парсера можно запустить полноценный парсинг
-	explore_site(url, max_urls=max_urls, max_depth=max_depth, check_pages_with_extractor=True, check_url=check_url, debug_port=debug_port)
+	#explore_site(url, max_urls=max_urls, max_depth=max_depth, check_pages_with_extractor=True, check_url=check_url, debug_port=debug_port)
 
 
 SITES_CONFIG = [
@@ -140,7 +140,7 @@ SITES_CONFIG = [
 ]
 
 
-def run_config(config):
+def run_config(config: dict):
 	"""Запуск парсинга для одной конфигурации"""
 	logger.info(f"Запуск конфигурации #{config['id']}: {config['url']}")
 	pipeline(
@@ -148,7 +148,8 @@ def run_config(config):
 		url=config['url'],
 		max_depth=5,
 		max_urls=10000,
-		check_url=True
+		check_url=True,
+		helper_links=config.get('helper_links', [])
 	)
 
 
@@ -194,4 +195,16 @@ def main():
 
 			
 if __name__ == "__main__":
-	main()
+	run_config(
+		{
+			'id': 1,
+			'url': 'https://www.thefrenchcookingacademy.com/recipes',
+			'debug_port': 9222,
+			'helper_links': [
+				'https://www.thefrenchcookingacademy.com/recipes/salade-nicoise',
+				'https://www.thefrenchcookingacademy.com/recipes/salade-nicoise',
+				'https://www.thefrenchcookingacademy.com/recipes/peppersauce',
+			]
+		}
+	)
+	#main()

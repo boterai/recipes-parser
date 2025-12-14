@@ -13,7 +13,7 @@ import json
 from src.common.db.mysql import MySQlManager
 from src.models import Page
 
-def make_test_data(site_id: int = 15):
+def make_test_data(site_id: int = 15, folder: str = "recipes"):
     if site_id is None:
         print("SITE_ID не задан. Невозможно создать тестовые данные.")
         return
@@ -31,7 +31,7 @@ def make_test_data(site_id: int = 15):
     result = session.execute(sqlalchemy.text(sql), {"id": site_id})
     site_name = result.scalar() or f"site_{site_id}"
 
-    recipes_path = os.path.join("recipes", site_name)
+    recipes_path = os.path.join(folder, site_name)
     os.makedirs(recipes_path, exist_ok=True)
 
     for page in pages:
