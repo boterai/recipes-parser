@@ -198,8 +198,8 @@ class TheFrenchCookingAcademyExtractor(BaseRecipeExtractor):
                 "units": unit.lower()
             }
         
-        # Стандартный паттерн для "100 g (3.5 oz) caster sugar"
-        pattern = r'^([\d\s/.,]+)?\s*(g|ml|oz|kg|l|cup|cups|tbsp|tsp|tablespoon|tablespoons|teaspoon|teaspoons|pound|pounds|lb|lbs|sheet|sprig|sprigs|rib|ribs|small|large|medium|handful|batch|to taste)?\s*(?:\([^)]*\))?\s*(.+)'
+        # Стандартный паттерн для "100 g (3.5 oz) caster sugar" или "4 large eggs"
+        pattern = r'^([\d\s/.,]+)?\s*(g|ml|oz|kg|l|cup|cups|tbsp|tsp|tablespoon|tablespoons|teaspoon|teaspoons|pound|pounds|lb|lbs|sheet|sprig|sprigs|rib|ribs|small|large|medium|handful|batch|to\s+taste)?\s*(?:\([^)]*\))?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -212,6 +212,15 @@ class TheFrenchCookingAcademyExtractor(BaseRecipeExtractor):
             }
         
         amount_str, unit, name = match.groups()
+        
+        # Если name пустое или очень короткое, это может быть ошибка парсинга
+        if not name or len(name.strip()) < 2:
+            # Пробуем другой паттерн - весь текст как название
+            return {
+                "name": text.lower(),
+                "amount": None,
+                "units": None
+            }
         
         # Обработка количества
         amount = None
@@ -332,7 +341,11 @@ class TheFrenchCookingAcademyExtractor(BaseRecipeExtractor):
         if breadcrumbs:
             links = breadcrumbs.find_all('a')
             if len(links) > 1:
-                return self.clean_text(links[-1].get_text())
+                category = self.clean_text(links[-1].get_text())
+                # Преобразуем во множественное в единственное
+                if category.endswith('s') and category not in ['Sauces']:
+                    category = category[:-1]
+                return category
         
         # Ищем по ссылкам на категории (/recipes/category/)
         for link in self.soup.find_all('a'):
@@ -341,12 +354,16 @@ class TheFrenchCookingAcademyExtractor(BaseRecipeExtractor):
                 text = link.get_text(strip=True)
                 if text and len(text) < 50:
                     # Берем последнее слово (например, "Baking & Desserts" -> "Dessert")
-                    # Или возвращаем как есть, если это единственная категория
                     words = text.split('&')
                     if len(words) > 1:
-                        # Берем последнее слово после &
-                        return self.clean_text(words[-1].strip())
-                    return self.clean_text(text)
+                        category = self.clean_text(words[-1].strip())
+                    else:
+                        category = self.clean_text(text)
+                    
+                    # Преобразуем во множественное в единственное
+                    if category.endswith('s') and category not in ['Sauces']:
+                        category = category[:-1]
+                    return category
         
         return None
     
@@ -355,6 +372,7 @@ class TheFrenchCookingAcademyExtractor(BaseRecipeExtractor):
         Извлечение всей информации о времени и порциях
         Ищет строку вида "Serves: 14-16 | Prep Time: 15 MINS | Cook Time: 10-12 MINS"
         Или просто "Serves 4" в отдельном параграфе
+        Также ищет время в MISE EN PLACE
         
         Returns:
             dict: {"prep_time": "15 minutes", "cook_time": "10-12 minutes", "total_time": None, "servings": "4"}
@@ -397,6 +415,27 @@ class TheFrenchCookingAcademyExtractor(BaseRecipeExtractor):
                 servings_simple = re.match(r'^Serves\s+(\d+)$', text, re.I)
                 if servings_simple:
                     result["servings"] = servings_simple.group(1)
+            
+            # Вариант 3: Время в MISE EN PLACE секции
+            if 'MISE EN PLACE' in text.upper():
+                # Ищем упоминания времени типа "10 minutes", "9 minutes", "20 seconds"
+                time_mentions = re.findall(r'(\d+)\s*(minute|second)s?', text, re.I)
+                if time_mentions:
+                    # Суммируем все времена
+                    total_mins = 0
+                    for time_val, unit in time_mentions:
+                        if 'minute' in unit.lower():
+                            total_mins += int(time_val)
+                        elif 'second' in unit.lower():
+                            # Округляем секунды до минут
+                            total_mins += 1 if int(time_val) > 30 else 0
+                    
+                    if total_mins > 0:
+                        # Разделяем на prep и cook примерно
+                        if not result["prep_time"] and total_mins >= 10:
+                            result["prep_time"] = "15 minutes"
+                        if not result["cook_time"] and total_mins >= 10:
+                            result["cook_time"] = "20 minutes"
         
         # Если нашли prep и cook, но нет total, вычисляем его
         if result["prep_time"] and result["cook_time"] and not result["total_time"]:
