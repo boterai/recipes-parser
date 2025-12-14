@@ -1,0 +1,16 @@
+{
+    "dish_name": "Salade Niçoise",
+    "description": "The hearty French salad that needs no introduction. I use green beans and a vinaigrette dressing in my recipe to vary the original recipe.",
+    "ingredient": "[{\"name\": \"traditional vinaigrette\", \"amount\": 1, \"units\": \"batch\"}, {\"name\": \"green beans\", \"amount\": 10.5, \"units\": \"oz\"}, {\"name\": \"arge eggs\", \"amount\": 4, \"units\": \"l\"}, {\"name\": \"tomatoes\", \"amount\": 10.5, \"units\": \"g\"}, {\"name\": \"red or green bell pepper peeled and cut into strips, seeds and white parts discarded\", \"amount\": 3.5, \"units\": \"oz\"}, {\"name\": \"s radicchio or mixed salad leaves, washed and dried\", \"amount\": 2, \"units\": \"cup\"}, {\"name\": \"peeled and diced celery or cucumber\", \"amount\": 0.5, \"units\": \"cup\"}, {\"name\": \"reen onion, sliced finely\", \"amount\": 1, \"units\": \"g\"}, {\"name\": \"tuna in oil, flaked into small pieces\", \"amount\": 7, \"units\": \"oz\"}, {\"name\": \"black olives\", \"amount\": 16, \"units\": null}, {\"name\": \"anchovy filets in oil\", \"amount\": 8, \"units\": null}, {\"name\": \"of fresh basil,\", \"amount\": null, \"units\": \"handful\"}]",
+    "step_by_step": "1. While optional, to peel (monder) tomatoes is commonly done in French cooking to improve the gustatory experience of them in salads and other dishes. To do this, use a small knife to cut an X on the top of each tomato and remove the stems. Boil the tomatoes whole for 20 seconds, then immediately plunge into a bowl of cold water. Use a small knife, or your hands, to peel the skin off the tomato, then cut the flesh into quarters. 2. To make the salad base, arrange the green beans, salad leaves, bell peppers, celery and green onion in a large serving dish. Pour half of the dressing evenly over the salad base. 3. Garnish the top of the salad with the tomatoes, eggs, the tuna, olives and anchovy filets, in whatever way pleases you. 4. For the final touch, drizzle rest of the dressing over the salad, decorate with basil leaves and serve with a small bowl of olive oil on the side.",
+    "nutrition_info": null,
+    "category": "Salad",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "servings": "4",
+    "difficulty_level": "Easy",
+    "rating": null,
+    "notes": "In France, this salad is more of a light meal than starter, usually served on a plate, never in a bowl (sacrilege!). A few panfried croutons rubbed with fresh garlic adds a tasty crunch. For the purists, the dressing is just salt, pepper and olive oil; vinegar is not welcome.",
+    "tags": "easy,summer,salad,classic,eggs,tuna,beans,tomatoes,fresh,bell pepper,vinaigrette"
+}
