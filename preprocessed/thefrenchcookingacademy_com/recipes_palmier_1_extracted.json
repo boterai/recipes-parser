@@ -1,0 +1,16 @@
+{
+    "dish_name": "Palmiers",
+    "description": "This is a true French classic: the Palmier, or as some like to call it, “the heart of France.",
+    "ingredient": "[{\"name\": \"sheet all-butter puff pastry\", \"amount\": 250, \"units\": \"g\"}, {\"name\": \"caster sugar\", \"amount\": 100, \"units\": \"g\"}, {\"name\": \"plus extra for sprinkling\", \"amount\": null, \"units\": null}]",
+    "step_by_step": "1. Unroll the sheet of puff pastry onto your work surface. Scatter half the sugar evenly over the top, then use the rolling pin to gently press the sugar into the pastry—don’t be shy, you want the sugar to stick right in. 2. Now, lay a fresh piece of baking paper on top, carefully flip the pastry over, and peel away the old backing. Sprinkle the rest of the sugar over this second side, again pressing it in gently with the rolling pin. 3. Now comes the folding: Starting from one long edge, fold the pastry in towards the middle, then repeat with the opposite side so the two sides meet in the centre. Sprinkle with a little more sugar if you like, and lightly roll again to seal. Now, fold each of those sides in towards the centre one more time, so you have a long, narrow rectangle. For a classic palmier shape, fold the pastry in half lengthways—just like closing a book. 4. Give the outside another gentle roll and a light shower of sugar for good measure. Using a sharp knife, slice the pastry crosswise into pieces about 2 cm (just under 1 inch) thick. 5. Arrange the slices on the prepared tray, placing each piece on its cut side and leaving plenty of space between them—these will puff and spread as they bake. 6. Slide the tray into the hot oven and bake for about 10–12 minutes. Keep an eye on them: halfway through, if they’re colouring quickly on the bottom, turn each one over so both sides caramelise and get a lovely golden hue. 7. When they’re deeply golden and crisp, remove the tray from the oven and let the palmiers cool for a couple of minutes on the tray before transferring to a rack.",
+    "nutrition_info": null,
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "10-12 minutes",
+    "total_time": "27 minutes",
+    "servings": "14-16",
+    "difficulty_level": "Easy",
+    "rating": null,
+    "notes": "Palmiers can burn fast at this temperature, so don’t wander too far from the oven—watch for that perfect golden colour. Try a sprinkle of cinnamon with the sugar, or swap in vanilla sugar for extra flavour. These biscuits are best eaten on the day they’re made but will keep for a day or two in an airtight tin (if they last that long!).",
+    "tags": "baking,sweet,puff pastry,sweets,snack"
+}

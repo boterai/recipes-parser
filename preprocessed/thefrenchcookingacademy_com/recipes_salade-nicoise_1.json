@@ -1,0 +1,13 @@
+{
+    "dish_name": "Salade Niçoise",
+    "description": "The French classic that needs no introduction.",
+    "ingredient": "[{\"name\": \"Traditional Vinaigrette\", \"units\": null, \"amount\": \"1 batch\"}, {\"name\": \"green beans\", \"units\": \"oz\", \"amount\": \"10.5\"}, {\"name\": \"large eggs\", \"units\": null, \"amount\": \"4\"}, {\"name\": \"tomatoes\", \"units\": \"g\", \"amount\": \"10.5\"}, {\"name\": \"red or green bell pepper\", \"units\": \"oz\", \"amount\": \"3.5\"}, {\"name\": \"radicchio or mixed salad leaves\", \"units\": \"cups\", \"amount\": \"2\"}, {\"name\": \"peeled and diced celery or cucumber\", \"units\": \"cup\", \"amount\": \"½\"}, {\"name\": \"green onion\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"tuna in oil\", \"units\": \"oz\", \"amount\": \"7\"}, {\"name\": \"black olives\", \"units\": null, \"amount\": \"16\"}, {\"name\": \"anchovy filets in oil\", \"units\": null, \"amount\": \"8\"}, {\"name\": \"fresh basil\", \"units\": null, \"amount\": \"Handful\"}, {\"name\": \"olive oil\", \"units\": \"to serve\", \"amount\": null}]",
+    "step_by_step": "1. Make the Traditional Vinaigrette. 2. Cook the green beans in salty boiling water for 10 minutes, then plunge into cold water and drain. 3. Cook the eggs in boiling water for 9 minutes, then transfer to a bowl of cold water to rest before peeling and cutting them in half. 4. To peel tomatoes, cut an X on the top, boil for 20 seconds, then plunge into cold water and peel. 5. Arrange the green beans, salad leaves, bell peppers, celery, and green onion in a large serving dish. 6. Pour half of the dressing over the salad base. 7. Garnish with tomatoes, eggs, tuna, olives, and anchovy filets. 8. Drizzle the rest of the dressing over the salad, decorate with basil leaves, and serve with olive oil on the side.",
+    "category": "Salad",
+    "prep_time": "15 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "35 minutes",
+    "difficulty_level": "Easy",
+    "notes": "In France, this salad is more of a light meal than a starter, usually served on a plate, never in a bowl. A few panfried croutons rubbed with fresh garlic adds a tasty crunch. For purists, the dressing is just salt, pepper, and olive oil; vinegar is not welcome.",
+    "tags": "easy, summer, salad, classic, eggs, tuna, beans, tomatoes, fresh, bell pepper, Vinaigrette"
+}
