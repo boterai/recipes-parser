@@ -199,7 +199,8 @@ class TheFrenchCookingAcademyExtractor(BaseRecipeExtractor):
             }
         
         # Стандартный паттерн для "100 g (3.5 oz) caster sugar" или "4 large eggs"
-        pattern = r'^([\d\s/.,]+)?\s*(g|ml|oz|kg|l|cup|cups|tbsp|tsp|tablespoon|tablespoons|teaspoon|teaspoons|pound|pounds|lb|lbs|sheet|sprig|sprigs|rib|ribs|small|large|medium|handful|batch|to\s+taste)?\s*(?:\([^)]*\))?\s*(.+)'
+        # Используем word boundaries \b для точного совпадения единиц измерения
+        pattern = r'^([\d\s/.,]+)?\s*\b(g|ml|oz|kg|l|cup|cups|tbsp|tsp|tablespoon|tablespoons|teaspoon|teaspoons|pound|pounds|lb|lbs|sheet|sprig|sprigs|rib|ribs|small|large|medium|handful|batch|to\s+taste)\b\s*(?:\([^)]*\))?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
