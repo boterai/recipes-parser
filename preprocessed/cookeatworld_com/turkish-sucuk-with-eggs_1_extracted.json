@@ -1,0 +1,16 @@
+{
+    "dish_name": "Turkish Sucuk with Eggs",
+    "description": "Turkish Sucuk with Eggs is the perfect start to any day! Sucuk is the Turkish version of a beef sausage found all across the Middle East, Balkans and Central Asia. It's a spiced beef sausage flavoured with cumin, salt paprika and pepper flakes. In Turkey, there are two types - mild or hot.",
+    "ingredient": "[{\"name\": \"sucuk sausage\", \"amount\": 8, \"units\": \"slices\"}, {\"name\": \"olive oil\", \"amount\": 1, \"units\": \"tbsp\"}, {\"name\": \"eggs\", \"amount\": 2, \"units\": \"pieces\"}, {\"name\": \"freshly ground black pepper\", \"amount\": null, \"units\": null}, {\"name\": \"fresh herbs for garnish\", \"amount\": null, \"units\": null}]",
+    "step_by_step": "[\"Add the sliced sausages to a cold small frying pan along with the oil. Turn on the heat to medium/high and let the sausages come up to temperature. Let them sizzle for 1 minute each side before breaking two eggs over them. Let these eggs fry for 3-4 minutes (pop on a lid to the pan and the tops of the eggs will cook more quickly.).\", \"Remove from the heat, grind over the pepper and sprinkle with a few herbs if you're using and serve directly from the pan. Serve with pita breads or flatbreads.\"]",
+    "nutrition_info": "515 kcal; 34/56/2",
+    "category": "Breakfast",
+    "prep_time": null,
+    "cook_time": "8 minutes",
+    "total_time": "8 minutes",
+    "difficulty_level": "Easy",
+    "rating": 4.8,
+    "notes": "If you can't get hold of Turkish Sucuk , try with Spanish chorizo or Italian salami for an alternative version.",
+    "tags": "Eggs, sausage, Sucuk, Turkish",
+    "image_urls": "https://www.cookeatworld.com/wp-content/uploads/2019/10/SucukEggs-6.jpg,https://www.cookeatworld.com/wp-content/uploads/2019/10/SucukEggs-6-500x500.jpg,https://www.cookeatworld.com/wp-content/uploads/2019/10/SucukEggs-6-500x375.jpg"
+}

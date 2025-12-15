@@ -1,0 +1,16 @@
+{
+    "dish_name": "Pasta Alla Zozzona",
+    "description": "Pasta Alla Zozzona is a rich, decadent combination of three Italian classics. Created in Rome, it's a hearty, comforting bowl of intense flavour and it's absolutely delicious too!",
+    "ingredient": "[{\"name\": \"pecorino romano\", \"amount\": 2.8, \"units\": \"oz\"}, {\"name\": \"egg yolks\", \"amount\": 3, \"units\": \"pieces\"}, {\"name\": \"freshly ground black pepper\", \"amount\": 0.5, \"units\": \"tsp\"}, {\"name\": \"italian sausages\", \"amount\": 2, \"units\": \"pieces\"}, {\"name\": \"guanciale\", \"amount\": 4.2, \"units\": \"oz\"}, {\"name\": \"dried rigatoni pasta\", \"amount\": 14, \"units\": \"oz\"}, {\"name\": \"onion\", \"amount\": 0.5, \"units\": \"cup\"}, {\"name\": \"tomato passata\", \"amount\": 2, \"units\": \"cups\"}]",
+    "step_by_step": "[\"Mix together the egg yolks, pecorino and pepper until creamy, then set aside.\", \"Add the guanciale to a cold frying pan and then turn on the heat to medium. Let cook until the fat begins to render (about 5 minutes). Pour out around half of the fat from the guanciale.\", \"Add the sausage and onions to the pan. Break up the sausage into small pieces with the back of a wooden spoon and let everything gently fry until the onions are soft, around 4-5 minutes.\", \"Add the tomato passata and around ¾ cup water and bring to a simmer. Reduce the heat and let this bubble gently for 5 minutes, then remove from the heat.\", \"In a large pan of boiling salted water, cook the pasta minus two minutes from the packet instructions. Drain and reserve at least a cup of the cooking liquid.\", \"Return the sauce to a light simmer over a medium heat then tumble the cooked rigatoni into the tomato sauce. Pour in around ¾ cup of the pasta water and the egg yolk and cheese mix.\", \"Stir quickly to incorporate and continuously mix for about 2 minutes until thick and creamy. You may add a little more pasta water if it becomes too thick.\", \"Remove from the heat and serve immediately.\"]",
+    "nutrition_info": "951 kcal; 35/51/89",
+    "category": "Appetizer, Main Course",
+    "prep_time": "5 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "25 minutes",
+    "difficulty_level": "Easy",
+    "rating": null,
+    "notes": "The pasta most likely won't need any additional seasoning of salt, but check your sauce and if you think it needs some, then add a little.",
+    "tags": "Guanciale, Pecorino Romano, Italian",
+    "image_urls": "https://www.cookeatworld.com/wp-content/uploads/2025/09/Zozzona-7.jpg,https://www.cookeatworld.com/wp-content/uploads/2025/09/Zozzona-7-500x500.jpg,https://www.cookeatworld.com/wp-content/uploads/2025/09/Zozzona-7-500x375.jpg"
+}
