@@ -1,0 +1,16 @@
+{
+    "dish_name": "Duck Congee",
+    "description": "A wonderfully creamy, hearty and fragrant hug of meal. Thank you China for this incredibly satisfying and simple dish. It's one of my favourites!",
+    "ingredient": "[{\"name\": \"duck legs\", \"amount\": 4, \"units\": \"pieces\"}, {\"name\": \"rice\", \"amount\": 1, \"units\": \"cup\"}, {\"name\": \"ginger\", \"amount\": 2, \"units\": \"inch\"}, {\"name\": \"star anise\", \"amount\": 1, \"units\": \"pieces\"}, {\"name\": \"chicken stock\", \"amount\": 9, \"units\": \"cups\"}, {\"name\": \"salt\", \"amount\": 1, \"units\": \"tbsp\"}, {\"name\": \"white pepper\", \"amount\": 0.25, \"units\": \"tsp\"}, {\"name\": \"spring onion\", \"amount\": 3, \"units\": \"pieces\"}, {\"name\": \"ginger\", \"amount\": 2, \"units\": \"inch\"}, {\"name\": \"duck-skin\", \"amount\": null, \"units\": null}, {\"name\": \"peanuts\", \"amount\": 0.33, \"units\": \"cup\"}, {\"name\": \"chinese 5-spice powder\", \"amount\": 0.25, \"units\": \"tsp\"}, {\"name\": \"salt\", \"amount\": 0.5, \"units\": \"tsp\"}, {\"name\": \"dark soy sauce\", \"amount\": null, \"units\": null}]",
+    "step_by_step": "[\"Add the rice, skinless duck legs, ginger and star anise to a large saucepan and cover with the stock. Bring to a boil, then reduce the heat to low for a gently bubbling simmer.\", \"Cook for 1 hour (covered) until the rice has broken up and the consistency is like a thick porridge. During the cooking, be sure to stir frequently to avoid sticking.\", \"When cooked, remove the duck legs and when they’ve cooled slightly shred or chop the meat. Return the meat to the pan and discard the bones.\", \"Season with salt and white pepper.\"]",
+    "nutrition_info": "545 kcal; 44/22/40",
+    "category": "Breakfast, Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "60 minutes",
+    "total_time": "70 minutes",
+    "difficulty_level": "Easy",
+    "rating": 5.0,
+    "notes": null,
+    "tags": "Congee, Jook, Rice Porridge, Chinese",
+    "image_urls": "https://www.cookeatworld.com/wp-content/uploads/2020/11/Duck-Congee-3.jpg,https://www.cookeatworld.com/wp-content/uploads/2020/11/Duck-Congee-3-500x500.jpg,https://www.cookeatworld.com/wp-content/uploads/2020/11/Duck-Congee-3-500x375.jpg"
+}

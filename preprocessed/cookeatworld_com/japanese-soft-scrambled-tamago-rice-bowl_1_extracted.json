@@ -1,0 +1,16 @@
+{
+    "dish_name": "Japanese Scrambled Eggs",
+    "description": "Perfect, pillow-soft Japanese scrambled eggs, fragrant and light, spooned over fluffy rice - it's the perfect start to any day.",
+    "ingredient": "[{\"name\": \"eggs\", \"amount\": 3, \"units\": \"pieces\"}, {\"name\": \"mirin\", \"amount\": 1, \"units\": \"tbsp\"}, {\"name\": \"soy sauce\", \"amount\": 1, \"units\": \"tsp\"}, {\"name\": \"salt\", \"amount\": 0.25, \"units\": \"tsp\"}, {\"name\": \"sesame oil\", \"amount\": 2, \"units\": \"tsp\"}, {\"name\": \"spring onion\", \"amount\": 1, \"units\": \"pieces\"}, {\"name\": \"japanese furikake rice seasoning\", \"amount\": 1, \"units\": \"tbsp\"}, {\"name\": \"white rice\", \"amount\": 1, \"units\": \"cup\"}]",
+    "step_by_step": "[\"Cook the rice if you're making it now and keep warm. If you're using leftover rice, reheat in the microwave and keep warm.\", \"Beat the eggs together with the mirin, soy sauce, salt, pepper and 1 tsp of the sesame oil.\", \"Heat a small frying pan with the remaining sesame oil until just hot - not too hot, we don't want the egg to cook too quickly.\", \"Pour the eggs into the pan and leave for a few seconds before stirring. Stir until just set, but still wet then remove from the heat - it will continue cook in the pan.\", \"Make a bed of the warm rice and then slide the eggs over the rice. Lastly, sprinkle with the spring onion and Japanese rice seasoning and enjoy right away!.\"]",
+    "nutrition_info": "977 kcal; 31/23/157",
+    "category": "Breakfast, Dinner, Lunch, Snack",
+    "prep_time": "2 minutes",
+    "cook_time": "3 minutes",
+    "total_time": "5 minutes",
+    "difficulty_level": "Easy",
+    "rating": 4.86,
+    "notes": null,
+    "tags": "Tamago, Tamagoyaki, Japanese",
+    "image_urls": "https://www.cookeatworld.com/wp-content/uploads/2024/12/Japanese-Eggs-5.jpg,https://www.cookeatworld.com/wp-content/uploads/2024/12/Japanese-Eggs-5-500x500.jpg,https://www.cookeatworld.com/wp-content/uploads/2024/12/Japanese-Eggs-5-500x375.jpg"
+}

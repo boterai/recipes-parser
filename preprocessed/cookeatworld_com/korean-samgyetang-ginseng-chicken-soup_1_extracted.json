@@ -1,0 +1,16 @@
+{
+    "dish_name": "Korean Samgyetang (Ginseng Chicken Soup)",
+    "description": "Fragrant and healthy, this life-giving Korean Ginseng Chicken soup will send joy flowing though your veins with every delicious spoonful. And who doesn't love a soup where EVERYONE gets their own chicken!?",
+    "ingredient": "[{\"name\": \"cornish hens\", \"amount\": 2, \"units\": \"pieces\"}, {\"name\": \"calrose rice\", \"amount\": 0.5, \"units\": \"cup\"}, {\"name\": \"garlic cloves\", \"amount\": 8, \"units\": \"pieces\"}, {\"name\": \"samgyetang soup kit\", \"amount\": 1, \"units\": \"pieces\"}, {\"name\": \"spice bag\", \"amount\": 1, \"units\": \"pieces\"}, {\"name\": \"salt\", \"amount\": 2, \"units\": \"tsp\"}, {\"name\": \"spring onion\", \"amount\": 2, \"units\": \"pieces\"}, {\"name\": \"salt\", \"amount\": 1, \"units\": \"tbsp\"}, {\"name\": \"white pepper\", \"amount\": 0.5, \"units\": \"tsp\"}, {\"name\": \"sesame oil\", \"amount\": 2, \"units\": \"tbsp\"}, {\"name\": \"soy sauce\", \"amount\": 2, \"units\": \"tsp\"}, {\"name\": \"toasted sesame seeds\", \"amount\": 1, \"units\": \"tsp\"}]",
+    "step_by_step": "[\"In a bowl, rinse the rice in cold water and drain a couple of times, until the water runs clear. Fill the bowl back up with cold water and soak the rice for one hour. Drain then set aside.\", \"Remove any giblets from the Cornish hens. Keep for stock!.\", \"Using a pair of scissors, trim some of the fat from around the cavity.\", \"Place 4 cloves garlic into the cavity and then top with rice until about ¾ full. Do the same with the other hen.\", \"Using a sharp knife, pierce the skin, left and right, of the cavity. Carefully push a drumstick into the opposite slit i.e. right drumstick into left hole and left drumstick into the righ hole. This will seal the cavity a bit. Alternatively, you can seal with a toothpick.\", \"Place in a pan, big enough fit the two hens snugly. Top with about 9 cups water and the salt.\", \"Add all the soup kit ingredients (I use a spice bag, so that I don’t need to drain later, but this is optional). Bring to a boil then reduce the heat so that the soup is lightly simmering. Pop on a lid and cook for 1 hour.\"]",
+    "nutrition_info": "1162 kcal; 82/71/43",
+    "category": "Main Course",
+    "prep_time": "75 minutes",
+    "cook_time": "80 minutes",
+    "total_time": "155 minutes",
+    "difficulty_level": "Easy",
+    "rating": 5.0,
+    "notes": "You may have broth leftover, simply poach a chicken breast and pull apart into strands to add, or use leftover roast chicken to add to the broth.",
+    "tags": "Chicken, Soup, Korean",
+    "image_urls": "https://www.cookeatworld.com/wp-content/uploads/2020/06/Samgyetang4.jpg,https://www.cookeatworld.com/wp-content/uploads/2020/06/Samgyetang4-500x500.jpg,https://www.cookeatworld.com/wp-content/uploads/2020/06/Samgyetang4-500x375.jpg"
+}

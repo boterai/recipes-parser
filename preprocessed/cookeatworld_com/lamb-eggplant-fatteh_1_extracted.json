@@ -1,0 +1,16 @@
+{
+    "dish_name": "Lamb & Eggplant Fatteh",
+    "description": "A wonderful Middle Eastern layered dish with crispy flatbreads, creamy spiced lamb and cooling yoghurt. A combination made in heaven!",
+    "ingredient": "[{\"name\": \"greek yoghurt\", \"amount\": 4, \"units\": \"tbsp\"}, {\"name\": \"garlic\", \"amount\": 1, \"units\": \"tsp\"}, {\"name\": \"lemon\", \"amount\": 0.5, \"units\": \"pieces\"}, {\"name\": \"salt\", \"amount\": 0.5, \"units\": \"tsp\"}, {\"name\": \"sliced almonds\", \"amount\": 0.33, \"units\": \"cup\"}, {\"name\": \"pistachios\", \"amount\": 0.33, \"units\": \"cup\"}, {\"name\": \"pine nuts\", \"amount\": 0.33, \"units\": \"cup\"}, {\"name\": \"butter\", \"amount\": 1, \"units\": \"tbsp\"}, {\"name\": \"olive oil\", \"amount\": 3, \"units\": \"tbsp\"}, {\"name\": \"eggplant\", \"amount\": 1, \"units\": \"pieces\"}, {\"name\": \"salt\", \"amount\": 0.5, \"units\": \"tsp\"}, {\"name\": \"olive oil\", \"amount\": 2, \"units\": \"tbsp\"}, {\"name\": \"cumin seeds\", \"amount\": 1, \"units\": \"tsp\"}, {\"name\": \"red onions\", \"amount\": 2, \"units\": \"pieces\"}, {\"name\": \"garlic cloves\", \"amount\": 3, \"units\": \"pieces\"}, {\"name\": \"ground lamb\", \"amount\": 1.5, \"units\": \"lb\"}, {\"name\": \"cumin powder\", \"amount\": 1, \"units\": \"tsp\"}, {\"name\": \"coriander powder\", \"amount\": 1, \"units\": \"tsp\"}, {\"name\": \"paprika\", \"amount\": 1, \"units\": \"tsp\"}, {\"name\": \"all spice\", \"amount\": 1, \"units\": \"tsp\"}, {\"name\": \"cinnamon powder\", \"amount\": 1, \"units\": \"tsp\"}, {\"name\": \"salt\", \"amount\": 1, \"units\": \"tsp\"}, {\"name\": \"black pepper\", \"amount\": 0.25, \"units\": \"tsp\"}, {\"name\": \"parsley\", \"amount\": 0.5, \"units\": \"cup\"}, {\"name\": \"pomegranate molasses\", \"amount\": 2, \"units\": \"tbsp\"}, {\"name\": \"lemon\", \"amount\": 0.5, \"units\": \"pieces\"}, {\"name\": \"fresh parsley\", \"amount\": null, \"units\": null}, {\"name\": \"sumac\", \"amount\": 1, \"units\": \"tbsp\"}, {\"name\": \"extra virgin olive oil\", \"amount\": null, \"units\": null}]",
+    "step_by_step": null,
+    "nutrition_info": "602 kcal; 24/49/19",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "50 minutes",
+    "total_time": "80 minutes",
+    "difficulty_level": "Easy",
+    "rating": 5.0,
+    "notes": null,
+    "tags": "Bread, Lamb, Lebanese",
+    "image_urls": "https://www.cookeatworld.com/wp-content/uploads/2020/02/Fatteh3.jpg,https://www.cookeatworld.com/wp-content/uploads/2020/02/Fatteh3-500x500.jpg,https://www.cookeatworld.com/wp-content/uploads/2020/02/Fatteh3-500x375.jpg"
+}
