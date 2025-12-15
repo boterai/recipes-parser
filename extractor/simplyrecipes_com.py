@@ -82,10 +82,9 @@ class SimplyRecipesExtractor(BaseRecipeExtractor):
             hours = minutes // 60
             minutes = minutes % 60
         
-        # Форматируем результат
+        # Форматируем результат (используем единообразные сокращения)
         parts = []
         if hours > 0:
-            # Используем "hrs" и "mins" для краткости
             parts.append(f"{hours} hr{'s' if hours > 1 else ''}")
         if minutes > 0:
             parts.append(f"{minutes} min{'s' if minutes > 1 else ''}")
@@ -201,12 +200,12 @@ class SimplyRecipesExtractor(BaseRecipeExtractor):
                     else:
                         total += float(part)
                 # Возвращаем как число (int или float)
-                amount = int(total) if total == int(total) else total
+                amount = int(total) if total.is_integer() else total
             else:
                 try:
                     val = float(amount_str.replace(',', '.'))
                     # Возвращаем как число (int или float)
-                    amount = int(val) if val == int(val) else val
+                    amount = int(val) if val.is_integer() else val
                 except:
                     amount = amount_str
         
@@ -359,8 +358,7 @@ class SimplyRecipesExtractor(BaseRecipeExtractor):
     def extract_difficulty_level(self) -> Optional[str]:
         """Извлечение уровня сложности"""
         # На simplyrecipes обычно нет явного указания сложности
-        # По умолчанию возвращаем "Medium" если не можем определить
-        # Можно использовать простую эвристику на основе количества шагов
+        # Используем простую эвристику на основе количества шагов
         json_ld = self._get_json_ld_data()
         
         if json_ld and 'recipeInstructions' in json_ld:
@@ -372,7 +370,7 @@ class SimplyRecipesExtractor(BaseRecipeExtractor):
             elif num_steps <= 8:
                 return "Medium"
             else:
-                return "Medium"  # Default to Medium for complex recipes
+                return "Hard"
         
         # Fallback to Medium if we can't determine
         return "Medium"
