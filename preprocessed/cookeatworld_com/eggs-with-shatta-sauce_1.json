@@ -1,0 +1,14 @@
+{
+    "dish_name": "Eggs with Shatta Sauce",
+    "description": "A simple breakfast featuring fried eggs paired with spicy Middle Eastern shatta sauce.",
+    "ingredient": "[{\"name\": \"eggs\", \"units\": null, \"amount\": 2}, {\"name\": \"vegetable oil\", \"units\": \"tbsp\", \"amount\": 2}, {\"name\": \"shatta sauce\", \"units\": \"tbsp\", \"amount\": 2}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"pepper\", \"units\": null, \"amount\": null}, {\"name\": \"bread\", \"units\": \"(for serving)\", \"amount\": null}]",
+    "step_by_step": "[\"Heat a small frying pan with the oil until hot.\", \"Break in each egg and fry for 2-3 minutes until crisp around the edges and the white is set, but the yolks still runny.\", \"Remove the eggs from the pan and place on a plate.\", \"Dot the shatta sauce around and over the eggs and then season with salt and freshly ground black pepper.\", \"Serve hot with plenty of bread on the side.\"]",
+    "nutrition_info": "Calories: 165 kcal, Carbohydrates: 8 g, Protein: 11 g, Fat: 8 g, Saturated Fat: 3 g, Polyunsaturated Fat: 2 g, Monounsaturated Fat: 3 g, Trans Fat: 0.03 g, Cholesterol: 327 mg, Sodium: 1.795 mg, Potassium: 121 mg, Fiber: 1 g, Sugar: 6 g, Vitamin A: 475 IU, Calcium: 49 mg, Iron: 2 mg",
+    "category": "Breakfast",
+    "prep_time": "2 minutes",
+    "cook_time": "5 minutes",
+    "total_time": "7 minutes",
+    "difficulty_level": "Easy",
+    "notes": "Experiment with additional garnishes like cherry tomatoes, labneh, feta cheese, fresh herbs, sautéed mushrooms, or chickpeas.",
+    "tags": "breakfast, Middle Eastern, quick and easy"
+}

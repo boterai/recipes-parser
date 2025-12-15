@@ -1,0 +1,15 @@
+{
+    "dish_name": "Garlic Soup with Beans and Bacon",
+    "description": "This healthy and hearty French garlic soup with beans and bacon is a warm welcome for lunch or dinner.",
+    "ingredient": "[{\"name\": \"smoked bacon lardons\", \"units\": \"oz\", \"amount\": 7}, {\"name\": \"dried Navy beans\", \"units\": \"oz\", \"amount\": 12}, {\"name\": \"onion\", \"units\": null, \"amount\": 1}, {\"name\": \"garlic bulb\", \"units\": null, \"amount\": 1}, {\"name\": \"fresh thyme leaves\", \"units\": \"tbsp\", \"amount\": 1}, {\"name\": \"chicken stock\", \"units\": \"cups\", \"amount\": 4.5}, {\"name\": \"salt & pepper\", \"units\": null, \"amount\": null}]",
+    "step_by_step": "1. Soak the beans in a large bowl filled with water (they'll double in size, so be sure to use enough water). After soaking, drain and rinse the beans and set aside. 2. If you're using a slab of bacon, cut it into cubes (lardons). Add them to a large pan and turn on the heat to medium. Let the lardons fry gently to release their fat. After about 10 minutes, remove the lardons from the pan and set aside. Keep the fat in the pan. 3. Over the same medium heat, add the onion and garlic and thyme leaves and saute gently for about 5 minutes until the onions are soft and the raw garlic smell is gone. 4. Add the beans to the pan and stir well to coat in the onion mixture. 5. Pour in the stock and bring to a simmer. Reduce the heat to low and put on a lid. Gently simmer the soup for 2½-3 hours, until the beans are completely soft. This time can fluctuate depending on the size of your beans. When the beans are creamy inside without any chalkiness, they're done. Remove from the heat. 6. Season generously with salt (at least 1 tsp) and plenty of black pepper. 7. Return the fried lardons to the soup and stir through. You're ready to serve.",
+    "nutrition_info": "Calories: 605 kcal | Carbohydrates: 65 g | Protein: 33 g | Fat: 24 g | Saturated Fat: 8 g | Polyunsaturated Fat: 5 g | Monounsaturated Fat: 10 g | Trans Fat: 0.1 g | Cholesterol: 41 mg | Sodium: 720 mg | Potassium: 1443 mg | Fiber: 21 g | Sugar: 9 g | Vitamin A: 110 IU | Vitamin C: 6 mg | Calcium: 150 mg | Iron: 6 mg",
+    "rating": 5.0,
+    "category": "Appetizer, Main",
+    "prep_time": "5 minutes",
+    "cook_time": "3 hours",
+    "total_time": "3 hours 5 minutes",
+    "difficulty_level": "Easy",
+    "notes": "This soup will be good in the fridge for 5-6 days in an airtight container. Reheat gently in a pan or microwave until piping hot. In an airtight container it'll be good for 3+ months in the freezer.",
+    "tags": "French, Soup, Healthy, Comfort Food"
+}

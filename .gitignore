@@ -20,3 +20,4 @@ qdrant_storage/*
 docs/*
 .env
 scripts/words.py
+parser_issue.md

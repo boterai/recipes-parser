@@ -1,0 +1,13 @@
+{
+    "dish_name": "Zapečena sarma",
+    "description": "Zapečena sarma ili sarma iz rerne, pripremljena na Makedonski način.",
+    "ingredient": "[{\"name\": \"mešano mleveno meso\", \"units\": \"gr\", \"amount\": 700}, {\"name\": \"crni luk\", \"units\": \"gr\", \"amount\": 500}, {\"name\": \"pirinač\", \"units\": \"gr\", \"amount\": 100}, {\"name\": \"ulje\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"suv začin\", \"units\": \"kašika\", \"amount\": 1}, {\"name\": \"so\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"tucana ljuta paprika\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"crvena, mlevena, slatka paprika\", \"units\": \"kašika\", \"amount\": 1}, {\"name\": \"glavica kiselog kupusa\", \"units\": null, \"amount\": 1}]",
+    "step_by_step": "Luk sitno iseckati ili samleti pa staviti sa uljem i suvim zalinom da se prodinsta. Kada se luk dinstao nekih 15 minuta, dodati mleveno meso, malo vode i opet malo dinstati. U drugu šerpu stavimo pirinač i nalijemo vode pa ostavimo da se kuva 10 – 15 minuta. Taman dok nam se meso izdinsta. Mesu dodamo začine i opet malo dinstamo. Pirinač procedimo i dodamo mesu pa sve sjedinimo. Kupus operemo, odvojimo listove i isečemo žilice. Stavljamo kašikom na početak lista smesu od mesa pa preklopimo od dole, sa leve strane i desne i onda urolamo sve zajedno. Slaćemo u pouljenu keramičku ili vatrostalnu tepsiju gusto. Nalijemo vode pola tepsije, poklopimo i stavimo da se peče na 180 stepeni nekih sat vremena. Posle sat vremena skinemo poklopac, pogledamo koliko ima vode. Ako je potrebno dolijemo. Ako stavljate zapršku, 100 ml ulja zagrejete i stavite kašiku brašna, malo mešate pa kašiku crvene, mlevene paprike. Tom smesom prelijemo papriku pod uslovom da ima vode u tepsiji do pola. Ostaviti još 30 minuta da se peče.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "60 minutes",
+    "total_time": "75 minutes",
+    "difficulty_level": "Medium",
+    "notes": "Neko stavlja zapršku, a neko ne.",
+    "tags": "Božićna trpeza, domaca sarma, kakos e pravi sarma, makedonska sarma, Novogodišnja trpeza, sarma, sarma iz rerne, sarma za slavu"
+}

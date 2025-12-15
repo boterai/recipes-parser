@@ -1,0 +1,14 @@
+{
+    "dish_name": "Sopa de tomate fácil",
+    "description": "Uma sopa fácil de tomate, ideal para aquecer os dias frios.",
+    "ingredient": "[{\"name\": \"Azeite\", \"units\": null, \"amount\": \"a gosto\"}, {\"name\": \"Cebola\", \"units\": \"grande picada\", \"amount\": \"½\"}, {\"name\": \"Tomates maduros\", \"units\": \"kg cortados ao meio\", \"amount\": \"1\"}, {\"name\": \"Água\", \"units\": \"litro\", \"amount\": \"½\"}, {\"name\": \"Manjericão\", \"units\": \"folhas pequenas\", \"amount\": \"4\"}, {\"name\": \"Folha de louro\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"Sal\", \"units\": null, \"amount\": \"a gosto\"}]",
+    "step_by_step": "[\"Reúna todos os ingredientes.\", \"Leve uma panela ao fogo médio, coloque azeite e refogue a cebola.\", \"Adicione os tomates, a água, o manjericão, o louro, sal e misture; quando levantar fervura, abaixe o fogo e deixe cozinhar por 20 minutos.\", \"Desligue o fogo, espere a sopa ficar morna, retire a folha de louro e bata tudo no liquidificador até homogeneizar.\", \"Peneire a sopa em uma panela e leve-a para cozinhar em fogo médio.\", \"Acerte o sal e mexa até levantar fervura.\", \"Agora é só servir. Bom apetite!\"]",
+    "rating": 5.0,
+    "category": "Sopa",
+    "prep_time": "10 minutes",
+    "cook_time": "50 minutes",
+    "total_time": "60 minutes",
+    "difficulty_level": "Easy",
+    "notes": "Caso queira uma sopa mais cremosa e encorpada, você pode pular a etapa de peneirar ou deixar o líquido reduzir e adicionar um pouco de creme de leite.",
+    "tags": "sopa, tomate, fácil"
+}

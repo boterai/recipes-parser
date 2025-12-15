@@ -1,0 +1,13 @@
+{
+    "dish_name": "Maiz Con Hielo",
+    "description": "Iced corn with milk, a classic Filipino treat consisting of layers of corn kernels, shaved ice, milk, and assorted toppings.",
+    "ingredient": "[{\"name\": \"Ice cubes\", \"units\": \"cups\", \"amount\": \"2\"}, {\"name\": \"Corn kernels\", \"units\": \"cups\", \"amount\": \"2\"}, {\"name\": \"Milk\", \"units\": \"cups\", \"amount\": \"2\"}, {\"name\": \"Granulated sugar\", \"units\": \"tablespoons\", \"amount\": \"2\"}, {\"name\": \"Optional toppings\", \"units\": null, \"amount\": null}]",
+    "step_by_step": "1. Shave the ice cubes using a shaved ice maker or crush them in a blender. 2. Add 1/2 cup corn kernels to each of four parfait glasses. 3. Add about 1/2 cup of shaved or crushed ice on top of the corn. 4. Sprinkle 1 1/2 teaspoons sugar per glass over the ice. 5. Pour 1/2 cup of milk into each glass. 6. Add toppings as desired. 7. Serve immediately.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "5 minutes",
+    "total_time": "20 minutes",
+    "difficulty_level": "Easy",
+    "notes": "Use fresh corn for the best flavor; optional toppings can include vanilla ice cream or Rice Krispies.",
+    "tags": "dessert, Filipino, summer, sweet"
+}

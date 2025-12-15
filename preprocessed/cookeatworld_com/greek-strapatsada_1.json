@@ -1,0 +1,15 @@
+{
+    "dish_name": "Greek Strapatsada",
+    "description": "A delectable combination of eggs and tomatoes, it’s a fragrant, simple and hugely satisfying wake-up call from the Greek Gods.",
+    "ingredient": "[{\"name\": \"olive oil\", \"units\": \"tbsp\", \"amount\": 2}, {\"name\": \"shallots\", \"units\": \"finely chopped\", \"amount\": 2}, {\"name\": \"garlic clove\", \"units\": \"finely chopped\", \"amount\": 1}, {\"name\": \"ripe tomatoes\", \"units\": \"chopped\", \"amount\": 4}, {\"name\": \"eggs\", \"units\": \"beaten\", \"amount\": 4}, {\"name\": \"fresh parsley\", \"units\": \"tbsp, finely chopped\", \"amount\": 2}, {\"name\": \"crumbled feta cheese\", \"units\": \"cup\", \"amount\": 0.25}, {\"name\": \"salt and pepper\", \"units\": null, \"amount\": null}]",
+    "step_by_step": "[\"In a deep frying pan over a moderate/medium heat, heat the olive oil until just hot.\", \"Add the shallot and garlic and fry gently for 3-4 minutes until lightly golden and soft.\", \"Add the tomato and stir. Let them sizzle then simmer for 4-5 minutes to reduce the liquid.\", \"Pour in the egg and add the parsley and season generously with salt and pepper.\", \"Stir well then leave the eggs for 20-30 seconds, then stir again.\", \"Stir for 2-3 minutes more to ensure the eggs are fully cooked.\", \"Remove from the heat and serve direct from the pan with the feta cheese crumbled on top along with a little more fresh parsley.\", \"Serve with plenty of bread (either crusty loaf or pita breads).\"]",
+    "nutrition_info": "Calories: 365 kcal, Carbohydrates: 16 g, Protein: 17 g, Fat: 27 g, Saturated Fat: 7 g, Sodium: 357 mg, Potassium: 828 mg, Fiber: 4 g, Sugar: 9 g.",
+    "rating": 5.0,
+    "category": "Breakfast",
+    "prep_time": "5 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "20 minutes",
+    "difficulty_level": "Easy",
+    "notes": "Strapatsada is best eaten right away and hot, but it's also really quite delicious eaten at room temperature too.",
+    "tags": "Greek, Breakfast, Vegetarian, Gluten Free"
+}

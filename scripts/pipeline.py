@@ -42,7 +42,7 @@ SITE_ID = None
 # Добавить сохранения состояния между запусками
 def prepare_data_for_parser_creation(url: str, max_depth: int, debug_port: int = 9222, helper_links: list[str] = None):
 	global SITE_ID
-	explorer = SiteExplorer(url, debug_mode=True, debug_port=debug_port, max_urls_per_pattern=3)
+	explorer = SiteExplorer(url, debug_mode=True, debug_port=debug_port, max_urls_per_pattern=5)
 	if helper_links:
 		explorer.add_helper_urls(helper_links, depth=1)
 	# предварительный запуск для просмотра сайта и получения хоть каких-то ссылок 
@@ -90,11 +90,14 @@ def prepare_data_for_parser_creation(url: str, max_depth: int, debug_port: int =
 				logger.info(f"Найден паттерн страниц с рецептами: {pattern}")
 				return # если паттерн найден, завершаем работу, пробуем создать полноценный парсер из полученных данных
 
-def pipeline(debug_port: int = 9222, url: str = "", max_depth: int = 4, max_urls: int = 10000, check_url: bool = True, helper_links: list[str] = None):
-	prepare_data_for_parser_creation(url=url, max_depth=max_depth, debug_port=debug_port, helper_links=helper_links)
-	make_test_data(28, folder="preprocessed") # создать тестовые данные для анализа и создания парсера (создается в папке recipes/)
+def pipeline(debug_port: int = 9222, url: str = "", max_depth: int = 4, max_urls: int = 10000, check_url: bool = True, helper_links: list[str] = None,
+			 preprocess_only: bool = False):
+	if preprocess_only:
+		prepare_data_for_parser_creation(url=url, max_depth=max_depth, debug_port=debug_port, helper_links=helper_links)
+		make_test_data(SITE_ID, folder="preprocessed") # создать тестовые данные для анализа и создания парсера
+		return
 	# после создания парсера можно запустить полноценный парсинг
-	#explore_site(url, max_urls=max_urls, max_depth=max_depth, check_pages_with_extractor=True, check_url=check_url, debug_port=debug_port)
+	explore_site(url, max_urls=max_urls, max_depth=max_depth, check_pages_with_extractor=True, check_url=check_url, debug_port=debug_port, helper_links=helper_links)
 
 
 SITES_CONFIG = [
@@ -195,16 +198,4 @@ def main():
 
 			
 if __name__ == "__main__":
-	run_config(
-		{
-			'id': 1,
-			'url': 'https://www.thefrenchcookingacademy.com/recipes',
-			'debug_port': 9222,
-			'helper_links': [
-				'https://www.thefrenchcookingacademy.com/recipes/salade-nicoise',
-				'https://www.thefrenchcookingacademy.com/recipes/salade-nicoise',
-				'https://www.thefrenchcookingacademy.com/recipes/peppersauce',
-			]
-		}
-	)
-	#main()
+	main()

@@ -1,0 +1,15 @@
+{
+    "dish_name": "Turkish Menemen",
+    "description": "Menemen is a hearty, healthy dish from Turkey. Creamy scrambled eggs flavoured with tomatoes, peppers and Aleppo pepper.",
+    "ingredient": "[{\"name\": \"olive oil\", \"units\": \"tbsp\", \"amount\": 1}, {\"name\": \"shallot\", \"units\": \"finely diced\", \"amount\": 1}, {\"name\": \"green bell pepper\", \"units\": \"finely diced\", \"amount\": 1}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"pepper\", \"units\": null, \"amount\": null}, {\"name\": \"Aleppo pepper flakes\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"tomato concentrate\", \"units\": \"tbsp\", \"amount\": 2}, {\"name\": \"chopped fresh tomatoes\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"tomato passata\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"eggs\", \"units\": \"beaten\", \"amount\": 6}, {\"name\": \"parsley\", \"units\": \"tbsp\", \"amount\": 2}]",
+    "step_by_step": "[\"Heat the oil in a deep frying pan or skillet over a moderate heat until just hot.\", \"Add the shallot and bell pepper and fry for 3-4 minutes until softened slightly.\", \"Add some salt & pepper, the Aleppo pepper and tomato concentrate and stir briefly to combine.\", \"Add the fresh tomatoes and tomato passata and stir well. Let this gently simmer for 1-2 minutes.\", \"Pour in the eggs and begin to stir. Stir for 2-3 minutes until the eggs are starting to firm up but still a little undercooked and creamy. Remove from the heat.\", \"If you're serving from the pan, scatter over the parsley and an extra sprinkling of Aleppo pepper. If you're plating in portions, sprinkle each portion with Aleppo pepper and parsley.\", \"Serve with some form of bread like flatbreads, pita breads or crusty sourdough.\"]",
+    "nutrition_info": "Calories: 163 kcal, Carbohydrates: 9 g, Protein: 10 g, Fat: 10 g, Saturated Fat: 3 g, Polyunsaturated Fat: 2 g, Monounsaturated Fat: 5 g, Trans Fat: 0.03 g, Cholesterol: 246 mg, Sodium: 179 mg, Potassium: 491 mg, Fiber: 2 g, Sugar: 5 g, Vitamin A: 1375 IU, Vitamin C: 37 mg, Calcium: 59 mg, Iron: 2 mg",
+    "rating": 4.0,
+    "category": "Breakfast",
+    "prep_time": "10 minutes",
+    "cook_time": "8 minutes",
+    "total_time": "18 minutes",
+    "difficulty_level": "Easy",
+    "notes": "Serve menemen right away for best results, but it can also be served at room temperature. Leftovers will stay good for 2-3 days in the fridge.",
+    "tags": "Turkish, Breakfast, Eggs, Quick, Easy"
+}

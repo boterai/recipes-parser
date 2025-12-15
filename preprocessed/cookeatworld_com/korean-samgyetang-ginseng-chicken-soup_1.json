@@ -1,0 +1,15 @@
+{
+    "dish_name": "Korean Samgyetang (Ginseng Chicken Soup)",
+    "description": "A whole chicken in a soup with ginseng, rice, and herbal additions, perfect for summer.",
+    "ingredient": "[{\"name\": \"Cornish hens\", \"units\": null, \"amount\": 2}, {\"name\": \"Calrose rice\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"garlic cloves\", \"units\": \"whole\", \"amount\": 8}, {\"name\": \"samgyetang soup kit\", \"units\": null, \"amount\": 1}, {\"name\": \"spice bag\", \"units\": \"optional\", \"amount\": 1}, {\"name\": \"salt\", \"units\": \"tsp\", \"amount\": 2}, {\"name\": \"spring onion\", \"units\": \"finely sliced\", \"amount\": 2}, {\"name\": \"salt\", \"units\": \"tbsp\", \"amount\": 1}, {\"name\": \"white pepper\", \"units\": \"tsp\", \"amount\": 0.5}, {\"name\": \"sesame oil\", \"units\": \"tbsp\", \"amount\": 2}, {\"name\": \"soy sauce\", \"units\": \"tsp\", \"amount\": 2}, {\"name\": \"toasted sesame seeds\", \"units\": \"tsp\", \"amount\": 1}]",
+    "step_by_step": "1. Wash your rice and leave to soak for an hour. 2. Pop all your samgyetang roots, twigs and dried fruit into a large spice bag. 3. Pop the bag into a large pan and cover with water. 4. Stuff the chicken with whole garlic cloves and some rice. 5. Seal the legs of the chicken. 6. Pop the chickens into the liquid and poach for 90 minutes. 7. Make your dipping sauce. 8. Remove each chicken and discard the spice bag. 9. Serve hot with the dipping sauce.",
+    "nutrition_info": "Calories: 1162 kcal, Carbohydrates: 43 g, Protein: 82 g, Fat: 71 g, Saturated Fat: 19 g, Cholesterol: 455 mg, Sodium: 6262 mg, Potassium: 1196 mg, Fiber: 1 g, Sugar: 1 g, Vitamin A: 606 IU, Vitamin C: 8 mg, Calcium: 103 mg, Iron: 4 mg",
+    "rating": 5.0,
+    "category": "Main Course",
+    "prep_time": "1 hour",
+    "cook_time": "1 hour 20 minutes",
+    "total_time": "2 hours 35 minutes",
+    "difficulty_level": "Medium",
+    "notes": "Buy a Samgyetang soup starter kit for convenience. Rinse and soak the rice first to avoid cloudy soup.",
+    "tags": "Korean, Soup, Chicken, Ginseng"
+}

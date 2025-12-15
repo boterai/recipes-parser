@@ -1,0 +1,15 @@
+{
+    "dish_name": "Japanese Scrambled Eggs",
+    "description": "Silky soft and lightly sweet eggs on a bed of fluffy rice.",
+    "ingredient": "[{\"name\": \"eggs\", \"units\": null, \"amount\": 3}, {\"name\": \"mirin\", \"units\": \"tbsp\", \"amount\": 1}, {\"name\": \"soy sauce\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"salt\", \"units\": \"tsp\", \"amount\": 0.25}, {\"name\": \"sesame oil\", \"units\": \"tsp\", \"amount\": 2}, {\"name\": \"spring onion\", \"units\": null, \"amount\": 1}, {\"name\": \"Japanese furikake rice seasoning\", \"units\": \"tbsp\", \"amount\": 1}, {\"name\": \"white rice\", \"units\": \"cup\", \"amount\": 1}]",
+    "step_by_step": "1. Cook the rice if you're making it now and keep warm. If you're using leftover rice, reheat in the microwave and keep warm. 2. Beat the eggs together with the mirin, soy sauce, salt, pepper and 1 tsp of the sesame oil. 3. Heat a small frying pan with the remaining sesame oil until just hot. 4. Pour the eggs into the pan and leave for a few seconds before stirring. Stir until just set, but still wet then remove from the heat. 5. Make a bed of the warm rice and then slide the eggs over the rice. 6. Sprinkle with the spring onion and Japanese rice seasoning and enjoy right away!",
+    "nutrition_info": "Calories: 977 kcal, Carbohydrates: 157 g, Protein: 31 g, Fat: 23 g, Saturated Fat: 6 g, Cholesterol: 491 mg, Sodium: 1246 mg, Potassium: 395 mg, Fiber: 3 g, Sugar: 5 g, Vitamin A: 962 IU, Vitamin C: 3 mg, Calcium: 126 mg, Iron: 4 mg",
+    "rating": 4.86,
+    "category": "Breakfast",
+    "prep_time": "2 minutes",
+    "cook_time": "3 minutes",
+    "total_time": "5 minutes",
+    "difficulty_level": "Easy",
+    "notes": "Serve hot. Best eaten right away, but can be refrigerated and reheated gently.",
+    "tags": "Japanese, breakfast, eggs, rice"
+}

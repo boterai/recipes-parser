@@ -1,0 +1,14 @@
+{
+    "dish_name": "Pieczona karkówka z czerwoną cebulą, suszonymi pomidorami i ziemniakami",
+    "description": "Pyszna, soczysta, dobrze wypieczona karkówka, z łatwo odrywającymi się kawałkami mięsa. Pieczona w piekarniku w jednym kawałku, z dodatkiem czerwonej cebuli, suszonych pomidorów i ziemniaków.",
+    "ingredient": "[{\"name\": \"karkówka\", \"units\": \"kg\", \"amount\": 1}, {\"name\": \"sól morska\", \"units\": null, \"amount\": null}, {\"name\": \"czarny pieprz\", \"units\": null, \"amount\": null}, {\"name\": \"miód\", \"units\": \"łyżki\", \"amount\": 2}, {\"name\": \"świeży tymianek\", \"units\": null, \"amount\": null}, {\"name\": \"białe wino\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"suszone pomidory\", \"units\": \"kawałków\", \"amount\": 6}, {\"name\": \"oliwa\", \"units\": \"łyżka\", \"amount\": 1}, {\"name\": \"czerwona cebula\", \"units\": null, \"amount\": 1}, {\"name\": \"ziemniaczki\", \"units\": \"kg\", \"amount\": 1}]",
+    "step_by_step": "Piekarnik nagrzać do 180 stopni C. Karkówkę natrzeć solą morską oraz pieprzem, włożyć do naczynia do zapiekania. Mięso polać miodem oraz oliwą. Dodać tymianek i wlać białe wino. Przykryć i piec przez 1 godzinę. Przygotować ziemniaki i cebulę, doprawić i dodać do mięsa. Piec bez przykrycia przez 1 i 1/2 godziny. Po upieczeniu odczekać 10 minut przed pokrojeniem.",
+    "rating": 4.8,
+    "category": "Main Course",
+    "prep_time": "1-2 dni (marynowanie), 15 minutes",
+    "cook_time": "2 hours",
+    "total_time": "2 hours 15 minutes",
+    "difficulty_level": "Medium",
+    "notes": "Mięso warto dzień wcześniej zamarynować. Świeży tymianek można zastąpić suszonym.",
+    "tags": "karkówka, pieczone mięso, dania główne, kuchnia francuska"
+}

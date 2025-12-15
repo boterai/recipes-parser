@@ -1,0 +1,12 @@
+{
+    "dish_name": "Meso ispod sača",
+    "description": "Meso ispod sača ili peke je zasigurno jedano od najukusnijih jela, posebno kada se doda povrće.",
+    "ingredient": "[{\"name\": \"juneće meso\", \"units\": null, \"amount\": null}, {\"name\": \"svinjsko meso\", \"units\": null, \"amount\": null}, {\"name\": \"krompir\", \"units\": null, \"amount\": null}, {\"name\": \"šargarepa\", \"units\": null, \"amount\": null}, {\"name\": \"šampinjoni\", \"units\": null, \"amount\": null}, {\"name\": \"ulje\", \"units\": null, \"amount\": null}, {\"name\": \"voda\", \"units\": \"ml\", \"amount\": \"200\"}, {\"name\": \"suvi začin\", \"units\": null, \"amount\": null}, {\"name\": \"so\", \"units\": null, \"amount\": null}, {\"name\": \"biber\", \"units\": null, \"amount\": null}]",
+    "step_by_step": "Prvo se upali vatra od tvrdog drveta. Sačeka se da svo drvo izgori i da se dobije jaka žar. U crepulju se poslaže meso, okolo krompir, preko šargarepa i šampinjoni. Uspe se 200 ml vode i isto toliko ulja. Dobro se pospe suvim začinom, posoli i pobiberi pa se crepulja uroni u žar. Preko se poklopi sa sačem i naspe se lopatom preko žar. Ispod sača se meso peče 2 do 2,5 sata.",
+    "category": "Main Course",
+    "cook_time": "2 hours",
+    "total_time": "2 hours 30 minutes",
+    "difficulty_level": "Medium",
+    "notes": "Meso pečeno ispod sača je mekano i topi se u ustima, a povrće pokupi sve ukuse.",
+    "tags": "jagnjetina ispod peke, jagnjetina ispod saca, jela ispod saca, kako ispeci meso ispod saca, kako se pece ispod peke, kako se pece ispod saca, meso ispod peke, meso ispod sača, peka recepti, sac recepti"
+}

@@ -340,7 +340,7 @@ class SiteExplorer:
                 dish_name, description, 
                 ingredient, step_by_step,
                 prep_time, cook_time, total_time,
-                servings, difficulty_level,
+                difficulty_level,
                 category, nutrition_info,
                 notes, rating, tags, title, language, image_urls
             ) VALUES (
@@ -349,8 +349,7 @@ class SiteExplorer:
                 :dish_name, :description,
                 :ingredient, :step_by_step,
                 :prep_time, :cook_time, :total_time,
-                :servings, :difficulty_level,
-                :category, :nutrition_info,
+                :difficulty_level, :category, :nutrition_info,
                 :notes, :rating, :tags, :title, :language, :image_urls
             )
             ON DUPLICATE KEY UPDATE
@@ -363,7 +362,6 @@ class SiteExplorer:
                 prep_time = VALUES(prep_time),
                 cook_time = VALUES(cook_time),
                 total_time = VALUES(total_time),
-                servings = VALUES(servings),
                 difficulty_level = VALUES(difficulty_level),
                 category = VALUES(category),
                 nutrition_info = VALUES(nutrition_info),
@@ -726,6 +724,9 @@ class SiteExplorer:
             urls: Список URL для добавления
             depth: Начальная глубина для этих URL (по умолчанию 0)
         """
+        # Сортируем очередь по приоритету
+        self.exploration_queue.sort(key=lambda x: self.get_url_priority(x[0]))
+
         added_count = 0
         for url in urls:
             # Проверяем что URL того же домена
@@ -734,13 +735,10 @@ class SiteExplorer:
                 continue
             
             # Проверяем что URL еще не посещен и не в очереди
-            if url not in self.visited_urls and (url, depth) not in self.exploration_queue:
-                self.exploration_queue.append((url, depth))
-                added_count += 1
-                logger.info(f"  + Добавлен в очередь: {url}")
+            self.exploration_queue.insert(0, (url, depth))
+            added_count += 1
+            logger.info(f"  + Добавлен в начало: {url}")
         
-        # Сортируем очередь по приоритету
-        self.exploration_queue.sort(key=lambda x: self.get_url_priority(x[0]))
         
         logger.info(f"Добавлено {added_count} вспомогательных URL в очередь")
         logger.info(f"Всего в очереди: {len(self.exploration_queue)} URL")
@@ -1058,7 +1056,8 @@ class SiteExplorer:
 def explore_site(url: str, max_urls: int = 1000, max_depth: int = 4, recipe_pattern: str = None,
                  check_pages_with_extractor: bool = False,
                  check_url: bool = False,
-                 max_urls_per_pattern: int = None, debug_port: int = 9222):
+                 max_urls_per_pattern: int = None, debug_port: int = 9222,
+                 helper_links: List[str] = None):
     """
     Функция для исследования сайта с обработкой ошибок и прерываний
     
@@ -1079,6 +1078,8 @@ def explore_site(url: str, max_urls: int = 1000, max_depth: int = 4, recipe_patt
             explorer = SiteExplorer(url, debug_port=debug_port, debug_mode=True, 
                                   recipe_pattern=recipe_pattern, 
                                   max_urls_per_pattern=max_urls_per_pattern)
+            if helper_links:
+                explorer.add_helper_urls(helper_links, depth=1)
             explorer.connect_to_chrome()
             explorer.load_state()
             explored = explorer.explore(max_urls=max_urls, max_depth=max_depth, check_url=check_url, check_pages_with_extractor=check_pages_with_extractor)

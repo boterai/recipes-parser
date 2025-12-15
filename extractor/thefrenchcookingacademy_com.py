@@ -570,6 +570,66 @@ class TheFrenchCookingAcademyExtractor(BaseRecipeExtractor):
         
         return ' '.join(notes) if notes else None
     
+    def extract_image_urls(self) -> Optional[str]:
+        """Извлечение URL изображений рецепта"""
+        image_urls = []
+        
+        # Ищем все изображения на странице
+        for img in self.soup.find_all('img'):
+            src = img.get('src') or img.get('data-src')
+            
+            if not src:
+                continue
+            
+            # Пропускаем маленькие изображения (иконки, логотипы)
+            width = img.get('width')
+            height = img.get('height')
+            if width and height:
+                try:
+                    if int(width) < 100 or int(height) < 100:
+                        continue
+                except (ValueError, TypeError):
+                    pass
+            
+            # Пропускаем служебные изображения
+            if any(skip in src.lower() for skip in ['logo', 'icon', 'avatar', 'sprite', 'placeholder']):
+                continue
+            
+            # Нормализуем URL
+            if src.startswith('//'):
+                src = 'https:' + src
+            elif src.startswith('/'):
+                src = 'https://www.thefrenchcookingacademy.com' + src
+            
+            # Для Squarespace изображений берем оригинальный размер
+            if 'squarespace-cdn.com' in src and '?' in src:
+                # Заменяем параметры формата на максимальный размер
+                src = re.sub(r'\?format=\d+w', '?format=1000w', src)
+            
+            if src and src not in image_urls:
+                image_urls.append(src)
+        
+        # Ищем изображения в JSON-LD
+        json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
+        for script in json_ld_scripts:
+            try:
+                data = json.loads(script.string)
+                # Проверяем наличие изображения в структуре
+                if isinstance(data, dict):
+                    if 'image' in data:
+                        img_data = data['image']
+                        if isinstance(img_data, str):
+                            if img_data not in image_urls:
+                                image_urls.append(img_data)
+                        elif isinstance(img_data, list):
+                            for img_url in img_data:
+                                if isinstance(img_url, str) and img_url not in image_urls:
+                                    image_urls.append(img_url)
+            except (json.JSONDecodeError, KeyError):
+                continue
+        
+        return image_urls[0] if image_urls else None
+    
     def extract_all(self) -> dict:
         """
         Извлечение всех данных рецепта
@@ -591,7 +651,8 @@ class TheFrenchCookingAcademyExtractor(BaseRecipeExtractor):
             "difficulty_level": self.extract_difficulty_level(),
             "rating": self.extract_rating(),
             "notes": self.extract_notes(),
-            "tags": self.extract_tags()
+            "tags": self.extract_tags(),
+            "image_urls": self.extract_image_urls()
         }
 
 

@@ -1,0 +1,11 @@
+{
+    "dish_name": "Sarma",
+    "description": "Sarma je jelo koje se pravi od kupusa i mesa, često sa suvim mesom, kobasicama ili slaninom.",
+    "ingredient": "[{\"name\": \"mleveno meso\", \"units\": \"gr\", \"amount\": 500}, {\"name\": \"pirinač\", \"units\": \"mala šoljica\", \"amount\": 1}, {\"name\": \"crni luk\", \"units\": \"srednje glavice\", \"amount\": 2}, {\"name\": \"suvi začin\", \"units\": null, \"amount\": null}, {\"name\": \"aleva paprika\", \"units\": null, \"amount\": null}, {\"name\": \"biber\", \"units\": null, \"amount\": null}, {\"name\": \"kupus\", \"units\": \"manja glavica\", \"amount\": 1}]",
+    "step_by_step": "Crni luk sitno iseckati, dodati meso, začine po ukusu i pirinač. Sve dobro izmesiti rukom i ostaviti da odstoji. Veće listove kupusa presecite na dva dela, operite. Uzimati po jednu kašiku smese i stavljati na list kupusa. Preklopiti kupus i urolati. Na dno lonca poslagati listove kupusa i umotane sarme. Pokriti listovima kupusa, naliti vodu i kuvati najmanje 2h.",
+    "category": "Main Course",
+    "cook_time": "120 minutes",
+    "difficulty_level": "Medium",
+    "notes": "Zapršku pravite od brašna i aleve paprike, sklanjajući sarmu sa vatre da se ne naprave grumuljice.",
+    "tags": "Božićna trpeza, domaca sarma, kiseli kupus, novogdisnja trpeza, recept za sarmu, sarma, sarma za slavu"
+}
