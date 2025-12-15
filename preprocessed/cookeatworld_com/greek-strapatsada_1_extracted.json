@@ -1,0 +1,16 @@
+{
+    "dish_name": "Greek Strapatsada",
+    "description": "",
+    "ingredient": "[{\"name\": \"olive oil\", \"amount\": 2, \"units\": \"tbsp\"}, {\"name\": \"shallots\", \"amount\": 2, \"units\": \"pieces\"}, {\"name\": \"garlic clove\", \"amount\": 1, \"units\": \"pieces\"}, {\"name\": \"ripe tomatoes\", \"amount\": 4, \"units\": \"pieces\"}, {\"name\": \"eggs\", \"amount\": 4, \"units\": \"pieces\"}, {\"name\": \"fresh parsley\", \"amount\": 2, \"units\": \"tbsp\"}, {\"name\": \"crumbled feta cheese\", \"amount\": 0.25, \"units\": \"cup\"}, {\"name\": \"salt and pepper\", \"amount\": null, \"units\": null}]",
+    "step_by_step": "[\"In a deep frying pan over a moderate/medium heat, heat the olive oil until just hot. Add the shallot and garlic and fry gently for 3-4 minutes until lightly golden and soft.\", \"Add the tomato and stir. Let them sizzle then simmer for 4-5 minutes to reduce the liquid.\", \"Pour in the egg and add the parsley and season generously with salt and pepper. Stir well then leave the eggs for 20-30 seconds, then stir again. Stir for 2-3 minutes more to ensure the eggs are fully cooked. Remove from the heat.\", \"Serve direct from the pan with the feta cheese crumbled on top along with a little more fresh parsley.\", \"Serve with plenty of bread (either crusty loaf or pita breads).\"]",
+    "nutrition_info": "365 kcal; 17/27/16",
+    "category": "Breakfast",
+    "prep_time": "5 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "20 minutes",
+    "difficulty_level": "Easy",
+    "rating": 5.0,
+    "notes": null,
+    "tags": "Eggs, Menemen, Strapatsada, Greek",
+    "image_urls": "https://www.cookeatworld.com/wp-content/uploads/2023/06/Strapatsada-7.jpg,https://www.cookeatworld.com/wp-content/uploads/2023/06/Strapatsada-7-500x500.jpg,https://www.cookeatworld.com/wp-content/uploads/2023/06/Strapatsada-7-500x375.jpg"
+}

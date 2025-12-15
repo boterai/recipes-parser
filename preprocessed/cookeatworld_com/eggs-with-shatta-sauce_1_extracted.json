@@ -1,0 +1,16 @@
+{
+    "dish_name": "Eggs with Shatta Sauce",
+    "description": "The simplest of recipes contain only a few delicious ingredients. Middle Eastern shatta sauce is a heady, spicy levantine sauce that is just perfect when paired with eggs. My simple breakfast favourite features two crisp fried eggs and a few dollops of red & green shatta. A perfect start to the day.",
+    "ingredient": "[{\"name\": \"eggs\", \"amount\": 2, \"units\": \"pieces\"}, {\"name\": \"vegetable oil\", \"amount\": 2, \"units\": \"tbsp\"}, {\"name\": \"shatta sauce\", \"amount\": 2, \"units\": \"tbsp\"}, {\"name\": \"salt & pepper\", \"amount\": null, \"units\": null}, {\"name\": \"bread\", \"amount\": null, \"units\": null}]",
+    "step_by_step": "[\"Heat a small frying pan with the oil until hot.\", \"Break in each egg and fry for 2-3 minutes until crisp around the edges and the white is set, but the yolks still runny. I like mine sunny side up, but you can flip if you prefer.\", \"Remove the eggs from the pan and place on a plate. Dot the shatta sauce around and over the eggs and then season with salt and freshly ground black pepper.\", \"Serve hot with plenty of bread on the side.\"]",
+    "nutrition_info": "165 kcal; 11/8/8",
+    "category": "Breakfast",
+    "prep_time": "2 minutes",
+    "cook_time": "5 minutes",
+    "total_time": "7 minutes",
+    "difficulty_level": "Easy",
+    "rating": null,
+    "notes": null,
+    "tags": "Fried Eggs, Shatta, Middle Eastern",
+    "image_urls": "https://www.cookeatworld.com/wp-content/uploads/2024/06/Shatta-Eggs-6.jpg,https://www.cookeatworld.com/wp-content/uploads/2024/06/Shatta-Eggs-6-500x500.jpg,https://www.cookeatworld.com/wp-content/uploads/2024/06/Shatta-Eggs-6-500x375.jpg"
+}
