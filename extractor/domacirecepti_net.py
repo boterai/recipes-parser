@@ -135,8 +135,8 @@ class DomaciReceptiExtractor(BaseRecipeExtractor):
                 }
         
         # Паттерн для извлечения: количество + единица + название
-        # Примеры: "3 jaja", "100ml ulja", "7 kašika šećera", "10g praška"
-        pattern = r'^([\d.,/]+)\s*(g|gr|kg|ml|l|kašika|kašike|kašiku|kašičica|kašičice|komada?|pieces?|glavica?|glavice|šoljica?|mala šoljica|srednje glavice|manja glavica)?\s*(.+)$'
+        # Примеры: "3 jaja", "100ml ulja", "7 kašika šećera", "10g praška", "500gr mesa"
+        pattern = r'^([\d.,/]+)\s*(gr|g|kg|ml|l|kašika|kašike|kašiku|kašičica|kašičice|komada?|pieces?|glavica?|glavice|šoljica?|mala šoljica|srednje glavice|manja glavica)?\s*(.+)$'
         
         match = re.match(pattern, line, re.IGNORECASE)
         
@@ -238,16 +238,14 @@ class DomaciReceptiExtractor(BaseRecipeExtractor):
         paragraphs = entry_content.find_all('p')
         
         # Ищем параграф с "Sastojci:"
-        in_ingredients_section = False
-        in_posip_section = False
-        
-        for i, p in enumerate(paragraphs):
+        sastojci_found = False
+        for p in paragraphs:
             text = p.get_text().strip()
             
             # Начало секции ингредиентов
             if re.match(r'^Sastojci\s*:', text, re.IGNORECASE):
-                in_ingredients_section = True
-                in_posip_section = False
+                sastojci_found = True
+                
                 # Парсим строки из этого же параграфа
                 lines = text.split('\n')
                 for line in lines[1:]:  # Пропускаем первую строку "Sastojci:"
@@ -256,35 +254,53 @@ class DomaciReceptiExtractor(BaseRecipeExtractor):
                         parsed = self.parse_ingredient_line(line, is_posip=False)
                         if parsed:
                             ingredients.append(parsed)
-                continue
-            
-            # Если мы в секции ингредиентов
-            if in_ingredients_section:
-                # Проверяем, не начинается ли секция Posip
-                if re.match(r'^Posip\s*:', text, re.IGNORECASE):
-                    in_posip_section = True
-                    lines = text.split('\n')
-                    for line in lines[1:]:
-                        line = line.strip()
-                        if line:
-                            parsed = self.parse_ingredient_line(line, is_posip=True)
-                            if parsed:
-                                ingredients.append(parsed)
-                    continue
                 
-                # Проверяем, не начинается ли секция приготовления
-                if re.match(r'^Priprema\s*:', text, re.IGNORECASE):
-                    # Конец секции ингредиентов
-                    break
+                # Ищем список <ul> или <ol> сразу после параграфа "Sastojci:"
+                next_elem = p.find_next_sibling()
+                while next_elem:
+                    if next_elem.name in ['ul', 'ol']:
+                        # Нашли список ингредиентов
+                        list_items = next_elem.find_all('li')
+                        for item in list_items:
+                            line = item.get_text().strip()
+                            if line:
+                                parsed = self.parse_ingredient_line(line, is_posip=False)
+                                if parsed:
+                                    ingredients.append(parsed)
+                        next_elem = next_elem.find_next_sibling()
+                    elif next_elem.name == 'p':
+                        text = next_elem.get_text().strip()
+                        # Если нашли "Posip:", парсим как posip
+                        if re.match(r'^Posip\s*:', text, re.IGNORECASE):
+                            lines = text.split('\n')
+                            for line in lines[1:]:
+                                line = line.strip()
+                                if line:
+                                    parsed = self.parse_ingredient_line(line, is_posip=True)
+                                    if parsed:
+                                        ingredients.append(parsed)
+                            next_elem = next_elem.find_next_sibling()
+                        # Если нашли "Priprema:", прекращаем
+                        elif re.match(r'^Priprema\s*:', text, re.IGNORECASE):
+                            break
+                        # Если пустой параграф, продолжаем
+                        elif not text:
+                            next_elem = next_elem.find_next_sibling()
+                        # Иначе парсим как ингредиент
+                        else:
+                            lines = text.split('\n')
+                            for line in lines:
+                                line = line.strip()
+                                if line:
+                                    parsed = self.parse_ingredient_line(line, is_posip=False)
+                                    if parsed:
+                                        ingredients.append(parsed)
+                            next_elem = next_elem.find_next_sibling()
+                    else:
+                        # Пропускаем другие элементы (div и т.д.)
+                        next_elem = next_elem.find_next_sibling()
                 
-                # Парсим строки ингредиентов
-                lines = text.split('\n')
-                for line in lines:
-                    line = line.strip()
-                    if line and not re.match(r'^(Posip|Priprema)\s*:', line, re.IGNORECASE):
-                        parsed = self.parse_ingredient_line(line, is_posip=in_posip_section)
-                        if parsed:
-                            ingredients.append(parsed)
+                break  # Нашли секцию ингредиентов, выходим
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
