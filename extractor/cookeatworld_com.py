@@ -15,6 +15,16 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class CookeatWorldExtractor(BaseRecipeExtractor):
     """Экстрактор для cookeatworld.com"""
     
+    # Список единиц измерения для ингредиентов
+    MEASUREMENT_UNITS = [
+        'cups?', 'tablespoons?', 'teaspoons?', 'tbsps?', 'tsps?', 'tbsp', 'tsp',
+        'pounds?', 'ounces?', 'lbs?', 'oz', 'grams?', 'kilograms?', 'kg',
+        'milliliters?', 'liters?', 'ml', 'pinch(?:es)?', 'dash(?:es)?',
+        'packages?', 'cans?', 'jars?', 'bottles?', 'inch(?:es)?', 'slices?',
+        'cloves?', 'bunches?', 'sprigs?', 'whole', 'halves?', 'quarters?',
+        'pieces?', 'head|heads', 'g', 'l'
+    ]
+    
     @staticmethod
     def parse_iso_duration(duration: str) -> Optional[str]:
         """
@@ -162,7 +172,8 @@ class CookeatWorldExtractor(BaseRecipeExtractor):
             text = text.replace(fraction, decimal)
         
         # Сначала пробуем паттерн с единицей измерения
-        pattern_with_unit = r'^([\d\s/.,]+)\s+(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|tbsp|tsp|pounds?|ounces?|lbs?|oz|grams?|kilograms?|kg|milliliters?|liters?|ml|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|piece|head|heads|g|l)\b\s*(.+)'
+        units_pattern = '|'.join(self.MEASUREMENT_UNITS)
+        pattern_with_unit = rf'^([\d\s/.,]+)\s+({units_pattern})\b\s*(.+)'
         
         match = re.match(pattern_with_unit, text, re.IGNORECASE)
         
@@ -198,13 +209,13 @@ class CookeatWorldExtractor(BaseRecipeExtractor):
                     else:
                         total += float(part)
                 # Возвращаем как число (int или float)
-                amount = int(total) if total == int(total) else total
+                amount = int(total) if isinstance(total, float) and total.is_integer() else total
             else:
                 amount_str = amount_str.replace(',', '.')
                 try:
                     amount_val = float(amount_str)
                     # Возвращаем как число (int или float)
-                    amount = int(amount_val) if amount_val == int(amount_val) else amount_val
+                    amount = int(amount_val) if amount_val.is_integer() else amount_val
                 except ValueError:
                     amount = None
         
@@ -367,9 +378,42 @@ class CookeatWorldExtractor(BaseRecipeExtractor):
     
     def extract_difficulty_level(self) -> Optional[str]:
         """Извлечение уровня сложности"""
-        # На cookeatworld.com обычно нет явного указания сложности в JSON-LD
         # Пробуем найти в HTML
-        # Для совместимости с ожидаемыми значениями возвращаем "Easy" если не найдено
+        difficulty_elem = self.soup.find(class_=re.compile(r'difficulty', re.I))
+        if difficulty_elem:
+            text = difficulty_elem.get_text(strip=True)
+            text = self.clean_text(text)
+            if text:
+                return text
+        
+        # На cookeatworld.com обычно нет явного указания сложности
+        # Возвращаем значение по умолчанию на основе времени приготовления
+        recipe_data = self.get_recipe_json_ld()
+        if recipe_data and 'totalTime' in recipe_data:
+            total_time = recipe_data['totalTime']
+            # Парсим ISO duration в минуты
+            if total_time and total_time.startswith('PT'):
+                duration_str = total_time[2:]
+                hours = 0
+                minutes = 0
+                hour_match = re.search(r'(\d+)H', duration_str)
+                if hour_match:
+                    hours = int(hour_match.group(1))
+                min_match = re.search(r'(\d+)M', duration_str)
+                if min_match:
+                    minutes = int(min_match.group(1))
+                
+                total_minutes = hours * 60 + minutes
+                
+                # Простая эвристика: до 30 минут - Easy, до 1 часа - Medium, больше - Hard
+                if total_minutes <= 30:
+                    return "Easy"
+                elif total_minutes <= 60:
+                    return "Medium"
+                else:
+                    return "Medium"
+        
+        # По умолчанию возвращаем Easy
         return "Easy"
     
     def extract_rating(self) -> Optional[float]:
@@ -477,6 +521,7 @@ class CookeatWorldExtractor(BaseRecipeExtractor):
                     unique_urls.append(url)
                     if len(unique_urls) >= 3:
                         break
+            # Note: URLs are joined without space after comma to match expected format
             return ','.join(unique_urls) if unique_urls else None
         
         return None
