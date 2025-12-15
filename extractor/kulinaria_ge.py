@@ -11,6 +11,14 @@ from typing import Optional, List, Dict
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
 
+# Константа для преобразования дробей в десятичные значения
+FRACTION_MAP = {
+    '½': 0.5, '¼': 0.25, '¾': 0.75,
+    '⅓': 0.3333, '⅔': 0.6667, '⅛': 0.125,
+    '⅜': 0.375, '⅝': 0.625, '⅞': 0.875,
+    '⅕': 0.2, '⅖': 0.4, '⅗': 0.6, '⅘': 0.8
+}
+
 
 class KulinariaGeExtractor(BaseRecipeExtractor):
     """Экстрактор для kulinaria.ge"""
@@ -18,13 +26,13 @@ class KulinariaGeExtractor(BaseRecipeExtractor):
     @staticmethod
     def parse_iso_duration(duration: str) -> Optional[str]:
         """
-        Конвертирует ISO 8601 duration в минуты
+        Конвертирует ISO 8601 duration в минуты с текстом "minutes"
         
         Args:
             duration: строка вида "PT20M" или "PT1H30M"
             
         Returns:
-            Время в минутах с текстом "minutes", например "90 minutes"
+            Время в формате "N minutes", например "90 minutes" или None
         """
         if not duration or not duration.startswith('PT'):
             return None
@@ -156,14 +164,9 @@ class KulinariaGeExtractor(BaseRecipeExtractor):
                 # Обрабатываем дроби в формате sup/sub (например: <sup>1</sup>⁄<sub>2</sub>)
                 # Ищем паттерн: число перед ⁄, потом число после
                 # Паттерн фракций: "1 ⁄ 2" или просто Unicode дроби
-                fraction_map = {
-                    '½': 0.5, '¼': 0.25, '¾': 0.75,
-                    '⅓': 0.33, '⅔': 0.67, '⅛': 0.125,
-                    '⅜': 0.375, '⅝': 0.625, '⅞': 0.875
-                }
                 
-                # Обрабатываем фракции в тексте
-                for frac_char, frac_val in fraction_map.items():
+                # Обрабатываем фракции в тексте, используя глобальную константу
+                for frac_char, frac_val in FRACTION_MAP.items():
                     if frac_char in full_text:
                         full_text = full_text.replace(frac_char, str(frac_val))
                 
@@ -295,7 +298,9 @@ class KulinariaGeExtractor(BaseRecipeExtractor):
                     parts = instructions.split('\n')
                     for part in parts:
                         part = self.clean_text(part)
-                        if part and not part.startswith('0.'):  # Пропускаем пустые и нулевые
+                        # Пропускаем пустые строки и строки начинающиеся с "0."
+                        # (иногда в JSON-LD могут быть ошибочные шаги с номером 0)
+                        if part and not part.startswith('0.'):
                             # Убираем номер в начале, если есть
                             part = re.sub(r'^\d+\.\s*', '', part)
                             if part:
@@ -532,8 +537,6 @@ class KulinariaGeExtractor(BaseRecipeExtractor):
 
 def main():
     """Точка входа для обработки директории с HTML файлами"""
-    import os
-    
     # Определяем путь к директории с примерами
     repo_root = Path(__file__).parent.parent
     preprocessed_dir = repo_root / "preprocessed" / "kulinaria_ge"
