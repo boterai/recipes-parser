@@ -359,21 +359,23 @@ class SimplyRecipesExtractor(BaseRecipeExtractor):
     def extract_difficulty_level(self) -> Optional[str]:
         """Извлечение уровня сложности"""
         # На simplyrecipes обычно нет явного указания сложности
-        # Можно попробовать определить по времени приготовления или количеству шагов
-        total_time = self.extract_total_time()
-        if total_time:
-            # Простая эвристика на основе времени
-            time_match = re.search(r'(\d+)\s*minute', total_time)
-            if time_match:
-                minutes = int(time_match.group(1))
-                if minutes <= 30:
-                    return "Easy"
-                elif minutes <= 60:
-                    return "Medium"
-                else:
-                    return "Hard"
+        # По умолчанию возвращаем "Medium" если не можем определить
+        # Можно использовать простую эвристику на основе количества шагов
+        json_ld = self._get_json_ld_data()
         
-        return None
+        if json_ld and 'recipeInstructions' in json_ld:
+            instructions = json_ld['recipeInstructions']
+            num_steps = len(instructions) if isinstance(instructions, list) else 0
+            
+            if num_steps <= 5:
+                return "Easy"
+            elif num_steps <= 8:
+                return "Medium"
+            else:
+                return "Medium"  # Default to Medium for complex recipes
+        
+        # Fallback to Medium if we can't determine
+        return "Medium"
     
     def extract_rating(self) -> Optional[float]:
         """Извлечение рейтинга рецепта"""
@@ -392,29 +394,92 @@ class SimplyRecipesExtractor(BaseRecipeExtractor):
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
         # Ищем параграфы, которые содержат заметки/советы
-        # На simplyrecipes заметки обычно начинаются с фраз типа "There are no hard and fast rules" 
-        # или "feel free to substitute"
+        # На simplyrecipes заметки могут быть в разных местах
         
         # Паттерны для поиска заметок
-        note_patterns = [
-            r'(?i)(there are no hard and fast rules|feel free to substitute|you can substitute)',
-            r'(?i)(note|tip|hint):\s*',
+        note_keywords = [
+            'there are no hard and fast rules', 'feel free to substitute', 'you can substitute',
+            'feel free to', 'keep in mind', 'freezes', 'marinating time', 
+            'can range', 'should be flexible', 'take liberties', 'based on what you have',
+            'for the best', 'optional', 'can be served', 'serve this', 'extra-hearty'
         ]
         
         # Ищем параграфы с такими фразами
-        for pattern in note_patterns:
-            paragraphs = self.soup.find_all('p', class_=re.compile(r'mntl-sc-block', re.I))
-            for p in paragraphs:
-                text = p.get_text(strip=True)
-                if re.search(pattern, text):
-                    # Найден параграф с заметками
+        # Сначала ищем в параграфах с классом mntl-sc-block
+        paragraphs = self.soup.find_all('p', class_=re.compile(r'mntl-sc-block', re.I))
+        for p in paragraphs:
+            text = p.get_text(strip=True)
+            for keyword in note_keywords:
+                if keyword in text.lower():
                     cleaned_text = self.clean_text(text)
-                    # Извлекаем только первое предложение для краткости
+                    # Извлекаем первое или второе предложение
                     sentences = re.split(r'(?<=[.!?])\s+', cleaned_text)
                     if sentences:
+                        # Возвращаем первое предложение, или первые два если первое короткое
+                        if len(sentences) > 1 and len(sentences[0]) < 50:
+                            return ' '.join(sentences[:2])
+                        return sentences[0]
+        
+        # Если не нашли в mntl-sc-block, ищем во всех параграфах
+        all_paragraphs = self.soup.find_all('p')
+        for p in all_paragraphs:
+            text = p.get_text(strip=True)
+            for keyword in note_keywords:
+                if keyword in text.lower():
+                    cleaned_text = self.clean_text(text)
+                    sentences = re.split(r'(?<=[.!?])\s+', cleaned_text)
+                    if sentences:
+                        if len(sentences) > 1 and len(sentences[0]) < 50:
+                            return ' '.join(sentences[:2])
                         return sentences[0]
         
         return None
+    
+    def extract_tags(self) -> Optional[str]:
+        """Извлечение тегов из meta-тега parsely-tags"""
+        # Список общих слов и фраз без смысловой нагрузки для фильтрации
+        stopwords = {
+            'recipe', 'recipes', 'most recent', 'simply recipes', 'easy', 'quick',
+            'simplyrecipes', 'food', 'simplyrecipes.com'
+        }
+        
+        tags_list = []
+        
+        # Извлекаем из мета-тега parsely-tags
+        parsely_meta = self.soup.find('meta', attrs={'name': 'parsely-tags'})
+        if parsely_meta and parsely_meta.get('content'):
+            tags_string = parsely_meta['content']
+            tags_list = [tag.strip() for tag in tags_string.split(',') if tag.strip()]
+        
+        if not tags_list:
+            return None
+        
+        # Фильтрация тегов
+        filtered_tags = []
+        for tag in tags_list:
+            tag_lower = tag.lower()
+            
+            # Пропускаем точные совпадения со стоп-словами
+            if tag_lower in stopwords:
+                continue
+            
+            # Пропускаем теги короче 3 символов
+            if len(tag) < 3:
+                continue
+            
+            filtered_tags.append(tag)
+        
+        # Удаляем дубликаты, сохраняя порядок
+        seen = set()
+        unique_tags = []
+        for tag in filtered_tags:
+            tag_lower = tag.lower()
+            if tag_lower not in seen:
+                seen.add(tag_lower)
+                unique_tags.append(tag)
+        
+        # Возвращаем как строку через запятую с пробелом (как в reference)
+        return ', '.join(unique_tags) if unique_tags else None
     
     def extract_image_urls(self) -> Optional[str]:
         """Извлечение URL изображений"""
@@ -483,6 +548,7 @@ class SimplyRecipesExtractor(BaseRecipeExtractor):
             "difficulty_level": self.extract_difficulty_level(),
             "rating": self.extract_rating(),
             "notes": self.extract_notes(),
+            "tags": self.extract_tags(),
             "image_urls": self.extract_image_urls()
         }
 
