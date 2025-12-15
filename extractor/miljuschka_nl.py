@@ -24,7 +24,7 @@ class MiljuschkaNlExtractor(BaseRecipeExtractor):
             duration: строка вида "PT20M" или "PT1H30M" или "PT240M"
             
         Returns:
-            Время в минутах, например "90 minutes" или "4 hours"
+            Время в минутах, например "90"
         """
         if not duration or not duration.startswith('PT'):
             return None
@@ -47,16 +47,7 @@ class MiljuschkaNlExtractor(BaseRecipeExtractor):
         # Конвертируем все в минуты
         total_minutes = hours * 60 + minutes
         
-        if total_minutes == 0:
-            return None
-        
-        # Форматируем вывод
-        if total_minutes >= 60 and total_minutes % 60 == 0:
-            # Если ровно часы, возвращаем в часах
-            hours_value = total_minutes // 60
-            return f"{hours_value} hour{'s' if hours_value > 1 else ''}"
-        else:
-            return f"{total_minutes} minutes"
+        return str(total_minutes) if total_minutes > 0 else None
     
     def get_recipe_data_from_jsonld(self) -> Optional[Dict[str, Any]]:
         """Извлекает данные рецепта из JSON-LD"""
@@ -131,7 +122,7 @@ class MiljuschkaNlExtractor(BaseRecipeExtractor):
         
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "210 g roomboter", "1,5 gelatineblaadjes", "200 g eieren (4 stuks)"
-        pattern = r'^(\d+(?:[.,]\d+)?)\s*([a-zA-Zë]+)?\s+(.+)$'
+        pattern = r'^(\d+(?:[.,]\d+)?)\s*(\w+)?\s+(.+)$'
         
         match = re.match(pattern, text)
         
@@ -277,17 +268,11 @@ class MiljuschkaNlExtractor(BaseRecipeExtractor):
         if recipe_data and 'recipeCategory' in recipe_data:
             category = recipe_data['recipeCategory']
             if isinstance(category, list):
-                # Берем первую категорию и удаляем HTML entities
+                # Берем первую категорию
                 if category:
-                    cat_text = category[0]
-                    # Удаляем &amp; и другие HTML entities
-                    cat_text = re.sub(r'&amp;', '&', cat_text)
-                    cat_text = re.sub(r'&[a-zA-Z]+;', '', cat_text)
-                    return self.clean_text(cat_text)
+                    return self.clean_text(category[0])
             elif isinstance(category, str):
-                cat_text = re.sub(r'&amp;', '&', category)
-                cat_text = re.sub(r'&[a-zA-Z]+;', '', cat_text)
-                return self.clean_text(cat_text)
+                return self.clean_text(category)
         
         return None
     
@@ -328,25 +313,17 @@ class MiljuschkaNlExtractor(BaseRecipeExtractor):
         total_time_str = self.extract_total_time()
         
         if total_time_str:
-            # Извлекаем количество минут
-            match = re.search(r'(\d+)\s*minutes?', total_time_str)
-            if match:
-                minutes = int(match.group(1))
+            try:
+                # Время возвращается как строка с числом минут
+                minutes = int(total_time_str)
                 if minutes <= 30:
                     return "Easy"
                 elif minutes <= 90:
                     return "Medium"
                 else:
                     return "Hard"
-            
-            # Если в часах
-            match = re.search(r'(\d+)\s*hours?', total_time_str)
-            if match:
-                hours = int(match.group(1))
-                if hours <= 1:
-                    return "Medium"
-                else:
-                    return "Hard"
+            except (ValueError, TypeError):
+                pass
         
         return "Medium"  # По умолчанию
     
