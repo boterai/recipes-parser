@@ -1,0 +1,16 @@
+{
+    "dish_name": "Sarma",
+    "description": "Suvišno je i bilo šta govoriti o ovom jelu koje svi obožavamo. Ja ne ponajem ni jednu osobu koja može da joj odoli.",
+    "ingredient": "[{\"name\": \"mlevenog mesa\", \"units\": \"gr\", \"amount\": 500}, {\"name\": \"pirinča\", \"units\": \"small cup\", \"amount\": 1}, {\"name\": \"crnog luka\", \"units\": \"medium pieces\", \"amount\": 2}, {\"name\": \"suvi začin, aleva paprika i biber\", \"units\": null, \"amount\": null}, {\"name\": \"kupusa\", \"units\": \"small head\", \"amount\": 1}]",
+    "step_by_step": "Crni luk sitno iseckati, ja ga izblendiram, da bude sto sitniji, ne napravim kašu od nejga, nego da fino iseckam. Luku dodati meso, začine po ukusu ( 1 kašika suvog začina, kašika paprike i pola kašičice bibera ) i pirinač. Sve dobro izmesiti rukom i ostaviti da odstoji dok se od kupusa odvoje listovi i poslidaju žilice. Veće listove kupusa presecite na dva dela a manje ostavite tako. Pa ih operite. Uzimati po jednu kašiku smese, najbolje rukom, ali to je mera, jedna puna kašika, pa stavljati na list kupusa. Preklopiti kupus sa leve strane prema desno, pa od gore i od dole i onda sa leva na desno urolati. Na dno lonca poslagati listove koji su popucali i sredinu od kupusa pa redjati umotane sarme. Izmedju sarme ubadati komade suvog mesa. uraditi tako sve do kraja. Na kraju pokriti sve listovima kupusa, naliti vodu i staviti prvo na jaču vatru dok ne provri, pa posle smanjiti da krčka, najmanje 2h. Videćete po listovima kupusa da li su kuvani. Zapršku pravite od 2 kašike brašna, jedne kašike aleve paprike i 1dl vode, sve izmešate, sklonite sarmu sa vatre pa prelijete i drmate levo desno lonac. Ili, na 0,5dl ulja propržite brašno i papriku pa zalijte isto sklanjajući sarmu sa vatre. Sa vatre se sklanja da se ne bi napravile grumuljice. Sarma sa zaprškom neka krčka jo 15 minuta, toliko je potrebno brašnu da se ukuva, pa možete da je poslužite.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "120 minutes",
+    "total_time": "120 minutes",
+    "difficulty_level": "Medium",
+    "rating": null,
+    "notes": "Sarma sa zaprškom neka krčka jo 15 minuta, toliko je potrebno brašnu da se ukuva, pa možete da je poslužite.",
+    "tags": "Božićna trpeza, domaca sarma, kiseli kupus, novogdisnja trpeza, recept za sarmu, sarma, sarma za slavu",
+    "image_urls": "https://domacirecepti.net/wp-content/uploads/2013/11/sarma.jpg,https://domacirecepti.net/wp-content/uploads/2013/11/sarma-640x385.jpg,https://domacirecepti.net/wp-content/uploads/2015/09/varivo-od-sargarepe-cuspajz-220x150.jpg"
+}
