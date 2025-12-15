@@ -132,7 +132,7 @@ class ReceiteriaCombBrExtractor(BaseRecipeExtractor):
         # Паттерн для португальского языка с учетом составных единиц
         # Примеры: "200g de farinha", "2 xícaras de açúcar", "1 colher de sopa de manteiga"
         # Единицы измерения на португальском
-        pattern = r'^([\d\s/.,]+)?\s*(g|gramas?|kg|quilogramas?|ml|mililitros?|l|litros?|xícaras?|colheres?\s+(?:de\s+)?(?:sopa|chá|café)|colher\s+(?:de\s+)?(?:sopa|chá|café)|unidades?|dentes?|pitadas?|a\s+gosto|quanto\s+baste?)?\s*(?:de\s+)?(.+)'
+        pattern = r'^([\d\s/.,]+)?\s*(g|gramas?|kg|quilogramas?|ml|mililitros?|litros?|xícaras?|latas?|colheres?\s+(?:de\s+)?(?:sopa|chá|café)|colher\s+(?:de\s+)?(?:sopa|chá|café)|unidades?|dentes?|pitadas?|a\s+gosto|quanto\s+baste?)?\s*(?:de\s+)?(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
