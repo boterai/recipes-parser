@@ -122,7 +122,9 @@ class DomaciReceptiExtractor(BaseRecipeExtractor):
                 # Удаляем слово из строки
                 name = re.sub(rf'\b{word}\b', '', line, flags=re.IGNORECASE).strip()
                 # Убираем лишние "od"
-                name = re.sub(r'\bod\b', '', name).strip()
+                name = re.sub(r'\bod\b', '', name, flags=re.IGNORECASE).strip()
+                # Убираем множественные пробелы
+                name = re.sub(r'\s+', ' ', name).strip()
                 # Добавляем (posip) если нужно
                 if is_posip:
                     name = f"{name} (posip)"
@@ -201,9 +203,8 @@ class DomaciReceptiExtractor(BaseRecipeExtractor):
             name = re.sub(r'(brašn)a$', r'\1o', name)
             name = re.sub(r'(maslac)a$', r'\1', name)
             name = re.sub(r'(praš)ka$', r'\1kasta', name)  # "praška" -> "praškasta"
-            name = re.sub(r'(badem|orah)a$', r'mleven\1 ili orah' if 'badem' in name else r'mleveni badem ili \1', name)
             # Специальная обработка для "mlevenog badema ili oraha"
-            name = re.sub(r'mlevenog badema ili oraha', 'mleveni badem ili orah', name)
+            name = re.sub(r'mlevenog\s+(badem)a\s+ili\s+(orah)a', r'mleveni \1 ili \2', name)
             name = re.sub(r'(jaj)a$', r'\1a', name)  # jaja остается jaja
             
             # Добавляем (posip) если нужно
