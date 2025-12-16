@@ -10,7 +10,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from config.db_config import MySQLConfig
 from src.models import Page
-
+from src.models import Recipe
 logger = logging.getLogger(__name__)
 
 
@@ -224,7 +224,7 @@ class MySQlManager:
         finally:
             session.close()
     
-    def get_page_by_id(self, page_id: int) -> Optional[Page]:
+    def get_page_by_id(self, page_id: int, table_name: str = "pages") -> Optional[Page]:
         """
         Получение страницы по ID
         
@@ -238,7 +238,7 @@ class MySQlManager:
         
         try:
             result = session.execute(
-                sqlalchemy.text("SELECT * FROM pages WHERE id = :page_id"),{"page_id": page_id}).fetchone()
+                sqlalchemy.text(f"SELECT * FROM {table_name} WHERE id = :page_id"),{"page_id": page_id}).fetchone()
             
             if not result:
                 logger.warning(f"Страница с ID {page_id} не найдена")
@@ -249,6 +249,42 @@ class MySQlManager:
             
         except SQLAlchemyError as e:
             logger.error(f"Ошибка получения страницы по ID: {e}")
+            return None
+        finally:
+            session.close()
+
+    def get_recipe_by_id(self, page_id: int, table_name: str = "pages") -> Optional[Recipe]:
+        """
+        Получение рецепта по ID страницы
+        
+        Args:
+            page_id: ID страницы
+            
+        Returns:
+            Объект Page или None если не найдена
+        """
+        session = self.get_session()
+        
+        try:
+            result = session.execute(
+                sqlalchemy.text(f"""SELECT r.*,
+                                p.nutrition_info,
+                                p.prep_time,
+                                p.cook_time,
+                                p.total_time
+                                FROM {table_name} r
+                                JOIN pages p ON p.id = r.page_id
+                                WHERE r.page_id = :page_id"""),{"page_id": page_id}).fetchone()
+            
+            if not result:
+                logger.warning(f"Рецепт с ID {page_id} не найден")
+                return None
+            
+            recipe = Recipe.model_validate(dict(result._mapping))
+            return recipe
+            
+        except SQLAlchemyError as e:
+            logger.error(f"Ошибка получения рецепта по ID: {e}")
             return None
         finally:
             session.close()

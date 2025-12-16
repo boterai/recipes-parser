@@ -210,12 +210,12 @@ class QdrantRecipeManager:
                         points = []
                         for i, recipe in enumerate(valid_recipes):
                             point = PointStruct(
-                                id=recipe.id if hasattr(recipe, 'id') else i,
+                                id=recipe.page_id if hasattr(recipe, 'id') else i,
                                 vector={"dense": dense_vecs[i]},
                                 payload={
                                     "dish_name": recipe.dish_name,
                                     "description": recipe.description or "",
-                                    "id": recipe.id
+                                    "id": recipe.page_id
                                 }
                             )
                             points.append(point)
@@ -229,7 +229,7 @@ class QdrantRecipeManager:
                         for recipe in valid_recipes:
                             # Собираем тексты для каждого компонента
                             comp_texts = {
-                                "ingredients": recipe.ingredients or "",
+                                "ingredients": recipe.ingredient or "",
                                 "description": recipe.description or "",
                                 "instructions": recipe.step_by_step or "",
                                 "dish_name": recipe.dish_name or "",
@@ -252,12 +252,12 @@ class QdrantRecipeManager:
                             vectors = {key: dense_vecs[idx] for idx, key in enumerate(keys_list)}
                             
                             point = PointStruct(
-                                id=recipe.id if hasattr(recipe, 'id') else hash(recipe.dish_name),
+                                id=recipe.page_id if hasattr(recipe, 'id') else hash(recipe.dish_name),
                                 vector=vectors,
                                 payload={
                                     "dish_name": recipe.dish_name,
                                     "description": recipe.description or "",
-                                    "id": recipe.id
+                                    "id": recipe.page_id
                                 }
                             )
                             points.append(point)
@@ -268,7 +268,7 @@ class QdrantRecipeManager:
                     
                     elif col_type == "ingredients":
                         # Коллекция ingredients: dense + colbert на ингредиенты
-                        texts = [r.ingredients or "" for r in valid_recipes if r.ingredients]
+                        texts = [r.ingredient or "" for r in valid_recipes if r.ingredient]
                         if not texts:
                             logger.warning(f"Батч {batch_num}, 'ingredients': нет ингредиентов")
                             continue
@@ -277,7 +277,7 @@ class QdrantRecipeManager:
                         
                         points = []
                         for i, recipe in enumerate(valid_recipes):
-                            if not recipe.ingredients:
+                            if not recipe.ingredient:
                                 continue
                             
                             vectors = {"dense": dense_vecs[i]}
@@ -285,12 +285,12 @@ class QdrantRecipeManager:
                                 vectors["colbert"] = colbert_vecs[i]
                             
                             point = PointStruct(
-                                id=recipe.id if hasattr(recipe, 'id') else i,
+                                id=recipe.page_id if hasattr(recipe, 'id') else i,
                                 vector=vectors,
                                 payload={
                                     "dish_name": recipe.dish_name,
-                                    "ingredients": recipe.ingredients,
-                                    "id": recipe.id
+                                    "ingredients": recipe.ingredient,
+                                    "id": recipe.page_id
                                 }
                             )
                             points.append(point)
@@ -406,7 +406,7 @@ class QdrantRecipeManager:
             
             elif collection_type == "ingredients":
                 # Поиск с ColBERT по ингредиентам
-                query_text = query_recipe.ingredients or ""
+                query_text = query_recipe.ingredient or ""
                 if not query_text:
                     logger.warning("Нет ингредиентов для поиска")
                     return []

@@ -106,16 +106,16 @@ class Page(BaseModel):
     def to_recipe(self) -> Recipe:
         """Преобразование Page в модель Recipe"""
         return Recipe(
-            id=self.id,
+            page_id=self.id,
             dish_name=self.dish_name or "",
             description=self.description,
             tags=self.tags,
-            ingredients=self.ingredients_to_full_str(separator=" "),
+            ingredient=self.ingredients_to_full_str(separator=" "),
             step_by_step=self.step_by_step or "",
-            cook_time_minutes=self.cook_time,
-            prep_time_minutes=self.prep_time,
-            total_time_minutes=self.total_time,
-            calories=self.nutrition_info
+            cook_time=self.cook_time,
+            prep_time=self.prep_time,
+            total_time=self.total_time,
+            nutrition_info=self.nutrition_info
         )   
     
     class Config:
