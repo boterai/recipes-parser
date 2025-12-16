@@ -495,7 +495,8 @@ class FeedContinentePtExtractor(BaseRecipeExtractor):
             "difficulty_level": self.extract_difficulty_level(),
             "rating": self.extract_rating(),
             "notes": self.extract_notes(),
-            "image_urls": self.extract_image_urls()
+            "image_urls": self.extract_image_urls(),
+            "tags": self.extract_tags()
         }
 
 

@@ -31,16 +31,26 @@ class Recipe(BaseModel):
                 "tags": self.tags or "",
                 "meta": self.get_meta_str() or ""
             }
+    
+    def is_int_str(self, s: str) -> bool:
+        s = s.strip()
+        return s.isdigit()
 
     def get_meta_str(self) -> str:
         """Возвращает строковое представление метаданных рецепта"""
         meta_parts = []
         if self.cook_time_minutes is not None:
-            meta_parts.append(f"Cook time: {self.cook_time_minutes} minutes")
+            if self.is_int_str(str(self.cook_time_minutes)):
+                self.cook_time_minutes = f"{self.cook_time_minutes} minutes"
+            meta_parts.append(f"Cook time: {self.cook_time_minutes}")
         if self.prep_time_minutes is not None:
-            meta_parts.append(f"Prep time: {self.prep_time_minutes} minutes")
+            if self.is_int_str(str(self.prep_time_minutes)):
+                self.prep_time_minutes = f"{self.prep_time_minutes} minutes"
+            meta_parts.append(f"Prep time: {self.prep_time_minutes}")
         if self.total_time_minutes is not None:
-            meta_parts.append(f"Total time: {self.total_time_minutes} minutes")
+            if self.is_int_str(str(self.cook_time_minutes)):
+                self.total_time_minutes = f"{self.total_time_minutes} minutes"
+            meta_parts.append(f"Total time: {self.total_time_minutes}")
         if self.calories is not None:
             meta_parts.append(f"Calories: {self.calories}")
         return "; ".join(meta_parts)

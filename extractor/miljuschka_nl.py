@@ -450,7 +450,8 @@ class MiljuschkaNlExtractor(BaseRecipeExtractor):
             "difficulty_level": self.extract_difficulty_level(),
             "rating": self.extract_rating(),
             "notes": notes,
-            "image_urls": self.extract_image_urls()
+            "image_urls": self.extract_image_urls(),
+            "tags": tags
         }
 
 
