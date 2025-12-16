@@ -8,8 +8,10 @@
     "prep_time": "30 minutes",
     "cook_time": "120 minutes",
     "total_time": "150 minutes",
+    "servings": "8 porções",
     "difficulty_level": "medium",
     "rating": 4.9,
     "notes": "Para uma feijoada ainda mais autêntica, deixe as carnes de molho no dia anterior. Sirva com laranja fatiada e cachaça!",
+    "tags": null,
     "image_urls": "https://www.receiteria.com.br/images/feijoada.jpg,https://www.receiteria.com.br/images/feijoada-step1.jpg"
 }

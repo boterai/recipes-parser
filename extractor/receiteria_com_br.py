@@ -552,6 +552,102 @@ class ReceiteriaCombBrExtractor(BaseRecipeExtractor):
         
         return None
     
+    def extract_servings(self) -> Optional[str]:
+        """Извлечение количества порций"""
+        # Из JSON-LD
+        json_ld = self.extract_from_json_ld()
+        if json_ld.get('recipeYield'):
+            yield_value = json_ld['recipeYield']
+            # Может быть строкой, числом или списком
+            if isinstance(yield_value, list):
+                # Берем первый элемент списка
+                return str(yield_value[0]) if yield_value else None
+            return str(yield_value)
+        
+        # Ищем в HTML
+        servings_elem = self.soup.find(class_=re.compile(r'servings?|yield|por[çc][õo]es?', re.I))
+        if not servings_elem:
+            servings_elem = self.soup.find(attrs={'data-servings': True})
+        
+        if servings_elem:
+            text = servings_elem.get_text(strip=True)
+            # Извлекаем число
+            match = re.search(r'\d+(?:\s*(?:servings?|por[çc][õo]es?|pessoas?))?', text, re.I)
+            if match:
+                return match.group(0)
+        
+        return None
+    
+    def extract_tags(self) -> Optional[str]:
+        """Извлечение тегов"""
+        # Список стоп-слов для фильтрации
+        stopwords = {
+            'recipe', 'recipes', 'receita', 'receitas', 'how to make', 'how to', 'easy', 
+            'cooking', 'quick', 'food', 'kitchen', 'simple', 'best', 'make', 'ingredients',
+            'video', 'meal', 'prep', 'ideas', 'tips', 'tricks', 'hacks', 'home', 'family',
+            'prepare', 'friends', 'homemade', 'dish', 'perfect', 'favorite', 'delicious',
+            'tutorial', 'demo', 'how', 'to', 'facil', 'fácil', 'rapido', 'rápido',
+            'como fazer', 'passo a passo', 'culinária', 'culinaria', 'cozinha'
+        }
+        
+        tags_list = []
+        
+        # 1. Пробуем извлечь из meta-тега keywords
+        meta_keywords = self.soup.find('meta', attrs={'name': 'keywords'})
+        if meta_keywords and meta_keywords.get('content'):
+            keywords = meta_keywords['content']
+            tags_list = [tag.strip().lower() for tag in keywords.split(',') if tag.strip()]
+        
+        # 2. Ищем в meta-тегах parsely или article:tag
+        if not tags_list:
+            parsely_meta = self.soup.find('meta', attrs={'name': 'parsely-tags'})
+            if parsely_meta and parsely_meta.get('content'):
+                tags_string = parsely_meta['content']
+                tags_list = [tag.strip().lower() for tag in tags_string.split(',') if tag.strip()]
+        
+        # 3. Ищем теги article:tag
+        if not tags_list:
+            article_tags = self.soup.find_all('meta', property='article:tag')
+            if article_tags:
+                tags_list = [tag.get('content').lower() for tag in article_tags if tag.get('content')]
+        
+        # 4. Ищем в JSON-LD
+        if not tags_list:
+            json_ld = self.extract_from_json_ld()
+            if json_ld.get('keywords'):
+                keywords = json_ld['keywords']
+                if isinstance(keywords, str):
+                    tags_list = [tag.strip().lower() for tag in keywords.split(',') if tag.strip()]
+                elif isinstance(keywords, list):
+                    tags_list = [tag.lower() for tag in keywords if isinstance(tag, str)]
+        
+        if not tags_list:
+            return None
+        
+        # Фильтрация тегов
+        filtered_tags = []
+        for tag in tags_list:
+            # Пропускаем точные совпадения со стоп-словами
+            if tag in stopwords:
+                continue
+            
+            # Пропускаем теги короче 3 символов
+            if len(tag) < 3:
+                continue
+            
+            filtered_tags.append(tag)
+        
+        # Удаляем дубликаты, сохраняя порядок
+        seen = set()
+        unique_tags = []
+        for tag in filtered_tags:
+            if tag not in seen:
+                seen.add(tag)
+                unique_tags.append(tag)
+        
+        # Возвращаем как строку через запятую
+        return ', '.join(unique_tags) if unique_tags else None
+    
     def extract_image_urls(self) -> Optional[str]:
         """Извлечение URL изображений"""
         urls = []
@@ -618,9 +714,11 @@ class ReceiteriaCombBrExtractor(BaseRecipeExtractor):
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
+            "servings": self.extract_servings(),
             "difficulty_level": self.extract_difficulty_level(),
             "rating": self.extract_rating(),
             "notes": self.extract_notes(),
+            "tags": self.extract_tags(),
             "image_urls": self.extract_image_urls()
         }
 

@@ -8,8 +8,10 @@
     "prep_time": "15 minutes",
     "cook_time": "40 minutes",
     "total_time": "55 minutes",
+    "servings": "10 porções",
     "difficulty_level": "easy",
     "rating": 4.8,
     "notes": "Você pode adicionar gotas de chocolate à massa para um sabor ainda mais intenso. O bolo fica ainda melhor no dia seguinte!",
+    "tags": null,
     "image_urls": "https://www.receiteria.com.br/images/bolo-chocolate.jpg,https://www.receiteria.com.br/images/bolo-chocolate-twitter.jpg,https://www.receiteria.com.br/images/bolo-chocolate-2.jpg"
 }

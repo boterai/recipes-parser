@@ -44,9 +44,11 @@ The parser extracts the following fields:
 - `prep_time` - Preparation time
 - `cook_time` - Cooking time
 - `total_time` - Total time
+- `servings` - Number of servings/portions
 - `difficulty_level` - Difficulty level (easy, medium, hard)
 - `rating` - Recipe rating as float
 - `notes` - Additional notes and tips
+- `tags` - Recipe tags/keywords (comma-separated)
 - `image_urls` - Comma-separated list of image URLs
 
 ## Data Sources

@@ -45,7 +45,8 @@ def test_parser():
             required_fields = [
                 'dish_name', 'description', 'ingredient', 'step_by_step',
                 'nutrition_info', 'category', 'prep_time', 'cook_time',
-                'total_time', 'difficulty_level', 'rating', 'notes', 'image_urls'
+                'total_time', 'servings', 'difficulty_level', 'rating', 'notes', 
+                'tags', 'image_urls'
             ]
             
             missing_fields = [field for field in required_fields if field not in result]

@@ -39,9 +39,11 @@ test_receiteria.py                   # Test suite for validation
 - `extract_prep_time()` - Preparation time
 - `extract_cook_time()` - Cooking time
 - `extract_total_time()` - Total time
+- `extract_servings()` - Number of servings/portions
 - `extract_difficulty_level()` - Difficulty level
 - `extract_rating()` - Rating as float
 - `extract_notes()` - Additional notes and tips
+- `extract_tags()` - Recipe tags/keywords
 - `extract_image_urls()` - Comma-separated image URLs
 
 ### Output Format
@@ -59,9 +61,11 @@ All fields are present in the output, with `None` for missing data:
     "prep_time": "15 minutes",
     "cook_time": "40 minutes",
     "total_time": "55 minutes",
+    "servings": "10 porções",
     "difficulty_level": "easy",
     "rating": 4.8,
     "notes": "Additional notes...",
+    "tags": "tag1, tag2, tag3",
     "image_urls": "url1,url2,url3"
 }
 ```
@@ -185,10 +189,10 @@ process_directory(ReceiteriaCombBrExtractor, 'path/to/directory')
 - All extraction methods follow allrecipes pattern
 
 ✅ **Output Fields**
-All 13 required fields implemented:
+All 15 fields implemented (matching allrecipes parser):
 - dish_name, description, ingredient, step_by_step
 - nutrition_info, category, prep_time, cook_time, total_time
-- difficulty_level, rating, notes, image_urls
+- servings, difficulty_level, rating, notes, tags, image_urls
 
 ✅ **Ingredient Format**
 - List of dictionaries with name/amount/unit
