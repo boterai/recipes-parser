@@ -85,10 +85,11 @@ class GPTClient:
         model: str = GPT_MODEL_MINI,
         temperature: float = 0.1,
         max_tokens: Optional[int] = None,
-        timeout: int = 30
+        timeout: int = 30,
+        retry_attempts: int = 3
     ) -> dict[str, Any]:
         """
-        Выполнение запроса к ChatGPT API
+        Выполнение запроса к ChatGPT API с повторными попытками
         
         Args:
             system_prompt: Системный промпт (роль ассистента)
@@ -97,6 +98,7 @@ class GPTClient:
             temperature: Температура генерации (0-1)
             max_tokens: Максимальное количество токенов в ответе
             timeout: Таймаут запроса в секундах
+            retry_attempts: Количество попыток при ошибках
             
         Returns:
             Распарсенный JSON ответ от GPT
@@ -104,64 +106,97 @@ class GPTClient:
         Raises:
             Exception: При ошибке запроса или парсинга
         """
-        try:
-            headers = {
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {self.api_key}"
-            }
-            
-            payload = {
-                "model": model,
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": system_prompt
-                    },
-                    {
-                        "role": "user",
-                        "content": user_prompt
-                    }
-                ],
-                "temperature": temperature,
-            }
-            
-            if max_tokens:
-                payload["max_tokens"] = max_tokens
-            
-            proxies = {"http": self.proxy, "https": self.proxy} if self.proxy else None
-            
-            response = requests.post(
-                self.api_url,
-                headers=headers,
-                json=payload,
-                timeout=timeout,
-                proxies=proxies
-            )
-            
-            response.raise_for_status()
-            response_data = response.json()
-            result_text = response_data['choices'][0]['message']['content'].strip()
-            
-            # Очистка от markdown форматирования
-            result_text = self._clean_markdown(result_text)
+        import time
+        
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.api_key}"
+        }
+        
+        payload = {
+            "model": model,
+            "messages": [
+                {
+                    "role": "system",
+                    "content": system_prompt
+                },
+                {
+                    "role": "user",
+                    "content": user_prompt
+                }
+            ],
+            "temperature": temperature,
+        }
+        
+        if max_tokens:
+            payload["max_tokens"] = max_tokens
+        
+        proxies = {"http": self.proxy, "https": self.proxy} if self.proxy else None
+        
+        last_exception = None
+        
+        for attempt in range(retry_attempts):
+            try:
+                response = requests.post(
+                    self.api_url,
+                    headers=headers,
+                    json=payload,
+                    timeout=timeout,
+                    proxies=proxies
+                )
+                
+                response.raise_for_status()
+                response_data = response.json()
+                result_text = response_data['choices'][0]['message']['content'].strip()
+                
+                # Очистка от markdown форматирования
+                result_text = self._clean_markdown(result_text)
 
-            result_text = self._normalize_json(result_text)
-            
-            # Парсинг JSON
-            result = json.loads(result_text)
-            
-            return result
-            
-        except json.JSONDecodeError as e:
-            logger.error(f"Ошибка парсинга JSON от GPT: {e}")
-            logger.error(f"Ответ GPT: {result_text if 'result_text' in locals() else 'N/A'}")
-            raise
-        except requests.exceptions.RequestException as e:
-            logger.error(f"Ошибка HTTP запроса к GPT: {e}")
-            raise
-        except Exception as e:
-            logger.error(f"Ошибка запроса к GPT: {e}")
-            raise
+                result_text = self._normalize_json(result_text)
+                
+                # Парсинг JSON
+                result = json.loads(result_text)
+                
+                return result
+                
+            except json.JSONDecodeError as e:
+                logger.error(f"Ошибка парсинга JSON от GPT: {e}")
+                logger.error(f"Ответ GPT: {result_text if 'result_text' in locals() else 'N/A'}")
+                last_exception = e
+                # JSON ошибки не повторяем
+                break
+                
+            except requests.exceptions.HTTPError as e:
+                # Если 403 (Forbidden) - не повторяем, это ошибка авторизации
+                if hasattr(e.response, 'status_code') and e.response.status_code == 403:
+                    logger.error(f"Ошибка 403 (Forbidden): проверьте API ключ")
+                    raise
+                
+                last_exception = e
+                if attempt < retry_attempts - 1:
+                    # Экспоненциальная задержка: 2^attempt секунд (1, 2, 4, 8...)
+                    delay = 2 ** attempt
+                    logger.warning(f"HTTP ошибка {e.response.status_code if hasattr(e, 'response') else 'N/A'}: попытка {attempt + 1}/{retry_attempts}. Повтор через {delay}с...")
+                    time.sleep(delay)
+                else:
+                    logger.error(f"Ошибка HTTP запроса к GPT после {retry_attempts} попыток: {e}")
+                    
+            except requests.exceptions.RequestException as e:
+                last_exception = e
+                if attempt < retry_attempts - 1:
+                    delay = 2 ** attempt
+                    logger.warning(f"Ошибка запроса к GPT: попытка {attempt + 1}/{retry_attempts}. Повтор через {delay}с...")
+                    time.sleep(delay)
+                else:
+                    logger.error(f"Ошибка запроса к GPT после {retry_attempts} попыток: {e}")
+                    
+            except Exception as e:
+                logger.error(f"Неожиданная ошибка запроса к GPT: {e}")
+                last_exception = e
+                break
+        
+        # Если дошли сюда - все попытки исчерпаны
+        raise last_exception if last_exception else Exception("Неизвестная ошибка запроса к GPT")
     
     def _clean_markdown(self, text: str) -> str:
         """
