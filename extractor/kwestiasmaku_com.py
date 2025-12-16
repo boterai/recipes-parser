@@ -455,9 +455,7 @@ class KwestiasmakuExtractor(BaseRecipeExtractor):
         Returns:
             Словарь с данными рецепта
         """
-        tags = self.extract_tags()
-        
-        result = {
+        return {
             "dish_name": self.extract_dish_name(),
             "description": self.extract_description(),
             "ingredient": self.extract_ingredients(),
@@ -470,14 +468,9 @@ class KwestiasmakuExtractor(BaseRecipeExtractor):
             "difficulty_level": self.extract_difficulty_level(),
             "rating": self.extract_rating(),
             "notes": self.extract_notes(),
+            "tags": self.extract_tags(),
             "image_urls": self.extract_image_urls()
         }
-        
-        # Добавляем tags только если они есть (для совместимости с примерами)
-        if tags:
-            result["tags"] = tags
-        
-        return result
 
 
 def main():
