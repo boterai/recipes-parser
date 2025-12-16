@@ -57,7 +57,7 @@ class RecipeVectorizer:
             return False
         self.connected = True
         return True
-    
+
     def get_pages(self, site_id: int = None, limit: int = None, ids: list[str] = None) -> list[Page]:
         """Получение страниц с рецептами для сайта из БД страниц"""
         sql_dict = {}

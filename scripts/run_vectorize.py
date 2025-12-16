@@ -167,7 +167,7 @@ def search_similar(model_prefix: str = "ml-e5-large", save_to_db: bool = True, r
 
 if __name__ == '__main__':
     # Векторизация рецептов (запускать один раз)
-    add_recipes(model_prefix="bge-m3", site_id=1)
+    add_recipes(model_prefix="bge-m3", site_id=5)
     
     # Поиск похожих с сохранением в БД
     search_similar(model_prefix="bge-m3", save_to_db=True, use_weighted=True)

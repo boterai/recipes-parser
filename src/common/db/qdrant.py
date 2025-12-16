@@ -67,6 +67,7 @@ class QdrantRecipeManager:
                 host=params.get('host', 'localhost'),
                 port=params.get('port', '6333'),
                 api_key=params.get('api_key'),
+                https=False,
                 timeout=40 # увеличенный таймаут для больших операций
             )
             return True

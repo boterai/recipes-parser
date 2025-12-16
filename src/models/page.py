@@ -35,7 +35,6 @@ class Page(BaseModel):
     prep_time: Optional[str] = None  # VARCHAR(100) - "30 minutes"
     cook_time: Optional[str] = None  # VARCHAR(100) - "45 minutes"
     total_time: Optional[str] = None  # VARCHAR(100) - "1 hour 15 minutes"
-    servings: Optional[str] = None  # VARCHAR(50) - "4 servings"
     difficulty_level: Optional[str] = None  # VARCHAR(50) - "easy", "medium", "hard"
     notes: Optional[str] = None  # TEXT - дополнительные заметки или советы
     image_urls: Optional[str] = None  # TEXT - URL изображения
@@ -59,7 +58,7 @@ class Page(BaseModel):
         recipe_fields = [
             'dish_name', 'description', 'ingredient', 'step_by_step', 'nutrition_info',
             'rating', 'category', 'prep_time', 'cook_time',
-            'total_time', 'servings', 'difficulty_level', 'notes', 'tags', 'image_urls'
+            'total_time', 'difficulty_level', 'notes', 'tags', 'image_urls'
         ]
         data = {field: getattr(self, field) for field in recipe_fields if getattr(self, field) is not None}
         return data

@@ -8,7 +8,7 @@ import json
 import requests
 from typing import Optional, Any
 from dotenv import load_dotenv
-
+import re
 # Загрузка переменных окружения
 load_dotenv()
 
@@ -38,6 +38,45 @@ class GPTClient:
         
         if not self.api_key:
             raise ValueError("GPT_API_KEY не установлен")
+        
+    def _normalize_json(self, text: str) -> str:
+        """
+        Нормализация JSON от GPT (исправление частых ошибок)
+        
+        Args:
+            text: JSON строка от GPT
+            
+        Returns:
+            Исправленная JSON строка
+        """
+        # 1. Исправить дроби (1/4 -> 0.25)
+        def replace_fraction(match):
+            numerator = float(match.group(1))
+            denominator = float(match.group(2))
+            return str(numerator / denominator)
+        
+        # Находим дроби в значениях amount (не в строках!)
+        text = re.sub(
+            r'"amount":\s*(\d+)/(\d+)',
+            lambda m: f'"amount": {replace_fraction(m)}',
+            text
+        )
+        
+        # 2. Исправить дроби в строковых значениях ("1/2" -> "0.5")
+        # Только если они не в кавычках как часть текста
+        text = re.sub(
+            r'"amount":\s*"(\d+)/(\d+)"',
+            lambda m: f'"amount": "{float(m.group(1)) / float(m.group(2))}"',
+            text
+        )
+        
+        # 3. Удалить trailing commas (запятые перед закрывающими скобками)
+        text = re.sub(r',(\s*[}\]])', r'\1', text)
+        
+        # 4. Исправить одинарные кавычки на двойные (если есть)
+        # text = text.replace("'", '"')  # Осторожно! Может сломать текст
+        
+        return text
     
     def request(
         self,
@@ -105,6 +144,8 @@ class GPTClient:
             
             # Очистка от markdown форматирования
             result_text = self._clean_markdown(result_text)
+
+            result_text = self._normalize_json(result_text)
             
             # Парсинг JSON
             result = json.loads(result_text)

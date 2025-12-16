@@ -188,7 +188,7 @@ URL: {url}
 
 ВАЖНО:
 - Если поле не найдено, ставь null
-- is_recipe = true только если есть ingredient И step_by_step
+- is_recipe = true только если поля ingredient, dish_name, step_by_step иначе всегда false
 - confidence_score зависит от полноты данных (100 = все поля заполнены полностью и это является рецептом)
 - Для времени используй единицы измерения из текста (minutes, hours и т.д.)
 - rating должен быть числом (не строкой), если найден
@@ -242,7 +242,6 @@ URL: {url}
                 "prep_time": analysis.get("prep_time"),
                 "cook_time": analysis.get("cook_time"),
                 "total_time": analysis.get("total_time"),
-                "servings": analysis.get("servings"),
                 "difficulty_level": analysis.get("difficulty_level"),
                 "category": analysis.get("category"),
                 "rating": Decimal(str(analysis["rating"])) if analysis.get("rating") else None,
@@ -264,7 +263,6 @@ URL: {url}
                     prep_time = :prep_time,
                     cook_time = :cook_time,
                     total_time = :total_time,
-                    servings = :servings,
                     difficulty_level = :difficulty_level,
                     category = :category,
                     rating = :rating,
