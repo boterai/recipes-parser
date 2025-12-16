@@ -9,8 +9,6 @@ from pydantic import BaseModel, Field
 import json
 from src.models.recipe import Recipe
 
-
-
 class Page(BaseModel):
     """Модель спарсенной страницы"""
     
@@ -30,12 +28,10 @@ class Page(BaseModel):
     step_by_step: Optional[str] = None  # TEXT - JSON или текст с шагами
     dish_name: Optional[str] = None  # VARCHAR(500) - название блюда
     nutrition_info: Optional[str] = None  # TEXT - JSON с питательной ценностью
-    rating: Optional[float] = None  # DECIMAL(3,2)
     category: Optional[str] = None  # VARCHAR(255)
     prep_time: Optional[str] = None  # VARCHAR(100) - "30 minutes"
     cook_time: Optional[str] = None  # VARCHAR(100) - "45 minutes"
     total_time: Optional[str] = None  # VARCHAR(100) - "1 hour 15 minutes"
-    difficulty_level: Optional[str] = None  # VARCHAR(50) - "easy", "medium", "hard"
     notes: Optional[str] = None  # TEXT - дополнительные заметки или советы
     image_urls: Optional[str] = None  # TEXT - URL изображения
     tags: Optional[str] = None  # TEXT - теги через запятую

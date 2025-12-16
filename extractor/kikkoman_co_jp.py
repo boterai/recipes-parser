@@ -274,35 +274,6 @@ class KikkomanExtractor(BaseRecipeExtractor):
         
         return None
     
-    def extract_servings(self) -> Optional[str]:
-        """Извлечение количества порций"""
-        # Ищем в h4.ttl-lv4-tsushin который содержит "材料（2人分）"
-        ingredient_heading = self.soup.find('h4', class_='ttl-lv4-tsushin')
-        if ingredient_heading:
-            text = ingredient_heading.get_text()
-            # Ищем паттерн "X人分"
-            match = re.search(r'(\d+)人分', text)
-            if match:
-                return match.group(1)
-        
-        return None
-    
-    def extract_difficulty_level(self) -> Optional[str]:
-        """Извлечение уровня сложности"""
-        # Определяем по наличию слов "簡単" (простой), "レンジ" (микроволновка)
-        title = self.extract_dish_name() or ''
-        description = self.extract_description() or ''
-        
-        if '簡単' in title or '簡単' in description or 'レンジ' in title:
-            return "Easy"
-        
-        return "Medium"
-    
-    def extract_rating(self) -> Optional[float]:
-        """Извлечение рейтинга рецепта"""
-        # На kikkoman.co.jp обычно нет рейтингов
-        return None
-    
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
         # Ищем Point секцию
@@ -378,9 +349,6 @@ class KikkomanExtractor(BaseRecipeExtractor):
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
-            "servings": self.extract_servings(),
-            "difficulty_level": self.extract_difficulty_level(),
-            "rating": self.extract_rating(),
             "notes": notes.lower() if notes else None,
             "tags": self.extract_tags(),
             "image_urls": self.extract_image_urls()

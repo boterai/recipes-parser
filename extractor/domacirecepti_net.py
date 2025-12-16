@@ -493,22 +493,6 @@ class DomaciReceptiExtractor(BaseRecipeExtractor):
         
         return times
     
-    def extract_difficulty_level(self, times: Dict[str, Optional[str]]) -> Optional[str]:
-        """Извлечение уровня сложности"""
-        # Определяем по времени приготовления
-        total_time = times.get('total_time')
-        if total_time:
-            minutes = int(re.search(r'\d+', total_time).group())
-            if minutes <= 40:
-                return "Easy"
-            elif minutes <= 120:
-                return "Medium"
-            else:
-                return "Hard"
-        
-        # По умолчанию - Easy
-        return "Easy"
-    
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок"""
         entry_content = self.soup.find(class_=lambda x: x and 'entry-content' in str(x).lower() if x else False)
@@ -560,11 +544,6 @@ class DomaciReceptiExtractor(BaseRecipeExtractor):
                 if any(keyword in last_para.lower() for keyword in ['može', 'možete', 'najbolje', 'opciono', 'savjet', 'napomena', 'tip', 'ili', 'ako']):
                     return last_para
         
-        return None
-    
-    def extract_rating(self) -> Optional[float]:
-        """Извлечение рейтинга"""
-        # На domacirecepti.net обычно нет явного рейтинга в структурированных данных
         return None
     
     def extract_nutrition_info(self) -> Optional[str]:
@@ -651,8 +630,6 @@ class DomaciReceptiExtractor(BaseRecipeExtractor):
             "prep_time": times.get('prep_time'),
             "cook_time": times.get('cook_time'),
             "total_time": times.get('total_time'),
-            "difficulty_level": self.extract_difficulty_level(times),
-            "rating": self.extract_rating(),
             "notes": self.extract_notes(),
             "tags": self.extract_tags(),
             "image_urls": self.extract_image_urls()

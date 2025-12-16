@@ -178,21 +178,18 @@ URL: {url}
     "prep_time": "время подготовки (например, '15 minutes') или null",
     "cook_time": "время приготовления (например, '30 minutes') или null",
     "total_time": "общее время (например, '45 minutes') или null",
-    "difficulty_level": "уровень сложности (Easy/Medium/Hard) или null",
     "category": "категория/тип блюда (например, 'Dessert', 'Main Course') или null",
     "nutrition_info": "информация о питательной ценности в текстовом формате или null",
-    "rating": число чаще всего от 0 до 5 (рейтинг рецепта) или null,
     "notes": "дополнительные заметки, советы, замены ингредиентов или null",
     "tags": "теги через запятую или null"
 }}
 
 ВАЖНО:
 - Если поле не найдено, ставь null
-- is_recipe = true только если поля ingredient, dish_name, step_by_step иначе всегда false
+- is_recipe = true только если поля ingredient, dish_name, step_by_step иначе ВСЕГДА, БЕЗ ИСКЛЮЧЕНИЙ false
 - confidence_score зависит от полноты данных (100 = все поля заполнены полностью и это является рецептом)
 - Для времени используй единицы измерения из текста (minutes, hours и т.д.)
-- rating должен быть числом (не строкой), если найден
-- Возвращай ТОЛЬКО валидный JSON без комментариев"""
+- Возвращай ТОЛЬКО валидный JSON без комментариев, если каких=то полей нет - ставь null в этом поле"""
 
         try:
             result = self.gpt_client.request(
@@ -242,9 +239,7 @@ URL: {url}
                 "prep_time": analysis.get("prep_time"),
                 "cook_time": analysis.get("cook_time"),
                 "total_time": analysis.get("total_time"),
-                "difficulty_level": analysis.get("difficulty_level"),
                 "category": analysis.get("category"),
-                "rating": Decimal(str(analysis["rating"])) if analysis.get("rating") else None,
                 "nutrition_info": analysis.get("nutrition_info"),
                 "notes": analysis.get("notes"),
                 "tags": analysis.get("tags"),
@@ -263,9 +258,7 @@ URL: {url}
                     prep_time = :prep_time,
                     cook_time = :cook_time,
                     total_time = :total_time,
-                    difficulty_level = :difficulty_level,
                     category = :category,
-                    rating = :rating,
                     nutrition_info = :nutrition_info,
                     notes = :notes,
                     tags = :tags

@@ -347,44 +347,6 @@ class FeedContinentePtExtractor(BaseRecipeExtractor):
         
         return None
     
-    def extract_difficulty_level(self) -> Optional[str]:
-        """Извлечение уровня сложности"""
-        # Ищем в HTML
-        # Обычно находится в секции с классом, содержащим "difficulty" или текст "Fácil"
-        
-        # Попробуем найти текст "Fácil", "Médio", "Difícil"
-        difficulty_patterns = [
-            (r'Fácil', 'Fácil'),
-            (r'Médio', 'Médio'),
-            (r'Difícil', 'Difícil')
-        ]
-        
-        html_text = self.soup.get_text()
-        
-        for pattern, level in difficulty_patterns:
-            if re.search(pattern, html_text, re.IGNORECASE):
-                return level
-        
-        return None
-    
-    def extract_rating(self) -> Optional[float]:
-        """Извлечение рейтинга рецепта"""
-        recipe_data = self.get_json_ld_recipe()
-        
-        if recipe_data and 'aggregateRating' in recipe_data:
-            rating_data = recipe_data['aggregateRating']
-            if 'ratingValue' in rating_data:
-                rating_value = rating_data['ratingValue']
-                # Может быть в формате "5,0000" с запятой
-                if isinstance(rating_value, str):
-                    rating_value = rating_value.replace(',', '.')
-                try:
-                    return float(rating_value)
-                except (ValueError, TypeError):
-                    pass
-        
-        return None
-    
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
         # Ищем секцию notes
@@ -492,8 +454,6 @@ class FeedContinentePtExtractor(BaseRecipeExtractor):
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
-            "difficulty_level": self.extract_difficulty_level(),
-            "rating": self.extract_rating(),
             "notes": self.extract_notes(),
             "image_urls": self.extract_image_urls(),
             "tags": self.extract_tags()

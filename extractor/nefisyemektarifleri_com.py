@@ -127,37 +127,6 @@ class NefisYemekTarifleriExtractor(BaseRecipeExtractor):
         """Извлечение общего времени"""
         return None
     
-    def extract_servings(self) -> Optional[str]:
-        """Извлечение количества порций из HTML"""
-        # Ищем элементы с информацией о порциях (обычно "6-8 kişilik")
-        recipe_elements = self.soup.find('span', class_='recipe-elements')
-        if recipe_elements:
-            text = recipe_elements.get_text()
-            # Ищем паттерн "X-Y kişilik" или "X kişilik"
-            match = re.search(r'(\d+(?:-\d+)?)\s*(?:kişilik|kişi)', text)
-            if match:
-                return match.group(1)
-        
-        return None
-    
-    def extract_difficulty_level(self) -> Optional[str]:
-        """Извлечение уровня сложности"""
-        return None
-    
-    def extract_rating(self) -> Optional[float]:
-        """Извлечение рейтинга рецепта из HTML"""
-        # Извлекаем из HTML
-        rating_div = self.soup.find('div', class_='ranking')
-        if rating_div:
-            stars = rating_div.find('ul', class_='rating-stars')
-            if stars and stars.get('data-score'):
-                try:
-                    return float(stars['data-score'])
-                except (ValueError, TypeError):
-                    pass
-        
-        return None
-    
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
         return None
@@ -227,9 +196,6 @@ class NefisYemekTarifleriExtractor(BaseRecipeExtractor):
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
-            "servings": self.extract_servings(),
-            "difficulty_level": self.extract_difficulty_level(),
-            "rating": self.extract_rating(),
             "notes": notes.lower() if notes else None,
             "tags": tags,
             "image_urls": self.extract_image_urls()

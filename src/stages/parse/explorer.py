@@ -61,6 +61,7 @@ class SiteExplorer:
         self.max_errors = max_errors
         self.max_urls_per_pattern = max_urls_per_pattern  # Лимит URL на паттерн (рекомендуется использовать для первоначальной сборки рецептовв, чтобы не собирать кучи одинаковых страниц)
         self.analyzer = None
+        self.site_language = None
         
         # Компиляция regex паттерна если передан
         if recipe_pattern:
@@ -95,10 +96,10 @@ class SiteExplorer:
         self.db = MySQlManager()
         for i in range(1, 4):  # Пытаемся подключиться 3 раза
             if self.db.connect():
-                self.site_id = self.db.create_or_get_site(
+                self.site_id, self.site_language = self.db.create_or_get_site(
                     name=self.site_name,
                     base_url=base_url,
-                    language=None  # Будет определен при парсинге
+                    language=self.site_language  # Будет определен при парсинге
                 )
                 if self.site_id:
                     logger.info(f"Работа с сайтом ID: {self.site_id}")
@@ -340,17 +341,16 @@ class SiteExplorer:
                 dish_name, description, 
                 ingredient, step_by_step,
                 prep_time, cook_time, total_time,
-                difficulty_level,
                 category, nutrition_info,
-                notes, rating, tags, title, language, image_urls
+                notes, tags, title, language, image_urls
             ) VALUES (
                 :site_id, :url, :pattern, :html_path,
                 :is_recipe, :confidence_score,
                 :dish_name, :description,
                 :ingredient, :step_by_step,
                 :prep_time, :cook_time, :total_time,
-                :difficulty_level, :category, :nutrition_info,
-                :notes, :rating, :tags, :title, :language, :image_urls
+                :category, :nutrition_info,
+                :notes, :tags, :title, :language, :image_urls
             )
             ON DUPLICATE KEY UPDATE
                 is_recipe = VALUES(is_recipe),
@@ -362,16 +362,19 @@ class SiteExplorer:
                 prep_time = VALUES(prep_time),
                 cook_time = VALUES(cook_time),
                 total_time = VALUES(total_time),
-                difficulty_level = VALUES(difficulty_level),
                 category = VALUES(category),
                 nutrition_info = VALUES(nutrition_info),
                 notes = VALUES(notes),
-                rating = VALUES(rating),
                 tags = VALUES(tags),
                 title = VALUES(title),
                 language = VALUES(language),
                 image_urls = VALUES(image_urls)
         """
+        language = self.driver.execute_script("return document.documentElement.lang") or 'unknown'
+        if self.site_language is None and language != 'unknown':
+            self.site_language = language
+            if self.db.update_site_language(self.site_id, language) is False:
+                logger.error("Ошибка обновления языка сайта в БД")
 
         # Подготовка данных
         upsert_data = {
@@ -380,7 +383,7 @@ class SiteExplorer:
             "pattern": pattern,
             "html_path": page.html_path,
             "title": self.driver.title,
-            "language": self.driver.execute_script("return document.documentElement.lang") or 'unknown',
+            "language": language,
             **recipe_data
         }
 

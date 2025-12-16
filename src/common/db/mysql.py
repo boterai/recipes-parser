@@ -86,7 +86,7 @@ class MySQlManager:
                 raise RuntimeError("Не удалось подключиться к базе данных")
         return self.local_session()
     
-    def create_or_get_site(self, name: str, base_url: str, language: str = None) -> Optional[int]:
+    def create_or_get_site(self, name: str, base_url: str, language: str = None) -> tuple[Optional[int], Optional[str]]:
         """
         Создание или получение ID сайта
         
@@ -103,14 +103,15 @@ class MySQlManager:
         try:
             # Поиск существующего сайта
             result = session.execute(
-                sqlalchemy.text("SELECT id FROM sites WHERE base_url = :base_url"),
+                sqlalchemy.text("SELECT id, languge FROM sites WHERE base_url = :base_url"),
                 {"base_url": base_url}
             ).fetchone()
             
             if result:
                 site_id = result[0]
-                logger.info(f"Найден существующий сайт: {name} (ID: {site_id})")
-                return site_id
+                language = result[1]
+                logger.info(f"Найден существующий сайт: {name} (ID: {site_id}, language: {language})")
+                return site_id, language
             
             # Создание нового сайта
             result = session.execute(
@@ -128,12 +129,44 @@ class MySQlManager:
             site_id = result.lastrowid
             
             logger.info(f"Создан новый сайт: {name} (ID: {site_id})")
-            return site_id
+            return site_id, None
             
         except SQLAlchemyError as e:
             session.rollback()
             logger.error(f"Ошибка при создании сайта: {e}")
-            return None
+            return None, None
+        finally:
+            session.close()
+
+    def update_site_language(self, site_id: int, language: str) -> bool:
+        """
+        Обновление языка сайта
+        
+        Args:
+            site_id: ID сайта
+            laanguage: Язык сайта
+
+        """
+        session = self.get_session()
+        
+        try:
+            session.execute(
+                sqlalchemy.text("""
+                    UPDATE sites SET language = :language WHERE id = :site_id
+                """),
+                {
+                    "language": language,
+                    "site_id": site_id
+                }
+            )
+            session.commit()
+            logger.info(f"Обновлен язык сайта ID {site_id} на {language}")
+            return True
+            
+        except SQLAlchemyError as e:
+            session.rollback()
+            logger.error(f"Ошибка при обновлении языка сайта: {e}")
+            return False
         finally:
             session.close()
     

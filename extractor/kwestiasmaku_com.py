@@ -308,47 +308,6 @@ class KwestiasmakuExtractor(BaseRecipeExtractor):
         
         return cook if cook else prep
     
-    def extract_difficulty_level(self) -> Optional[str]:
-        """Извлечение уровня сложности"""
-        # На kwestiasmaku обычно нет явного указания сложности
-        # Можно определить по времени приготовления
-        cook_time = self.extract_cook_time()
-        if cook_time:
-            # Простая эвристика
-            if 'hours' in cook_time and float(re.search(r'(\d+(?:\.\d+)?)', cook_time).group(1)) >= 2:
-                return "Medium"
-            elif 'hours' in cook_time:
-                return "Medium"
-            else:
-                return "Easy"
-        
-        return "Medium"
-    
-    def extract_rating(self) -> Optional[float]:
-        """Извлечение рейтинга рецепта"""
-        # Ищем рейтинг в различных местах
-        # Fivestar widget
-        fivestar = self.soup.find('div', class_=re.compile(r'fivestar', re.I))
-        if fivestar:
-            # Ищем значение рейтинга
-            rating_span = fivestar.find('span', class_='average-rating')
-            if rating_span:
-                rating_text = rating_span.get_text(strip=True)
-                rating_match = re.search(r'(\d+(?:\.\d+)?)', rating_text)
-                if rating_match:
-                    return float(rating_match.group(1))
-        
-        # Ищем в микроданных или скриптах
-        scripts = self.soup.find_all('script')
-        for script in scripts:
-            if script.string:
-                rating_match = re.search(r'"ratingValue"\s*:\s*"?(\d+(?:\.\d+)?)"?', script.string)
-                if rating_match:
-                    return float(rating_match.group(1))
-        
-        # Возвращаем примерный рейтинг если есть много отзывов
-        return 4.8  # Из примера в JSON
-    
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
         notes = []
@@ -465,8 +424,6 @@ class KwestiasmakuExtractor(BaseRecipeExtractor):
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
-            "difficulty_level": self.extract_difficulty_level(),
-            "rating": self.extract_rating(),
             "notes": self.extract_notes(),
             "tags": self.extract_tags(),
             "image_urls": self.extract_image_urls()

@@ -390,72 +390,7 @@ class RecipeSgethaiExtractor(BaseRecipeExtractor):
                             return f"{time_match.group(1)} นาที"
         
         return None
-    
-    def extract_servings(self) -> Optional[str]:
-        """Извлечение количества порций"""
-        # Ищем в JSON-LD
-        json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
-        
-        for script in json_ld_scripts:
-            try:
-                data = json.loads(script.string)
-                
-                if isinstance(data, dict) and '@graph' in data:
-                    for item in data['@graph']:
-                        if isinstance(item, dict) and item.get('@type') == 'Recipe':
-                            servings = item.get('recipeYield')
-                            if servings:
-                                # Извлекаем число
-                                servings_match = re.search(r'(\d+)', str(servings))
-                                if servings_match:
-                                    return servings_match.group(1)
-            except (json.JSONDecodeError, KeyError, AttributeError):
-                continue
-        
-        # Ищем в HTML по паттерну "สำหรับ" или "เสิร์ฟ"
-        checklist = self.soup.find('ul', class_=re.compile(r'fusion-checklist', re.I))
-        if checklist:
-            items = checklist.find_all('li')
-            for item in items:
-                content = item.find('div', class_='fusion-li-item-content')
-                if content:
-                    text = content.get_text(strip=True)
-                    if 'สำหรับ' in text or 'เสิร์ฟ' in text:
-                        servings_match = re.search(r'(\d+)', text)
-                        if servings_match:
-                            return servings_match.group(1)
-        
-        return None
-    
-    def extract_difficulty_level(self) -> Optional[str]:
-        """Извлечение уровня сложности - для тайских рецептов обычно Easy"""
-        # Для тайского сайта обычно простые рецепты
-        return "Easy"
-    
-    def extract_rating(self) -> Optional[str]:
-        """Извлечение рейтинга"""
-        # Ищем в JSON-LD
-        json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
-        
-        for script in json_ld_scripts:
-            try:
-                data = json.loads(script.string)
-                
-                if isinstance(data, dict) and '@graph' in data:
-                    for item in data['@graph']:
-                        if isinstance(item, dict) and item.get('@type') == 'Recipe':
-                            review = item.get('review')
-                            if review and isinstance(review, dict):
-                                review_rating = review.get('reviewRating')
-                                if review_rating and isinstance(review_rating, dict):
-                                    rating_value = review_rating.get('ratingValue')
-                                    if rating_value:
-                                        return str(rating_value)
-            except (json.JSONDecodeError, KeyError, AttributeError):
-                continue
-        
-        return None
-    
+
     def extract_notes(self) -> Optional[str]:
         """Извлечение примечаний/советов"""
         # Ищем секцию TIPS в HTML
@@ -654,9 +589,6 @@ class RecipeSgethaiExtractor(BaseRecipeExtractor):
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
-            "servings": self.extract_servings(),
-            "difficulty_level": self.extract_difficulty_level(),
-            "rating": self.extract_rating(),
             "notes": notes.lower() if notes else None,
             "tags": tags,
             "image_urls": self.extract_image_urls()

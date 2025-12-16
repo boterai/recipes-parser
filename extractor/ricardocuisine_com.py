@@ -261,20 +261,6 @@ class RicardoCuisineExtractor(BaseRecipeExtractor):
         
         return ""
     
-    def extract_rating(self) -> Optional[float]:
-        """Извлечение рейтинга"""
-        # Из JSON-LD
-        json_data = self.extract_from_json_ld()
-        if json_data and 'aggregateRating' in json_data:
-            rating_data = json_data['aggregateRating']
-            if 'ratingValue' in rating_data:
-                try:
-                    return float(rating_data['ratingValue'])
-                except (ValueError, TypeError):
-                    pass
-        
-        return None
-    
     def extract_category(self) -> str:
         """Извлечение категории рецепта"""
         # Из JSON-LD
@@ -338,38 +324,6 @@ class RicardoCuisineExtractor(BaseRecipeExtractor):
         total_minutes = hours * 60 + minutes
         
         return str(total_minutes) if total_minutes > 0 else ""
-    
-    def extract_servings(self) -> str:
-        """Извлечение количества порций"""
-        # Из JSON-LD
-        json_data = self.extract_from_json_ld()
-        if json_data and 'recipeYield' in json_data:
-            yield_str = json_data['recipeYield']
-            # Извлекаем число из строки типа "4 portion(s)"
-            match = re.search(r'(\d+)', yield_str)
-            if match:
-                return match.group(1)
-        
-        return ""
-    
-    def extract_difficulty_level(self) -> str:
-        """Извлечение уровня сложности"""
-        # На ricardocuisine.com обычно нет явного уровня сложности
-        # Можно попробовать определить по времени
-        total_time = self.extract_total_time()
-        if total_time:
-            try:
-                total_minutes = int(total_time)
-                if total_minutes <= 30:
-                    return "Easy"
-                elif total_minutes <= 60:
-                    return "Medium"
-                else:
-                    return "Hard"
-            except (ValueError, TypeError):
-                pass
-        
-        return "Medium"
     
     def extract_notes(self) -> str:
         """Извлечение заметок и примечаний"""
@@ -555,13 +509,10 @@ class RicardoCuisineExtractor(BaseRecipeExtractor):
         description = self.extract_description()
         ingredients = self.extract_ingredients()
         step_by_step = self.extract_step_by_step()
-        rating = self.extract_rating()
         category = self.extract_category()
         prep_time = self.extract_prep_time()
         cook_time = self.extract_cook_time()
         total_time = self.extract_total_time()
-        servings = self.extract_servings()
-        difficulty_level = self.extract_difficulty_level()
         notes = self.extract_notes()
         nutrition_info = self.extract_nutrition_info()
         tags = self.extract_tags()
@@ -571,13 +522,10 @@ class RicardoCuisineExtractor(BaseRecipeExtractor):
             "description": description.lower() if description else None,
             "ingredients": ingredients,
             "step_by_step": step_by_step.lower() if step_by_step else None,
-            "rating": rating,
             "category": category.lower() if category else None,
             "prep_time": prep_time if prep_time else None,
             "cook_time": cook_time if cook_time else None,
             "total_time": total_time if total_time else None,
-            "servings": servings if servings else None,
-            "difficulty_level": difficulty_level.lower() if difficulty_level else None,
             "notes": notes.lower() if notes else None,
             "nutrition_info": nutrition_info,
             "tags": tags,

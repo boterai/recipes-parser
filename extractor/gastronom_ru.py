@@ -405,42 +405,6 @@ class GastronomRuExtractor(BaseRecipeExtractor):
         
         return None
     
-    def extract_difficulty_level(self) -> Optional[str]:
-        """Извлечение уровня сложности из JSON структуры"""
-        scripts = self.soup.find_all('script', id='vite-plugin-ssr_pageContext')
-        
-        for script in scripts:
-            if not script.string:
-                continue
-            
-            try:
-                data = json.loads(script.string)
-                
-                # Ищем complexity в pageProps.page.content
-                if 'pageProps' in data and 'page' in data['pageProps']:
-                    page = data['pageProps']['page']
-                    
-                    # Проверяем в content.complexity
-                    if 'content' in page and 'complexity' in page['content']:
-                        complexity = page['content']['complexity']
-                        
-                        if complexity and 'name' in complexity:
-                            # Переводим на английский для унификации
-                            complexity_map = {
-                                'просто': 'easy',
-                                'простые рецепты': 'easy',
-                                'легко': 'easy',
-                                'средне': 'medium',
-                                'сложно': 'hard'
-                            }
-                            russian_complexity = complexity['name'].lower()
-                            return complexity_map.get(russian_complexity, russian_complexity)
-                        
-            except (json.JSONDecodeError, KeyError):
-                continue
-        
-        return None
-    
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
         # Ищем секцию "Особенности рецепта" или "Совет"
@@ -481,23 +445,6 @@ class GastronomRuExtractor(BaseRecipeExtractor):
                         
             except (json.JSONDecodeError, KeyError):
                 continue
-        
-        return None
-    
-    def extract_rating(self) -> Optional[float]:
-        """Извлечение рейтинга рецепта"""
-        # Из JSON-LD
-        json_ld = self.extract_from_json_ld()
-        
-        if json_ld.get('aggregateRating'):
-            rating_data = json_ld['aggregateRating']
-            rating_value = rating_data.get('ratingValue')
-            
-            if rating_value:
-                try:
-                    return float(rating_value)
-                except (ValueError, TypeError):
-                    pass
         
         return None
     
@@ -558,14 +505,11 @@ class GastronomRuExtractor(BaseRecipeExtractor):
             "step_by_step": step_by_step.lower() if step_by_step else None,
             "nutrition_info": self.extract_nutrition_info(),  # Формат: "99 kcal; 4/3/18"
             "category": category.lower() if category else None,
-            "prep_time": self.extract_prep_time(),  # Только минуты
-            "cook_time": self.extract_cook_time(),  # Только минуты
-            "total_time": self.extract_total_time(),  # Только минуты
-            "servings": self.extract_servings(),
-            "difficulty_level": self.extract_difficulty_level(),  # Уже lowercase
-            "notes": notes,  # Уже lowercase
-            "rating": self.extract_rating(),
-            "tags": tags,  # Уже lowercase
+            "prep_time": self.extract_prep_time(),  
+            "cook_time": self.extract_cook_time(), 
+            "total_time": self.extract_total_time(),  
+            "notes": notes,  
+            "tags": tags,
             "image_urls": self.extract_image_urls()
         }
 

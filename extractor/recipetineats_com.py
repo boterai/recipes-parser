@@ -178,20 +178,6 @@ class RecipeTinEatsExtractor(BaseRecipeExtractor):
         
         return None
     
-    def extract_servings(self) -> Optional[str]:
-        """Извлечение количества порций"""
-        servings = self.soup.find('span', class_='wprm-recipe-servings')
-        if servings:
-            return servings.get_text(strip=True)
-        
-        return None
-    
-    def extract_difficulty_level(self) -> Optional[str]:
-        """Извлечение уровня сложности"""
-        # На этом сайте обычно нет явного указания сложности
-        # Можем попробовать определить по времени или оставить как "Easy"
-        return None
-    
     def extract_description(self) -> Optional[str]:
         """Извлечение описания рецепта"""
         # Ищем описание в summary
@@ -241,9 +227,9 @@ class RecipeTinEatsExtractor(BaseRecipeExtractor):
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
-            "servings": self.extract_servings(),
-            "difficulty_level": self.extract_difficulty_level(),
-            "notes": self.extract_notes()
+            "notes": self.extract_notes(),
+            "tags": None,  # recipetineats.com не предоставляет теги явно
+            "image_urls": None  # Можно добавить извлечение изображений при необходимости
         }
 
 

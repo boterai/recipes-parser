@@ -306,41 +306,6 @@ class MiljuschkaNlExtractor(BaseRecipeExtractor):
         
         return None
     
-    def extract_difficulty_level(self) -> Optional[str]:
-        """Извлечение уровня сложности"""
-        # На miljuschka.nl нет явного указания сложности
-        # Определяем на основе общего времени
-        total_time_str = self.extract_total_time()
-        
-        if total_time_str:
-            try:
-                # Время возвращается как строка с числом минут
-                minutes = int(total_time_str)
-                if minutes <= 30:
-                    return "Easy"
-                elif minutes <= 90:
-                    return "Medium"
-                else:
-                    return "Hard"
-            except (ValueError, TypeError):
-                pass
-        
-        return "Medium"  # По умолчанию
-    
-    def extract_rating(self) -> Optional[float]:
-        """Извлечение рейтинга рецепта"""
-        recipe_data = self.get_recipe_data_from_jsonld()
-        
-        if recipe_data and 'aggregateRating' in recipe_data:
-            rating_data = recipe_data['aggregateRating']
-            if isinstance(rating_data, dict) and 'ratingValue' in rating_data:
-                try:
-                    return float(rating_data['ratingValue'])
-                except (ValueError, TypeError):
-                    pass
-        
-        return None
-    
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
         # На miljuschka.nl заметки могут быть в конце описания или в специальных секциях
@@ -447,8 +412,6 @@ class MiljuschkaNlExtractor(BaseRecipeExtractor):
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
-            "difficulty_level": self.extract_difficulty_level(),
-            "rating": self.extract_rating(),
             "notes": notes,
             "image_urls": self.extract_image_urls(),
             "tags": tags

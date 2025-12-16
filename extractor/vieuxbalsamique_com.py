@@ -224,44 +224,7 @@ class VieuxBalsamiqueExtractor(BaseRecipeExtractor):
             return str(total) if total > 0 else None
         
         return None
-    
-    def extract_servings(self) -> Optional[str]:
-        """Извлечение количества порций"""
-        json_data = self.extract_from_json_ld()
-        if json_data and 'recipeYield' in json_data:
-            yield_data = json_data['recipeYield']
-            
-            # Может быть список или строка
-            if isinstance(yield_data, list) and yield_data:
-                yield_str = str(yield_data[0])
-            else:
-                yield_str = str(yield_data)
-            
-            # Извлекаем число
-            match = re.search(r'\d+', yield_str)
-            if match:
-                return match.group(0)
-        
-        return None
-    
-    def extract_difficulty_level(self) -> Optional[str]:
-        """Извлечение уровня сложности"""
-        # На vieuxbalsamique обычно нет явного указания сложности
-        return None
-    
-    def extract_rating(self) -> Optional[float]:
-        """Извлечение рейтинга"""
-        json_data = self.extract_from_json_ld()
-        if json_data and 'aggregateRating' in json_data:
-            rating_data = json_data['aggregateRating']
-            if isinstance(rating_data, dict) and 'ratingValue' in rating_data:
-                try:
-                    return float(rating_data['ratingValue'])
-                except (ValueError, TypeError):
-                    pass
-        
-        return None
-    
+
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и примечаний"""
         # Ищем в HTML
@@ -465,9 +428,6 @@ class VieuxBalsamiqueExtractor(BaseRecipeExtractor):
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
-            "servings": self.extract_servings(),
-            "difficulty_level": self.extract_difficulty_level(),
-            "rating": self.extract_rating(),
             "notes": notes.lower() if notes else None,
             "tags": tags,
             "image_urls": self.extract_image_urls()

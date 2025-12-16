@@ -195,11 +195,9 @@ class RecipeExtractor:
                         prep_time = :prep_time,
                         cook_time = :cook_time,
                         total_time = :total_time,
-                        difficulty_level = :difficulty_level,
                         category = :category,
                         nutrition_info = :nutrition_info,
                         notes = :notes,
-                        rating = :rating,
                         tags = :tags,
                         image_urls = :image_urls
                     WHERE id = :page_id

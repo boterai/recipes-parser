@@ -376,60 +376,6 @@ class CookeatWorldExtractor(BaseRecipeExtractor):
         
         return None
     
-    def extract_difficulty_level(self) -> Optional[str]:
-        """Извлечение уровня сложности"""
-        # Пробуем найти в HTML
-        difficulty_elem = self.soup.find(class_=re.compile(r'difficulty', re.I))
-        if difficulty_elem:
-            text = difficulty_elem.get_text(strip=True)
-            text = self.clean_text(text)
-            if text:
-                return text
-        
-        # На cookeatworld.com обычно нет явного указания сложности
-        # Возвращаем значение по умолчанию на основе времени приготовления
-        recipe_data = self.get_recipe_json_ld()
-        if recipe_data and 'totalTime' in recipe_data:
-            total_time = recipe_data['totalTime']
-            # Парсим ISO duration в минуты
-            if total_time and total_time.startswith('PT'):
-                duration_str = total_time[2:]
-                hours = 0
-                minutes = 0
-                hour_match = re.search(r'(\d+)H', duration_str)
-                if hour_match:
-                    hours = int(hour_match.group(1))
-                min_match = re.search(r'(\d+)M', duration_str)
-                if min_match:
-                    minutes = int(min_match.group(1))
-                
-                total_minutes = hours * 60 + minutes
-                
-                # Простая эвристика: до 30 минут - Easy, до 1 часа - Medium, больше - Hard
-                if total_minutes <= 30:
-                    return "Easy"
-                elif total_minutes <= 60:
-                    return "Medium"
-                else:
-                    return "Medium"
-        
-        # По умолчанию возвращаем Easy
-        return "Easy"
-    
-    def extract_rating(self) -> Optional[float]:
-        """Извлечение рейтинга рецепта"""
-        recipe_data = self.get_recipe_json_ld()
-        
-        if recipe_data and 'aggregateRating' in recipe_data:
-            rating_data = recipe_data['aggregateRating']
-            if 'ratingValue' in rating_data:
-                try:
-                    return float(rating_data['ratingValue'])
-                except (ValueError, TypeError):
-                    pass
-        
-        return None
-    
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
         # Ищем в HTML секцию с классом wprm-recipe-notes
@@ -543,8 +489,6 @@ class CookeatWorldExtractor(BaseRecipeExtractor):
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
-            "difficulty_level": self.extract_difficulty_level(),
-            "rating": self.extract_rating(),
             "notes": self.extract_notes(),
             "tags": self.extract_tags(),
             "image_urls": self.extract_image_urls()

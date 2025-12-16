@@ -355,40 +355,6 @@ class SimplyRecipesExtractor(BaseRecipeExtractor):
         
         return None
     
-    def extract_difficulty_level(self) -> Optional[str]:
-        """Извлечение уровня сложности"""
-        # На simplyrecipes обычно нет явного указания сложности
-        # Используем простую эвристику на основе количества шагов
-        json_ld = self._get_json_ld_data()
-        
-        if json_ld and 'recipeInstructions' in json_ld:
-            instructions = json_ld['recipeInstructions']
-            num_steps = len(instructions) if isinstance(instructions, list) else 0
-            
-            if num_steps <= 5:
-                return "Easy"
-            elif num_steps <= 8:
-                return "Medium"
-            else:
-                return "Hard"
-        
-        # Fallback to Medium if we can't determine
-        return "Medium"
-    
-    def extract_rating(self) -> Optional[float]:
-        """Извлечение рейтинга рецепта"""
-        json_ld = self._get_json_ld_data()
-        
-        if json_ld and 'aggregateRating' in json_ld:
-            rating_data = json_ld['aggregateRating']
-            if isinstance(rating_data, dict) and 'ratingValue' in rating_data:
-                try:
-                    return float(rating_data['ratingValue'])
-                except (ValueError, TypeError):
-                    pass
-        
-        return None
-    
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
         # Ищем параграфы, которые содержат заметки/советы
@@ -543,8 +509,6 @@ class SimplyRecipesExtractor(BaseRecipeExtractor):
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
-            "difficulty_level": self.extract_difficulty_level(),
-            "rating": self.extract_rating(),
             "notes": self.extract_notes(),
             "tags": self.extract_tags(),
             "image_urls": self.extract_image_urls()

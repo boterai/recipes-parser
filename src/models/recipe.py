@@ -4,9 +4,11 @@ from typing import Optional
 from pydantic import BaseModel
 
 class Recipe(BaseModel):
-    """Recipe entity with fields optimized for similarity search."""
+    """Recipe entity with fields optimized for similarity search.
+    рецепты могут раниться в БД, переведенные на какой-то конкретный язык
+    """
     # Core content
-    id: Optional[int] = None
+    id: int
     dish_name: str
     description: Optional[str] = None
     tags: Optional[str] = None
@@ -20,6 +22,7 @@ class Recipe(BaseModel):
     prep_time_minutes: Optional[int] = None
     total_time_minutes: Optional[int] = None
     calories: Optional[str] = None
+    ctegory: Optional[str] = None
 
     def prepare_multivector_data(self, max_instruction_length: int = 300, max_description_length: int = 300) -> dict:
         """Подготавливает данные для мульти-векторного эмбеддинга"""

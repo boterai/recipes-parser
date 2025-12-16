@@ -472,29 +472,6 @@ class TheFrenchCookingAcademyExtractor(BaseRecipeExtractor):
         time_info = self.extract_time_info()
         return time_info.get("total_time")
     
-    def extract_servings(self) -> Optional[str]:
-        """Извлечение количества порций"""
-        time_info = self.extract_time_info()
-        return time_info.get("servings")
-    
-    def extract_difficulty_level(self) -> Optional[str]:
-        """Извлечение уровня сложности"""
-        # Ищем упоминания Easy, Medium, Hard в тексте
-        for elem in self.soup.find_all(['p', 'div', 'span', 'strong']):
-            text = elem.get_text(strip=True)
-            if re.search(r'\b(Easy|Medium|Hard|Beginner|Intermediate|Advanced)\b', text, re.I):
-                match = re.search(r'\b(Easy|Medium|Hard|Beginner|Intermediate|Advanced)\b', text, re.I)
-                if match:
-                    # Приводим к title case
-                    return match.group(1).capitalize()
-        
-        return None
-    
-    def extract_rating(self) -> Optional[float]:
-        """Извлечение рейтинга рецепта"""
-        # На thefrenchcookingacademy.com обычно нет рейтингов
-        return None
-    
     def extract_tags(self) -> Optional[str]:
         """Извлечение тегов"""
         tags = []
@@ -647,9 +624,6 @@ class TheFrenchCookingAcademyExtractor(BaseRecipeExtractor):
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
-            "servings": self.extract_servings(),
-            "difficulty_level": self.extract_difficulty_level(),
-            "rating": self.extract_rating(),
             "notes": self.extract_notes(),
             "tags": self.extract_tags(),
             "image_urls": self.extract_image_urls()

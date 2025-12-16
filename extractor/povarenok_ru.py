@@ -347,32 +347,6 @@ class PovarenokRuExtractor(BaseRecipeExtractor):
         
         return None
     
-    def extract_servings(self) -> Optional[str]:
-        """Извлечение количества порций"""
-        # Ищем в тексте или в специальных полях
-        # На povarenok.ru порции могут быть указаны в таблице
-        
-        text = self.soup.get_text()
-        
-        # Паттерны для поиска порций
-        servings_patterns = [
-            r'(\d+)\s*порци[йяи]',
-            r'на\s*(\d+)\s*человек',
-            r'(\d+)\s*персон'
-        ]
-        
-        for pattern in servings_patterns:
-            match = re.search(pattern, text, re.IGNORECASE)
-            if match:
-                return match.group(1)
-        
-        return None
-    
-    def extract_difficulty_level(self) -> Optional[str]:
-        """Извлечение уровня сложности"""
-        # На povarenok.ru сложность обычно не указывается
-        return None
-    
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
         # Ищем дополнительные советы или примечания
@@ -431,27 +405,6 @@ class PovarenokRuExtractor(BaseRecipeExtractor):
         
         return ', '.join(tags) if tags else None
     
-    def extract_rating(self) -> Optional[float]:
-        """Извлечение рейтинга рецепта"""
-        # На povarenok.ru есть рейтинговая система
-        # Ищем элементы с рейтингом
-        
-        # Можем поискать в meta данных или в специальных div
-        rating_elem = self.soup.find(class_=re.compile(r'rating', re.I))
-        if rating_elem:
-            text = rating_elem.get_text()
-            # Ищем число (рейтинг обычно от 1 до 5)
-            match = re.search(r'(\d+(?:\.\d+)?)', text)
-            if match:
-                try:
-                    rating = float(match.group(1))
-                    if 0 <= rating <= 5:
-                        return rating
-                except ValueError:
-                    pass
-        
-        return None
-    
     def extract_image_urls(self) -> Optional[str]:
         """Извлечение URL изображений"""
         image_urls = []
@@ -503,9 +456,6 @@ class PovarenokRuExtractor(BaseRecipeExtractor):
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
-            "servings": self.extract_servings(),
-            "difficulty_level": self.extract_difficulty_level(),
-            "rating": self.extract_rating(),
             "notes": notes,
             "tags": tags,
             "image_urls": self.extract_image_urls()

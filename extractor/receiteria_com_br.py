@@ -485,23 +485,6 @@ class ReceiteriaCombBrExtractor(BaseRecipeExtractor):
         """Извлечение общего времени"""
         return self.extract_time('total')
     
-    def extract_difficulty_level(self) -> Optional[str]:
-        """Извлечение уровня сложности"""
-        # Ищем в HTML
-        difficulty_elem = self.soup.find(class_=re.compile(r'difficulty|dificuldade', re.I))
-        if difficulty_elem:
-            text = self.clean_text(difficulty_elem.get_text()).lower()
-            # Маппинг португальских терминов на английские
-            if any(word in text for word in ['fácil', 'facil', 'easy']):
-                return 'easy'
-            elif any(word in text for word in ['médio', 'medio', 'medium', 'moderado']):
-                return 'medium'
-            elif any(word in text for word in ['difícil', 'dificil', 'hard']):
-                return 'hard'
-            return text
-        
-        return None
-    
     def extract_rating(self) -> Optional[float]:
         """Извлечение рейтинга рецепта"""
         # Из JSON-LD
@@ -552,31 +535,6 @@ class ReceiteriaCombBrExtractor(BaseRecipeExtractor):
         
         return None
     
-    def extract_servings(self) -> Optional[str]:
-        """Извлечение количества порций"""
-        # Из JSON-LD
-        json_ld = self.extract_from_json_ld()
-        if json_ld.get('recipeYield'):
-            yield_value = json_ld['recipeYield']
-            # Может быть строкой, числом или списком
-            if isinstance(yield_value, list):
-                # Берем первый элемент списка
-                return str(yield_value[0]) if yield_value else None
-            return str(yield_value)
-        
-        # Ищем в HTML
-        servings_elem = self.soup.find(class_=re.compile(r'servings?|yield|por[çc][õo]es?', re.I))
-        if not servings_elem:
-            servings_elem = self.soup.find(attrs={'data-servings': True})
-        
-        if servings_elem:
-            text = servings_elem.get_text(strip=True)
-            # Извлекаем число
-            match = re.search(r'\d+(?:\s*(?:servings?|por[çc][õo]es?|pessoas?))?', text, re.I)
-            if match:
-                return match.group(0)
-        
-        return None
     
     def extract_tags(self) -> Optional[str]:
         """Извлечение тегов"""
@@ -714,8 +672,6 @@ class ReceiteriaCombBrExtractor(BaseRecipeExtractor):
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
-            "servings": self.extract_servings(),
-            "difficulty_level": self.extract_difficulty_level(),
             "rating": self.extract_rating(),
             "notes": self.extract_notes(),
             "tags": self.extract_tags(),

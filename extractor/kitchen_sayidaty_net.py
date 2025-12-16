@@ -335,38 +335,6 @@ class KitchenSayidatyNetExtractor(BaseRecipeExtractor):
             return self.parse_iso_duration(json_data['totalTime'])
         return None
     
-    def extract_servings(self) -> Optional[str]:
-        """Извлечение количества порций"""
-        json_data = self.get_json_ld_data()
-        if json_data and 'recipeYield' in json_data:
-            yield_value = json_data['recipeYield']
-            # Может быть строкой вида "4 servings" или просто "4"
-            if isinstance(yield_value, (str, int)):
-                # Извлекаем только число
-                match = re.search(r'(\d+)', str(yield_value))
-                if match:
-                    return match.group(1)
-        
-        return None
-    
-    def extract_difficulty_level(self) -> Optional[str]:
-        """Извлечение уровня сложности"""
-        # На kitchen.sayidaty.net обычно нет явного указания сложности
-        return None
-    
-    def extract_rating(self) -> Optional[float]:
-        """Извлечение рейтинга рецепта"""
-        json_data = self.get_json_ld_data()
-        if json_data and 'aggregateRating' in json_data:
-            rating_data = json_data['aggregateRating']
-            if isinstance(rating_data, dict) and 'ratingValue' in rating_data:
-                try:
-                    return float(rating_data['ratingValue'])
-                except (ValueError, TypeError):
-                    pass
-        
-        return None
-    
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
         # На kitchen.sayidaty.net заметки обычно в конце инструкций
@@ -600,9 +568,6 @@ class KitchenSayidatyNetExtractor(BaseRecipeExtractor):
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
-            "servings": self.extract_servings(),
-            "difficulty_level": self.extract_difficulty_level(),
-            "rating": self.extract_rating(),
             "notes": notes.lower() if notes else None,
             "tags": tags,
             "image_urls": self.extract_image_urls()

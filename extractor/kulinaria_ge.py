@@ -414,44 +414,6 @@ class KulinariaGeExtractor(BaseRecipeExtractor):
         
         return None
     
-    def extract_difficulty_level(self) -> Optional[str]:
-        """Извлечение уровня сложности"""
-        # Ищем в lineDesc с иконкой сложности
-        line_desc = self.soup.find('div', class_='lineDesc')
-        if line_desc:
-            difficulty_div = line_desc.find('div', class_='kulinaria-sprite--circleprogress')
-            if difficulty_div and difficulty_div.parent:
-                difficulty_text = difficulty_div.parent.get_text(strip=True)
-                difficulty_text = self.clean_text(difficulty_text)
-                if difficulty_text:
-                    return difficulty_text
-        
-        return None
-    
-    def extract_rating(self) -> Optional[float]:
-        """Извлечение рейтинга рецепта"""
-        # Ищем в JSON-LD
-        json_ld = self.extract_json_ld()
-        if json_ld and 'aggregateRating' in json_ld:
-            rating_data = json_ld['aggregateRating']
-            if 'ratingValue' in rating_data:
-                try:
-                    return float(rating_data['ratingValue'])
-                except (ValueError, TypeError):
-                    pass
-        
-        # Можно попробовать найти активные звезды в HTML
-        # Ищем div.post-star с активными звездами
-        star_container = self.soup.find('div', class_='post-star')
-        if star_container:
-            # Ищем звезды с классом active или filled
-            active_stars = star_container.find_all('div', class_=re.compile(r'active|filled|star-\d+'))
-            # Подсчитываем количество активных звезд
-            # Но в данном HTML нет явного указания на активные звезды
-            pass
-        
-        return None
-    
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
         # На kulinaria.ge обычно нет отдельной секции с заметками
@@ -563,8 +525,6 @@ class KulinariaGeExtractor(BaseRecipeExtractor):
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
-            "difficulty_level": self.extract_difficulty_level(),
-            "rating": self.extract_rating(),
             "notes": self.extract_notes(),
             "tags": self.extract_tags(),
             "image_urls": self.extract_image_urls()

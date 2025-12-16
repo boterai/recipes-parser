@@ -361,63 +361,6 @@ class AllRecipesExtractor(BaseRecipeExtractor):
         """Извлечение общего времени"""
         return self.extract_time('total')
     
-    def extract_servings(self) -> Optional[str]:
-        """Извлечение количества порций"""
-        # Сначала пробуем извлечь из JSON-LD
-        json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
-        
-        for script in json_ld_scripts:
-            try:
-                data = json.loads(script.string)
-                
-                # Функция для проверки типа Recipe
-                def is_recipe(item):
-                    item_type = item.get('@type', '')
-                    if isinstance(item_type, list):
-                        return 'Recipe' in item_type
-                    return item_type == 'Recipe'
-                
-                # Ищем recipeYield в данных
-                recipe_data = None
-                if isinstance(data, list):
-                    for item in data:
-                        if is_recipe(item):
-                            recipe_data = item
-                            break
-                elif isinstance(data, dict) and is_recipe(data):
-                    recipe_data = data
-                
-                if recipe_data and 'recipeYield' in recipe_data:
-                    yield_value = recipe_data['recipeYield']
-                    # Может быть строкой, числом или списком
-                    if isinstance(yield_value, list):
-                        # Берем первый элемент списка (обычно это число порций)
-                        return str(yield_value[0]) if yield_value else None
-                    return str(yield_value)
-                        
-            except (json.JSONDecodeError, KeyError):
-                continue
-        
-        # Если JSON-LD не помог, ищем в HTML
-        servings_elem = self.soup.find(class_=re.compile(r'servings?|yield', re.I))
-        if not servings_elem:
-            servings_elem = self.soup.find(attrs={'data-test-id': re.compile(r'servings?', re.I)})
-        
-        if servings_elem:
-            text = servings_elem.get_text(strip=True)
-            # Извлекаем только число или число с единицей
-            match = re.search(r'\d+(?:\s*servings?)?', text, re.I)
-            if match:
-                return match.group(0)
-        
-        return None
-    
-    def extract_difficulty_level(self) -> Optional[str]:
-        """Извлечение уровня сложности"""
-        # На allrecipes обычно нет явного указания сложности
-        # Можно попробовать определить по времени или оставить как "Easy"
-        return "N/A"
-    
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
         # Ищем секцию с примечаниями/советами (специфичные классы для AllRecipes)
@@ -503,42 +446,7 @@ class AllRecipesExtractor(BaseRecipeExtractor):
         # Возвращаем как строку через запятую
         return ', '.join(unique_tags) if unique_tags else None
     
-    def extract_rating(self) -> Optional[float]:
-        """Извлечение рейтинга рецепта"""
-        # Сначала пробуем извлечь из JSON-LD
-        json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
-        
-        for script in json_ld_scripts:
-            try:
-                data = json.loads(script.string)
-                
-                # Функция для проверки типа Recipe
-                def is_recipe(item):
-                    item_type = item.get('@type', '')
-                    if isinstance(item_type, list):
-                        return 'Recipe' in item_type
-                    return item_type == 'Recipe'
-                
-                # Ищем aggregateRating в данных
-                recipe_data = None
-                if isinstance(data, list):
-                    for item in data:
-                        if is_recipe(item):
-                            recipe_data = item
-                            break
-                elif isinstance(data, dict) and is_recipe(data):
-                    recipe_data = data
-                
-                if recipe_data and 'aggregateRating' in recipe_data:
-                    rating_data = recipe_data['aggregateRating']
-                    if 'ratingValue' in rating_data:
-                        return float(rating_data['ratingValue'])
-                        
-            except (json.JSONDecodeError, KeyError, ValueError):
-                continue
-        
-        return None
-    
+
     def parse_ingredient(self, ingredient_text: str) -> Optional[dict]:
         """
         Парсинг строки ингредиента в структурированный формат
@@ -735,9 +643,6 @@ class AllRecipesExtractor(BaseRecipeExtractor):
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
-            "servings": self.extract_servings(),
-            "difficulty_level": self.extract_difficulty_level(),
-            "rating": self.extract_rating(),
             "notes": notes.lower() if notes else None,
             "tags": tags,
             "image_urls": self.extract_image_urls()

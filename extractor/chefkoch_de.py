@@ -271,62 +271,6 @@ class ChefkochDeExtractor(BaseRecipeExtractor):
         
         return None
     
-    def extract_servings(self) -> Optional[int]:
-        """Extract number of servings"""
-        if not self.recipe_data:
-            return None
-        
-        try:
-            servings_idx = self.recipe_data.get('servings')
-            servings = self._resolve_value(servings_idx)
-            if isinstance(servings, int):
-                return servings
-        except Exception:
-            pass
-        
-        return None
-    
-    def extract_difficulty_level(self) -> Optional[str]:
-        """Extract difficulty level"""
-        if not self.recipe_data:
-            return None
-        
-        try:
-            difficulty_idx = self.recipe_data.get('difficulty')
-            difficulty = self._resolve_value(difficulty_idx)
-            if isinstance(difficulty, int):
-                # Map difficulty codes to text
-                difficulty_map = {
-                    0: "Simple",
-                    1: "Easy",
-                    2: "Normal",
-                    3: "Advanced"
-                }
-                return difficulty_map.get(difficulty, None)
-        except Exception:
-            pass
-        
-        return None
-    
-    def extract_rating(self) -> Optional[float]:
-        """Extract recipe rating"""
-        if not self.recipe_data:
-            return None
-        
-        try:
-            rating_idx = self.recipe_data.get('rating')
-            rating_obj = self._resolve_value(rating_idx)
-            
-            if rating_obj and isinstance(rating_obj, dict):
-                rating_val_idx = rating_obj.get('rating')
-                rating_val = self._resolve_value(rating_val_idx)
-                if rating_val is not None:
-                    return float(rating_val)
-        except Exception:
-            pass
-        
-        return None
-    
     def extract_notes(self) -> Optional[str]:
         """Extract additional notes"""
         if not self.recipe_data:
@@ -398,9 +342,6 @@ class ChefkochDeExtractor(BaseRecipeExtractor):
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
-            "servings": self.extract_servings(),
-            "difficulty_level": self.extract_difficulty_level(),
-            "rating": self.extract_rating(),
             "notes": self.extract_notes(),
             "image_urls": self.extract_image_urls(),
             "tags": self.extract_tags()
