@@ -1,0 +1,17 @@
+{
+    "dish_name": "Brigadeiro",
+    "description": "O clássico doce brasileiro feito com leite condensado e chocolate. Simples e delicioso!",
+    "ingredient": "[{\"name\": \"leite condensado\", \"amount\": \"1\", \"unit\": \"lata\"}, {\"name\": \"manteiga\", \"amount\": \"1\", \"unit\": \"colher de sopa\"}, {\"name\": \"chocolate em pó\", \"amount\": \"3\", \"unit\": \"colheres de sopa\"}, {\"name\": \"chocolate granulado\", \"amount\": null, \"unit\": null}]",
+    "step_by_step": "1. Em uma panela, misture o leite condensado, a manteiga e o chocolate em pó. 2. Cozinhe em fogo médio, mexendo sempre, até desgrudar do fundo da panela. 3. Deixe esfriar e faça bolinhas com as mãos untadas com manteiga. 4. Passe no chocolate granulado e coloque em forminhas.",
+    "nutrition_info": null,
+    "category": null,
+    "prep_time": "10 minutes",
+    "cook_time": null,
+    "total_time": "25 minutes",
+    "servings": null,
+    "difficulty_level": "easy",
+    "rating": null,
+    "notes": "Dica: Para um brigadeiro mais cremoso, retire do fogo um pouco antes de desgrudar completamente.",
+    "tags": null,
+    "image_urls": "https://www.receiteria.com.br/images/brigadeiro-main.jpg"
+}

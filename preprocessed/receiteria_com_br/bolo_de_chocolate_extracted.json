@@ -1,0 +1,17 @@
+{
+    "dish_name": "Bolo de Chocolate",
+    "description": "Delicioso bolo de chocolate fofinho e úmido, perfeito para qualquer ocasião. Receita fácil e rápida.",
+    "ingredient": "[{\"name\": \"farinha de trigo\", \"amount\": \"2\", \"unit\": \"xícaras\"}, {\"name\": \"açúcar\", \"amount\": \"1\", \"unit\": \"xícara\"}, {\"name\": \"chocolate em pó\", \"amount\": \"0.5\", \"unit\": \"xícara\"}, {\"name\": \"ovos\", \"amount\": \"3\", \"unit\": null}, {\"name\": \"leite\", \"amount\": \"1\", \"unit\": \"xícara\"}, {\"name\": \"óleo\", \"amount\": \"0.5\", \"unit\": \"xícara\"}, {\"name\": \"fermento em pó\", \"amount\": \"1\", \"unit\": \"colher de sopa\"}]",
+    "step_by_step": "1. Pré-aqueça o forno a 180°C e unte uma forma com manteiga e farinha. 2. Em uma tigela grande, misture a farinha, o açúcar e o chocolate em pó. 3. Adicione os ovos, o leite e o óleo. Bata bem até obter uma massa homogênea. 4. Por último, adicione o fermento e misture delicadamente. 5. Despeje a massa na forma e leve ao forno por 40 minutos. 6. Deixe esfriar antes de desenformar.",
+    "nutrition_info": "285 kcal; 6/12/38",
+    "category": "Sobremesa",
+    "prep_time": "15 minutes",
+    "cook_time": "40 minutes",
+    "total_time": "55 minutes",
+    "servings": "10 porções",
+    "difficulty_level": "easy",
+    "rating": 4.8,
+    "notes": "Você pode adicionar gotas de chocolate à massa para um sabor ainda mais intenso. O bolo fica ainda melhor no dia seguinte!",
+    "tags": null,
+    "image_urls": "https://www.receiteria.com.br/images/bolo-chocolate.jpg,https://www.receiteria.com.br/images/bolo-chocolate-twitter.jpg,https://www.receiteria.com.br/images/bolo-chocolate-2.jpg"
+}
