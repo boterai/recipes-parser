@@ -466,6 +466,41 @@ class KulinariaGeExtractor(BaseRecipeExtractor):
         
         return None
     
+    def extract_tags(self) -> Optional[str]:
+        """Извлечение тегов рецепта"""
+        # Ищем теги в div.howto-tag
+        tag_container = self.soup.find('div', class_='howto-tag')
+        if tag_container:
+            # Ищем ссылки или элементы с тегами
+            tag_links = tag_container.find_all('a')
+            if tag_links:
+                tags_list = []
+                for link in tag_links:
+                    tag_text = self.clean_text(link.get_text())
+                    if tag_text:
+                        tags_list.append(tag_text.lower())
+                
+                if tags_list:
+                    # Удаляем дубликаты, сохраняя порядок
+                    seen = set()
+                    unique_tags = []
+                    for tag in tags_list:
+                        if tag not in seen:
+                            seen.add(tag)
+                            unique_tags.append(tag)
+                    
+                    return ', '.join(unique_tags)
+        
+        # Также проверяем meta keywords если есть
+        meta_keywords = self.soup.find('meta', attrs={'name': 'keywords'})
+        if meta_keywords and meta_keywords.get('content'):
+            keywords = meta_keywords['content']
+            tags_list = [tag.strip().lower() for tag in keywords.split(',') if tag.strip()]
+            if tags_list:
+                return ', '.join(tags_list)
+        
+        return None
+    
     def extract_image_urls(self) -> Optional[str]:
         """Извлечение URL изображений"""
         urls = []
@@ -531,6 +566,7 @@ class KulinariaGeExtractor(BaseRecipeExtractor):
             "difficulty_level": self.extract_difficulty_level(),
             "rating": self.extract_rating(),
             "notes": self.extract_notes(),
+            "tags": self.extract_tags(),
             "image_urls": self.extract_image_urls()
         }
 
