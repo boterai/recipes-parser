@@ -16,6 +16,7 @@ from src.common.gpt_client import GPTClient
 import sqlalchemy
 from src.models.page import Page
 from src.models.page import Recipe
+from utils.languages import LanguageCodes, validate_and_normalize_language
 
 # Настройка логирования
 logging.basicConfig(
@@ -26,19 +27,31 @@ logger = logging.getLogger(__name__)
 
 
 class Translator:
-    def __init__(self, target_language: str = 'ru'):
+    def __init__(self, target_language: str = 'en'):
         """
         Инициализация переводчика
         Args:
-            target_language: Целевой язык для перевода (по умолчанию 'ru' - русский)
+            target_language: Целевой язык для перевода (по умолчанию 'en' - английский)
         """
-        self.target_language = target_language
+        # Валидация и нормализация языка
+        normalized_lang = validate_and_normalize_language(target_language)
+        if not normalized_lang:
+            raise ValueError(
+                f"Неподдерживаемый язык: '{target_language}'. "
+                f"Доступные языки: {', '.join(list(LanguageCodes.keys()))}"
+            )
+        
+        self.target_language = normalized_lang
+        self.lang_variations = LanguageCodes.get(normalized_lang)
+        self.lang_variations = {lang.lower() for lang in self.lang_variations}
+        
         self.db = MySQlManager()
         self.olap_db = ClickHouseManager()
         
+        self.olap_table = f"recipe_{self.target_language}"
         # Инициализация GPT клиента
         self.gpt_client = GPTClient()
-        
+
         if self.db.connect() is False:
             logger.error("Не удалось подключиться к MySQL")
             raise RuntimeError("MySQL connection failed")
@@ -59,8 +72,9 @@ class Translator:
         """
 
         if overwrite is False:
-            recipe: Recipe = self.olap_db.get_recipe_by_id(page_id)
-            if recipe:
+            recipes: Recipe = self.olap_db.get_recipes_by_ids([page_id], table_name=self.olap_table)
+            if recipes:
+                recipe = recipes[0]
                 logger.info(f"Рецепт с ID={page_id} уже переведен и сохранен в таблице recipe_ru")
                 return recipe
 
@@ -77,11 +91,10 @@ class Translator:
             logger.error(f"Не удалось перевести страницу с ID={page_id}")
             return None
         # Сохраняем перевод в БД
-        if self.olap_db.insert_recipes_batch([translated_recipe]) != 1:
+        if self.olap_db.insert_recipes_batch([translated_recipe], table_name=self.olap_table) != 1:
             logger.error(f"Ошибка при сохранении перевода страницы ID={page_id} в ClickHouse")
             return None
         return translated_recipe
-        
         
     def translate_and_save_batch(self, site_id: int = None, batch_size: int = 100, start_from_id: Optional[int] = None):
         """
@@ -101,7 +114,7 @@ class Translator:
         logger.info(f"Получение списка непереведенных страниц для site_id={site_id}...")
         
         # Получаем все ID из ClickHouse (уже переведенные)
-        translated_ids = set(self.olap_db.get_page_ids_by_site(site_id=site_id))
+        translated_ids = set(self.olap_db.get_page_ids_by_site(site_id=site_id, table_name=self.olap_table))
         logger.info(f"Найдено {len(translated_ids)} переведенных страниц в ClickHouse")
         
         # Если нет переведенных страниц, переходим к последовательному режиму
@@ -229,7 +242,7 @@ class Translator:
                 
                 logger.info(f"[{i}/{len(pages_data)}] Перевод страницы ID={recipe.page_id}: {recipe.dish_name}")
                 
-                if page_data.language.lower() == self.target_language.lower():
+                if page_data.language.lower() in self.lang_variations:
                     translated_recipe = recipe
                     translated_recipe.list_fields_to_lower()
                     logger.info(f"✓ Страница ID={recipe.page_id} уже на целевом языке {self.target_language}")
@@ -249,7 +262,7 @@ class Translator:
                 continue
         
         # Шаг 2: Сохраняем весь переведенный батч в БД одной транзакцией
-        if self.olap_db.insert_recipes_batch(translated_recipes) == len(translated_recipes):
+        if self.olap_db.insert_recipes_batch(translated_recipes, table_name=self.olap_table) == len(translated_recipes):
             logger.info(f"✓ Батч из {len(translated_recipes)} переведенных страниц успешно сохранен в ClickHouse")
         else:
             logger.warning(f"⚠ Частичная ошибка при сохранении батча")
@@ -268,12 +281,14 @@ class Translator:
             # Подготавливаем данные для перевода
             recipe_data = recipe.to_dict_for_translation()
             # Системный промпт для перевода рецепта
-            system_prompt = f"""Ты переводчик рецептов. Переведи следующий JSON с рецептом на {self.target_language} язык.
-ВАЖНО:
-1. Переведи полностью и обязательно следующие поля: "dish_name", "description", "ingredients", "tags", "category", "instructions"
-2. Верни результат в том же JSON формате, не изменяя структуру и не добавляя никаких комментариев
-3. Если поле null или пустое, оставь его как есть
-"""
+            system_prompt = f"""You are a professional recipe translator. Translate the following recipe JSON to {self.target_language} language.
+
+IMPORTANT:
+1. Translate completely and accurately these fields: "dish_name", "description", "ingredients", "tags", "category", "instructions"
+2. Return the result in the same JSON format without changing the structure or adding any comments
+3. If a field is null or empty, leave it as is
+4. Preserve all measurements, numbers, and formatting
+5. Keep the translation natural and culinary-appropriate for the target language"""
 
             user_prompt = json.dumps(recipe_data, ensure_ascii=False)
             

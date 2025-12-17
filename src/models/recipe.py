@@ -1,6 +1,3 @@
-from __future__ import annotations
-
-import json
 from typing import Optional
 from pydantic import BaseModel
 
@@ -29,7 +26,10 @@ class Recipe(BaseModel):
     nutrition_info: Optional[str] = None
     category: Optional[str] = None
 
-    def prepare_multivector_data(self, max_instruction_length: int = 300, max_description_length: int = 300) -> dict:
+    # системные поля
+    vectorised: Optional[bool] = False  # было ли произведено векторное представление рецепта   
+
+    def get_multivector_data(self, max_instruction_length: int = 400, max_description_length: int = 150) -> dict:
         """Подготавливает данные для мульти-векторного эмбеддинга"""
         return {
                 "ingredients": self.ingredient_to_str(),
@@ -55,13 +55,13 @@ class Recipe(BaseModel):
     def get_meta_str(self) -> str:
         """Возвращает строковое представление метаданных рецепта"""
         meta_parts = []
-        if self.cook_time is not None:
+        if self.cook_time:
             meta_parts.append(f"Cook time: {self.cook_time}")
-        if self.prep_time is not None:
+        if self.prep_time:
             meta_parts.append(f"Prep time: {self.prep_time}")
-        if self.total_time is not None:
+        if self.total_time:
             meta_parts.append(f"Total time: {self.total_time}")
-        if self.nutrition_info is not None:
+        if self.nutrition_info:
             meta_parts.append(f"Calories: {self.nutrition_info}")
         return "; ".join(meta_parts)
     
@@ -71,13 +71,13 @@ class Recipe(BaseModel):
         if self.dish_name:
             parts.append(self.dish_name)
         if self.description:
-            parts.append(self.description[:300])
+            parts.append(self.description[:200])
         if self.ingredients:
-            parts.append(self.ingredients)
+            parts.append(self.ingredient_to_str())
         if self.instructions:
             parts.append(self.instructions[:600])
         if self.tags:
-            parts.append(self.tags[:150])
+            parts.append(self.tags_to_str()[:100])
         
         return " ".join(parts)
     

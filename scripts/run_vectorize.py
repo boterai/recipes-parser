@@ -4,190 +4,69 @@
 
 import sys
 from pathlib import Path
-import sqlalchemy
+
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.models.page import Page
-from src.common.db.mysql import MySQlManager
-from src.common.embedding import get_embedding_function_bge_m3, get_embedding_function_multilingual
+from src.common.embedding import get_embedding_function
 from src.stages.vectorise.vectorise import RecipeVectorizer
-from src.common.db.qdrant import QdrantRecipeManager
+from src.models.recipe import Recipe
 
-def add_recipes(model_prefix: str = "ml-e5-large", site_id: int = None):
-    if model_prefix == "bge-m3" or model_prefix == "bge-m3-nonorm":
-        embed_func, dims = get_embedding_function_bge_m3()
-    else:
-        embed_func, dims = get_embedding_function_multilingual()
+def add_recipes():
+    batch_size = 15 # примерный размер батча для векторизации и добавления в Qdrant при котором не происходит timeout
+    rv = RecipeVectorizer()
 
-    db = MySQlManager()
-    qm = QdrantRecipeManager(collection_prefix=model_prefix)
-    rv = RecipeVectorizer(vector_db=qm, page_database=db)
-    if not rv.connect():
-        print("cant connect to dbs")
-        return
-    
+    embed_func, dims = get_embedding_function(batch_size=batch_size)
     rv.add_all_recipes(
         embedding_function=embed_func,
-        batch_size=10,
-        dims=dims,
-        site_id=site_id
-    )
+        batch_size=batch_size,
+        dims=dims ,
+        site_id=5)
 
-def save_similar_to_db(db: MySQlManager, model_prefix: str, similar_to_id: int, similar_results: list, content_type: str = "full"):
-    """
-    Сохранение похожих рецептов в БД
-    
+def search_similar(recipe_id: int = 21427, use_weighted: bool = True,
+                   score_threshold: float = 0.0, limit: int = 6):
+    """Поиск похожих рецептов для заданного recipe_id и вывод их на экран
     Args:
-        model_prefix: Префикс модели (ml-e5-large или bge-m3)
-        similar_to_id: ID исходного рецепта
-        similar_results: Список кортежей (score, Page)
+        recipe_id: ID рецепта для поиска похожих
+        use_weighted: использовать ли взвешенный поиск
+        score_threshold: порог схожести для фильтрации результатов
+        limit: максимальное количество возвращаемых похожих рецептов
     """
-    table_name = model_prefix
-    
-    if not similar_results or len(similar_results) == 0:
-        print("Нет результатов для сохранения")
-        return 0
-    
-    print(f"Сохранение {len(similar_results)} результатов в таблицу `{table_name}`...")
-    
-    saved_count = 0
-    
-    try:
-        session = db.get_session()
-        for score, similar_page in similar_results:
-            # Пропускаем сам рецепт
-            similar_page: Page
-            if similar_page.id == similar_to_id:
-                continue
-            
-            try:
-                session.execute(
-                    sqlalchemy.text(f"""
-                        INSERT INTO `{table_name}` 
-                        (similar_to, url, language, step_by_step, 
-                            dish_name, description, tags, ingredient, score, content_type)
-                        VALUES 
-                        (:similar_to, :url, :language, :step_by_step,
-                            :dish_name, :description, :tags, :ingredient, :score, :content_type)
-                        ON DUPLICATE KEY UPDATE 
-                            score = VALUES(score),
-                            step_by_step = VALUES(step_by_step),
-                            dish_name = VALUES(dish_name),
-                            description = VALUES(description),
-                            tags = VALUES(tags),
-                            ingredient = VALUES(ingredient)
-                    """),
-                    {
-                        "similar_to": similar_to_id,
-                        "url": similar_page.url[-191:],
-                        "language": similar_page.language,
-                        "step_by_step": similar_page.step_by_step,
-                        "dish_name": similar_page.dish_name,
-                        "description": similar_page.description,
-                        "tags": similar_page.tags,
-                        "ingredient": similar_page.ingredient,
-                        "score": float(score),
-                        "content_type": content_type
-                    }
-                )
-                saved_count += 1
+    rv = RecipeVectorizer()
 
-            except Exception as e:
-                print(f"Ошибка сохранения рецепта ID {similar_page.id}: {e}")
-                import traceback
-                traceback.print_exc()
-        session.commit()
-        session.close()
-        print(f"Итого сохранено {saved_count} похожих рецептов в таблицу `{table_name}`\n")
-        return saved_count
-        
-    except Exception as e:
-        print(f"Критическая ошибка при сохранении в `{table_name}`: {e}")
-        import traceback
-        traceback.print_exc()
-        return 0
-
-def search_similar(model_prefix: str = "ml-e5-large", save_to_db: bool = True, recipe_id: str = "21427", use_weighted: bool = True):
-    if model_prefix == "bge-m3":
-        embed_func, _ = get_embedding_function_bge_m3()
-    else:
-        embed_func, _ = get_embedding_function_multilingual()
-
-    db = MySQlManager()
-    qm = QdrantRecipeManager(collection_prefix=model_prefix)
-    rv = RecipeVectorizer(vector_db=qm, page_database=db)
-    if not rv.connect():
-        print("Не удалось подключиться к БД")
-        return
+    embed_func, _ = get_embedding_function(batch_size=1)
     
-    page = db.get_page_by_id(recipe_id)
-    if not page:
-        print(f"Рецепт с ID {recipe_id} не найден")
-        rv.close()
-        return
-    
-    print(f"\n{'='*60}")
-    print(f"Модель: {model_prefix}")
-    print(f"Поиск похожих рецептов для: {page.dish_name or page.title} (ID: {page.id})")
-    print(f"{'='*60}\n")
-
-    if use_weighted:
-        results = rv.get_similar_recipes_weighted_as_pages(
-            page=page,
-            embed_function=embed_func,
-            limit=5,
-            score_threshold=0.0
-        )
-    else:
-        results = rv.get_similar_recipes_as_pages(
-            page=page,
-            embed_function=embed_func,
-            collection_type="full",
-            limit=5,
-            score_threshold=0.0,
-            use_colbert=False
-        )
-    
-    print(f"Найдено {len(results)} похожих рецептов:")
-    for score, similar_page in results:
-        print(f"  Score: {score:.4f} | ID: {similar_page.id} | {similar_page.dish_name or similar_page.title}")
-    
-    # Сохраняем результаты в БД
-    if save_to_db and len(results) > 0:
-        save_similar_to_db(
-            db=db, 
-            model_prefix=model_prefix,
-            similar_to_id=page.id,
-            similar_results=results,
-            content_type="weighted"
-        )
-
-    rv.close()
-
-def get_recipe_len(): 
-    db = MySQlManager()
-    if not db.connect():
-        print("Не удалось подключиться к БД")
-        return
-    page = db.get_page_by_id(6659)
-    recipe = page.to_recipe()
+    recipe = rv.olap_database.get_recipes_by_ids([recipe_id])[0]
     if not recipe:
-        print("Рецепт не найден")
+        print(f"Recipe with id {recipe_id} not found")
         return
-    total_recipe = recipe.get_full_recipe_str()
-    print(f"Длина полного рецепта: {len(total_recipe)} символов")
+    
+    similar_recipes: list[float, Recipe] = []
+    if use_weighted:
+        similar_recipes = rv.get_similar_recipes_weighted(
+            recipe=recipe,
+            embed_function=embed_func,
+            limit=limit,
+            score_threshold=score_threshold
+        )
+    else:
+        similar_recipes = rv.get_similar_recipes_full(
+            recipe=recipe,
+            embed_function=embed_func,
+            limit=limit,
+            score_threshold=score_threshold
+        )
+
+    if len(similar_recipes) == 0:
+        print(f"No similar recipes found for recipe ID {recipe_id}")
+        return
+    print(f"Похожие рецепты для рецепта ID: {recipe_id} - {recipe.dish_name}:")
+    for score, sim_recipe in similar_recipes:
+        print(f"ID: {sim_recipe.page_id}, Блюдо: {sim_recipe.dish_name}, Score: {score}")
+
 
 
 if __name__ == '__main__':
-    # Векторизация рецептов (запускать один раз)
-    get_recipe_len()
-    add_recipes(model_prefix="bge-m3", site_id=5)
-    
-    # Поиск похожих с сохранением в БД
-    search_similar(model_prefix="bge-m3", save_to_db=True, use_weighted=True)
-
-    """
-    bge-m3 лучше c colbert получается на тестах как будто хуже, чем без него
-    
-    """
+    # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)
+    #add_recipes()
+    search_similar(recipe_id=8829, use_weighted=False, score_threshold=0.0, limit=6)

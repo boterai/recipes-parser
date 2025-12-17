@@ -114,10 +114,11 @@ class Page(BaseModel):
             tags=self.tags_to_json(),
             ingredients=self.ingredients_to_json(),
             instructions=self.step_by_step or "",
-            cook_time=self.cook_time,
-            prep_time=self.prep_time,
-            total_time=self.total_time,
-            nutrition_info=self.nutrition_info
+            cook_time=self.cook_time or "",
+            prep_time=self.prep_time or "",
+            total_time=self.total_time or "",
+            nutrition_info=self.nutrition_info or "",
+            category=self.category or ""
         )   
     
     class Config:

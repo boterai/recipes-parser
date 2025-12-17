@@ -345,6 +345,28 @@ class MySQlManager:
         
         return pages
     
+    def get_all_site_ids(self) -> list[int]:
+        """
+        Получение всех ID сайтов
+        
+        Returns:
+            Список ID сайтов
+        """
+        session = self.get_session()
+        
+        try:
+            result = session.execute(sqlalchemy.text("SELECT DISTINCT(site_id) FROM pages where is_recipe = TRUE and description IS NOT NULL AND step_by_step IS NOT NULL and ingredient IS NOT NULL"))
+            rows = result.fetchall()
+            site_ids = [int(row[0]) for row in rows]
+            
+            return site_ids
+            
+        except SQLAlchemyError as e:
+            logger.error(f"Ошибка получения всех site_id: {e}")
+            return []
+        finally:
+            session.close()
+            
     def close(self):
         """Закрытие подключения"""
         if self.engine:

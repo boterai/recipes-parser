@@ -2,21 +2,21 @@
 Менеджер работы с Qdrant для векторного добавления и поиска рецептов
 """
 
+import time
 import logging
 from typing import Any, Optional
 from itertools import batched
 from src.common.embedding import EmbeddingFunction
 from config.db_config import QdrantConfig
-from src.models.page import Page
 from src.models.recipe import Recipe
+from src.models.search_config import ComponentWeights, SearchProfiles
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
-    Distance, VectorParams, PointStruct,
-    MultiVectorConfig, MultiVectorComparator,
-    Prefetch, HnswConfigDiff
-    )
+    Distance, VectorParams, PointStruct)
 
 logger = logging.getLogger(__name__)
+
+
 
 class QdrantError(Exception):
     """Базовый класс для ошибок Qdrant"""
@@ -51,39 +51,63 @@ class QdrantRecipeManager:
         """
         self.client = None
         self.collection_prefix = collection_prefix
+        self.full_collection = "full"
+        self.mv_collection = "mv"
         self.collections = {"full": f"{collection_prefix}_full", # no colbert locally
                             "mv": f"{collection_prefix}_mv", # multivector search with colbert
         }
+        self.connected = False
         
+    def connect(self, retry_attempts: int = 3, retry_delay: float = 2.0) -> bool:
+        """Установка подключения к Qdrant с повторными попытками
         
-    def connect(self) -> bool:
-        """Установка подключения к Qdrant"""
-        try:
-            params = QdrantConfig.get_connection_params()
-            
-            # Создаем клиент
-            self.client = QdrantClient(
-                host=params.get('host', 'localhost'),
-                port=params.get('port', '6333'),
-                api_key=params.get('api_key'),
-                https=False,
-                timeout=40 # увеличенный таймаут для больших операций
-            )
-            return True
-            
-        except Exception as e:
-            logger.error(f"Ошибка подключения к Qdrant: {e}")
-            return False
+        Args:
+            retry_attempts: Количество попыток подключения
+            retry_delay: Базовая задержка между попытками (в секундах)
         
-    def create_collections(
-            self, 
-            dense_dim: int = 1024, 
-            colbert_dim: int = 1024) -> bool:
+        Returns:
+            True если подключение успешно, False иначе
+        """
+        params = QdrantConfig.get_connection_params()
+        
+        for attempt in range(retry_attempts):
+            try:
+                logger.info(f"Попытка подключения к Qdrant {attempt + 1}/{retry_attempts}...")
+                
+                # Создаем клиент
+                self.client = QdrantClient(
+                    host=params.get('host', 'localhost'),
+                    port=params.get('port', '6333'),
+                    api_key=params.get('api_key'),
+                    https=False,
+                    timeout=40  # увеличенный таймаут для больших операций
+                )
+                
+                # Проверка подключения
+                self.client.get_collections()
+                
+                logger.info("✓ Успешное подключение к Qdrant")
+                return True
+                
+            except Exception as e:
+                if attempt < retry_attempts - 1:
+                    # Экспоненциальная задержка: delay * 2^attempt
+                    delay = retry_delay * (2 ** attempt)
+                    logger.warning(f"✗ Ошибка подключения к Qdrant (попытка {attempt + 1}/{retry_attempts}): {e}")
+                    logger.info(f"Повторная попытка через {delay:.1f}с...")
+                    time.sleep(delay)
+                else:
+                    logger.error(f"✗ Не удалось подключиться к Qdrant после {retry_attempts} попыток: {e}")
+        
+        # Если дошли сюда - все попытки исчерпаны
+        return False
+        
+    def create_collections(self, dims: int = 1024) -> bool:
         """
         Создание отдельных коллекций для каждого типа эмбеддинга
         
         Args:
-            dense_dim: Размерность плотных векторов (1024 для BGE-M3)
+            dims: Размерность плотных векторов (1024 для BGE-en)
         
         Returns:
             True если успешно создано или уже существует
@@ -106,43 +130,35 @@ class QdrantRecipeManager:
                     case "full":
                         vectors_config = {
                             "dense": VectorParams(
-                                size=dense_dim,
+                                size=dims,
                                 distance=Distance.COSINE
                             )
                         }
                     case "mv":
                         vectors_config = {
                             "ingredients": VectorParams(
-                                size=dense_dim,
+                                size=dims,
                                 distance=Distance.COSINE
                             ),
                             "description": VectorParams(
-                                size=dense_dim,
+                                size=dims,
                                 distance=Distance.COSINE,
                             ),
                             "instructions": VectorParams(
-                                size=dense_dim,
+                                size=dims,
                                 distance=Distance.COSINE,
                             ),
                             "dish_name": VectorParams(
-                                size=dense_dim,
+                                size=dims,
                                 distance=Distance.COSINE,
                             ),
                             "tags": VectorParams(
-                                size=dense_dim,
+                                size=dims,
                                 distance=Distance.COSINE,
                             ),
                             "meta": VectorParams(
-                                size=dense_dim,
+                                size=dims,
                                 distance=Distance.COSINE,
-                            ),
-                            "colbert": VectorParams(
-                                size=colbert_dim,
-                                distance=Distance.COSINE,
-                                multivector_config=MultiVectorConfig(
-                                    comparator=MultiVectorComparator.MAX_SIM
-                                ),
-                                hnsw_config=HnswConfigDiff(m=0)
                             )
                         }
                 
@@ -160,11 +176,122 @@ class QdrantRecipeManager:
             return False
 
 
+    def _add_to_full_collection(
+        self, 
+        batch: list[Recipe], 
+        collection_name: str,
+        embedding_function: EmbeddingFunction,
+        batch_num: int
+    ) -> int:
+        """
+        Добавление рецептов в коллекцию 'full' (один dense вектор на полный текст)
+        
+        Args:
+            batch: Батч рецептов
+            collection_name: Имя коллекции
+            embedding_function: Функция эмбеддинга
+            batch_num: Номер батча для логирования
+            
+        Returns:
+            Количество добавленных рецептов
+        """
+        texts = [r.get_full_recipe_str() for r in batch]
+        dense_vecs = embedding_function(texts, is_query=False)
+        
+        points = []
+        for i, recipe in enumerate(batch):
+            point = PointStruct(
+                id=recipe.page_id,
+                vector={"dense": dense_vecs[i]},
+                payload={
+                    "dish_name": recipe.dish_name,
+                    "id": recipe.page_id
+                }
+            )
+            points.append(point)
+        
+        self.client.upsert(collection_name=collection_name, points=points, wait=True)
+        logger.info(f"✓ Батч {batch_num}, 'full': {len(points)} рецептов")
+        return len(points)
+    
+    def _add_to_multivector_collection(
+        self,
+        batch: list[Recipe],
+        collection_name: str,
+        embedding_function: EmbeddingFunction,
+        batch_num: int
+    ) -> int:
+        """
+        Добавление рецептов в мультивекторную коллекцию (отдельные векторы для компонентов)
+        
+        Args:similar_recipes: list[float, Recipe]
+            batch: Батч рецептов
+            collection_name: Имя коллекции
+            embedding_function: Функция эмбеддинга
+            batch_num: Номер батча для логирования
+            
+        Returns:
+            Количество добавленных рецептов
+        """
+        points = []
+        for recipe in batch:
+            # Собираем тексты для каждого компонента
+            comp_texts = recipe.get_multivector_data()
+            
+            # Фильтруем пустые
+            comp_texts = {k: v for k, v in comp_texts.items() if v.strip()}
+            
+            if not comp_texts:
+                continue
+            
+            # Создаем dense embedding для каждого компонента
+            texts_list = list(comp_texts.values())
+            keys_list = list(comp_texts.keys())
+            
+            dense_vecs = embedding_function(texts_list, is_query=False)
+            vectors = {key: dense_vecs[idx] for idx, key in enumerate(keys_list)}
+            
+            point = PointStruct(
+                id=recipe.page_id,
+                vector=vectors,
+                payload={
+                    "dish_name": recipe.dish_name,
+                    "id": recipe.page_id
+                }
+            )
+            points.append(point)
+        
+        if points:
+            self.client.upsert(collection_name=collection_name, points=points, wait=True)
+            logger.info(f"✓ Батч {batch_num}, 'mv': {len(points)} рецептов")
+            return len(points)
+        return 0
+    
+    def _mark_vectorised(self, recipes: list[Recipe], mark_vectorised_callback = None):
+        """
+        _mark_vectorised Пометка рецептов как векторизованные через callback функцию
+
+        Args:
+            recipes: Список рецептов для пометки
+            mark_vectorised_callback: Функция для пометки рецептов как векторизованных (принимает list[Recipe])
+        """
+
+        if not mark_vectorised_callback:
+            return
+        for page in recipes:
+            page.vectorised = True
+        try:
+            marked = mark_vectorised_callback(recipes)
+            logger.info(f"✓ Помечено {marked} рецептов как векторизованные")
+        except Exception as e:
+            logger.warning(f"⚠ Ошибка при пометке рецептов как векторизованных: {e}")
+
     def add_recipes(
             self, 
-            pages: list[Page], 
+            pages: list[Recipe], 
             embedding_function: EmbeddingFunction, 
-            batch_size: int = 50) -> int:
+            batch_size: int = 50,
+            mark_vectorised_callback = None) -> int:
         """
         Массовое добавление рецептов в отдельные коллекции
         
@@ -172,6 +299,7 @@ class QdrantRecipeManager:
             pages: Список объектов страниц с рецептами
             embedding_function: Функция для создания эмбеддингов
             batch_size: Размер батча
+            mark_vectorised_callback: Функция для пометки рецептов как векторизованных (принимает list[int] page_ids)
         Returns:
             Количество успешно добавленных рецептов
         """
@@ -182,104 +310,18 @@ class QdrantRecipeManager:
         
         for batch_num, batch in enumerate(batched(pages, batch_size), 1):
             try:
-                # Конвертируем Page в Recipe, фильтруем валидные
-                valid_recipes: list[Recipe] = []
-                for p in batch:
-                    if p.is_recipe and p.dish_name and p.ingredient and p.step_by_step:
-                        valid_recipes.append(p.to_recipe())
-                
-                if not valid_recipes:
-                    logger.warning(f"Батч {batch_num}: нет валидных рецептов")
-                    continue
-                
                 # Обрабатываем каждую коллекцию
                 for col_type, collection_name in self.collections.items():
                     if col_type == "full":
-                        # Коллекция full: один dense вектор на полный текст
-                        texts = [r.get_full_recipe_str() for r in valid_recipes]
-                        dense_vecs, _ = embedding_function(texts, is_query=False, use_colbert=False)
-                        
-                        points = []
-                        for i, recipe in enumerate(valid_recipes):
-                            point = PointStruct(
-                                id=recipe.page_id if hasattr(recipe, 'id') else i,
-                                vector={"dense": dense_vecs[i]},
-                                payload={
-                                    "dish_name": recipe.dish_name,
-                                    "description": recipe.description or "",
-                                    "id": recipe.page_id
-                                }
-                            )
-                            points.append(point)
-                        
-                        self.client.upsert(collection_name=collection_name, points=points, wait=True)
-                        logger.info(f"✓ Батч {batch_num}, 'full': {len(points)} рецептов")
-                    
+                        self._add_to_full_collection(batch, collection_name, embedding_function, batch_num)
                     elif col_type == "mv":
-                        # Коллекция mv: multiple dense vectors + colbert
-                        points = []
-                        for recipe in valid_recipes:
-                            # Собираем тексты для каждого компонента
-                            comp_texts = {
-                                "ingredients": recipe.ingredients or "",
-                                "description": recipe.description or "",
-                                "instructions": recipe.instructions or "",
-                                "dish_name": recipe.dish_name or "",
-                                "tags": recipe.tags or "",
-                                "meta": recipe.get_meta_str() or ""
-                            }
-                            
-                            # Фильтруем пустые
-                            comp_texts = {k: v for k, v in comp_texts.items() if v.strip()}
-                            
-                            if not comp_texts:
-                                continue
-                            
-                            # Создаем dense embedding для каждого компонента
-                            texts_list = list(comp_texts.values())
-                            keys_list = list(comp_texts.keys())
-                            
-                            vectors = {}
-                            ingredients_idx = keys_list.index("ingredients") if "ingredients" in keys_list else -1
-                            
-                            if ingredients_idx >= 0:
-                                # Для ingredients получаем dense + colbert одновременно
-                                dense_ing, colbert_vecs = embedding_function([texts_list[ingredients_idx]], is_query=False, use_colbert=True)
-                                vectors["ingredients"] = dense_ing[0]
-                                if colbert_vecs:
-                                    vectors["colbert"] = colbert_vecs[0]
-                                
-                                # Для остальных компонентов только dense
-                                other_texts = [texts_list[i] for i in range(len(texts_list)) if i != ingredients_idx]
-                                other_keys = [keys_list[i] for i in range(len(keys_list)) if i != ingredients_idx]
-                                
-                                if other_texts:
-                                    dense_vecs, _ = embedding_function(other_texts, is_query=False, use_colbert=False)
-                                    for idx, key in enumerate(other_keys):
-                                        vectors[key] = dense_vecs[idx]
-                            else:
-                                # Нет ingredients - только dense для всех
-                                dense_vecs, _ = embedding_function(texts_list, is_query=False, use_colbert=False)
-                                vectors = {key: dense_vecs[idx] for idx, key in enumerate(keys_list)}
-                            
-                            point = PointStruct(
-                                id=recipe.page_id if hasattr(recipe, 'id') else hash(recipe.dish_name),
-                                vector=vectors,
-                                payload={
-                                    "dish_name": recipe.dish_name,
-                                    "description": recipe.description or "",
-                                    "ingredients": recipe.ingredients or "",
-                                    "id": recipe.page_id
-                                }
-                            )
-                            points.append(point)
-                        
-                        if points:
-                            self.client.upsert(collection_name=collection_name, points=points, wait=True)
-                            logger.info(f"✓ Батч {batch_num}, 'mv': {len(points)} рецептов")
+                        self._add_to_multivector_collection(batch, collection_name, embedding_function, batch_num)
                 
-                added_count += len(valid_recipes)
+                added_count += len(batch)
                 logger.info(f"✓ Батч {batch_num} завершен: всего {added_count} рецептов")
+                
+                # Помечаем рецепты как векторизованные
+                self._mark_vectorised(batch, mark_vectorised_callback)
             
             except Exception as e:
                 logger.error(f"✗ Ошибка батча {batch_num}: {e}")
@@ -290,156 +332,58 @@ class QdrantRecipeManager:
         logger.info(f"✓ Итого добавлено: {added_count} рецептов в {len(self.collections)} коллекций")
         return added_count
     
-    def search(
+    def search_full(
         self,
-        query_recipe: Recipe,
+        query_vector: list[float],
         limit: int = 10,
-        embedding_function: EmbeddingFunction = None,
         score_threshold: float = 0.0,
-        collection_type: str = "full",
-        use_colbert: bool = False
+
     ) -> list[dict[str, Any]]:
         """
         Поиск похожих рецептов в указанной коллекции
         
         Args:
-            query_recipe: Рецепт для поиска похожих
+            query_recipe: вектор запроса
             limit: Количество результатов
             embedding_function: Функция для создания эмбеддинга
-            score_threshold: Минимальный порог схожести
-            collection_type: Тип коллекции ("full", "mv", "ingredients")
-            
+            score_threshold: Минимальный порог схожести            
         Returns:
             Список найденных рецептов с метаданными
         """
         if not self.client:
             logger.warning("Qdrant не подключен")
             return []
-        
-        collection_name = self.collections.get(collection_type)
-        if not collection_name:
-            logger.error(f"Неизвестный тип коллекции: {collection_type}")
-            return []
-        
+        collection = self.collections.get(self.full_collection)
         try:
-            if collection_type == "full":
-                # Поиск по полному тексту (dense only)
-                query_text = query_recipe.get_full_recipe_str()
-                dense_query, _ = embedding_function(query_text, is_query=True, use_colbert=False)
-                
-                results = self.client.query_points(
-                    collection_name=collection_name,
-                    query=dense_query[0],
-                    using="dense",
-                    limit=limit,
-                    with_payload=True,
-                    score_threshold=score_threshold
-                )
-                
-                return [{
-                    "recipe_id": hit.id,
-                    "score": hit.score,
-                    "dish_name": hit.payload.get("dish_name"),
-                    "description": hit.payload.get("description"),
-                    "method": "Dense"
-                } for hit in results.points]
+            results = self.client.query_points(
+                collection_name=collection,
+                query=query_vector,
+                using="dense",
+                limit=limit,
+                with_payload=True,
+                score_threshold=score_threshold
+            )
             
-            elif collection_type == "mv":
-                # Поиск по multi-vector с опциональным ColBERT
-                if use_colbert:
-                    # Поиск с ColBERT только по ingredients: prefetch с dense, затем ре-ранкинг с ColBERT
-                    ingredients_text = query_recipe.ingredients or ""
-                    
-                    if ingredients_text:
-                        dense_ing, colbert_query = embedding_function([ingredients_text], is_query=True, use_colbert=True)
-                        
-                        if colbert_query:
-                            results = self.client.query_points(
-                                collection_name=collection_name,
-                                prefetch=Prefetch(
-                                    query=dense_ing[0],
-                                    using="ingredients",
-                                    limit=limit * 2
-                                ),
-                                query=colbert_query[0],
-                                using="colbert",
-                                limit=limit,
-                                with_payload=True,
-                                score_threshold=score_threshold
-                            )
-                        else:
-                            # Fallback: используем только dense
-                            results = self.client.query_points(
-                                collection_name=collection_name,
-                                query=dense_ing[0],
-                                using="ingredients",
-                                limit=limit,
-                                with_payload=True,
-                                score_threshold=score_threshold
-                            )
-                    else:
-                        logger.warning("Нет ингредиентов для ColBERT поиска")
-                        return []
-                        
-                        return [{
-                            "recipe_id": hit.id,
-                            "score": hit.score,
-                            "dish_name": hit.payload.get("dish_name"),
-                            "description": hit.payload.get("description"),
-                            "ingredients": hit.payload.get("ingredients"),
-                            "method": "MultiVector+ColBERT"
-                        } for hit in results.points]
-                
-                # Поиск без ColBERT - только dense компоненты
-                comp_texts = query_recipe.prepare_multivector_data()
-                comp_texts = {k: v for k, v in comp_texts.items() if v.strip()}
-                
-                if not comp_texts:
-                    logger.warning("Нет компонентов для поиска в mv коллекции")
-                    return []
-                
-                texts_list = list(comp_texts.values())
-                keys_list = list(comp_texts.keys())
-                dense_vecs, _ = embedding_function(texts_list, is_query=True, use_colbert=False)
-                
-                primary_key = keys_list[0]
-                primary_vec = dense_vecs[0]
-                
-                results = self.client.query_points(
-                    collection_name=collection_name,
-                    query=primary_vec,
-                    using=primary_key,
-                    limit=limit,
-                    with_payload=True,
-                    score_threshold=score_threshold
-                )
-                
-                return [{
-                    "recipe_id": hit.id,
-                    "score": hit.score,
-                    "dish_name": hit.payload.get("dish_name"),
-                    "description": hit.payload.get("description"),
-                    "ingredients": hit.payload.get("ingredients"),
-                    "method": f"MultiVector-{primary_key}"
-                } for hit in results.points]
-            
-            else:
-                logger.error(f"Неподдерживаемый тип коллекции: {collection_type}")
-                return []
-            
+            return [{
+                "recipe_id": hit.id,
+                "score": hit.score,
+                "dish_name": hit.payload.get("dish_name"),
+                "method": "Dense"
+            } for hit in results.points]
+        
         except Exception as e:
-            logger.error(f"Ошибка поиска в коллекции '{collection_type}': {e}")
+            logger.error(f"Ошибка поиска в коллекции 'full': {e}")
             import traceback
             traceback.print_exc()
             return []
     
     def search_multivector_weighted(
         self,
-        query_recipe: Recipe,
+        recipe: Recipe,
         limit: int = 10,
         embedding_function: EmbeddingFunction = None,
         score_threshold: float = 0.0,
-        component_weights: Optional[dict[str, float]] = None
+        component_weights: Optional[ComponentWeights] = None
     ) -> list[dict[str, Any]]:
         """
         Взвешенный поиск по мультивекторной коллекции с приоритетами компонентов
@@ -448,19 +392,11 @@ class QdrantRecipeManager:
         результаты с учетом весов компонентов.
         
         Args:
-            query_recipe: Рецепт для поиска похожих
+            recipe: Рецепт для поиска похожих
             limit: Количество финальных результатов
             embedding_function: Функция для создания эмбеддинга
             score_threshold: Минимальный порог схожести
             component_weights: Словарь весов для компонентов
-                По умолчанию: {
-                    "ingredients": 0.35,  # Самый приоритетный
-                    "dish_name": 0.25,
-                    "description": 0.15,
-                    "instructions": 0.15,
-                    "tags": 0.05,
-                    "meta": 0.05
-                }
         
         Returns:
             Список рецептов с взвешенным score
@@ -469,25 +405,20 @@ class QdrantRecipeManager:
             logger.warning("Qdrant не подключен")
             return []
         
-        collection_name = self.collections.get("mv")
+        collection_name = self.collections.get(self.mv_collection)
         if not collection_name:
             logger.error("Мультивекторная коллекция не найдена")
             return []
         
         # Веса по умолчанию (сумма = 1.0)
         if component_weights is None:
-            component_weights = {
-                "ingredients": 0.35,    # Ингредиенты - самый важный компонент
-                "dish_name": 0.25,      # Название блюда
-                "description": 0.15,    # Описание
-                "instructions": 0.15,   # Инструкции приготовления
-                "tags": 0.05,           # Теги
-                "meta": 0.05            # Метаданные (время, калории)
-            }
-        
+            component_weights = SearchProfiles.BALANCED
+
+        weights_dict = component_weights.to_dict()
+            
         try:
             # Подготовка компонентов запроса
-            comp_texts = query_recipe.prepare_multivector_data()
+            comp_texts = recipe.get_multivector_data()
             
             # Фильтруем пустые компоненты
             comp_texts = {k: v for k, v in comp_texts.items() if v.strip()}
@@ -496,10 +427,17 @@ class QdrantRecipeManager:
                 logger.warning("Нет компонентов для поиска")
                 return []
             
-            # Создаем эмбеддинги для всех компонентов
+            # Фильтруем компоненты с нулевым весом перед созданием эмбеддингов
+            comp_texts = {k: v for k, v in comp_texts.items() if weights_dict.get(k, 0) > 0}
+            
+            if not comp_texts:
+                logger.warning("Все компоненты имеют нулевой вес")
+                return []
+            
+            # Создаем эмбеддинги только для компонентов с ненулевым весом
             texts_list = list(comp_texts.values())
             keys_list = list(comp_texts.keys())
-            dense_vecs, _ = embedding_function(texts_list, is_query=True, use_colbert=False)
+            dense_vecs = embedding_function(texts_list, is_query=True)
             
             # Словарь для накопления score по каждому recipe_id
             # {recipe_id: {"total_score": float, "component_scores": {component: score}, "payload": dict}}
@@ -509,7 +447,7 @@ class QdrantRecipeManager:
             search_limit = limit * 3  # Берем больше кандидатов для каждого компонента
             
             for idx, component_name in enumerate(keys_list):
-                weight = component_weights.get(component_name, 0)
+                weight = weights_dict.get(component_name, 0)
                 if weight == 0:
                     continue
                 
@@ -561,8 +499,6 @@ class QdrantRecipeManager:
                     "recipe_id": recipe_id,
                     "score": data["total_score"],
                     "dish_name": data["payload"].get("dish_name"),
-                    "description": data["payload"].get("description"),
-                    "method": "MultiVector-Weighted",
                     "component_scores": data["component_scores"],  # Детализация по компонентам
                     "matches": data["matches"]  # Количество совпавших компонентов
                 })
@@ -575,7 +511,8 @@ class QdrantRecipeManager:
             import traceback
             traceback.print_exc()
             return []
-    
+        
+
     def close(self):
         """Закрытие подключения"""
         if self.client:

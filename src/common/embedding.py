@@ -2,16 +2,13 @@ import sys
 from pathlib import Path
 from typing import Protocol, Literal, Optional
 
-import numpy as np
-from FlagEmbedding import BGEM3FlagModel
 from sentence_transformers import SentenceTransformer
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-EmbeddingFunctionReturn = tuple[list[float] | list[list[float]], Optional[list[list[float]]]] # (dense_vector, colbert_vectors) при том, что colbert_vectors может быть None и тогда его надо опредлять
+EmbeddingFunctionReturn = list[list[float]] # (dense_vector, colbert_vectors) при том, что colbert_vectors может быть None и тогда его надо опредлять
 ContentType = Literal["full", "ingredients", "instructions", "descriptions", "description+name"]
-BGEM3_MODEL = "BAAI/bge-m3"
-INFLOAT_MODEL = 'intfloat/multilingual-e5-large'
+MODEL = 'BAAI/bge-large-en-v1.5'
 
 
 class EmbeddingFunction(Protocol):
@@ -24,9 +21,7 @@ class EmbeddingFunction(Protocol):
         use_colbert: True для получения ColBERT multi-vector эмбеддингов
     
     Returns:
-        tuple: (dense_vectors, colbert_vectors)
-            - dense_vectors: list[float] или list[list[float]] - основные векторы
-            - colbert_vectors: Optional[list[list[float]]] - ColBERT векторы (None если use_colbert=False)
+        - dense_vectors: list[float] или list[list[float]] - основные векторы
     """
     def __call__(
         self, 
@@ -36,141 +31,77 @@ class EmbeddingFunction(Protocol):
     ) -> EmbeddingFunctionReturn:
         ...
 
-def normalize_vector(vec: list[float]) -> list[float]:
+def get_embedding_function(model_name: str = MODEL, batch_size: int=8) -> tuple[EmbeddingFunction, int]:
     """
-    normalize_vector нормализует вектор до единичной длины.
-    Args:
-        vec: Входной вектор.
-    Returns:
-        Нормализованный вектор.
-    """
-    norm = np.linalg.norm(vec)
-    if norm == 0:
-        return vec
-    normalized = (np.array(vec) / norm).tolist()
-    return normalized
-
-def normalize_colbert_vectors(colbert_vecs: list[list[float]]) -> list[list[float]]:
-    """
-    normalize_colbert_vectors нормализует каждый вектор в последовательности ColBERT до единичной длины.
-    Args:
-        colbert_vecs: Список векторов ColBERT.
-    Returns:
-        Список нормализованных векторов ColBERT.
-    """
-    normalized_vecs = []
-    for vec in colbert_vecs:
-        norm = np.linalg.norm(vec)
-        if norm == 0:
-            normalized_vecs.append(vec)
-        else:
-            normalized_vecs.append((np.array(vec) / norm).tolist())
-    return normalized_vecs
-
-def get_embedding_function_multilingual(model_name: str = INFLOAT_MODEL) -> tuple[EmbeddingFunction, int]:
-    # Варианты моделей (от меньшей к большей):
-    # 1. 'sentence-transformers/all-MiniLM-L6-v2' - 80MB, 384 dimensions, только английский
-    # 2. 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2' - 470MB, 384 dimensions, multilingual
-    # 3. 'intfloat/multilingual-e5-small' - 470MB, 384 dimensions
-    # 4. 'intfloat/multilingual-e5-base' - 1.1GB, 768 dimensions
-    # 5. 'intfloat/multilingual-e5-large' - 2.2GB, 1024 dimensions (текущая)
-    # 6. 'BAAI/bge-m3' - только для dense для ColBERT использовать get_embedding_function_bge_m3
+    Создает функцию эмбеддинга для указанной модели
     
-    """
-    Что делать если модель автоматически не скачивается скачать в путь ~/.cache/huggingface/hub/model_name/snapshots/commit_id/
-    Например для intfloat/multilingual-e5-large можно скачать здесь: https://huggingface.co/intfloat/multilingual-e5-large
-
-    Обязательные файлы для скачивания:
-    - model.safetensors
+    По умолчанию: BAAI/bge-large-en-v1.5
+    - 1.34GB, 1024 dimensions
+    - Лучшая опенсорс модель для английского языка
+    - Специализирована на semantic search
+    
+    Другие варианты (от меньшей к большей):
+    1. 'sentence-transformers/all-MiniLM-L6-v2' - 80MB, 384 dims, только EN
+    2. 'BAAI/bge-small-en-v1.5' - 133MB, 384 dims, только EN
+    3. 'BAAI/bge-base-en-v1.5' - 438MB, 768 dims, только EN
+    4. 'BAAI/bge-large-en-v1.5' - 1.34GB, 1024 dims, только EN ✅ ЛУЧШАЯ ДЛЯ EN
+    5. 'intfloat/multilingual-e5-large' - 2.2GB, 1024 dims, multilingual
+    6. 'BAAI/bge-m3' - 2.2GB, 1024 dims, multilingual + ColBERT
+    
+    Что делать если модель автоматически не скачивается:
+    Скачать вручную в путь ~/.cache/huggingface/hub/models--{org}--{model}/snapshots/{commit_id}/
+    
+    Например для BAAI/bge-large-en-v1.5:
+    https://huggingface.co/BAAI/bge-large-en-v1.5
+    
+    Обязательные файлы:
+    - model.safetensors или pytorch_model.bin
     - config.json
     - tokenizer.json
     - tokenizer_config.json
     - special_tokens_map.json
-    - sentence_bert_config.json
-    - modules.json
+    - sentence_bert_config.json (опционально)
+    - modules.json (опционально)
     """
     
     model = SentenceTransformer(model_name)
-    colbert_model = BGEM3FlagModel(BGEM3_MODEL)
     
-    def embedding_func(texts: str, is_query: bool = False, use_colbert: bool = False) -> EmbeddingFunctionReturn:
+    # Определяем размерность модели
+    embedding_dimension = model.get_sentence_embedding_dimension()
+    
+    def embedding_func(texts: str | list[str], is_query: bool = False) -> EmbeddingFunctionReturn:
+        """
+        Генерирует эмбеддинги для текстов
+        
+        Args:
+            texts: Текст или список текстов
+            is_query: True для поисковых запросов (добавляет префикс "Represent this sentence for searching relevant passages:")
+            use_colbert: Игнорируется (bge-large-en-v1.5 не поддерживает ColBERT)
+        
+        Returns:
+            Список dense векторов (ColBERT не поддерживается)
+        """
         if isinstance(texts, str):
             texts = [texts]
-        prefix = "query: " if is_query else "passage: "
-        texts = [prefix + text for text in texts]
+        
+        # BGE модели используют специальный префикс для query
+        if is_query and model_name.startswith('BAAI/bge'):
+            # Для BGE моделей рекомендуется добавлять инструкцию для query
+            instruction = "Represent this sentence for searching relevant passages: "
+            texts = [instruction + text for text in texts]
+        
         dense_vecs = model.encode(
             texts,
-            normalize_embeddings=True,
-            batch_size=8
+            normalize_embeddings=True,  # Важно для косинусного сходства
+            batch_size=batch_size,
+            show_progress_bar=False
         ).tolist()
-
-        colbert_vecs = None
-        if use_colbert:
-            encoded_data = colbert_model.encode(
-                texts,
-                batch_size=8,
-                max_length=8192,
-                return_dense=False,
-                return_sparse=False,
-                return_colbert_vecs=True,
-            )
-            colbert_vecs = encoded_data['colbert_vecs']
-            
-        return dense_vecs, colbert_vecs
+        
+        return dense_vecs
     
-    return embedding_func, 1024  # Размерность для small модели
-
-def get_embedding_function_bge_m3() -> tuple[EmbeddingFunction, int]:
-    """
-    get_embedding_function_bge_m3 возвращает функцию эмбеддинга на основе модели BGE-M3 от BAAI.
-    Модель поддерживает создание как dense векторов, так и ColBERT multi-vector эмбеддингов.
-    """
-    model = BGEM3FlagModel(BGEM3_MODEL)
-    
-    def embedding_func(texts: str|list[str], is_query: bool = False, use_colbert: bool = False) -> EmbeddingFunctionReturn:
-        if isinstance(texts, str):
-            texts = [texts]
-        
-        encoded_data = model.encode(
-            texts,
-            batch_size=8,
-            max_length=8192,
-            return_dense=True,
-            return_sparse=False,
-            return_colbert_vecs=use_colbert,
-        )
-        dense_vecs = encoded_data['dense_vecs']
-        colbert_vecs = encoded_data.get('colbert_vecs', None)
-        
-        # Нормализация dense
-        dense_norms = np.linalg.norm(dense_vecs, axis=1, keepdims=True)
-        dense_normalized = dense_vecs / dense_norms
-
-        if not use_colbert or colbert_vecs is None:
-            return dense_normalized.tolist(), None
-        
-        
-        return dense_normalized.tolist(), colbert_vecs
-
-    return embedding_func, 1024  # Размерность для bge-m3
+    return embedding_func, embedding_dimension
 
 if __name__ == "__main__":
-    # предварительно перед передачец текст надо разбить на части по 8192 токенов, можно пока попробовать не нормализоавывать даныне и оставить так \
-    # и лучше не разбивать, а передавать целиком, тк нужно сходвтсво именно цельного рецепта
-    ef, _ = get_embedding_function_multilingual()
-    emb, colbert = ef("Тесто для блинов: 2 яйца, 500 мл молока, 250 г муки, щепотка соли, 1 ст.л. сахара, 2 ст.л. растительного масла.",
-                      is_query=False, use_colbert=True)
-    model = BGEM3FlagModel(BGEM3_MODEL)
-    text = "Тесто для блинов: 2 яйца, 500 мл молока, 250 г муки, щепотка соли, 1 ст.л. сахара, 2 ст.л. растительного масла."
-    encoded_data = model.encode(
-            [text],
-            batch_size=12,
-            max_length=8192,
-            return_dense=True,
-            return_sparse=False,
-            return_colbert_vecs=True,
-        )
-    
-    print(f"Dense embedding length: {len(encoded_data['dense_vecs'][0])}")
-    print(f"Colbert embedding length: {len(encoded_data['colbert_vecs'][0])}")
+    ef, dims = get_embedding_function()
+    print(f"Эмбеддинги созданы. Размерность: {dims}")
     

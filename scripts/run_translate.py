@@ -19,10 +19,10 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    translator = Translator(target_language="ru")
+    translator = Translator(target_language="en")
     translator.translate_and_save_batch(
-        site_id=12,
-        batch_size=500, # большой батч только, если целевой язык совпадает с исходным
+        site_id=30,
+        batch_size=10, # большой батч только, если целевой язык совпадает с исходным
     )
 
 if __name__ == "__main__":

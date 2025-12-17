@@ -7,15 +7,16 @@ from typing import Any, Optional
 from pathlib import Path
 import sys
 import logging
-import sqlalchemy
 
 # Добавляем корневую директорию в путь
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.models.page import Page
 from src.models.page import Recipe
-from src.common.db.qdrant import QdrantRecipeManager
+from src.models.search_config import ComponentWeights
 from src.common.db.mysql import MySQlManager
+from src.common.db.qdrant import QdrantRecipeManager
+from src.common.db.clickhouse import ClickHouseManager
 from src.common.embedding import EmbeddingFunction
 
 logger = logging.getLogger(__name__)
@@ -25,80 +26,55 @@ NO_EMBEDDING_ERROR = "Embedding function не установлена. Испол
 class RecipeVectorizer:
     """Векторизатор рецептов на основе векторной БД"""
     
-    def __init__(self, vector_db: QdrantRecipeManager = None, page_database: MySQlManager = None):
+    def __init__(self, vector_db: QdrantRecipeManager = None, olap_database: ClickHouseManager = None,
+                 db: MySQlManager = None):
         """
         Инициализация векторизатора
         
         Args:
             vector_db: Реализация векторной БД (по умолчанию QdrantManager)
-            embedding_dim: Размерность векторов эмбеддингов
+            olap_database: OLAP база данных (по умолчанию ClickHouseManager)
+            db: Транзакционная база данных (по умолчанию MySQlManager)
         """
-        if vector_db is None:
-            self.vector_db = QdrantRecipeManager()
-        else:
-            self.vector_db = vector_db
-
-        if page_database is None:
-            self.page_database = MySQlManager()
-        else:
-            self.page_database = page_database
-        self.connected = False
-                
-    def connect(self) -> bool:
-        if self.connected:
-            return True
-        """Подключение к векторной БД и БД страниц"""
-        if self.vector_db.connect() is False:
-            logger.error("Не удалось подключиться к векторной БД")
-            return False
-        
-        if self.page_database.connect() is False:
-            logger.error("Не удалось подключиться к базе данных страниц")
-            return False
-        self.connected = True
-        return True
-
-    def get_pages(self, site_id: int = None, limit: int = None, ids: list[str] = None) -> list[Page]:
-        """Получение страниц с рецептами для сайта из БД страниц"""
-        sql_dict = {}
-        sql = "SELECT * FROM pages WHERE is_recipe = TRUE AND dish_name IS NOT NULL AND ingredient IS NOT NULL and step_by_step IS NOT NULL"
-        if site_id is not None:
-            sql += " AND site_id = :site_id"
-            sql_dict["site_id"] = site_id
-
-        if ids is not None and len(ids) > 0:
-            sql += " AND id IN :ids"
-            sql_dict["ids"] = tuple(ids)
-
-        if limit is not None:
-            sql += " LIMIT :limit"
-            sql_dict["limit"] = limit
-
-        pages = []
-        with self.page_database.get_session() as session:
-            result = session.execute(sqlalchemy.text(sql), sql_dict)
-            rows = result.fetchall()
-            pages = [Page.model_validate(dict(row._mapping)) for row in rows]
-        
-        return pages
+        self._vector_db = vector_db
+        self._olap_database = olap_database
+        self._db = db
     
-    def get_all_site_ids(self) -> list[int]:
-        """Получение всех ID сайтов, для которых есть рецепты в БД страниц"""
-        site_ids = []
-        with self.page_database.get_session() as session:
-            sql = "SELECT DISTINCT site_id FROM sites WHERE is_recipe = TRUE"
-            result = session.execute(sqlalchemy.text(sql))
-            rows = result.fetchall()
-            site_ids = [row[0] for row in rows]
-        return site_ids
+    @property
+    def vector_db(self) -> QdrantRecipeManager:
+        """Ленивое подключение к векторной БД"""
+        if self._vector_db is None:
+            self._vector_db = QdrantRecipeManager()
+            if not self._vector_db.connect():
+                raise ConnectionError("Не удалось подключиться к векторной БД")
+        return self._vector_db
     
+    @property
+    def olap_database(self) -> ClickHouseManager:
+        """Ленивое подключение к ClickHouse"""
+        if self._olap_database is None:
+            self._olap_database = ClickHouseManager()
+            if not self._olap_database.connect():
+                raise ConnectionError("Не удалось подключиться к ClickHouse")
+        return self._olap_database
+    
+    @property
+    def db(self) -> MySQlManager:
+        """Ленивое подключение к MySQL"""
+        if self._db is None:
+            self._db = MySQlManager()
+            if not self._db.connect():
+                raise ConnectionError("Не удалось подключиться к MySQL")
+        return self._db
+
     def close(self):
         """Закрытие подключений к БД"""
-        if self.connected:
-            self.vector_db.close()
-            self.page_database.close()
-            self.connected = False
-        logger.info("Подключения к БД закрыты")
+        if self._vector_db is not None:
+            self._vector_db.close()
+        if self._olap_database is not None:
+            self._olap_database.close()
+        if self._db is not None:
+            self._db.close()
 
     def add_all_recipes(
             self, 
@@ -106,130 +82,123 @@ class RecipeVectorizer:
             batch_size: int = 8,
             site_id: Optional[int] = None,
             dims: int = 1024,
-            colbert_dims: int = 1024
+            vectorised: bool = False 
         ) -> int:
-        """Добавление всех рецептов в векторную БД для конкретного сайта или вообще всех сайтов"""
+        """
+        Добавление всех рецептов в векторную БД для конкретного сайта или вообще всех сайтов
 
-        self.vector_db.create_collections(colbert_dim=colbert_dims, dense_dim=dims)
+        Args:
+            embedding_function: Функция для получения эмбеддингов
+            batch_size: Размер партии для векторизации
+            site_id: Идентификатор сайта для векторизации (если None, то для всех сайтов)
+            dims: Размерность плотных векторов
+            colbert_dims: Размерность разреженных векторов ColBERT
+            vectorised: Флаг, указывающий, векторизованы ли уже рецепты
+        """
+
+        sites = []
         if site_id is not None:
-            pages = self.get_pages(site_id=site_id)
-            if len(pages) == 0:
-                print(f"Нет страниц для векторизации для сайта {site_id}, пропускаем")
-                return 0
-            print(f"Векторизуем партию из {len(pages)} страниц, сайт {site_id}")
-            return self.vector_db.add_recipes(pages=pages, embedding_function=embedding_function, batch_size=batch_size)
-
-        sites = self.get_all_site_ids()
-        total_added = 0
-        for site in sites:
-            pages = self.get_pages(site_id=site)
-            if len(pages) == 0:
-                print(f"Нет страниц для векторизации для сайта {site}, пропускаем")
-                continue
-
-            addedd = self.vector_db.add_recipes(pages=pages, embedding_function=embedding_function, batch_size=batch_size)
-            print(f"Всего добавлено для сайта {site}: {addedd}/{len(pages)}")
-            total_added += addedd
+            sites = [site_id]
+        else:
+            sites = self.db.get_all_site_ids()
         
-        return total_added
+        if not sites:
+            logger.warning("Нет сайтов для векторизации")
+            return 0
 
-    def get_similar_recipes(
+        self.vector_db.create_collections(dims=dims)
+        total = 0
+        total_vectorised = 0
+        for site_id in sites:
+            logger.info(f"Начинаем векторизацию рецептов для сайта {site_id}")
+            while (recipes := self.olap_database.get_recipes_by_site(site_id=site_id, vectorised=vectorised, limit=batch_size)):
+                if len(recipes) == 0:
+                    logger.info(f"Все рецепты для сайта {site_id} уже векторизованы или отсутствуют")
+                    break
+                print(f"Векторизуем партию из {len(recipes)} страниц, сайт {site_id}")
+                batch = self.vector_db.add_recipes(pages=recipes, embedding_function=embedding_function, batch_size=batch_size,
+                                              mark_vectorised_callback=self.olap_database.insert_recipes_batch)
+                total_vectorised += batch
+                total += len(recipes)
+                logger.info(f"Векторизовано рецептов в этой партии: {batch}/{len(recipes)}")
+            logger.info(f"Завершена векторизация партии для сайта {site_id}")
+
+        logger.info(f"Всего векторизовано рецептов: {total_vectorised}/{total}")
+        return total_vectorised
+
+    def vectors_to_recipes(
+            self, 
+            initial_recipe_id: int,
+            vector_results: list[dict[str, Any]]
+        ) -> list[float, Recipe]:
+        """
+            Преобразование результатов поиска в векторной БД в объекты Page с оценкой схожести
+        Args:
+            vector_results: Результаты поиска в векторной БД
+        Returns:
+            Список кортежей (score, Recipe)"""
+
+        # Создаем маппинг recipe_id -> score
+        score_map = {res['recipe_id']: res['score'] for res in vector_results}
+        
+        recipe_with_scores: list[float, Page] = []
+        recipes = self.olap_database.get_recipes_by_ids(list(score_map.keys()))
+            
+        # Возвращаем tuple (score, Page) для каждого рецепта
+        for recipe in recipes:
+            if recipe.page_id == initial_recipe_id:
+                continue  # пропускаем исходный рецепт
+            score = score_map.get(recipe.page_id, 0.0)
+            recipe_with_scores.append((score, recipe))
+        
+        recipe_with_scores.sort(key=lambda x: x[0], reverse=True)
+        
+        return recipe_with_scores
+    
+    def get_similar_recipes_full(
             self, 
             recipe: Recipe, 
             embed_function: EmbeddingFunction, 
-            collection_type: str = "full", 
             limit: int = 6,
             score_threshold: float = 0.0,
-            use_colbert: bool = False
-        ) -> list[dict[str, Any]]:
-        """Поиск похожих рецептов в векторной БД"""
+        ) -> list[float, Recipe]:
+        """
+        get_similar_recipes_full  - Поиск похожих рецептов в векторной БД и возврат их как объекты Page + score схожести c изначальным вариантом
+        Args:
+            recipe: Рецепт для поиска похожих
+            embed_function: Функция для получения эмбеддингов
+            limit: Максимальное количество возвращаемых похожих рецептов
+            score_threshold: Порог схожести для фильтрации результатов
+        """
+        query = recipe.get_full_recipe_str()
+        query_recipe = embed_function(texts=[query], is_query=True)[0]
         
-        return self.vector_db.search(
-            query_recipe=recipe,
-            embedding_function=embed_function,
-            limit=limit,
-            collection_type=collection_type,
-            score_threshold=score_threshold,
-            use_colbert=use_colbert
-        )
-    
-    def get_similar_recipes_as_pages(
-            self, 
-            page: Page, 
-            embed_function: EmbeddingFunction, 
-            collection_type: str = "full", 
-            limit: int = 6,
-            score_threshold: float = 0.0,
-            use_colbert: bool = False
-        ) -> list[float, Page]:
-        """Поиск похожих рецептов в векторной БД и возврат их как объекты Page + score схожести c изначальным вариантом"""
-
-        # Конвертируем Page в Recipe
-        recipe = page.to_recipe()
-        
-        results = self.get_similar_recipes(
-            recipe=recipe,
-            embed_function=embed_function,
-            collection_type=collection_type,
-            limit=limit,
-            score_threshold=score_threshold,
-            use_colbert=use_colbert
+        results = self.vector_db.search_full(
+            query_vector=query_recipe,
+            limit=limit+1,  # +1 чтобы исключить сам рецепт из результатов
+            score_threshold=score_threshold
         )
         
         if len(results) == 0:
             return []
         
-        # Создаем маппинг page_id -> score
-        score_map = {res['recipe_id']: res['score'] for res in results}
+        return self.vectors_to_recipes(recipe.page_id, results)
         
-        pages_with_scores: list[float, Page] = []
-        with self.page_database.get_session() as session:
-            sql = "SELECT * FROM pages WHERE id IN :ids"
-            result = session.execute(sqlalchemy.text(sql), {"ids": tuple(score_map.keys())})
-            rows = result.fetchall()
-            
-            # Возвращаем tuple (score, Page) для каждой страницы
-            for row in rows:
-                page_obj = Page.model_validate(dict(row._mapping))
-                score = score_map.get(page_obj.id, 0.0)
-                pages_with_scores.append((score, page_obj))
-        
-        pages_with_scores.sort(key=lambda x: x[0], reverse=True)
-        
-        return pages_with_scores
     
     def get_similar_recipes_weighted(
             self, 
-            page: Page,
+            recipe: Recipe,
             embed_function: EmbeddingFunction, 
             limit: int = 6,
             score_threshold: float = 0.0,
-            component_weights: Optional[dict[str, float]] = None
-        ) -> list[dict[str, Any]]:
-        """Поиск похожих рецептов в векторной БД с учетом типа контента"""
-        recipe = page.to_recipe()
-        return self.vector_db.search_multivector_weighted(
-            query_recipe=recipe,
-            embedding_function=embed_function,
-            limit=limit,
-            score_threshold=score_threshold,
-            component_weights=component_weights
-        )
-    
-    def get_similar_recipes_weighted_as_pages(
-            self, 
-            page: Page,
-            embed_function: EmbeddingFunction, 
-            limit: int = 6,
-            score_threshold: float = 0.0,
-            component_weights: Optional[dict[str, float]] = None
+            component_weights: Optional[ComponentWeights] = None
         ) -> list[float, Page]:
         """Поиск похожих рецептов в векторной БД с учетом типа контента и возврат их как объекты Page + score схожести c изначальным вариантом"""
 
-        results = self.get_similar_recipes_weighted(
-            page=page,
+        results = self.vector_db.search_multivector_weighted(
+            recipe=recipe,
             embed_function=embed_function,
-            limit=limit,
+            limit=limit + 1,  # +1 чтобы исключить сам рецепт из результатов
             score_threshold=score_threshold,
             component_weights=component_weights
         )
@@ -237,21 +206,4 @@ class RecipeVectorizer:
         if len(results) == 0:
             return []
         
-        # Создаем маппинг page_id -> score
-        score_map = {res['recipe_id']: res['score'] for res in results}
-        
-        pages_with_scores: list[float, Page] = []
-        with self.page_database.get_session() as session:
-            sql = "SELECT * FROM pages WHERE id IN :ids"
-            result = session.execute(sqlalchemy.text(sql), {"ids": tuple(score_map.keys())})
-            rows = result.fetchall()
-            
-            # Возвращаем tuple (score, Page) для каждой страницы
-            for row in rows:
-                page_obj = Page.model_validate(dict(row._mapping))
-                score = score_map.get(page_obj.id, 0.0)
-                pages_with_scores.append((score, page_obj))
-        
-        pages_with_scores.sort(key=lambda x: x[0], reverse=True)
-        
-        return pages_with_scores
+        return self.vectors_to_recipes(recipe.page_id, results)

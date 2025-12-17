@@ -100,13 +100,13 @@ class ClickHouseManager:
         
         return False
     
-    def insert_recipes_batch(self, recipes: list[Recipe], table_name: str = "recipe_ru") -> int:
+    def insert_recipes_batch(self, recipes: list[Recipe], table_name: str = "recipe_en") -> int:
         """
         Батчевая вставка рецептов в ClickHouse
         
         Args:
             recipes: Список объектов Recipe
-            table_name: Имя таблицы (recipe_ru, recipe_en и т.д.)
+            table_name: Имя таблицы (recipe_en, recipe_en и т.д.)
         
         Returns:
             Количество успешно вставленных рецептов
@@ -134,6 +134,7 @@ class ClickHouseManager:
                     recipe.prep_time,
                     recipe.total_time,
                     recipe.nutrition_info,
+                    recipe.vectorised,
                     recipe.category
                 ])
             
@@ -148,7 +149,7 @@ class ClickHouseManager:
                 column_names=[
                     'page_id', 'site_id', 'dish_name', 'description', 'instructions',
                     'ingredients', 'tags', 'cook_time', 'prep_time', 
-                    'total_time', 'nutrition_info', 'category'
+                    'total_time', 'nutrition_info', 'vectorised', 'category'
                 ]
             )
             
@@ -161,13 +162,13 @@ class ClickHouseManager:
             traceback.print_exc()
             return 0
     
-    def upsert_recipes_batch(self, recipes: list, table_name: str = "recipe_ru") -> int:
+    def upsert_recipes_batch(self, recipes: list, table_name: str = "recipe_en") -> int:
         """
         Батчевая вставка/обновление рецептов (благодаря ReplacingMergeTree)
         
         Args:
             recipes: Список объектов Recipe
-            table_name: Имя таблицы (recipe_ru, recipe_en и т.д.)
+            table_name: Имя таблицы (recipe_en, recipe_ru и т.д.)
         
         Returns:
             Количество успешно обработанных рецептов
@@ -175,64 +176,49 @@ class ClickHouseManager:
         # ReplacingMergeTree автоматически заменит записи с одинаковым page_id
         return self.insert_recipes_batch(recipes, table_name)
     
-    def get_recipe_by_id(self, page_id: int, table_name: str = "recipe_ru") -> Optional[Recipe]:
+    def _parse_recipes_from_dataframe(self, df) -> list[Recipe]:
         """
-        Получение рецепта по ID
+        Общая функция для парсинга DataFrame в список Recipe
         
         Args:
-            page_id: ID страницы
-            table_name: Имя таблицы
-        
+            df: DataFrame с данными рецептов
+            
         Returns:
-            Объект Recipe или None
+            Список объектов Recipe
         """
-        if not self.client:
-            logger.error("ClickHouse не подключен")
-            return None
-        
-        try:
-            query = f"""
-                SELECT 
-                    page_id, site_id, dish_name, description, instructions,
-                    ingredients, tags, cook_time, prep_time,
-                    total_time, nutrition_info, category
-                FROM {table_name}
-                WHERE page_id = %(page_id)s
-                ORDER BY last_updated DESC
-                LIMIT 1
-            """
-            
-            # Используем query_df для эффективного парсинга
-            df = self.client.query_df(query, parameters={'page_id': page_id})
-            
-            if len(df) > 0:
-                row = df.iloc[0]
-                return Recipe(
+        recipes = []
+        for _, row in df.iterrows():
+            try:
+                site_id = row.get('site') or row.get('site_id') # чтоыб не пересекалось в argmax иногда используется site, чаще site_id
+                site_id = int(site_id) if site_id is not None else 0
+                recipe = Recipe(
                     page_id=int(row['page_id']),
-                    site_id=int(row['site_id']),
+                    site_id=site_id,
                     dish_name=str(row['dish_name']),
-                    description=str(row['description']) if row['description'] else None,
+                    description=str(row['description']),
                     instructions=str(row['instructions']),
-                    ingredients=list(row['ingredients']) if row['ingredients'] else [],
-                    tags=list(row['tags']) if row['tags'] else None,
-                    cook_time=str(row['cook_time']) if row['cook_time'] else None,
-                    prep_time=str(row['prep_time']) if row['prep_time'] else None,
-                    total_time=str(row['total_time']) if row['total_time'] else None,
-                    nutrition_info=str(row['nutrition_info']) if row['nutrition_info'] else None,
-                    category=str(row['category']) if row['category'] else None
+                    ingredients=list(row['ingredients']),
+                    tags=list(row['tags']),
+                    cook_time=str(row['cook_time']),
+                    prep_time=str(row['prep_time']),
+                    total_time=str(row['total_time']),
+                    nutrition_info=str(row['nutrition_info']),
+                    category=str(row['category']),
+                    vectorised=bool(row.get('vectorised', False))
                 )
-            
-            return None
-            
-        except Exception as e:
-            logger.error(f"Ошибка получения рецепта {page_id}: {e}")
-            import traceback
-            traceback.print_exc()
-            return None
+                recipes.append(recipe)
+            except Exception as e:
+                logger.warning(f"Ошибка парсинга рецепта page_id={row['page_id']}: {e}")
+                continue
+        return recipes
     
-    def get_recipes_batch(self, page_ids: list[int], table_name: str = "recipe_ru") -> list[Recipe]:
+    def get_recipes_by_ids(
+        self, 
+        page_ids: list[int],
+        table_name: str = "recipe_en"
+    ) -> list[Recipe]:
         """
-        Получение батча рецептов по списку ID
+        Получение рецептов по списку ID
         
         Args:
             page_ids: Список ID страниц
@@ -241,66 +227,130 @@ class ClickHouseManager:
         Returns:
             Список объектов Recipe
         """
-        if not self.client or not page_ids:
+        if not self.client:
+            logger.error("ClickHouse не подключен")
+            return []
+        
+        if not page_ids:
+            logger.warning("Пустой список page_ids")
             return []
         
         try:
             query = f"""
                 SELECT 
-                    page_id, 
+                    page_id,
+                    argMax(site_id, last_updated) as site_id,
                     argMax(dish_name, last_updated) as dish_name, 
                     argMax(description, last_updated) as description,
-                    armax(instructions, last_updated) as instructions,
+                    argMax(instructions, last_updated) as instructions,
                     argMax(ingredients, last_updated) as ingredients,
                     argMax(tags, last_updated) as tags,
                     argMax(cook_time, last_updated) as cook_time,
                     argMax(prep_time, last_updated) as prep_time,
                     argMax(total_time, last_updated) as total_time,
                     argMax(nutrition_info, last_updated) as nutrition_info,
-                    argMax(category, last_updated) as category
+                    argMax(category, last_updated) as category,
+                    argMax(vectorised, last_updated) as vectorised
                 FROM {table_name}
                 WHERE page_id IN %(page_ids)s
-                ORDER BY page_id
                 GROUP BY page_id
+                ORDER BY page_id
             """
             
-            # Используем query_df для эффективного парсинга батча
             df = self.client.query_df(query, parameters={'page_ids': page_ids})
             
             if len(df) == 0:
+                logger.info("Рецепты не найдены по списку ID")
                 return []
             
-            # Векторизованная конвертация DataFrame в список Recipe
-            recipes = []
-            for _, row in df.iterrows():
-                try:
-                    recipe = Recipe(
-                        page_id=int(row['page_id']),
-                        dish_name=str(row['dish_name']),
-                        description=str(row['description']) if row['description'] else None,
-                        instructions=str(row['instructions']),
-                        ingredients=list(row['ingredients']) if row['ingredients'] else [],
-                        tags=list(row['tags']) if row['tags'] else None,
-                        cook_time=str(row['cook_time']) if row['cook_time'] else None,
-                        prep_time=str(row['prep_time']) if row['prep_time'] else None,
-                        total_time=str(row['total_time']) if row['total_time'] else None,
-                        nutrition_info=str(row['nutrition_info']) if row['nutrition_info'] else None,
-                        category=str(row['category']) if row['category'] else None
-                    )
-                    recipes.append(recipe)
-                except Exception as e:
-                    logger.warning(f"Ошибка парсинга рецепта page_id={row['page_id']}: {e}")
-                    continue
-            
+            recipes = self._parse_recipes_from_dataframe(df)
+            logger.info(f"Получено {len(recipes)} рецептов по списку из {len(page_ids)} ID")
             return recipes
             
         except Exception as e:
-            logger.error(f"Ошибка получения батча рецептов: {e}")
+            logger.error(f"Ошибка получения рецептов по ID: {e}")
             import traceback
             traceback.print_exc()
             return []
     
-    def get_page_ids_by_site(self, site_id: int, table_name: str = "recipe_ru") -> list[int]:
+    def get_recipes_by_site(
+        self,
+        site_id: int,
+        limit: Optional[int] = None,
+        vectorised: Optional[bool] = None,
+        table_name: str = "recipe_en"
+    ) -> list[Recipe]:
+        """
+        Получение рецептов по site_id с фильтрацией
+        
+        Args:
+            site_id: ID сайта
+            limit: Максимальное количество рецептов
+            vectorised: Если True - только векторизованные, False - только невекторизованные, None - все
+            table_name: Имя таблицы
+        
+        Returns:
+            Список объектов Recipe
+        """
+        if not self.client:
+            logger.error("ClickHouse не подключен")
+            return []
+        
+        try:
+            query = f"""
+                SELECT 
+                    page_id,
+                    argMax(site_id, last_updated) as site,
+                    argMax(dish_name, last_updated) as dish_name, 
+                    argMax(description, last_updated) as description,
+                    argMax(instructions, last_updated) as instructions,
+                    argMax(ingredients, last_updated) as ingredients,
+                    argMax(tags, last_updated) as tags,
+                    argMax(cook_time, last_updated) as cook_time,
+                    argMax(prep_time, last_updated) as prep_time,
+                    argMax(total_time, last_updated) as total_time,
+                    argMax(nutrition_info, last_updated) as nutrition_info,
+                    argMax(category, last_updated) as category,
+                    argMax(vectorised, last_updated) as vectorised
+                FROM {table_name}
+                WHERE site_id = %(site_id)s
+                GROUP BY page_id
+            """
+            
+            params = {'site_id': site_id}
+            
+            # Добавляем фильтр по vectorised через HAVING (после агрегации)
+            if vectorised is not None:
+                query += " HAVING vectorised = %(vectorised)s"
+                params['vectorised'] = vectorised
+            
+            query += " ORDER BY page_id"
+            
+            # Добавляем лимит если указан
+            if limit is not None:
+                query += " LIMIT %(limit)s"
+                params['limit'] = limit
+            
+            df = self.client.query_df(query, parameters=params)
+            
+            if len(df) == 0:
+                logger.info(f"Рецепты не найдены для site_id={site_id}")
+                return []
+            
+            recipes = self._parse_recipes_from_dataframe(df)
+            
+            vectorised_str = "все" if vectorised is None else ("векторизованные" if vectorised else "невекторизованные")
+            logger.info(f"Получено {len(recipes)} {vectorised_str} рецептов для site_id={site_id}")
+            
+            return recipes
+            
+        except Exception as e:
+            logger.error(f"Ошибка получения рецептов для site_id={site_id}: {e}")
+            import traceback
+            traceback.print_exc()
+            return []
+    
+    def get_page_ids_by_site(self, site_id: int, table_name: str = "recipe_en") -> list[int]:
         """
         Получение всех page_id для заданного site_id
         
@@ -338,45 +388,7 @@ class ClickHouseManager:
             import traceback
             traceback.print_exc()
             return []
-    
-    def get_last_page_id_by_site(self, site_id: int, table_name: str = "recipe_ru") -> Optional[int]:
-        """
-        Получение последнего (максимального) page_id для заданного site_id
-        
-        Args:
-            site_id: ID сайта
-            table_name: Имя таблицы
-        
-        Returns:
-            Последний page_id или None если рецептов нет
-        """
-        if not self.client:
-            logger.error("ClickHouse не подключен")
-            return None
-        
-        try:
-            query = f"""
-                SELECT MAX(page_id) as max_page_id
-                FROM {table_name}
-                WHERE site_id = %(site_id)s
-            """
-            
-            df = self.client.query_df(query, parameters={'site_id': site_id})
-            
-            if len(df) == 0 or df.iloc[0]['max_page_id'] is None:
-                logger.info(f"Нет рецептов для site_id={site_id} в {table_name}")
-                return None
-            
-            last_page_id = int(df.iloc[0]['max_page_id'])
-            logger.info(f"Последний page_id для site_id={site_id}: {last_page_id}")
-            return last_page_id
-            
-        except Exception as e:
-            logger.error(f"Ошибка получения последнего page_id для site_id={site_id}: {e}")
-            import traceback
-            traceback.print_exc()
-            return None
-    
+
     def close(self):
         """Закрытие подключения"""
         if self.client:
