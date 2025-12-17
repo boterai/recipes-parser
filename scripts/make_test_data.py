@@ -50,7 +50,7 @@ def make_test_data(site_id: int = 15, folder: str = "recipes"):
         # сохраняем файл с вытащенными данными из него
         extracted_data_path = html_filename.replace(".html", ".json")
         with open(os.path.join(recipes_path, extracted_data_path), "w", encoding="utf-8") as f:
-            f.write(json.dumps(page.receipt_to_json(), ensure_ascii=False, indent=4))
+            f.write(json.dumps(page.page_to_json(), ensure_ascii=False, indent=4))
 
     
     print(f"Всего скопировано {len(pages)} рецептов в {recipes_path}")

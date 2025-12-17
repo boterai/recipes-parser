@@ -1,7 +1,7 @@
 """
 Менеджер базы данных для работы с MySQL
 """
-
+import time
 import logging
 from typing import Optional
 import sqlalchemy
@@ -22,35 +22,57 @@ class MySQlManager:
         self.engine: sqlalchemy.Engine = None
         self.local_session = None
         
-    def connect(self):
-        """Установка подключения к БД"""
-        try:
-            connection_url = MySQLConfig.get_connection_url()
-            self.engine = sqlalchemy.create_engine(
-                connection_url,
-                pool_pre_ping=True,
-                pool_recycle=3600,
-                pool_size=5,
-                max_overflow=10,
-                pool_timeout=30,
-                echo=False
-            )
-            self.local_session = sessionmaker(bind=self.engine,
-                                              expire_on_commit=False,
-                                              autoflush=True,
-                                              autocommit=False)
-            
-            # Проверка подключения
-            with self.engine.connect() as conn:
-                conn.execute(sqlalchemy.text("SELECT 1"))
-            
-            logger.info("Успешное подключение к MySQL")
-            
-            # Создание таблиц если их нет
-            return self.create_tables()
-                        
-        except SQLAlchemyError as e:
-            logger.error(f"Ошибка подключения к MySQL: {e}")
+    def connect(self, retry_attempts: int = 3, retry_delay: float = 2.0):
+        """
+        Установка подключения к БД с повторными попытками
+        
+        Args:
+            retry_attempts: Количество попыток подключения
+            retry_delay: Базовая задержка между попытками (в секундах)
+        
+        Returns:
+            True если подключение успешно, False иначе
+        """
+        
+        connection_url = MySQLConfig.get_connection_url()
+        
+        for attempt in range(retry_attempts):
+            try:
+                logger.info(f"Попытка подключения к MySQL {attempt + 1}/{retry_attempts}...")
+                
+                self.engine = sqlalchemy.create_engine(
+                    connection_url,
+                    pool_pre_ping=True,
+                    pool_recycle=3600,
+                    pool_size=5,
+                    max_overflow=10,
+                    pool_timeout=30,
+                    connect_args={'connect_timeout': 10},
+                    echo=False
+                )
+                self.local_session = sessionmaker(bind=self.engine,
+                                                  expire_on_commit=False,
+                                                  autoflush=True,
+                                                  autocommit=False)
+                
+                # Проверка подключения
+                with self.engine.connect() as conn:
+                    conn.execute(sqlalchemy.text("SELECT 1"))
+                
+                logger.info("✓ Успешное подключение к MySQL")
+                
+                # Создание таблиц если их нет
+                return self.create_tables()
+                
+            except SQLAlchemyError as e:                
+                if attempt < retry_attempts - 1:
+                    # Экспоненциальная задержка: delay * 2^attempt
+                    delay = retry_delay * (2 ** attempt)
+                    logger.warning(f"✗ Ошибка подключения к MySQL (попытка {attempt + 1}/{retry_attempts}): {e}")
+                    logger.info(f"Повторная попытка через {delay:.1f}с...")
+                    time.sleep(delay)
+                else:
+                    logger.error(f"✗ Не удалось подключиться к MySQL после {retry_attempts} попыток: {e}")
         
         return False
     

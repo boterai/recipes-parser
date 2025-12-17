@@ -2,15 +2,13 @@
 Менеджер работы с ClickHouse для хранения слов из описаний рецептов
 Также может использоваться как векторная БД (экспериментально)
 """
-
+import time
 import logging
-from typing import Any, Optional
+from typing import Optional
 from config.db_config import ClickHouseConfig
 import clickhouse_connect
 from clickhouse_connect.driver import Client
-from src.models.page import Page
-from src.common.embedding import prepare_text, EmbeddingFunction
-
+from src.models.recipe import Recipe
 logger = logging.getLogger(__name__)
 
 CONNECTION_ERROR = "Ошибка подключения к ClickHouse"
@@ -18,7 +16,7 @@ CONNECTION_ERROR = "Ошибка подключения к ClickHouse"
 class ClickHouseManager:
     """Менеджер для работы с ClickHouse (включая векторную БД)"""
     
-    def __init__(self, embedding_dim: int = 384):
+    def __init__(self):
         """
         Инициализация подключения к ClickHouse
         
@@ -26,23 +24,53 @@ class ClickHouseManager:
             embedding_dim: Размерность векторов эмбеддингов
         """
         self.client = None
-        self.embedding_dim = embedding_dim
         
-    def connect(self) -> bool:
-        """Установка подключения к ClickHouse"""
-        try:
-            self.client: Client  = clickhouse_connect.get_client(**ClickHouseConfig.get_connection_params())
-            
-            # Проверка подключения
-            self.client.command('SELECT 1')
-            
-            logger.info("Успешное подключение к ClickHouse")
-            
-            # Создание таблиц если их нет
-            return self.create_tables()
-        except Exception as e:
-            logger.error(f"Ошибка подключения к ClickHouse: {e}")
-            return False
+    def connect(self, retry_attempts: int = 3, retry_delay: float = 2.0) -> bool:
+        """
+        Установка подключения к ClickHouse с повторными попытками
+        
+        Args:
+            retry_attempts: Количество попыток подключения
+            retry_delay: Базовая задержка между попытками (в секундах)
+        
+        Returns:
+            True если подключение успешно, False иначе
+        """        
+        conn_params = ClickHouseConfig.get_connection_params()
+        
+        for attempt in range(retry_attempts):
+            try:
+                logger.info(f"Попытка подключения к ClickHouse {attempt + 1}/{retry_attempts}...")
+                
+                self.client: Client = clickhouse_connect.get_client(
+                    host=conn_params['host'],
+                    user=conn_params['user'],
+                    password=conn_params['password'],
+                    secure=True,
+                    connect_timeout=10,
+                    send_receive_timeout=30
+                )
+                
+                # Проверка подключения
+                self.client.command('SELECT 1')
+                
+                logger.info("✓ Успешное подключение к ClickHouse")
+                
+                # Создание таблиц если их нет
+                return self.create_tables()
+                
+            except Exception as e:
+                if attempt < retry_attempts - 1:
+                    # Экспоненциальная задержка: delay * 2^attempt
+                    delay = retry_delay * (2 ** attempt)
+                    logger.warning(f"✗ Ошибка подключения к ClickHouse (попытка {attempt + 1}/{retry_attempts}): {e}")
+                    logger.info(f"Повторная попытка через {delay:.1f}с...")
+                    time.sleep(delay)
+                else:
+                    logger.error(f"✗ Не удалось подключиться к ClickHouse после {retry_attempts} попыток: {e}")
+        
+        # Если дошли сюда - все попытки исчерпаны
+        return False
     
     def create_tables(self) -> bool:
         """Создание таблиц в ClickHouse"""
@@ -72,264 +100,286 @@ class ClickHouseManager:
         
         return False
     
+    def insert_recipes_batch(self, recipes: list[Recipe], table_name: str = "recipe_ru") -> int:
+        """
+        Батчевая вставка рецептов в ClickHouse
+        
+        Args:
+            recipes: Список объектов Recipe
+            table_name: Имя таблицы (recipe_ru, recipe_en и т.д.)
+        
+        Returns:
+            Количество успешно вставленных рецептов
+        """
+        if not self.client:
+            logger.error("ClickHouse не подключен")
+            return 0
+        
+        if not recipes:
+            return 0
+        
+        try:
+            # Подготавливаем данные для вставки
+            data = []
+            for recipe in recipes:
+                data.append([
+                    recipe.page_id,
+                    recipe.site_id,
+                    recipe.dish_name or "",
+                    recipe.description or "",
+                    recipe.instructions or "",
+                    recipe.ingredients or [],
+                    recipe.tags or [],
+                    recipe.cook_time,
+                    recipe.prep_time,
+                    recipe.total_time,
+                    recipe.nutrition_info,
+                    recipe.category
+                ])
+            
+            if not data:
+                logger.warning("Нет валидных рецептов для вставки")
+                return 0
+            
+            # Батчевая вставка
+            self.client.insert(
+                table_name,
+                data,
+                column_names=[
+                    'page_id', 'site_id', 'dish_name', 'description', 'instructions',
+                    'ingredients', 'tags', 'cook_time', 'prep_time', 
+                    'total_time', 'nutrition_info', 'category'
+                ]
+            )
+            
+            logger.info(f"✓ Вставлено {len(data)} рецептов в {table_name}")
+            return len(data)
+            
+        except Exception as e:
+            logger.error(f"Ошибка батчевой вставки рецептов: {e}")
+            import traceback
+            traceback.print_exc()
+            return 0
+    
+    def upsert_recipes_batch(self, recipes: list, table_name: str = "recipe_ru") -> int:
+        """
+        Батчевая вставка/обновление рецептов (благодаря ReplacingMergeTree)
+        
+        Args:
+            recipes: Список объектов Recipe
+            table_name: Имя таблицы (recipe_ru, recipe_en и т.д.)
+        
+        Returns:
+            Количество успешно обработанных рецептов
+        """
+        # ReplacingMergeTree автоматически заменит записи с одинаковым page_id
+        return self.insert_recipes_batch(recipes, table_name)
+    
+    def get_recipe_by_id(self, page_id: int, table_name: str = "recipe_ru") -> Optional[Recipe]:
+        """
+        Получение рецепта по ID
+        
+        Args:
+            page_id: ID страницы
+            table_name: Имя таблицы
+        
+        Returns:
+            Объект Recipe или None
+        """
+        if not self.client:
+            logger.error("ClickHouse не подключен")
+            return None
+        
+        try:
+            query = f"""
+                SELECT 
+                    page_id, site_id, dish_name, description, instructions,
+                    ingredients, tags, cook_time, prep_time,
+                    total_time, nutrition_info, category
+                FROM {table_name}
+                WHERE page_id = %(page_id)s
+                ORDER BY last_updated DESC
+                LIMIT 1
+            """
+            
+            # Используем query_df для эффективного парсинга
+            df = self.client.query_df(query, parameters={'page_id': page_id})
+            
+            if len(df) > 0:
+                row = df.iloc[0]
+                return Recipe(
+                    page_id=int(row['page_id']),
+                    site_id=int(row['site_id']),
+                    dish_name=str(row['dish_name']),
+                    description=str(row['description']) if row['description'] else None,
+                    instructions=str(row['instructions']),
+                    ingredients=list(row['ingredients']) if row['ingredients'] else [],
+                    tags=list(row['tags']) if row['tags'] else None,
+                    cook_time=str(row['cook_time']) if row['cook_time'] else None,
+                    prep_time=str(row['prep_time']) if row['prep_time'] else None,
+                    total_time=str(row['total_time']) if row['total_time'] else None,
+                    nutrition_info=str(row['nutrition_info']) if row['nutrition_info'] else None,
+                    category=str(row['category']) if row['category'] else None
+                )
+            
+            return None
+            
+        except Exception as e:
+            logger.error(f"Ошибка получения рецепта {page_id}: {e}")
+            import traceback
+            traceback.print_exc()
+            return None
+    
+    def get_recipes_batch(self, page_ids: list[int], table_name: str = "recipe_ru") -> list[Recipe]:
+        """
+        Получение батча рецептов по списку ID
+        
+        Args:
+            page_ids: Список ID страниц
+            table_name: Имя таблицы
+        
+        Returns:
+            Список объектов Recipe
+        """
+        if not self.client or not page_ids:
+            return []
+        
+        try:
+            query = f"""
+                SELECT 
+                    page_id, 
+                    argMax(dish_name, last_updated) as dish_name, 
+                    argMax(description, last_updated) as description,
+                    armax(instructions, last_updated) as instructions,
+                    argMax(ingredients, last_updated) as ingredients,
+                    argMax(tags, last_updated) as tags,
+                    argMax(cook_time, last_updated) as cook_time,
+                    argMax(prep_time, last_updated) as prep_time,
+                    argMax(total_time, last_updated) as total_time,
+                    argMax(nutrition_info, last_updated) as nutrition_info,
+                    argMax(category, last_updated) as category
+                FROM {table_name}
+                WHERE page_id IN %(page_ids)s
+                ORDER BY page_id
+                GROUP BY page_id
+            """
+            
+            # Используем query_df для эффективного парсинга батча
+            df = self.client.query_df(query, parameters={'page_ids': page_ids})
+            
+            if len(df) == 0:
+                return []
+            
+            # Векторизованная конвертация DataFrame в список Recipe
+            recipes = []
+            for _, row in df.iterrows():
+                try:
+                    recipe = Recipe(
+                        page_id=int(row['page_id']),
+                        dish_name=str(row['dish_name']),
+                        description=str(row['description']) if row['description'] else None,
+                        instructions=str(row['instructions']),
+                        ingredients=list(row['ingredients']) if row['ingredients'] else [],
+                        tags=list(row['tags']) if row['tags'] else None,
+                        cook_time=str(row['cook_time']) if row['cook_time'] else None,
+                        prep_time=str(row['prep_time']) if row['prep_time'] else None,
+                        total_time=str(row['total_time']) if row['total_time'] else None,
+                        nutrition_info=str(row['nutrition_info']) if row['nutrition_info'] else None,
+                        category=str(row['category']) if row['category'] else None
+                    )
+                    recipes.append(recipe)
+                except Exception as e:
+                    logger.warning(f"Ошибка парсинга рецепта page_id={row['page_id']}: {e}")
+                    continue
+            
+            return recipes
+            
+        except Exception as e:
+            logger.error(f"Ошибка получения батча рецептов: {e}")
+            import traceback
+            traceback.print_exc()
+            return []
+    
+    def get_page_ids_by_site(self, site_id: int, table_name: str = "recipe_ru") -> list[int]:
+        """
+        Получение всех page_id для заданного site_id
+        
+        Args:
+            site_id: ID сайта
+            table_name: Имя таблицы
+        
+        Returns:
+            Список всех page_id для данного сайта (отсортированный по возрастанию)
+        """
+        if not self.client:
+            logger.error("ClickHouse не подключен")
+            return []
+        
+        try:
+            query = f"""
+                SELECT DISTINCT page_id
+                FROM {table_name}
+                WHERE site_id = %(site_id)s
+                ORDER BY page_id
+            """
+            
+            df = self.client.query_df(query, parameters={'site_id': site_id})
+            
+            if len(df) == 0:
+                logger.info(f"Нет рецептов для site_id={site_id} в {table_name}")
+                return []
+            
+            page_ids = df['page_id'].astype(int).tolist()
+            logger.info(f"Найдено {len(page_ids)} рецептов для site_id={site_id}")
+            return page_ids
+            
+        except Exception as e:
+            logger.error(f"Ошибка получения page_id для site_id={site_id}: {e}")
+            import traceback
+            traceback.print_exc()
+            return []
+    
+    def get_last_page_id_by_site(self, site_id: int, table_name: str = "recipe_ru") -> Optional[int]:
+        """
+        Получение последнего (максимального) page_id для заданного site_id
+        
+        Args:
+            site_id: ID сайта
+            table_name: Имя таблицы
+        
+        Returns:
+            Последний page_id или None если рецептов нет
+        """
+        if not self.client:
+            logger.error("ClickHouse не подключен")
+            return None
+        
+        try:
+            query = f"""
+                SELECT MAX(page_id) as max_page_id
+                FROM {table_name}
+                WHERE site_id = %(site_id)s
+            """
+            
+            df = self.client.query_df(query, parameters={'site_id': site_id})
+            
+            if len(df) == 0 or df.iloc[0]['max_page_id'] is None:
+                logger.info(f"Нет рецептов для site_id={site_id} в {table_name}")
+                return None
+            
+            last_page_id = int(df.iloc[0]['max_page_id'])
+            logger.info(f"Последний page_id для site_id={site_id}: {last_page_id}")
+            return last_page_id
+            
+        except Exception as e:
+            logger.error(f"Ошибка получения последнего page_id для site_id={site_id}: {e}")
+            import traceback
+            traceback.print_exc()
+            return None
+    
     def close(self):
         """Закрытие подключения"""
         if self.client:
             self.client.close()
             logger.info("Подключение к ClickHouse закрыто")
     
-    # ===== Методы интерфейса VectorDBInterface =====
-    
-    def add_recipe(self, page: Page, embedding_function: EmbeddingFunction) -> bool:
-        """
-        Добавление одного рецепта в векторную БД
-        
-        Args:
-            page: Объект страницы с рецептом
-            embedding_function: Функция для создания эмбеддингов
-            
-        Returns:
-            True если успешно добавлено
-        """
-        if not self.client:
-            logger.warning(CONNECTION_ERROR)
-            return False
-        
-        try:
-            # Подготовка текста и создание эмбеддинга
-            recipe_embedding = prepare_text(page, "main")
-            recipe_embedding = embedding_function([recipe_embedding])
-
-            ingredients_text = prepare_text(page, "ingredients")
-            ingredient_embedding = embedding_function([ingredients_text])
-
-            description_text = prepare_text(page, "description")
-            description_embedding = embedding_function([description_text])
-
-            instructions_text = prepare_text(page, "instructions")
-            instruction_embedding = embedding_function([instructions_text])
-
-            
-            # Вставка в таблицу
-            self.client.insert(
-                "recipe_keywords",
-               [[
-                    page.id,
-                    page.dish_name,
-                    page.language,
-                    page.ingredient_to_list(), # временно в качестве кейвордов только имена ингредиентов
-                    recipe_embedding,
-                    ingredient_embedding,
-                    description_embedding,
-                    instruction_embedding
-               ]],
-               column_names=[
-                   'page_id',
-                   'dish_name',
-                   'language',
-                   'keywords',
-                   'recipe_embedding',
-                   'ingredient_embedding',
-                   'description_embedding',
-                   'instruction_embedding'
-               ]
-            )
-            
-            logger.info(f"Рецепт page_id={page.id} добавлен в ClickHouse")
-            return True
-            
-        except Exception as e:
-            logger.error(f"Ошибка добавления рецепта в ClickHouse: {e}")
-            return False
-    
-    def add_recipes_batch(self, pages: list[Page], embedding_function: EmbeddingFunction, batch_size: int = 100) -> int:
-        """
-        Массовое добавление рецептов
-        
-        Args:
-            pages: Список страниц с рецептами
-            embedding_function: Функция для создания эмбеддингов
-            batch_size: Размер батча
-            
-        Returns:
-            Количество успешно добавленных рецептов
-        """
-        if not self.client:
-            logger.warning(CONNECTION_ERROR)
-            return 0
-        
-        try:
-            count = 0
-            # Обработка батчами
-            for i in range(0, len(pages), batch_size):
-                batch = pages[i:i + batch_size]
-                rows = []
-                for page in pages[i:i + batch_size]:
-                    # Подготовка текста и создание эмбеддинга
-                    recipe_embedding = embedding_function(prepare_text(page, "main"))
-                    ingredient_embedding = embedding_function(prepare_text(page, "ingredients"))
-                    description_embedding = embedding_function(prepare_text(page, "description"))
-                    instruction_embedding = embedding_function(prepare_text(page, "instructions"))
-                    rows.append([page.id, 
-                                 page.dish_name,
-                                 page.language,
-                                 page.ingredient_to_list(),  # временно в качестве кейвордов только имена ингредиентов
-                                 recipe_embedding,
-                                 ingredient_embedding,
-                                 description_embedding,
-                                 instruction_embedding
-                                 ]
-                    )
-                
-                
-                self.client.insert(
-                "recipe_keywords",
-                rows,
-                column_names=[
-                    'page_id', 'dish_name', 'language', 'keywords',
-                    'recipe_embedding', 'ingredient_embedding', 
-                    'description_embedding', 'instruction_embedding'
-                ]
-                )
-                count += len(batch)
-                logger.info(f"Добавлен батч {i // batch_size + 1}: {len(batch)} рецептов")
-            
-            logger.info(f"Всего добавлено {count} рецептов в ClickHouse")
-            return count
-            
-        except Exception as e:
-            logger.error(f"Ошибка массового добавления рецептов: {e}")
-            return 0
-    
-    def search(
-    self,
-    query_vector: list[float],
-    collection_name: str = "recipes",
-    limit: int = 5,
-    site_id: Optional[int] = None,
-    score_threshold: float = 0.0
-) -> list[dict[str, Any]]:
-        """
-        Поиск похожих рецептов по вектору (через косинусное расстояние)
-        
-        Args:
-            query_vector: Вектор запроса
-            collection_name: Тип эмбеддинга ('recipes', 'ingredients', 'instructions', 'descriptions')
-            limit: Количество результатов
-            site_id: Фильтр по сайту (не используется в новой схеме)
-            score_threshold: Минимальный порог схожести
-            
-        Returns:
-            Список найденных рецептов с метаданными
-        """
-        if not self.client:
-            logger.warning("ClickHouse не подключен")
-            return []
-        
-        try:
-            
-            # Выбираем колонку эмбеддинга в зависимости от collection_name
-            embedding_column_map = {
-                "recipes": "recipe_embedding",
-                "ingredients": "ingredient_embedding",
-                "instructions": "instruction_embedding",
-                "descriptions": "description_embedding"
-            }
-            
-            embedding_column = embedding_column_map.get(collection_name, "recipe_embedding")
-            
-            # Запрос поиска
-            query = f"""
-                SELECT 
-                    page_id,
-                    argMax(dish_name, updated_at) as dish_name,
-                    argMax(language, updated_at) as language,
-                    argMax(keywords, updated_at) as keywords,
-                    cosineDistance(argMax({embedding_column}, updated_at), %(query_vector)s) as distance
-                FROM recipe_keywords
-                GROUP BY page_id
-                ORDER BY distance ASC
-                LIMIT %(limit)s
-            """
-            
-            results = self.client.query(
-                query,
-                parameters={'query_vector': query_vector, 'limit': limit}
-            )
-            
-            # Преобразуем результаты
-            output = []
-            for row in results.result_rows:
-                page_id, dish_name, language, keywords, distance = row
-                
-                # Вычисляем score (1 - distance для косинусного расстояния)
-                score = 1.0 - distance
-                
-                # Фильтруем по порогу
-                if score < score_threshold:
-                    continue
-                
-                output.append({
-                    'page_id': page_id,
-                    'dish_name': dish_name,
-                    'language': language,
-                    'keywords': keywords,
-                    'score': score
-                })
-            
-            logger.info(f"Найдено {len(output)} похожих рецептов")
-            return output
-            
-        except Exception as e:
-            logger.error(f"Ошибка поиска в ClickHouse: {e}")
-            return []
-    
-    def get_stats(self) -> dict:
-        """
-        Получение статистики по векторным коллекциям
-        
-        Returns:
-            Словарь со статистикой
-        """
-        if not self.client:
-            logger.warning(CONNECTION_ERROR)
-            return {}
-        
-        try:
-            # Статистика по recipe_keywords
-            result = self.client.query("""
-                SELECT 
-                    count() as total_recipes,
-                    uniq(page_id) as unique_pages,
-                    uniq(language) as languages,
-                    avg(length(recipe_embedding)) as avg_recipe_emb_size,
-                    avg(length(ingredient_embedding)) as avg_ingredient_emb_size,
-                    avg(length(description_embedding)) as avg_description_emb_size,
-                    avg(length(instructions_embedding)) as avg_instructions_emb_size
-                FROM recipe_keywords
-            """)
-            
-            row = result.result_rows[0] if result.result_rows else None
-            
-            if row:
-                return {
-                    'recipe_keywords': {
-                        'total_recipes': row[0],
-                        'unique_pages': row[1],
-                        'languages': row[2],
-                        'avg_embedding_sizes': {
-                            'recipe': row[3],
-                            'ingredient': row[4],
-                            'description': row[5],
-                            'instructions': row[6]
-                        }
-                    }
-                }
-            
-            return {}
-            
-        except Exception as e:
-            logger.error(f"Ошибка получения статистики: {e}")
-            return {}
-
-

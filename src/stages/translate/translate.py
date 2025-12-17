@@ -11,6 +11,7 @@ if __name__ == "__main__":
     sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.common.db.mysql import MySQlManager
+from src.common.db.clickhouse import ClickHouseManager
 from src.common.gpt_client import GPTClient
 import sqlalchemy
 from src.models.page import Page
@@ -32,63 +33,21 @@ class Translator:
             target_language: Целевой язык для перевода (по умолчанию 'ru' - русский)
         """
         self.target_language = target_language
-        self.table_name = f"pages_{self.target_language}"
         self.db = MySQlManager()
+        self.olap_db = ClickHouseManager()
         
         # Инициализация GPT клиента
         self.gpt_client = GPTClient()
         
-        for i in range(1, 4):  # Пытаемся подключиться 3 раза
-            if self.db.connect():
-                # попробовать создать таблицы, если их нет для переводов
-                logger.info("Успешно подключились к БД")
-                if self.create_translation_table() is False:
-                    logger.error("Не удалось создать таблицу для переводов")
-                    raise RuntimeError("Cannot create translation table")
-                break
-            else:
-                logger.error("Не удалось подключиться к БД")
-            if i < 3:
-                logger.info("Повторная попытка подключения к БД через несколько секунд...")
-            if i == 3:
-                logger.error("Превышено количество попыток подключения к БД. Работа без БД невозможна")
-                self.db = None
-                raise RuntimeError("DB connection failed")
-            time.sleep(random.uniform(4, 6))
+        if self.db.connect() is False:
+            logger.error("Не удалось подключиться к MySQL")
+            raise RuntimeError("MySQL connection failed")
 
-    def create_translation_table(self) -> bool:
-        """Создание таблицы для хранения переводов, если она не существует"""
-        if self.db is None:
-            logger.error("Нет подключения к БД. Невозможно создать таблицу переводов.")
-            return False
-        
-        create_table_query = f"""
-        CREATE TABLE IF NOT EXISTS {self.table_name} (
-            `page_id` INT NOT NULL PRIMARY KEY,
-            `description` text,
-            `tags` text,
-            `ingredient` text, 
-            `step_by_step` text,
-            `dish_name` varchar(500) DEFAULT NULL,
-            `category` varchar(255) DEFAULT NULL,
-            `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-            CONSTRAINT `pages_s` FOREIGN KEY (`page_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE
-            )
-            """
-        
-        with self.db.get_session() as session:
-            try:
-                session.execute(sqlalchemy.text(create_table_query))
-                session.commit()
-                logger.info(f"Таблица {self.table_name} успешно создана или уже существует.")
-            except Exception as e:
-                logger.error(f"Ошибка при создании таблицы {self.table_name}: {e}")
-                session.rollback()
-                return False
-        
-        return True
+        if self.olap_db.connect() is False:
+            logger.error("Не удалось подключиться к ClickHouse")
+            raise RuntimeError("ClickHouse connection failed")
     
-    def translate_and_save_page(self, page_id: int) -> Optional[Recipe]:
+    def translate_and_save_page(self, page_id: int, overwrite: bool = False) -> Optional[Recipe]:
         """
         Переводит и сохраняет страницу с рецептом в БД
         
@@ -99,10 +58,11 @@ class Translator:
             Переведенный объект Page или None в случае ошибки
         """
 
-        recipe: Recipe = self.db.get_recipe_by_id(page_id, table_name=self.table_name)
-        if recipe:
-            logger.info(f"Рецепт с ID={page_id} уже переведен и сохранен в таблице {self.table_name}")
-            return recipe
+        if overwrite is False:
+            recipe: Recipe = self.olap_db.get_recipe_by_id(page_id)
+            if recipe:
+                logger.info(f"Рецепт с ID={page_id} уже переведен и сохранен в таблице recipe_ru")
+                return recipe
 
         # Получаем страницу из БД
         page = self.db.get_page_by_id(page_id)
@@ -112,20 +72,18 @@ class Translator:
         
         recipe = page.to_recipe()
         # Переводим страницу
-        translated_page = self.translate_recipe(recipe)
-        if not translated_page:
+        translated_recipe = self.translate_recipe(recipe)
+        if not translated_recipe:
             logger.error(f"Не удалось перевести страницу с ID={page_id}")
             return None
         # Сохраняем перевод в БД
-        if self.save_recipe(translated_page):
-            logger.info(f"Перевод для страницы ID={page_id} успешно сохранен в {self.table_name}")
-            return translated_page
-        else:
-            logger.error(f"Ошибка при сохранении перевода страницы ID={page_id}")
+        if self.olap_db.insert_recipes_batch([translated_recipe]) != 1:
+            logger.error(f"Ошибка при сохранении перевода страницы ID={page_id} в ClickHouse")
             return None
+        return translated_recipe
         
         
-    def translate_and_save_batch(self, site_id: int = None, batch_size: int = 100, start_from_id: int = 0):
+    def translate_and_save_batch(self, site_id: int = None, batch_size: int = 100, start_from_id: Optional[int] = None):
         """
         Переводит пакет страниц с рецептами для заданного site_id
         
@@ -134,168 +92,171 @@ class Translator:
             batch_size: Размер пакета для обработки
             start_from_id: ID страницы, с которой начать обработку (для продолжения)
         """
-        last_processed_id = start_from_id
+        # Если указан start_from_id, работаем в режиме последовательной обработки
+        if start_from_id is not None:
+            self._sequential_translate(site_id, batch_size, start_from_id)
+            return
+        
+        # сравниваем ID из OLAP и MySQL
+        logger.info(f"Получение списка непереведенных страниц для site_id={site_id}...")
+        
+        # Получаем все ID из ClickHouse (уже переведенные)
+        translated_ids = set(self.olap_db.get_page_ids_by_site(site_id=site_id))
+        logger.info(f"Найдено {len(translated_ids)} переведенных страниц в ClickHouse")
+        
+        # Если нет переведенных страниц, переходим к последовательному режиму
+        if len(translated_ids) == 0:
+            logger.info("Нет переведенных страниц. Переход к последовательному режиму обработки...")
+            self._sequential_translate(site_id, batch_size, start_from_id=0)
+            return
+        
+        # Получаем все валидные ID рецептов из MySQL
+        with self.db.get_session() as session:
+            query = """
+                SELECT id FROM pages
+                WHERE is_recipe = TRUE
+                AND ingredient IS NOT NULL
+                AND dish_name IS NOT NULL
+                AND step_by_step IS NOT NULL
+            """
+            if site_id:
+                query += f" AND site_id = {site_id}"
+            query += " ORDER BY id ASC"
+            
+            result = session.execute(sqlalchemy.text(query))
+            mysql_ids = set(row.id for row in result.fetchall())
+        
+        logger.info(f"Найдено {len(mysql_ids)} валидных рецептов в MySQL")
+        
+        # Вычисляем разницу - ID которые есть в MySQL, но нет в ClickHouse
+        untranslated_ids = sorted(mysql_ids - translated_ids)
+        logger.info(f"Найдено {len(untranslated_ids)} непереведенных страниц")
+        
+        if not untranslated_ids:
+            logger.info("Все страницы уже переведены!")
+            return
+        
+        # Если минимальный непереведенный ID больше максимального переведенного,
+        # значит все новые страницы идут последовательно - переходим к sequential режиму
+        max_translated_id = max(translated_ids) if translated_ids else 0
+        min_untranslated_id = min(untranslated_ids)
+        
+        if min_untranslated_id > max_translated_id:
+            logger.info(f"Все непереведенные страницы (начиная с ID={min_untranslated_id}) идут после переведенных (до ID={max_translated_id})")
+            logger.info("Переход к последовательному режиму обработки...")
+            self._sequential_translate(site_id, batch_size, start_from_id=min_untranslated_id)
+            return
+        
+        # Обрабатываем только непереведенные ID батчами
+        for i in range(0, len(untranslated_ids), batch_size):
+            batch_ids = untranslated_ids[i:i + batch_size]
+            
+            with self.db.get_session() as session:
+                # Получаем страницы по списку ID
+                placeholders = ','.join([f':id_{j}' for j in range(len(batch_ids))])
+                query = f"""
+                    SELECT * FROM pages
+                    WHERE id IN ({placeholders})
+                    ORDER BY id ASC
+                """
+                params = {f'id_{j}': page_id for j, page_id in enumerate(batch_ids)}
+                
+                result = session.execute(sqlalchemy.text(query), params)
+                pages_data = result.fetchall()
+            
+            if pages_data:
+                logger.info(f"Обработка батча {i // batch_size + 1}/{(len(untranslated_ids) + batch_size - 1) // batch_size}")
+                self._process_batch(pages_data)
+    
+    def _sequential_translate(self, site_id: int, batch_size: int, start_from_id: int):
+        """
+        Последовательная обработка страниц начиная с указанного ID
+        
+        Args:
+            site_id: ID сайта для фильтрации (если None, обрабатываются все)
+            batch_size: Размер пакета для обработки
+            start_from_id: ID страницы, с которой начать обработку
+        """
+        logger.info(f"Режим последовательной обработки начиная с ID={start_from_id}")
+        last_processed_id = start_from_id - 1 if start_from_id > 0 else 0
         
         while True:
             with self.db.get_session() as session:
-                # Формируем запрос для получения страниц без перевода
-                query = f"""
-                    SELECT p.* FROM pages p
-                    LEFT JOIN {self.table_name} pt ON p.id = pt.page_id
-                    WHERE p.is_recipe = TRUE
-                    AND p.ingredient IS NOT NULL
-                    AND p.dish_name IS NOT NULL
-                    AND p.step_by_step IS NOT NULL
-                    AND pt.page_id IS NULL
-                    AND p.id > :last_id
+                query = """
+                    SELECT * FROM pages
+                    WHERE is_recipe = TRUE
+                    AND ingredient IS NOT NULL
+                    AND dish_name IS NOT NULL
+                    AND step_by_step IS NOT NULL
+                    AND id > :last_id
                 """
                 
                 if site_id:
-                    query += f" AND p.site_id = {site_id}"
+                    query += f" AND site_id = {site_id}"
                 
-                query += f" ORDER BY p.id ASC LIMIT {batch_size}"
+                query += f" ORDER BY id ASC LIMIT {batch_size}"
                 
                 result = session.execute(sqlalchemy.text(query), {"last_id": last_processed_id})
                 pages_data = result.fetchall()
-                
+            
                 if not pages_data:
                     logger.info("Все страницы переведены!")
                     break
                 
-                logger.info(f"Найдено {len(pages_data)} страниц для перевода (начиная с ID={pages_data[0].id})")
-                
-                # Шаг 1: Переводим весь батч
-                translated_recipes = []
-                for i, page_data in enumerate(pages_data, 1):
-                    try:
-                        page_data = Page.model_validate(dict(page_data._mapping))
-                        recipe = page_data.to_recipe()
-                        last_processed_id = recipe.page_id
-                        
-                        logger.info(f"[{i}/{len(pages_data)}] Перевод страницы ID={recipe.page_id}: {recipe.dish_name}")
-                        
-                        if page_data.language == self.target_language:
-                            translated_recipe = recipe
-                            logger.info(f"✓ Страница ID={recipe.page_id} уже на целевом языке {self.target_language}")
-                        else:
-                            translated_recipe = self.translate_recipe(recipe)
-                            # Пауза между запросами к GPT API
-                            time.sleep(random.uniform(.2, 1))
-                        
-                        if translated_recipe:
-                            translated_recipes.append(translated_recipe)
-                            logger.info(f"✓ Страница ID={recipe.page_id} успешно переведена")
-                        else:
-                            logger.warning(f"✗ Не удалось перевести страницу ID={recipe.page_id}")
-                        
-                    except Exception as e:
-                        logger.error(f"Ошибка при переводе страницы ID={recipe.page_id}: {e}")
-                        continue
-                
-                # Шаг 2: Сохраняем весь переведенный батч в БД одной транзакцией
-                if translated_recipes:
-                    logger.info(f"Сохранение {len(translated_recipes)} переведенных рецептов в БД...")
-                    saved_count = self.save_recipes_batch(translated_recipes)
-                    logger.info(f"✓ Сохранено {saved_count}/{len(translated_recipes)} рецептов")
-                
-                logger.info(f"Обработан батч. Последний ID: {last_processed_id}")
+                self._process_batch(pages_data)
+                last_processed_id = pages_data[-1].id
                 
                 # Если получили меньше страниц чем batch_size, значит это последний батч
                 if len(pages_data) < batch_size:
                     logger.info("Это был последний батч. Все страницы обработаны!")
                     break
-
-    def save_recipe(self, recipe: Recipe) -> bool:
+    
+    def _process_batch(self, pages_data):
         """
-        Переводит и сохраняет страницу с рецептом в БД
+        Вспомогательный метод для обработки батча страниц
         
         Args:
-            page: Объект страницы для перевода
-        
-        Returns:
-            Переведенный объект Page или None в случае ошибки
+            pages_data: Список данных страниц из БД
         """
-        # Сохраняем перевод в БД
-        with self.db.get_session() as session:
+        logger.info(f"Найдено {len(pages_data)} страниц для перевода (начиная с ID={pages_data[0].id})")
+        
+        # Шаг 1: Переводим весь батч
+        translated_recipes = []
+        for i, page_data in enumerate(pages_data, 1):
             try:
-                insert_query = sqlalchemy.text(f"""
-                    INSERT INTO {self.table_name} 
-                    (page_id, description, tags, ingredient, step_by_step, 
-                     dish_name, category)
-                    VALUES 
-                    (:page_id, :description, :tags, :ingredient, :step_by_step,
-                     :dish_name, :category)
-                     AS new_values
-                     ON DUPLICATE KEY UPDATE
-                        description = new_values.description,
-                        tags = new_values.tags,
-                        ingredient = new_values.ingredient,
-                        step_by_step = new_values.step_by_step,
-                        dish_name = new_values.dish_name,
-                        category = new_values.category
-                """)
+                page_data = Page.model_validate(dict(page_data._mapping))
+                recipe = page_data.to_recipe()
                 
-                session.execute(insert_query, recipe.to_dict())
+                logger.info(f"[{i}/{len(pages_data)}] Перевод страницы ID={recipe.page_id}: {recipe.dish_name}")
                 
-                session.commit()
-                logger.info(f"Перевод для страницы ID={recipe.page_id} успешно сохранен в {self.table_name}")
-                return True
+                if page_data.language.lower() == self.target_language.lower():
+                    translated_recipe = recipe
+                    translated_recipe.list_fields_to_lower()
+                    logger.info(f"✓ Страница ID={recipe.page_id} уже на целевом языке {self.target_language}")
+                else:
+                    translated_recipe = self.translate_recipe(recipe)
+                    # Пауза между запросами к GPT API
+                    time.sleep(random.uniform(.2, 1))
+                
+                if translated_recipe:
+                    translated_recipes.append(translated_recipe)
+                    logger.info(f"✓ Страница ID={recipe.page_id} успешно переведена")
+                else:
+                    logger.warning(f"✗ Не удалось перевести страницу ID={recipe.page_id}")
                 
             except Exception as e:
-                logger.error(f"Ошибка при сохранении перевода для страницы ID={recipe.page_id}: {e}")
-                session.rollback()
-                return False
-
-    def save_recipes_batch(self, recipes: list[Recipe]) -> int:
-        """
-        Сохраняет батч переведенных рецептов в БД одной транзакцией
+                logger.error(f"Ошибка при переводе страницы ID={page_data}: {e}")
+                continue
         
-        Args:
-            recipes: Список объектов Recipe для сохранения
-        
-        Returns:
-            Количество успешно сохраненных рецептов
-        """
-        if not recipes:
-            return 0
-        
-        with self.db.get_session() as session:
-            try:
-                insert_query = sqlalchemy.text(f"""
-                    INSERT INTO {self.table_name} 
-                    (page_id, description, tags, ingredient, step_by_step, 
-                     dish_name, category)
-                    VALUES 
-                    (:page_id, :description, :tags, :ingredient, :step_by_step,
-                     :dish_name, :category)
-                     AS new_values
-                     ON DUPLICATE KEY UPDATE
-                        description = new_values.description,
-                        tags = new_values.tags,
-                        ingredient = new_values.ingredient,
-                        step_by_step = new_values.step_by_step,
-                        dish_name = new_values.dish_name,
-                        category = new_values.category
-                """)
-                
-                # Подготавливаем данные для batch insert
-                recipes_data = [recipe.to_dict() for recipe in recipes]
-                
-                # Выполняем batch insert
-                session.execute(insert_query, recipes_data)
-                session.commit()
-                
-                logger.info(f"Батч из {len(recipes)} рецептов успешно сохранен в {self.table_name}")
-                return len(recipes)
-                
-            except Exception as e:
-                logger.error(f"Ошибка при сохранении батча рецептов: {e}")
-                session.rollback()
-                return 0
+        # Шаг 2: Сохраняем весь переведенный батч в БД одной транзакцией
+        if self.olap_db.insert_recipes_batch(translated_recipes) == len(translated_recipes):
+            logger.info(f"✓ Батч из {len(translated_recipes)} переведенных страниц успешно сохранен в ClickHouse")
+        else:
+            logger.warning(f"⚠ Частичная ошибка при сохранении батча")
 
     def translate_recipe(self, recipe: Recipe) -> Optional[Recipe]:
         """
-        Переводит данные рецепта на целевой язык одним запросом к GPT
+        Переводит данные рецепта на целевой язык
         
         Args:
             page: Объект страницы для перевода
@@ -305,14 +266,14 @@ class Translator:
         """
         try:
             # Подготавливаем данные для перевода
-            recipe_data = recipe.to_dict(required_fields=["dish_name", "description", "ingredient", "tags", "category", "step_by_step"])
-            
+            recipe_data = recipe.to_dict_for_translation()
             # Системный промпт для перевода рецепта
             system_prompt = f"""Ты переводчик рецептов. Переведи следующий JSON с рецептом на {self.target_language} язык.
 ВАЖНО:
-1. Переведи полностью: "dish_name", "description", "ingredient", "tags", "category", "step_by_step"
+1. Переведи полностью и обязательно следующие поля: "dish_name", "description", "ingredients", "tags", "category", "instructions"
 2. Верни результат в том же JSON формате, не изменяя структуру и не добавляя никаких комментариев
-3. Если поле null или пустое, оставь его как есть"""
+3. Если поле null или пустое, оставь его как есть
+"""
 
             user_prompt = json.dumps(recipe_data, ensure_ascii=False)
             
@@ -334,13 +295,15 @@ class Translator:
                 logger.error(f"Неожиданный формат ответа от GPT: {type(response)}")
                 return None
             
+            
             # обновляем recipe данными перевода
             final_recipe = recipe.to_dict()
             final_recipe.update(translation)
             
             translated_recipe = Recipe(**final_recipe)
+            translated_recipe.list_fields_to_lower() # преобразуем все переведнные названия к нижнесу регистру
             
-            logger.info(f"Страница ID={translated_recipe.page_id} успешно переведена одним запросом")
+            logger.info(f"Страница ID={translated_recipe.page_id} успешно переведена")
             return translated_recipe
             
         except json.JSONDecodeError as e:

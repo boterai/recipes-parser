@@ -165,8 +165,23 @@ def search_similar(model_prefix: str = "ml-e5-large", save_to_db: bool = True, r
 
     rv.close()
 
+def get_recipe_len(): 
+    db = MySQlManager()
+    if not db.connect():
+        print("Не удалось подключиться к БД")
+        return
+    page = db.get_page_by_id(6659)
+    recipe = page.to_recipe()
+    if not recipe:
+        print("Рецепт не найден")
+        return
+    total_recipe = recipe.get_full_recipe_str()
+    print(f"Длина полного рецепта: {len(total_recipe)} символов")
+
+
 if __name__ == '__main__':
     # Векторизация рецептов (запускать один раз)
+    get_recipe_len()
     add_recipes(model_prefix="bge-m3", site_id=5)
     
     # Поиск похожих с сохранением в БД

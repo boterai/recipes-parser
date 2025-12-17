@@ -5,7 +5,7 @@ Pydantic модель для страницы
 from datetime import datetime
 from typing import Optional, Any
 from decimal import Decimal
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 import json
 from src.models.recipe import Recipe
 
@@ -49,7 +49,7 @@ class Page(BaseModel):
         data = self.model_dump(mode='json', exclude_none=True)
         return data
         
-    def receipt_to_json(self) -> dict:
+    def page_to_json(self) -> dict:
         """Преобразование данных рецепта в JSON-совместимый словарь"""
         recipe_fields = [
             'dish_name', 'description', 'ingredient', 'step_by_step', 'nutrition_info',
@@ -58,60 +58,62 @@ class Page(BaseModel):
         ]
         data = {field: getattr(self, field) for field in recipe_fields if getattr(self, field) is not None}
         return data
-    
-    def ingredient_to_str(self, separator: str = ", ") -> str:
-        """возвращает все игредиенты через запятую"""
-        if not self.ingredient:
-            return ""
-        try:
-            ingredients: list[dict[str, Any]] = json.loads(self.ingredient)
-            names = [item.get('name', '').strip() for item in ingredients if 'name' in item]
-            return separator.join(names)
-        except json.JSONDecodeError:
-            return ""
         
-    def ingredient_to_list(self) -> list[str]:
-        """возвращает все игредиенты списком строк"""
+    def ingredients_to_json(self) -> list[str]:
         if not self.ingredient:
             return []
         try:
             ingredients: list[dict[str, Any]] = json.loads(self.ingredient)
-            names = [item.get('name', '').strip() for item in ingredients if 'name' in item]
-            return names
+            ingredients = [str(i.get("name")).strip() for i in ingredients if isinstance(i, dict) and "name" in i]
+            return ingredients
         except json.JSONDecodeError:
             return []
         
-    def ingredients_to_full_str(self, separator: str = " ") -> str:
-        """возвращает все игредиенты в полном виде (кол-во, ед.изм., имя)"""
-        if not self.ingredient:
-            return ""
-        try:
-            ingredients: list[dict[str, Any]] = json.loads(self.ingredient)
-            lines = []
-            for item in ingredients:
-                parts = []
-                if (quantity := item.get('quantity')) is not None:
-                    parts.append(str(quantity).strip())
-                if (unit := item.get('unit')) is not None:
-                    parts.append(str(unit).strip())
-                if (name := item.get('name')) is not None:
-                    parts.append(str(name).strip())
-                line = " ".join(parts).strip()
-                if line:
-                    lines.append(line)
-            return separator.join(lines)
-        except json.JSONDecodeError:
-            return ""
+    def tags_to_json(self) -> list[str]:
+        if not self.tags:
+            return []
+        tags_list = [tag.strip() for tag in self.tags.split(",") if tag.strip()]
+        return tags_list
     
+    @field_validator('prep_time', 'cook_time', 'total_time', mode='before')
+    @classmethod
+    def normalize_time(cls, v: Optional[str]) -> Optional[str]:
+        """
+        Автоматическая нормализация времени при создании объекта.
+        Если значение - это только число, добавляет ' minutes'
+        
+        Args:
+            v: Значение времени (может быть None, число или строка)
+            
+        Returns:
+            Нормализованная строка времени или None
+        """
+        if v is None:
+            return None
+        
+        # Преобразуем в строку и очищаем
+        v_str = str(v).strip()
+        
+        if not v_str:
+            return None
+        
+        # Если это только число (без букв), добавляем "minutes"
+        if v_str.isdigit():
+            return f"{v_str} minutes"
+        
+        # Если уже есть единицы измерения, возвращаем как есть
+        return v_str
+
     def to_recipe(self) -> Recipe:
         """Преобразование Page в модель Recipe"""
         return Recipe(
             page_id=self.id,
+            site_id=self.site_id,
             dish_name=self.dish_name or "",
             description=self.description,
-            tags=self.tags,
-            ingredient=self.ingredients_to_full_str(separator=" "),
-            step_by_step=self.step_by_step or "",
+            tags=self.tags_to_json(),
+            ingredients=self.ingredients_to_json(),
+            instructions=self.step_by_step or "",
             cook_time=self.cook_time,
             prep_time=self.prep_time,
             total_time=self.total_time,

@@ -52,8 +52,7 @@ class QdrantRecipeManager:
         self.client = None
         self.collection_prefix = collection_prefix
         self.collections = {"full": f"{collection_prefix}_full", # no colbert locally
-                            "mv": f"{collection_prefix}_mv", # multivector search
-                            "ingredients": f"{collection_prefix}_ingredients", # ingredients + colbert
+                            "mv": f"{collection_prefix}_mv", # multivector search with colbert
         }
         
         
@@ -136,13 +135,6 @@ class QdrantRecipeManager:
                             "meta": VectorParams(
                                 size=dense_dim,
                                 distance=Distance.COSINE,
-                            )
-                        }
-                    case "ingredients":
-                        vectors_config = {
-                            "dense": VectorParams(
-                                size=dense_dim,
-                                distance=Distance.COSINE
                             ),
                             "colbert": VectorParams(
                                 size=colbert_dim,
@@ -152,7 +144,7 @@ class QdrantRecipeManager:
                                 ),
                                 hnsw_config=HnswConfigDiff(m=0)
                             )
-                            }
+                        }
                 
                 # Создаем коллекцию
                 self.client.create_collection(
@@ -224,14 +216,14 @@ class QdrantRecipeManager:
                         logger.info(f"✓ Батч {batch_num}, 'full': {len(points)} рецептов")
                     
                     elif col_type == "mv":
-                        # Коллекция mv: multiple dense vectors (ingredients, description, instructions, dish_name, tags, meta)
+                        # Коллекция mv: multiple dense vectors + colbert
                         points = []
                         for recipe in valid_recipes:
                             # Собираем тексты для каждого компонента
                             comp_texts = {
-                                "ingredients": recipe.ingredient or "",
+                                "ingredients": recipe.ingredients or "",
                                 "description": recipe.description or "",
-                                "instructions": recipe.step_by_step or "",
+                                "instructions": recipe.instructions or "",
                                 "dish_name": recipe.dish_name or "",
                                 "tags": recipe.tags or "",
                                 "meta": recipe.get_meta_str() or ""
@@ -243,13 +235,32 @@ class QdrantRecipeManager:
                             if not comp_texts:
                                 continue
                             
-                            # Создаем embedding для каждого компонента
+                            # Создаем dense embedding для каждого компонента
                             texts_list = list(comp_texts.values())
                             keys_list = list(comp_texts.keys())
-                            dense_vecs, _ = embedding_function(texts_list, is_query=False, use_colbert=False)
                             
-                            # Формируем multi-vector payload
-                            vectors = {key: dense_vecs[idx] for idx, key in enumerate(keys_list)}
+                            vectors = {}
+                            ingredients_idx = keys_list.index("ingredients") if "ingredients" in keys_list else -1
+                            
+                            if ingredients_idx >= 0:
+                                # Для ingredients получаем dense + colbert одновременно
+                                dense_ing, colbert_vecs = embedding_function([texts_list[ingredients_idx]], is_query=False, use_colbert=True)
+                                vectors["ingredients"] = dense_ing[0]
+                                if colbert_vecs:
+                                    vectors["colbert"] = colbert_vecs[0]
+                                
+                                # Для остальных компонентов только dense
+                                other_texts = [texts_list[i] for i in range(len(texts_list)) if i != ingredients_idx]
+                                other_keys = [keys_list[i] for i in range(len(keys_list)) if i != ingredients_idx]
+                                
+                                if other_texts:
+                                    dense_vecs, _ = embedding_function(other_texts, is_query=False, use_colbert=False)
+                                    for idx, key in enumerate(other_keys):
+                                        vectors[key] = dense_vecs[idx]
+                            else:
+                                # Нет ingredients - только dense для всех
+                                dense_vecs, _ = embedding_function(texts_list, is_query=False, use_colbert=False)
+                                vectors = {key: dense_vecs[idx] for idx, key in enumerate(keys_list)}
                             
                             point = PointStruct(
                                 id=recipe.page_id if hasattr(recipe, 'id') else hash(recipe.dish_name),
@@ -257,6 +268,7 @@ class QdrantRecipeManager:
                                 payload={
                                     "dish_name": recipe.dish_name,
                                     "description": recipe.description or "",
+                                    "ingredients": recipe.ingredients or "",
                                     "id": recipe.page_id
                                 }
                             )
@@ -265,39 +277,6 @@ class QdrantRecipeManager:
                         if points:
                             self.client.upsert(collection_name=collection_name, points=points, wait=True)
                             logger.info(f"✓ Батч {batch_num}, 'mv': {len(points)} рецептов")
-                    
-                    elif col_type == "ingredients":
-                        # Коллекция ingredients: dense + colbert на ингредиенты
-                        texts = [r.ingredient or "" for r in valid_recipes if r.ingredient]
-                        if not texts:
-                            logger.warning(f"Батч {batch_num}, 'ingredients': нет ингредиентов")
-                            continue
-                        
-                        dense_vecs, colbert_vecs = embedding_function(texts, is_query=False, use_colbert=True)
-                        
-                        points = []
-                        for i, recipe in enumerate(valid_recipes):
-                            if not recipe.ingredient:
-                                continue
-                            
-                            vectors = {"dense": dense_vecs[i]}
-                            if colbert_vecs:
-                                vectors["colbert"] = colbert_vecs[i]
-                            
-                            point = PointStruct(
-                                id=recipe.page_id if hasattr(recipe, 'id') else i,
-                                vector=vectors,
-                                payload={
-                                    "dish_name": recipe.dish_name,
-                                    "ingredients": recipe.ingredient,
-                                    "id": recipe.page_id
-                                }
-                            )
-                            points.append(point)
-                        
-                        if points:
-                            self.client.upsert(collection_name=collection_name, points=points, wait=True)
-                            logger.info(f"✓ Батч {batch_num}, 'ingredients': {len(points)} рецептов")
                 
                 added_count += len(valid_recipes)
                 logger.info(f"✓ Батч {batch_num} завершен: всего {added_count} рецептов")
@@ -366,27 +345,66 @@ class QdrantRecipeManager:
                 } for hit in results.points]
             
             elif collection_type == "mv":
-                # Поиск по multi-vector (взвешенная сумма компонентов)
-                comp_texts = query_recipe.prepare_multivector_data()
+                # Поиск по multi-vector с опциональным ColBERT
+                if use_colbert:
+                    # Поиск с ColBERT только по ingredients: prefetch с dense, затем ре-ранкинг с ColBERT
+                    ingredients_text = query_recipe.ingredients or ""
+                    
+                    if ingredients_text:
+                        dense_ing, colbert_query = embedding_function([ingredients_text], is_query=True, use_colbert=True)
+                        
+                        if colbert_query:
+                            results = self.client.query_points(
+                                collection_name=collection_name,
+                                prefetch=Prefetch(
+                                    query=dense_ing[0],
+                                    using="ingredients",
+                                    limit=limit * 2
+                                ),
+                                query=colbert_query[0],
+                                using="colbert",
+                                limit=limit,
+                                with_payload=True,
+                                score_threshold=score_threshold
+                            )
+                        else:
+                            # Fallback: используем только dense
+                            results = self.client.query_points(
+                                collection_name=collection_name,
+                                query=dense_ing[0],
+                                using="ingredients",
+                                limit=limit,
+                                with_payload=True,
+                                score_threshold=score_threshold
+                            )
+                    else:
+                        logger.warning("Нет ингредиентов для ColBERT поиска")
+                        return []
+                        
+                        return [{
+                            "recipe_id": hit.id,
+                            "score": hit.score,
+                            "dish_name": hit.payload.get("dish_name"),
+                            "description": hit.payload.get("description"),
+                            "ingredients": hit.payload.get("ingredients"),
+                            "method": "MultiVector+ColBERT"
+                        } for hit in results.points]
                 
-                # Фильтруем пустые
+                # Поиск без ColBERT - только dense компоненты
+                comp_texts = query_recipe.prepare_multivector_data()
                 comp_texts = {k: v for k, v in comp_texts.items() if v.strip()}
                 
                 if not comp_texts:
                     logger.warning("Нет компонентов для поиска в mv коллекции")
                     return []
                 
-                # Создаем эмбеддинги для каждого компонента
                 texts_list = list(comp_texts.values())
                 keys_list = list(comp_texts.keys())
                 dense_vecs, _ = embedding_function(texts_list, is_query=True, use_colbert=False)
                 
-                # Выполняем поиск по первому ключевому компоненту (например, ingredients)
-                # и используем prefetch для остальных
                 primary_key = keys_list[0]
                 primary_vec = dense_vecs[0]
                 
-                # Простой поиск по первому вектору (можно расширить с prefetch)
                 results = self.client.query_points(
                     collection_name=collection_name,
                     query=primary_vec,
@@ -401,50 +419,8 @@ class QdrantRecipeManager:
                     "score": hit.score,
                     "dish_name": hit.payload.get("dish_name"),
                     "description": hit.payload.get("description"),
-                    "method": f"MultiVector-{primary_key}"
-                } for hit in results.points]
-            
-            elif collection_type == "ingredients":
-                # Поиск с ColBERT по ингредиентам
-                query_text = query_recipe.ingredient or ""
-                if not query_text:
-                    logger.warning("Нет ингредиентов для поиска")
-                    return []
-                
-                dense_query, colbert_query = embedding_function(query_text, is_query=True, use_colbert=True)
-                
-                # Двухэтапный поиск: prefetch с dense, затем ре-ранкинг с ColBERT
-                if colbert_query and use_colbert:
-                    results = self.client.query_points(
-                        collection_name=collection_name,
-                        prefetch=Prefetch(
-                            query=dense_query[0],
-                            using="dense",
-                            limit=limit * 2  # Берем больше для ре-ранкинга
-                        ),
-                        query=colbert_query[0],
-                        using="colbert",
-                        limit=limit,
-                        with_payload=True,
-                        score_threshold=score_threshold
-                    )
-                else:
-                    # Fallback на dense только
-                    results = self.client.query_points(
-                        collection_name=collection_name,
-                        query=dense_query[0],
-                        using="dense",
-                        limit=limit,
-                        with_payload=True,
-                        score_threshold=score_threshold
-                    )
-                
-                return [{
-                    "recipe_id": hit.id,
-                    "score": hit.score,
-                    "dish_name": hit.payload.get("dish_name"),
                     "ingredients": hit.payload.get("ingredients"),
-                    "method": "ColBERT+Dense" if colbert_query else "Dense"
+                    "method": f"MultiVector-{primary_key}"
                 } for hit in results.points]
             
             else:

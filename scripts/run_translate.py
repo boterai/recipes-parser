@@ -6,6 +6,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.stages.translate import Translator
+from src.common.db.clickhouse import ClickHouseManager
 
 # Настройка логирования
 logging.basicConfig(
@@ -18,11 +19,10 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    
     translator = Translator(target_language="ru")
     translator.translate_and_save_batch(
-        site_id=1,
-        batch_size=15
+        site_id=12,
+        batch_size=500, # большой батч только, если целевой язык совпадает с исходным
     )
 
 if __name__ == "__main__":
