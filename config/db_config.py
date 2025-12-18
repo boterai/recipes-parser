@@ -40,6 +40,7 @@ class ClickHouseConfig:
     CH_USER = os.getenv('CLICKHOUSE_USER', 'default')
     CH_PASSWORD = os.getenv('CLICKHOUSE_PASSWORD', '')
     CH_DATABASE = os.getenv('CLICKHOUSE_DATABASE', 'recipes')
+    CH_SECURE = bool(int(os.getenv('CLICKHOUSE_SECURE', '1')))
     
     @classmethod
     def get_connection_params(cls) -> dict:
@@ -49,7 +50,8 @@ class ClickHouseConfig:
             'port': cls.CH_PORT,
             'user': cls.CH_USER,
             'password': cls.CH_PASSWORD,
-            'database': cls.CH_DATABASE
+            'database': cls.CH_DATABASE,
+            'secure': cls.CH_SECURE
         }
 
 

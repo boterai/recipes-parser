@@ -44,9 +44,10 @@ class ClickHouseManager:
                 
                 self.client: Client = clickhouse_connect.get_client(
                     host=conn_params['host'],
+                    port=conn_params['port'],
                     user=conn_params['user'],
                     password=conn_params['password'],
-                    secure=True,
+                    secure=conn_params['secure'],
                     connect_timeout=10,
                     send_receive_timeout=30
                 )
