@@ -575,15 +575,15 @@ class RecipeSgethaiExtractor(BaseRecipeExtractor):
         dish_name = self.extract_dish_name()
         description = self.extract_description()
         ingredients = self.extract_ingredients()
-        step_by_step = self.extract_steps()
+        instructions = self.extract_steps()
         notes = self.extract_notes()
         tags = self.extract_tags()
         
         return {
             "dish_name": dish_name.lower() if dish_name else None,
             "description": description.lower() if description else None,
-            "ingredient": ingredients,
-            "step_by_step": step_by_step,
+            "ingredients": ingredients,
+            "instructions": instructions,
             "nutrition_info": self.extract_nutrition_info(),
             "category": None,
             "prep_time": self.extract_prep_time(),

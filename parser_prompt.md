@@ -74,8 +74,8 @@
 
 - `dish_name`
 - `description`
-- `ingredient`
-- `step_by_step`
+- `ingredients`
+- `instructions`
 - `nutrition_info`
 - `category`
 - `prep_time`
@@ -99,7 +99,7 @@
 - `description`:  
   Строка — краткое текстовое описание рецепта (анонс/intro).
 
-- `ingredient`:  
+- `ingredients`:  
   Список ингредиентов.  
   Желательно проверить все места, в html файле, где упоминаются ингредиенты и брать их оттуда где name amount unit отдельно
   Формат каждого элемента: **словарь** с полями:
@@ -109,13 +109,13 @@
   
   Пример структуры:
   ```json
-  "ingredient": [
+  "ingredients": [
     {"name": "flour", "amount": "200", "unit": "g"},
     {"name": "butter", "amount": "50", "unit": "g"}
   ]
   ```
 
-- `step_by_step`:  
+- `instructions`:  
   - строка со всеми щагами из рецепта
 
 - `nutrition_info`:  

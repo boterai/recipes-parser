@@ -47,8 +47,8 @@ Key responsibilities:
 
      - `dish_name`
      - `description`
-     - `ingredient`
-     - `step_by_step`
+     - `ingredients`
+     - `instructions`
      - `nutrition_info`
      - `category`
      - `prep_time`
@@ -70,7 +70,7 @@ Key responsibilities:
    - `description`:  
      String — short textual description/intro of the recipe.
 
-   - `ingredient`:  
+   - `ingredients`:  
      List of ingredients.  
      Prefer to use locations in the HTML where `name`, `amount`, and `unit` are separately available or can be reliably split.  
      Each ingredient is a dict with:
@@ -80,13 +80,13 @@ Key responsibilities:
 
      Example:
      ```json
-     "ingredient": [
+     "ingredients": [
        { "name": "flour", "amount": "200", "unit": "g" },
        { "name": "butter", "amount": "50", "unit": "g" }
      ]
      ```
 
-   - `step_by_step`:  
+   - `instructions`:  
      String with all recipe steps in order (merged into one text field).  
      Extract all actual cooking steps from the page.
 

@@ -339,7 +339,7 @@ class SiteExplorer:
                 site_id, url, pattern, html_path,
                 is_recipe, confidence_score,
                 dish_name, description, 
-                ingredient, step_by_step,
+                ingredients, instructions,
                 prep_time, cook_time, total_time,
                 category, nutrition_info,
                 notes, tags, title, language, image_urls
@@ -347,7 +347,7 @@ class SiteExplorer:
                 :site_id, :url, :pattern, :html_path,
                 :is_recipe, :confidence_score,
                 :dish_name, :description,
-                :ingredient, :step_by_step,
+                :ingredients, :instructions,
                 :prep_time, :cook_time, :total_time,
                 :category, :nutrition_info,
                 :notes, :tags, :title, :language, :image_urls
@@ -357,8 +357,8 @@ class SiteExplorer:
                 confidence_score = VALUES(confidence_score),
                 dish_name = VALUES(dish_name),
                 description = VALUES(description),
-                ingredient = VALUES(ingredient),
-                step_by_step = VALUES(step_by_step),
+                ingredients = VALUES(ingredients),
+                instructions = VALUES(instructions),
                 prep_time = VALUES(prep_time),
                 cook_time = VALUES(cook_time),
                 total_time = VALUES(total_time),

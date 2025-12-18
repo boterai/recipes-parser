@@ -236,7 +236,7 @@ class RicardoCuisineExtractor(BaseRecipeExtractor):
         return None
     
 
-    def extract_step_by_step(self) -> str:
+    def extract_instructions(self) -> str:
         """Извлечение пошаговых инструкций"""
         # Из JSON-LD
         json_data = self.extract_from_json_ld()
@@ -508,7 +508,7 @@ class RicardoCuisineExtractor(BaseRecipeExtractor):
         dish_name = self.extract_dish_name()
         description = self.extract_description()
         ingredients = self.extract_ingredients()
-        step_by_step = self.extract_step_by_step()
+        instructions = self.extract_instructions()
         category = self.extract_category()
         prep_time = self.extract_prep_time()
         cook_time = self.extract_cook_time()
@@ -521,7 +521,7 @@ class RicardoCuisineExtractor(BaseRecipeExtractor):
             "dish_name": dish_name.lower() if dish_name else None,
             "description": description.lower() if description else None,
             "ingredients": ingredients,
-            "step_by_step": step_by_step.lower() if step_by_step else None,
+            "instructions": instructions.lower() if instructions else None,
             "category": category.lower() if category else None,
             "prep_time": prep_time if prep_time else None,
             "cook_time": cook_time if cook_time else None,

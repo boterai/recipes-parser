@@ -152,7 +152,7 @@ class RecipeExtractor:
             return None
         
         # если ключевые поля отсутствуют, помечаем как не рецепт
-        key_fields = ['dish_name', 'ingredient', 'step_by_step']
+        key_fields = ['dish_name', 'ingredients', 'instructions']
         if not all(field in recipe_data and recipe_data[field] for field in key_fields):
             return {
                 "page_id": page.id,
@@ -190,8 +190,8 @@ class RecipeExtractor:
                         confidence_score = :confidence_score,
                         dish_name = :dish_name,
                         description = :description,
-                        ingredient = :ingredient,
-                        step_by_step = :step_by_step,
+                        ingredients = :ingredients,
+                        instructions = :instructions,
                         prep_time = :prep_time,
                         cook_time = :cook_time,
                         total_time = :total_time,

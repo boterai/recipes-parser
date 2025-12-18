@@ -128,9 +128,9 @@ class Translator:
             query = """
                 SELECT id FROM pages
                 WHERE is_recipe = TRUE
-                AND ingredient IS NOT NULL
+                AND ingredients IS NOT NULL
                 AND dish_name IS NOT NULL
-                AND step_by_step IS NOT NULL
+                AND instructions IS NOT NULL
             """
             if site_id:
                 query += f" AND site_id = {site_id}"
@@ -198,9 +198,9 @@ class Translator:
                 query = """
                     SELECT * FROM pages
                     WHERE is_recipe = TRUE
-                    AND ingredient IS NOT NULL
+                    AND ingredients IS NOT NULL
                     AND dish_name IS NOT NULL
-                    AND step_by_step IS NOT NULL
+                    AND instructions IS NOT NULL
                     AND id > :last_id
                 """
                 

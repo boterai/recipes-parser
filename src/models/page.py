@@ -23,9 +23,9 @@ class Page(BaseModel):
     metadata_path: Optional[str] = None
     
     # Данные рецепта (NULL = отсутствует)
-    ingredient: Optional[str] = None  #  JSON список ингредиентов
+    ingredients: Optional[str] = None  #  JSON список ингредиентов
     description: Optional[str] = None  # TEXT - описание рецепта
-    step_by_step: Optional[str] = None  # TEXT - JSON или текст с шагами
+    instructions: Optional[str] = None  # TEXT - JSON или текст с шагами
     dish_name: Optional[str] = None  # VARCHAR(500) - название блюда
     nutrition_info: Optional[str] = None  # TEXT - JSON с питательной ценностью
     category: Optional[str] = None  # VARCHAR(255)
@@ -52,7 +52,7 @@ class Page(BaseModel):
     def page_to_json(self) -> dict:
         """Преобразование данных рецепта в JSON-совместимый словарь"""
         recipe_fields = [
-            'dish_name', 'description', 'ingredient', 'step_by_step', 'nutrition_info',
+            'dish_name', 'description', 'ingredients', 'instructions', 'nutrition_info',
             'rating', 'category', 'prep_time', 'cook_time',
             'total_time', 'difficulty_level', 'notes', 'tags', 'image_urls'
         ]
@@ -60,10 +60,10 @@ class Page(BaseModel):
         return data
         
     def ingredients_to_json(self) -> list[str]:
-        if not self.ingredient:
+        if not self.ingredients:
             return []
         try:
-            ingredients: list[dict[str, Any]] = json.loads(self.ingredient)
+            ingredients: list[dict[str, Any]] = json.loads(self.ingredients)
             ingredients = [str(i.get("name")).strip() for i in ingredients if isinstance(i, dict) and "name" in i]
             return ingredients
         except json.JSONDecodeError:
@@ -113,7 +113,7 @@ class Page(BaseModel):
             description=self.description,
             tags=self.tags_to_json(),
             ingredients=self.ingredients_to_json(),
-            instructions=self.step_by_step or "",
+            instructions=self.instructions or "",
             cook_time=self.cook_time or "",
             prep_time=self.prep_time or "",
             total_time=self.total_time or "",

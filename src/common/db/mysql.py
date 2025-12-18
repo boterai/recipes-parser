@@ -355,7 +355,7 @@ class MySQlManager:
         session = self.get_session()
         
         try:
-            result = session.execute(sqlalchemy.text("SELECT DISTINCT(site_id) FROM pages where is_recipe = TRUE and description IS NOT NULL AND step_by_step IS NOT NULL and ingredient IS NOT NULL"))
+            result = session.execute(sqlalchemy.text("SELECT DISTINCT(site_id) FROM pages where is_recipe = TRUE and description IS NOT NULL AND instructions IS NOT NULL and ingredients IS NOT NULL"))
             rows = result.fetchall()
             site_ids = [int(row[0]) for row in rows]
             

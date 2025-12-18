@@ -335,15 +335,15 @@ class KikkomanExtractor(BaseRecipeExtractor):
         """
         dish_name = self.extract_dish_name()
         description = self.extract_description()
-        step_by_step = self.extract_steps()
+        instructions = self.extract_steps()
         category = self.extract_category()
         notes = self.extract_notes()
         
         return {
             "dish_name": dish_name.lower() if dish_name else None,
             "description": description.lower() if description else None,
-            "ingredient": self.extract_ingredients(),
-            "step_by_step": step_by_step.lower() if step_by_step else None,
+            "ingredients": self.extract_ingredients(),
+            "instructions": instructions.lower() if instructions else None,
             "nutrition_info": self.extract_nutrition_info(),
             "category": category.lower() if category else None,
             "prep_time": self.extract_prep_time(),

@@ -154,7 +154,7 @@ class VieuxBalsamiqueExtractor(BaseRecipeExtractor):
         
         return ', '.join(names) if names else None
     
-    def extract_step_by_step(self) -> Optional[str]:
+    def extract_instructions(self) -> Optional[str]:
         """Извлечение пошаговых инструкций"""
         # Из JSON-LD
         json_data = self.extract_from_json_ld()
@@ -411,8 +411,7 @@ class VieuxBalsamiqueExtractor(BaseRecipeExtractor):
         dish_name = self.extract_dish_name()
         description = self.extract_description()
         ingredients = self.extract_ingredients()
-        ingredients_names = self.extract_ingredients_names()
-        step_by_step = self.extract_step_by_step()
+        instructions = self.extract_instructions()
         category = self.extract_category()
         notes = self.extract_notes()
         tags = self.extract_tags()
@@ -421,8 +420,7 @@ class VieuxBalsamiqueExtractor(BaseRecipeExtractor):
             "dish_name": dish_name.lower() if dish_name else None,
             "description": description.lower() if description else None,
             "ingredients": ingredients.lower() if ingredients else None,
-            "ingredients_names": ingredients_names.lower() if ingredients_names else None,
-            "step_by_step": step_by_step.lower() if step_by_step else None,
+            "instructions": instructions.lower() if instructions else None,
             "nutrition_info": self.extract_nutrition_info(),
             "category": category.lower() if category else None,
             "prep_time": self.extract_prep_time(),

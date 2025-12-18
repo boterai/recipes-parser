@@ -134,7 +134,7 @@ class ChefkochDeExtractor(BaseRecipeExtractor):
         
         return None
     
-    def extract_step_by_step(self) -> Optional[str]:
+    def extract_instructions(self) -> Optional[str]:
         """Extract cooking steps as JSON array"""
         if not self.recipe_data:
             return None
@@ -335,8 +335,8 @@ class ChefkochDeExtractor(BaseRecipeExtractor):
         return {
             "dish_name": self.extract_dish_name(),
             "description": self.extract_description(),
-            "ingredient": self.extract_ingredients(),
-            "step_by_step": self.extract_step_by_step(),
+            "ingredients": self.extract_ingredients(),
+            "instructions": self.extract_instructions(),
             "nutrition_info": self.extract_nutrition_info(),
             "category": self.extract_category(),
             "prep_time": self.extract_prep_time(),

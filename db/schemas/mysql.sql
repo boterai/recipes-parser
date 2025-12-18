@@ -21,25 +21,20 @@ CREATE TABLE IF NOT EXISTS pages (
     html_path VARCHAR(500),
     
     -- Данные рецепта (NULL = отсутствует)
-    ingredient JSON, -- 100% обязательное поле
-    step_by_step TEXT, -- 100% обязательное поле
+    ingredients JSON, -- 100% обязательное поле
+    instructions TEXT, -- 100% обязательное поле
     dish_name VARCHAR(500), -- 100 % обязательное поле
     image_blob BLOB,
     nutrition_info TEXT,
-    rating DECIMAL(3,2),
-    author VARCHAR(255),
     category VARCHAR(255),
     prep_time VARCHAR(100),
     cook_time VARCHAR(100),
     total_time VARCHAR(100),
-    servings VARCHAR(50),
-    difficulty_level VARCHAR(50),
     image_urls VARCHAR(1000),
     description TEXT,
     notes TEXT,
     tags TEXT, -- теги через запятую
 
-    
     -- Оценка
     confidence_score DECIMAL(5,2) DEFAULT 0.00,
     is_recipe BOOLEAN DEFAULT FALSE,

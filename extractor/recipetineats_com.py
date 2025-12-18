@@ -221,7 +221,7 @@ class RecipeTinEatsExtractor(BaseRecipeExtractor):
             "dish_name": self.extract_dish_name(),
             "description": self.extract_description(),
             "ingredients": self.extract_ingredients(),
-            "step_by_step": self.extract_steps(),
+            "instructions": self.extract_steps(),
             "nutrition_info": self.extract_nutrition_info(),
             "category": self.extract_category(),
             "prep_time": self.extract_prep_time(),
