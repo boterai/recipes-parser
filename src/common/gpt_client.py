@@ -1,7 +1,7 @@
 """
 Клиент для работы с OpenAI ChatGPT API
 """
-
+import time
 import os
 import logging
 import json
@@ -106,7 +106,6 @@ class GPTClient:
         Raises:
             Exception: При ошибке запроса или парсинга
         """
-        import time
         
         headers = {
             "Content-Type": "application/json",
