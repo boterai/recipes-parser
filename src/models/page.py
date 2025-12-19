@@ -1,5 +1,5 @@
 """
-Pydantic модель для страницы
+Модели для страницы (Pydantic и SQLAlchemy)
 """
 
 from datetime import datetime
@@ -7,7 +7,79 @@ from typing import Optional, Any
 from decimal import Decimal
 from pydantic import BaseModel, Field, field_validator
 import json
+from sqlalchemy import Column, Integer, String, Boolean, DECIMAL, TIMESTAMP, Text, ForeignKey, text, Index
+from src.models.base import Base
 from src.models.recipe import Recipe
+
+
+class PageORM(Base):
+    """SQLAlchemy модель для таблицы pages"""
+    
+    __tablename__ = 'pages'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    site_id = Column(Integer, ForeignKey('sites.id', ondelete='CASCADE'), nullable=False)
+    url = Column(String(1000), nullable=False)
+    pattern = Column(String(500))
+    title = Column(Text)
+    language = Column(String(10))
+    html_path = Column(String(500))
+    
+    # Данные рецепта
+    ingredients = Column(Text)  # JSON список ингредиентов
+    instructions = Column(Text)  # JSON или текст с шагами
+    dish_name = Column(String(500))
+    nutrition_info = Column(Text)
+    category = Column(String(255))
+    prep_time = Column(String(100))
+    cook_time = Column(String(100))
+    total_time = Column(String(100))
+    image_urls = Column(Text)
+    description = Column(Text)
+    notes = Column(Text)
+    tags = Column(Text)
+    
+    # Оценка
+    confidence_score = Column(DECIMAL(5, 2), default=0.00)
+    is_recipe = Column(Boolean, default=False)
+    
+    # Метаданные
+    created_at = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'))
+    
+    # Индексы
+    __table_args__ = (
+        Index('unique_site_url', 'site_id', 'url', unique=True, mysql_length={'url': 500}),
+        Index('idx_is_recipe', 'is_recipe'),
+        Index('idx_confidence', 'confidence_score'),
+    )
+    
+    def to_pydantic(self) -> 'Page':
+        """Конвертация ORM модели в Pydantic"""
+        return Page.model_validate(self)
+    
+    def update_from_dict(self, data: dict, exclude: Optional[set] = None) -> 'PageORM':
+        """
+        Обновить поля ORM объекта из словаря (дополнить, не заменить все)
+        
+        Args:
+            data: Словарь с данными для обновления
+            exclude: Набор полей для исключения из обновления
+        
+        Returns:
+            Self (для chaining)
+        """
+        exclude = exclude or {'id', 'created_at'}
+        
+        for key, value in data.items():
+            # Пропускаем исключенные поля и поля, которых нет в модели
+            if key in exclude or not hasattr(self, key):
+                continue
+            
+            # Обновляем только если значение не None (для дополнения)
+            if value is not None:
+                setattr(self, key, value)
+        
+        return self
 
 class Page(BaseModel):
     """Модель спарсенной страницы"""
@@ -53,10 +125,10 @@ class Page(BaseModel):
         """Преобразование данных рецепта в JSON-совместимый словарь"""
         recipe_fields = [
             'dish_name', 'description', 'ingredients', 'instructions', 'nutrition_info',
-            'rating', 'category', 'prep_time', 'cook_time',
-            'total_time', 'difficulty_level', 'notes', 'tags', 'image_urls'
+            'category', 'prep_time', 'cook_time','total_time', 
+            'notes', 'tags', 'image_urls'
         ]
-        data = {field: getattr(self, field) for field in recipe_fields if getattr(self, field) is not None}
+        data = {field: getattr(self, field) for field in recipe_fields}
         return data
         
     def ingredients_to_json(self) -> list[str]:
@@ -119,7 +191,82 @@ class Page(BaseModel):
             total_time=self.total_time or "",
             nutrition_info=self.nutrition_info or "",
             category=self.category or ""
-        )   
+        )
+    
+    @classmethod
+    def from_orm(cls, page_orm: PageORM) -> 'Page':
+        """
+        Создать Pydantic модель из SQLAlchemy ORM
+        
+        Args:
+            page_orm: SQLAlchemy объект PageORM
+        
+        Returns:
+            Page (Pydantic модель)
+        """
+        return cls.model_validate(page_orm)
+    
+    def to_orm(self, exclude_none: bool = True) -> PageORM:
+        """
+        Создать SQLAlchemy ORM объект из Pydantic модели
+        
+        Args:
+            exclude_none: Исключить поля со значением None
+        
+        Returns:
+            PageORM (SQLAlchemy модель)
+        """
+        data = self.model_dump(
+            exclude={'id', 'created_at', 'metadata_path'},
+            exclude_none=exclude_none
+        )
+        return PageORM(**data)
+    
+    def update_orm(self, page_orm: PageORM, exclude_none: bool = True) -> PageORM:
+        """
+        Обновить существующий ORM объект данными из Pydantic модели
+        
+        Args:
+            page_orm: Существующий SQLAlchemy объект
+            exclude_none: Исключить поля со значением None
+        
+        Returns:
+            Обновленный PageORM объект
+        """
+        data = self.model_dump(
+            exclude={'id', 'created_at', 'metadata_path'},
+            exclude_none=exclude_none
+        )
+        
+        for key, value in data.items():
+            if hasattr(page_orm, key):
+                setattr(page_orm, key, value)
+        
+        return page_orm
+
+    def update_from_dict(self, data: dict, exclude: Optional[set] = None) -> 'Page':
+        """
+        Обновить поля модели из словаря (дополнить, не заменить)
+        
+        Args:
+            data: Словарь с данными для обновления
+            exclude: Набор полей для исключения из обновления
+        
+        Returns:
+            Self (для chaining)
+        """
+        exclude = exclude or set()
+        
+        for key, value in data.items():
+            # Пропускаем исключенные поля и поля, которых нет в модели
+            if key in exclude or not hasattr(self, key):
+                continue
+            
+            # Обновляем только если значение не None (для дополнения, а не замены)
+            if value is not None:
+                setattr(self, key, value)
+        
+        return self
     
     class Config:
         from_attributes = True

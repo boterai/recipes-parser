@@ -9,7 +9,7 @@ import re
 import random
 from pathlib import Path
 from urllib.parse import urlparse, urljoin
-from typing import Set, Dict, List
+from typing import Set, Dict, List, Optional
 import logging
 import heapq
 from selenium import webdriver
@@ -26,8 +26,11 @@ import config.config as config
 from src.common.db.mysql import MySQlManager
 from src.stages.extract.recipe_extractor import RecipeExtractor
 from src.stages.analyse.analyse import RecipeAnalyzer
+from src.repositories.site import SiteRepository
+from src.repositories.page import PageRepository
+from src.models.site import Site
 import sqlalchemy
-from src.models.page import Page
+from src.models.page import Page, PageORM
 # Настройка логирования
 logging.basicConfig(
     level=logging.INFO,
@@ -39,7 +42,8 @@ class SiteExplorer:
     """Исследователь структуры сайта с поддержкой многоязычных рецептов"""
     
     def __init__(self, base_url: str, debug_mode: bool = True, recipe_pattern: str = None,
-                 max_errors: int = 3, max_urls_per_pattern: int = None, debug_port: int = None):
+                 max_errors: int = 3, max_urls_per_pattern: int = None, debug_port: int = None,
+                 driver: webdriver.Chrome = None):
         """
         Args:
             base_url: Базовый URL сайта
@@ -49,33 +53,34 @@ class SiteExplorer:
             max_urls_per_pattern: Максимальное количество URL на один паттерн (None = без ограничений)
             debug_port: Порт для подключения к Chrome (по умолчанию из config)
         """
-        self.base_url = base_url
         self.debug_mode = debug_mode
         self.debug_port = debug_port if debug_port is not None else config.CHROME_DEBUG_PORT
-        self.driver = None
-        self.db = None
-        self.site_id = None
-        self.recipe_pattern = recipe_pattern
+        self.driver = driver
         self.recipe_regex = None
         self.request_count = 0  # Счетчик запросов для адаптивных пауз
         self.max_errors = max_errors
         self.max_urls_per_pattern = max_urls_per_pattern  # Лимит URL на паттерн (рекомендуется использовать для первоначальной сборки рецептовв, чтобы не собирать кучи одинаковых страниц)
         self.analyzer = None
-        self.site_language = None
+        self.site_repository = SiteRepository()
+        self.page_repository = PageRepository()
+        self.site = Site(
+            base_url=base_url,
+            pattern=recipe_pattern,
+            name="",
+        )
+        self.site.set_url(base_url)
         
         # Компиляция regex паттерна если передан
-        if recipe_pattern:
+        if self.site.pattern:
             try:
-                self.recipe_regex = re.compile(recipe_pattern)
-                logger.info(f"Используется regex паттерн для рецептов: {recipe_pattern}")
+                self.recipe_regex = re.compile(self.site.pattern)
+                logger.info(f"Используется regex паттерн для рецептов: {self.site.pattern}")
             except re.error as e:
                 logger.error(f"Неверный regex паттерн: {e}")
                 self.recipe_regex = None
         
         parsed_url = urlparse(base_url)
         self.base_domain = parsed_url.netloc.replace('www.', '')
-        self.site_name = self.base_domain.replace('.', '_')
-        base_url = f"{parsed_url.scheme}://{parsed_url.netloc}/"
         
         # Множества для отслеживания
         self.visited_urls: Set[str] = set()
@@ -86,51 +91,25 @@ class SiteExplorer:
         self.exploration_queue: List[tuple] = []  # Очередь URL для исследования: [(url, depth), ...]
         
         # Файлы для сохранения
-        self.save_dir = os.path.join(config.PARSED_DIR, self.site_name,"exploration")
+        self.save_dir = os.path.join(config.PARSED_DIR, self.site.name,"exploration")
         os.makedirs(self.save_dir, exist_ok=True)
         
         self.state_file = os.path.join(self.save_dir, "exploration_state.json")
         self.patterns_file = os.path.join(self.save_dir, "url_patterns.json")
+
+        site_orm = self.site_repository.create_or_get(self.site) # надо оставить только site а остальные все убрать тип поля из сайта которые 
+        self.site = site_orm.to_pydantic()
         
-        # Подключение к БД
-        self.db = MySQlManager()
-        for i in range(1, 4):  # Пытаемся подключиться 3 раза
-            if self.db.connect():
-                self.site_id, self.site_language = self.db.create_or_get_site(
-                    name=self.site_name,
-                    base_url=base_url,
-                    language=self.site_language  # Будет определен при парсинге
-                )
-                if self.site_id:
-                    logger.info(f"Работа с сайтом ID: {self.site_id}")
-                    
-                    # Если паттерн не задан, загружаем из БД
-                    if not recipe_pattern:
-                        self.load_pattern_from_db()
-                    
-                    # Загружаем посещенные URL из БД
-                    self.load_visited_urls_from_db()
-                else:
-                    logger.warning("Не удалось создать/получить ID сайта")
-                break
-            else:
-                logger.error("Не удалось подключиться к БД")
-            if i < 3:
-                logger.info("Повторная попытка подключения к БД через несколько секунд...")
-            if i == 3:
-                logger.error("Превышено количество попыток подключения к БД. Работа без БД невозможна")
-                self.db = None
-                raise RuntimeError("DB connection failed")
-            time.sleep(random.uniform(4, 6))
+        # Загружаем посещенные URL из БД
+        self.load_visited_urls_from_db()
 
         # Инициализация экстрактора для проверки и извлечения рецептов
         self.recipe_extractor = None
-        if self.db:
-            self.recipe_extractor = RecipeExtractor(self.db)
+        self.recipe_extractor = RecipeExtractor()
 
 
     def set_pattern(self, pattern: str):
-        self.recipe_pattern = pattern
+        self.site.pattern = pattern
         try:
             self.recipe_regex = re.compile(pattern)
             logger.info(f"Используется regex паттерн для рецептов: {pattern}")
@@ -138,74 +117,34 @@ class SiteExplorer:
             logger.error(f"Неверный regex паттерн: {e}")
             self.recipe_regex = None
     
-    def load_pattern_from_db(self):
-        """
-        Загрузка regex паттерна рецептов из БД для данного сайта
-        """
-        if not self.db or not self.site_id:
-            return
-        
-        try:
-            session = self.db.get_session()
-            
-            sql = "SELECT recipe_pattern FROM sites WHERE id = :site_id"
-            result = session.execute(sqlalchemy.text(sql), {"site_id": self.site_id})
-            row = result.fetchone()
-            
-            if row and row[0]:
-                pattern = row[0]
-                self.recipe_pattern = pattern
-                try:
-                    self.recipe_regex = re.compile(pattern)
-                    logger.info(f"Загружен паттерн из БД: {pattern}")
-                except re.error as e:
-                    logger.error(f"Неверный regex паттерн из БД: {e}")
-                    self.recipe_regex = None
-            else:
-                logger.info("Паттерн рецептов не найден в БД")
-            
-            session.close()
-            
-        except Exception as e:
-            logger.error(f"Ошибка загрузки паттерна из БД: {e}")
     
     def load_visited_urls_from_db(self):
         """
         Загрузка всех уже посещенных URL для данного сайта из БД
         """
-        if not self.db or not self.site_id:
+        pages_orm = self.page_repository.get_by_site(site_id=self.site.id)
+        
+        loaded_count = 0
+        for page in pages_orm:
+            if page.url:
+                self.visited_urls.add(page.url)
+                loaded_count += 1
+                
+                if not page.pattern:
+                    continue
+                
+                # Добавляем в паттерны
+                if page.pattern not in self.url_patterns:
+                    self.url_patterns[page.pattern] = []
+                if page.url not in self.url_patterns[page.pattern]:
+                    self.url_patterns[page.pattern].append(page.url)
+        
+        if loaded_count > 0:
+            logger.info(f"Загружено {loaded_count} посещенных URL из БД")
+            logger.info(f"Найдено {len(self.url_patterns)} уникальных паттернов")
             return
         
-        try:
-            session = self.db.get_session()
-            
-            sql = "SELECT url, pattern FROM pages WHERE site_id = :site_id"
-            result = session.execute(sqlalchemy.text(sql), {"site_id": self.site_id})
-            rows = result.fetchall()
-            
-            loaded_count = 0
-            for url, pattern in rows:
-                if url:
-                    self.visited_urls.add(url)
-                    loaded_count += 1
-                    
-                    # Добавляем в паттерны
-                    if pattern:
-                        if pattern not in self.url_patterns:
-                            self.url_patterns[pattern] = []
-                        if url not in self.url_patterns[pattern]:
-                            self.url_patterns[pattern].append(url)
-            
-            if loaded_count > 0:
-                logger.info(f"Загружено {loaded_count} посещенных URL из БД")
-                logger.info(f"Найдено {len(self.url_patterns)} уникальных паттернов")
-            else:
-                logger.info("В БД нет ранее посещенных URL для этого сайта")
-            
-            session.close()
-            
-        except Exception as e:
-            logger.error(f"Ошибка загрузки посещенных URL из БД: {e}")
+        logger.info("В БД нет ранее посещенных URL для этого сайта")
     
     def connect_to_chrome(self):
         """Подключение к Chrome в отладочном режиме"""
@@ -296,7 +235,7 @@ class SiteExplorer:
         try:
             parsed = urlparse(url)
             path = parsed.path
-            return len(re.findall(self.recipe_pattern, path)) > 0
+            return len(re.findall(self.site.pattern, path)) > 0
         except Exception as e:
             logger.debug(f"Ошибка проверки URL {url}: {e}")
             return False
@@ -316,90 +255,35 @@ class SiteExplorer:
             - confidence_score: уровень уверенности (0-100)
             - recipe_data: извлеченные данные рецепта или None
         """
-        if not (self.db and self.site_id):
-            logger.warning(" БД не используется, пропускаем проверку рецепта")
-            return False
-            # Создаем объект Page для БД
-
-
-        page = Page(site_id=self.site_id, 
+        language = self.driver.execute_script("return document.documentElement.lang") or 'unknown'
+        page = Page(site_id=self.site.id, 
                     url=url, 
                     pattern=pattern, 
-                    html_path=self.save_page_as_file(pattern, page_index))
+                    html_path=self.save_page_as_file(pattern, page_index),
+                    title=self.driver.title,
+                    language=language)
 
-
-        
-            
         # Извлекаем полные данные рецепта
-        recipe_data = self.recipe_extractor.extract_and_update_page(page)
-        
-        # UPSERT
-        upsert_sql = """
-            INSERT INTO pages (
-                site_id, url, pattern, html_path,
-                is_recipe, confidence_score,
-                dish_name, description, 
-                ingredients, instructions,
-                prep_time, cook_time, total_time,
-                category, nutrition_info,
-                notes, tags, title, language, image_urls
-            ) VALUES (
-                :site_id, :url, :pattern, :html_path,
-                :is_recipe, :confidence_score,
-                :dish_name, :description,
-                :ingredients, :instructions,
-                :prep_time, :cook_time, :total_time,
-                :category, :nutrition_info,
-                :notes, :tags, :title, :language, :image_urls
-            )
-            ON DUPLICATE KEY UPDATE
-                is_recipe = VALUES(is_recipe),
-                confidence_score = VALUES(confidence_score),
-                dish_name = VALUES(dish_name),
-                description = VALUES(description),
-                ingredients = VALUES(ingredients),
-                instructions = VALUES(instructions),
-                prep_time = VALUES(prep_time),
-                cook_time = VALUES(cook_time),
-                total_time = VALUES(total_time),
-                category = VALUES(category),
-                nutrition_info = VALUES(nutrition_info),
-                notes = VALUES(notes),
-                tags = VALUES(tags),
-                title = VALUES(title),
-                language = VALUES(language),
-                image_urls = VALUES(image_urls)
-        """
-        language = self.driver.execute_script("return document.documentElement.lang") or 'unknown'
+        recipe_data: Optional[Page] = self.recipe_extractor.extract_and_update_page(page)
+        if not recipe_data:
+            return False
+
         if self.site_language is None and language != 'unknown':
             self.site_language = language
-            if self.db.update_site_language(self.site_id, language) is False:
+            if self.site_repository.update(self.site.to_orm()) is not None:
                 logger.error("Ошибка обновления языка сайта в БД")
-
-        # Подготовка данных
-        upsert_data = {
-            "site_id": self.site_id,
-            "url": url,
-            "pattern": pattern,
-            "html_path": page.html_path,
-            "title": self.driver.title,
-            "language": language,
-            **recipe_data
-        }
-
-        if recipe_data.get("is_recipe", False) is False:
+        
+        if recipe_data.is_recipe is False:
             logger.info(f"  ✗ Рецепт не найден на {url}")
             return False
 
         try:
-            with self.db.get_session() as session:
-                session.execute(sqlalchemy.text(upsert_sql), upsert_data)
-                session.commit()
+            self.page_repository.create_or_update(recipe_data)
         except Exception as e:
             logger.error(f"Ошибка сохранения страницы в БД: {e}")
             return False
         
-        dish_name = recipe_data.get('dish_name', 'Unknown')
+        dish_name = recipe_data.dish_name or "Без названия"
         logger.info(f"  ✓ Рецепт '{dish_name}' сохранен в БД")
         return True
     
@@ -579,32 +463,28 @@ class SiteExplorer:
             pattern: Паттерн URL
             page_index: Индекс страницы в рамках паттерна
         """
-        try:
             
-            # Получение метаданных
-            title = self.driver.title
-            language = self.driver.execute_script("return document.documentElement.lang") or 'unknown'
-            filepath = self.save_page_as_file(pattern, page_index)
-            filename = os.path.basename(filepath)
-            # Сохранение в БД
-            if self.db and self.site_id:
-                page_id = self.db.save_page(
-                    site_id=self.site_id,
-                    url=url,
-                    pattern=pattern,
-                    title=title,
-                    language=language,
-                    html_path=os.path.relpath(filepath),
-                )
-                if page_id:
-                    logger.info(f"  ✓ Сохранено: {filename} (DB ID: {page_id})")
-                else:
-                    logger.info(f"  ✓ Сохранено: {filename} (БД: ошибка)")
-            else:
-                logger.info(f"  ✓ Сохранено: {filename}")
-            
-        except Exception as e:
-            logger.error(f"Ошибка сохранения страницы: {e}")
+        # Получение метаданных
+        title = self.driver.title
+        language = self.driver.execute_script("return document.documentElement.lang") or 'unknown'
+        filepath = self.save_page_as_file(pattern, page_index)
+        filename = os.path.basename(filepath)
+        page_orm = self.page_repository.create_or_update(
+            Page(
+                site_id=self.site.id,
+                url=url,
+                pattern=pattern,
+                title=title,
+                language=language,
+                html_path=os.path.relpath(filepath)
+            ))
+    
+        if page_orm.id:
+            logger.info(f"  ✓ Сохранено: {filename} (DB ID: {page_orm.id})")
+        else:
+            logger.info(f"  ✓ Сохранено: {filename} (БД: ошибка)")
+
+
     
     def extract_links(self) -> List[str]:
         """
@@ -705,8 +585,8 @@ class SiteExplorer:
             Словарь с полным состоянием explorer
         """
         return {
-            'base_url': self.base_url,
-            'recipe_pattern': self.recipe_pattern,
+            'base_url': self.site.base_url,
+            'recipe_pattern': self.site.pattern,
             'visited_urls': list(self.visited_urls),
             'url_patterns': dict(self.url_patterns),
             'failed_urls': list(self.failed_urls),
@@ -714,8 +594,8 @@ class SiteExplorer:
             'successful_referrers': list(self.successful_referrers),
             'exploration_queue': list(self.exploration_queue),
             'request_count': self.request_count,
-            'site_id': self.site_id,
-            'site_name': self.site_name,
+            'site_id': self.site.id,
+            'site_name': self.site.name,
             'exported_at': time.strftime('%Y-%m-%d %H:%M:%S')
         }
     
@@ -762,8 +642,8 @@ class SiteExplorer:
         
         # Обновляем regex паттерн если изменился
         new_pattern = state.get('recipe_pattern')
-        if new_pattern and new_pattern != self.recipe_pattern:
-            self.recipe_pattern = new_pattern
+        if new_pattern and new_pattern != self.site.pattern:
+            self.site.pattern = new_pattern
             try:
                 self.recipe_regex = re.compile(new_pattern)
                 logger.info(f"Обновлен regex паттерн: {new_pattern}")
@@ -877,7 +757,7 @@ class SiteExplorer:
         Returns:
             urls_explored: Количество успешно посещенных URL в этой сессии
         """
-        logger.info(f"Начало исследования сайта: {self.base_url}")
+        logger.info(f"Начало исследования сайта: {self.site.base_url}")
         logger.info(f"Цель: найти до {max_urls} уникальных паттернов URL")
         
         # Очередь URL для обхода: (url, depth)
@@ -886,7 +766,7 @@ class SiteExplorer:
             queue = list(self.exploration_queue)
             logger.info(f"Продолжаем с сохраненной очередью: {len(queue)} URL")
         else:
-            queue = [(self.base_url, 0)]
+            queue = [(self.site.base_url, 0)]
             logger.info("Начинаем новое исследование")
         
         urls_explored = len(self.visited_urls)
@@ -978,16 +858,12 @@ class SiteExplorer:
                         if self.recipe_regex and not self.is_recipe_url(current_url):
                             logger.info("  Обновление паттерна URL, так как найден рецепт на странице")
                             if self.analyzer is None:
-                                self.analyzer = RecipeAnalyzer(
-                                    site_id=self.site_id,
-                                    db_manager=self.db,
-                                    sample_size=10
-                                )
-                            pattern =  self.analyzer.analyse_recipe_page_pattern(site_id=self.site_id)
+                                self.analyzer = RecipeAnalyzer()
+                            pattern =  self.analyzer.analyse_recipe_page_pattern(site_id=self.site.id)
                             
                 # Если задан regex паттерн - сохраняем рецепт, иначе сохраняем все страницы
                 elif self.should_extract_recipe(current_url):
-                    if self.recipe_pattern: self.mark_page_as_successful(current_url) # Если паттерн задан - отмечаем как успешный тк иначе не можем знать был ли вообще успех
+                    if self.site.pattern: self.mark_page_as_successful(current_url) # Если паттерн задан - отмечаем как успешный тк иначе не можем знать был ли вообще успех
                     self.save_page_html(current_url, pattern, page_index)
 
                 # Извлечение новых ссылок
@@ -1051,8 +927,8 @@ class SiteExplorer:
         """Закрытие браузера и БД"""
         if self.driver and not self.debug_mode:
             self.driver.quit()
-        if self.db:
-            self.db.close()
+        self.site_repository.close()
+        self.page_repository.close()
         logger.info("Готово")
 
 
@@ -1089,12 +965,59 @@ def explore_site(url: str, max_urls: int = 1000, max_depth: int = 4, recipe_patt
             urls_explored += explored
             logger.info(f"Всего исследовано URL: {urls_explored}/{max_urls}")
     except KeyboardInterrupt:
+        logger.info("Прервано пользователем")
+    except Exception as e:
+        logger.error(f"Критическая ошибка: {e}", exc_info=True)
+        sys.exit(1)
+    finally:
+        explorer.close()
+
+def run_explorer(explorer:SiteExplorer, max_urls: int, max_depth: int):
+    
+    try:
+        explorer.connect_to_chrome()
+        explorer.explore(max_urls=max_urls, max_depth=max_depth)
+    except KeyboardInterrupt:
         logger.info("\nПрервано пользователем")
     except Exception as e:
         logger.error(f"Критическая ошибка: {e}", exc_info=True)
         sys.exit(1)
     finally:
         explorer.close()
+
+def prepare_data_for_parser_creation(url: str, max_depth: int, debug_port: int = 9222, helper_links: list[str] = None,
+                                     batch_size: int = 50, max_preparepages: int = 500, min_recipes: int = 3) -> Optional[int]:
+    """    
+    Подготовка данных для создания парсера рецептов путем исследования сайта.
+    
+    DEPRECATED: Используйте SitePreparationPipeline напрямую для большего контроля.
+    Эта функция оставлена для обратной совместимости.
+    
+    Args:
+        url: Базовый URL сайта
+        max_depth: Максимальная глубина исследования
+        debug_port: Порт для подключения к Chrome
+        helper_links: Вспомогательные ссылки для начала исследования
+        batch_size: Размер одного батча исследования
+        max_preparepages: Максимальное количество страниц для подготовки данных
+        min_recipes: Минимальное количество рецептов для поиска паттерна
+    
+    Returns:
+        site_id: ID сайта в БД, если найден паттерн рецептов, иначе None
+    """
+    from src.stages.parse.site_preparation_pipeline import prepare_site_for_parsing
+    
+    logger.warning("prepare_data_for_parser_creation deprecated, используйте SitePreparationPipeline")
+    
+    return prepare_site_for_parsing(
+        url=url,
+        helper_links=helper_links,
+        debug_port=debug_port,
+        batch_size=batch_size,
+        max_pages=max_preparepages,
+        max_depth=max_depth,
+        min_recipes=min_recipes
+    )
 
 def main():
     url = "https://www.allrecipes.com/"

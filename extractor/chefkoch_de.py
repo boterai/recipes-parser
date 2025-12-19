@@ -146,8 +146,7 @@ class ChefkochDeExtractor(BaseRecipeExtractor):
             if instructions and isinstance(instructions, str):
                 # Split by newlines and filter empty lines
                 steps = [self.clean_text(step) for step in instructions.split('\n') if step.strip()]
-                if steps:
-                    return json.dumps(steps, ensure_ascii=False)
+                return " ".join(steps)
         except Exception:
             pass
         

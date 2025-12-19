@@ -3,12 +3,27 @@
 """
 
 from datetime import datetime
+from urllib.parse import urlparse
 from typing import Optional
 from pydantic import BaseModel
 from sqlalchemy import Column, Integer, String, Boolean, TIMESTAMP, text
-from sqlalchemy.ext.declarative import declarative_base
+from src.models.base import Base
 
-Base = declarative_base()
+def get_name_base_url_from_url(url: str) -> tuple[str, str]:
+    """
+    Извлечь имя сайта и базовый URL из полного URL
+    
+    Args:
+        url: Полный URL страницы
+    
+    Returns:
+        Кортеж (имя сайта, базовый URL)
+    """
+    parsed_url = urlparse(url)
+    base_domain = parsed_url.netloc.replace('www.', '')
+    base_url = f"{parsed_url.scheme}://{parsed_url.netloc}/"
+    site_name = base_domain.replace('.', '_')
+    return site_name, base_url
 
 
 class SiteORM(Base):
@@ -18,8 +33,10 @@ class SiteORM(Base):
     
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(255), nullable=False, unique=True)
-    recipe_pattern = Column(String(500))
+    pattern = Column(String(500))
     base_url = Column(String(500), nullable=False, unique=True)
+    search_url = Column(String(1000))
+    searched = Column(Boolean, default=False)
     language = Column(String(10))
     is_recipe_site = Column(Boolean, default=False)
     created_at = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'))
@@ -35,7 +52,9 @@ class Site(BaseModel):
     id: Optional[int] = None
     name: str
     base_url: str
+    search_url: Optional[str] = None
     is_recipe_site: bool = False
+    searched: bool = False
     pattern: Optional[str] = None  # строка с паттернами для страниц
     language: Optional[str] = None
     created_at: Optional[datetime] = None
@@ -94,3 +113,14 @@ class Site(BaseModel):
                 setattr(site_orm, key, value)
         
         return site_orm
+    
+    def set_url(self, base_url: str):
+        """
+        Установить базовый URL и имя сайта на его основе
+        
+        Args:
+            base_url: Базовый URL сайта
+        """
+        name, base_url = get_name_base_url_from_url(base_url)
+        self.base_url = base_url
+        self.name = name

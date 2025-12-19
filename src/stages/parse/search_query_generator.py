@@ -12,6 +12,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 from src.common.db.mysql import MySQlManager
 from src.common.gpt_client import GPTClient
 from utils.languages import LANGUAGE_NAME_TO_CODE
+from src.models.search_query import SearchQueryORM, SearchQuery
+from src.repositories.search_query import SearchQueryRepository
 
 logger = logging.getLogger(__name__)
 
@@ -19,44 +21,21 @@ logger = logging.getLogger(__name__)
 class SearchQueryGenerator:
     """Генератор поисковых запросов для рецептов"""
     
-    def __init__(self, max_non_searched: int = 10):
+    def __init__(self, max_non_searched: int = 10, query_repository: SearchQueryRepository = None):
         """
             max_non_searched: Максимальное количество неиспользованных запросов в БД (если больше - не генерируем новые)
         """
-        self._db = None
         self.gpt_client = GPTClient()
+        if query_repository is not None:
+            self.query_repository = query_repository
+        else:
+            self.query_repository = SearchQueryRepository()
         self.max_non_searched = max_non_searched
-    
-    @property
-    def db(self) -> MySQlManager:
-        """Ленивое подключение к MySQL"""
-        if self._db is None:
-            self._db = MySQlManager()
-            if not self._db.connect():
-                raise ConnectionError("Не удалось подключиться к MySQL")
-        return self._db
     
     def close(self):
         """Закрытие подключений"""
-        if self._db:
-            self._db.close()
-    
-    def get_query_count(self) -> int:
-        """
-        Получить количество поисковых запросов в БД
-        
-        Returns:
-            Количество запросов
-        """
-        session = self.db.get_session()
-        try:
-            # Получаем количество запросов для которых не было найдено ни одной ссылки
-            result = session.execute(text("SELECT COUNT(*) FROM search_query WHERE url_count = 0"))
-            count = result.scalar()
-            logger.info(f"Найдено {count} поисковых запросов в БД")
-            return count
-        finally:
-            session.close()
+        if self.query_repository.close():
+            logger.info("Закрыто подключение к БД")
     
     def generate_search_queries(self, count: int = 10) -> List[str]:
         """
@@ -180,136 +159,21 @@ Translate now:"""
         Returns:
             Количество сохраненных запросов
         """
-        session = self.db.get_session()
         saved_count = 0
         
         try:            
             for _, translations in queries_with_translations.items():
                 for lang, query_text in translations.items():
-                    # Определяем код языка (первые 2 буквы в нижнем регистре)
                     lang_code = LANGUAGE_NAME_TO_CODE.get(lang, lang)
-                    
-                    try:
-                        # Вставка с игнорированием дубликатов
-                        insert_query = text("""
-                            INSERT INTO search_query (query, language)
-                            VALUES (:query, :language)
-                            ON DUPLICATE KEY UPDATE query = query
-                        """)
-                        
-                        session.execute(insert_query, {
-                            "query": query_text,
-                            "language": lang_code
-                        })
-                        saved_count += 1
-                    except Exception as e:
-                        logger.warning(f"Ошибка сохранения запроса '{query_text}': {e}")
-                        continue
+                    query_orm = SearchQueryORM(
+                        query=query_text,
+                        language=lang_code
+                    )
+                    self.query_repository.upsert(query_orm)
+                    saved_count += 1
             
-            session.commit()
             logger.info(f"✓ Сохранено {saved_count} запросов в БД")
             return saved_count
-            
         except Exception as e:
-            session.rollback()
             logger.error(f"Ошибка сохранения запросов: {e}")
             return 0
-        finally:
-            session.close()
-    
-    def get_unsearched_queries(self, limit: Optional[int] = None) -> List[tuple[int, str, str]]:
-        """
-        Получить неиспользованные поисковые запросы из БД
-        
-        Args:
-            limit: Максимальное количество запросов
-        
-        Returns:
-            Список кортежей (id, query, language)
-        """
-        session = self.db.get_session()
-        
-        try:
-            
-            query = """
-                SELECT id, query, language
-                FROM search_query
-                WHERE url_count = 0
-                ORDER BY created_at ASC
-            """
-            
-            if limit:
-                query += f" LIMIT {limit}"
-            
-            result = session.execute(text(query))
-            queries = [(row[0], row[1], row[2]) for row in result.fetchall()]
-            
-            logger.info(f"Найдено {len(queries)} неиспользованных запросов")
-            return queries
-            
-        finally:
-            session.close()
-    
-    def update_query_url_count(self, query_id: int, url_count: int):
-        """
-        Обновить количество найденных URL для запроса
-        
-        Args:
-            query_id: ID запроса
-            url_count: Количество найденных URL
-        """
-        session = self.db.get_session()
-        
-        try:
-            update_query = text("""
-                UPDATE search_query
-                SET url_count = :url_count
-                WHERE id = :id
-            """)
-            
-            session.execute(update_query, {
-                "id": query_id,
-                "url_count": url_count
-            })
-            session.commit()
-            logger.debug(f"✓ Обновлено url_count={url_count} для запроса ID={query_id}")
-            
-        except Exception as e:
-            session.rollback()
-            logger.error(f"Ошибка обновления url_count для запроса {query_id}: {e}")
-        finally:
-            session.close()
-    
-    def mark_query_as_searched(self, query_id: int, url_count: int = 0, recipe_url_count: int = 0):
-        """
-        Пометить запрос как использованный
-        
-        Args:
-            query_id: ID запроса
-            url_count: Количество найденных URL
-            recipe_url_count: Количество URL с рецептами
-        """
-        session = self.db.get_session()
-        
-        try:
-            
-            update_query = text("""
-                UPDATE search_query
-                SET 
-                    url_count = :url_count,
-                    recipe_url_count = :recipe_url_count
-                WHERE id = :id
-            """)
-            
-            session.execute(update_query, {
-                "id": query_id,
-                "url_count": url_count,
-                "recipe_url_count": recipe_url_count
-            })
-            session.commit()
-            
-        except Exception as e:
-            session.rollback()
-            logger.error(f"Ошибка обновления запроса {query_id}: {e}")
-        finally:
-            session.close()

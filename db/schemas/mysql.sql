@@ -2,8 +2,10 @@
 CREATE TABLE IF NOT EXISTS sites (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE, -- доменное имя сайта
-    pattern VARCHAR(500),
+    pattern VARCHAR(500), -- recipe pattern для страниц рецептов
     base_url VARCHAR(500) NOT NULL UNIQUE,
+    search_url TEXT, -- URL для поиска рецептов на сайте
+    searched BOOLEAN DEFAULT FALSE, -- был ли выполнен поиск рецептов на сайте
     language VARCHAR(10),
     is_recipe_site BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

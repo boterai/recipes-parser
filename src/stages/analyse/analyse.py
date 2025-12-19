@@ -18,7 +18,9 @@ if __name__ == "__main__":
     import sys
     sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
-from src.common.db.mysql import MySQlManager
+from src.models.page import PageORM
+from src.repositories.page import PageRepository
+from src.repositories.site import SiteRepository
 from src.common.gpt_client import GPTClient
 
 # Загрузка переменных окружения
@@ -37,11 +39,9 @@ class RecipeAnalyzer:
     
     def __init__(self):
         """Инициализация анализатора"""
-        self.db = MySQlManager()
-        if not self.db.connect():
-            raise ConnectionError("Не удалось подключиться к БД")
-        
         self.gpt_client = GPTClient()
+        self.page_repository = PageRepository()
+        self.site_repository = SiteRepository()
         logger.info("RecipeAnalyzer инициализирован")
     
     def analyze_titles_with_gpt(self, pages: dict[int, dict[str, str]]) -> list[int]:
@@ -220,63 +220,40 @@ URL: {url}
         Returns:
             True при успехе, False при ошибке
         """
-        session = self.db.get_session()
-        
         try:
             # Подготовка данных
-            ingredients = analysis.get("ingredient")
+            ingredients = analysis.get("ingredients")
             if ingredients and isinstance(ingredients, list):
                 ingredients = json.dumps(ingredients, ensure_ascii=False)
-            if not isinstance(analysis.get("instructions"), str):
-                analysis["instructions"] = json.dumps(analysis.get("instructions"), ensure_ascii=False)
-            update_data = {
-                "page_id": page_id,
-                "is_recipe": analysis.get("is_recipe", False),
-                "confidence_score": Decimal(str(analysis.get("confidence_score", 0))),
-                "dish_name": analysis.get("dish_name"),
-                "description": analysis.get("description"),
-                "instructions": analysis.get("instructions"),
-                "prep_time": analysis.get("prep_time"),
-                "cook_time": analysis.get("cook_time"),
-                "total_time": analysis.get("total_time"),
-                "category": analysis.get("category"),
-                "nutrition_info": analysis.get("nutrition_info"),
-                "notes": analysis.get("notes"),
-                "tags": analysis.get("tags"),
-                "ingredients": ingredients
-            }
-            
-            # SQL запрос на обновление
-            sql = """
-                UPDATE pages SET
-                    is_recipe = :is_recipe,
-                    confidence_score = :confidence_score,
-                    dish_name = :dish_name,
-                    description = :description,
-                    ingredients = :ingredients,
-                    instructions = :instructions,
-                    prep_time = :prep_time,
-                    cook_time = :cook_time,
-                    total_time = :total_time,
-                    category = :category,
-                    nutrition_info = :nutrition_info,
-                    notes = :notes,
-                    tags = :tags
-                WHERE id = :page_id
-            """
-            
-            session.execute(sqlalchemy.text(sql), update_data)
-            session.commit()
+            if isinstance(analysis.get("instructions"), list):
+                analysis["instructions"] = ' '.join(analysis["instructions"])
+
+            page_orm = PageORM(
+                id=page_id,
+                is_recipe=analysis.get("is_recipe", False),
+                confidence_score=Decimal(str(analysis.get("confidence_score", 0))),
+                dish_name=analysis.get("dish_name"),
+                description=analysis.get("description"),
+                instructions=analysis.get("instructions"),
+                prep_time=analysis.get("prep_time"),
+                cook_time=analysis.get("cook_time"),
+                total_time=analysis.get("total_time"),
+                category=analysis.get("category"),
+                nutrition_info=analysis.get("nutrition_info"),
+                notes=analysis.get("notes"),
+                tags=analysis.get("tags"),
+                ingredients=ingredients,
+                image_urls=analysis.get("image_urls"),  # Оставляем без изменений
+            )
+
+            self.page_repository.update(page_orm)
             
             logger.info(f"Страница ID {page_id} обновлена в БД")
             return True
             
         except Exception as e:
-            session.rollback()
             logger.error(f"Ошибка обновления страницы {page_id}: {e}")
             return False
-        finally:
-            session.close()
     
     def analyze_page(self, page_id: int, html_path: str, url: str) -> bool:
         """
@@ -315,27 +292,24 @@ URL: {url}
             Список page_id, которые вероятно являются рецептами, которые не являются рецептами
         
         """
-        session = self.db.get_session()
+        session = self.page_repository.get_session()
         
         try:
             # Получение всех страниц с заголовками
-            sql = """
-                SELECT id, url, title
-                FROM pages
-                WHERE title IS NOT NULL
-                AND is_recipe = FALSE
-                AND confidence_score = 0
-                AND pattern != '/'
-            """
+            query = session.query(PageORM).filter(
+                PageORM.title.isnot(None),
+                PageORM.is_recipe == False,
+                PageORM.confidence_score == 0,
+                PageORM.pattern != '/'
+            )
             
             if site_id:
-                sql += f" AND site_id = {site_id}"
+                query = query.filter(PageORM.site_id == site_id)
             
             if limit:
-                sql += f" LIMIT {limit}"
-            
-            result = session.execute(sqlalchemy.text(sql))
-            pages = result.fetchall()
+                query = query.limit(limit)
+
+            pages: list[PageORM] = query.all()
             
             total = len(pages)
             logger.info(f"Найдено {total} страниц для анализа заголовков")
@@ -344,10 +318,9 @@ URL: {url}
             recipe_ids = []
             not_recipe_ids = set()
 
-            
-            for page_id, url, title in pages:
-                not_recipe_ids.add(page_id)
-                pages_to_analyze[page_id] = {"title": title, "url": url}
+            for page in pages:
+                not_recipe_ids.add(page.id)
+                pages_to_analyze[page.id] = {"title": page.title, "url": page.url}
                 if len(pages_to_analyze) >= 15: # анализируем загоовки батчами по 15 штук
                     ids = self.analyze_titles_with_gpt(pages_to_analyze)
                     recipe_ids.extend(ids)
@@ -363,43 +336,6 @@ URL: {url}
             session.close()
 
         return [], list(not_recipe_ids)
-
-    def mark_as_non_recipes(self, page_ids: list[int]) -> int:
-        """
-        Пометка страниц как не являющихся рецептами
-        пометка is_recipe = FALSE, confidence_score = 10 тк вывод сделан только на оснвоании заглоовка
-        
-        Args:
-            page_ids: Список ID страниц
-            
-        Returns:
-            Количество обновленных записей
-        """
-        if not page_ids:
-            return 0
-        
-        session = self.db.get_session()
-        
-        try:
-            sql = """
-                UPDATE pages
-                SET is_recipe = FALSE,
-                    confidence_score = 10
-                WHERE id IN :page_ids
-            """
-            result = session.execute(sqlalchemy.text(sql), {"page_ids": tuple(page_ids)})
-            session.commit()
-            
-            updated_count = result.rowcount
-            logger.info(f"Помечено {updated_count} страниц как не рецепты")
-            return updated_count
-            
-        except Exception as e:
-            session.rollback()
-            logger.error(f"Ошибка при пометке не рецептов: {e}")
-            return 0
-        finally:
-            session.close()
 
     def analyze_all_pages(self, site_id: Optional[int] = None, limit: Optional[int] = None, 
                           filter_by_title: bool = False, recalculate: bool = False,
@@ -417,7 +353,7 @@ URL: {url}
         Returns:
             Количество страниц с рецептами после анализа
         """
-        session = self.db.get_session()
+        session = self.page_repository.get_session()
         recipe_page_ids = []
         no_recipe_ids = []
         if filter_by_title:
@@ -427,31 +363,26 @@ URL: {url}
         
         try:
             # Получение страниц для анализа (где еще не проводился анализ)
-            sql = """
-                SELECT id, url, html_path
-                FROM pages
-                WHERE html_path IS NOT NULL
-            """
+            query = session.query(PageORM).filter(
+                PageORM.html_path.isnot(None)
+            )
 
             if page_ids is not None:
-                ids_str = ','.join(map(str, page_ids))
-                sql += f" AND id IN ({ids_str})"
+                query = query.filter(PageORM.id.in_(page_ids))
 
             if recalculate is False:
-                sql += " AND is_recipe = FALSE AND confidence_score = 0"  # анализируем только неанализированные или помеченные как не рецепты
+                query = query.filter(PageORM.is_recipe == False, PageORM.confidence_score == 0)
             
             if site_id:
-                sql += f" AND site_id = {site_id}"
+                query = query.filter(PageORM.site_id == site_id)
             
             if limit and not recipe_page_ids and not page_ids:
-                sql += f" LIMIT {limit}"
+                query = query.limit(limit)
 
             if filter_by_title and recipe_page_ids: # фильтрация по ID из заголовков если не удаось получить из заголовка хоть 1 рецепт, то првоеряем все подярд
-                ids_str = ','.join(map(str, recipe_page_ids))
-                sql += f" AND id IN ({ids_str})"
+                query = query.filter(PageORM.id.in_(recipe_page_ids))
             
-            result = session.execute(sqlalchemy.text(sql))
-            pages = result.fetchall()
+            pages: list[PageORM] = query.all()
             
             total = len(pages)
             logger.info(f"Найдено {total} страниц для анализа")
@@ -459,27 +390,21 @@ URL: {url}
             success_count = 0
             recipe_count = 0
             
-            for idx, (page_id, url, html_path) in enumerate(pages, 1):
-                logger.info(f"\n[{idx}/{total}] Обработка страницы {page_id}")
+            for idx, (page) in enumerate(pages, 1):
+                logger.info(f"\n[{idx}/{total}] Обработка страницы {page.id}")
                 
                 # Проверка существования файла
-                if not os.path.exists(html_path):
-                    logger.warning(f"Файл не найден: {html_path}")
+                if not os.path.exists(page.html_path):
+                    logger.warning(f"Файл не найден: {page.html_path}")
                     continue
                 
                 # Анализ страницы
-                if self.analyze_page(page_id, html_path, url):
+                if self.analyze_page(page.id, page.html_path, page.url):
                     success_count += 1
                     
                     session.commit()
-                    # Проверка, является ли рецептом
-                    check_sql = "SELECT is_recipe FROM pages WHERE id = :page_id"
-                    is_recipe = session.execute(
-                        sqlalchemy.text(check_sql), 
-                        {"page_id": page_id}
-                    ).fetchone()[0]
-                    
-                    if is_recipe:
+                    analysis_page = self.page_repository.get_by_id(page.id)                    
+                    if analysis_page.is_recipe:
                         recipe_count += 1
 
                     if stop_analyse and recipe_count >= stop_analyse:
@@ -490,7 +415,7 @@ URL: {url}
                 if idx < total:
                     time.sleep(2)  # 2 секунды между запросами
             
-            self.mark_as_non_recipes(no_recipe_ids)
+            self.page_repository.mark_as_non_recipes(no_recipe_ids)
             logger.info(f"\n{'='*60}")
             logger.info(f"  Обработано: {success_count}/{total}")
             logger.info(f"  Найдено рецептов: {recipe_count}")
@@ -516,31 +441,24 @@ URL: {url}
             Regex паттерн для поиска страниц с рецептами или пустая строка если невозможно
         """
         pattern = ""
-        session = self.db.get_session()
-
+        
+        # Проверка, есть ли уже паттерн в БД
         if not recalculate:
-            # Проверка, есть ли уже паттерн в БД
-            sql_check = "SELECT recipe_pattern FROM sites WHERE id = :site_id"
-            result_check = session.execute(
-                sqlalchemy.text(sql_check),
-                {"site_id": site_id}
-            ).fetchone()
-            existing_pattern = result_check[0] if result_check else None
-            if existing_pattern:
-                logger.info(f"Паттерн уже существует для сайта ID {site_id}, пропускаем анализ.")
-                return existing_pattern
+            site_orm = self.site_repository.get_by_id(site_id)
+            if site_orm and site_orm.pattern:
+                logger.info(f"Паттерн уже существует для сайта ID {site_id}: {site_orm.pattern}")
+                return site_orm.pattern
         
         try:
-            # Получение всех URL страниц с рецептами
-            sql = f"SELECT url FROM pages WHERE is_recipe = TRUE AND site_id = {site_id}"
-            result = session.execute(sqlalchemy.text(sql))
-            pages = result.fetchall()
-            urls = [page[0] for page in pages]
+            # Получение всех страниц с рецептами через репозиторий
+            recipe_pages = self.page_repository.get_recipes(site_id=site_id)
             
-            if not urls:
+            if not recipe_pages:
                 logger.warning(f"Нет рецептов для сайта ID {site_id}")
                 return ""
             
+            # Извлекаем URL из ORM объектов
+            urls = [page.url for page in recipe_pages]
             logger.info(f"Найдено {len(urls)} URL с рецептами для анализа паттерна")
             
             # Извлечение только path из URL (без домена)
@@ -600,103 +518,25 @@ URL: {url}
                 logger.warning("GPT: Не удалось создать паттерны")
                 return ""
             
-            confidence = result.get('confidence', 0)
-            explanation = result.get('explanation', '')
-            
-            logger.info(f"Создано {len(patterns)} regex паттернов (уверенность {confidence}%)")
-            logger.info(f"Общее объяснение: {explanation}")
+            logger.info(f"Создано {len(patterns)} regex паттернов")
             
             # Объединяем паттерны в один через | (OR)
             pattern = '|'.join(f'({p})' for p in patterns)
             
             logger.info(f"\nИтоговый паттерн (комбинированный): {pattern}")
             
-            # Сохранение паттерна в БД для сайта
-            update_sql = """
-                UPDATE sites 
-                SET recipe_pattern = :recipe_pattern 
-                WHERE id = :site_id
-            """
-            session.execute(sqlalchemy.text(update_sql), {
-                "recipe_pattern": pattern,
-                "site_id": site_id
-            })
-            session.commit()
-            logger.info(f"Паттерн сохранён в БД для сайта ID {site_id}")
+            # Сохранение паттерна в БД через репозиторий
+            site_orm = self.site_repository.get_by_id(site_id)
+            if site_orm:
+                site_orm.pattern = pattern
+                self.site_repository.update(site_orm)
+                logger.info(f"Паттерн сохранён в БД для сайта ID {site_id}")
+            else:
+                logger.error(f"Сайт ID {site_id} не найден в БД")
             
         except Exception as e:
             logger.error(f"Ошибка при анализе шаблона страниц с рецептами: {e}")
             import traceback
             traceback.print_exc()
-        finally:
-            session.close()
             
         return pattern
-
-    def cleanup_non_recipe_pages(self, site_id: int):
-        """
-        Удаление неиспользуемых данных из БД (например, страниц без HTML)
-        """
-        session = self.db.get_session()
-        
-        try:
-            # получить страницы, которые надо удалить 
-            select_paths = "SELECT html_path, metadata_path FROM pages WHERE is_recipe = FALSE AND site_id = :site_id"
-            result = session.execute(sqlalchemy.text(select_paths), {"site_id": site_id})
-            pages = result.fetchall()
-
-            for html_path, metadata_path in pages:
-                # Удаление HTML файла
-                if html_path and os.path.exists(html_path):
-                    os.remove(html_path)
-                    logger.info(f"Удалён HTML файл: {html_path}")
-                
-                # Удаление метаданных
-                if metadata_path and os.path.exists(metadata_path):
-                    os.remove(metadata_path)
-                    logger.info(f"Удалён файл метаданных: {metadata_path}")
-
-            # Удаление страниц без HTML
-            delete_sql = "DELETE FROM pages WHERE is_recipe = FALSE"
-            result = session.execute(sqlalchemy.text(delete_sql))
-            deleted_count = result.rowcount
-            session.commit()
-            
-            logger.info(f"Удалено {deleted_count} страниц без рецептов из БД")
-            
-        except Exception as e:
-            session.rollback()
-            logger.error(f"Ошибка при удалении неиспользуемых данных: {e}")
-        finally:
-            session.close()
-    
-    def close(self):
-        """Закрытие соединений"""
-        if self.db:
-            self.db.close()
-        logger.info("Анализатор закрыт")
-
-
-def main():
-
-    site_id = 1  # пример site_id для анализа
-    analyzer = RecipeAnalyzer()
-    session = analyzer.db.get_session()
-    results = session.execute(sqlalchemy.text("SELECT id from pages WHERE site_id = 1 AND is_recipe = TRUE LIMIT 2"))
-    session.close()
-    page_ids = [row[0] for row in results.fetchall()]
-    try:
-        analyzer.analyze_all_pages(site_id=site_id, page_ids=page_ids, recalculate=True)
-
-        analyzer.analyze_all_pages(site_id=site_id, limit=15, filter_by_title=True)
-        analyzer.analyze_all_pages(limit=None, filter_by_title=True)
-    except KeyboardInterrupt:
-        logger.info("\nПрервано пользователем")
-    except Exception as e:
-        logger.error(f"Критическая ошибка: {e}")
-    finally:
-        analyzer.close()
-
-
-if __name__ == "__main__":
-    main()

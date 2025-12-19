@@ -2,67 +2,93 @@
 Автоматический парсер рецептов через DuckDuckGo с Selenium
 """
 
+import random
 import sys
 import time
 import logging
 from pathlib import Path
-from typing import List, Optional
-from urllib.parse import urlparse, urljoin
+from typing import Optional
+from urllib.parse import urlparse
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.common.exceptions import TimeoutException, WebDriverException
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
+import config.config as config
 from src.stages.parse.search_query_generator import SearchQueryGenerator
-from src.stages.parse.explorer import SiteExplorer
-from src.models.site import Site, SiteORM
-from src.common.db.mysql import MySQlManager
-
+from src.models.site import Site, get_name_base_url_from_url
+from src.repositories.site import SiteRepository
+from src.repositories.search_query import SearchQueryRepository
+from src.stages.parse.site_preparation_pipeline import SitePreparationPipeline
+from pathlib import Path
+from src.stages.parse import explore_site
+from utils.languages import POPULAR_LANGUAGES
 logger = logging.getLogger(__name__)
 
 
 class AutoScraper:
     """Автоматический сборщик рецептов через DuckDuckGo"""
     
-    def __init__(self, headless: bool = False):
+    def __init__(self, debug_mode: bool = True, debug_port: Optional[int] = None):
         """
         Инициализация скрапера
         
         Args:
-            headless: Запускать браузер в фоновом режиме
+            debug_mode: Если True, подключается к открытому Chrome с отладкой
+            debug_port: Порт для подключения к существующему Chrome (по умолчанию из config)
         """
-        self.headless = headless
+        self.debug_mode = debug_mode
+        self.debug_port = debug_port if debug_port is not None else config.CHROME_DEBUG_PORT
         self.driver = None
-        self.query_generator = SearchQueryGenerator()
-        self.db = MySQlManager()
-        if not self.db.connect():
-            raise ConnectionError("Не удалось подключиться к базе данных")
-    
-    def _init_driver(self):
-        """Инициализация Selenium WebDriver"""
+        self.site_repository = SiteRepository()
+        self.search_query_repository = SearchQueryRepository()
+        self.site_preparation_pipeline = SitePreparationPipeline() # все значения установлены как дефолтные
+        
+    def connect_to_chrome(self):
+        """Подключение к Chrome в отладочном режиме"""
         if self.driver:
             return
         
-        logger.info("Инициализация Selenium WebDriver...")
+        chrome_options = Options()
         
-        options = webdriver.ChromeOptions()
+        if self.debug_mode:
+            chrome_options.add_experimental_option(
+                "debuggerAddress", 
+                f"localhost:{self.debug_port}"
+            )
+            logger.info(f"Подключение к Chrome на порту {self.debug_port}")
+        else:
+            chrome_options.add_argument("--start-maximized")
+            chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+            # Ротация User-Agent для меньшей детекции
+            user_agents = [
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            ]
+            chrome_options.add_argument(f"user-agent={random.choice(user_agents)}")
         
-        if self.headless:
-            options.add_argument('--headless')
-        
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
-        options.add_argument('--disable-blink-features=AutomationControlled')
-        options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36')
-        
-        self.driver = webdriver.Chrome(options=options)
-        logger.info("✓ WebDriver инициализирован")
+        try:
+            self.driver = webdriver.Chrome(options=chrome_options)
+            self.driver.implicitly_wait(config.IMPLICIT_WAIT)
+            self.driver.set_page_load_timeout(config.PAGE_LOAD_TIMEOUT)
+            logger.info("Успешное подключение к браузеру")
+        except WebDriverException as e:
+            logger.error(f"Ошибка подключения к браузеру: {e}")
+            if self.debug_mode:
+                logger.error(
+                    f"\nЗапустите Chrome командой:\n"
+                    f"google-chrome --remote-debugging-port={self.debug_port} "
+                    f"--user-data-dir=./chrome_debug_{self.debug_port}\n"
+                )
+            raise
     
-    def search_duckduckgo(self, query: str, max_results: int = 20) -> List[str]:
+    def search_duckduckgo(self, query: str, max_results: int = 20) -> list[str]:
         """
         Поиск по DuckDuckGo и сбор ссылок
         
@@ -73,7 +99,7 @@ class AutoScraper:
         Returns:
             Список найденных URL
         """
-        self._init_driver()
+        self.connect_to_chrome()
         
         logger.info(f"Поиск в DuckDuckGo: '{query}'")
         
@@ -120,7 +146,7 @@ class AutoScraper:
                                     
                                     if len(urls) >= max_results:
                                         break
-                        except:
+                        except Exception:
                             continue
                     
                     # Скроллим вниз
@@ -151,7 +177,78 @@ class AutoScraper:
             traceback.print_exc()
             return []
     
-    def process_urls(self, urls: List[str], query_language: str, query_id: Optional[int] = None) -> tuple[int, int]:
+    def _create_sites_from_urls(self, urls: list[str], query_language: str) -> set:
+        """
+        Создать сайты в БД из списка URL
+        
+        Args:
+            urls: Список URL
+            query_language: Язык для новых сайтов
+        
+        Returns:
+            Словарь {url: site_id}
+        """
+        logger.info(f"Создание сайтов из {len(urls)} URL...")
+        saved_urls = set()
+
+        for url in urls:
+            try:
+                # Извлекаем домен
+                name, base_url = get_name_base_url_from_url(url)
+                
+                # Создаем модель сайта
+                site = Site(
+                    name=name,
+                    search_url=url,
+                    base_url=base_url,
+                    language=query_language,
+                    is_recipe_site=False
+                )
+                
+                site_orm = self.site_repository.create_or_get(site)
+                if site_orm.pattern is not None or site_orm.is_recipe_site:
+                    logger.info(f"✓ Сайт уже существует и является сайтом с рецептом: {base_url} (ID={site_orm.id})")
+                    continue  # Сайт уже существует
+                saved_urls.add(url)
+                
+            except Exception as e:
+                logger.error(f"Ошибка создания сайта для URL {url}: {e}")
+                continue
+        
+        logger.info(f"✓ Подготовлено {len(saved_urls)} сайтов")
+        return saved_urls
+    
+    def _check_pages_for_recipes(self, saved_urls: set) -> tuple[int, int]:
+        """
+        Проверить страницы на наличие рецептов
+        
+        Args:
+            url_to_site_id: Словарь {url: site_id}
+        
+        Returns:
+            (количество_обработанных, количество_рецептов)
+        """
+        logger.info(f"Проверка {len(saved_urls)} страниц на рецепты...")
+        
+        processed_count = 0
+        recipe_count = 0
+        
+        for url in saved_urls:
+            try:
+
+                if self.site_preparation_pipeline.prepare_site(url, max_pages=120):
+                    recipe_count += 1
+                    
+                processed_count += 1
+                
+            except Exception as e:
+                logger.error(f"Ошибка обработки URL {url}: {e}")
+                continue
+        
+        logger.info(f"✓ Обработано {processed_count} URL, найдено {recipe_count} рецептов")
+        return processed_count, recipe_count
+    
+    def process_urls(self, urls: list[str], query_language: str, query_id: int) -> tuple[int, int]:
         """
         Обработка найденных URL (создание сайтов и проверка страниц)
         
@@ -168,99 +265,26 @@ class AutoScraper:
         
         logger.info(f"Обработка {len(urls)} URL...")
         
-        # Шаг 1: Создаём все сайты в БД и собираем мапу URL -> site_id
-        logger.info(f"[1/3] Создание сайтов в БД...")
-        url_to_site_id = {}
-        session = self.db.get_session()
-        
-        for url in urls:
-            try:
-                # Извлекаем домен
-                parsed = urlparse(url)
-                domain = parsed.netloc
-                
-                if not domain:
-                    continue
-                
-                # Убираем www.
-                domain = domain.replace('www.', '')
-                base_url = f"https://{domain}"
-                
-                # Проверяем существует ли сайт в БД
-                existing_site = session.query(SiteORM).filter(SiteORM.base_url == base_url).first()
-                
-                if not existing_site:
-                    # Создаем новый сайт
-                    site = Site(
-                        name=domain.replace('.', '_'),
-                        base_url=base_url,
-                        language=query_language,
-                        is_recipe_site=False  # Пока неизвестно
-                    )
-
-                    site_orm = site.to_orm()
-                    session.add(site_orm)
-                    session.commit()
-                    
-                    site_id = site_orm.id
-                    if not site_id:
-                        logger.warning(f"Не удалось добавить сайт {domain}")
-                        continue
-                    
-                    logger.info(f"✓ Создан новый сайт: {domain} (ID: {site_id})")
-                else:
-                    site_id = existing_site.id
-                    logger.debug(f"Сайт {domain} уже существует (ID: {site_id})")
-                
-                url_to_site_id[url] = site_id
-                
-            except Exception as e:
-                logger.error(f"Ошибка создания сайта для URL {url}: {e}")
-                continue
-        
-        logger.info(f"✓ Подготовлено {len(url_to_site_id)} сайтов")
+        # Шаг 1: Создаём все сайты в БД
+        saved_urls = self._create_sites_from_urls(urls, query_language)
         
         # Шаг 2: Обновляем статистику в search_query
-        if query_id:
-            logger.info(f"[2/3] Обновление статистики для запроса ID={query_id}...")
-            try:
-                self.db.update_query_url_count(query_id, len(urls))
-                logger.info(f"✓ Обновлено url_count={len(urls)} для запроса ID={query_id}")
-            except Exception as e:
-                logger.error(f"Ошибка обновления статистики запроса: {e}")
+        self.search_query_repository.update_query_statistics(query_id, len(saved_urls), 0)
         
-        # Шаг 3: Обрабатываем URL (проверяем страницы на рецепты)
-        logger.info(f"[3/3] Проверка страниц на рецепты...")
+        # Шаг 3: Проверяем страницы на рецепты
+        processed_count, recipe_count = self._check_pages_for_recipes(saved_urls)
+
+        # Шаг 4: Обновляем статистику в search_query с учётом найденных рецептов
+        self.search_query_repository.update_query_statistics(query_id, processed_count, recipe_count)
         
-        processed_count = 0
-        recipe_count = 0
-        
-        for url, site_id in url_to_site_id.items():
-            try:
-                # Проверяем страницу
-                page = self.explorer.check_page(url, site_id)
-                
-                if page and page.is_recipe:
-                    recipe_count += 1
-                    logger.info(f"✓ Найден рецепт: {url}")
-                
-                processed_count += 1
-                
-                # Небольшая задержка между запросами
-                time.sleep(1)
-                
-            except Exception as e:
-                logger.error(f"Ошибка обработки URL {url}: {e}")
-                continue
-        
-        logger.info(f"✓ Обработано {processed_count} URL, найдено {recipe_count} рецептов")
         return processed_count, recipe_count
     
     def run_auto_scraping(
         self, 
         min_queries: int = 10,
         queries_to_process: int = 5,
-        results_per_query: int = 20
+        results_per_query: int = 10,
+        min_unprocessed_sites: int = 100,
     ):
         """
         Автоматический сбор рецептов
@@ -269,25 +293,62 @@ class AutoScraper:
             min_queries: Минимальное количество запросов в БД
             queries_to_process: Сколько запросов обработать за раз
             results_per_query: Сколько результатов собирать на запрос
+            min_unprocessed_sites: Минимальное количество необработанных сайтов для запуска поиска новых
         """
-        logger.info("="*70)
-        logger.info("Запуск автоматического сбора рецептов")
-        logger.info("="*70)
-        
         try:
-            # 1. Проверяем и генерируем запросы если нужно
-            logger.info("\n[1/3] Проверка и генерация поисковых запросов...")
-            added = self.query_generator.generate_and_save_queries(
-                min_queries=min_queries,
-                queries_per_batch=5
-            )
+            # 0. Проверяем количество необработанных сайтов
+            logger.info("\n[0/4] Проверка количества необработанных сайтов...")
+            unprocessed_count = self.site_repository.count_sites_without_pattern()
             
-            if added > 0:
-                logger.info(f"✓ Добавлено {added} новых запросов")
+            logger.info(f"  Найдено необработанных сайтов (без паттерна): {unprocessed_count}")
+            logger.info(f"  Минимум требуется: {min_unprocessed_sites}")
+            
+            if unprocessed_count >= min_unprocessed_sites:
+                logger.info(f"\n{'='*70}")
+                logger.info("✓ ДОСТАТОЧНО НЕОБРАБОТАННЫХ САЙТОВ")
+                logger.info(f"  Необработанных сайтов: {unprocessed_count} >= {min_unprocessed_sites}")
+                logger.info("  Поиск новых сайтов не требуется")
+                logger.info(f"{'='*70}\n")
+                
+                # здесь проводим обработку уже имеющихся сайтов
+                logger.info("Начинаем обработку необработанных сайтов...\n")
+                sites = self.site_repository.get_unprocessed_sites(limit=min_unprocessed_sites)
+                    
+                for site in sites:
+                    try:
+                        logger.info(f"\n=== Обработка сайта ID={site.id}, URL={site.base_url} ===")
+                        if self.site_preparation_pipeline.prepare_site(site.search_url, max_pages=120):
+                            logger.info(f"✓ Сайт ID={site.id} обработан и содержит рецепты")
+                        else:
+                            logger.info(f"→ Сайт ID={site.id} обработан, но рецепты не найдены")
+                    except Exception as e:
+                        logger.error(f"Ошибка обработки сайта ID={site.id}, URL={site.base_url}: {e}")
+                        continue
+                return
+            
+            logger.info(f"→ Недостаточно необработанных сайтов ({unprocessed_count} < {min_unprocessed_sites})")
+            logger.info("→ Начинаем поиск новых сайтов через DuckDuckGo...\n")
+            
+            generator = SearchQueryGenerator(max_non_searched=10, query_repository=self.search_query_repository)
+            # 1. Проверяем и генерируем запросы если нужно
+            logger.info("\n[1/4] Проверка и генерация поисковых запросов...")
+            if self.search_query_repository.get_unsearched_count() < min_queries:
+                # генерируем новые запросы, елси остлоьс меньше минимального
+                
+                new_queries = generator.generate_search_queries(count=10)
+
+                query_results = {}
+                for query in new_queries:
+                    translated = generator.translate_query(query=query, target_languages=random.sample(POPULAR_LANGUAGES, k=5))
+                    query_results[query] = translated
+                
+                generator.save_queries_to_db(query_results)
+                logger.info(f"Сгенерировано {len(new_queries)} новых поисковых запросов:")
             
             # 2. Получаем неиспользованные запросы
-            logger.info(f"\n[2/3] Получение неиспользованных запросов...")
-            queries = self.query_generator.get_unsearched_queries(limit=queries_to_process)
+            logger.info("\n[2/4] Получение неиспользованных запросов...")
+            search_queries = self.search_query_repository.get_unsearched_queries(limit=queries_to_process)
+            queries = [q.to_pydantic() for q in search_queries]
             
             if not queries:
                 logger.warning("Нет неиспользованных запросов")
@@ -296,43 +357,44 @@ class AutoScraper:
             logger.info(f"✓ Будет обработано {len(queries)} запросов")
             
             # 3. Обрабатываем каждый запрос
-            logger.info(f"\n[3/3] Обработка запросов...")
+            logger.info("\n[3/4] Поиск в DuckDuckGo...")
             
             total_urls = 0
             total_recipes = 0
             
-            for idx, (query_id, query_text, query_lang) in enumerate(queries, 1):
+            for idx, query in enumerate(queries, 1):
+                if query.language.lower() == "en":
+                    continue  # пропускаем английские запросы
                 logger.info(f"\n--- Запрос {idx}/{len(queries)} ---")
-                logger.info(f"ID: {query_id}, Язык: {query_lang}")
-                logger.info(f"Запрос: '{query_text}'")
+                logger.info(f"ID: {query.id}, Язык: {query.language}")
+                logger.info(f"Запрос: '{query.query}'")
                 
                 # Ищем в DuckDuckGo
-                urls = self.search_duckduckgo(query_text, max_results=results_per_query)
+                urls = self.search_duckduckgo(query.query, max_results=results_per_query)
                 
                 # Обрабатываем найденные URL (включая обновление url_count в search_query)
-                processed, recipes = self.process_urls(urls, query_lang, query_id=query_id)
-                
+                processed, recipes = self.process_urls(urls, query_language=query.language, query_id=query.id)
+
                 total_urls += processed
                 total_recipes += recipes
-                
-                # Помечаем запрос как использованный и обновляем recipe_url_count
-                self.query_generator.mark_query_as_searched(
-                    query_id=query_id,
-                    url_count=len(urls),
-                    recipe_url_count=recipes
-                )
-                
                 logger.info(f"✓ Запрос обработан: {processed} URL, {recipes} рецептов")
                 
                 # Задержка между запросами
                 time.sleep(3)
             
+            # 4. Проверяем итоговое количество необработанных сайтов
+            logger.info("\n[4/4] Проверка итогов...")
+            final_unprocessed_count = self.site_repository.count_sites_without_pattern()
+            
             # Итоги
             logger.info("\n" + "="*70)
-            logger.info("ИТОГИ:")
+            logger.info("ИТОГИ ПОИСКА:")
             logger.info(f"  Обработано запросов: {len(queries)}")
             logger.info(f"  Найдено URL: {total_urls}")
             logger.info(f"  Найдено рецептов: {total_recipes}")
+            logger.info(f"  Необработанных сайтов до: {unprocessed_count}")
+            logger.info(f"  Необработанных сайтов после: {final_unprocessed_count}")
+            logger.info(f"  Добавлено новых: {final_unprocessed_count - unprocessed_count}")
             logger.info("="*70)
             
         except Exception as e:
@@ -341,47 +403,10 @@ class AutoScraper:
             traceback.print_exc()
         finally:
             self.close()
-    
+
+
     def close(self):
         """Закрытие всех подключений"""
-        if self.driver:
+        if self.driver and not self.debug_mode:
             self.driver.quit()
             logger.info("WebDriver закрыт")
-        
-        self.query_generator.close()
-        self.explorer.close()
-
-
-def main():
-    """Главная функция"""
-    import argparse
-    
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(levelname)s - %(message)s'
-    )
-    
-    parser = argparse.ArgumentParser(description='Автоматический сбор рецептов через DuckDuckGo')
-    parser.add_argument('--headless', action='store_true', help='Запустить браузер в фоновом режиме')
-    parser.add_argument('--min-queries', type=int, default=10, help='Минимум запросов в БД')
-    parser.add_argument('--queries-to-process', type=int, default=5, help='Сколько запросов обработать')
-    parser.add_argument('--results-per-query', type=int, default=20, help='Результатов на запрос')
-    
-    args = parser.parse_args()
-    
-    scraper = AutoScraper(headless=args.headless)
-    
-    try:
-        scraper.run_auto_scraping(
-            min_queries=args.min_queries,
-            queries_to_process=args.queries_to_process,
-            results_per_query=args.results_per_query
-        )
-    except KeyboardInterrupt:
-        logger.info("\n\nПрервано пользователем")
-    finally:
-        scraper.close()
-
-
-if __name__ == '__main__':
-    main()

@@ -1,5 +1,3 @@
-
-
 import sys
 import logging
 from pathlib import Path
@@ -8,10 +6,8 @@ import argparse
 # Добавление корневой директории в PYTHONPATH
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.stages.parse import SiteExplorer
-from src.stages.analyse import RecipeAnalyzer
 from src.stages.parse import explore_site
-from scripts.make_test_data import make_test_data
+from src.stages.parse.auto_scraper import AutoScraper
 from multiprocessing import Process
 
 logging.basicConfig(
@@ -23,120 +19,59 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-def run_explorer(explorer:SiteExplorer, max_urls: int, max_depth: int):
-    
-    try:
-        explorer.connect_to_chrome()
-        explorer.explore(max_urls=max_urls, max_depth=max_depth)
-    except KeyboardInterrupt:
-        logger.info("\nПрервано пользователем")
-    except Exception as e:
-        logger.error(f"Критическая ошибка: {e}", exc_info=True)
-        sys.exit(1)
-    finally:
-        explorer.close()
     
 MAX_PREPAREPAGES = 100	
 BATCH_SIZE = 30
-SITE_ID = None
-# Добавить сохранения состояния между запусками
-def prepare_data_for_parser_creation(url: str, max_depth: int, debug_port: int = 9222, helper_links: list[str] = None):
-	global SITE_ID
-	explorer = SiteExplorer(url, debug_mode=True, debug_port=debug_port, max_urls_per_pattern=5)
-	if helper_links:
-		explorer.add_helper_urls(helper_links, depth=1)
-	# предварительный запуск для просмотра сайта и получения хоть каких-то ссылок 
-	run_explorer(explorer, max_urls=BATCH_SIZE, max_depth=max_depth)
-	# Экспорт состояния после первого batch
-	state = explorer.export_state()
-	SITE_ID = explorer.site_id
-	analyzer = RecipeAnalyzer()
-	try:
-		# анализ данных Stage 1 и получение паттерна страниц с рецептами
-		recipes = analyzer.analyze_all_pages(site_id=explorer.site_id, filter_by_title=True, stop_analyse=3)
-		if recipes > 1 and (explorer.recipe_pattern is None and explorer.recipe_regex is None): # можно исктаь паттерн соответствия 
-			pattern = analyzer.analyse_recipe_page_pattern(site_id=explorer.site_id)
-			if pattern: 
-				explorer.set_pattern(pattern) # обновление паттерна в эксеплорере
-				logger.info(f"Найден паттерн страниц с рецептами: {pattern}")
-				return # если паттерн найден, завершаем работу, пробуем создать полноценный парсер из полученных данных
 
-	except KeyboardInterrupt:
-		logger.info("\nПрервано пользователем")
-	except Exception as e:
-		logger.error(f"Ошибка: {e}", exc_info=True)
-		sys.exit(1)
-	
-	for batch in range(0, MAX_PREPAREPAGES, BATCH_SIZE):
-
-		logger.info(f"\n=== Запуск основного исследования, страницы {batch+1} - {batch+BATCH_SIZE} ===")
-		run_explorer(explorer, max_urls=BATCH_SIZE, max_depth=max_depth)
-		
-		# Экспортируем текущее состояние перед анализом
-		state = explorer.export_state()
-		
-		results = analyzer.analyze_all_pages(site_id=explorer.site_id, filter_by_title=True)
-		
-		if results == 0 and pattern:
-			logger.info("Сбрасываем паттерн возможно он не подходит")
-			explorer = SiteExplorer(url, debug_mode=True, debug_port=debug_port, max_urls_per_pattern=3)
-			explorer.import_state(state)  # Восстанавливаем состояние
-			pattern = ""
-		
-		if results > 0 and not explorer.recipe_pattern:
-			pattern = analyzer.analyse_recipe_page_pattern(site_id=explorer.site_id)
-			if pattern:
-				explorer.set_pattern(pattern) # обновление паттерна в эксеплорере
-				logger.info(f"Найден паттерн страниц с рецептами: {pattern}")
-				return # если паттерн найден, завершаем работу, пробуем создать полноценный парсер из полученных данных
-
-def pipeline(debug_port: int = 9222, url: str = "", max_depth: int = 4, max_urls: int = 10000, check_url: bool = True, helper_links: list[str] = None,
-			 preprocess_only: bool = False):
-	if preprocess_only:
-		prepare_data_for_parser_creation(url=url, max_depth=max_depth, debug_port=debug_port, helper_links=helper_links)
-		make_test_data(SITE_ID, folder="preprocessed") # создать тестовые данные для анализа и создания парсера
-		return
-	# после создания парсера можно запустить полноценный парсинг
+def pipeline(debug_port: int = 9222, url: str = "", max_depth: int = 4, max_urls: int = 10000, check_url: bool = True, helper_links: list[str] = None):
 	explore_site(url, max_urls=max_urls, max_depth=max_depth, check_pages_with_extractor=True, check_url=check_url, debug_port=debug_port, helper_links=helper_links)
 
 
 SITES_CONFIG = [
 	{	'id': 1,
+        'name': 'allrecipes_com',
         'url': 'https://www.allrecipes.com/',
         'debug_port': 9222,
     },
 	{
 		'id': 2,
+        'name': 'nefisyemektarifleri_com',
         'url': 'https://www.nefisyemektarifleri.com/',
         'debug_port': 9223,
     },
     {
 		'id': 3,
+        'name': 'recipe_sgethai_com',
         'url': 'https://recipe.sgethai.com/',
         'debug_port': 9224,
     },
     {
 		'id': 4,
+        'name': 'chefkoch_de',
         'url': 'https://www.chefkoch.de/',
         'debug_port': 9225,
     },
     {
 		'id': 5,
+        'name': 'kitchen_sayidaty_net',
         'url': 'https://kitchen.sayidaty.net/',
         'debug_port': 9226,
     },
     {
 		'id': 6,
+        'name': 'kikkoman_co_jp',
         'url': 'https://www.kikkoman.co.jp/',
         'debug_port': 9227,
     },
 	{
 		'id': 7,
+        'name': 'povarenok_ru',
 		'url': 'https://www.povarenok.ru/',
 		'debug_port': 9228,
 	},
 	{
 		'id': 8,
+        'name': 'gastronom_ru',
 		'url': 'https://www.gastronom.ru/',
 		'debug_port': 9229,
 	}
@@ -173,14 +108,35 @@ def run_parallel():
 	logger.info("Все процессы завершены")
 
 
+def run_extractor_sites():
+	"""Запуск скрапинга для сайтов с экстракторами"""
+	logger.info("Запуск автоматического скрапинга для сайтов с экстракторами...")
+	scraper = AutoScraper(debug_mode=True)
+	
+	try:
+		scraper.run_recipe_site_scrapping(SITES_CONFIG)
+	except KeyboardInterrupt:
+		logger.info("\nПрервано пользователем")
+	except Exception as e:
+		logger.error(f"Ошибка при скрапинге: {e}")
+		import traceback
+		traceback.print_exc()
+	finally:
+		scraper.close()
+
+
 def main():
 	parser = argparse.ArgumentParser(description='Recipe parser pipeline')
-	parser.add_argument('--config', type=int, help='Номер конфигурации для запуска (1-6)')
+	parser.add_argument('--config', type=int, help='Номер конфигурации для запуска (1-8)')
 	parser.add_argument('--parallel', action='store_true', help='Запустить все конфигурации параллельно')
+	parser.add_argument('--extractors', action='store_true', help='Запустить скрапинг для сайтов с экстракторами')
 	
 	args = parser.parse_args()
 	
-	if args.parallel:
+	if args.extractors:
+		logger.info("Режим: Скрапинг сайтов с экстракторами")
+		run_extractor_sites()
+	elif args.parallel:
 		logger.info("Запуск всех конфигураций параллельно...")
 		run_parallel()
 	elif args.config:
@@ -189,7 +145,6 @@ def main():
 		if config:
 			run_config(config)
 		else:
-			logger.error(f"Конфигурация с ID {args.config} не найдена. Доступны: {[c['id'] for c in SITES_CONFIG]}")
 			sys.exit(1)
 	else:
 		# По умолчанию запускаем первую конфигурацию

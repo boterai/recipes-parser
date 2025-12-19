@@ -20,22 +20,10 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    mysql = MySQlManager()
-    if not mysql.connect():
-        logger.error("Не удалось подключиться к базе данных")
-        return
-    
-    session = mysql.get_session()
-    exsisting = session.query(SiteORM).filter(SiteORM.id == 24).first()
-    if not exsisting:
-        logger.error("Сайт с ID=24 не найден в базе данных")
-        return
-    
-    session.close()
 
     translator = Translator(target_language="en")
     translator.translate_and_save_batch(
-        site_id=24,
+        site_id=17,
         batch_size=10, # большой батч только, если целевой язык совпадает с исходным
     )
 
