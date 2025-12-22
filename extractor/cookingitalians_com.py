@@ -161,6 +161,24 @@ class CookingItaliansExtractor(BaseRecipeExtractor):
                 if parsed:
                     ingredients.append(parsed)
         
+        # Если ничего не нашли, ищем в HTML напрямую
+        else:
+            # Ищем списки ингредиентов по заголовкам
+            headers = self.soup.find_all(['h2', 'h3', 'h4', 'strong', 'b'])
+            for header in headers:
+                header_text = header.get_text(strip=True).lower()
+                if 'ingredient' in header_text:
+                    # Ищем следующий список после заголовка
+                    next_list = header.find_next(['ul', 'ol'])
+                    if next_list:
+                        items = next_list.find_all('li', recursive=False)
+                        for item in items:
+                            ing_text = item.get_text(strip=True)
+                            parsed = self.parse_ingredient(ing_text)
+                            if parsed:
+                                ingredients.append(parsed)
+                        break
+        
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
     def parse_ingredient(self, ingredient_text: str) -> Optional[dict]:
@@ -168,7 +186,7 @@ class CookingItaliansExtractor(BaseRecipeExtractor):
         Парсинг строки ингредиента в структурированный формат
         
         Args:
-            ingredient_text: Строка вида "1 cup all-purpose flour"
+            ingredient_text: Строка вида "1 cup all-purpose flour" или "14 oz flour"
             
         Returns:
             dict: {"name": "flour", "amount": 1, "units": "cup"} или None
@@ -189,7 +207,8 @@ class CookingItaliansExtractor(BaseRecipeExtractor):
             text = text.replace(fraction, decimal)
         
         # Паттерн для извлечения количества, единицы и названия
-        pattern = r'^([\d\s/.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?)?\s*(.+)'
+        # Обновлен для поддержки более широкого списка единиц
+        pattern = r'^([\d\s/.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|fl\s*oz|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|beaten|juice of \d+ lemon)?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -206,27 +225,29 @@ class CookingItaliansExtractor(BaseRecipeExtractor):
         amount = None
         if amount_str:
             amount_str = amount_str.strip()
-            if '/' in amount_str:
-                parts = amount_str.split()
-                total = 0
-                for part in parts:
-                    if '/' in part:
-                        num, denom = part.split('/')
-                        total += float(num) / float(denom)
-                    else:
-                        total += float(part)
-                # Конвертируем в int если это целое число
-                amount = int(total) if total.is_integer() else total
-            else:
-                try:
+            try:
+                if '/' in amount_str:
+                    parts = amount_str.split()
+                    total = 0
+                    for part in parts:
+                        if '/' in part:
+                            num, denom = part.split('/')
+                            total += float(num) / float(denom)
+                        else:
+                            total += float(part)
+                    # Конвертируем в int если это целое число
+                    amount = int(total) if total.is_integer() else total
+                else:
                     amount_val = float(amount_str.replace(',', '.'))
                     amount = int(amount_val) if amount_val.is_integer() else amount_val
-                except ValueError:
-                    amount = amount_str
+            except ValueError:
+                # Если не можем распарсить число, оставляем как строку
+                amount = amount_str
         
         # Очистка названия
         name = re.sub(r'\([^)]*\)', '', name)
-        name = re.sub(r'\b(to taste|as needed|or more|if needed|optional|for garnish)\b', '', name, flags=re.IGNORECASE)
+        name = re.sub(r',\s*plus extra.*$', '', name, flags=re.IGNORECASE)
+        name = re.sub(r'\b(to taste|as needed|or more|if needed|optional|for garnish|for dusting)\b', '', name, flags=re.IGNORECASE)
         name = re.sub(r'[,;]+$', '', name)
         name = re.sub(r'\s+', ' ', name).strip()
         
@@ -269,6 +290,33 @@ class CookingItaliansExtractor(BaseRecipeExtractor):
                     # Простая строка
                     elif isinstance(item, str):
                         steps.append(item)
+        
+        # Если ничего не нашли в JSON-LD, ищем в HTML
+        if not steps:
+            # Ищем по заголовкам - более строго фильтруем чтобы избежать "Preparation: 20 minutes"
+            headers = self.soup.find_all(['h2', 'h3', 'h4', 'strong', 'b'])
+            for header in headers:
+                header_text = header.get_text(strip=True).lower()
+                # Ищем точное совпадение или начало строки
+                if (header_text in ['instructions', 'directions', 'method', 'steps', 'how to make'] or
+                    header_text.startswith('instruction') or 
+                    header_text.startswith('direction') or
+                    header_text == 'method' or
+                    header_text.startswith('how to ')):
+                    # Ищем следующий список или параграфы после заголовка
+                    next_list = header.find_next(['ol', 'ul'])
+                    if next_list:
+                        items = next_list.find_all('li', recursive=False)
+                        # Проверяем что это не список ингредиентов (первый элемент не содержит "oz", "cup" в начале)
+                        if items:
+                            first_item = items[0].get_text(strip=True).lower()
+                            # Если первый элемент начинается с числа и единицы измерения, это вероятно ингредиенты
+                            if not re.match(r'^\d+\s*(oz|cup|tablespoon|teaspoon|pound|gram|ml|l)\b', first_item):
+                                for item in items:
+                                    step_text = item.get_text(strip=True)
+                                    if step_text:
+                                        steps.append(step_text)
+                                break
         
         if steps:
             # Объединяем все шаги в одну строку, разделяя предложениями
