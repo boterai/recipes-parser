@@ -1,0 +1,14 @@
+{
+    "dish_name": "Affogato al Caffè",
+    "description": "This treat combines the robust, rich flavors of freshly brewed espresso with the creamy, velvety texture of vanilla ice cream, creating a harmonious symphony of hot and cold sensations.",
+    "ingredients": "[{\"name\": \"strong espresso coffee\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"sugar\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"coffee or vanilla ice cream\", \"units\": null, \"amount\": null}, {\"name\": \"good whiskey\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"grated chocolate\", \"units\": null, \"amount\": null}, {\"name\": \"coffee beans\", \"units\": null, \"amount\": null}, {\"name\": \"whipped cream\", \"units\": null, \"amount\": null}]",
+    "instructions": "Prepare the hot coffee blend. Prepare 1 cup of strong espresso coffee using your preferred method. While the coffee is still very hot, add 1 tablespoon of sugar to the coffee and stir well to dissolve the sugar. Once the sugar is dissolved, pour in 1 cup of good whiskey. Stir again to combine. Prepare the ice cream by placing one or two scoops of coffee or vanilla ice cream in each serving glass. Carefully pour the hot coffee and whiskey mixture over the ice cream in each glass. Garnish with grated chocolate, coffee granules, or whipped cream if desired. Serve immediately.",
+    "nutrition_info": "Calories: 230 kcal, Total Fat: 7 g, Saturated Fat: 4 g, Cholesterol: 20 mg, Sodium: 10 mg, Total Carbohydrate: 17 g, Dietary Fiber: 0 g, Total Sugars: 13 g, Added Sugars: 10 g, Protein: 2 g, Vitamin D: 0.1 mcg, Calcium: 30 mg, Iron: 0.3 mg, Potassium: 100 mg.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "The key to this dessert is the contrast between the hot coffee and the cold ice cream. Adjust the amount of whiskey to suit your taste or replace it with another distillate.",
+    "tags": "Dessert, Coffee, Ice Cream",
+    "image_urls": null
+}

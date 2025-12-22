@@ -1,0 +1,14 @@
+{
+    "dish_name": "Havermout Banaan Pannenkoek",
+    "description": "Een gezond en gebalanceerd ontbijt met havermout, banaan en ei.",
+    "ingredients": "[{\"name\": \"havermout\", \"units\": \"gram\", \"amount\": 40}, {\"name\": \"banaan\", \"units\": \"stuk\", \"amount\": 1}, {\"name\": \"ei\", \"units\": \"stuk\", \"amount\": 1}]",
+    "instructions": "1. Prak de banaan met een vork in een kom. 2. Klus het ei door de geprakte banaan. 3. Voeg de havermout toe en roer goed door. 4. Verhit kokosolie in een koekenpan op middelhoog vuur. 5. Schep het beslag in de koekenpan en bak aan beide kanten gaar (ongeveer 5 minuten).",
+    "nutrition_info": "Deze bananenpannenkoek bevat zo’n 330 kcal.",
+    "category": "Breakfast",
+    "prep_time": null,
+    "cook_time": "5 minutes",
+    "total_time": null,
+    "notes": "Je kunt variëren met ingrediënten zoals kwark, honing of pindakaas.",
+    "tags": "ontbijt, gezond, havermout, banaan, ei",
+    "image_urls": null
+}

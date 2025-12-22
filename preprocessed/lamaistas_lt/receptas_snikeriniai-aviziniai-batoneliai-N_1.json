@@ -1,0 +1,14 @@
+{
+    "dish_name": "Snikeriniai avižiniai batonėliai",
+    "description": "Mėgstantiems pasiskaninti dieną, šie batonėliai puikiai tiks ir patiks! Sveikesnė alternatyva, tačiau ne ką prastesnė, o ir paruošiama be galo lengvai ir greitai.",
+    "ingredients": "[{\"name\": \"žemės riešutų sviesto\", \"units\": \"gramų\", \"amount\": 200}, {\"name\": \"sūdytų žemės riešutų\", \"units\": \"gramų\", \"amount\": 60}, {\"name\": \"granolos\", \"units\": \"saujos\", \"amount\": 2}, {\"name\": \"ksilitolio\", \"units\": \"šaukštai\", \"amount\": 2}, {\"name\": \"vanilės ekstrakto\", \"units\": \"šaukštelis\", \"amount\": 1}, {\"name\": \"juodojo šokolado\", \"units\": \"gramų\", \"amount\": 100}, {\"name\": \"kokosų aliejaus\", \"units\": \"šaukštas\", \"amount\": 1}]",
+    "instructions": "1. Ksilitolį ištirpiname su 5 v.š. vandens. Sumaišome su riešutų sviestu ir vanile (gausis tiršta masė, viskas gerai). 2. Riešutus pasmulkiname peiliu ir sudedame į riešutų sviesto masę. 3. Ten pat dedame granolą ir rankomis gerai išminkome. 4. Masę sukrečiame į kepimo popieriumi išklotą kekso formą ir rankomis suspaudžiame į tvirtą pagrindą. 5. Apliejame šokoladu, ištirpintu drauge su kokosų aliejumi. 6. Dedame į šaldytuvą 1-2 val., kad sustingtų. O tada pjaustome ir skanaujame.",
+    "nutrition_info": null,
+    "category": "Dessert",
+    "prep_time": "30 minutes",
+    "cook_time": null,
+    "total_time": "30 minutes",
+    "notes": null,
+    "tags": "naminiai batonėliai, sveiki desertai, sveiki saldumynai, Be mėsos, Be glitimo, Be laktozės, Be kiaušinių, Greitai pagaminami, Pusryčiams, Vaikams, Sušaldyti, Desertai, Šalti desertai, Valgome sveikiau!",
+    "image_urls": null
+}

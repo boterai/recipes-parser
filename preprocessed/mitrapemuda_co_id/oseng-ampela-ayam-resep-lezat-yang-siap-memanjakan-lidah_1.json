@@ -1,0 +1,14 @@
+{
+    "dish_name": "Oseng Ampela Ayam",
+    "description": "Oseng Ampela Ayam adalah salah satu masakan khas Indonesia yang memiliki cita rasa gurih dan sedikit pedas.",
+    "ingredients": "[{\"name\": \"ampela ayam\", \"units\": \"buah\", \"amount\": 10}, {\"name\": \"daun salam\", \"units\": \"lembar\", \"amount\": 2}, {\"name\": \"daun jeruk\", \"units\": \"lembar\", \"amount\": 2}, {\"name\": \"serai\", \"units\": \"batang\", \"amount\": 1}, {\"name\": \"cabai merah besar\", \"units\": \"buah\", \"amount\": 2}, {\"name\": \"cabai rawit merah\", \"units\": \"buah\", \"amount\": 5}, {\"name\": \"tomat\", \"units\": \"buah\", \"amount\": 1}, {\"name\": \"kecap manis\", \"units\": \"sendok makan\", \"amount\": 2}, {\"name\": \"saus tiram\", \"units\": \"sendok makan\", \"amount\": 1}, {\"name\": \"garam\", \"units\": \"sendok teh\", \"amount\": 1}, {\"name\": \"gula pasir\", \"units\": \"sendok teh\", \"amount\": 0.5}, {\"name\": \"air\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"minyak goreng\", \"units\": \"secukupnya\", \"amount\": null}, {\"name\": \"bawang merah\", \"units\": \"siung\", \"amount\": 5}, {\"name\": \"bawang putih\", \"units\": \"siung\", \"amount\": 3}, {\"name\": \"cabai merah keriting\", \"units\": \"buah\", \"amount\": 2}, {\"name\": \"kemiri\", \"units\": \"butir\", \"amount\": 3}]",
+    "instructions": "1. Persiapan Ampela Ayam: Bersihkan ampela ayam dari kotoran dan lapisan lemak. Rebus ampela ayam bersama daun salam dan sedikit garam selama 15-20 menit. 2. Menghaluskan Bumbu: Haluskan bawang merah, bawang putih, cabai merah keriting, dan kemiri. 3. Menumis Bumbu: Tumis bumbu halus bersama serai, daun jeruk, dan daun salam hingga harum. 4. Memasukkan Ampela Ayam: Masukkan ampela ayam yang sudah dipotong-potong ke dalam wajan. 5. Menambahkan Bumbu Penyedap: Tambahkan kecap manis, saus tiram, garam, dan gula pasir. 6. Penyajian Oseng Ampela Ayam: Sajikan oseng ampela ayam dengan nasi putih.",
+    "nutrition_info": "Ampela ayam adalah sumber protein hewani yang baik dan kaya akan zat besi.",
+    "category": "Main Course",
+    "prep_time": "15-20 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Bersihkan ampela dengan teliti untuk menghilangkan bau amis. Sesuaikan tingkat kepedasan dengan jumlah cabai.",
+    "tags": "Indonesian, Main Course, Chicken, Spicy",
+    "image_urls": null
+}

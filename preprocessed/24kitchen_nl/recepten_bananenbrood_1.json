@@ -1,0 +1,14 @@
+{
+    "dish_name": "Bananenbrood",
+    "description": "Een makkelijk bananenbrood recept dat snel en eenvoudig te maken is.",
+    "ingredients": "[{\"name\": \"bloem\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"bakpoeder\", \"units\": \"tl\", \"amount\": 2}, {\"name\": \"kaneelpoeder\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"zeezout\", \"units\": \"snufje\", \"amount\": 1}, {\"name\": \"suiker\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"eieren\", \"units\": null, \"amount\": 2}, {\"name\": \"lichte olijfolie\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"rijpe bananen\", \"units\": null, \"amount\": 3}]",
+    "instructions": "Verwarm de oven voor op 180 °C. Kneus de bananen in de schil en prak ze in een kom. Voeg suiker en kaneel toe en meng. Voeg de eieren toe en meng weer. Zeef de bloem en bakpoeder boven de kom en meng. Voeg olijfolie en zout toe en meng. Bekleed een cakevorm met bakpapier en giet het beslag erin. Bak het bananenbrood ongeveer 45 minuten in de oven. Laat 10 minuten afkoelen voordat je het aansnijdt.",
+    "nutrition_info": null,
+    "category": "Snack",
+    "prep_time": "15 minutes",
+    "cook_time": "45 minutes",
+    "total_time": "60 minutes",
+    "notes": "Gebruik overrijpe bananen voor een smeuïger resultaat.",
+    "tags": "vegetarisch, makkelijk, nagerecht, ontbijtgerecht, fruit",
+    "image_urls": null
+}

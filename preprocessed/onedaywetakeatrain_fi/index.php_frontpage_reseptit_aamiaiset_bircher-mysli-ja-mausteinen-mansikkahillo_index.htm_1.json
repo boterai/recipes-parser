@@ -1,0 +1,14 @@
+{
+    "dish_name": "Bircher-mysli ja mausteinen mansikkahillo",
+    "description": "Тämä aamiainen on napakymppi: todella helppo ja nopea sekä uskomattoman hyvänmakuinen.",
+    "ingredients": "[{\"name\": \"kaurahiutaleita\", \"units\": \"dl\", \"amount\": 4.5}, {\"name\": \"maitoa\", \"units\": \"dl\", \"amount\": 5.2}, {\"name\": \"sitruunamehua\", \"units\": \"tl\", \"amount\": 0.5}, {\"name\": \"pellavan tai hampunsiemeniä\", \"units\": \"rkl\", \"amount\": \"2-3\"}, {\"name\": \"mansikoita\", \"units\": \"l\", \"amount\": 1}, {\"name\": \"luomuappelsiini\", \"units\": \"kpl\", \"amount\": 1}, {\"name\": \"vaniljatanko\", \"units\": \"kpl\", \"amount\": 0.5}, {\"name\": \"jauhettua kardemummaa\", \"units\": \"tl\", \"amount\": 0.5}, {\"name\": \"mustapippuria\", \"units\": \"kpl\", \"amount\": 4}, {\"name\": \"kanelia\", \"units\": \"tl\", \"amount\": 0.25}, {\"name\": \"jauhettua inkivääriä\", \"units\": \"tl\", \"amount\": 0.25}, {\"name\": \"hunajaa\", \"units\": \"rkl\", \"amount\": 1}, {\"name\": \"suolaa\", \"units\": null, \"amount\": \"hyppysellinen\"}, {\"name\": \"tähtianis\", \"units\": \"kpl\", \"amount\": 1}, {\"name\": \"maustamatonta jogurttia\", \"units\": null, \"amount\": null}]",
+    "instructions": "Mittaa kaikki Bircher-myslin ainekset astiaan ja laita vetäytymään jääkaappiin yön yli. Perkaa ja puolita mansikat, laita ne kulhoon ja survo esim. perunanuijalla niin, että mansikat soseutuvat, mutta mukaan jää myös kokonaisia palasia tuomaan rakennetta. Viillä vaniljatanko auki veitsellä ja kaavi siemenet mansikkaseoksen joukkoon. Lisää sitten tankokin mukaan antamaan makua. Raasta appelsiinin kuori hyvin hienoksi (älä raasta mukaan kuoren alla olevaa valkoista osaa) ja murskaa mustapippurit morttelissa. Lisää appelsiinin kuoriraaste, murskatut mustapippurit sekä kaikki muut mausteet mansikoiden sekaan. Anna maustua jääkaapissa muutamia tunteja tai yön yli. Maku vain paranee, jos hillo saa olla jääkapissa pari päivää. Tähtianista ja vaniljatankoa ei ole tarkoitus syödä. Kun aamiaishetki koittaa, lado kulhoon kerroksittain Bircher-mysliä, mansikkahilloa ja maustamatonta jogurttia. Nauti.",
+    "nutrition_info": null,
+    "category": "Aamiainen",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Mansikoiden on tosin oltava hyvälaatuisia: jos teet tätä kesällä, käytä tuoreita suomalaisia mansikoita. Talvella olisi suotavaa, että pakkasestasi löytyisi kesällä pakastettuja mansikoita.",
+    "tags": "aamiainen, mysli, mansikkahillo",
+    "image_urls": null
+}

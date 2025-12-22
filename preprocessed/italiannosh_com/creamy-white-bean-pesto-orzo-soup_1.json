@@ -1,0 +1,14 @@
+{
+    "dish_name": "Creamy White Bean Pesto Orzo Soup",
+    "description": "A comforting, creamy soup that combines the velvety smoothness of white beans, the rich nuttiness of pesto, and the tender texture of orzo pasta.",
+    "ingredients": "[{\"name\": \"olive oil\", \"units\": \"tablespoons\", \"amount\": \"2\"}, {\"name\": \"onion\", \"units\": \"small\", \"amount\": \"1\"}, {\"name\": \"garlic\", \"units\": \"cloves\", \"amount\": \"3\"}, {\"name\": \"vegetable broth\", \"units\": \"cups\", \"amount\": \"4\"}, {\"name\": \"cannellini beans\", \"units\": \"can (14 oz)\", \"amount\": \"1\"}, {\"name\": \"orzo pasta\", \"units\": \"cup\", \"amount\": \"1\"}, {\"name\": \"prepared pesto\", \"units\": \"cup\", \"amount\": \"0.5\"}, {\"name\": \"heavy cream or coconut milk\", \"units\": \"cup\", \"amount\": \"0.25\"}, {\"name\": \"fresh spinach or basil leaves\", \"units\": \"cups\", \"amount\": \"2\"}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"black pepper\", \"units\": null, \"amount\": null}, {\"name\": \"fresh basil leaves\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Heat the olive oil in a large pot over medium heat. Add the onion and sauté for 4-5 minutes until softened. Stir in the garlic and cook for another minute until fragrant. 2. Add the vegetable broth and cannellini beans to the pot. Bring to a gentle boil, then reduce the heat and let it simmer for 5 minutes. 3. Use an immersion blender to puree the soup slightly, leaving some beans whole for texture. If you don’t have an immersion blender, transfer about half the soup to a blender, puree, and return it to the pot. 4. Stir in the orzo pasta and simmer for 8-10 minutes, or until the orzo is tender. Stir occasionally to prevent sticking. 5. Stir in the pesto and fresh spinach. Let the spinach wilt for 2-3 minutes. If using heavy cream or coconut milk, stir it in at this stage for an extra creamy texture. 6. Taste and season with salt and black pepper as needed. Ladle the soup into bowls, garnish with fresh basil leaves, and serve warm.",
+    "nutrition_info": null,
+    "category": "Soup",
+    "prep_time": null,
+    "cook_time": "30 minutes",
+    "total_time": null,
+    "notes": "This versatile soup can easily be customized to suit your preferences: Use kale, arugula, or Swiss chard instead of spinach for a heartier option. Stir in cooked shredded chicken or crispy pancetta for an extra protein boost. Replace heavy cream with additional blended beans or cashew cream for a vegan-friendly version. Add a squeeze of fresh lemon juice to brighten the flavors. Swap orzo with ditalini, farro, or couscous for a fun twist.",
+    "tags": "soup, creamy, Italian, orzo, beans, pesto",
+    "image_urls": null
+}

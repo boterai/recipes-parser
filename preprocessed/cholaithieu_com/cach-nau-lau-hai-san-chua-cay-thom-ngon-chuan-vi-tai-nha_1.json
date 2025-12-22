@@ -1,0 +1,14 @@
+{
+    "dish_name": "Lẩu Hải Sản Chua Cay",
+    "description": "Món lẩu hải sản chua cay thơm ngon, lý tưởng cho bữa tiệc gia đình.",
+    "ingredients": "[{\"name\": \"Tôm tươi\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"Mực tươi\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"Ngao tươi\", \"units\": \"g\", \"amount\": 1000}, {\"name\": \"Thịt cá trắm\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"Xương ống lợn\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"Cà chua\", \"units\": \"quả\", \"amount\": 2}, {\"name\": \"Dứa\", \"units\": \"quả\", \"amount\": 0.25}, {\"name\": \"Me chua\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"Tỏi\", \"units\": \"tép\", \"amount\": 5}, {\"name\": \"Sả\", \"units\": \"cây\", \"amount\": 2}, {\"name\": \"Riềng\", \"units\": \"củ\", \"amount\": 1}, {\"name\": \"Hành tây\", \"units\": \"củ\", \"amount\": 1}, {\"name\": \"Nấm hương khô\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"Nấm kim châm\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"Gia vị\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Sơ chế nguyên liệu. 2. Hầm xương lấy nước dùng. 3. Làm sạch hải sản. 4. Hoàn thiện nước dùng. 5. Pha chế nước chấm. 6. Trình bày và thưởng thức.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Chọn hải sản tươi sống để đảm bảo hương vị.",
+    "tags": "lẩu, hải sản, món ăn gia đình, chua cay",
+    "image_urls": null
+}

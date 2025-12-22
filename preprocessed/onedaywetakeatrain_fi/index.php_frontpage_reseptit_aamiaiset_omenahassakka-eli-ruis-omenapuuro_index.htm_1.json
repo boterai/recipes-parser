@@ -1,0 +1,14 @@
+{
+    "dish_name": "Omenahässäkkä eli ruis-omenapuuro",
+    "description": "Tämä on aivan loistava aamiainen silloin, kun omenakausi on villeimmillään ja omppuja pursuaa ovista ja ikkunoista.",
+    "ingredients": "[{\"name\": \"omenat\", \"units\": \"kpl\", \"amount\": 3}, {\"name\": \"omenamehu\", \"units\": \"dl\", \"amount\": 4}, {\"name\": \"vesi\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"ruishiutaleet\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"kaneli\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"muskottipähkinä\", \"units\": null, \"amount\": null}, {\"name\": \"suola\", \"units\": null, \"amount\": null}, {\"name\": \"mantelilastuja\", \"units\": null, \"amount\": null}, {\"name\": \"hunaja\", \"units\": null, \"amount\": null}]",
+    "instructions": "Poista omenoista kota ja pilko pieniksi kuutioiksi. Omenoita ei pidä kuoria. Laita omenamehu, vesi, omenakuutiot ja mausteet kattilaan. Kiehauta ja anna porista hiljalleen noin 10 minuuttia, eli kunnes omenat alkavat tummua ja tuntuvat selvästi pehmeiltä. Lisää sitten ruishiutaleet ja anna keittyä vielä noin 5-8 minuuttia. Anna jäähtyä hiukan ja laita aamiaiskulhoon. Viimeistele ripottelemalla mantelilastuja päälle ja valuta mukaan vielä hiukan hunajaa maun mukaan.",
+    "nutrition_info": null,
+    "category": "Aamiainen",
+    "prep_time": null,
+    "cook_time": "15 minutes",
+    "total_time": null,
+    "notes": "Omenahässäkkä maistuu hyvin myös lapsille.",
+    "tags": "aamiainen, puuro, omenat",
+    "image_urls": null
+}

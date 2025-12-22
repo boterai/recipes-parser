@@ -1,0 +1,14 @@
+{
+    "dish_name": "Cà Ri Chay",
+    "description": "Món cà ri chay thơm ngon, đậm đà với sự kết hợp của các loại rau củ và nước cốt dừa.",
+    "ingredients": "[{\"name\": \"Khoai lang vàng\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"Khoai môn\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"Cà rốt\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"Nấm rơm tươi\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"Nấm đùi gà\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"Tàu hũ chiên\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"Tàu hũ ky\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"Nước cốt dừa dão\", \"units\": \"ml\", \"amount\": 1800}, {\"name\": \"Nước cốt dừa đậm đặc\", \"units\": \"ml\", \"amount\": 350}, {\"name\": \"Bột cà ri\", \"units\": \"g\", \"amount\": 30}, {\"name\": \"Cà ri dầu\", \"units\": \"g\", \"amount\": 15}, {\"name\": \"Sả\", \"units\": \"cây\", \"amount\": 2}, {\"name\": \"Hành tím\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"Muối\", \"units\": null, \"amount\": null}, {\"name\": \"Hạt nêm chay\", \"units\": null, \"amount\": null}, {\"name\": \"Đường\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Sơ chế và xử lý rau củ. 2. Tạo nước xốt sánh. 3. Phi thơm bột cà ri. 4. Nấu nước cốt dừa dão. 5. Hoàn thiện với cốt dừa đặc.",
+    "nutrition_info": "Cà ri chay cung cấp protein từ đậu hũ, tinh bột phức hợp từ khoai và chất béo lành mạnh từ dừa.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Có thể thay thế nấm bằng các loại rau củ khác tùy thích.",
+    "tags": "vegetarian, curry, Thai, Vietnamese",
+    "image_urls": null
+}

@@ -1,0 +1,14 @@
+{
+    "dish_name": "Christmas Tiramisu",
+    "description": "A festive delight, layered with rich mascarpone and a hint of holiday spirit.",
+    "ingredients": "[{\"name\": \"strong brewed coffee\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"coffee liqueur\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"mascarpone cheese\", \"units\": \"ounces\", \"amount\": 8}, {\"name\": \"heavy cream\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"granulated sugar\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"large egg yolks\", \"units\": \"pieces\", \"amount\": 3}, {\"name\": \"vanilla extract\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"ladyfinger cookies\", \"units\": \"pieces\", \"amount\": 24}, {\"name\": \"unsweetened cocoa powder\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"dark chocolate\", \"units\": \"ounce\", \"amount\": 1}, {\"name\": \"fresh rosemary sprigs\", \"units\": null, \"amount\": null}, {\"name\": \"sea salt\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Brew the coffee and allow it to cool completely. 2. If desired, add coffee liqueur to the cooled coffee and stir. 3. In a mixing bowl, combine mascarpone cheese, heavy cream, granulated sugar, egg yolks, vanilla extract, and sea salt. Whip until smooth and creamy. 4. Dip ladyfinger cookies into the coffee mixture and arrange in a serving dish. 5. Spread half of the mascarpone mixture over the ladyfingers. 6. Add another layer of dipped ladyfingers followed by the remaining mascarpone mixture. 7. Cover and refrigerate for at least 4 hours. 8. Dust with cocoa powder before serving and garnish with dark chocolate and rosemary.",
+    "nutrition_info": null,
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": null,
+    "total_time": "4 hours",
+    "notes": "Consider adding spices, flavored coffee, or fruit layers for variations.",
+    "tags": "Christmas, Tiramisu, Dessert",
+    "image_urls": null
+}

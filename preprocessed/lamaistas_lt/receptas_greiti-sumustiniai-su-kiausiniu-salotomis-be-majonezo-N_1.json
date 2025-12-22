@@ -1,0 +1,14 @@
+{
+    "dish_name": "Sotūs sumuštiniai su kiaušinių ir avokado salotomis (be majonezo)",
+    "description": "Šios salotos - puiki idėja, kur juos laaaaabai skaniai panaudoti!",
+    "ingredients": "[{\"name\": \"šviesios forminės duonos\", \"units\": \"riekės\", \"amount\": 4}, {\"name\": \"salotų\", \"units\": \"lapai\", \"amount\": 2}, {\"name\": \"kiaušinių\", \"units\": \"vienetai\", \"amount\": 2}, {\"name\": \"avokadų\", \"units\": \"vienetas\", \"amount\": 1}, {\"name\": \"garstyčių\", \"units\": \"šaukštelio\", \"amount\": 0.5}, {\"name\": \"druskos\", \"units\": \"žiupsnelis\", \"amount\": 1}, {\"name\": \"pipirų\", \"units\": \"žiupsnelis\", \"amount\": 1}, {\"name\": \"pomidorų\", \"units\": \"vienetas\", \"amount\": 1}, {\"name\": \"citrinų sulčių\", \"units\": \"šaukštas\", \"amount\": 1}]",
+    "instructions": "1. Kiaušinius ir avokadą nulupti. Baltymus supjaustyti smulkiais kubeliais. 2. Kiaušinių trynius ir avokado minkštimą sutrinti šakute ir išmaišyti su garstyčiomis, druska, pipirais ir citrinos sultimis. Paragauti, jei norisi, papildomai pasūdyti. Išmaišyti su smulkintais baltymais. 3. Duonos riekeles iš abiejų pusių pakepinti sausoje keptuvėje. 4. Ant dviejų riekelių dėti po salotos lapą, pomidorų griežinėlių, kiaušinių salotų, užvožti antra duonos riekele. Skanaus!",
+    "nutrition_info": null,
+    "category": "Sumuštiniai",
+    "prep_time": "10 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "kiaušinių sumuštiniai, Sotūs sumuštiniai, Be mėsos, Be laktozės, Greitai pagaminami, Išmaišyti, Sumuštiniai, Šalti sumuštiniai, Pusryčiai",
+    "image_urls": null
+}

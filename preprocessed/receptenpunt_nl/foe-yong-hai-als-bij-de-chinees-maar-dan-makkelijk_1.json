@@ -1,0 +1,14 @@
+{
+    "dish_name": "Foe Yong Hai",
+    "description": "Een heerlijke omelet met veel groente in een zoet-zure tomatensaus, geserveerd met rijst en kroepoek.",
+    "ingredients": "[{\"name\": \"kip dijfilet\", \"units\": \"gram\", \"amount\": 225}, {\"name\": \"maizena\", \"units\": \"eetlepels\", \"amount\": 2}, {\"name\": \"sojasaus\", \"units\": \"eetlepels\", \"amount\": 2}, {\"name\": \"zonnebloem olie\", \"units\": \"ml\", \"amount\": 75}, {\"name\": \"knoflook\", \"units\": \"teentjes\", \"amount\": 4}, {\"name\": \"rode uitjes\", \"units\": \"stuks\", \"amount\": 2}, {\"name\": \"passata\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"water\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"kristal suiker\", \"units\": \"gram\", \"amount\": 90}, {\"name\": \"witte azijn\", \"units\": \"eetlepels\", \"amount\": 5}, {\"name\": \"gember siroop\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"maizena\", \"units\": \"eetlepels\", \"amount\": 4}, {\"name\": \"water\", \"units\": \"eetlepels\", \"amount\": 4}, {\"name\": \"witte peper\", \"units\": null, \"amount\": null}, {\"name\": \"eieren\", \"units\": \"stuks\", \"amount\": 8}, {\"name\": \"champignons\", \"units\": \"stuks\", \"amount\": 8}, {\"name\": \"prei\", \"units\": \"stuks\", \"amount\": 1}, {\"name\": \"rode paprika\", \"units\": \"stuks\", \"amount\": 1}]",
+    "instructions": "1. Snij de kip in dunne plakjes en doe in een kom. Voeg maizena toe en meng goed door. Zet de kip afgedekt voor tien minuten in de koelkast. Spoel de kip af onder een koude kraan. Voeg sojasaus toe en laat marineren. 2. Verhit zonnebloem olie in een pan, voeg knoflook en rode ui toe en laat sudderen. Zeef de olie. 3. Meng passata, water, suiker, gember siroop en azijn in een pan en breng aan de kook. Voeg maizena met water toe en laat indikken. 4. Kluts de eieren en meng met gesneden groenten. Verhit kruidenolie in een pan, bak de gemarineerde kip en giet het eimengsel erbij. Bak tot de omelet gaar is. 5. Serveer de omelet met de saus en rijst.",
+    "nutrition_info": null,
+    "category": "hoofdgerecht",
+    "prep_time": "10 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "30 minutes",
+    "notes": "Experimenteer met groenten en eiwitten. Maak je eigen saus voor extra smaak.",
+    "tags": "Chinees, hoofdgerecht, omelet",
+    "image_urls": null
+}

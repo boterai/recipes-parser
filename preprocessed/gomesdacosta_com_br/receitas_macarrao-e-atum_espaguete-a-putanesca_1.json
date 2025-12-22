@@ -1,0 +1,14 @@
+{
+    "dish_name": "Espaguete à Putanesca",
+    "description": null,
+    "ingredients": "[{\"name\": \"espaguete\", \"units\": \"grams\", \"amount\": \"500\"}, {\"name\": \"Azeite oliva extra virgem Gomes da Costa\", \"units\": \"xícara\", \"amount\": \"¼\"}, {\"name\": \"alho\", \"units\": \"dentes\", \"amount\": \"2\"}, {\"name\": \"Atum sólido em óleo Gomes da Costa\", \"units\": \"latas\", \"amount\": \"2\"}, {\"name\": \"tomate pelatti\", \"units\": \"lata\", \"amount\": \"1\"}, {\"name\": \"azeitona preta\", \"units\": \"xícara\", \"amount\": \"½\"}, {\"name\": \"Sal\", \"units\": null, \"amount\": \"a gosto\"}, {\"name\": \"Pimenta\", \"units\": null, \"amount\": \"a gosto\"}, {\"name\": \"folhas de manjericão\", \"units\": null, \"amount\": \"a gosto\"}]",
+    "instructions": "Cozinhe o espaguete de acordo com as instruções da embalagem, até que esteja al dente. Enquanto a massa cozinha, adicione o azeite em uma panela média e leve ao fogo médio. Adicione o alho, o atum Gomes da Costa (sem o óleo) e refogue bem. Coloque o tomate pelatti e deixe cozinhar por 5 minutos. Adicione a azeitona preta e tempere com sal e pimenta. Coloque o espaguete cozido, misture até agregar todos os ingredientes e finalize com as folhas de manjericão. Sirva em seguida.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "40 minutes",
+    "total_time": "40 minutes",
+    "notes": null,
+    "tags": null,
+    "image_urls": null
+}

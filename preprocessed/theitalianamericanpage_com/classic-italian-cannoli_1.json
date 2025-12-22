@@ -1,0 +1,14 @@
+{
+    "dish_name": "Classic Italian Cannoli",
+    "description": "A crisp, golden cannoli shell filled with rich, creamy ricotta filling.",
+    "ingredients": "[{\"name\": \"all-purpose flour\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"granulated sugar\", \"units\": \"tbsp\", \"amount\": 2}, {\"name\": \"cinnamon\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"salt\", \"units\": \"tsp\", \"amount\": 0.25}, {\"name\": \"unsalted butter\", \"units\": \"tbsp\", \"amount\": 3}, {\"name\": \"egg\", \"units\": null, \"amount\": 1}, {\"name\": \"sweet Marsala wine\", \"units\": \"cup\", \"amount\": 0.25}, {\"name\": \"vinegar\", \"units\": \"tbsp\", \"amount\": 1}, {\"name\": \"water\", \"units\": \"as needed\", \"amount\": null}, {\"name\": \"vegetable oil\", \"units\": \"for frying\", \"amount\": null}, {\"name\": \"whole milk ricotta cheese\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"powdered sugar\", \"units\": \"cup\", \"amount\": 0.75}, {\"name\": \"vanilla extract\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"cinnamon\", \"units\": \"tsp\", \"amount\": 0.25}, {\"name\": \"mini chocolate chips\", \"units\": \"cup\", \"amount\": 0.3333333333333333}, {\"name\": \"chopped pistachios\", \"units\": \"optional\", \"amount\": null}, {\"name\": \"additional chocolate chips\", \"units\": \"optional\", \"amount\": null}, {\"name\": \"candied orange peel\", \"units\": \"optional\", \"amount\": null}]",
+    "instructions": "Step 1: Make the Dough. In a large bowl, mix flour, sugar, cinnamon, and salt. Cut in the butter until the mixture resembles coarse crumbs. Add the egg, Marsala wine, vinegar, and water, mixing until a dough forms. Knead gently on a floured surface until smooth. Wrap the dough in plastic and refrigerate for at least 1 hour. Step 2: Prepare the Filling. In a medium bowl, combine ricotta, powdered sugar, vanilla, and cinnamon. Fold in the mini chocolate chips. Cover and refrigerate until ready to fill the shells. Step 3: Roll and Fry the Shells. Roll out the dough very thin on a floured surface. Cut out circles. Wrap each circle around a metal cannoli form, sealing the edge with water. Heat vegetable oil to 350°F. Fry shells until golden brown and crisp. Drain on paper towels. Let cool before removing from forms. Step 4: Fill the Cannoli. Use a piping bag or spoon to fill each shell with the ricotta mixture just before serving. Garnish as desired and dust with powdered sugar.",
+    "nutrition_info": null,
+    "category": "Dessert",
+    "prep_time": "1 hour",
+    "cook_time": "30 minutes",
+    "total_time": "1 hour 30 minutes",
+    "notes": "Cannoli may be a sweet indulgence, but it’s all about balance.",
+    "tags": "Italian, Dessert, Cannoli, Sweets",
+    "image_urls": null
+}

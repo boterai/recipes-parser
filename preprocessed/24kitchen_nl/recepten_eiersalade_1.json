@@ -1,0 +1,14 @@
+{
+    "dish_name": "Eiersalade",
+    "description": "Een snel, simpel en lekker recept voor eiersalade met bieslook en kerrie.",
+    "ingredients": "[{\"name\": \"eieren\", \"units\": null, \"amount\": 4}, {\"name\": \"kleine ui\", \"units\": null, \"amount\": 1}, {\"name\": \"mosterd\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"mayonaise\", \"units\": \"el\", \"amount\": 2}, {\"name\": \"kerriepoeder\", \"units\": \"tl\", \"amount\": 0.5}, {\"name\": \"bieslook\", \"units\": \"el\", \"amount\": 1.5}, {\"name\": \"peper\", \"units\": null, \"amount\": null}, {\"name\": \"zout\", \"units\": null, \"amount\": null}]",
+    "instructions": "Kook de eieren in circa 8 minuten hard en snipper de ui. Pel de eieren nadat je ze hebt laten schrikken. Laat afkoelen. Prak de gepelde eieren in een kom of diep bord met een vork fijn. Voeg de ui, mosterd, mayonaise, kerriepoeder en fijngesneden bieslook toe aan de geprakte eieren. Breng op smaak met peper en zout.",
+    "nutrition_info": null,
+    "category": "Lunchgerecht",
+    "prep_time": "15 minutes",
+    "cook_time": "8 minutes",
+    "total_time": null,
+    "notes": "Door de mayonaise te vervangen voor magere kwark, kun je de eiersalade omtoveren tot een gezondere variant.",
+    "tags": "Vegetarisch, Nederlands, Pasen",
+    "image_urls": null
+}

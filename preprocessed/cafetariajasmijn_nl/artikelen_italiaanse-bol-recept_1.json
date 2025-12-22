@@ -1,0 +1,14 @@
+{
+    "dish_name": "Italiaanse Bol",
+    "description": "Een rustiek broodje met een luchtige structuur, ideaal voor diverse belegsoorten.",
+    "ingredients": "[{\"name\": \"bloem\", \"units\": \"gram\", \"amount\": 500}, {\"name\": \"water\", \"units\": \"ml\", \"amount\": 350}, {\"name\": \"verse gist\", \"units\": \"gram\", \"amount\": 10}, {\"name\": \"zout\", \"units\": \"gram\", \"amount\": 10}, {\"name\": \"olijfolie\", \"units\": \"ml\", \"amount\": 25}]",
+    "instructions": "1. Los de verse gist op in een klein beetje van het lauwe water. Voeg dit mengsel toe aan de bloem in een kom. Als je droge gist gebruikt, kun je deze direct met de bloem mengen. Voeg het zout en de rest van het water toe.\n2. Kneed het deeg gedurende 10-15 minuten tot een soepel en elastisch deeg. Dit kan met de hand of met een keukenmachine. Het deeg mag licht plakkerig zijn.\n3. Vorm het deeg tot een bol en leg het in een licht ingevette kom. Dek de kom af en laat het deeg op een warme plaats rijzen gedurende 1-1,5 uur.\n4. Verdeel het deeg in 8-10 gelijke stukken en vorm elk stuk tot een losse bol.\n5. Laat de gevormde bollen nog 30-45 minuten rijzen.\n6. Verwarm de oven voor op 220°C en bak de bollen gedurende 20-25 minuten.",
+    "nutrition_info": "De Italiaanse bol bestaat voornamelijk uit koolhydraten en kan vezels en vitaminen bevatten, afhankelijk van de gebruikte bloem.",
+    "category": "Bread",
+    "prep_time": "15 minutes",
+    "cook_time": "25 minutes",
+    "total_time": "45 minutes",
+    "notes": "Gebruik tipo 00 bloem voor een luchtigere structuur. Experimenteer met verschillende vormen en toevoegingen voor extra smaak.",
+    "tags": "brood, Italiaans, zelf bakken",
+    "image_urls": null
+}

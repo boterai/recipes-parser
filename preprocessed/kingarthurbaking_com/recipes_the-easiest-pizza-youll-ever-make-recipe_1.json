@@ -1,0 +1,14 @@
+{
+    "dish_name": "The Easiest Pizza You'll Ever Make",
+    "description": "This recipe makes a terrific 'do-it-yourself-party.' All you do is make this simple dough and provide plenty of toppings and grated cheese; your guests will have fun doing the rest.",
+    "ingredients": "[{\"name\": \"water\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"olive oil\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"table salt\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"granulated sugar\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"active dry yeast\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"King Arthur Unbleached All-Purpose Flour\", \"units\": \"cups\", \"amount\": 6}, {\"name\": \"King Arthur Pizza Dough Flavor\", \"units\": \"tablespoons\", \"amount\": 2}]",
+    "instructions": "In a large bowl or the bowl of a stand mixer, combine the lukewarm water, oil, salt, sugar, and yeast. Add the flour and the Pizza Dough Flavor. Mix the ingredients together, adding more water as necessary to make a soft dough. Knead for about 7 to 10 minutes, until it's smooth and elastic. Place the dough in a lightly greased bowl, cover, and let it rise for 1 to 2 hours. Transfer the dough to a lightly greased surface and gently deflate it. Divide it into pieces and roll each piece into a 12\" round. Preheat the oven to 450°F. Brush each crust with olive oil, spread sauce, and add toppings. Bake for 15 to 20 minutes until golden brown.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "15 to 20 minutes",
+    "total_time": "2 hours",
+    "notes": "To add flexibility to your schedule, let the dough rise once at room temperature, then refrigerate overnight. To freeze partially baked pizza crust, bake until set and cool before freezing.",
+    "tags": "pizza, dough, easy, party",
+    "image_urls": null
+}

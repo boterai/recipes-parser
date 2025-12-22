@@ -1,0 +1,14 @@
+{
+    "dish_name": "Rode linzensoep met Bibi's wereldse twist",
+    "description": "Een heerlijk kruidige limited editie van Oma's feestsoep met heerlijke kruiden.",
+    "ingredients": "[{\"name\": \"volle yoghurt\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"komkommer\", \"units\": \"pieces\", \"amount\": 0.5}, {\"name\": \"citroen\", \"units\": \"pieces\", \"amount\": 0.5}, {\"name\": \"munt\", \"units\": \"handje\", \"amount\": 1}, {\"name\": \"komijn\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"volkoren pita's\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"garam masala\", \"units\": \"eetlepel\", \"amount\": 1}, {\"name\": \"olijfolie\", \"units\": null, \"amount\": null}]",
+    "instructions": "Rasp de komkommer. Pers de halve citroen uit. Hak de munt. Meng de komkommer, munt, citroen en komijn met de volle yoghurt. Verwarm de oven tot 180 °C. Snijd de volkoren pita’s in driehoeken. Verdeel over een met bakpapier beklede bakplaat. Breng de pitachips op smaak met de garam masala en olijfolie. Meng goed door. Bak de pita’s in 15-20 minuten krokant en goudbruin. Verwarm Oma’s Rode linzen soep en verdeel over de kommen. Lepel een dot van de raïta in elke kom. Maak met behulp van een satéprikker een swirl in de soep. Garneer met de kruidige pitachips.",
+    "nutrition_info": null,
+    "category": "Voorgerecht",
+    "prep_time": "10 minutes",
+    "cook_time": "20 minutes",
+    "total_time": null,
+    "notes": "Bibi laat je zien hoe je haar wereldse twist maakt.",
+    "tags": "soup, vegetarian, quick",
+    "image_urls": null
+}

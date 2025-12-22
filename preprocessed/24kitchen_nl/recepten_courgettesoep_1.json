@@ -1,0 +1,14 @@
+{
+    "dish_name": "Courgettesoep",
+    "description": "Een supermakkelijke basisrecept voor courgettesoep van 24Kitchen-chef Miljuschka.",
+    "ingredients": "[{\"name\": \"uien\", \"units\": null, \"amount\": 2}, {\"name\": \"boter\", \"units\": \"klont\", \"amount\": 1}, {\"name\": \"olijfolie\", \"units\": \"el\", \"amount\": 2}, {\"name\": \"courgettes\", \"units\": null, \"amount\": 6}, {\"name\": \"knoflook\", \"units\": \"tenen\", \"amount\": 3}, {\"name\": \"tijm\", \"units\": \"takjes\", \"amount\": 5}, {\"name\": \"groentebouillon\", \"units\": \"l\", \"amount\": 3}, {\"name\": \"kruimige aardappels\", \"units\": null, \"amount\": 2}]",
+    "instructions": "Pel de ui en knoflook en snijd in grove blokjes. Schil de aardappels en snijd in blokjes. Was de courgettes en snijd in grove blokjes. Ris de blaadjes van de tijm. Smelt de boter en olijfolie in een soeppan. Voeg de uien met een flinke snuf zout toe aan de pan. Fruit voor 2 minuten op middelvuur. Voeg de knoflook en tijm toe aan de soeppan. Bak voor ongeveer 1 minuut op middelvuur. Voeg de blokjes courgette toe. Bak voor ongeveer 2 minuten op middelvuur. Voeg de bouillon en aardappelblokjes toe. Breng aan de kook en laat voor 15 minuten zachtjes door. Pureer de soep met een staafmixer. Breng op smaak met zout en peper en eventueel een scheut room.",
+    "nutrition_info": "Ja absoluut! Een courgette weegt zo'n 250-500 gram per stuk. Dus jij krijgt sowieso jouw dagelijkse portie groente binnen als je dit recept maakt.",
+    "category": "Hoofdgerecht",
+    "prep_time": "20 min",
+    "cook_time": "15 min",
+    "total_time": null,
+    "notes": "Tip: Romige courgettesoep maken? Voeg dan voor het pureren een 200 ml room of 200 g crème fraîche toe.",
+    "tags": "vegetarisch, soep, courgette",
+    "image_urls": null
+}

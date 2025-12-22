@@ -1,0 +1,14 @@
+{
+    "dish_name": "Ayam Bakar Kecap",
+    "description": "Ayam Bakar Kecap merupakan hidangan yang sangat digemari oleh banyak orang di Indonesia, dengan kombinasi rasa manis dari kecap dan gurihnya bumbu rempah-rempah.",
+    "ingredients": "[{\"name\": \"ayam\", \"units\": \"ekor\", \"amount\": \"1\"}, {\"name\": \"kecap manis\", \"units\": \"sendok makan\", \"amount\": \"3\"}, {\"name\": \"margarin\", \"units\": \"sendok makan\", \"amount\": \"2\"}, {\"name\": \"air jeruk nipis\", \"units\": \"sendok makan\", \"amount\": \"2\"}, {\"name\": \"garam\", \"units\": null, \"amount\": \"secukupnya\"}, {\"name\": \"bawang putih\", \"units\": \"siung\", \"amount\": \"6\"}, {\"name\": \"bawang merah\", \"units\": \"butir\", \"amount\": \"8\"}, {\"name\": \"kemiri\", \"units\": \"butir\", \"amount\": \"5\"}, {\"name\": \"jahe\", \"units\": \"cm\", \"amount\": \"2\"}, {\"name\": \"kunyit\", \"units\": \"cm\", \"amount\": \"2\"}, {\"name\": \"ketumbar\", \"units\": \"sendok teh\", \"amount\": \"1\"}, {\"name\": \"lada putih\", \"units\": \"sendok teh\", \"amount\": \"1\"}, {\"name\": \"gula merah\", \"units\": \"sendok makan\", \"amount\": \"1\"}, {\"name\": \"minyak goreng\", \"units\": \"sendok makan\", \"amount\": \"1\"}]",
+    "instructions": "1. Persiapkan Ayam: Cuci ayam hingga bersih dan tiriskan. Lumuri ayam dengan air jeruk nipis dan sedikit garam. Diamkan selama 10-15 menit. 2. Haluskan Bumbu: Haluskan semua bahan bumbu halus. 3. Tumis Bumbu Halus: Tumis bumbu halus hingga harum. 4. Marinasi Ayam: Lumuri ayam dengan bumbu yang sudah ditumis. Diamkan selama 30 menit hingga 1 jam. 5. Membakar Ayam: Panggang ayam di atas bara api atau di dalam oven. 6. Tips Membakar Ayam: Bakar dengan api sedang. 7. Sajikan: Sajikan dengan nasi hangat, sambal, dan lalapan.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Gunakan ayam yang masih segar agar tekstur dagingnya empuk. Marinasi lebih lama untuk rasa yang lebih meresap.",
+    "tags": "Ayam, Bakar, Kecap, Indonesia",
+    "image_urls": null
+}

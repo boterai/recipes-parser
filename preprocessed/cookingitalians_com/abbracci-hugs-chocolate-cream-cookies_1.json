@@ -1,0 +1,14 @@
+{
+    "dish_name": "Abbracci (Hugs) Cookies",
+    "description": "These iconic Italian cookies, known as Abbracci (meaning “hugs”), are a delightful combination of light and dark shortbread doughs.",
+    "ingredients": "[{\"name\": \"all-purpose flour\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"sugar\", \"units\": \"tbsp\", \"amount\": 4}, {\"name\": \"butter\", \"units\": \"tbsp\", \"amount\": 4}, {\"name\": \"honey\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"medium egg\", \"units\": \"unit\", \"amount\": 1}, {\"name\": \"fresh liquid cream\", \"units\": \"tbsp\", \"amount\": 1}, {\"name\": \"baking powder\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"bitter cocoa powder\", \"units\": \"tbsp\", \"amount\": 1}, {\"name\": \"all-purpose flour\", \"units\": \"tbsp\", \"amount\": 1}]",
+    "instructions": "1. Prepare the Base Dough: Place the softened butter, sugar, honey, and a pinch of salt in a bowl. Mix together using your hands until well combined. Gradually add 1 cup of flour sifted with baking powder. Knead until the mixture begins to come together. Add the egg and liquid cream, and continue kneading until a soft, smooth dough forms. 2. Divide and Flavor the Dough: Divide the dough into two equal portions using a kitchen scale for precision. In one portion, mix in 1 tbsp of flour to create the light dough. In the other portion, mix in 1 tbsp of cocoa powder to create the dark dough. Knead each dough separately until the additions are fully incorporated. 3. Shape the Cookies: Divide each dough into small pieces, weighing about 10 g (0.35 oz) each. Roll each piece into a small sausage shape. Chill the dough shapes in the refrigerator for 30 minutes to firm up. 4. Assemble the Abbracci: Take one light dough sausage and one dark dough sausage. Overlap the ends to form a circle, alternating which end goes over and under. Gently press the overlapping tips together to secure the shape. Place the assembled cookies on a baking sheet lined with parchment paper. 5. Bake the Cookies: Preheat your oven to 350°F (180°C). Bake the cookies in a static oven for 18–20 minutes, or until they are set but not browned. Remove from the oven and allow the cookies to cool completely on the baking sheet before serving.",
+    "nutrition_info": "Calories: 85 kcal, Protein: 2 g, Carbohydrates: 10 g, Fat: 4 g, Saturated Fat: 2 g, Sodium: 20 mg",
+    "category": "Dessert",
+    "prep_time": "20 minutes",
+    "cook_time": "18–20 minutes",
+    "total_time": "1 hour 10 minutes",
+    "notes": "Chilling the dough helps retain the cookie’s shape during baking. Use a scale to ensure consistent sizes for a professional look. Store in an airtight container at room temperature for up to a week.",
+    "tags": "cookies, Italian, dessert, chocolate",
+    "image_urls": null
+}

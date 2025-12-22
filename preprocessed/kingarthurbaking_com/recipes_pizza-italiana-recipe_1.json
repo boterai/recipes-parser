@@ -1,0 +1,14 @@
+{
+    "dish_name": "Pizza Italiana",
+    "description": "Our Neapolitan-style ‘00’ Pizza Flour makes a crust that’s easy to shape and bakes up crisp outside, with satisfying chew and excellent wheaty flavor.",
+    "ingredients": "[{\"name\": \"King Arthur ‘00’ Pizza Flour\", \"units\": \"cups\", \"amount\": 1.5}, {\"name\": \"King Arthur Semolina Flour\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"King Arthur Pizza Dough Flavor\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"instant yeast\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"table salt\", \"units\": \"teaspoons\", \"amount\": 1.25}, {\"name\": \"olive oil\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"water, lukewarm\", \"units\": \"cup\", \"amount\": 1}]",
+    "instructions": "Weigh your flour; or measure it by gently spooning it into a cup, then sweeping off any excess. Place all of the ingredients in the bowl of your electric mixer using the beater blade, and mix at medium-high speed for 2 minutes. Switch to the dough hook and knead at low speed for 7 minutes; the dough should be smooth and quite soft. Place the dough in a covered container and let rise at room temperature for 45 minutes. After this rise, refrigerate the dough for 4 to 8 hours. When you’re ready to bake, place a baking stone or steel in the oven and preheat to 450°F. Deflate the dough and shape it into one large or two smaller balls. Cover and let rise for 25 minutes. To shape: Place the dough on a semolina-dusted peel or piece of parchment. Use your fingertips to gently depress the interior of the round, leaving a thicker edge as you stretch it to your desired size (12” to 14” for a large pizza, 9” to 11” for two smaller pizzas). Top as desired, and bake for 15 to 17 minutes for smaller pies, 22 to 25 minutes for a large pizza, until the crust is golden brown and the top is bubbly. Remove from the oven and let rest for 5 minutes before slicing and serving.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": "20 minutes",
+    "cook_time": "15 to 25 minutes",
+    "total_time": "5 hours 45 minutes",
+    "notes": null,
+    "tags": "pizza, Italian, dough",
+    "image_urls": null
+}

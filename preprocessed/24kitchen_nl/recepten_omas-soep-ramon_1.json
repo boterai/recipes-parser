@@ -1,0 +1,14 @@
+{
+    "dish_name": "Tomaten basilicum soep met Ramon's Spaanse twist",
+    "description": "Ramon's limited editie maken van Oma's feestsoep met een Spaanse twist.",
+    "ingredients": "[{\"name\": \"geroosterde amandelen\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"witbrood\", \"units\": \"slices\", \"amount\": 2}, {\"name\": \"knoflook\", \"units\": \"cloves\", \"amount\": 3}, {\"name\": \"peterselie\", \"units\": \"handful\", \"amount\": 1}, {\"name\": \"citroen\", \"units\": \"pieces\", \"amount\": 0.5}, {\"name\": \"olijfolie\", \"units\": \"generous splash\", \"amount\": 1}, {\"name\": \"zout\", \"units\": null, \"amount\": null}, {\"name\": \"peper\", \"units\": null, \"amount\": null}]",
+    "instructions": "Snijd het brood in kleine blokjes. Snijd de knoflook grof door. Verhit olie in een koekenpan. Bak de broodblokjes en knoflook in de pan en laat iets afkoelen. Hak de peterselie grof door. Rasp de schil van de citroen. Doe de peterselie, broodblokjes met knoflook, amandelen en olijfolie in een vijzel. Maal tot een grove picada. Verwarm Oma’s Tomaat met verse basilicum en verdeel over de kommen. Garneer de kommen tomatensoep met Ramon’s picada en maak af met een paar druppels olijfolie.",
+    "nutrition_info": null,
+    "category": "Voorgerecht",
+    "prep_time": "15 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Deze feestelijke soep staat niet zomaar op het menu van Ramon. De totale opbrengst gaat naar evenementen voor alleenstaande ouderen.",
+    "tags": "soup, tomato, basil, Spanish twist",
+    "image_urls": null
+}

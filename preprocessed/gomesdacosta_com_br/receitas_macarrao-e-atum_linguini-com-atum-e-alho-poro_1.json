@@ -1,0 +1,14 @@
+{
+    "dish_name": "Linguini com Atum e Alho Poró",
+    "description": null,
+    "ingredients": "[{\"name\": \"linguini\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"manteiga com sal\", \"units\": \"colheres de sopa\", \"amount\": 4}, {\"name\": \"ervas frescas picadas\", \"units\": \"colheres de sopa\", \"amount\": 2}, {\"name\": \"farinha panko\", \"units\": \"xícara\", \"amount\": 1}, {\"name\": \"sal\", \"units\": \"a gosto\", \"amount\": null}, {\"name\": \"pimenta do reino\", \"units\": \"a gosto\", \"amount\": null}, {\"name\": \"Azeite oliva extra virgem Gomes da Costa\", \"units\": \"colheres de sopa\", \"amount\": 2}, {\"name\": \"alho poro\", \"units\": \"talo\", \"amount\": 1}, {\"name\": \"Atum sólido em óleo Gomes da Costa\", \"units\": \"latas de 170 g\", \"amount\": 2}, {\"name\": \"Parmesão ralado\", \"units\": \"a gosto\", \"amount\": null}]",
+    "instructions": "Cozinhe o linguini de acordo com as instruções da embalagem, até que esteja al dente. Enquanto a massa cozinha, adicione a manteiga em uma frigideira média e leve ao fogo médio para derreter. Adicione as ervas frescas e frite por 1 minuto e coloque a farinha panko. Tempere com sal, pimenta do reino e reserve. Em uma panela média, regue o azeite e leve ao fogo médio. Adicione o alho poro e refogue por 2 minutos e em seguida adicione o Atum Gomes da Costa (sem o óleo). Coloque o linguini cozido e misture bem todos os ingredientes. Na hora de servir, finalize com a farofinha de panko e o parmesão ralado.",
+    "nutrition_info": null,
+    "category": null,
+    "prep_time": "35 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null,
+    "image_urls": null
+}

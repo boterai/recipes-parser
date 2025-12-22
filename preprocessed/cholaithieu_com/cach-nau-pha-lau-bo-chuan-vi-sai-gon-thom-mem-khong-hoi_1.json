@@ -1,0 +1,14 @@
+{
+    "dish_name": "Phá Lấu Bò",
+    "description": "Món ăn đường phố mang tính biểu tượng của ẩm thực miền Nam, đặc biệt là TP. Hồ Chí Minh, với hương vị đậm đà và béo ngậy từ nội tạng bò.",
+    "ingredients": "[{\"name\": \"Lòng bò các loại\", \"units\": \"kg\", \"amount\": 1.5}, {\"name\": \"Nước dừa tươi\", \"units\": \"lít\", \"amount\": 1}, {\"name\": \"Nước dão dừa\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"Nước cốt dừa\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"Hành tím\", \"units\": \"g\", \"amount\": 70}, {\"name\": \"Tỏi\", \"units\": \"g\", \"amount\": 35}, {\"name\": \"Gừng\", \"units\": \"g\", \"amount\": 60}, {\"name\": \"Rượu mai quế lộ\", \"units\": \"muỗng canh\", \"amount\": 3}, {\"name\": \"Dầu hào\", \"units\": \"muỗng canh\", \"amount\": 2}, {\"name\": \"Đường thốt nốt/Đường cát\", \"units\": \"muỗng canh\", \"amount\": 1.5}, {\"name\": \"Bột ngũ vị hương\", \"units\": \"muỗng cà phê\", \"amount\": 0.3333333333333333}, {\"name\": \"Bột cà ri\", \"units\": \"muỗng cà phê\", \"amount\": 1}, {\"name\": \"Dầu màu điều\", \"units\": \"muỗng canh\", \"amount\": 1}, {\"name\": \"Bột nghệ\", \"units\": \"muỗng canh\", \"amount\": 1}, {\"name\": \"Quế cây\", \"units\": \"g\", \"amount\": 5}, {\"name\": \"Hoa hồi\", \"units\": \"tai\", \"amount\": 3}, {\"name\": \"Thảo quả\", \"units\": \"trái\", \"amount\": 1}, {\"name\": \"Đinh hương\", \"units\": \"nụ\", \"amount\": 3}, {\"name\": \"Lá cà ri\", \"units\": \"lá\", \"amount\": 5}]",
+    "instructions": "1. Sơ chế tổng thể: Rang thơm các loại thảo mộc; đập dập gừng, thái hành tỏi. 2. Khử mùi lòng bò: Sử dụng hỗn hợp rượu trắng, giấm, gừng đập dập và muối hạt để chà xát lòng bò. 3. Ướp gia vị: Trộn lòng bò với ngũ vị hương, hành tỏi xay, rượu mai quế lộ, dầu hào và các gia vị cơ bản, ướp tối thiểu 60 phút. 4. Xào săn lòng bò: Phi thơm tỏi, nghệ, ngũ vị hương và lá cà ri, sau đó cho lòng bò vào xào nhanh. 5. Nấu phá lấu: Hầm lòng bò với nước dừa tươi và nước dão dừa cùng các loại thảo mộc trong khoảng 45–60 phút. 6. Hoàn thành nước chấm: Pha chế nước chấm tắc chua ngọt.",
+    "nutrition_info": "Món ăn cung cấp protein dồi dào, khoáng chất như sắt, kẽm và Vitamin B12.",
+    "category": "Main Course",
+    "prep_time": "60 minutes",
+    "cook_time": "60 minutes",
+    "total_time": "120 minutes",
+    "notes": "Nên thưởng thức với bánh mì hoặc cơm, và rau răm để cân bằng độ béo.",
+    "tags": "Phá Lấu, Bò, Món ăn đường phố, Ẩm thực Việt Nam",
+    "image_urls": null
+}

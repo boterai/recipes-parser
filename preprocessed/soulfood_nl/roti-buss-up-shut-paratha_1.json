@@ -1,0 +1,14 @@
+{
+    "dish_name": "Buss up shut (paratha) roti",
+    "description": "Een recept voor paratha roti, een platbrood met veel laagjes, dat traditioneel wordt gegeten in het Caribisch gebied.",
+    "ingredients": "[{\"name\": \"tarwebloem\", \"units\": \"gr\", \"amount\": 600}, {\"name\": \"bakpoeder\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"bruine suiker\", \"units\": \"tl\", \"amount\": 2}, {\"name\": \"zout\", \"units\": \"snufje\", \"amount\": null}, {\"name\": \"volle melk\", \"units\": \"ml\", \"amount\": 150}, {\"name\": \"warm water\", \"units\": \"ml\", \"amount\": 150}, {\"name\": \"roomboter\", \"units\": \"gr\", \"amount\": 100}, {\"name\": \"extra bloem\", \"units\": \"voor bestrooien\", \"amount\": null}, {\"name\": \"zonnebloemolie\", \"units\": \"om te bakken\", \"amount\": null}]",
+    "instructions": "Begin met het mengen van het deeg. Meng de bloem, het bakpoeder, de suiker en het zout. Meng de melk met het warme water en voeg dit toe aan de droge ingrediënten tot je een zacht deeg krijgt. Kneed het deeg voorzichtig en laat het 15 minuten rusten. Verdeel het deeg in 6 delen, rol uit, bestrijk met boter en rol op. Laat de bolletjes een uur rusten. Bak de roti in een pan tot ze gaar zijn en schud ze om de laagjes los te maken.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": "20 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "2 hours 40 minutes",
+    "notes": "Vegan opties zijn mogelijk door melk te vervangen door plantaardige melk en roomboter door kokosolie of margarine.",
+    "tags": "roti, paratha, Caribisch, vegan",
+    "image_urls": null
+}

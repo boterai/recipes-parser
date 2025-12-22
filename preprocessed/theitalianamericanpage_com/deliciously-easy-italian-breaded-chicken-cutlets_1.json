@@ -1,0 +1,14 @@
+{
+    "dish_name": "Italian Breaded Chicken Cutlets",
+    "description": "A simple yet mouthwatering treat that delivers a delightful crunch and tender juiciness with every bite.",
+    "ingredients": "[{\"name\": \"Skinless chicken breasts\", \"units\": null, \"amount\": null}, {\"name\": \"Kosher salt\", \"units\": null, \"amount\": null}, {\"name\": \"Black pepper\", \"units\": null, \"amount\": null}, {\"name\": \"Parmesan cheese\", \"units\": null, \"amount\": null}, {\"name\": \"Italian or plain breadcrumbs\", \"units\": null, \"amount\": null}, {\"name\": \"Virgin olive oil\", \"units\": null, \"amount\": null}, {\"name\": \"Vegetable oil\", \"units\": null, \"amount\": null}, {\"name\": \"Garlic powder\", \"units\": null, \"amount\": null}, {\"name\": \"Onion powder\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Flatten the chicken breasts between plastic wrap using a meat mallet. 2. Season with salt and pepper. 3. Prepare a breadcrumb mixture with breadcrumbs and parmesan cheese. 4. Dredge the chicken in flour, dip in egg, and coat with breadcrumbs. 5. Heat oil in a pan and fry the chicken until golden brown on both sides. 6. Serve with fresh parsley.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "25 minutes",
+    "notes": "For gluten-free options, use gluten-free breadcrumbs. For vegetarian variations, substitute chicken with eggplant or zucchini.",
+    "tags": "Italian, Chicken, Main Course, Easy Recipe",
+    "image_urls": null
+}

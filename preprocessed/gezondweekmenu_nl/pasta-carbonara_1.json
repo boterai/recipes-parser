@@ -1,0 +1,14 @@
+{
+    "dish_name": "Pasta Carbonara",
+    "description": "Pasta Carbonara is een van de meest iconische gerechten uit de Italiaanse keuken, gemaakt met spaghetti, pancetta, eieren, kaas, en peper.",
+    "ingredients": "[{\"name\": \"spaghetti\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"pancetta\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"grote eieren\", \"units\": null, \"amount\": 3}, {\"name\": \"Parmezaanse kaas\", \"units\": \"g\", \"amount\": 60}, {\"name\": \"Pecorino Romano\", \"units\": \"g\", \"amount\": 40}, {\"name\": \"versgemalen zwarte peper\", \"units\": \"naar smaak\", \"amount\": null}, {\"name\": \"olijfolie\", \"units\": \"eetlepel\", \"amount\": 1}, {\"name\": \"zout\", \"units\": \"voor het koken van de pasta\", \"amount\": null}]",
+    "instructions": "Breng een grote pan water aan de kook en voeg een flinke snuf zout toe. Kook de spaghetti al dente volgens de aanwijzingen op de verpakking. Bewaar ongeveer 150 ml van het kookvocht voordat je de pasta afgiet. Verhit de olijfolie in een grote koekenpan op middelhoog vuur. Voeg de blokjes pancetta toe en bak deze tot ze krokant zijn, ongeveer 4-5 minuten. Zet het vuur laag en houd warm. Klop in een kom de eidooiers los en meng deze met de geraspte Parmezaanse kaas en Pecorino Romano. Voeg royaal versgemalen zwarte peper toe en meng tot een gladde, dikke saus. Voeg de warme, net afgegoten pasta toe aan de pan met pancetta. Roer goed door zodat de pasta de smaken opneemt. Haal de pan van het vuur en voeg de eimengeling toe. Roer snel en constant om een romige saus te creëren, zonder dat de eieren stollen. Voeg indien nodig een beetje van het bewaarde kookvocht toe om de saus extra zijdezacht te maken. Verdeel de Pasta Carbonara over de borden en garneer met extra Parmezaanse kaas en een vleugje zwarte peper. Serveer direct.",
+    "nutrition_info": "Calorieën: 600, Total Fat: 20g, Saturated Fat: 8g, Carbohydrates: 60g, Fiber: 3g, Sugar: 2g, Protein: 22g",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "25 minutes",
+    "total_time": null,
+    "notes": "Het geheim van een perfecte Pasta Carbonara ligt in de balans van smaken en texturen. De romige saus wordt niet gemaakt met room, maar door het combineren van eidooiers en geraspte kaas.",
+    "tags": "pasta, carbonara, Italiaans, hoofdgerecht",
+    "image_urls": null
+}

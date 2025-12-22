@@ -1,0 +1,14 @@
+{
+    "dish_name": "Lẩu cá thác lác khổ qua",
+    "description": "Món lẩu thanh đạm và bổ dưỡng của ẩm thực Việt Nam, đặc biệt phổ biến với phiên bản kết hợp cùng khổ qua.",
+    "ingredients": "[{\"name\": \"Chả cá thác lác tươi\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"Hành tím băm\", \"units\": \"muỗng cà phê\", \"amount\": 2}, {\"name\": \"Hành lá cắt nhỏ\", \"units\": \"muỗng canh\", \"amount\": 1}, {\"name\": \"Hành phi\", \"units\": \"muỗng cà phê\", \"amount\": 1}, {\"name\": \"Xương heo (xương ống hoặc xương sườn)\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"Nấm rơm\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"Khổ qua\", \"units\": \"trái\", \"amount\": 4}, {\"name\": \"Hành tím củ\", \"units\": \"củ\", \"amount\": 2}, {\"name\": \"Nước\", \"units\": \"lít\", \"amount\": 1.5}, {\"name\": \"Gia vị ướp chả cá\", \"units\": null, \"amount\": null}, {\"name\": \"Gia vị nêm lẩu\", \"units\": null, \"amount\": null}, {\"name\": \"Rau ăn lẩu\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Sơ chế xương và ninh hầm. 2. Thêm củ quả và nêm nếm. 3. Quết chả cá. 4. Vo viên và nấu lẩu.",
+    "nutrition_info": "Cá thác lác là nguồn protein dồi dào, ít chất béo, tốt cho sức khỏe tim mạch.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "60 minutes",
+    "total_time": "75 minutes",
+    "notes": "Chọn cá thác lác tươi, xử lý khổ qua để giảm vị đắng.",
+    "tags": "lẩu, cá thác lác, khổ qua, món ăn Việt Nam",
+    "image_urls": null
+}

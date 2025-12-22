@@ -1,0 +1,14 @@
+{
+    "dish_name": "Banaani-nokkossmoothie",
+    "description": "Helppo, terveellinen, herkullinen ja edullinen smoothie, joka sisältää tuoreita nokkosia ja banaania.",
+    "ingredients": "[{\"name\": \"pakastettu, kypsä banaani\", \"units\": \"viipaleina\", \"amount\": 2}, {\"name\": \"tuore nokkonen\", \"units\": null, \"amount\": \"kourallinen\"}, {\"name\": \"rasvaton maitorahka\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"jogurtti\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"maito\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"maapähkinävoi\", \"units\": \"rkl\", \"amount\": 1}, {\"name\": \"kaura- tai vehnäleseet\", \"units\": \"rkl\", \"amount\": 1}, {\"name\": \"kaneli\", \"units\": \"tl\", \"amount\": 0.5}, {\"name\": \"tyrnirouhe\", \"units\": \"tl\", \"amount\": 1}]",
+    "instructions": "Laita kaikki smoothien ainekset tehosekoittimeen. Sekoita voimakkaasti kunnes rakenne on tasainen, ja kaada aamiaiskulhoihin. Jos haluat juoksevampaa smoothieta, lisää maidon määrää.",
+    "nutrition_info": null,
+    "category": "Aamiainen",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Nokkoset pitää aina kerätä puhtaasta paikasta. Maapähkinävoita saa edullisesti esimerkiksi Lidlistä.",
+    "tags": "smoothie, terveellinen, aamiainen",
+    "image_urls": null
+}

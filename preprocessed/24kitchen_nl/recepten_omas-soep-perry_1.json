@@ -1,0 +1,14 @@
+{
+    "dish_name": "Pompoensoep met Perry's Jamaican twist",
+    "description": "Een Jamaicaanse twist op de heerlijke pompoensoep van Oma Carla.",
+    "ingredients": "[{\"name\": \"gerookte kip\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"black eyed bonen\", \"units\": \"klein blikje\", \"amount\": 1}, {\"name\": \"verse tijm\", \"units\": \"takjes\", \"amount\": 4}, {\"name\": \"platte peterselie\", \"units\": \"zakje\", \"amount\": 1}, {\"name\": \"madame Jeanette\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"maïskolf\", \"units\": null, \"amount\": 1}, {\"name\": \"zout\", \"units\": null, \"amount\": null}, {\"name\": \"peper\", \"units\": null, \"amount\": null}]",
+    "instructions": "Zet in een pannetje Oma’s pompoensoep op en laat langzaam opwarmen. Lek de bonen uit en spoel af en zet apart. Kook de maiskolf in een pan met gezouten water in 25 min gaar. Snijd daarna in plakken. Pluk de gerookte kipfilet en zet apart. Hak de tijm en peterselie. Snijd de madame Jeanette fijn. Doe de blacked eyed bonen in de pompoensoep en laat kort meewarmen. Verdeel de pompoensoep over de kommen. Verdeel de plakken mais en gerookte kip. Breng op smaak met de gehakte kruiden en madame Jeanette.",
+    "nutrition_info": null,
+    "category": "Hoofdgerecht",
+    "prep_time": "30 min",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Madame Jeanette te pittig? Dan kan je deze hete gele peper eventueel kiezen voor sambal. Echt geen fan van pittige soep? Dan kan je het er natuurlijk ook gewoon uit laten.",
+    "tags": "soep, pompoensoep, jamaicaans",
+    "image_urls": null
+}

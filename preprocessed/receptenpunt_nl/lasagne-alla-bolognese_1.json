@@ -1,0 +1,14 @@
+{
+    "dish_name": "Lasagne alla Bolognese",
+    "description": "Authentieke Italiaanse Lasagne alla Bolognese, een gerecht dat je normaal gesproken alleen in de beste Italiaanse restaurants vindt.",
+    "ingredients": "[{\"name\": \"rundergehakt\", \"units\": \"gram\", \"amount\": 600}, {\"name\": \"pancetta\", \"units\": \"gram\", \"amount\": 300}, {\"name\": \"tomaten passata\", \"units\": \"gram\", \"amount\": 600}, {\"name\": \"wortel\", \"units\": \"stuk\", \"amount\": 2}, {\"name\": \"bleekselderij\", \"units\": \"stokjes\", \"amount\": 2}, {\"name\": \"ui\", \"units\": \"stuk\", \"amount\": 2}, {\"name\": \"droge witte wijn\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"volle melk\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"runderbouillon\", \"units\": \"ml\", \"amount\": 600}, {\"name\": \"olijfolie\", \"units\": \"eetlepels\", \"amount\": 6}, {\"name\": \"zout\", \"units\": null, \"amount\": null}, {\"name\": \"peper\", \"units\": null, \"amount\": null}, {\"name\": \"volle melk\", \"units\": \"ml\", \"amount\": 1000}, {\"name\": \"ongezouten roomboter\", \"units\": \"gram\", \"amount\": 100}, {\"name\": \"bloem\", \"units\": \"gram\", \"amount\": 100}, {\"name\": \"nootmuskaat\", \"units\": null, \"amount\": null}, {\"name\": \"lasagne bladeren\", \"units\": null, \"amount\": null}, {\"name\": \"parmigiano reggiano\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Snijd de wortel, selderij en ui in kleine stukjes. 2. Bak de pancetta in een pan. 3. Voeg olijfolie en de groenten toe en bak tot ze zacht zijn. 4. Voeg het rundergehakt toe en bak tot het bruin is. 5. Blus af met witte wijn en laat verdampen. 6. Voeg tomaten passata en melk toe, laat sudderen. 7. Maak de béchamelsaus door boter en bloem te mengen, voeg melk toe en roer tot dik. 8. Verwarm de oven voor op 190°C. 9. Begin met het assembleren van de lasagne in lagen. 10. Bak de lasagne voor ongeveer 30 minuten.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "180 minutes",
+    "total_time": "210 minutes",
+    "notes": "Als je geen pancetta kan vinden, kan je dit vervangen door varkensgehakt.",
+    "tags": "Italian, Pasta, Main Course",
+    "image_urls": null
+}

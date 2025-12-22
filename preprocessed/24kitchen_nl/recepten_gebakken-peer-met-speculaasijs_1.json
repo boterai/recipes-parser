@@ -1,0 +1,14 @@
+{
+    "dish_name": "Gebakken peer met speculaasijs",
+    "description": "Gebakken peer met speculaasijs is het ultieme nagerecht om een heerlijk avondje gourmetten mee af te sluiten! Dit dessert staat al binnen 10 minuten op tafel.",
+    "ingredients": "[{\"name\": \"suiker\", \"units\": \"el\", \"amount\": 1}, {\"name\": \"kaneelsuiker\", \"units\": \"snufje\", \"amount\": 1}, {\"name\": \"handpeer\", \"units\": null, \"amount\": 1}, {\"name\": \"boter\", \"units\": null, \"amount\": null}, {\"name\": \"speculaasjes\", \"units\": null, \"amount\": 6}, {\"name\": \"vanille-ijs\", \"units\": \"bollen\", \"amount\": 4}]",
+    "instructions": "Meng de suiker met het kaneelpoeder. Snijd de peren van het klokhuis af in plakken en meng met de kaneelsuiker. Smelt een klontje boter in de gourmetpannetjes en bak de plakjes peer tot ze warm zijn en de suiker is gesmolten. Verkruimel de speculaasjes. Rol de bollen ijs door de speculaaskruimels en leg ze even in de vriezer tot de peer klaar is. Serveer het speculaasijs bij de warme peer.",
+    "nutrition_info": null,
+    "category": "Nagerecht",
+    "prep_time": "10 min.",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "Vegetarisch, Makkelijk, Fruit, Nederlands, Kerst",
+    "image_urls": null
+}

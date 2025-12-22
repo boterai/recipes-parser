@@ -1,0 +1,14 @@
+{
+    "dish_name": "Ouderwetse Preischotel Met Spekjes",
+    "description": "Deze preischotel met aardappelpuree is makkelijk om te maken en echt ‘comfort food’ voor een koude winterdag.",
+    "ingredients": "[{\"name\": \"magere spekblokjes\", \"units\": \"gram\", \"amount\": 250}, {\"name\": \"kruimige aardappels of kant-en-klare aardappelpuree\", \"units\": \"kg\", \"amount\": 1}, {\"name\": \"kookroom\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"boursin\", \"units\": \"gram\", \"amount\": 150}, {\"name\": \"geraspte kaas\", \"units\": \"gram\", \"amount\": 150}, {\"name\": \"prei\", \"units\": \"stengels\", \"amount\": 3}, {\"name\": \"uien\", \"units\": null, \"amount\": 2}, {\"name\": \"roomboter\", \"units\": \"klontje\", \"amount\": null}, {\"name\": \"nootmuskaat\", \"units\": \"snufje\", \"amount\": null}, {\"name\": \"peper\", \"units\": null, \"amount\": null}, {\"name\": \"zout\", \"units\": null, \"amount\": null}]",
+    "instructions": "Verwarm de oven voor op 180 ℃ en vet een ovenschaal in. Maak de aardappelpuree, kies uit zelfgemaakte of kant-en-klare. Snipper de ui en snijd de prei in dunne ringen. Bak de spekjes en de ui in een hapjespan (ca. 5 minuten). Voeg de prei toe en bak nog 5 minuten. Meng de boursin en kookroom met de helft van de geraspte kaas. Schep de aardappelpuree door het spek-ui-prei mengsel en doe dit in de ovenschaal. Giet het mengsel van geraspte kaas, boursin en kookroom erover en bestrooi met de overige geraspte kaas. Bak nog 15 minuten in de oven en serveer.",
+    "nutrition_info": "Calorieën: 683 per portie.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Variatietips: vervang spekjes door gehakt, kip, zalm of maak het vegetarisch.",
+    "tags": "preischotel, comfort food, wintergerecht",
+    "image_urls": null
+}

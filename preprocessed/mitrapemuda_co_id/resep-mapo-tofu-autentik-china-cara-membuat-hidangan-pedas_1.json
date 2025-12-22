@@ -1,0 +1,14 @@
+{
+    "dish_name": "Mapo Tofu",
+    "description": "Resep Mapo Tofu Autentik adalah salah satu hidangan paling ikonik dari masakan Sichuan, China, terkenal karena kombinasi unik antara tahu yang lembut dengan daging cincang dan saus pedas yang kuat.",
+    "ingredients": "[{\"name\": \"tahu sutra\", \"units\": \"gram\", \"amount\": 400}, {\"name\": \"daging sapi atau babi cincang\", \"units\": \"gram\", \"amount\": 200}, {\"name\": \"pasta kacang pedas (doubanjiang)\", \"units\": \"sendok makan\", \"amount\": 2}, {\"name\": \"saus tiram\", \"units\": \"sendok makan\", \"amount\": 1}, {\"name\": \"kecap asin\", \"units\": \"sendok makan\", \"amount\": 1}, {\"name\": \"minyak cabai\", \"units\": \"sendok makan\", \"amount\": 2}, {\"name\": \"lada Sichuan (ground)\", \"units\": \"sendok teh\", \"amount\": 1}, {\"name\": \"bawang putih\", \"units\": \"siung\", \"amount\": 2}, {\"name\": \"jahe\", \"units\": \"cm\", \"amount\": 1}, {\"name\": \"daun bawang\", \"units\": \"batang\", \"amount\": 1}, {\"name\": \"tepung maizena\", \"units\": \"sendok makan\", \"amount\": 1}, {\"name\": \"kaldu ayam atau air\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"gula\", \"units\": \"secukupnya\", \"amount\": null}, {\"name\": \"garam\", \"units\": \"secukupnya\", \"amount\": null}, {\"name\": \"daun bawang iris halus\", \"units\": \"opsional\", \"amount\": null}, {\"name\": \"lada Sichuan sangrai tambahan\", \"units\": \"opsional\", \"amount\": null}, {\"name\": \"minyak cabai untuk finishing\", \"units\": \"opsional\", \"amount\": null}]",
+    "instructions": "1. Siapkan Tahu Sutra. 2. Tumis Bumbu Aromatik. 3. Masukkan Daging Cincang. 4. Tambahkan Pasta Kacang Pedas dan Saus. 5. Tambahkan Kaldu dan Tahu. 6. Tambahkan Larutan Tepung Maizena. 7. Tambahkan Lada Sichuan dan Gula. 8. Sajikan Mapo Tofu.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Pilih tahu sutra yang berkualitas dan gunakan doubanjiang autentik untuk rasa yang lebih baik.",
+    "tags": "Sichuan, Tahu, Pedas, Daging",
+    "image_urls": null
+}

@@ -1,0 +1,14 @@
+{
+    "dish_name": "Big and Bubbly Focaccia",
+    "description": "With its bubbly, bronzed top, crisp edges, and tender, airy interior, our 2025 Recipe of the Year is the focaccia of the moment.",
+    "ingredients": "[{\"name\": \"King Arthur Unbleached All-Purpose Flour\", \"units\": \"cups\", \"amount\": 3}, {\"name\": \"table salt\", \"units\": \"teaspoons\", \"amount\": 1.5}, {\"name\": \"granulated sugar\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"instant yeast\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"water, warm (90°F to 110°F)\", \"units\": \"cups\", \"amount\": 1.25}, {\"name\": \"extra-virgin olive oil\", \"units\": \"tablespoons\", \"amount\": 1.5}, {\"name\": \"extra-virgin olive oil, divided\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"flaky sea salt, for topping\", \"units\": null, \"amount\": null}]",
+    "instructions": "Weigh your flour; or measure it by gently spooning it into a cup, then sweeping off any excess. In a large bowl, whisk together the flour, salt, sugar, and yeast. Add the water and olive oil and stir until the mixture is thoroughly combined. Cover the bowl and set it aside for 15 minutes. Perform the first bowl fold: Use a wet hand to grab a section of dough from one side of the bowl, then lift it up and press it into the center. Repeat this motion until you've made a full circle around the bowl, about 8 to 12 times. Cover the bowl and let the dough rest for 15 minutes. Repeat the bowl fold for a second, third, and fourth time, letting the dough rest for 15 minutes each time. Cover the bowl and let the dough rise at a warm room temperature for 1 hour. Prepare the pan by spraying it with nonstick spray and adding parchment. Transfer the risen dough to the pan, cover, and let it rise for 1 to 1.5 hours. Preheat the oven to 475°F. Dimple the dough, drizzle with olive oil, and sprinkle with flaky salt. Bake for 15 to 18 minutes until golden brown. Remove from the oven and cool on a wire rack.",
+    "nutrition_info": null,
+    "category": null,
+    "prep_time": "25 minutes",
+    "cook_time": "15 to 18 minutes",
+    "total_time": "3 hours 40 minutes",
+    "notes": "Focaccia is best enjoyed the day it's made. If storing leftovers, wrap the focaccia loosely in foil, keep it at room temperature, and reheat before serving.",
+    "tags": "focaccia,bread,recipe",
+    "image_urls": null
+}

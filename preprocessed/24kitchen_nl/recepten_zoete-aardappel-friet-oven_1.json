@@ -1,0 +1,14 @@
+{
+    "dish_name": "Zoete aardappel friet",
+    "description": "Knapperige zoete aardappel friet uit de oven.",
+    "ingredients": "[{\"name\": \"zoete aardappel\", \"units\": \"g\", \"amount\": 800}, {\"name\": \"(zonnebloem)olie\", \"units\": null, \"amount\": null}, {\"name\": \"(zee)zout\", \"units\": null, \"amount\": null}]",
+    "instructions": "Stap 1: Verwarm de oven voor op 225 °C. Stap 2: Was de zoete aardappels tot al het zand eraf is en ze helemaal schoon zijn. Stap 3: Snijd de zoete aardappel in frietjes. Probeer ze zo dun mogelijk te snijden voor een zo knapperig mogelijk resultaat. Houd een halve centimeter aan en je zit goed. Stap 4: Was de frietjes nogmaals om ze vervolgens weer kurkdroog te deppen. Lukt het je nou niet om ze zo droog te deppen, dan kun je deze stap overslaan. Het gaat er namelijk om dat de frieten krokanter worden, en dat lukt niet wanneer ze niet helemaal droog worden. Stap 5: Bak de zoete aardappel friet in zo’n 25 minuten knapperig in de oven. Zorg wel dat je de frietjes ongeveer om de 10 minuten omschept zodat de warmte alle frietjes helemaal raakt. Meng de zoete aardappelfriet met de zonnebloemolie en verspreid over een met bakpapier beklede bakplaat.",
+    "nutrition_info": null,
+    "category": "Bijgerecht",
+    "prep_time": "10 minutes",
+    "cook_time": "25 minutes",
+    "total_time": "35 minutes",
+    "notes": "Je kunt de zoete aardappel schillen voor de friet, je kunt de schil er ook gerust aan laten voor een knapperig velletje.",
+    "tags": "zoete aardappel, friet, oven, bijgerecht",
+    "image_urls": null
+}

@@ -1,0 +1,14 @@
+{
+    "dish_name": "Affogagatti Cookies",
+    "description": "Soft and Lemon-Glazed Treats",
+    "ingredients": "[{\"name\": \"all-purpose flour\", \"units\": \"oz\", \"amount\": \"14\"}, {\"name\": \"unsalted butter\", \"units\": \"oz\", \"amount\": \"3.5\"}, {\"name\": \"granulated sugar\", \"units\": \"oz\", \"amount\": \"4.25\"}, {\"name\": \"eggs\", \"units\": \"beaten\", \"amount\": \"2\"}, {\"name\": \"milk\", \"units\": \"fl oz\", \"amount\": \"1.33\"}, {\"name\": \"vanilla powder\", \"units\": \"tsp\", \"amount\": \"1\"}, {\"name\": \"baking powder\", \"units\": \"oz\", \"amount\": \"0.25\"}, {\"name\": \"lemon juice\", \"units\": \"juice of 1 lemon\", \"amount\": \"1\"}, {\"name\": \"icing sugar\", \"units\": \"oz\", \"amount\": \"3.2\"}, {\"name\": \"Italian grappa\", \"units\": \"fl oz\", \"amount\": \"1.67\"}]",
+    "instructions": "Prepare the Dough: Melt the butter with the milk in a small saucepan over low heat. Remove from heat and stir in the granulated sugar until dissolved. On a pastry board, mix the flour, vanilla powder, and baking powder. Create a well in the center and pour in the beaten eggs. Gradually add the melted butter mixture, drawing in the flour from the edges of the well. Knead until a smooth, elastic dough forms. Shape and Bake: Preheat the oven to 350°F (180°C). Line baking sheets with parchment paper. Divide the dough into cylinders about 4–5 inches (10–12 cm) long. Flatten slightly and shape into coils. Place the cookies on the baking sheets, leaving space between them. Bake for about 10 minutes, ensuring the surface remains pale. Let cool completely. Prepare the Glaze: In a small saucepan, combine icing sugar and ½ cup (120 ml) water. Bring to a gentle boil over low heat for 1 minute. Add the lemon juice and grappa (or liqueur) and boil for another minute. Glaze the Cookies: Brush the glaze generously over the cooled cookies. For best results, dry the glazed cookies in a warm oven.",
+    "nutrition_info": "Calories: 210 kcal, Protein: 3 g, Carbohydrates: 30 g, Fat: 8 g, Saturated Fat: 5 g, Sodium: 80 mg",
+    "category": "Dessert",
+    "prep_time": "20 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "30 minutes",
+    "notes": "The dough should be soft but not sticky; add a pinch of flour if needed. Do not let the cookies brown; their delicate texture depends on low, consistent heat. Boil the glaze longer if a thicker coating is desired.",
+    "tags": "cookies, dessert, Italian, lemon",
+    "image_urls": null
+}

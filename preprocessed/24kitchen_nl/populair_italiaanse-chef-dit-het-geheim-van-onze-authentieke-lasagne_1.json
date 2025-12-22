@@ -1,0 +1,14 @@
+{
+    "dish_name": "authentieke lasagne",
+    "description": "Een authentieke lasagne met ragù, verse lasagnebladeren en bechamèlsaus.",
+    "ingredients": "[{\"name\": \"wortel\", \"units\": null, \"amount\": null}, {\"name\": \"selderij\", \"units\": null, \"amount\": null}, {\"name\": \"ui\", \"units\": null, \"amount\": null}, {\"name\": \"gehakt\", \"units\": null, \"amount\": null}, {\"name\": \"worst\", \"units\": null, \"amount\": null}, {\"name\": \"rode wijn\", \"units\": null, \"amount\": null}, {\"name\": \"tomatenpuree\", \"units\": null, \"amount\": null}, {\"name\": \"water\", \"units\": null, \"amount\": null}, {\"name\": \"verse lasagnebladeren\", \"units\": null, \"amount\": null}, {\"name\": \"boter\", \"units\": null, \"amount\": null}, {\"name\": \"bloem\", \"units\": null, \"amount\": null}, {\"name\": \"melk\", \"units\": null, \"amount\": null}, {\"name\": \"verse nootmuskaat\", \"units\": null, \"amount\": null}]",
+    "instructions": "Snijd de wortel, selderij en ui flinterdun en bak ze in olie tot ze zacht zijn. Voeg het gehakt en worst toe en bak door. Voeg rode wijn, tomatenpuree en water toe en laat 3 tot 4 uur doorkoken. Blancheer de lasagnebladeren kort in water en geef ze een ijsbad. Maak de bechamèlsaus door boter en bloem te mengen, voeg warme melk en nootmuskaat toe en laat doorkoken.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "60 minutes",
+    "total_time": null,
+    "notes": "Gebruik gehakt van verschillende delen van het varken voor de ragù.",
+    "tags": "lasagne, Italiaans, hoofdgerecht",
+    "image_urls": null
+}

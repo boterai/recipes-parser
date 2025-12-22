@@ -1,0 +1,14 @@
+{
+    "dish_name": "Amish Dinner Rolls",
+    "description": "These rolls are dense yet tender, moist but not heavy, and remain fresh-tasting for several days.",
+    "ingredients": "[{\"name\": \"large eggs\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"granulated sugar\", \"units\": \"cup\", \"amount\": 0.3333333333333333}, {\"name\": \"table salt\", \"units\": \"teaspoons\", \"amount\": 2}, {\"name\": \"butter, softened\", \"units\": \"tablespoons\", \"amount\": 6}, {\"name\": \"mashed potatoes, unseasoned, lightly packed\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"instant yeast or active dry yeast\", \"units\": \"teaspoons\", \"amount\": 2.5}, {\"name\": \"water, lukewarm\", \"units\": \"cup\", \"amount\": 0.75}, {\"name\": \"King Arthur Unbleached All-Purpose Flour\", \"units\": \"cups\", \"amount\": 4.25}]",
+    "instructions": "Weigh your flour; or measure it by gently spooning it into a cup, then sweeping off any excess. To make the dough, mix and knead all of the ingredients together — by hand, mixer, or bread machine set on the dough cycle — to make a smooth, soft dough. Place the dough in a lightly greased bowl, cover the bowl with plastic wrap, and let the dough rise until it's doubled in bulk, about 90 minutes. Gently deflate the dough, and divide it into 16 large balls, or 24 smaller balls. Round each ball into a smooth roll. Place the rolls in a lightly greased 9\" x 13\" pan. Cover the pan with lightly greased plastic wrap, and let them rise for 1 1/2 to 2 hours, until they're quite puffy. Towards the end of the rising time, preheat the oven to 350°F. Bake the rolls for 20 to 25 minutes, until they're golden brown and feel set. Remove them from the oven, and turn them out of the pan onto a rack. Brush with melted butter, if desired. Serve rolls warm, or at room temperature. Store rolls, well wrapped in plastic, for several days at room temperature; freeze for longer storage.",
+    "nutrition_info": null,
+    "category": null,
+    "prep_time": "15 minutes",
+    "cook_time": "20 to 25 minutes",
+    "total_time": "3 hours 35 minutes",
+    "notes": "These rolls have the characteristic golden brown, rounded, smooth top of a classic dinner roll; we like to bake them rather tightly spaced, in a 9\" x 13\" pan, so that they crowd each other and become pull-apart rolls, with unbrowned sides, as they're baking.",
+    "tags": null,
+    "image_urls": null
+}

@@ -1,0 +1,14 @@
+{
+    "dish_name": "Italiaanse Salade met Groene Asperges",
+    "description": "Een heerlijke Italiaanse salade met groene asperges, verse ingrediënten en een culinaire ervaring die de zintuigen prikkelt.",
+    "ingredients": "[{\"name\": \"Groene Asperges\", \"units\": null, \"amount\": null}, {\"name\": \"Tomaten\", \"units\": null, \"amount\": null}, {\"name\": \"Mozzarella\", \"units\": null, \"amount\": null}, {\"name\": \"Pesto\", \"units\": null, \"amount\": null}, {\"name\": \"Olijfolie\", \"units\": null, \"amount\": null}, {\"name\": \"Balsamicoazijn\", \"units\": null, \"amount\": null}, {\"name\": \"Citroen\", \"units\": null, \"amount\": null}, {\"name\": \"Pijnboompitten\", \"units\": null, \"amount\": null}, {\"name\": \"Basilicum\", \"units\": null, \"amount\": null}, {\"name\": \"Prosciutto of Chorizo\", \"units\": null, \"amount\": null}, {\"name\": \"Parmezaanse kaas\", \"units\": null, \"amount\": null}]",
+    "instructions": "Blancheren, grillen, roosteren of stomen van de asperges. Meng met andere ingrediënten en serveer.",
+    "nutrition_info": null,
+    "category": "Salade",
+    "prep_time": null,
+    "cook_time": "5 minutes",
+    "total_time": null,
+    "notes": "Gebruik verse, seizoensgebonden ingrediënten voor de beste smaak.",
+    "tags": "Salade, Italiaans, Groene Asperges",
+    "image_urls": null
+}

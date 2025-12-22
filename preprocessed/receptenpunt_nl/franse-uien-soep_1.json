@@ -1,0 +1,14 @@
+{
+    "dish_name": "Franse uien soep",
+    "description": "Franse Uiensoep is in wezen gekarameliseerde ui in soepvorm, bekroond met brood bedekt met kaas.",
+    "ingredients": "[{\"name\": \"ongezouten roomboter\", \"units\": \"eetlepels\", \"amount\": 6}, {\"name\": \"uien\", \"units\": \"kilo\", \"amount\": 1.5}, {\"name\": \"bloem\", \"units\": \"eetlepels\", \"amount\": 2}, {\"name\": \"droge sherry\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"peper\", \"units\": null, \"amount\": null}, {\"name\": \"zout\", \"units\": null, \"amount\": null}, {\"name\": \"stokbrood\", \"units\": null, \"amount\": null}, {\"name\": \"Gruyere kaas\", \"units\": null, \"amount\": null}, {\"name\": \"olijfolie\", \"units\": null, \"amount\": null}, {\"name\": \"soja saus\", \"units\": \"eetlepel\", \"amount\": 1}, {\"name\": \"vissaus\", \"units\": \"theelepel\", \"amount\": 1}, {\"name\": \"verse tijm\", \"units\": \"takjes\", \"amount\": 2}, {\"name\": \"laurierblad\", \"units\": null, \"amount\": 1}]",
+    "instructions": "Begin met het voorbereiden van je uien. Pel ze en snijd ze vervolgens doormidden van boven tot onder kant - door de wortel en stengel. Verwijder het harde wortelgedeelte door het weg te snijden met je mes. Snijd ze daarna dun van de boven tot de onderkant. Doe de roomboter in een pan en laat 1 minuut opwarmen. Doe de gesneden uien erin. Karamelliseer de uien langzaam op laag tot middelhoog vuur. Voeg 2 eetlepels bloem toe aan de uien en kook 1-2 minuten. Blus de pot af met de droge sherry en kook. Voeg de runderbouillon toe en laat het geheel 5-10 minuten sudderen. Snijd dikke plakken van een Frans stokbrood, rooster ze en top de soep met gesneden stokbrood en geraspte kaas.",
+    "nutrition_info": null,
+    "category": "soep",
+    "prep_time": "30 minutes",
+    "cook_time": "120 minutes",
+    "total_time": "150 minutes",
+    "notes": "Gele uien zijn je beste allround keuze voor deze soep, maar een mix van gele, zoete en rode uien, evenals sjalotten, levert een nog complexere smaak op.",
+    "tags": "Frans, soep, uiensoep",
+    "image_urls": null
+}

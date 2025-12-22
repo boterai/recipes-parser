@@ -1,0 +1,14 @@
+{
+    "dish_name": "Authentic Italian Lasagna",
+    "description": "A classic Italian dish featuring layers of pasta, meat sauce, and cheese, embodying the essence of Italian culinary tradition.",
+    "ingredients": "[{\"name\": \"lasagna noodles\", \"units\": null, \"amount\": null}, {\"name\": \"ground beef\", \"units\": null, \"amount\": null}, {\"name\": \"garlic\", \"units\": null, \"amount\": null}, {\"name\": \"yellow onion\", \"units\": null, \"amount\": null}, {\"name\": \"tomato paste\", \"units\": null, \"amount\": null}, {\"name\": \"tomato sauce\", \"units\": null, \"amount\": null}, {\"name\": \"black pepper\", \"units\": null, \"amount\": null}, {\"name\": \"fresh basil\", \"units\": null, \"amount\": null}, {\"name\": \"ricotta cheese\", \"units\": null, \"amount\": null}, {\"name\": \"mozzarella cheese\", \"units\": null, \"amount\": null}, {\"name\": \"Parmesan cheese\", \"units\": null, \"amount\": null}, {\"name\": \"egg\", \"units\": null, \"amount\": null}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"fresh parsley\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Gather all ingredients. 2. Prepare the meat sauce by browning ground beef with garlic and onion. 3. Add tomato paste and sauce, season with herbs. 4. Prepare the cheese mixture with ricotta, egg, and herbs. 5. Layer noodles, meat sauce, and cheese in a baking dish. 6. Bake at 375°F for 45-60 minutes.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "45 minutes",
+    "total_time": "1 hour 15 minutes",
+    "notes": "Consider using fresh lasagna noodles for a richer texture. Pair with a green salad and garlic bread.",
+    "tags": "Italian, lasagna, main course, comfort food",
+    "image_urls": null
+}

@@ -1,0 +1,14 @@
+{
+    "dish_name": "Caçarola de Macatum",
+    "description": null,
+    "ingredients": "[{\"name\": \"rigattoni\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"Azeite oliva extra virgem Gomes da Costa\", \"units\": \"colheres de sopa\", \"amount\": 4}, {\"name\": \"cebola média picada\", \"units\": \"unidade\", \"amount\": 1}, {\"name\": \"dentes de alho picado\", \"units\": \"unidade\", \"amount\": 2}, {\"name\": \"cenoura média em cubos\", \"units\": \"unidade\", \"amount\": 1}, {\"name\": \"abobrinha em cubos\", \"units\": \"unidade\", \"amount\": 1}, {\"name\": \"ervilha fresca\", \"units\": \"xícara (chá)\", \"amount\": 1}, {\"name\": \"Atum em pedaços em óleo Gomes da Costa\", \"units\": \"latas\", \"amount\": 2}, {\"name\": \"molho de tomate\", \"units\": \"xícaras\", \"amount\": 4}, {\"name\": \"Sal\", \"units\": \"a gosto\", \"amount\": null}, {\"name\": \"Pimenta do reino\", \"units\": \"a gosto\", \"amount\": null}, {\"name\": \"Cheiro verde picado\", \"units\": \"a gosto\", \"amount\": null}]",
+    "instructions": "Cozinhe o rigattoni de acordo com as instruções da embalagem, até que esteja al dente. Enquanto a massa cozinha, adicione o azeite em uma panela grande e leve ao fogo médio para aquecer. Adicione a cebola, cozinhe por 2 minutos e em seguida adicione o alho e misture bem. Coloque a cenoura picada, misture e em seguida a abobrinha e a ervilha. Adicione o Atum Gomes da Costa (sem o óleo) e tempere com sal e pimenta do reino. Cubra com o molho de tomate e cozinhe por 5 minutos. Adicione o rigattoni e finalize com o cheiro verde. Sirva em seguida.",
+    "nutrition_info": null,
+    "category": null,
+    "prep_time": "40 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null,
+    "image_urls": null
+}

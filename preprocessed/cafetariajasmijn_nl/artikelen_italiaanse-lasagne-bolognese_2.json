@@ -1,0 +1,14 @@
+{
+    "dish_name": "Lasagne alla Bolognese",
+    "description": "Een authentiek Italiaans recept voor lasagne met laagjes pasta, ragù, bechamelsaus en Parmezaanse kaas.",
+    "ingredients": "[{\"name\": \"lasagnevellen\", \"units\": null, \"amount\": null}, {\"name\": \"bolognese saus\", \"units\": null, \"amount\": null}, {\"name\": \"bechamelsaus\", \"units\": null, \"amount\": null}, {\"name\": \"Parmezaanse kaas\", \"units\": null, \"amount\": null}, {\"name\": \"basilicumblaadjes\", \"units\": null, \"amount\": null}, {\"name\": \"geraspte mozzarella\", \"units\": null, \"amount\": null}, {\"name\": \"bakolijfolie\", \"units\": null, \"amount\": null}, {\"name\": \"uien\", \"units\": null, \"amount\": null}, {\"name\": \"knoflook\", \"units\": null, \"amount\": null}, {\"name\": \"wortel\", \"units\": null, \"amount\": null}, {\"name\": \"bleekselderij\", \"units\": null, \"amount\": null}, {\"name\": \"gehakt\", \"units\": null, \"amount\": null}, {\"name\": \"tomatenpuree\", \"units\": null, \"amount\": null}, {\"name\": \"passata\", \"units\": null, \"amount\": null}, {\"name\": \"rode wijn\", \"units\": null, \"amount\": null}, {\"name\": \"oregano\", \"units\": null, \"amount\": null}, {\"name\": \"nootmuskaat\", \"units\": null, \"amount\": null}, {\"name\": \"kaneel\", \"units\": null, \"amount\": null}, {\"name\": \"suiker\", \"units\": null, \"amount\": null}, {\"name\": \"melk\", \"units\": null, \"amount\": null}, {\"name\": \"bloem\", \"units\": null, \"amount\": null}, {\"name\": \"boter\", \"units\": null, \"amount\": null}, {\"name\": \"zout\", \"units\": null, \"amount\": null}, {\"name\": \"peper\", \"units\": null, \"amount\": null}, {\"name\": \"olijfolie\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Maak de bolognesesaus en laat deze 3 uur pruttelen. 2. Maak de bechamelsaus. 3. Verwarm de oven voor op 180 graden. 4. Bouw de lasagne op met laagjes bolognesesaus, lasagnevellen, bechamelsaus en kaas. 5. Bak de lasagne 40-45 minuten in de oven.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": "3 hours",
+    "cook_time": "45 minutes",
+    "total_time": "3 hours 45 minutes",
+    "notes": "Dit recept kan van tevoren worden bereid en ingevroren. Gebruik verse lasagnebladen voor de beste smaak.",
+    "tags": "lasagne, Italiaans, hoofdgerecht, comfortfood",
+    "image_urls": null
+}
