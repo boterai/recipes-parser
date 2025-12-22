@@ -26,6 +26,8 @@ class CholaithieuExtractor(BaseRecipeExtractor):
             # Убираем постфиксы (более агрессивно)
             title = re.sub(r'\s+(Tại\s+Nhà.*|Ngon.*|Thơm.*|Chuẩn.*|Của.*|Từ.*|Với.*|Cho.*)$', '', title, flags=re.IGNORECASE)
             title = title.strip()
+            # Capitalize first letter of each word for proper names
+            title = ' '.join(word[0].upper() + word[1:] if word else '' for word in title.split())
             return self.clean_text(title)
         
         # Альтернативно - из title тега
@@ -35,6 +37,7 @@ class CholaithieuExtractor(BaseRecipeExtractor):
             # Убираем название сайта
             title = re.sub(r'\s*[–-]\s*Chợ\s+Lái\s+Thiêu.*$', '', title, flags=re.IGNORECASE)
             title = re.sub(r'^(Cách\s+Nấu|Cách\s+Làm|Công\s+Thức)\s+', '', title, flags=re.IGNORECASE)
+            title = ' '.join(word[0].upper() + word[1:] if word else '' for word in title.split())
             return self.clean_text(title)
         
         return None
