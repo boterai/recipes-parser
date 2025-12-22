@@ -1,5 +1,6 @@
 """
 Экстрактор данных рецептов для сайта receptenpunt.nl
+Извлекает данные рецептов из HTML-страниц сайта https://receptenpunt.nl/
 """
 
 import sys
@@ -13,7 +14,12 @@ from extractor.base import BaseRecipeExtractor, process_directory
 
 
 class ReceptenpuntNlExtractor(BaseRecipeExtractor):
-    """Экстрактор для receptenpunt.nl"""
+    """
+    Экстрактор для receptenpunt.nl
+    
+    Извлекает данные рецептов с голландского сайта receptenpunt.nl,
+    используя JSON-LD структурированные данные и HTML-парсинг.
+    """
     
     def _get_json_ld_data(self) -> Optional[dict]:
         """Извлечение данных JSON-LD из страницы"""
@@ -64,7 +70,7 @@ class ReceptenpuntNlExtractor(BaseRecipeExtractor):
             duration: строка вида "PT20M" или "PT1H30M" или "PT2H30M"
             
         Returns:
-            Время в формате "20 minutes" или "120 minutes"
+            Время в формате "{total_minutes} minutes", например "30 minutes" или "150 minutes"
         """
         if not duration or not duration.startswith('PT'):
             return None
@@ -128,7 +134,7 @@ class ReceptenpuntNlExtractor(BaseRecipeExtractor):
         
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "600 gram rundergehakt", "2 wortels", "1,5 kilo uien"
-        pattern = r'^([\d\s/.,]+)?\s*(gram|kilo|kg|ml|liter|l|eetlepels?|theelepels?|eetlepel|theelepel|takjes?|stokjes?|stuk|stuks|kilo)?(?:\s+)?(.+)'
+        pattern = r'^([\d\s/.,]+)?\s*(gram|kilo|kg|ml|liter|l|eetlepels?|theelepels?|eetlepel|theelepel|takjes?|stokjes?|stuk|stuks)?(?:\s+)?(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -208,10 +214,10 @@ class ReceptenpuntNlExtractor(BaseRecipeExtractor):
                 # Парсим в структурированный формат
                 parsed = self.parse_ingredient(ingredient_text)
                 if parsed:
-                    # Переименовываем ключи для соответствия эталону
+                    # Используем формат: name, units, amount (как в эталонных JSON)
                     ingredients.append({
                         "name": parsed["name"],
-                        "units": parsed["unit"],  # Обратите внимание: "units", не "unit"
+                        "units": parsed["unit"],
                         "amount": parsed["amount"]
                     })
         
