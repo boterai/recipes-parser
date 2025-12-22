@@ -132,13 +132,16 @@ class SpeedinfoComUaExtractor(BaseRecipeExtractor):
                                 total += float(part.replace(',', '.'))
                             except ValueError:
                                 pass
-                    amount = str(total) if total > 0 else None
+                    # Возвращаем int если целое число, иначе float
+                    amount = int(total) if total == int(total) else total
                 else:
                     # Обработка диапазонов "1... 2" -> берем среднее или первое значение
                     if '...' in amount_str:
                         amount_str = amount_str.split('...')[0].strip()
                     try:
-                        amount = str(float(amount_str.replace(',', '.')))
+                        value = float(amount_str.replace(',', '.'))
+                        # Возвращаем int если целое число, иначе float
+                        amount = int(value) if value == int(value) else value
                     except ValueError:
                         amount = amount_str
         else:
@@ -161,9 +164,10 @@ class SpeedinfoComUaExtractor(BaseRecipeExtractor):
                                     total += float(num) / float(denom)
                                 else:
                                     total += float(part.replace(',', '.'))
-                            amount = str(total)
+                            amount = int(total) if total == int(total) else total
                         else:
-                            amount = str(float(amount_str.replace(',', '.')))
+                            value = float(amount_str.replace(',', '.'))
+                            amount = int(value) if value == int(value) else value
                         unit = amount_unit[num_match.end():].strip() or None
                     except ValueError:
                         amount = None
@@ -250,9 +254,22 @@ class SpeedinfoComUaExtractor(BaseRecipeExtractor):
             if not text:
                 continue
             
-            # Проверяем, что это не технические данные
-            if re.match(r'^(Інгредієнти|Час|Кількість|Харчова|100 г|Готової|Порц|ккал|белк|білк|жир|вуглевод)', text):
-                continue
+            # Проверяем, что это технические данные (заголовки секций с двоеточием или в strong)
+            # Ищем strong теги для точности
+            strong = p.find('strong')
+            if strong:
+                strong_text = strong.get_text(strip=True)
+                if re.match(r'^(Інгредієнти|Час|Кількість|Харчова|100 г|Готової|Порц)', strong_text):
+                    # Это заголовок технической секции, рецепт закончился
+                    break
+            
+            # Также проверяем строки, которые явно являются техническими данными
+            if re.match(r'^(Час приготування|Кількість порцій|Харчова та енергетична|100 г страви|Готової страви|Порції):', text):
+                break
+            
+            # Пропускаем строки с калориями и питательностью (но только если они в начале строки)
+            if re.match(r'^(ккал|белк|білк|жир|вуглевод)\d', text):
+                break
             
             # Проверяем, что это шаг рецепта (начинается с числа и точки) или просто инструкция
             if re.match(r'^\d+\.', text):
@@ -260,29 +277,33 @@ class SpeedinfoComUaExtractor(BaseRecipeExtractor):
                 step_text = self.clean_text(text)
                 steps.append(step_text)
             elif len(text) > 10:
-                # Ненумерованная инструкция - проверяем, что это действительно инструкция
-                # (содержит глаголы действий)
-                if any(word in text.lower() for word in ['приготувати', 'нарізати', 'викласти', 'перемішати', 
-                                                          'додати', 'зварити', 'змішати', 'розкласти', 'посолити',
-                                                          'розтопити', 'збити', 'висипати', 'вилити', 'випік',
-                                                          'покрити', 'прикрасити', 'обсушити', 'вимити']):
-                    step_text = self.clean_text(text)
-                    steps.append(step_text)
-                # Если мы уже собрали шаги и встретили не-инструкцию, скорее всего рецепт закончился
-                elif len(steps) > 0:
-                    break
+                # Ненумерованная инструкция - собираем все параграфы как инструкции
+                # пока не встретим технические данные или конец
+                step_text = self.clean_text(text)
+                steps.append(step_text)
         
         # Объединяем все шаги в одну строку
         if steps:
-            # Если шаги не нумерованы, добавляем нумерацию
+            # Если шаги не нумерованы, объединяем их, сохраняя точки
             if steps and not re.match(r'^\d+\.', steps[0]):
-                # Проверяем, не являются ли это предложения в одном параграфе
-                # Разбиваем по точкам, чтобы получить отдельные шаги
-                all_text = ' '.join(steps)
-                # Разбиваем на предложения
-                sentences = [s.strip() for s in re.split(r'\.(?=[А-ЯІЇЄҐ])', all_text) if s.strip()]
-                return ' '.join(sentences)
+                # Убедимся, что каждое предложение заканчивается точкой и добавляем пробел после
+                sentences = []
+                for step in steps:
+                    step = step.strip()
+                    # Пропускаем длинные поздравления или не относящиеся к рецепту тексты
+                    # (обычно содержат слова типа "рік", "здоровля", "вітаю" и т.д.)
+                    if len(step) > 100 and any(word in step.lower() for word in ['рік', 'вітаю', 'здоров', 'щасти', 'нехай', 'господь']):
+                        continue
+                    if step and not step.endswith('.'):
+                        step += '.'
+                    sentences.append(step)
+                # Объединяем с пробелом после каждой точки
+                result = ' '.join(sentences)
+                # Исправляем случаи, когда точка не имеет пробела после нее перед заглавной буквой
+                result = re.sub(r'\.([А-ЯІЇЄҐ])', r'. \1', result)
+                return result
             else:
+                # Для нумерованных шагов объединяем как есть
                 return ' '.join(steps)
         
         return None
