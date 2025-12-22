@@ -62,7 +62,7 @@ class OnedaywetakeatrainFiExtractor(BaseRecipeExtractor):
         line_clean = self.clean_text(line_clean).strip()
         
         # Пропускаем строки, которые похожи на заголовки или примечания
-        if any(x in line_clean.lower() for x in ['ainekset', 'valmistus', 'resepti', 'ohje']):
+        if any(x in line_clean.lower() for x in ['ainekset', 'valmistus', 'resepti', 'ohje', 'lisäksi']):
             return None
         
         # Заменяем дроби на числа
@@ -82,6 +82,8 @@ class OnedaywetakeatrainFiExtractor(BaseRecipeExtractor):
         # - "250 g rasvatonta" (число + стандартная единица)
         # - "1 kukkurallinen rkl maapähkinävoita" (число + модификатор + единица)
         # - "kourallinen tuoretta" (специальная единица без числа)
+        # - "4 mustapippuria" (число без единицы - штучный товар)
+        # - "½ vaniljatanko" (дробь без единицы)
         
         # Сначала попробуем паттерн с модификатором (kukkurallinen, pieni, suuri и т.д.)
         pattern_with_modifier = r'^([0-9.,\-]+)\s+(kukkurallinen|pieni|suuri|iso|vähän|paljon)\s*(dl|g|kg|l|ml|rkl|tl|kpl)\s+(.+)$'
@@ -126,11 +128,17 @@ class OnedaywetakeatrainFiExtractor(BaseRecipeExtractor):
             
             # Очистка названия
             name = name.strip()
+            # Убираем скобки и содержимое
+            name = re.sub(r'\([^)]*\)', '', name)
             name = re.sub(r'\b(tai maun mukaan|maun mukaan|tai tarpeen mukaan)\b', '', name, flags=re.IGNORECASE)
             name = name.strip()
             
             if not name or len(name) < 2:
                 return None
+            
+            # Если единицы нет, но есть число - это штучный товар, используем "kpl" как единицу
+            if not unit and amount:
+                unit = "kpl"
             
             return {
                 "name": name,
@@ -139,8 +147,8 @@ class OnedaywetakeatrainFiExtractor(BaseRecipeExtractor):
             }
         else:
             # Если паттерн не совпал, попробуем без количества
-            # Например: "kourallinen tuoretta nokkosta"
-            pattern_no_amount = r'^(kourallinen|hyppysellinen|ripaus|tilkka)\s+(.+)$'
+            # Например: "kourallinen tuoretta nokkosta", "hieman raastettua pähkinää"
+            pattern_no_amount = r'^(kourallinen|hyppysellinen|ripaus|tilkka|hieman|vähän)\s+(.+)$'
             match_no_amount = re.match(pattern_no_amount, line_clean, re.IGNORECASE)
             
             if match_no_amount:
@@ -151,7 +159,7 @@ class OnedaywetakeatrainFiExtractor(BaseRecipeExtractor):
                 
                 return {
                     "name": name,
-                    "amount": unit,  # "kourallinen" as amount
+                    "amount": unit,  # "kourallinen", "hieman" etc as amount
                     "units": None
                 }
         
@@ -188,17 +196,19 @@ class OnedaywetakeatrainFiExtractor(BaseRecipeExtractor):
             temp_ingredients = []
             
             for line in lines:
+                # Убираем скобки для проверки длины и паттернов
+                line_no_parens = re.sub(r'\([^)]*\)', '', line)
+                line_no_parens = line_no_parens.strip()
+                
                 # Пропускаем строки, которые явно являются заголовками или заметками
-                if len(line) > 100:  # Слишком длинная для ингредиента
+                # Увеличен лимит до 150 для строк с описаниями в скобках
+                if len(line_no_parens) > 150:  # Слишком длинная для ингредиента
                     continue
                 
                 # Пропускаем строки, которые начинаются с заглавной буквы и содержат глаголы
                 # (это инструкции)
-                if re.match(r'^[A-ZÄÖÅ]', line) and any(verb in line.lower() for verb in ['laita', 'sekoita', 'lisää', 'kaada', 'anna', 'valmista', 'mittaa', 'perkaa']):
+                if re.match(r'^[A-ZÄÖÅ]', line_no_parens) and any(verb in line_no_parens.lower() for verb in ['laita', 'sekoita', 'lisää', 'kaada', 'anna', 'valmista', 'mittaa', 'perkaa', 'viillä']):
                     continue
-                
-                # Убираем скобки из строки для проверки
-                line_no_parens = re.sub(r'[()]', '', line)
                 
                 # Проверяем наличие паттерна количества с учетом различных вариантов
                 # 1. Стандартные единицы измерения
@@ -218,6 +228,15 @@ class OnedaywetakeatrainFiExtractor(BaseRecipeExtractor):
                     has_ingredient_pattern = True
                 # Проверка 4: модификаторы с единицами (kukkurallinen rkl, pieni dl и т.д.)
                 elif re.search(r'\d+\s+(kukkurallinen|pieni|suuri|iso)\s+(dl|g|kg|l|ml|rkl|tl|kpl)', line_no_parens, re.IGNORECASE):
+                    has_ingredient_pattern = True
+                # Проверка 5: просто число + название (штучные ингредиенты типа "4 mustapippuria", "1 tähtianis")
+                elif re.search(r'^\d+\s+[a-zäöå]', line_no_parens, re.IGNORECASE) and len(line_no_parens.split()) <= 5:
+                    has_ingredient_pattern = True
+                # Проверка 6: дробь + название ("½ vaniljatanko")
+                elif re.search(r'^[½¼¾⅓⅔⅛⅜⅝⅞]\s+[a-zäöå]', line_no_parens, re.IGNORECASE) and len(line_no_parens.split()) <= 4:
+                    has_ingredient_pattern = True
+                # Проверка 7: специальные слова количества ("hieman raastettua...")
+                elif re.search(r'^(hieman|vähän|ripaus)\s+[a-zäöå]', line_no_parens, re.IGNORECASE):
                     has_ingredient_pattern = True
                 
                 if has_ingredient_pattern:
