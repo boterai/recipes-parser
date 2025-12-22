@@ -462,8 +462,14 @@ class CookingItaliansExtractor(BaseRecipeExtractor):
                 notes_text = notes_section.get_text(separator=' ', strip=True)
             
             # Убираем заголовки "Notes", "Key Notes:", и префиксы "–"
-            notes_text = re.sub(r'^(Key\s+)?Notes?\s*:?\s*', '', notes_text, flags=re.IGNORECASE)
-            notes_text = re.sub(r'^[–-]\s*', '', notes_text)
+            # Убираем "Notes" в начале
+            notes_text = re.sub(r'^Notes\s+', '', notes_text, flags=re.IGNORECASE)
+            # Убираем "Key Notes:"
+            notes_text = re.sub(r'^Key\s+Notes?\s*:?\s*', '', notes_text, flags=re.IGNORECASE)
+            # Убираем "– " в начале
+            notes_text = re.sub(r'^[–-]\s+', '', notes_text)
+            # Убираем повторяющиеся "– " внутри текста и заменяем на обычный текст
+            notes_text = re.sub(r'\s+[–-]\s+', ' ', notes_text)
             
             return self.clean_text(notes_text)
         
