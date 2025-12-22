@@ -48,12 +48,44 @@ class LamaistasLtExtractor(BaseRecipeExtractor):
         # Сначала пробуем из meta description (более короткое описание)
         meta_desc = self.soup.find('meta', {'name': 'description'})
         if meta_desc and meta_desc.get('content'):
-            return self.clean_text(meta_desc['content'])
+            desc = self.clean_text(meta_desc['content'])
+            
+            # Удаляем языковые пометки типа "(angl. overnight )"
+            desc = re.sub(r'\s*\([^)]*angl\.[^)]*\)\s*', ' ', desc)
+            desc = re.sub(r'\s+', ' ', desc).strip()
+            
+            # Разделяем на предложения
+            sentences = re.split(r'\.(\s+|$)', desc)
+            # Фильтруем пустые элементы и объединяем предложения
+            actual_sentences = []
+            for i in range(0, len(sentences), 2):
+                if sentences[i].strip():
+                    actual_sentences.append(sentences[i].strip())
+            
+            if actual_sentences:
+                # Если первое предложение очень короткое (< 50 символов), берем два предложения
+                if len(actual_sentences) > 1 and len(actual_sentences[0]) < 50:
+                    return actual_sentences[0] + '. ' + actual_sentences[1] + '.'
+                else:
+                    # Иначе берем первое предложение
+                    return actual_sentences[0] + '.'
         
         # Или из og:description
         og_desc = self.soup.find('meta', property='og:description')
         if og_desc and og_desc.get('content'):
-            return self.clean_text(og_desc['content'])
+            desc = self.clean_text(og_desc['content'])
+            desc = re.sub(r'\s*\([^)]*angl\.[^)]*\)\s*', ' ', desc)
+            desc = re.sub(r'\s+', ' ', desc).strip()
+            sentences = re.split(r'\.(\s+|$)', desc)
+            actual_sentences = []
+            for i in range(0, len(sentences), 2):
+                if sentences[i].strip():
+                    actual_sentences.append(sentences[i].strip())
+            if actual_sentences:
+                if len(actual_sentences) > 1 and len(actual_sentences[0]) < 50:
+                    return actual_sentences[0] + '. ' + actual_sentences[1] + '.'
+                else:
+                    return actual_sentences[0] + '.'
         
         # Альтернативно - из JSON-LD (может быть длиннее)
         json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
@@ -222,10 +254,45 @@ class LamaistasLtExtractor(BaseRecipeExtractor):
                 if data.get('@type') == 'Recipe' and 'recipeCategory' in data:
                     category = data['recipeCategory']
                     # Может быть строка с несколькими категориями через запятую
-                    # Берем первую категорию
                     if isinstance(category, str):
                         categories = [cat.strip() for cat in category.split(',')]
-                        return categories[0] if categories else None
+                        
+                        # Приоритет категорий:
+                        # 1. Desertai (десерты) - возвращаем Dessert
+                        for cat in categories:
+                            if 'desert' in cat.lower():
+                                return 'Dessert'
+                        
+                        # 2. Специфичные категории блюд
+                        for cat in categories:
+                            cat_lower = cat.lower()
+                            if 'sumuštin' in cat_lower:
+                                return 'Sumuštiniai'
+                            elif 'košė' in cat_lower or 'košė' in cat_lower:
+                                # Košės (porridge) обычно pusryčiai (breakfast)
+                                return 'Pusryčiai'
+                            elif 'sriuba' in cat_lower or 'sriubo' in cat_lower:
+                                return 'Soup'
+                            elif 'salot' in cat_lower:
+                                return 'Salad'
+                        
+                        # 3. Pusryčiai (breakfast) как fallback
+                        for cat in categories:
+                            if 'pusryč' in cat.lower():
+                                return 'Pusryčiai'
+                        
+                        # 4. Если ничего не нашли, берем вторую категорию если есть
+                        if len(categories) >= 2:
+                            second_cat = categories[1].strip()
+                            if second_cat:
+                                return second_cat[0].upper() + second_cat[1:]
+                        
+                        # 5. Иначе первую
+                        if categories:
+                            first_cat = categories[0].strip()
+                            if first_cat:
+                                return first_cat[0].upper() + first_cat[1:]
+                    
                     return category
             except (json.JSONDecodeError, KeyError):
                 continue
@@ -271,9 +338,9 @@ class LamaistasLtExtractor(BaseRecipeExtractor):
         return None
     
     def extract_prep_time(self) -> Optional[str]:
-        """Извлечение времени подготовки (может отсутствовать на этом сайте)"""
-        # На lamaistas.lt обычно есть только totalTime
-        return None
+        """Извлечение времени подготовки"""
+        # На lamaistas.lt totalTime используется как prep_time
+        return self.extract_total_time()
     
     def extract_cook_time(self) -> Optional[str]:
         """Извлечение времени приготовления (может отсутствовать на этом сайте)"""
@@ -281,7 +348,7 @@ class LamaistasLtExtractor(BaseRecipeExtractor):
         return None
     
     def extract_total_time(self) -> Optional[str]:
-        """Извлечение общего времени"""
+        """Извлечение общего времени (внутренний метод для получения времени из JSON-LD)"""
         # Пробуем извлечь из JSON-LD
         json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
         
@@ -369,6 +436,9 @@ class LamaistasLtExtractor(BaseRecipeExtractor):
         Returns:
             Словарь с данными рецепта
         """
+        # Get time from JSON-LD once
+        time_value = self.extract_total_time()
+        
         return {
             "dish_name": self.extract_dish_name(),
             "description": self.extract_description(),
@@ -376,9 +446,9 @@ class LamaistasLtExtractor(BaseRecipeExtractor):
             "instructions": self.extract_instructions(),
             "nutrition_info": self.extract_nutrition_info(),
             "category": self.extract_category(),
-            "prep_time": self.extract_prep_time(),
+            "prep_time": time_value,  # Используем totalTime как prep_time
             "cook_time": self.extract_cook_time(),
-            "total_time": self.extract_total_time(),
+            "total_time": time_value,  # И также как total_time
             "notes": self.extract_notes(),
             "tags": self.extract_tags(),
             "image_urls": self.extract_image_urls()
