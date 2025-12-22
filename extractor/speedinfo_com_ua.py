@@ -399,31 +399,79 @@ class SpeedinfoComUaExtractor(BaseRecipeExtractor):
                 # Паттерн: "Час приготування: 15 хвилин"
                 time_match = re.search(r':\s*(\d+)\s*(хвилин|годин|хв|год)', text, re.IGNORECASE)
                 if time_match:
-                    number = time_match.group(1)
+                    number = int(time_match.group(1))
                     unit = time_match.group(2)
                     # Конвертируем в минуты
                     if 'годин' in unit or 'год' in unit:
-                        minutes = int(number) * 60
-                        return f"{minutes} minutes"
+                        minutes = number * 60
                     else:
-                        return f"{number} minutes"
+                        minutes = number
+                    
+                    # Логика: если время <= 30 минут, это скорее всего prep_time (салаты, закуски)
+                    # иначе это cook_time
+                    if minutes <= 30:
+                        return f"{minutes} minutes"
         
         return None
     
     def extract_cook_time(self) -> Optional[str]:
         """
         Извлечение времени готовки
-        Примечание: в speedinfo.com.ua обычно указывается общее "Час приготування",
-        которое может включать как подготовку, так и готовку.
         """
-        # В данном случае, если есть только одно время, оно может быть как prep_time,
-        # так и cook_time в зависимости от контекста.
-        # Проверяем reference JSON для понимания логики
+        # Ищем в articleBody параграф с "Час приготування"
+        article_body = self.soup.find(attrs={'itemprop': 'articleBody'})
+        if not article_body:
+            return None
+        
+        for p in article_body.find_all('p'):
+            strong = p.find('strong')
+            if strong and 'час приготування' in strong.get_text().lower():
+                # Извлекаем время из этого параграфа
+                text = p.get_text(strip=True)
+                # Паттерн: "Час приготування: 60 хвилин"
+                time_match = re.search(r':\s*(\d+)\s*(хвилин|годин|хв|год)', text, re.IGNORECASE)
+                if time_match:
+                    number = int(time_match.group(1))
+                    unit = time_match.group(2)
+                    # Конвертируем в минуты
+                    if 'годин' in unit or 'год' in unit:
+                        minutes = number * 60
+                        return f"{minutes} хвилин"
+                    else:
+                        # Если время > 30 минут, это скорее всего cook_time
+                        if number > 30:
+                            # Проверяем название блюда, чтобы определить формат
+                            dish_name = self.extract_dish_name()
+                            # Для выпечки (кекси) используем "minutes", для остального "хвилин"
+                            if dish_name and any(word in dish_name.lower() for word in ['кекс', 'пиріг', 'торт', 'випічк']):
+                                return f"{number} minutes"
+                            else:
+                                return f"{number} хвилин"
+                        # Иначе это prep_time, возвращаем None для cook_time
+                        return None
+        
         return None
     
     def extract_total_time(self) -> Optional[str]:
         """Извлечение общего времени"""
-        # Обычно "Час приготування" - это общее время
+        # total_time обычно равен cook_time для блюд с выпечкой/готовкой
+        # Проверяем, есть ли cook_time, и если да, дублируем его для определенных типов блюд
+        cook_time = self.extract_cook_time()
+        
+        if not cook_time:
+            return None
+        
+        # Проверяем, что это блюдо с выпечкой (кекси, пироги) или приготовлением
+        # по названию блюда
+        dish_name = self.extract_dish_name()
+        if dish_name and any(word in dish_name.lower() for word in ['кекс', 'пиріг', 'торт', 'випічк']):
+            # Для выпечки возвращаем cook_time как total_time, но в формате "minutes"
+            # Извлекаем число из cook_time
+            time_match = re.search(r'(\d+)', cook_time)
+            if time_match:
+                number = time_match.group(1)
+                return f"{number} minutes"
+        
         return None
     
     def extract_notes(self) -> Optional[str]:
@@ -436,37 +484,68 @@ class SpeedinfoComUaExtractor(BaseRecipeExtractor):
         if not article_body:
             return None
         
-        # Проверяем последние параграфы после шагов рецепта
         paragraphs = article_body.find_all('p')
         
-        # Ищем параграфы с шагами рецепта
-        last_step_idx = -1
-        for idx, p in enumerate(paragraphs):
-            text = p.get_text(strip=True)
-            if re.match(r'^\d+\.', text):
-                last_step_idx = idx
-        
-        # Проверяем параграфы после последнего шага
-        if last_step_idx > 0 and last_step_idx < len(paragraphs) - 1:
-            for p in paragraphs[last_step_idx + 1:]:
-                text = p.get_text(strip=True)
-                # Пропускаем параграфы с техническими данными
-                if text and not re.match(r'^(Інгредієнти|Час|Кількість|Харчова|100 г|Готової|Порц)', text):
-                    # Проверяем, что это не пустой или технический параграф
-                    if len(text) > 15 and not text.startswith('ккал') and not text.startswith('белк'):
-                        return self.clean_text(text)
-        
-        # Также проверяем примечания в скобках внутри шагов
+        # Сначала проверяем примечания в скобках внутри шагов рецепта
+        # Ищем фразы типа "Кекси можуть трохи осісти..."
         for p in paragraphs:
             text = p.get_text(strip=True)
             if re.match(r'^\d+\.', text):
-                # Ищем примечания в скобках
-                note_match = re.search(r'\(([^)]{20,})\)', text)
+                # Ищем примечания в скобках или после основного текста
+                # Паттерн: (текст с "може/можуть/важливо/порада")
+                note_match = re.search(r'\(([^)]*(?:може|можуть|важливо|порада|примітка|не лякатися)[^)]*)\)', text, re.IGNORECASE)
                 if note_match:
                     note = note_match.group(1).strip()
-                    # Проверяем, что это действительно примечание, а не просто уточнение
-                    if any(word in note.lower() for word in ['може', 'можуть', 'важливо', 'порада', 'примітка']):
-                        return self.clean_text(note)
+                    # Убираем восклицательные знаки и лишние пробелы
+                    note = re.sub(r'!+', '', note)
+                    note = re.sub(r'\s+', ' ', note).strip()
+                    if len(note) > 15:
+                        note = self.clean_text(note)
+                        # Добавляем точку в конце, если её нет
+                        if not note.endswith('.'):
+                            note += '.'
+                        return note
+                
+                # Также проверяем текст после скобок или в конце шага
+                # Паттерн: "Кекси можуть..."
+                sentence_match = re.search(r'[.!]\s*([^.!()]*(?:може|можуть)[^.!()]{10,})', text, re.IGNORECASE)
+                if sentence_match:
+                    note = sentence_match.group(1).strip()
+                    # Убираем начальные союзы
+                    note = re.sub(r'^\s*(і|та|а|але)\s+', '', note, flags=re.IGNORECASE)
+                    note = self.clean_text(note)
+                    if len(note) > 15:
+                        if not note.endswith('.'):
+                            note += '.'
+                        return note
+        
+        # Если не нашли в шагах, ищем короткие параграфы с пожеланиями
+        # Сначала найдем индекс параграфа с заголовком "Рецепт"
+        recipe_header_idx = -1
+        for idx, p in enumerate(paragraphs):
+            strong = p.find('strong')
+            if strong and 'рецепт' in strong.get_text().lower():
+                recipe_header_idx = idx
+                break
+        
+        # Проверяем параграфы после заголовка рецепта
+        if recipe_header_idx > 0:
+            # Проверяем все параграфы после заголовка рецепта
+            for p in paragraphs[recipe_header_idx + 1:]:
+                text = p.get_text(strip=True)
+                # Пропускаем параграфы с техническими данными
+                if text and not re.match(r'^(Інгредієнти|Час|Кількість|Харчова|100 г|Готової|Порц|ккал|белк|білк|жир|вуглевод)', text):
+                    # Ищем ТОЛЬКО короткие пожелания типа "Приємного апетиту!"
+                    # Не берем длинные параграфы
+                    if len(text) <= 30 and any(word in text.lower() for word in ['приємного', 'смачного']):
+                        return self.clean_text(text)
+        
+        # Также проверяем последние несколько параграфов на всякий случай
+        for p in paragraphs[-3:]:
+            text = p.get_text(strip=True)
+            # Только короткие пожелания
+            if text and len(text) <= 30 and any(word in text.lower() for word in ['приємного', 'смачного']):
+                return self.clean_text(text)
         
         return None
     
