@@ -202,7 +202,7 @@ class GezondWeekmenuExtractor(BaseRecipeExtractor):
         """Извлечение ингредиентов в структурированном формате"""
         ingredients = []
         
-        # Сначала пробуем извлечь из HTML (более точно)
+        # ТОЛЬКО извлекаем из HTML (не из JSON-LD, т.к. там смешанные данные)
         ingredients_div = self.soup.find('div', class_='mv-create-ingredients')
         
         if ingredients_div:
@@ -220,16 +220,6 @@ class GezondWeekmenuExtractor(BaseRecipeExtractor):
                     parsed = self.parse_ingredient_text(text)
                     if parsed['name']:
                         ingredients.append(parsed)
-        
-        # Если не нашли в HTML, пробуем JSON-LD (fallback)
-        if not ingredients:
-            recipe_data = self._get_json_ld_data()
-            if recipe_data and 'recipeIngredient' in recipe_data:
-                for ing_text in recipe_data['recipeIngredient']:
-                    if ing_text:
-                        parsed = self.parse_ingredient_text(ing_text)
-                        if parsed['name']:
-                            ingredients.append(parsed)
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
@@ -340,14 +330,26 @@ class GezondWeekmenuExtractor(BaseRecipeExtractor):
                 if category.lower() == 'recepten':
                     # Пробуем определить категорию по тегам или контексту
                     keywords = recipe_data.get('keywords', '')
-                    if 'ontbijt' in keywords.lower():
-                        return 'Breakfast'
-                    elif any(word in keywords.lower() for word in ['hoofdgerecht', 'lunch', 'diner']):
-                        return 'Main Course'
-                    elif 'dessert' in keywords.lower():
-                        return 'Dessert'
-                    else:
-                        return 'Breakfast'  # По умолчанию
+                    if isinstance(keywords, str):
+                        keywords_lower = keywords.lower()
+                        if 'ontbijt' in keywords_lower or 'breakfast' in keywords_lower:
+                            return 'Breakfast'
+                        elif any(word in keywords_lower for word in ['hoofdgerecht', 'lunch', 'diner', 'avondeten', 'hoofdmaaltijd']):
+                            return 'Main Course'
+                        elif 'dessert' in keywords_lower or 'nagerecht' in keywords_lower:
+                            return 'Dessert'
+                    
+                    # Если не удалось определить по ключевым словам, проверяем title
+                    title = self.extract_dish_name()
+                    if title:
+                        title_lower = title.lower()
+                        if any(word in title_lower for word in ['pannenkoek', 'ontbijt']):
+                            return 'Breakfast'
+                        elif any(word in title_lower for word in ['pasta', 'schotel', 'gerecht']):
+                            return 'Main Course'
+                    
+                    # По умолчанию
+                    return 'Main Course'
                 return self.clean_text(category)
         
         return None
@@ -414,11 +416,17 @@ class GezondWeekmenuExtractor(BaseRecipeExtractor):
                     # Разбиваем по запятым и очищаем
                     tags = [self.clean_text(tag) for tag in keywords.split(',')]
                     tags = [tag for tag in tags if tag and len(tag) > 2]
-                    # Оставляем только первые 5-6 наиболее релевантных тегов
-                    # Фильтруем очень длинные теги (вероятно, это фразы)
-                    tags = [tag for tag in tags if len(tag) < 50][:6]
-                    if tags:
-                        return ', '.join(tags)
+                    # Фильтруем очень длинные теги (вероятно, это фразы) и берем только короткие релевантные
+                    short_tags = []
+                    for tag in tags:
+                        # Пропускаем фразы (больше 4 слов)
+                        if len(tag.split()) <= 4 and len(tag) < 50:
+                            short_tags.append(tag)
+                        if len(short_tags) >= 5:
+                            break
+                    
+                    if short_tags:
+                        return ', '.join(short_tags)
         
         # Fallback: ищем meta keywords
         meta_keywords = self.soup.find('meta', {'name': 'keywords'})
