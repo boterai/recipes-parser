@@ -15,8 +15,22 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class Kitchen24Extractor(BaseRecipeExtractor):
     """Экстрактор для 24kitchen.nl"""
     
+    # Константы для фильтрации оборудования
+    KITCHEN_EQUIPMENT_KEYWORDS = [
+        'vorm', 'satéprikker', 'bakpapier', 'pan', 
+        'keukentouw', 'braadslee', 'thermometer'
+    ]
+    
+    def __init__(self, html_path: str):
+        """Инициализация с кешированием данных"""
+        super().__init__(html_path)
+        self._json_ld_cache = None
+    
     def _get_json_ld_data(self) -> Optional[dict]:
-        """Извлечение данных JSON-LD из страницы"""
+        """Извлечение данных JSON-LD из страницы с кешированием"""
+        if self._json_ld_cache is not None:
+            return self._json_ld_cache
+        
         json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
         
         for script in json_ld_scripts:
@@ -30,19 +44,23 @@ class Kitchen24Extractor(BaseRecipeExtractor):
                 if isinstance(data, dict) and '@graph' in data:
                     for item in data['@graph']:
                         if isinstance(item, dict) and item.get('@type') == 'Recipe':
+                            self._json_ld_cache = item
                             return item
                 
                 # Данные могут быть списком или словарем
                 if isinstance(data, list):
                     for item in data:
                         if isinstance(item, dict) and item.get('@type') == 'Recipe':
+                            self._json_ld_cache = item
                             return item
                 elif isinstance(data, dict) and data.get('@type') == 'Recipe':
+                    self._json_ld_cache = data
                     return data
                         
             except (json.JSONDecodeError, KeyError):
                 continue
         
+        self._json_ld_cache = {}
         return None
     
     @staticmethod
@@ -190,7 +208,7 @@ class Kitchen24Extractor(BaseRecipeExtractor):
                         
                         if name:
                             # Убираем утварь/оборудование
-                            if not any(keyword in name.lower() for keyword in ['vorm', 'satéprikker', 'bakpapier', 'pan', 'keukentouw', 'braadslee', 'thermometer']):
+                            if not any(keyword in name.lower() for keyword in self.KITCHEN_EQUIPMENT_KEYWORDS):
                                 ingredients.append({
                                     "name": name,
                                     "units": unit,
@@ -225,7 +243,7 @@ class Kitchen24Extractor(BaseRecipeExtractor):
         text = self.clean_text(text)
         
         # Пропускаем утварь/оборудование
-        if any(keyword in text.lower() for keyword in ['vorm', 'satéprikker', 'bakpapier', 'pan']):
+        if any(keyword in text.lower() for keyword in self.KITCHEN_EQUIPMENT_KEYWORDS):
             return None
         
         # Паттерн: количество + единица + название
@@ -408,34 +426,6 @@ class Kitchen24Extractor(BaseRecipeExtractor):
         
         return None
     
-    def extract_total_time(self) -> Optional[str]:
-        """Извлечение общего времени"""
-        # Сначала пытаемся вычислить из prep_time и cook_time
-        prep_time = self.extract_prep_time()
-        cook_time = self.extract_cook_time()
-        
-        if prep_time and cook_time:
-            # Извлекаем минуты из строк
-            prep_match = re.search(r'(\d+)', prep_time)
-            cook_match = re.search(r'(\d+)', cook_time)
-            
-            if prep_match and cook_match:
-                prep_minutes = int(prep_match.group(1))
-                cook_minutes = int(cook_match.group(1))
-                
-                total = prep_minutes + cook_minutes
-                if total > 0:
-                    return f"{total} minutes"
-        
-        # Если не удалось вычислить, проверяем JSON-LD
-        json_ld = self._get_json_ld_data()
-        if json_ld and 'totalTime' in json_ld:
-            total_from_ld = self.parse_iso_duration(json_ld['totalTime'])
-            if total_from_ld:
-                return total_from_ld
-        
-        return None
-    
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
         # Ищем параграфы с конкретными советами/примечаниями
@@ -590,6 +580,29 @@ class Kitchen24Extractor(BaseRecipeExtractor):
         Returns:
             Словарь с данными рецепта
         """
+        # Извлекаем времена один раз для эффективности
+        prep_time = self.extract_prep_time()
+        cook_time = self.extract_cook_time()
+        
+        # Вычисляем total_time
+        total_time = None
+        if prep_time and cook_time:
+            # Извлекаем минуты из строк
+            prep_match = re.search(r'(\d+)', prep_time)
+            cook_match = re.search(r'(\d+)', cook_time)
+            
+            if prep_match and cook_match:
+                prep_minutes = int(prep_match.group(1))
+                cook_minutes = int(cook_match.group(1))
+                total = prep_minutes + cook_minutes
+                total_time = f"{total} minutes" if total > 0 else None
+        
+        # Если не удалось вычислить, берем из JSON-LD
+        if not total_time:
+            json_ld = self._get_json_ld_data()
+            if json_ld and 'totalTime' in json_ld:
+                total_time = self.parse_iso_duration(json_ld['totalTime'])
+        
         return {
             "dish_name": self.extract_dish_name(),
             "description": self.extract_description(),
@@ -597,9 +610,9 @@ class Kitchen24Extractor(BaseRecipeExtractor):
             "instructions": self.extract_instructions(),
             "nutrition_info": self.extract_nutrition_info(),
             "category": self.extract_category(),
-            "prep_time": self.extract_prep_time(),
-            "cook_time": self.extract_cook_time(),
-            "total_time": self.extract_total_time(),
+            "prep_time": prep_time,
+            "cook_time": cook_time,
+            "total_time": total_time,
             "notes": self.extract_notes(),
             "tags": self.extract_tags(),
             "image_urls": self.extract_image_urls()
