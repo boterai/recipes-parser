@@ -101,17 +101,24 @@ class Kitchen24Extractor(BaseRecipeExtractor):
         json_ld = self._get_json_ld_data()
         
         if json_ld and 'name' in json_ld:
-            return self.clean_text(json_ld['name'])
+            name = self.clean_text(json_ld['name'])
+            # Убираем суффикс " recept" если есть
+            name = re.sub(r'\s+recept\s*$', '', name, flags=re.IGNORECASE)
+            return name
         
         # Альтернативно - из meta тега og:title
         og_title = self.soup.find('meta', property='og:title')
         if og_title and og_title.get('content'):
-            return self.clean_text(og_title['content'])
+            name = self.clean_text(og_title['content'])
+            name = re.sub(r'\s+recept\s*$', '', name, flags=re.IGNORECASE)
+            return name
         
         # Из h1
         h1 = self.soup.find('h1')
         if h1:
-            return self.clean_text(h1.get_text())
+            name = self.clean_text(h1.get_text())
+            name = re.sub(r'\s+recept\s*$', '', name, flags=re.IGNORECASE)
+            return name
         
         return None
     
@@ -372,21 +379,38 @@ class Kitchen24Extractor(BaseRecipeExtractor):
         if json_ld and 'cookTime' in json_ld:
             return self.parse_iso_duration(json_ld['cookTime'])
         
-        # Если нет cookTime в JSON-LD, возвращаем None
-        # (не пытаемся извлечь из инструкций, т.к. это может быть неточно)
+        # Если нет cookTime в JSON-LD, пробуем найти в инструкциях
+        # Ищем фразы типа "bak 45 minuten", "in de oven voor 60 minuten", "1 uur in de oven"
+        instructions = self.extract_instructions()
+        if instructions:
+            # Паттерны для поиска времени приготовления в духовке
+            # Сначала проверяем часы
+            hour_pattern = r'(?:in de oven|zet|bak|gaar)(?:[^.]{0,30}?)(\d+)\s*(?:uur|u\b)'
+            match = re.search(hour_pattern, instructions.lower())
+            if match:
+                hours = int(match.group(1))
+                minutes = hours * 60
+                return f"{minutes} minutes"
+            
+            # Затем минуты
+            minute_patterns = [
+                r'(?:in de oven|bak|gaar)(?:[^.]{0,30}?)(\d+)\s*(?:minuten|minuut)',
+                r'(?:bak|gaar)(?:[^.]{0,30}?)(\d+)\s*min(?:uten)?'
+            ]
+            
+            for pattern in minute_patterns:
+                match = re.search(pattern, instructions.lower())
+                if match:
+                    minutes = int(match.group(1))
+                    # Проверяем, что это разумное время для приготовления (не prep time)
+                    if minutes >= 15:  # Минимум 15 минут для cook time
+                        return f"{minutes} minutes"
+        
         return None
     
     def extract_total_time(self) -> Optional[str]:
         """Извлечение общего времени"""
-        json_ld = self._get_json_ld_data()
-        
-        # Сначала проверяем JSON-LD
-        if json_ld and 'totalTime' in json_ld:
-            total_from_ld = self.parse_iso_duration(json_ld['totalTime'])
-            if total_from_ld:
-                return total_from_ld
-        
-        # Если нет в JSON-LD и есть prep_time и cook_time, суммируем
+        # Сначала пытаемся вычислить из prep_time и cook_time
         prep_time = self.extract_prep_time()
         cook_time = self.extract_cook_time()
         
@@ -403,12 +427,23 @@ class Kitchen24Extractor(BaseRecipeExtractor):
                 if total > 0:
                     return f"{total} minutes"
         
+        # Если не удалось вычислить, проверяем JSON-LD
+        json_ld = self._get_json_ld_data()
+        if json_ld and 'totalTime' in json_ld:
+            total_from_ld = self.parse_iso_duration(json_ld['totalTime'])
+            if total_from_ld:
+                return total_from_ld
+        
         return None
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
-        # Ищем в тексте после инструкций - только короткие параграфы с советами
+        # Ищем параграфы с конкретными советами/примечаниями
+        # Сначала пробуем найти параграф начинающийся с ключевых слов
         text_sections = self.soup.find_all('div', class_='text-formatted')
+        
+        best_candidate = None
+        best_score = 0
         
         for section in text_sections:
             # Пропускаем секции с видео-плеером
@@ -420,40 +455,70 @@ class Kitchen24Extractor(BaseRecipeExtractor):
             for p in paragraphs:
                 text = self.clean_text(p.get_text())
                 
-                # Фильтруем: должно быть от 20 до 300 символов
-                if text and 20 <= len(text) <= 300:
-                    # Пропускаем общие фразы и рекламу
-                    skip_phrases = [
-                        'deel je ervaring', 
-                        'praat mee', 
-                        'tips voor het ultieme',
-                        'met een account',
-                        'log in om',
-                        'favorieten',
-                        'bewaarde recepten',
-                        'ik maak graag'  # цитаты
-                    ]
-                    
-                    if not any(phrase in text.lower() for phrase in skip_phrases):
-                        # Проверяем, что это совет/заметка (содержит ключевые слова)
-                        tip_keywords = ['tip', 'gebruik', 'voor', 'voeg', 'mix', 'smeuïg', 'romig', 'altijd', 'kernthermometer']
-                        if any(keyword in text.lower() for keyword in tip_keywords):
-                            return text
+                # Фильтруем по длине
+                if not text or not (20 <= len(text) <= 300):
+                    continue
+                
+                # Пропускаем служебные фразы
+                skip_phrases = [
+                    'met een account',
+                    'log in',
+                    'favorieten',
+                    'bewaarde recepten',
+                    'meldt je aan',
+                    'profiter',
+                    'beoordelen'
+                ]
+                
+                if any(phrase in text.lower() for phrase in skip_phrases):
+                    continue
+                
+                # Считаем score - параграфы с советами обычно содержат эти слова
+                score = 0
+                tip_keywords = [
+                    ('gebruik', 5),  # "Gebruik altijd...", "Gebruik overrijpe..."
+                    ('voor', 3),     # "Voor smeuïg...", "Voor een..."
+                    ('tip', 10),     # "Tip: ..."
+                    ('altijd', 5),
+                    ('voeg', 3),
+                    ('smeuïg', 5),
+                    ('romig', 5),
+                    ('kernthermometer', 10),
+                    ('overrijpe', 5),
+                    ('uitdroging', 5)
+                ]
+                
+                for keyword, weight in tip_keywords:
+                    if keyword in text.lower():
+                        score += weight
+                
+                # Приоритет параграфам, начинающимся с ключевых слов
+                if text.lower().startswith(('gebruik', 'voor', 'tip', 'voeg')):
+                    score += 10
+                
+                if score > best_score:
+                    best_score = score
+                    best_candidate = text
         
-        return None
+        return best_candidate if best_score >= 5 else None
     
     def extract_tags(self) -> Optional[str]:
         """Извлечение тегов"""
         tags = []
         
-        # Ищем теги в ссылках с классом содержащим 'tag'
+        # Ищем теги в ссылках с классом 'tag'
         tag_links = self.soup.find_all('a', class_=lambda x: x and any('tag' in str(c).lower() for c in (x if isinstance(x, list) else [x])))
         
         for tag_link in tag_links:
+            # Проверяем, что это не социальная ссылка
+            classes = tag_link.get('class', [])
+            if any('socials' in str(c).lower() for c in classes):
+                continue
+            
             tag_text = self.clean_text(tag_link.get_text())
-            # Пропускаем служебные теги
+            
+            # Пропускаем служебные теги и "externe link"
             if tag_text and tag_text.lower() not in tags:
-                # Фильтруем "instagram (externe link)" и подобное
                 if 'externe link' not in tag_text.lower() and 'instagram' not in tag_text.lower():
                     tags.append(tag_text.lower())
         
