@@ -14,6 +14,7 @@ from src.common.gpt_client import GPTClient
 from utils.languages import LANGUAGE_NAME_TO_CODE
 from src.models.search_query import SearchQueryORM, SearchQuery
 from src.repositories.search_query import SearchQueryRepository
+from src.repositories.page import PageRepository
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +32,7 @@ class SearchQueryGenerator:
         else:
             self.query_repository = SearchQueryRepository()
         self.max_non_searched = max_non_searched
+        self.paage_repository = PageRepository()
     
     def close(self):
         """Закрытие подключений"""
@@ -54,13 +56,14 @@ class SearchQueryGenerator:
 Return ONLY a JSON array of strings, without any additional text, explanations, or markdown formatting.
 
 Example format:
-["best chocolate cake recipe", "easy chicken dinner ideas", "vegetarian pasta recipes"]
+["best chocolate cake recipe", "easy chicken dinner recipe", "vegetarian pasta recipe"]
 
 Requirements for queries:
 - Diverse (different cuisines, meal types, cooking methods)
 - Mix specific and general queries
 - Include popular recipe search patterns
 - Focus on finding actual recipe websites
+- Focus on finding concrete recipe pages
 
 Generate {count} queries now:"""
 
@@ -91,6 +94,51 @@ Generate {count} queries now:"""
             logger.error(f"Ошибка генерации запросов: {e}")
             return []
     
+    def get_queries_from_existing_recipes(self, count: int = 10) -> List[str]:
+        """
+        Генерация поисковых запросов на основе существующих рецептов в БД
+        Берет случайные рецепты и использует их названия для поиска похожих на других сайтах
+        
+        Args:
+            count: Количество запросов для генерации
+        
+        Returns:
+            Список поисковых запросов (названий блюд)
+        """
+        logger.info(f"Генерация {count} запросов на основе существующих рецептов...")
+        
+        try:
+            # Получаем случайные рецепты из БД с названиями
+            recipes = self.paage_repository.get_recipes(
+                limit=count * 2,  # Берем с запасом на случай пустых названий
+                random_order=True
+            )
+            
+            if not recipes:
+                logger.warning("Нет рецептов в БД для генерации запросов")
+                return []
+            
+            # Извлекаем названия блюд
+            dish_names = []
+            for recipe in recipes:
+                if recipe.dish_name and len(recipe.dish_name.strip()) > 0:
+                    dish_names.append(recipe.dish_name.strip())
+            
+            if not dish_names:
+                logger.warning("Не найдено рецептов с названиями блюд")
+                return []
+            
+            logger.info(f"✓ Получено {len(dish_names)} запросов из существующих рецептов")
+            logger.info(f"  Примеры: {', '.join(dish_names[:3])}")
+            
+            return dish_names
+            
+        except Exception as e:
+            logger.error(f"Ошибка генерации запросов из рецептов: {e}")
+            import traceback
+            traceback.print_exc()
+            return []
+    
     def translate_query(self, query: str, target_languages: List[str]) -> dict[str, str]:
         """
         Перевод поискового запроса на несколько языков через ChatGPT
@@ -108,7 +156,7 @@ Generate {count} queries now:"""
         
         prompt = f"""Translate the following search query into these languages: {languages_str}
 
-Original query (English): "{query}"
+Original query: "{query}"
 
 Return ONLY a JSON object with language names as keys and translations as values, without any additional text or markdown.
 

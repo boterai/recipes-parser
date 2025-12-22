@@ -236,7 +236,7 @@ class AutoScraper:
         for url in saved_urls:
             try:
 
-                if self.site_preparation_pipeline.prepare_site(url, max_pages=120):
+                if self.site_preparation_pipeline.prepare_site(url, max_pages=90):
                     recipe_count += 1
                     
                 processed_count += 1
@@ -285,6 +285,8 @@ class AutoScraper:
         queries_to_process: int = 5,
         results_per_query: int = 10,
         min_unprocessed_sites: int = 100,
+        generate_from_recipes: bool = True,
+        generate_with_gpt: bool = False
     ):
         """
         Автоматический сбор рецептов
@@ -294,6 +296,8 @@ class AutoScraper:
             queries_to_process: Сколько запросов обработать за раз
             results_per_query: Сколько результатов собирать на запрос
             min_unprocessed_sites: Минимальное количество необработанных сайтов для запуска поиска новых
+            generate_from_recipes: Генерировать запросы на основе существующих рецептов (для поиска используются рецепты из БД)
+            generate_with_gpt: Генерировать запросы с помощью GPT
         """
         try:
             # 0. Проверяем количество необработанных сайтов
@@ -312,12 +316,11 @@ class AutoScraper:
                 
                 # здесь проводим обработку уже имеющихся сайтов
                 logger.info("Начинаем обработку необработанных сайтов...\n")
-                sites = self.site_repository.get_unprocessed_sites(limit=min_unprocessed_sites)
-                    
+                sites = self.site_repository.get_unprocessed_sites(limit=min_unprocessed_sites, random_order=True) # получаем случайные необработанные сайты
                 for site in sites:
                     try:
                         logger.info(f"\n=== Обработка сайта ID={site.id}, URL={site.base_url} ===")
-                        if self.site_preparation_pipeline.prepare_site(site.search_url, max_pages=120):
+                        if self.site_preparation_pipeline.prepare_site(site.search_url, max_pages=90):
                             logger.info(f"✓ Сайт ID={site.id} обработан и содержит рецепты")
                         else:
                             logger.info(f"→ Сайт ID={site.id} обработан, но рецепты не найдены")
@@ -335,7 +338,16 @@ class AutoScraper:
             if self.search_query_repository.get_unsearched_count() < min_queries:
                 # генерируем новые запросы, елси остлоьс меньше минимального
                 
-                new_queries = generator.generate_search_queries(count=10)
+                if generate_with_gpt:
+                    new_queries = generator.generate_search_queries(count=10) # запросы генерирует chatGPT
+                elif generate_from_recipes:
+                    new_queries = generator.get_queries_from_existing_recipes(count=10)
+                    if not new_queries:
+                        logger.warning("Не удалось сгенерировать запросы на основе существующих рецептов, пробуем GPT...")
+                        new_queries = generator.generate_search_queries(count=10)
+                else:
+                    logger.warning("Нет способа сгенерировать новые запросы (generate_from_recipes и generate_with_gpt отключены)")
+                    new_queries = []
 
                 query_results = {}
                 for query in new_queries:
@@ -363,8 +375,6 @@ class AutoScraper:
             total_recipes = 0
             
             for idx, query in enumerate(queries, 1):
-                if query.language.lower() == "en":
-                    continue  # пропускаем английские запросы
                 logger.info(f"\n--- Запрос {idx}/{len(queries)} ---")
                 logger.info(f"ID: {query.id}, Язык: {query.language}")
                 logger.info(f"Запрос: '{query.query}'")

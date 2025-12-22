@@ -100,7 +100,7 @@ class RecipeAnalyzer:
             result = self.gpt_client.request(
                 system_prompt=system_prompt,
                 user_prompt=user_prompt,
-                temperature=0.1,
+                temperature=0.1
             )
             
             recipe_ids = result.get("recipe_ids", [])
@@ -361,17 +361,19 @@ URL: {url}
             recipe_page_ids, no_recipe_ids = self.filter_pages_by_titles(site_id=site_id, limit=limit)
             logger.info(f"Фильтрация завершена. Найдено {len(recipe_page_ids)} вероятных рецептов по заголовкам.")
         
+        if not recipe_page_ids and filter_by_title:
+            self.page_repository.mark_as_non_recipes(no_recipe_ids)
+            return 0  # Нет страниц для анализа после фильтрации по заголовкам
+
+        
         try:
             # Получение страниц для анализа (где еще не проводился анализ)
             query = session.query(PageORM).filter(
-                PageORM.html_path.isnot(None)
+                PageORM.html_path.isnot(None), PageORM.pattern != '/'
             )
 
             if page_ids is not None:
                 query = query.filter(PageORM.id.in_(page_ids))
-
-            if recalculate is False:
-                query = query.filter(PageORM.is_recipe == False, PageORM.confidence_score == 0)
             
             if site_id:
                 query = query.filter(PageORM.site_id == site_id)
@@ -406,6 +408,11 @@ URL: {url}
                     analysis_page = self.page_repository.get_by_id(page.id)                    
                     if analysis_page.is_recipe:
                         recipe_count += 1
+                        if page.id in no_recipe_ids:
+                            no_recipe_ids.remove(page.id) # удаляем из списка не рецептов если успешно проанализировали
+                    else:
+                        if page.id not in no_recipe_ids:
+                            no_recipe_ids.append(page.id) # добавляем в список не рецептов если успешно проанализировали и определили что не рецепт
 
                     if stop_analyse and recipe_count >= stop_analyse:
                         logger.info(f"Достигнуто максимальное количество рецептов для анализа: {stop_analyse}. Прекращение анализа.")

@@ -4,7 +4,7 @@
 
 import logging
 from typing import Optional, List
-from sqlalchemy import and_, or_, func
+from sqlalchemy import and_, func
 
 from src.repositories.base import BaseRepository
 from src.models.page import PageORM, Page
@@ -70,7 +70,7 @@ class PageRepository(BaseRepository[PageORM]):
             session.close()
     
     def get_recipes(self, site_id: Optional[int] = None, language: Optional[str] = None, 
-                    limit: Optional[int] = None) -> List[PageORM]:
+                    limit: Optional[int] = None, random_order: bool = False) -> List[PageORM]:
         """
         Получить страницы с рецептами
         
@@ -78,6 +78,7 @@ class PageRepository(BaseRepository[PageORM]):
             site_id: ID сайта (опционально)
             language: Язык (опционально)
             limit: Максимальное количество
+            random_order: Если True, возвращает в случайном порядке
         
         Returns:
             Список страниц с рецептами
@@ -92,8 +93,11 @@ class PageRepository(BaseRepository[PageORM]):
             if language:
                 query = query.filter(PageORM.language == language)
             
-            # Сортируем по confidence_score (самые уверенные первыми)
-            query = query.order_by(PageORM.confidence_score.desc())
+            # Сортировка
+            if random_order:
+                query = query.order_by(func.random())  # Случайный порядок
+            else:
+                query = query.order_by(PageORM.confidence_score.desc())  # По уверенности
             
             if limit:
                 query = query.limit(limit)

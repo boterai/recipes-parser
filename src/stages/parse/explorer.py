@@ -301,7 +301,7 @@ class SiteExplorer:
             return False
         
         # Проверка лимита URL на паттерн
-        if self.max_urls_per_pattern is not None:
+        if self.max_urls_per_pattern is not None and self.recipe_regex is None:
             pattern = self.get_url_pattern(url)
             current_count = len(self.url_patterns.get(pattern, []))
             if current_count >= self.max_urls_per_pattern:
@@ -810,19 +810,84 @@ class SiteExplorer:
                 logger.info(f"[{urls_explored + 1}/{max_urls}] Переход на: {current_url}")
                 logger.info(f"  Паттерн: {pattern}, Глубина: {depth}")
                 
-                # Переход на страницу
+                # Засекаем время начала загрузки
+                page_load_start = time.time()
+                MAX_PAGE_LOAD_TIME = 90  # Максимум 90 секунд на всю загрузку
+                
+                # Переход на страницу с обработкой timeout
                 try:
                     self.driver.get(current_url)
                 except TimeoutException:
-                    logger.warning(f"Timeout при загрузке {current_url}")
+                    logger.warning(f"⏱ Timeout при загрузке {current_url}")
+                    # Останавливаем загрузку принудительно
+                    try:
+                        self.driver.execute_script("window.stop();")
+                    except Exception:
+                        pass
+                except Exception as e:
+                    logger.error(f"Ошибка при переходе на {current_url}: {e}")
+                    self.failed_urls.add(current_url)
+                    err_count += 1
+                    continue
                 
-                # Ожидание загрузки (сокращено до 15 сек)
+                # Проверка времени загрузки
+                if time.time() - page_load_start > MAX_PAGE_LOAD_TIME:
+                    logger.warning("⏱ Страница загружается слишком долго, пропускаем")
+                    self.failed_urls.add(current_url)
+                    continue
+                
+                # Более надежное ожидание загрузки
                 try:
-                    WebDriverWait(self.driver, 15).until(
-                        lambda d: d.execute_script('return document.readyState') == 'complete'
+                    # Ждем либо полной загрузки, либо interactive (достаточно для парсинга)
+                    WebDriverWait(self.driver, 10).until(
+                        lambda d: d.execute_script('return document.readyState') in ['complete', 'interactive']
                     )
                 except TimeoutException:
-                    logger.warning("Timeout при загрузке страницы, продолжаем")
+                    logger.warning("⏱ Timeout при ожидании загрузки, но продолжаем")
+                    # Проверяем что хоть что-то загрузилось
+                    try:
+                        body = self.driver.find_element("tag name", "body")
+                        if not body:
+                            raise RuntimeError("Страница пустая")
+                    except Exception:
+                        logger.error("Страница не загрузилась, пропускаем")
+                        self.failed_urls.add(current_url)
+                        continue
+                
+                # Проверка на Cloudflare/Captcha
+                try:
+                    page_title = self.driver.title.lower()
+                    page_source_snippet = self.driver.page_source[:5000].lower()  # Только начало для скорости
+                    
+                    # Проверка на защиту
+                    protection_indicators = [
+                        'cloudflare', 'captcha', 'are you a robot', 'access denied',
+                        'just a moment', 'challenge', 'verify you are human'
+                    ]
+                    
+                    if any(indicator in page_title or indicator in page_source_snippet 
+                           for indicator in protection_indicators):
+                        logger.warning(f"🛡️ Обнаружена защита от ботов на {current_url}")
+                        logger.warning("Пауза 10 секунд для ручного решения...")
+                        time.sleep(10)  # Даем время решить вручную
+                        
+                        # Проверяем еще раз
+                        if any(indicator in self.driver.title.lower() for indicator in protection_indicators):
+                            logger.error("Защита не пройдена, пропускаем URL")
+                            self.failed_urls.add(current_url)
+                            err_count += 1
+                            continue
+                except Exception as e:
+                    logger.debug(f"Ошибка проверки защиты: {e}")
+                
+                # Финальная проверка времени
+                total_load_time = time.time() - page_load_start
+                if total_load_time > MAX_PAGE_LOAD_TIME:
+                    logger.warning(f"⏱ Превышено время загрузки ({total_load_time:.1f}s), пропускаем")
+                    self.failed_urls.add(current_url)
+                    continue
+                
+                logger.debug(f"  ✓ Страница загружена за {total_load_time:.1f}s")
                 
                 # Адаптивная задержка: короче в начале, длиннее после каждых 10 запросов
                 self.request_count += 1
@@ -897,6 +962,11 @@ class SiteExplorer:
                     self.exploration_queue = queue  # Сохраняем текущую очередь
                     self.save_state()
                 
+            except KeyboardInterrupt:
+                logger.warning("⌨️ Прервано пользователем, сохраняем состояние...")
+                self.exploration_queue = queue
+                self.save_state()
+                raise
             except Exception as e:
                 logger.error(f"Ошибка при обработке {current_url}: {e}")
                 self.failed_urls.add(current_url)

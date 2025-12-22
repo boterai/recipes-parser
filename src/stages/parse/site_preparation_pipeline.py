@@ -37,7 +37,7 @@ class SitePreparationPipeline:
                  debug_port: int = 9222,
                  batch_size: int = 30,
                  max_depth: int = 4,
-                 max_urls_per_pattern: int = 5,
+                 max_urls_per_pattern: int = 4, # рекомендуется ставить на 1 больше чем min_recipes
                  min_recipes: int = 3,
                  preprocessed_recipe_folder: str = "preprocessed"):
         """
@@ -217,10 +217,10 @@ class SitePreparationPipeline:
             
             logger.info(f"✓ Найдено рецептов: {recipes_found}")
             
-            # Если нашли рецепты - ищем паттерн
-            if recipes_found >= self.min_recipes:
+            # Если нашли рецепты - ищем паттерн, для поиска паттерна хватит и 1 рецепта на первый раз
+            if recipes_found > 1:
                 pattern = self._try_find_pattern(site_id, explorer)
-                if pattern:
+                if pattern and recipes_found >= self.min_recipes:
                     logger.info(f"\n{'='*70}")
                     logger.info("✓ УСПЕХ: Паттерн найден после первичного анализа")
                     logger.info(f"  Паттерн: {pattern}")
@@ -257,7 +257,8 @@ class SitePreparationPipeline:
                 # Анализируем новые страницы
                 recipes_found = self.analyzer.analyze_all_pages(
                     site_id=site_id,
-                    filter_by_title=True
+                    filter_by_title=True,
+                    stop_analyse=self.min_recipes
                 )
                 
                 logger.info(f"✓ Всего найдено рецептов: {recipes_found}")

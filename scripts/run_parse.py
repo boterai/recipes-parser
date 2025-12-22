@@ -10,6 +10,8 @@ import json
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.stages.parse.auto_scraper import AutoScraper
 from src.stages.parse.site_preparation_pipeline import SitePreparationPipeline
+from src.stages.parse.search_query_generator import SearchQueryGenerator
+from src.repositories.site import SiteRepository
 # Настройка логирования
 logging.basicConfig(
     level=logging.INFO,
@@ -21,7 +23,7 @@ logger = logging.getLogger(__name__)
 def prepare():
     # запустить подготовку сайтов для создания парсеров рецептов
     auto_scraper = AutoScraper(debug_port=9222)
-    auto_scraper.run_auto_scraping()
+    auto_scraper.run_auto_scraping(generate_from_recipes=True, min_unprocessed_sites=150)
 
 def main():
     """Основная функция"""

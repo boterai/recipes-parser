@@ -4,7 +4,7 @@
 
 import logging
 from typing import Optional, List
-from sqlalchemy import and_, or_, func
+from sqlalchemy import or_, func
 
 from src.repositories.base import BaseRepository
 from src.models.site import SiteORM, Site
@@ -149,7 +149,7 @@ class SiteRepository(BaseRepository[SiteORM]):
             return count
         
 
-    def get_unprocessed_sites(self, limit: int = 10) -> List[SiteORM]:
+    def get_unprocessed_sites(self, limit: int = 10, random_order: bool = False) -> List[SiteORM]:
         """
         Получить список сайтов без паттерна
         
@@ -160,13 +160,18 @@ class SiteRepository(BaseRepository[SiteORM]):
             Список SiteORM объектов
         """
         with self.get_session() as session:
-            sites = session.query(SiteORM).filter(
+            query = session.query(SiteORM).filter(
                 or_(
                     SiteORM.pattern.is_(None),
                     SiteORM.pattern == ''
                 ), SiteORM.is_recipe_site == False,
                 SiteORM.search_url.isnot(None), SiteORM.searched == False
-            ).limit(limit).all()
+            )
+
+            if random_order:
+                query = query.order_by(func.random())
+
+            sites = query.limit(limit).all()
             return sites
         
 

@@ -4,11 +4,11 @@
 
 import logging
 from typing import Optional, List
-from sqlalchemy.exc import IntegrityError
 
 from src.repositories.base import BaseRepository
-from src.models.search_query import SearchQueryORM, SearchQuery
+from src.models.search_query import SearchQueryORM
 from src.common.db.connection import get_db_connection
+from sqlalchemy import func
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ class SearchQueryRepository(BaseRepository[SearchQueryORM]):
         with self.get_session() as session:
             return session.query(SearchQueryORM).filter(SearchQueryORM.url_count == 0).count()
     
-    def get_unsearched_queries(self, limit: Optional[int] = None) -> List[SearchQueryORM]:
+    def get_unsearched_queries(self, limit: Optional[int] = None, random_order: bool = False) -> List[SearchQueryORM]:
         """
         Получить неиспользованные поисковые запросы
         
@@ -44,10 +44,13 @@ class SearchQueryRepository(BaseRepository[SearchQueryORM]):
         """
         with self.get_session() as session:
             query = session.query(SearchQueryORM).filter(SearchQueryORM.url_count == 0).order_by(SearchQueryORM.created_at.asc())
-            
+
+            if random_order:
+                query = query.order_by(func.random())
+
             if limit:
                 query = query.limit(limit)
-            
+
             return query.all()
     
     def upsert(self, new_query: SearchQueryORM) -> Optional[SearchQueryORM]:
