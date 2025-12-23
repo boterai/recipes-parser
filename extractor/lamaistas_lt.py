@@ -6,6 +6,8 @@ import sys
 from pathlib import Path
 import json
 import re
+import html
+import os
 from typing import Optional
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -54,21 +56,39 @@ class LamaistasLtExtractor(BaseRecipeExtractor):
             desc = re.sub(r'\s*\([^)]*angl\.[^)]*\)\s*', ' ', desc)
             desc = re.sub(r'\s+', ' ', desc).strip()
             
-            # Разделяем на предложения
-            sentences = re.split(r'\.(\s+|$)', desc)
-            # Фильтруем пустые элементы и объединяем предложения
+            # Разделяем на предложения (по точке, восклицательному или вопросительному знаку)
+            sentences = re.split(r'([.!?])\s+', desc)
+            # Объединяем предложения с их знаками препинания
             actual_sentences = []
-            for i in range(0, len(sentences), 2):
+            for i in range(0, len(sentences)-1, 2):
                 if sentences[i].strip():
-                    actual_sentences.append(sentences[i].strip())
+                    actual_sentences.append(sentences[i].strip() + (sentences[i+1] if i+1 < len(sentences) else ''))
+            # Добавляем последнее предложение если оно есть и не было обработано
+            if len(sentences) % 2 == 1 and sentences[-1].strip():
+                actual_sentences.append(sentences[-1].strip())
             
             if actual_sentences:
+                # Если первое предложение - вопрос и есть второе предложение, берем второе
+                if len(actual_sentences) > 1 and actual_sentences[0].endswith('?'):
+                    # Берем второе предложение
+                    if len(actual_sentences[1]) > 50:
+                        return actual_sentences[1]
+                    # Или оба если второе короткое
+                    elif len(actual_sentences) > 2:
+                        return actual_sentences[1] + ' ' + actual_sentences[2]
+                    else:
+                        return actual_sentences[1]
+                
+                # Если первое предложение заканчивается на "!" и есть второе, берем оба
+                if len(actual_sentences) > 1 and actual_sentences[0].endswith('!'):
+                    return actual_sentences[0] + ' ' + actual_sentences[1]
+                
                 # Если первое предложение очень короткое (< 50 символов), берем два предложения
                 if len(actual_sentences) > 1 and len(actual_sentences[0]) < 50:
-                    return actual_sentences[0] + '. ' + actual_sentences[1] + '.'
+                    return actual_sentences[0] + ' ' + actual_sentences[1]
                 else:
                     # Иначе берем первое предложение
-                    return actual_sentences[0] + '.'
+                    return actual_sentences[0]
         
         # Или из og:description
         og_desc = self.soup.find('meta', property='og:description')
@@ -76,16 +96,27 @@ class LamaistasLtExtractor(BaseRecipeExtractor):
             desc = self.clean_text(og_desc['content'])
             desc = re.sub(r'\s*\([^)]*angl\.[^)]*\)\s*', ' ', desc)
             desc = re.sub(r'\s+', ' ', desc).strip()
-            sentences = re.split(r'\.(\s+|$)', desc)
+            sentences = re.split(r'([.!?])\s+', desc)
             actual_sentences = []
-            for i in range(0, len(sentences), 2):
+            for i in range(0, len(sentences)-1, 2):
                 if sentences[i].strip():
-                    actual_sentences.append(sentences[i].strip())
+                    actual_sentences.append(sentences[i].strip() + (sentences[i+1] if i+1 < len(sentences) else ''))
+            if len(sentences) % 2 == 1 and sentences[-1].strip():
+                actual_sentences.append(sentences[-1].strip())
             if actual_sentences:
+                if len(actual_sentences) > 1 and actual_sentences[0].endswith('?'):
+                    if len(actual_sentences[1]) > 50:
+                        return actual_sentences[1]
+                    elif len(actual_sentences) > 2:
+                        return actual_sentences[1] + ' ' + actual_sentences[2]
+                    else:
+                        return actual_sentences[1]
+                if len(actual_sentences) > 1 and actual_sentences[0].endswith('!'):
+                    return actual_sentences[0] + ' ' + actual_sentences[1]
                 if len(actual_sentences) > 1 and len(actual_sentences[0]) < 50:
-                    return actual_sentences[0] + '. ' + actual_sentences[1] + '.'
+                    return actual_sentences[0] + ' ' + actual_sentences[1]
                 else:
-                    return actual_sentences[0] + '.'
+                    return actual_sentences[0]
         
         # Альтернативно - из JSON-LD (может быть длиннее)
         json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
@@ -213,7 +244,6 @@ class LamaistasLtExtractor(BaseRecipeExtractor):
                     instructions_text = data['recipeInstructions']
                     
                     # Очищаем HTML entities и теги
-                    import html
                     instructions_text = html.unescape(instructions_text)
                     instructions_text = re.sub(r'<[^>]+>', '', instructions_text)
                     instructions_text = self.clean_text(instructions_text)
@@ -448,7 +478,7 @@ class LamaistasLtExtractor(BaseRecipeExtractor):
             "category": self.extract_category(),
             "prep_time": time_value,  # Используем totalTime как prep_time
             "cook_time": self.extract_cook_time(),
-            "total_time": time_value,  # И также как total_time
+            "total_time": time_value,  # Используем totalTime как total_time
             "notes": self.extract_notes(),
             "tags": self.extract_tags(),
             "image_urls": self.extract_image_urls()
@@ -456,7 +486,6 @@ class LamaistasLtExtractor(BaseRecipeExtractor):
 
 
 def main():
-    import os
     # Обрабатываем директорию preprocessed/lamaistas_lt
     preprocessed_dir = os.path.join("preprocessed", "lamaistas_lt")
     
