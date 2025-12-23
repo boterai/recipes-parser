@@ -12,6 +12,7 @@ from src.stages.parse.auto_scraper import AutoScraper
 from src.stages.parse.site_preparation_pipeline import SitePreparationPipeline
 from src.stages.parse.search_query_generator import SearchQueryGenerator
 from src.repositories.site import SiteRepository
+from src.stages.parse.parse import RecipeParserRunner
 # Настройка логирования
 logging.basicConfig(
     level=logging.INFO,
@@ -25,10 +26,9 @@ def prepare():
     auto_scraper = AutoScraper(debug_port=9222)
     auto_scraper.run_auto_scraping(generate_from_recipes=True, min_unprocessed_sites=150)
 
-def main():
-    """Основная функция"""
-    
-            
+def parse_site():
+    rp = RecipeParserRunner(extractor_dir="extractor")
+    rp.run_parser()
 
 if __name__ == "__main__":
-    prepare()
+    parse_site()

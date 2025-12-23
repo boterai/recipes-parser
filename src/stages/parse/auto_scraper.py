@@ -26,7 +26,6 @@ from src.repositories.site import SiteRepository
 from src.repositories.search_query import SearchQueryRepository
 from src.stages.parse.site_preparation_pipeline import SitePreparationPipeline
 from pathlib import Path
-from src.stages.parse import explore_site
 from utils.languages import POPULAR_LANGUAGES
 logger = logging.getLogger(__name__)
 

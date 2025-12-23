@@ -54,7 +54,7 @@ class Site(BaseModel):
     base_url: str
     search_url: Optional[str] = None
     is_recipe_site: bool = False
-    searched: bool = False
+    searched: Optional[bool] = None
     pattern: Optional[str] = None  # строка с паттернами для страниц
     language: Optional[str] = None
     created_at: Optional[datetime] = None

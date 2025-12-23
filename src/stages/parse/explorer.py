@@ -43,7 +43,7 @@ class SiteExplorer:
     
     def __init__(self, base_url: str, debug_mode: bool = True, recipe_pattern: str = None,
                  max_errors: int = 3, max_urls_per_pattern: int = None, debug_port: int = None,
-                 driver: webdriver.Chrome = None):
+                 driver: webdriver.Chrome = None, custom_logger: logging.Logger = None):
         """
         Args:
             base_url: Базовый URL сайта
@@ -68,15 +68,19 @@ class SiteExplorer:
             pattern=recipe_pattern,
             name="",
         )
+        if custom_logger:
+            self.logger = custom_logger
+        else:
+            self.logger = logger
         self.site.set_url(base_url)
         
         # Компиляция regex паттерна если передан
         if self.site.pattern:
             try:
                 self.recipe_regex = re.compile(self.site.pattern)
-                logger.info(f"Используется regex паттерн для рецептов: {self.site.pattern}")
+                self.logger.info(f"Используется regex паттерн для рецептов: {self.site.pattern}")
             except re.error as e:
-                logger.error(f"Неверный regex паттерн: {e}")
+                self.logger.error(f"Неверный regex паттерн: {e}")
                 self.recipe_regex = None
         
         parsed_url = urlparse(base_url)
@@ -112,9 +116,9 @@ class SiteExplorer:
         self.site.pattern = pattern
         try:
             self.recipe_regex = re.compile(pattern)
-            logger.info(f"Используется regex паттерн для рецептов: {pattern}")
+            self.logger.info(f"Используется regex паттерн для рецептов: {pattern}")
         except re.error as e:
-            logger.error(f"Неверный regex паттерн: {e}")
+            self.logger.error(f"Неверный regex паттерн: {e}")
             self.recipe_regex = None
     
     
@@ -140,25 +144,50 @@ class SiteExplorer:
                     self.url_patterns[page.pattern].append(page.url)
         
         if loaded_count > 0:
-            logger.info(f"Загружено {loaded_count} посещенных URL из БД")
-            logger.info(f"Найдено {len(self.url_patterns)} уникальных паттернов")
+            self.logger.info(f"Загружено {loaded_count} посещенных URL из БД")
+            self.logger.info(f"Найдено {len(self.url_patterns)} уникальных паттернов")
             return
         
-        logger.info("В БД нет ранее посещенных URL для этого сайта")
+        self.logger.info("В БД нет ранее посещенных URL для этого сайта")
     
     def connect_to_chrome(self):
         """Подключение к Chrome в отладочном режиме"""
         chrome_options = Options()
         
         if self.debug_mode:
+            # Проверяем доступность Chrome на указанном порту
+            if not self._is_chrome_running(self.debug_port):
+                error_msg = (
+                    f"\n{'='*60}\n"
+                    f"ОШИБКА: Chrome не запущен на порту {self.debug_port}\n\n"
+                    f"Запустите Chrome командой:\n"
+                    f"  google-chrome --remote-debugging-port={self.debug_port} "
+                    f"--user-data-dir=./chrome_debug_{self.debug_port}\n\n"
+                    f"Или проверьте что порт не занят:\n"
+                    f"  lsof -i :{self.debug_port}\n"
+                    f"{'='*60}\n"
+                )
+                self.logger.error(error_msg)
+                raise WebDriverException(
+                    f"Chrome не запущен на порту {self.debug_port}"
+                )
+            
             chrome_options.add_experimental_option(
                 "debuggerAddress", 
                 f"localhost:{self.debug_port}"
             )
-            logger.info(f"Подключение к Chrome на порту {self.debug_port}")
+            self.logger.info(f"Подключение к Chrome на порту {self.debug_port}")
         else:
             chrome_options.add_argument("--start-maximized")
             chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+            
+            # Отключение ненужных сервисов Google (убирает ошибки GCM)
+            chrome_options.add_argument("--disable-sync")
+            chrome_options.add_argument("--disable-background-networking")
+            chrome_options.add_argument("--disable-default-apps")
+            chrome_options.add_argument("--disable-extensions")
+            chrome_options.add_argument("--log-level=3")
+            
             # Ротация User-Agent для меньшей детекции
             user_agents = [
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -171,16 +200,45 @@ class SiteExplorer:
             self.driver = webdriver.Chrome(options=chrome_options)
             self.driver.implicitly_wait(config.IMPLICIT_WAIT)
             self.driver.set_page_load_timeout(config.PAGE_LOAD_TIMEOUT)
-            logger.info("Успешное подключение к браузеру")
+            
+            # Проверяем что подключение работает
+            try:
+                _ = self.driver.current_url
+                self.logger.info("✓ Успешное подключение к браузеру")
+            except Exception as e:
+                self.logger.warning(f"Подключение установлено, но проблема с сессией: {e}")
+                self.driver.quit()
+                raise
+                
         except WebDriverException as e:
-            logger.error(f"Ошибка подключения к браузеру: {e}")
+            self.logger.error(f"Ошибка подключения к браузеру: {e}")
             if self.debug_mode:
-                logger.error(
-                    f"\nЗапустите Chrome командой:\n"
-                    f"google-chrome --remote-debugging-port={self.debug_port} "
-                    f"--user-data-dir=./chrome_debug_{self.debug_port}\n"
+                self.logger.error(
+                    f"\nУбедитесь что Chrome запущен:\n"
+                    f"  ps aux | grep chrome | grep {self.debug_port}\n"
                 )
             raise
+    
+    def _is_chrome_running(self, port: int) -> bool:
+        """
+        Проверка запущен ли Chrome на указанном порту
+        
+        Args:
+            port: Порт для проверки
+        
+        Returns:
+            True если Chrome доступен
+        """
+        import socket
+        
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(1)
+            result = sock.connect_ex(('localhost', port))
+            sock.close()
+            return result == 0
+        except Exception:
+            return False
     
     def get_url_pattern(self, url: str) -> str:
         """
@@ -237,7 +295,7 @@ class SiteExplorer:
             path = parsed.path
             return len(re.findall(self.site.pattern, path)) > 0
         except Exception as e:
-            logger.debug(f"Ошибка проверки URL {url}: {e}")
+            self.logger.debug(f"Ошибка проверки URL {url}: {e}")
             return False
     
     def check_and_extract_recipe(self, url: str, pattern: str, page_index: int) -> bool:
@@ -268,23 +326,28 @@ class SiteExplorer:
         if not recipe_data:
             return False
 
-        if self.site_language is None and language != 'unknown':
-            self.site_language = language
-            if self.site_repository.update(self.site.to_orm()) is not None:
-                logger.error("Ошибка обновления языка сайта в БД")
+        if (self.site.language is None or self.site.language != language) and language != 'unknown':
+            self.site.language = language
+            try:
+                site = self.site_repository.get_by_id(self.site.id)
+                site.language = language
+                if self.site_repository.update(site) is not None:
+                    self.logger.error("Ошибка обновления языка сайта в БД")
+            except Exception as e:
+                self.logger.error(f"Ошибка обновления языка сайта в БД: {e}")
         
         if recipe_data.is_recipe is False:
-            logger.info(f"  ✗ Рецепт не найден на {url}")
+            self.logger.info(f"  ✗ Рецепт не найден на {url}")
             return False
 
         try:
             self.page_repository.create_or_update(recipe_data)
         except Exception as e:
-            logger.error(f"Ошибка сохранения страницы в БД: {e}")
+            self.logger.error(f"Ошибка сохранения страницы в БД: {e}")
             return False
         
         dish_name = recipe_data.dish_name or "Без названия"
-        logger.info(f"  ✓ Рецепт '{dish_name}' сохранен в БД")
+        self.logger.info(f"  ✓ Рецепт '{dish_name}' сохранен в БД")
         return True
     
     def should_explore_url(self, url: str) -> bool:
@@ -305,7 +368,7 @@ class SiteExplorer:
             pattern = self.get_url_pattern(url)
             current_count = len(self.url_patterns.get(pattern, []))
             if current_count >= self.max_urls_per_pattern:
-                logger.debug(f"Пропуск URL: достигнут лимит {self.max_urls_per_pattern} для паттерна {pattern}")
+                self.logger.debug(f"Пропуск URL: достигнут лимит {self.max_urls_per_pattern} для паттерна {pattern}")
                 return False
         
         # Пропускаем файлы
@@ -360,7 +423,7 @@ class SiteExplorer:
         
         for skip_pattern in skip_patterns:
             if re.search(skip_pattern, path_lower):
-                logger.debug(f"Пропуск служебной страницы: {url}")
+                self.logger.debug(f"Пропуск служебной страницы: {url}")
                 return False
         return True
     
@@ -424,7 +487,7 @@ class SiteExplorer:
                 time.sleep(random.uniform(0.5, 1.0))
             
         except Exception as e:
-            logger.debug(f"Ошибка при прокрутке: {e}")
+            self.logger.debug(f"Ошибка при прокрутке: {e}")
 
 
     def save_page_as_file(self, pattern: str, page_index: int) -> str:
@@ -480,9 +543,9 @@ class SiteExplorer:
             ))
     
         if page_orm.id:
-            logger.info(f"  ✓ Сохранено: {filename} (DB ID: {page_orm.id})")
+            self.logger.info(f"  ✓ Сохранено: {filename} (DB ID: {page_orm.id})")
         else:
-            logger.info(f"  ✓ Сохранено: {filename} (БД: ошибка)")
+            self.logger.info(f"  ✓ Сохранено: {filename} (БД: ошибка)")
 
 
     
@@ -508,7 +571,7 @@ class SiteExplorer:
             return list(set(links))  # Уникальные ссылки
             
         except Exception as e:
-            logger.error(f"Ошибка извлечения ссылок: {e}")
+            self.logger.error(f"Ошибка извлечения ссылок: {e}")
             return []
     
 
@@ -569,12 +632,12 @@ class SiteExplorer:
             
             # Логирование для отладки
             if different_pattern_links:
-                logger.debug(f"  Приоритизировано {len(different_pattern_links)} ссылок с другим паттерном (текущий: {current_pattern})")
+                self.logger.debug(f"  Приоритизировано {len(different_pattern_links)} ссылок с другим паттерном (текущий: {current_pattern})")
             
             return result
             
         except Exception as e:
-            logger.error(f"Ошибка извлечения ссылок с приоритетом: {e}")
+            self.logger.error(f"Ошибка извлечения ссылок с приоритетом: {e}")
             return []
     
     
@@ -614,17 +677,17 @@ class SiteExplorer:
         for url in urls:
             # Проверяем что URL того же домена
             if not self.is_same_domain(url):
-                logger.warning(f"Пропущен URL другого домена: {url}")
+                self.logger.warning(f"Пропущен URL другого домена: {url}")
                 continue
             
             # Проверяем что URL еще не посещен и не в очереди
             self.exploration_queue.insert(0, (url, depth))
             added_count += 1
-            logger.info(f"  + Добавлен в начало: {url}")
+            self.logger.info(f"  + Добавлен в начало: {url}")
         
         
-        logger.info(f"Добавлено {added_count} вспомогательных URL в очередь")
-        logger.info(f"Всего в очереди: {len(self.exploration_queue)} URL")
+        self.logger.info(f"Добавлено {added_count} вспомогательных URL в очередь")
+        self.logger.info(f"Всего в очереди: {len(self.exploration_queue)} URL")
     
     def import_state(self, state: dict):
         """Импорт состояния из другого экземпляра
@@ -646,11 +709,11 @@ class SiteExplorer:
             self.site.pattern = new_pattern
             try:
                 self.recipe_regex = re.compile(new_pattern)
-                logger.info(f"Обновлен regex паттерн: {new_pattern}")
+                self.logger.info(f"Обновлен regex паттерн: {new_pattern}")
             except re.error as e:
-                logger.error(f"Неверный regex паттерн при импорте: {e}")
+                self.logger.error(f"Неверный regex паттерн при импорте: {e}")
         
-        logger.info(f"Состояние импортировано: {len(self.visited_urls)} посещенных URL, "
+        self.logger.info(f"Состояние импортировано: {len(self.visited_urls)} посещенных URL, "
                    f"{len(self.url_patterns)} паттернов, {len(self.exploration_queue)} URL в очереди, "
                    f"{self.request_count} запросов")
     
@@ -671,12 +734,12 @@ class SiteExplorer:
         with open(self.patterns_file, 'w', encoding='utf-8') as f:
             json.dump(patterns_data, f, ensure_ascii=False, indent=2)
         
-        logger.info(f"Состояние сохранено: {len(self.visited_urls)} посещено, {len(self.url_patterns)} паттернов")
+        self.logger.info(f"Состояние сохранено: {len(self.visited_urls)} посещено, {len(self.url_patterns)} паттернов")
     
     def load_state(self) -> bool:
         """Загрузка сохраненного состояния из файла"""
         if not os.path.exists(self.state_file):
-            logger.info("Файл состояния не найден, начинаем с нуля")
+            self.logger.info("Файл состояния не найден, начинаем с нуля")
             return False
         
         try:
@@ -685,17 +748,17 @@ class SiteExplorer:
             
             self.import_state(state)
             
-            logger.info("Загружено состояние:")
-            logger.info(f"  Посещено URL: {len(self.visited_urls)}")
-            logger.info(f"  Найдено паттернов: {len(self.url_patterns)}")
-            logger.info(f"  URL в очереди: {len(self.exploration_queue)}")
-            logger.info(f"  Успешных источников: {len(self.successful_referrers)}")
-            logger.info(f"  Ошибок: {len(self.failed_urls)}")
+            self.logger.info("Загружено состояние:")
+            self.logger.info(f"  Посещено URL: {len(self.visited_urls)}")
+            self.logger.info(f"  Найдено паттернов: {len(self.url_patterns)}")
+            self.logger.info(f"  URL в очереди: {len(self.exploration_queue)}")
+            self.logger.info(f"  Успешных источников: {len(self.successful_referrers)}")
+            self.logger.info(f"  Ошибок: {len(self.failed_urls)}")
             
             return True
             
         except Exception as e:
-            logger.error(f"Ошибка загрузки состояния: {e}")
+            self.logger.error(f"Ошибка загрузки состояния: {e}")
             return False
         
     def should_extract_recipe(self, current_url: str) -> bool:
@@ -724,7 +787,7 @@ class SiteExplorer:
         referrer = self.referrer_map.get(current_url)
         if referrer:
             self.successful_referrers.add(referrer)
-            logger.info(f"  ✓ Источник отмечен как успешный: {referrer}")
+            self.logger.info(f"  ✓ Источник отмечен как успешный: {referrer}")
             
             # Переупорядочиваем очередь: URL от успешного источника - в начало
             if self.exploration_queue:
@@ -732,7 +795,7 @@ class SiteExplorer:
                 other_urls = []
                 
                 for url_tuple in self.exploration_queue:
-                    url, depth = url_tuple
+                    url, _ = url_tuple
                     if self.referrer_map.get(url) == referrer:
                         priority_urls.append(url_tuple)
                     else:
@@ -741,7 +804,7 @@ class SiteExplorer:
                 if priority_urls:
                     # Приоритетные URL вперед, остальные после
                     self.exploration_queue = priority_urls + other_urls
-                    logger.info(f"  ↑ {len(priority_urls)} URL от успешного источника передвинуты в начало очереди")
+                    self.logger.info(f"  ↑ {len(priority_urls)} URL от успешного источника передвинуты в начало очереди")
     
     def explore(self, max_urls: int = 100, max_depth: int = 3, session_urls: bool = True, 
                 check_pages_with_extractor:bool = False, check_url: bool = False) -> int:
@@ -757,17 +820,17 @@ class SiteExplorer:
         Returns:
             urls_explored: Количество успешно посещенных URL в этой сессии
         """
-        logger.info(f"Начало исследования сайта: {self.site.base_url}")
-        logger.info(f"Цель: найти до {max_urls} уникальных паттернов URL")
+        self.logger.info(f"Начало исследования сайта: {self.site.base_url}")
+        self.logger.info(f"Цель: найти до {max_urls} уникальных паттернов URL")
         
         # Очередь URL для обхода: (url, depth)
         # Если есть сохраненная очередь - используем её, иначе начинаем с base_url
         if self.exploration_queue:
             queue = list(self.exploration_queue)
-            logger.info(f"Продолжаем с сохраненной очередью: {len(queue)} URL")
+            self.logger.info(f"Продолжаем с сохраненной очередью: {len(queue)} URL")
         else:
             queue = [(self.site.base_url, 0)]
-            logger.info("Начинаем новое исследование")
+            self.logger.info("Начинаем новое исследование")
         
         urls_explored = len(self.visited_urls)
 
@@ -776,7 +839,7 @@ class SiteExplorer:
         
         # Логирование начальной стратегии
         initial_strategy = "глубина (паттерн рецептов не найден)" if self.recipe_regex is None else "ширина (паттерн рецептов найден)"
-        logger.info(f"Стратегия обхода: {initial_strategy}")
+        self.logger.info(f"Стратегия обхода: {initial_strategy}")
 
         err_count = 0  # Счетчик ошибок подряд
         last_strategy = self.recipe_regex is not None  # Для отслеживания переключений
@@ -788,7 +851,7 @@ class SiteExplorer:
             # Логируем переключение стратегии
             if has_recipe_pattern != last_strategy:
                 new_strategy = "ширина (паттерн найден)" if has_recipe_pattern else "глубина (паттерн потерян)"
-                logger.info(f"⚡ Переключение стратегии: {new_strategy}")
+                self.logger.info(f"⚡ Переключение стратегии: {new_strategy}")
                 last_strategy = has_recipe_pattern
             
             # DFS: pop() берет с конца (последний добавленный - первым обрабатывается)
@@ -807,8 +870,8 @@ class SiteExplorer:
                 continue
             
             try:
-                logger.info(f"[{urls_explored + 1}/{max_urls}] Переход на: {current_url}")
-                logger.info(f"  Паттерн: {pattern}, Глубина: {depth}")
+                self.logger.info(f"[{urls_explored + 1}/{max_urls}] Переход на: {current_url}")
+                self.logger.info(f"  Паттерн: {pattern}, Глубина: {depth}")
                 
                 # Засекаем время начала загрузки
                 page_load_start = time.time()
@@ -818,21 +881,21 @@ class SiteExplorer:
                 try:
                     self.driver.get(current_url)
                 except TimeoutException:
-                    logger.warning(f"⏱ Timeout при загрузке {current_url}")
+                    self.logger.warning(f"⏱ Timeout при загрузке {current_url}")
                     # Останавливаем загрузку принудительно
                     try:
                         self.driver.execute_script("window.stop();")
                     except Exception:
                         pass
                 except Exception as e:
-                    logger.error(f"Ошибка при переходе на {current_url}: {e}")
+                    self.logger.error(f"Ошибка при переходе на {current_url}: {e}")
                     self.failed_urls.add(current_url)
                     err_count += 1
                     continue
                 
                 # Проверка времени загрузки
                 if time.time() - page_load_start > MAX_PAGE_LOAD_TIME:
-                    logger.warning("⏱ Страница загружается слишком долго, пропускаем")
+                    self.logger.warning("⏱ Страница загружается слишком долго, пропускаем")
                     self.failed_urls.add(current_url)
                     continue
                 
@@ -843,14 +906,14 @@ class SiteExplorer:
                         lambda d: d.execute_script('return document.readyState') in ['complete', 'interactive']
                     )
                 except TimeoutException:
-                    logger.warning("⏱ Timeout при ожидании загрузки, но продолжаем")
+                    self.logger.warning("⏱ Timeout при ожидании загрузки, но продолжаем")
                     # Проверяем что хоть что-то загрузилось
                     try:
                         body = self.driver.find_element("tag name", "body")
                         if not body:
                             raise RuntimeError("Страница пустая")
                     except Exception:
-                        logger.error("Страница не загрузилась, пропускаем")
+                        self.logger.error("Страница не загрузилась, пропускаем")
                         self.failed_urls.add(current_url)
                         continue
                 
@@ -867,34 +930,34 @@ class SiteExplorer:
                     
                     if any(indicator in page_title or indicator in page_source_snippet 
                            for indicator in protection_indicators):
-                        logger.warning(f"🛡️ Обнаружена защита от ботов на {current_url}")
-                        logger.warning("Пауза 10 секунд для ручного решения...")
+                        self.logger.warning(f"🛡️ Обнаружена защита от ботов на {current_url}")
+                        self.logger.warning("Пауза 10 секунд для ручного решения...")
                         time.sleep(10)  # Даем время решить вручную
                         
                         # Проверяем еще раз
                         if any(indicator in self.driver.title.lower() for indicator in protection_indicators):
-                            logger.error("Защита не пройдена, пропускаем URL")
+                            self.logger.error("Защита не пройдена, пропускаем URL")
                             self.failed_urls.add(current_url)
                             err_count += 1
                             continue
                 except Exception as e:
-                    logger.debug(f"Ошибка проверки защиты: {e}")
+                    self.logger.debug(f"Ошибка проверки защиты: {e}")
                 
                 # Финальная проверка времени
                 total_load_time = time.time() - page_load_start
                 if total_load_time > MAX_PAGE_LOAD_TIME:
-                    logger.warning(f"⏱ Превышено время загрузки ({total_load_time:.1f}s), пропускаем")
+                    self.logger.warning(f"⏱ Превышено время загрузки ({total_load_time:.1f}s), пропускаем")
                     self.failed_urls.add(current_url)
                     continue
                 
-                logger.debug(f"  ✓ Страница загружена за {total_load_time:.1f}s")
+                self.logger.debug(f"  ✓ Страница загружена за {total_load_time:.1f}s")
                 
                 # Адаптивная задержка: короче в начале, длиннее после каждых 10 запросов
                 self.request_count += 1
                 if self.request_count % 10 == 0:
                     # Каждые 10 запросов - более длинная пауза для снижения подозрительности
                     delay = random.uniform(3, 5)
-                    logger.info(f"  Длинная пауза после {self.request_count} запросов: {delay:.1f}с")
+                    self.logger.info(f"  Длинная пауза после {self.request_count} запросов: {delay:.1f}с")
                 else:
                     # Обычная короткая пауза
                     delay = random.uniform(0.8, 1.5)
@@ -921,7 +984,7 @@ class SiteExplorer:
                     if self.check_and_extract_recipe(current_url, pattern, page_index):
                         # Если URL не соответствует паттерну, но рецепт найден - обновляем паттерн
                         if self.recipe_regex and not self.is_recipe_url(current_url):
-                            logger.info("  Обновление паттерна URL, так как найден рецепт на странице")
+                            self.logger.info("  Обновление паттерна URL, так как найден рецепт на странице")
                             if self.analyzer is None:
                                 self.analyzer = RecipeAnalyzer()
                             pattern =  self.analyzer.analyse_recipe_page_pattern(site_id=self.site.id)
@@ -933,7 +996,7 @@ class SiteExplorer:
 
                 # Извлечение новых ссылок
                 new_links = self.extract_links_with_priority()
-                logger.info(f"  Найдено ссылок: {len(new_links)}")
+                self.logger.info(f"  Найдено ссылок: {len(new_links)}")
                 
                 # Добавление новых ссылок в очередь с отслеживанием источника
                 # Если паттерн рецептов не найден - приоритизируем глубину (DFS)
@@ -963,18 +1026,18 @@ class SiteExplorer:
                     self.save_state()
                 
             except KeyboardInterrupt:
-                logger.warning("⌨️ Прервано пользователем, сохраняем состояние...")
+                self.logger.warning("⌨️ Прервано пользователем, сохраняем состояние...")
                 self.exploration_queue = queue
                 self.save_state()
                 raise
             except Exception as e:
-                logger.error(f"Ошибка при обработке {current_url}: {e}")
+                self.logger.error(f"Ошибка при обработке {current_url}: {e}")
                 self.failed_urls.add(current_url)
                 self.exploration_queue = queue  # Сохраняем очередь при ошибке
                 self.save_state()  # Сохранение при ошибке
                 err_count += 1
                 if err_count >= self.max_errors:
-                    logger.error(f"Превышено максимальное количество ошибок подряд ({self.max_errors}), остановка исследования.")
+                    self.logger.error(f"Превышено максимальное количество ошибок подряд ({self.max_errors}), остановка исследования.")
                     break
                 continue
         
@@ -982,14 +1045,14 @@ class SiteExplorer:
         self.exploration_queue = queue
         self.save_state()
         
-        logger.info(f"\n{'='*60}")
-        logger.info("Исследование завершено" if err_count < self.max_errors else "Исследование остановлено из-за ошибок")
-        logger.info(f"Результаты сохранены в: {self.save_dir}")
-        logger.info(f"  - {self.state_file} - состояние")
-        logger.info(f"  - {self.patterns_file} - найденные паттерны")
-        logger.info(f"  - *.html - сохраненные страницы ({sum(len(urls) for urls in self.url_patterns.values())} файлов)")
-        logger.info("Для продолжения используйте: explorer.load_state() или explorer.import_state(state)")
-        logger.info(f"{'='*60}")
+        self.logger.info(f"\n{'='*60}")
+        self.logger.info("Исследование завершено" if err_count < self.max_errors else "Исследование остановлено из-за ошибок")
+        self.logger.info(f"Результаты сохранены в: {self.save_dir}")
+        self.logger.info(f"  - {self.state_file} - состояние")
+        self.logger.info(f"  - {self.patterns_file} - найденные паттерны")
+        self.logger.info(f"  - *.html - сохраненные страницы ({sum(len(urls) for urls in self.url_patterns.values())} файлов)")
+        self.logger.info("Для продолжения используйте: explorer.load_state() или explorer.import_state(state)")
+        self.logger.info(f"{'='*60}")
         return urls_explored
 
     
@@ -999,14 +1062,15 @@ class SiteExplorer:
             self.driver.quit()
         self.site_repository.close()
         self.page_repository.close()
-        logger.info("Готово")
+        self.logger.info("Готово")
 
 
 def explore_site(url: str, max_urls: int = 1000, max_depth: int = 4, recipe_pattern: str = None,
                  check_pages_with_extractor: bool = False,
                  check_url: bool = False,
                  max_urls_per_pattern: int = None, debug_port: int = 9222,
-                 helper_links: List[str] = None):
+                 helper_links: List[str] = None,
+                 custom_logger: Optional[logging.Logger] = None) -> int:
     """
     Функция для исследования сайта с обработкой ошибок и прерываний
     
@@ -1019,28 +1083,62 @@ def explore_site(url: str, max_urls: int = 1000, max_depth: int = 4, recipe_patt
         check_url: Проверять ли URL на соответствие паттерну перед экстракцией
         max_urls_per_pattern: Максимальное количество URL на один паттерн (None = без ограничений)
         debug_port: Порт для подключения к Chrome
+        helper_links: Список вспомогательных ссылок для начала исследования
+    
+    Returns:
+        Количество исследованных URL
     """
-    urls_explored = 0
+    explorer = None  # Инициализация перед try
+    if custom_logger is None:
+        custom_logger = logger
+    
     try:
-        # Цикл для продолжения исследования до достижения max_urls (на случай ошибок или прерываний)
-        while urls_explored < max_urls:
-            explorer = SiteExplorer(url, debug_port=debug_port, debug_mode=True, 
-                                  recipe_pattern=recipe_pattern, 
-                                  max_urls_per_pattern=max_urls_per_pattern)
-            if helper_links:
-                explorer.add_helper_urls(helper_links, depth=1)
-            explorer.connect_to_chrome()
-            explorer.load_state()
-            explored = explorer.explore(max_urls=max_urls, max_depth=max_depth, check_url=check_url, check_pages_with_extractor=check_pages_with_extractor)
-            urls_explored += explored
-            logger.info(f"Всего исследовано URL: {urls_explored}/{max_urls}")
+        explorer = SiteExplorer(
+            url, 
+            debug_port=debug_port, 
+            debug_mode=True, 
+            recipe_pattern=recipe_pattern, 
+            max_urls_per_pattern=max_urls_per_pattern,
+            custom_logger=custom_logger
+        )
+        
+        if helper_links:
+            explorer.add_helper_urls(helper_links, depth=1)
+        
+        explorer.connect_to_chrome()
+        explorer.load_state()
+        
+        urls_explored = explorer.explore(
+            max_urls=max_urls, 
+            max_depth=max_depth, 
+            check_url=check_url, 
+            check_pages_with_extractor=check_pages_with_extractor
+        )
+        
+        custom_logger.info(f"✓ Исследование завершено: {urls_explored} URL")
+        return urls_explored
+        
     except KeyboardInterrupt:
-        logger.info("Прервано пользователем")
+        custom_logger.warning("\nПрервано пользователем")
+        if explorer:
+            explorer.save_state()
+        raise
+        
+    except WebDriverException as e:
+        custom_logger.error(f"Ошибка WebDriver: {e}")
+        if explorer:
+            explorer.save_state()
+        raise
+        
     except Exception as e:
-        logger.error(f"Критическая ошибка: {e}", exc_info=True)
-        sys.exit(1)
+        custom_logger.error(f"Критическая ошибка: {e}", exc_info=True)
+        if explorer:
+            explorer.save_state()
+        raise
+        
     finally:
-        explorer.close()
+        if explorer:
+            explorer.close()
 
 def run_explorer(explorer:SiteExplorer, max_urls: int, max_depth: int):
     
@@ -1055,44 +1153,3 @@ def run_explorer(explorer:SiteExplorer, max_urls: int, max_depth: int):
     finally:
         explorer.close()
 
-def prepare_data_for_parser_creation(url: str, max_depth: int, debug_port: int = 9222, helper_links: list[str] = None,
-                                     batch_size: int = 50, max_preparepages: int = 500, min_recipes: int = 3) -> Optional[int]:
-    """    
-    Подготовка данных для создания парсера рецептов путем исследования сайта.
-    
-    DEPRECATED: Используйте SitePreparationPipeline напрямую для большего контроля.
-    Эта функция оставлена для обратной совместимости.
-    
-    Args:
-        url: Базовый URL сайта
-        max_depth: Максимальная глубина исследования
-        debug_port: Порт для подключения к Chrome
-        helper_links: Вспомогательные ссылки для начала исследования
-        batch_size: Размер одного батча исследования
-        max_preparepages: Максимальное количество страниц для подготовки данных
-        min_recipes: Минимальное количество рецептов для поиска паттерна
-    
-    Returns:
-        site_id: ID сайта в БД, если найден паттерн рецептов, иначе None
-    """
-    from src.stages.parse.site_preparation_pipeline import prepare_site_for_parsing
-    
-    logger.warning("prepare_data_for_parser_creation deprecated, используйте SitePreparationPipeline")
-    
-    return prepare_site_for_parsing(
-        url=url,
-        helper_links=helper_links,
-        debug_port=debug_port,
-        batch_size=batch_size,
-        max_pages=max_preparepages,
-        max_depth=max_depth,
-        min_recipes=min_recipes
-    )
-
-def main():
-    url = "https://www.allrecipes.com/"
-    explore_site(url, max_urls=100, max_depth=3, recipe_pattern=r'/recipe/[\w-]+/\d+/')
-
-
-if __name__ == "__main__":
-    main()
