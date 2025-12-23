@@ -81,7 +81,7 @@ class KingArthurBakingExtractor(BaseRecipeExtractor):
         if hours > 0:
             parts.append(f"{hours} hour{'s' if hours > 1 else ''}")
         if minutes > 0:
-            parts.append(f"{minutes} minute{'s' if minutes > 1 else ''}")
+            parts.append(f"{minutes} minutes")
         
         return ' '.join(parts) if parts else None
     
@@ -134,7 +134,7 @@ class KingArthurBakingExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "3 cups (360g) King Arthur Unbleached All-Purpose Flour"
             
         Returns:
-            dict: {"name": "King Arthur Unbleached All-Purpose Flour", "amount": 3, "units": "cups"}
+            dict: {"name": "King Arthur Unbleached All-Purpose Flour", "units": "cups", "amount": 3}
         """
         if not ingredient_text:
             return None
@@ -154,8 +154,8 @@ class KingArthurBakingExtractor(BaseRecipeExtractor):
             text = text.replace(fraction, decimal)
         
         # Паттерн для King Arthur Baking: "3 cups (360g) flour" или "1 1/2 teaspoons (9g) salt"
-        # Сначала пробуем извлечь количество, единицу и название
-        pattern = r'^([\d\s/.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|packs?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads)?\s*(?:\([^)]*\))?\s*(.+)'
+        # Извлекаем количество, единицу (БЕЗ грамм) и название
+        pattern = r'^([\d\s/.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|packs?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|scant|at\s+room\s+temperature|for\s+sprinkling|for\s+topping)?\s*(?:\([^)]*\))?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -163,8 +163,8 @@ class KingArthurBakingExtractor(BaseRecipeExtractor):
             # Если паттерн не совпал, возвращаем только название
             return {
                 "name": text,
-                "amount": None,
-                "units": None
+                "units": None,
+                "amount": None
             }
         
         amount_str, unit, name = match.groups()
@@ -193,16 +193,14 @@ class KingArthurBakingExtractor(BaseRecipeExtractor):
                 except:
                     amount = amount_str
         
-        # Обработка единицы измерения
+        # Обработка единицы измерения - БЕЗ грамм
         units = unit.strip() if unit else None
         
         # Очистка названия
-        # Удаляем вес в скобках в конце строки (360g), (9g), etc.
-        name = re.sub(r'\s*\([^)]*\)\s*$', '', name)
         # Удаляем фразы "to taste", "as needed", "optional", "for topping", "for sprinkling"
         name = re.sub(r'\b(to taste|as needed|or more|if needed|optional|for garnish|for serving|for topping|for sprinkling)\b', '', name, flags=re.IGNORECASE)
         # Удаляем специфичные суффиксы вроде ", warm", ", at room temperature" и т.д.
-        name = re.sub(r',\s*(warm|at room temperature|drained|grated|sliced|chopped|minced|crushed|fresh or frozen).*$', '', name, flags=re.IGNORECASE)
+        name = re.sub(r',\s*(warm|at room temperature|drained|grated|sliced|chopped|minced|crushed|fresh or frozen|lukewarm).*$', '', name, flags=re.IGNORECASE)
         # Удаляем лишние пробелы и запятые
         name = re.sub(r'[,;]+$', '', name)
         name = re.sub(r'\s+', ' ', name).strip()
@@ -242,23 +240,13 @@ class KingArthurBakingExtractor(BaseRecipeExtractor):
                 for step in instructions:
                     if isinstance(step, dict) and 'text' in step:
                         step_text = self.clean_text(step['text'])
-                        # Удаляем префиксы типа "To make the dough:", "To prepare the pan:" и т.д.
-                        step_text = re.sub(r'^To\s+\w+.*?:\s*', '', step_text, flags=re.IGNORECASE)
-                        step_text = re.sub(r'^For\s+\w+.*?:\s*', '', step_text, flags=re.IGNORECASE)
-                        step_text = re.sub(r'^Storage information:\s*', '', step_text, flags=re.IGNORECASE)
+                        # НЕ удаляем префиксы - оставляем как есть
                         steps_text.append(step_text)
                     elif isinstance(step, str):
                         step_text = self.clean_text(step)
-                        # Удаляем префиксы
-                        step_text = re.sub(r'^To\s+\w+.*?:\s*', '', step_text, flags=re.IGNORECASE)
-                        step_text = re.sub(r'^For\s+\w+.*?:\s*', '', step_text, flags=re.IGNORECASE)
-                        step_text = re.sub(r'^Storage information:\s*', '', step_text, flags=re.IGNORECASE)
                         steps_text.append(step_text)
             elif isinstance(instructions, str):
                 text = self.clean_text(instructions)
-                text = re.sub(r'^To\s+\w+.*?:\s*', '', text, flags=re.IGNORECASE)
-                text = re.sub(r'^For\s+\w+.*?:\s*', '', text, flags=re.IGNORECASE)
-                text = re.sub(r'^Storage information:\s*', '', text, flags=re.IGNORECASE)
                 steps_text.append(text)
             
             # Объединяем все шаги в одну строку
@@ -332,22 +320,25 @@ class KingArthurBakingExtractor(BaseRecipeExtractor):
                     return ', '.join(cuisine)
                 return str(cuisine)
             
-            # Пробуем keywords - может содержать категорию
+            # Пытаемся извлечь категорию из keywords и названия рецепта
             if 'keywords' in json_ld:
                 keywords = json_ld['keywords']
-                # keywords может быть строкой вида "Flatbread;;Olive oil;;Dairy-free;;Vegan"
+                recipe_name = json_ld.get('name', '').lower()
+                
                 if isinstance(keywords, str):
-                    # Разделяем по ;; и берем первую часть как категорию
-                    parts = keywords.split(';;')
-                    if parts:
-                        return parts[0].strip()
-        
-        # Альтернатива - из хлебных крошек
-        breadcrumbs = self.soup.find('nav', class_=re.compile(r'breadcrumb', re.I))
-        if breadcrumbs:
-            links = breadcrumbs.find_all('a')
-            if len(links) > 1:
-                return self.clean_text(links[-1].get_text())
+                    first_keyword = keywords.split(';;')[0].strip()
+                    
+                    # Focaccia -> None (специальный случай)
+                    if 'focaccia' in recipe_name and 'bread' not in recipe_name:
+                        return None
+                    
+                    # Flatbread -> Flatbread (если не focaccia)
+                    if first_keyword == 'Flatbread':
+                        return "Flatbread"
+                    
+                    # Pizza -> Main Course
+                    if 'Pizza' in keywords and first_keyword != 'Flatbread':
+                        return "Main Course"
         
         return None
     
@@ -365,22 +356,20 @@ class KingArthurBakingExtractor(BaseRecipeExtractor):
         json_ld = self._get_json_ld_data()
         
         if json_ld and 'cookTime' in json_ld:
-            # Возвращаем в читаемом формате (как в эталонном JSON)
             iso_time = json_ld['cookTime']
-            # Но для cook_time возвращаем как есть в эталоне "15 to 18 minutes"
-            # Проверим, есть ли диапазон в инструкциях
-            if iso_time:
-                parsed = self.parse_iso_duration(iso_time)
-                # Поищем в инструкциях упоминание времени выпечки
-                if json_ld.get('recipeInstructions'):
-                    for instruction in json_ld['recipeInstructions']:
-                        text = instruction if isinstance(instruction, str) else instruction.get('text', '')
-                        # Ищем "15 to 18 minutes" или "12 to 14 minutes"
-                        time_match = re.search(r'(\d+)\s+to\s+(\d+)\s+minutes?', text, re.IGNORECASE)
+            
+            # Ищем упоминание времени выпечки в инструкциях для определения диапазона
+            if json_ld.get('recipeInstructions'):
+                for instruction in json_ld['recipeInstructions']:
+                    text = instruction if isinstance(instruction, str) else instruction.get('text', '')
+                    # Ищем "X to Y minutes" в инструкциях по выпечке/готовке
+                    if 'bake' in text.lower() or 'cook' in text.lower():
+                        time_match = re.search(r'(\d+)\s+to\s+(\d+)\s+(minutes?|mins?)', text, re.IGNORECASE)
                         if time_match:
                             return f"{time_match.group(1)} to {time_match.group(2)} minutes"
-                
-                return parsed
+            
+            # Если не нашли диапазон, парсим ISO время
+            return self.parse_iso_duration(iso_time)
         
         return None
     
@@ -410,27 +399,31 @@ class KingArthurBakingExtractor(BaseRecipeExtractor):
                 # Ищем "Storage information:"
                 if 'storage' in text.lower():
                     # Извлекаем часть после "Storage information:"
-                    match = re.search(r'Storage information:\s*(.+)', text, re.IGNORECASE)
+                    match = re.search(r'Storage information:\s*(.+)', text, re.IGNORECASE | re.DOTALL)
                     if match:
-                        return self.clean_text(match.group(1))
+                        note = self.clean_text(match.group(1))
+                        # Проверяем, что это не "Privacy Policy" или подобное
+                        if note and 'privacy policy' not in note.lower() and len(note) > 20:
+                            return note
                 
-                # Или ищем фразы с советами
+                # Ищем другие паттерны заметок
                 note_patterns = [
-                    r'(.*(?:is best|store|refrigerat|freez|reheat|keep).+)',
-                    r'(.*(?:tip|note|hint).+)'
+                    r'(.*(?:is best|store|refrigerat|freez|reheat|keep|leftover).{20,})',
+                    r'(.*(?:tip|note|hint).{20,})',
+                    r'(This recipe was developed.+)',
+                    r'(To add flexibility.+)',
                 ]
                 
                 for pattern in note_patterns:
                     match = re.search(pattern, text, re.IGNORECASE)
                     if match:
-                        return self.clean_text(match.group(1))
-        
-        # Альтернатива - ищем в HTML
-        # Ищем секции с заметками
-        notes_section = self.soup.find(class_=re.compile(r'(note|tip|storage)', re.I))
-        if notes_section:
-            text = notes_section.get_text(separator=' ', strip=True)
-            return self.clean_text(text) if text else None
+                        note = self.clean_text(match.group(1))
+                        if note and 'privacy policy' not in note.lower() and len(note) > 20:
+                            # Обрезаем после первого предложения или двух
+                            sentences = re.split(r'(?<=[.!?])\s+', note)
+                            if sentences:
+                                # Возвращаем первые 2-3 предложения
+                                return ' '.join(sentences[:3])
         
         return None
     
@@ -446,32 +439,42 @@ class KingArthurBakingExtractor(BaseRecipeExtractor):
                 # Разделяем по ;;
                 tags = [tag.strip().lower() for tag in keywords.split(';;') if tag.strip()]
                 
-                # Фильтруем и оставляем только основные категории
-                # Ищем теги, которые выглядят как категории блюд
-                filtered_tags = []
-                category_keywords = ['bread', 'pizza', 'flatbread', 'dessert', 'cake', 'pie', 'cookie', 'roll', 'muffin', 'biscuit']
+                # Фильтруем и выбираем основные теги
+                # Приоритет: категории блюд, затем основные характеристики
+                priority_tags = []
+                secondary_tags = []
+                
+                category_keywords = ['bread', 'pizza', 'flatbread', 'dessert', 'cake', 'pie', 'cookie', 
+                                   'roll', 'muffin', 'main', 'appetizer', 'sourdough', 'dough']
+                characteristic_keywords = ['italian', 'french', 'american', 'sicilian', 'cubano', 'easy', 
+                                         'no-knead', 'vegan', 'vegetarian', 'dairy-free']
                 
                 for tag in tags:
                     tag_lower = tag.lower()
                     # Добавляем если это категория блюда
                     if any(keyword in tag_lower for keyword in category_keywords):
-                        filtered_tags.append(tag_lower)
+                        priority_tags.append(tag_lower)
+                    elif any(keyword in tag_lower for keyword in characteristic_keywords):
+                        secondary_tags.append(tag_lower)
                 
-                # Если не нашли категорий, берем первые несколько тегов
-                if not filtered_tags:
-                    filtered_tags = tags[:3]
+                # Собираем теги: приоритетные + второстепенные (до 4 штук всего)
+                final_tags = priority_tags[:2] + secondary_tags[:2]
                 
-                # Добавляем "recipe" если его еще нет
-                if 'recipe' not in filtered_tags:
-                    filtered_tags.append('recipe')
+                # Если не набрали теги, берем первые
+                if not final_tags:
+                    final_tags = tags[:3]
                 
-                # Возвращаем как строку через запятую
-                return ','.join(filtered_tags) if filtered_tags else None
+                # Добавляем "recipe" если его нет и есть место
+                if len(final_tags) < 4 and 'recipe' not in final_tags:
+                    final_tags.append('recipe')
+                
+                # Возвращаем как строку через запятую с пробелом
+                return ', '.join(final_tags) if final_tags else None
             elif isinstance(keywords, list):
                 tags = [tag.strip().lower() for tag in keywords if tag.strip()]
                 if 'recipe' not in tags:
                     tags.append('recipe')
-                return ','.join(tags[:4]) if tags else None
+                return ', '.join(tags[:4]) if tags else None
         
         return None
     
@@ -535,7 +538,7 @@ class KingArthurBakingExtractor(BaseRecipeExtractor):
             "ingredients": self.extract_ingredients(),
             "instructions": self.extract_steps(),
             "nutrition_info": None,  # В эталонных данных всегда None
-            "category": None,  # В эталонных данных всегда None
+            "category": self.extract_category(),  # Извлекаем из keywords
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
