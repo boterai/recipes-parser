@@ -158,7 +158,7 @@ def main(module_name: str = "24kitchen_nl", port: int = 9222):
     )
 
 
-def run_parallel(ports: list[int], max_workers: int = None):
+def run_parallel(ports: list[int], max_workers: int = None, modules: list[str] = None):
     """
     Запуск парсеров в нескольких потоках с отдельными логами
     
@@ -173,19 +173,21 @@ def run_parallel(ports: list[int], max_workers: int = None):
     parser = RecipeParserRunner(extractor_dir="extractor")
     
     # Выбираем случайные уникальные модули
-    random_modules = set()
-    while len(random_modules) < len(ports):
-        random_extractor = parser.get_random_extractor()
-        if random_extractor is None:
-            logger.error("Нет доступных экстракторов для выбора")
-            return
-        random_modules.add(random_extractor)
-    
-    random_modules = list(random_modules)
+    if modules is None:
+        random_modules = set()
+        while len(random_modules) < len(ports):
+            random_extractor = parser.get_random_extractor()
+            if random_extractor is None:
+                logger.error("Нет доступных экстракторов для выбора")
+                return
+            random_modules.add(random_extractor)
+        
+        random_modules = list(random_modules)
+        modules = random_modules
     
     # Логируем план
     logger.info("\nПлан запуска:")
-    for i, (port, module) in enumerate(zip(ports, random_modules), 1):
+    for i, (port, module) in enumerate(zip(ports, modules), 1):
         logger.info(f"  [{i}] {module} → port {port} → logs/{module}_{port}.log")
     
     logger.info(f"\n{'='*60}\n")
@@ -203,7 +205,7 @@ def run_parallel(ports: list[int], max_workers: int = None):
                 max_urls=5000, 
                 max_depth=4
             ): (module, port)
-            for port, module in zip(ports, random_modules)
+            for port, module in zip(ports, modules)
         }
         
         # Ждем завершения
@@ -246,7 +248,7 @@ if __name__ == "__main__":
     parser.add_argument(
         '--modules',
         type=str,
-        default=["receiteria_com_br", "domacirecepti_net", "24kitchen_nl", "simplyrecipes_com", "speedinfo_com_ua"],
+        default=["lamaistas_lt", "domacirecepti_net", "24kitchen_nl", "simplyrecipes_com", "speedinfo_com_ua"],
         help='Имя модуля экстрактора для одиночного запуска (по умолчанию: 24kitchen_nl)'
     )
     

@@ -74,14 +74,22 @@ class QdrantRecipeManager:
             try:
                 logger.info(f"Попытка подключения к Qdrant {attempt + 1}/{retry_attempts}...")
                 
+                # Базовые параметры подключения
+                client_kwargs = {
+                    'host': params.get('host', 'localhost'),
+                    'port': params.get('port', '6333'),
+                    'api_key': params.get('api_key'),
+                    'https': params.get('https', False),
+                    'timeout': 40  # увеличенный таймаут для больших операций
+                }
+                
+                # Добавляем прокси если указан в конфигурации
+                if params.get('proxy'):
+                    logger.info(f"Использование прокси: {params['proxy']}")
+                    client_kwargs['proxy'] = params['proxy']
+                
                 # Создаем клиент
-                self.client = QdrantClient(
-                    host=params.get('host', 'localhost'),
-                    port=params.get('port', '6333'),
-                    api_key=params.get('api_key'),
-                    https=False,
-                    timeout=40  # увеличенный таймаут для больших операций
-                )
+                self.client = QdrantClient(**client_kwargs)
                 
                 # Проверка подключения
                 self.client.get_collections()

@@ -265,7 +265,7 @@ class Translator:
         if self.olap_db.insert_recipes_batch(translated_recipes, table_name=self.olap_table) == len(translated_recipes):
             logger.info(f"✓ Батч из {len(translated_recipes)} переведенных страниц успешно сохранен в ClickHouse")
         else:
-            logger.warning(f"⚠ Частичная ошибка при сохранении батча")
+            logger.warning("⚠ Частичная ошибка при сохранении батча")
 
     def translate_recipe(self, recipe: Recipe) -> Optional[Recipe]:
         """

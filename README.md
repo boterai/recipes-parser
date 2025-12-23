@@ -11,11 +11,8 @@
 google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug_9222
 ```
 
-документация qdrant - https://qdrant.tech/documentation/quickstart/
-```bash
-# запус qdrant локально
-docker pull qdrant/qdrant
-docker run -p 6333:6333 -p 6334:6334 \
-    -v "$(pwd)/qdrant_storage:/qdrant/storage:z" \
-    qdrant/qdrant
-```
+## скрипты 
+1. scripts/prepare_site - генерация запросов для поиска в duck duck go, поиск сайтов, анализ сайтов, генерация примеров для создания парсера
+2. scripts/parse - парсинг сайтов (для которых есть парсеры в extractor директории) в один или несколкьо потоков
+3.  scripts/translate - перевод страниц с рецептами и доабвление их в clickhouse
+4. scripts/vectorise - поиск похожих и векторизация данных (пока без изображений)

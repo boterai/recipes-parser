@@ -4,11 +4,15 @@
 """
 import time
 import logging
+import urllib3
 from typing import Optional
 from config.db_config import ClickHouseConfig
 import clickhouse_connect
 from clickhouse_connect.driver import Client
 from src.models.recipe import Recipe
+from urllib.parse import urlparse
+from urllib3.contrib.socks import SOCKSProxyManager
+
 logger = logging.getLogger(__name__)
 
 CONNECTION_ERROR = "Ошибка подключения к ClickHouse"
@@ -38,40 +42,89 @@ class ClickHouseManager:
         """        
         conn_params = ClickHouseConfig.get_connection_params()
         
-        for attempt in range(retry_attempts):
-            try:
-                logger.info(f"Попытка подключения к ClickHouse {attempt + 1}/{retry_attempts}...")
+        # Настройка пула с прокси если указан
+        pool_manager = None
+        if conn_params.get('proxy'):
+            logger.info(f"Использование прокси для ClickHouse: {conn_params['proxy']}")
+            
+            # Парсим URL прокси
+            parsed = urlparse(conn_params['proxy'])
+            
+            # Проверяем тип прокси (HTTP/HTTPS или SOCKS5)
+            if parsed.scheme in ('socks5', 'socks5h'):
                 
-                self.client: Client = clickhouse_connect.get_client(
-                    host=conn_params['host'],
-                    port=conn_params['port'],
-                    user=conn_params['user'],
-                    password=conn_params['password'],
-                    secure=conn_params['secure'],
-                    connect_timeout=10,
-                    send_receive_timeout=30
+                pool_manager = SOCKSProxyManager(
+                    conn_params['proxy'],
+                    timeout=urllib3.Timeout(connect=30.0, read=300.0),
+                    retries=urllib3.Retry(total=3, backoff_factor=0.5)
                 )
+            else:
+                # HTTP/HTTPS прокси
+                proxy_headers = None
+                if parsed.username and parsed.password:
+                    proxy_headers = urllib3.make_headers(
+                        proxy_basic_auth=f"{parsed.username}:{parsed.password}"
+                    )
                 
-                # Проверка подключения
-                self.client.command('SELECT 1')
+                proxy_url = f"{parsed.scheme}://{parsed.hostname}:{parsed.port}"
                 
-                logger.info("✓ Успешное подключение к ClickHouse")
-                
-                # Создание таблиц если их нет
-                return self.create_tables()
-                
-            except Exception as e:
-                if attempt < retry_attempts - 1:
-                    # Экспоненциальная задержка: delay * 2^attempt
-                    delay = retry_delay * (2 ** attempt)
-                    logger.warning(f"✗ Ошибка подключения к ClickHouse (попытка {attempt + 1}/{retry_attempts}): {e}")
-                    logger.info(f"Повторная попытка через {delay:.1f}с...")
-                    time.sleep(delay)
-                else:
-                    logger.error(f"✗ Не удалось подключиться к ClickHouse после {retry_attempts} попыток: {e}")
+                pool_manager = urllib3.ProxyManager(
+                    proxy_url,
+                    proxy_headers=proxy_headers,
+                    timeout=urllib3.Timeout(connect=30.0, read=300.0),
+                    retries=urllib3.Retry(total=3, backoff_factor=0.5)
+                )
         
-        # Если дошли сюда - все попытки исчерпаны
-        return False
+        try:
+            for attempt in range(retry_attempts):
+                try:
+                    logger.info(f"Попытка подключения к ClickHouse {attempt + 1}/{retry_attempts}...")
+                    
+                    # Используем интерфейс в зависимости от secure
+                    interface = 'https' if conn_params['secure'] else 'http'
+                    
+                    client_kwargs = {
+                        'host': conn_params['host'],
+                        'database': conn_params['database'],
+                        'port': conn_params['port'],
+                        'user': conn_params['user'],
+                        'password': conn_params['password'],
+                        'secure': conn_params['secure'],
+                        'interface': interface,
+                        'connect_timeout': 30,
+                        'send_receive_timeout': 300
+                    }
+                    
+                    # Добавляем pool_manager если есть прокси
+                    if pool_manager:
+                        client_kwargs['pool_mgr'] = pool_manager
+                    
+                    self.client: Client = clickhouse_connect.get_client(**client_kwargs)
+                    
+                    # Проверка подключения
+                    self.client.command('SELECT 1')
+                    
+                    logger.info("✓ Успешное подключение к ClickHouse")
+                    
+                    # Создание таблиц если их нет
+                    return self.create_tables()
+                    
+                except Exception as e:
+                    if attempt < retry_attempts - 1:
+                        # Экспоненциальная задержка: delay * 2^attempt
+                        delay = retry_delay * (2 ** attempt)
+                        logger.warning(f"✗ Ошибка подключения к ClickHouse (попытка {attempt + 1}/{retry_attempts}): {e}")
+                        logger.info(f"Повторная попытка через {delay:.1f}с...")
+                        time.sleep(delay)
+                    else:
+                        logger.error(f"✗ Не удалось подключиться к ClickHouse после {retry_attempts} попыток: {e}")
+            
+            # Если дошли сюда - все попытки исчерпаны
+            return False
+        finally:
+            # Закрываем pool_manager если был создан
+            if pool_manager:
+                pool_manager.clear()
     
     def create_tables(self) -> bool:
         """Создание таблиц в ClickHouse"""
@@ -228,10 +281,6 @@ class ClickHouseManager:
         Returns:
             Список объектов Recipe
         """
-        if not self.client:
-            logger.error("ClickHouse не подключен")
-            return []
-        
         if not page_ids:
             logger.warning("Пустой список page_ids")
             return []

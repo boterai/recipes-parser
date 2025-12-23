@@ -41,6 +41,7 @@ class ClickHouseConfig:
     CH_PASSWORD = os.getenv('CLICKHOUSE_PASSWORD', '')
     CH_DATABASE = os.getenv('CLICKHOUSE_DATABASE', 'recipes')
     CH_SECURE = bool(int(os.getenv('CLICKHOUSE_SECURE', '1')))
+    CH_PROXY = os.getenv('SOCKS5', None)
     
     @classmethod
     def get_connection_params(cls) -> dict:
@@ -51,7 +52,8 @@ class ClickHouseConfig:
             'user': cls.CH_USER,
             'password': cls.CH_PASSWORD,
             'database': cls.CH_DATABASE,
-            'secure': cls.CH_SECURE
+            'secure': cls.CH_SECURE,
+            'proxy': cls.CH_PROXY
         }
 
 
@@ -62,6 +64,7 @@ class QdrantConfig:
     QDRANT_PORT = int(os.getenv('QDRANT_PORT_CLOUD', 6333))
     QDRANT_API_KEY = os.getenv('QDRANT_API_KEY_CLOUD', None)
     QDRANT_HTTPS = os.getenv('QDRANT_HTTPS', 'false').lower() == 'true'
+    QDRANT_PROXY = os.getenv('PROXY', None)
     
     @classmethod
     def get_connection_params(cls) -> dict:
@@ -70,5 +73,6 @@ class QdrantConfig:
             'host': cls.QDRANT_HOST,
             'port': cls.QDRANT_PORT,
             'api_key': cls.QDRANT_API_KEY,
-            'https': cls.QDRANT_HTTPS
+            'https': cls.QDRANT_HTTPS,
+            'proxy': cls.QDRANT_PROXY
         }

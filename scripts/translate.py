@@ -23,8 +23,8 @@ def main():
 
     translator = Translator(target_language="en")
     translator.translate_and_save_batch(
-        site_id=17,
-        batch_size=10, # большой батч только, если целевой язык совпадает с исходным
+        site_id=1,
+        batch_size=100, # большой батч только, если целевой язык совпадает с исходным
     )
 
 if __name__ == "__main__":

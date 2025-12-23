@@ -34,12 +34,14 @@ def search_similar(recipe_id: int = 21427, use_weighted: bool = True,
     """
     rv = RecipeVectorizer()
 
+
     embed_func, _ = get_embedding_function(batch_size=1)
     
-    recipe = rv.olap_database.get_recipes_by_ids([recipe_id])[0]
+    recipe = rv.olap_database.get_recipes_by_ids([recipe_id])
     if not recipe:
         print(f"Recipe with id {recipe_id} not found")
         return
+    recipe = recipe[0]
     
     similar_recipes: list[float, Recipe] = []
     if use_weighted:
@@ -68,5 +70,4 @@ def search_similar(recipe_id: int = 21427, use_weighted: bool = True,
 
 if __name__ == '__main__':
     # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)
-    #add_recipes()
-    search_similar(recipe_id=8829, use_weighted=False, score_threshold=0.0, limit=6)
+    search_similar(recipe_id=19, use_weighted=False, score_threshold=0.0, limit=6)
