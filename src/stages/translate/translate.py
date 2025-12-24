@@ -10,13 +10,12 @@ if __name__ == "__main__":
     import sys
     sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from src.common.db.mysql import MySQlManager
 from src.common.db.clickhouse import ClickHouseManager
 from src.common.gpt_client import GPTClient
-import sqlalchemy
-from src.models.page import Page
+from src.models.page import Page, PageORM
 from src.models.page import Recipe
 from utils.languages import LanguageCodes, validate_and_normalize_language
+from src.repositories.page import PageRepository
 
 # Настройка логирования
 logging.basicConfig(
@@ -24,7 +23,6 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-
 
 class Translator:
     def __init__(self, target_language: str = 'en'):
@@ -44,17 +42,13 @@ class Translator:
         self.target_language = normalized_lang
         self.lang_variations = LanguageCodes.get(normalized_lang)
         self.lang_variations = {lang.lower() for lang in self.lang_variations}
-        
-        self.db = MySQlManager()
+    
         self.olap_db = ClickHouseManager()
+        self.page_repository = PageRepository()
         
         self.olap_table = f"recipe_{self.target_language}"
         # Инициализация GPT клиента
         self.gpt_client = GPTClient()
-
-        if self.db.connect() is False:
-            logger.error("Не удалось подключиться к MySQL")
-            raise RuntimeError("MySQL connection failed")
 
         if self.olap_db.connect() is False:
             logger.error("Не удалось подключиться к ClickHouse")
@@ -79,12 +73,11 @@ class Translator:
                 return recipe
 
         # Получаем страницу из БД
-        page = self.db.get_page_by_id(page_id)
+        page = self.page_repository.get_by_id(page_id)
         if not page:
             logger.error(f"Страница с ID={page_id} не найдена в БД")
             return None
-        
-        recipe = page.to_recipe()
+        recipe = page.to_pydantic().to_recipe()
         # Переводим страницу
         translated_recipe = self.translate_recipe(recipe)
         if not translated_recipe:
@@ -123,22 +116,8 @@ class Translator:
             self._sequential_translate(site_id, batch_size, start_from_id=0)
             return
         
-        # Получаем все валидные ID рецептов из MySQL
-        with self.db.get_session() as session:
-            query = """
-                SELECT id FROM pages
-                WHERE is_recipe = TRUE
-                AND ingredients IS NOT NULL
-                AND dish_name IS NOT NULL
-                AND instructions IS NOT NULL
-            """
-            if site_id:
-                query += f" AND site_id = {site_id}"
-            query += " ORDER BY id ASC"
-            
-            result = session.execute(sqlalchemy.text(query))
-            mysql_ids = set(row.id for row in result.fetchall())
-        
+        mysql_ids = set(self.page_repository.get_recipes_ids(site_id=site_id))
+
         logger.info(f"Найдено {len(mysql_ids)} валидных рецептов в MySQL")
         
         # Вычисляем разницу - ID которые есть в MySQL, но нет в ClickHouse
@@ -164,20 +143,12 @@ class Translator:
         for i in range(0, len(untranslated_ids), batch_size):
             batch_ids = untranslated_ids[i:i + batch_size]
             
-            with self.db.get_session() as session:
+            with self.page_repository.get_session() as session:
                 # Получаем страницы по списку ID
-                placeholders = ','.join([f':id_{j}' for j in range(len(batch_ids))])
-                query = f"""
-                    SELECT * FROM pages
-                    WHERE id IN ({placeholders})
-                    ORDER BY id ASC
-                """
-                params = {f'id_{j}': page_id for j, page_id in enumerate(batch_ids)}
-                
-                result = session.execute(sqlalchemy.text(query), params)
-                pages_data = result.fetchall()
-            
-            if pages_data:
+                pages = session.query(PageORM).filter(PageORM.id.in_(batch_ids)).order_by(PageORM.id.asc()).all()
+
+            if pages:
+                pages_data = [page.to_pydantic() for page in pages]
                 logger.info(f"Обработка батча {i // batch_size + 1}/{(len(untranslated_ids) + batch_size - 1) // batch_size}")
                 self._process_batch(pages_data)
     
@@ -194,28 +165,24 @@ class Translator:
         last_processed_id = start_from_id - 1 if start_from_id > 0 else 0
         
         while True:
-            with self.db.get_session() as session:
-                query = """
-                    SELECT * FROM pages
-                    WHERE is_recipe = TRUE
-                    AND ingredients IS NOT NULL
-                    AND dish_name IS NOT NULL
-                    AND instructions IS NOT NULL
-                    AND id > :last_id
-                """
+            with self.page_repository.get_session() as session:
+                query = session.query(PageORM).filter(PageORM.is_recipe == True, 
+                                                     PageORM.ingredients != None, 
+                                                     PageORM.dish_name != None,
+                                                     PageORM.instructions != None, 
+                                                     PageORM.id > last_processed_id)
                 
                 if site_id:
-                    query += f" AND site_id = {site_id}"
-                
-                query += f" ORDER BY id ASC LIMIT {batch_size}"
-                
-                result = session.execute(sqlalchemy.text(query), {"last_id": last_processed_id})
-                pages_data = result.fetchall()
+                    query = query.filter(PageORM.site_id == site_id)
+
+                query = query.order_by(PageORM.id.asc()).limit(batch_size)
+                pages_orm = query.all()
             
-                if not pages_data:
+                if not pages_orm:
                     logger.info("Все страницы переведены!")
                     break
                 
+                pages_data = [page.to_pydantic() for page in pages_orm]
                 self._process_batch(pages_data)
                 last_processed_id = pages_data[-1].id
                 
@@ -224,7 +191,7 @@ class Translator:
                     logger.info("Это был последний батч. Все страницы обработаны!")
                     break
     
-    def _process_batch(self, pages_data):
+    def _process_batch(self, pages_data: list[Page]):
         """
         Вспомогательный метод для обработки батча страниц
         
@@ -237,12 +204,12 @@ class Translator:
         translated_recipes = []
         for i, page_data in enumerate(pages_data, 1):
             try:
-                page_data = Page.model_validate(dict(page_data._mapping))
                 recipe = page_data.to_recipe()
                 
                 logger.info(f"[{i}/{len(pages_data)}] Перевод страницы ID={recipe.page_id}: {recipe.dish_name}")
                 
-                if page_data.language.lower() in self.lang_variations:
+                if page_data.language.lower() in self.lang_variations and page_data.site_id != 36:
+
                     translated_recipe = recipe
                     translated_recipe.list_fields_to_lower()
                     logger.info(f"✓ Страница ID={recipe.page_id} уже на целевом языке {self.target_language}")
@@ -288,7 +255,9 @@ IMPORTANT:
 2. Return the result in the same JSON format without changing the structure or adding any comments
 3. If a field is null or empty, leave it as is
 4. Preserve all measurements, numbers, and formatting
-5. Keep the translation natural and culinary-appropriate for the target language"""
+5. Keep the translation natural and culinary-appropriate for the target language
+6. CRITICAL: Escape all double quotes (") inside string values with backslash (\\"). For example: "tofu \\"steaks\\"" not "tofu "steaks""
+7. Return ONLY valid JSON, no markdown formatting, no extra text"""
 
             user_prompt = json.dumps(recipe_data, ensure_ascii=False)
             
@@ -327,3 +296,17 @@ IMPORTANT:
         except Exception as e:
             logger.error(f"Ошибка при переводе страницы ID={recipe.page_id}: {e}")
             return None
+
+    def translate_all(self, site_ids: Optional[list[int]] = None, batch_size: int = 10):
+        """
+        Основной метод для перевода всех страниц с рецептами
+        """        
+        if site_ids is None:
+            site_ids = self.page_repository.get_recipe_sites()
+            if not site_ids:
+                logger.error("Не удалось получить список site_id с рецептами")
+                return
+        
+        for i in site_ids:
+            self.translate_and_save_batch(site_id=i, batch_size=batch_size)
+            

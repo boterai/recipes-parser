@@ -73,9 +73,6 @@ class GPTClient:
         # 3. Удалить trailing commas (запятые перед закрывающими скобками)
         text = re.sub(r',(\s*[}\]])', r'\1', text)
         
-        # 4. Исправить одинарные кавычки на двойные (если есть)
-        # text = text.replace("'", '"')  # Осторожно! Может сломать текст
-        
         return text
     
     def request(
@@ -168,7 +165,7 @@ class GPTClient:
             except requests.exceptions.HTTPError as e:
                 # Если 403 (Forbidden) - не повторяем, это ошибка авторизации
                 if hasattr(e.response, 'status_code') and e.response.status_code == 403:
-                    logger.error(f"Ошибка 403 (Forbidden): проверьте API ключ")
+                    logger.error("Ошибка 403 (Forbidden): проверьте API ключ")
                     raise
                 
                 last_exception = e

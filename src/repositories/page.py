@@ -85,7 +85,8 @@ class PageRepository(BaseRepository[PageORM]):
         """
         session = self.get_session()
         try:
-            query = session.query(PageORM).filter(PageORM.is_recipe == True)
+            query = session.query(PageORM).filter(PageORM.is_recipe == True, PageORM.instructions != None, PageORM.instructions != "",
+                                                  PageORM.ingredients != None)
             
             if site_id:
                 query = query.filter(PageORM.site_id == site_id)
@@ -103,6 +104,45 @@ class PageRepository(BaseRepository[PageORM]):
                 query = query.limit(limit)
             
             return query.all()
+        finally:
+            session.close()
+
+    def get_recipes_ids(self, site_id: Optional[int] = None, language: Optional[str] = None, 
+                    limit: Optional[int] = None, random_order: bool = False) -> List[int]:
+        """
+        Получить страницы с рецептами
+        
+        Args:
+            site_id: ID сайта (опционально)
+            language: Язык (опционально)
+            limit: Максимальное количество
+            random_order: Если True, возвращает в случайном порядке
+        
+        Returns:
+            Список страниц с рецептами
+        """
+        session = self.get_session()
+        try:
+            query = session.query(PageORM).filter(PageORM.is_recipe == True, PageORM.instructions != None, PageORM.instructions != "",
+                                                  PageORM.ingredients != None)
+            
+            if site_id:
+                query = query.filter(PageORM.site_id == site_id)
+            
+            if language:
+                query = query.filter(PageORM.language == language)
+            
+            # Сортировка
+            if random_order:
+                query = query.order_by(func.random())  # Случайный порядок
+            else:
+                query = query.order_by(PageORM.id.asc())  # По id
+            
+            if limit:
+                query = query.limit(limit)
+            
+            result = query.with_entities(PageORM.id).all()
+            return [row[0] for row in result]
         finally:
             session.close()
     
@@ -268,5 +308,24 @@ class PageRepository(BaseRepository[PageORM]):
             session.rollback()
             logger.error(f"Ошибка при пометке не рецептов: {e}")
             return 0
+        finally:
+            session.close()
+
+    def get_recipe_sites(self) -> List[int]:
+        """
+        Получить список уникальных site_id, для которых есть страницы с рецептами
+        
+        Returns:
+            Список site_id
+        """
+        session = self.get_session()
+        try:
+            site_ids = session.query(PageORM.site_id).filter(
+                PageORM.is_recipe == True,
+                PageORM.ingredients != None,
+                PageORM.dish_name != None,
+                PageORM.instructions != None
+            ).distinct().all()
+            site_ids = [sid[0] for sid in site_ids]
         finally:
             session.close()

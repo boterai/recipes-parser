@@ -16,8 +16,6 @@ from qdrant_client.models import (
 
 logger = logging.getLogger(__name__)
 
-
-
 class QdrantError(Exception):
     """Базовый класс для ошибок Qdrant"""
     pass
@@ -40,23 +38,49 @@ class QdrantCollectionNotFoundError(QdrantError):
 
 class QdrantRecipeManager:
     """Менеджер для работы с Qdrant векторной БД"""
+    _instance = None
+    _client = None
+    _initialised = False
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(QdrantRecipeManager, cls).__new__(cls)
+        return cls._instance
     
     def __init__(self, collection_prefix: str = "recipes"):
         """
         Инициализация подключения к Qdrant
         
         Args:
-            dense_vectors: Список типов эмбеддингов для создания коллекций
             collection_prefix: Префикс для названий коллекций (используется чтобы разделить два типа коллекций для тестов)
         """
-        self.client = None
-        self.collection_prefix = collection_prefix
-        self.full_collection = "full"
-        self.mv_collection = "mv"
-        self.collections = {"full": f"{collection_prefix}_full", # no colbert locally
-                            "mv": f"{collection_prefix}_mv", # multivector search with colbert
-        }
-        self.connected = False
+        if not QdrantRecipeManager._initialized:
+            self.collection_prefix = collection_prefix
+            self.full_collection = "full"
+            self.mv_collection = "mv"
+            self.collections = {
+                "full": f"{collection_prefix}_full",
+                "mv": f"{collection_prefix}_mv",
+            }
+            self.connected = False
+            
+            QdrantRecipeManager._initialized = True
+            logger.info(f"Инициализирован QdrantRecipeManager с префиксом '{collection_prefix}'")
+        else:
+            if collection_prefix != self.collection_prefix:
+                logger.warning(
+                    f"QdrantRecipeManager уже инициализирован с префиксом '{self.collection_prefix}'. "
+                    f"Игнорируем новый префикс '{collection_prefix}'"
+                )
+    @property
+    def client(self) -> Optional[QdrantClient]:
+        """Получение клиента ClickHouse"""
+        return self._client
+    
+    @client.setter
+    def client(self, value: Optional[QdrantClient]):
+        """Установка клиента ClickHouse"""
+        self._client = value
         
     def connect(self, retry_attempts: int = 3, retry_delay: float = 2.0) -> bool:
         """Установка подключения к Qdrant с повторными попытками
@@ -68,6 +92,15 @@ class QdrantRecipeManager:
         Returns:
             True если подключение успешно, False иначе
         """
+        if self.client is not None:
+            try:
+                self.client.get_collections()
+                logger.info("✓ Уже подключено к Qdrant")
+                return True
+            except Exception:
+                logger.warning("⚠ Существующее подключение к Qdrant недействительно, повторное подключение...")
+                self.close()
+
         params = QdrantConfig.get_connection_params()
         
         for attempt in range(retry_attempts):

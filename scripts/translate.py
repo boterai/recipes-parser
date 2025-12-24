@@ -6,8 +6,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.stages.translate import Translator
-from src.common.db.mysql import MySQlManager
-from src.models.site import SiteORM
 
 # Настройка логирования
 logging.basicConfig(
@@ -22,10 +20,8 @@ logger = logging.getLogger(__name__)
 def main():
 
     translator = Translator(target_language="en")
-    translator.translate_and_save_batch(
-        site_id=1,
-        batch_size=100, # большой батч только, если целевой язык совпадает с исходным
-    )
+    translator.translate_and_save_batch(site_id=17,batch_size=30) # большой батч только, если целевой язык совпадает с исходным
+    #translator.translate_all(batch_size=10)
 
 if __name__ == "__main__":
     main()

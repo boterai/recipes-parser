@@ -17,17 +17,24 @@ logger = logging.getLogger(__name__)
 
 CONNECTION_ERROR = "Ошибка подключения к ClickHouse"
 
-class ClickHouseManager:
-    """Менеджер для работы с ClickHouse (включая векторную БД)"""
+class ClickHouseManager:    
+    _instance = None
+    _client = None
     
-    def __init__(self):
-        """
-        Инициализация подключения к ClickHouse
-        
-        Args:
-            embedding_dim: Размерность векторов эмбеддингов
-        """
-        self.client = None
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(ClickHouseManager, cls).__new__(cls)
+        return cls._instance
+    
+    @property
+    def client(self) -> Optional[Client]:
+        """Получение клиента ClickHouse"""
+        return self._client
+    
+    @client.setter
+    def client(self, value: Optional[Client]):
+        """Установка клиента ClickHouse"""
+        self._client = value
         
     def connect(self, retry_attempts: int = 3, retry_delay: float = 2.0) -> bool:
         """
@@ -40,6 +47,24 @@ class ClickHouseManager:
         Returns:
             True если подключение успешно, False иначе
         """        
+
+        if self._client is not None:
+            try:
+                # Пробуем выполнить простой запрос
+                self._client.command('SELECT 1')
+                logger.info("✓ Подключение к ClickHouse уже существует и активно")
+                return True
+            except Exception as e:
+                logger.warning(f"Существующее подключение неактивно: {e}")
+                logger.info("Попытка переподключения...")
+                # Закрываем старое подключение
+                try:
+                    self._client.close()
+                except Exception:
+                    pass
+                self._client = None
+
+
         conn_params = ClickHouseConfig.get_connection_params()
         
         # Настройка пула с прокси если указан
