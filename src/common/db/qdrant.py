@@ -40,7 +40,7 @@ class QdrantRecipeManager:
     """Менеджер для работы с Qdrant векторной БД"""
     _instance = None
     _client = None
-    _initialised = False
+    _initialized = False
 
     def __new__(cls):
         if cls._instance is None:

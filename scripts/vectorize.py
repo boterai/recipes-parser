@@ -20,8 +20,7 @@ def add_recipes():
     rv.add_all_recipes(
         embedding_function=embed_func,
         batch_size=batch_size,
-        dims=dims ,
-        site_id=5)
+        dims=dims)
 
 def search_similar(recipe_id: int = 21427, use_weighted: bool = True,
                    score_threshold: float = 0.0, limit: int = 6):

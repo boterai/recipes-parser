@@ -327,5 +327,6 @@ class PageRepository(BaseRepository[PageORM]):
                 PageORM.instructions != None
             ).distinct().all()
             site_ids = [sid[0] for sid in site_ids]
+            return site_ids
         finally:
             session.close()
