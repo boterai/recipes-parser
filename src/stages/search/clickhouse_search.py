@@ -46,58 +46,62 @@ class SearchSimilarInClickhouse:
             # Используем GPT для генерации regex паттернов
             logger.info(f"Генерация regex паттернов для: '{text_query}'")
             
-            system_prompt = """You are a search query analyzer for recipe search that generates regex patterns.
+            system_prompt = """You are a search query analyzer for recipe search that generates RE2 regex patterns for ClickHouse.
 Extract search parameters and generate regex patterns from user's natural language query.
+
+IMPORTANT: ClickHouse uses RE2 regex engine. DO NOT use \\b word boundaries - they are not supported in RE2.
+Instead, use (^|\\s|[^a-zA-Z]) before and ($|\\s|[^a-zA-Z]) after words for word matching.
 
 Return ONLY valid JSON with the following structure:
 {
-    "dish_name": ["pattern1", "pattern2"],  // Regex patterns for dish name/type
-    "ingredients": ["pattern1", "pattern2"],  // Regex patterns for ingredients
-    "instructions": ["pattern1", "pattern2"],  // Regex patterns for cooking methods
-    "instructions_negatives": ["pattern1"],  // Regex patterns to EXCLUDE from instructions
-    "ingredients_negatives": ["pattern1"],  // Regex patterns to EXCLUDE from ingredients
-    "description": ["pattern1"]  // Regex patterns for description
+    "dish_name": ["pattern1", "pattern2"],  // RE2 regex patterns for dish name/type
+    "ingredients": ["pattern1", "pattern2"],  // RE2 regex patterns for ingredients
+    "instructions": ["pattern1", "pattern2"],  // RE2 regex patterns for cooking methods
+    "instructions_negatives": ["pattern1"],  // RE2 regex patterns to EXCLUDE from instructions
+    "ingredients_negatives": ["pattern1"],  // RE2 regex patterns to EXCLUDE from ingredients
+    "description": ["pattern1"]  // RE2 regex patterns for description
 }
 
-Rules for regex patterns:
-1. Use word boundaries: \\b for precise matching
-2. Use case-insensitive patterns (ClickHouse multiMatchAllIndices is case-sensitive, so use [Cc] for 'c')
-3. Include variations: "bake" → "\\b(bak(e|ed|ing)|oven)\\b"
+Rules for RE2 regex patterns:
+1. DO NOT use \\b - use spaces or word boundaries manually: "(^|\\s)[Cc]hicken($|\\s|[^a-zA-Z])"
+2. Use case-insensitive patterns: [Cc] for 'c', [Bb] for 'b', etc.
+3. Include variations: "bake" → "(bak(e|ed|ing)|oven)"
 4. For negatives, detect phrases like "not", "no", "without", "avoid"
 5. Use alternation (|) for synonyms: "(chicken|poultry)"
-6. If a field has no values, use empty array []
-7. Return ONLY the JSON object, no explanations
-8. Escape special regex characters properly
+6. Keep patterns simple - RE2 doesn't support all PCRE features
+7. If a field has no values, use empty array []
+8. Return ONLY the JSON object, no explanations
+9. Avoid complex lookaheads/lookbehinds - RE2 has limited support
 
 Examples:
 Query: "курица с чесноком в духовке, но не жареная"
 {
-    "dish_name": ["\\b[Cc]hicken\\b", "\\b[Pp]oultry\\b"],
-    "ingredients": ["\\b[Cc]hicken\\b", "\\b[Gg]arlic\\b"],
-    "instructions": ["\\b(bak(e|ed|ing)|oven|roast(ed|ing)?)\\b"],
-    "instructions_negatives": ["\\b(fr(y|ied|ying)|deep[- ]fr(y|ied))\\b"],
+    "dish_name": ["[Cc]hicken", "[Pp]oultry"],
+    "ingredients": ["[Cc]hicken", "[Gg]arlic"],
+    "instructions": ["(bak(e|ed|ing)|oven|roast(ed|ing)?)"],
+    "instructions_negatives": ["(fr(y|ied|ying)|deep.?fr(y|ied))"],
     "ingredients_negatives": [],
     "description": []
 }
 
 Query: "pasta with tomatoes without meat"
 {
-    "dish_name": ["\\b[Pp]asta\\b"],
-    "ingredients": ["\\b[Pp]asta\\b", "\\b[Tt]omat(o|oes)\\b"],
+    "dish_name": ["[Pp]asta"],
+    "ingredients": ["[Pp]asta", "[Tt]omat(o|oes)"],
     "instructions": [],
     "instructions_negatives": [],
-    "ingredients_negatives": ["\\b(meat|beef|pork|chicken|lamb)\\b"],
+    "ingredients_negatives": ["(meat|beef|pork|chicken|lamb)"],
     "description": []
 }
 
 Query: "quick chocolate dessert"
 {
-    "dish_name": ["\\b[Dd]essert\\b"],
-    "ingredients": ["\\b[Cc]hocolate\\b"],
+    "dish_name": ["[Dd]essert"],
+    "ingredients": ["[Cc]hocolate"],
     "instructions": [],
     "instructions_negatives": [],
     "ingredients_negatives": [],
-    "description": ["\\b(quick|fast|easy)\\b"]
+    "description": ["(quick|fast|easy)"]
 }"""
 
             user_prompt = f'Generate regex patterns for: "{text_query}"'

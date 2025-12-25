@@ -39,4 +39,4 @@ def main(search_type: int = 2):
             print_recipe_list(result)
 
 if __name__ == "__main__":
-    main(2)
+    main(0)
