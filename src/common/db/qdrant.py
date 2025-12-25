@@ -58,9 +58,11 @@ class QdrantRecipeManager:
             self.collection_prefix = collection_prefix
             self.full_collection = "full"
             self.mv_collection = "mv"
+            self.images_collection = "images"
             self.collections = {
                 "full": f"{collection_prefix}_full",
                 "mv": f"{collection_prefix}_mv",
+                "images": f"{collection_prefix}_images",
             }
             self.connected = False
             
@@ -143,7 +145,7 @@ class QdrantRecipeManager:
         # Если дошли сюда - все попытки исчерпаны
         return False
         
-    def create_collections(self, dims: int = 1024) -> bool:
+    def create_collections(self, dims: int = 1024, image_dims: int = 768) -> bool:
         """
         Создание отдельных коллекций для каждого типа эмбеддинга
         
@@ -200,6 +202,13 @@ class QdrantRecipeManager:
                             "meta": VectorParams(
                                 size=dims,
                                 distance=Distance.COSINE,
+                            )
+                        }
+                    case "images":
+                        vectors_config = {
+                            "image": VectorParams(
+                                size=image_dims,  # Стандартный размер для CLIP/image embeddings
+                                distance=Distance.COSINE
                             )
                         }
                 

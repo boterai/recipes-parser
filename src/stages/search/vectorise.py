@@ -172,7 +172,6 @@ class RecipeVectorizer:
         
         return self.vectors_to_recipes(recipe.page_id, results)
         
-    
     def get_similar_recipes_weighted(
             self, 
             recipe: Recipe,
@@ -195,3 +194,51 @@ class RecipeVectorizer:
             return []
         
         return self.vectors_to_recipes(recipe.page_id, results)
+    
+    def vectorise_images(self, image_paths: list[str], embed_function: EmbeddingFunction) -> list[list[float]]:
+        """
+        Векторизация изображений рецептов
+        
+        Args:
+            image_paths: Список путей к изображениям
+            embed_function: Функция для получения эмбеддингов
+            
+        Returns:
+            Список векторов для каждого изображения
+        """
+        embeddings = embed_function(texts=image_paths, is_image=True)
+        return embeddings
+    
+    def get_similar_recipes_by_images(
+            self,
+            image_paths: list[str],
+            embed_function: EmbeddingFunction,
+            limit: int = 6,
+            score_threshold: float = 0.0
+        ) -> list[float, Recipe]:
+        """
+        Поиск похожих рецептов по изображениям
+        
+        Args:
+            image_paths: Список путей к изображениям
+            embed_function: Функция для получения эмбеддингов
+            limit: Максимальное количество возвращаемых похожих рецептов
+            score_threshold: Порог схожести для фильтрации результатов
+            
+        Returns:
+            Список кортежей (score, Recipe)
+        """
+        image_vectors = self.vectorise_images(image_paths, embed_function)
+        
+        results = self.vector_db.search_by_image_vectors(
+            image_vectors=image_vectors,
+            limit=limit,
+            score_threshold=score_threshold
+        )
+        
+        if len(results) == 0:
+            return []
+        
+        # Предполагается, что все результаты относятся к одному рецепту
+        first_result = results[0]
+        return self.vectors_to_recipes(first_result['recipe_id'], results)
