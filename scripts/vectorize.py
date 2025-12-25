@@ -9,7 +9,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.common.embedding import get_embedding_function
-from src.stages.vectorise.vectorise import RecipeVectorizer
+from src.stages.search.vectorise import RecipeVectorizer
 from src.models.recipe import Recipe
 
 def add_recipes():

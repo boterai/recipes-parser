@@ -7,7 +7,6 @@ import sys
 import logging
 from pathlib import Path
 import argparse
-import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Добавление корневой директории в PYTHONPATH

@@ -14,10 +14,10 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from src.models.page import Page
 from src.models.page import Recipe
 from src.models.search_config import ComponentWeights
-from src.common.db.mysql import MySQlManager
 from src.common.db.qdrant import QdrantRecipeManager
 from src.common.db.clickhouse import ClickHouseManager
 from src.common.embedding import EmbeddingFunction
+from src.repositories.page import PageRepository
 
 logger = logging.getLogger(__name__)
 
@@ -26,8 +26,7 @@ NO_EMBEDDING_ERROR = "Embedding function не установлена. Испол
 class RecipeVectorizer:
     """Векторизатор рецептов на основе векторной БД"""
     
-    def __init__(self, vector_db: QdrantRecipeManager = None, olap_database: ClickHouseManager = None,
-                 db: MySQlManager = None):
+    def __init__(self, vector_db: QdrantRecipeManager = None, olap_database: ClickHouseManager = None):
         """
         Инициализация векторизатора
         
@@ -38,7 +37,7 @@ class RecipeVectorizer:
         """
         self._vector_db = vector_db
         self._olap_database = olap_database
-        self._db = db
+        self.page_repository = PageRepository()
     
     @property
     def vector_db(self) -> QdrantRecipeManager:
@@ -57,15 +56,6 @@ class RecipeVectorizer:
             if not self._olap_database.connect():
                 raise ConnectionError("Не удалось подключиться к ClickHouse")
         return self._olap_database
-    
-    @property
-    def db(self) -> MySQlManager:
-        """Ленивое подключение к MySQL"""
-        if self._db is None:
-            self._db = MySQlManager()
-            if not self._db.connect():
-                raise ConnectionError("Не удалось подключиться к MySQL")
-        return self._db
 
     def close(self):
         """Закрытие подключений к БД"""
@@ -73,8 +63,6 @@ class RecipeVectorizer:
             self._vector_db.close()
         if self._olap_database is not None:
             self._olap_database.close()
-        if self._db is not None:
-            self._db.close()
 
     def add_all_recipes(
             self, 
@@ -100,7 +88,7 @@ class RecipeVectorizer:
         if site_id is not None:
             sites = [site_id]
         else:
-            sites = self.db.get_all_site_ids()
+            sites = self.page_repository.get_recipe_sites()
         
         if not sites:
             logger.warning("Нет сайтов для векторизации")

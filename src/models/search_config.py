@@ -3,7 +3,6 @@
 """
 
 from pydantic import BaseModel, model_validator, ValidationError
-from typing import Optional
 
 class ComponentWeights(BaseModel):
     """
@@ -140,5 +139,14 @@ class SearchProfiles:
         description=0.0,
         instructions=0.0,
         tags=0.0,
+        meta=0.0
+    )
+
+    CLICKHOUSE_DEFAULT = ComponentWeights(
+        ingredients=0.40,
+        dish_name=0.25,
+        description=0.15,
+        instructions=0.15,
+        tags=0.05,
         meta=0.0
     )

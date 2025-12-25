@@ -255,7 +255,7 @@ class ClickHouseManager:
         # ReplacingMergeTree автоматически заменит записи с одинаковым page_id
         return self.insert_recipes_batch(recipes, table_name)
     
-    def _parse_recipes_from_dataframe(self, df) -> list[Recipe]:
+    def parse_recipes_from_dataframe(self, df, score_column: Optional[str] = None) -> list[Recipe]|list[tuple[float, Recipe]]:
         """
         Общая функция для парсинга DataFrame в список Recipe
         
@@ -285,7 +285,10 @@ class ClickHouseManager:
                     category=str(row['category']),
                     vectorised=bool(row.get('vectorised', False))
                 )
-                recipes.append(recipe)
+                if score_column and score_column in row:
+                    recipes.append((float(row[score_column]), recipe))
+                else:
+                    recipes.append(recipe)
             except Exception as e:
                 logger.warning(f"Ошибка парсинга рецепта page_id={row['page_id']}: {e}")
                 continue
@@ -338,7 +341,7 @@ class ClickHouseManager:
                 logger.info("Рецепты не найдены по списку ID")
                 return []
             
-            recipes = self._parse_recipes_from_dataframe(df)
+            recipes = self.parse_recipes_from_dataframe(df)
             logger.info(f"Получено {len(recipes)} рецептов по списку из {len(page_ids)} ID")
             return recipes
             
@@ -412,7 +415,7 @@ class ClickHouseManager:
                 logger.info(f"Рецепты не найдены для site_id={site_id}")
                 return []
             
-            recipes = self._parse_recipes_from_dataframe(df)
+            recipes = self.parse_recipes_from_dataframe(df)
             
             vectorised_str = "все" if vectorised is None else ("векторизованные" if vectorised else "невекторизованные")
             logger.info(f"Получено {len(recipes)} {vectorised_str} рецептов для site_id={site_id}")
