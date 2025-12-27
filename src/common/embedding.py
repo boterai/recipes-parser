@@ -35,9 +35,24 @@ class EmbeddingFunction(Protocol):
     def __call__(
         self, 
         texts: str | list[str], 
-        is_query: bool = False, 
-        use_colbert: bool = False
+        is_query: bool = False
     ) -> EmbeddingFunctionReturn:
+        ...
+
+class ImageEmbeddingFunction(Protocol):
+    """
+    Протокол для функций эмбеддинга изображений.
+    
+    Args:
+        images: Путь к изображению или список путей к изображениям
+    
+    Returns:
+        - dense_vectors: list[float] или list[list[float]] - основные векторы
+    """
+    def __call__(
+        self, 
+        images: ImageInput | list[ImageInput]
+    ) -> ImageEmbeddingFunctionReturn:
         ...
 
 def get_embedding_function(model_name: str = MODEL, batch_size: int=8) -> tuple[EmbeddingFunction, int]:
@@ -116,7 +131,7 @@ def get_image_embedding_function(
     pretrained: str = "laion2b_s32b_b82k",
     device: Optional[str] = "cuda",
     batch_size: int = 32,
-) -> tuple[Callable[[ImageInput | list[ImageInput]], ImageEmbeddingFunctionReturn], int]:
+) -> tuple[ImageEmbeddingFunction, int]:
     """Создает функцию эмбеддинга изображений через OpenCLIP.
     
     Популярные модели:

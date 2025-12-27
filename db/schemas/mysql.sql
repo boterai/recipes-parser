@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS pages (
     prep_time VARCHAR(100),
     cook_time VARCHAR(100),
     total_time VARCHAR(100),
-    image_urls TEXT,
+    image_urls TEXT, -- TODO вероятно лучше мигрировать на отдельную таблицу полнотсью и удалить это поле
     description TEXT,
     notes TEXT,
     tags TEXT, -- теги через запятую (лучше бы мигрировать на JSON)
@@ -58,4 +58,19 @@ CREATE TABLE IF NOT EXISTS search_query (
     recipe_url_count INT DEFAULT 0, -- число уникальных сайтов, признанных рецептами
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY unique_query (query(191))
+) ENGINE=InnoDB;
+
+-- Таблица изображений рецептов
+CREATE TABLE IF NOT EXISTS images (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    page_id INT NOT NULL,
+    image_url VARCHAR(1000) NOT NULL,
+    image_url_hash CHAR(64) AS (SHA2(image_url, 256)) STORED,
+    local_path VARCHAR(500),
+    remote_storage_url VARCHAR(500),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    vectorised BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (page_id) REFERENCES pages(id) ON DELETE CASCADE,
+    INDEX idx_page_id (page_id),
+    UNIQUE KEY unique_image_url_hash (image_url_hash)
 ) ENGINE=InnoDB;

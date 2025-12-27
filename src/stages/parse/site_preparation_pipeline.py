@@ -10,7 +10,7 @@ import shutil
 from pathlib import Path
 from typing import Optional, List
 from urllib.parse import urlparse
-
+from selenium import webdriver
 if __name__ == "__main__":
     sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
@@ -136,7 +136,9 @@ class SitePreparationPipeline:
     
     def prepare_site(self, 
                     url: str,
-                    max_pages: int = 150) -> bool:
+                    max_pages: int = 150,
+                    driver: Optional[webdriver.Chrome] = None,
+                    custom_logger: Optional[logging.Logger] = None) -> bool:
         """
         Подготовка данных для создания парсера рецептов
         
@@ -155,6 +157,10 @@ class SitePreparationPipeline:
         Returns:
             site_found: bool - True если сайт подготовлен и паттерн найден, False иначе
         """
+        if custom_logger:
+            logger = custom_logger
+        else: 
+            logger = logging.getLogger(__name__)
         logger.info(f"\n{'='*70}")
         logger.info(f"НАЧАЛО ПОДГОТОВКИ САЙТА: {url}")
         logger.info(f"{'='*70}")
@@ -185,7 +191,9 @@ class SitePreparationPipeline:
             url, 
             debug_mode=True, 
             debug_port=self.debug_port,
-            max_urls_per_pattern=self.max_urls_per_pattern
+            max_urls_per_pattern=self.max_urls_per_pattern,
+            driver=driver,
+            custom_logger=logger
         )
 
         if site_orm.search_url:
@@ -217,7 +225,7 @@ class SitePreparationPipeline:
             
             logger.info(f"✓ Найдено рецептов: {recipes_found}")
             
-            # Если нашли рецепты - ищем паттерн, для поиска паттерна хватит и 1 рецепта на первый раз
+            # Если нашли рецепты - ищем паттерн, для поиска паттерна хватит и 2 рецептов на первый раз
             if recipes_found > 1:
                 pattern = self._try_find_pattern(site_id, explorer)
                 if pattern and recipes_found >= self.min_recipes:
@@ -266,7 +274,7 @@ class SitePreparationPipeline:
                 # Если паттерн был, но рецепты не находятся - сбрасываем
                 if recipes_found == 0 and explorer.site.pattern:
                     logger.warning("⚠ Паттерн не работает, сбрасываем и продолжаем")
-                    explorer = self._reset_explorer_pattern(url, state)
+                    explorer = self._reset_explorer_pattern(url, state, driver=driver, custom_logger=logger)
                     continue
                 
                 # Пытаемся найти паттерн
@@ -337,7 +345,8 @@ class SitePreparationPipeline:
             logger.error(f"Ошибка при поиске паттерна: {e}")
             return None
     
-    def _reset_explorer_pattern(self, url: str, state: dict) -> SiteExplorer:
+    def _reset_explorer_pattern(self, url: str, state: dict, driver: Optional[webdriver.Chrome] = None,
+                                custom_logger: Optional[logging.Logger] = None) -> SiteExplorer:
         """
         Сброс паттерна explorer с восстановлением состояния
         
@@ -354,7 +363,9 @@ class SitePreparationPipeline:
             url,
             debug_mode=True,
             debug_port=self.debug_port,
-            max_urls_per_pattern=self.max_urls_per_pattern - 2  # Уменьшаем лимит
+            max_urls_per_pattern=self.max_urls_per_pattern - 2,  # Уменьшаем лимит
+            driver=driver,
+            custom_logger=custom_logger
         )
         
         new_explorer.import_state(state)

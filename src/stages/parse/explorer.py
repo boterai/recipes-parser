@@ -152,6 +152,18 @@ class SiteExplorer:
     
     def connect_to_chrome(self):
         """Подключение к Chrome в отладочном режиме"""
+
+        if self.driver is not None:
+             # Проверяем что подключение работает
+            try:
+                _ = self.driver.current_url
+                self.logger.info("✓ Успешное подключение к браузеру")
+                self.logger.info("Используется переданный экземпляр webdriver.Chrome")
+                return
+            except Exception as e:
+                self.logger.warning(f"Подключение установлено, но проблема с сессией: {e}")
+                self.driver.quit()
+
         chrome_options = Options()
         
         if self.debug_mode:

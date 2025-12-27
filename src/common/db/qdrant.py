@@ -6,11 +6,13 @@ import time
 import logging
 from typing import Any, Optional
 from itertools import batched
-from src.common.embedding import EmbeddingFunction
+from src.common.embedding import EmbeddingFunction, ImageEmbeddingFunction
 from config.db_config import QdrantConfig
 from src.models.recipe import Recipe
 from src.models.search_config import ComponentWeights, SearchProfiles
 from qdrant_client import QdrantClient
+from src.models.image import ImageORM, Image, download_image
+
 from qdrant_client.models import (
     Distance, VectorParams, PointStruct)
 
@@ -336,7 +338,7 @@ class QdrantRecipeManager:
         except Exception as e:
             logger.warning(f"⚠ Ошибка при пометке рецептов как векторизованных: {e}")
 
-    def add_recipes(
+    def vectorise_recipes(
             self, 
             pages: list[Recipe], 
             embedding_function: EmbeddingFunction, 
@@ -561,10 +563,133 @@ class QdrantRecipeManager:
             import traceback
             traceback.print_exc()
             return []
+    
+    def vectorise_images(
+        self,
+        images: list[ImageORM],
+        embedding_function: ImageEmbeddingFunction,
+        batch_size: int = 10,
+        mark_vectorised_callback: callable = None
+    ) -> int:
+        """
+        Добавление изображений рецептов в коллекцию images
         
-
-    def close(self):
-        """Закрытие подключения"""
-        if self.client:
-            self.client.close()
-            logger.info("Подключение к Qdrant закрыто")
+        Args:
+            images: Список объектов ImageORM с изображениями
+            embedding_function: Функция для создания эмбеддингов изображений
+            batch_size: Размер батча для upsert
+            mark_vectorised_callback: Callback для пометки изображений как векторизованных (принимает list[int] image_ids)
+        
+        Returns:
+            Количество успешно добавленных изображений
+        """
+        if not self.client:
+            raise QdrantNotConnectedError()
+        
+        collection_name = self.collections.get(self.images_collection)
+        if not collection_name:
+            logger.error("Коллекция images не найдена")
+            return 0
+        
+        added_count = 0
+        
+        for batch_num, start in enumerate(range(0, len(images), batch_size), 1):
+            end = min(start + batch_size, len(images))
+            batch_images = images[start:end]
+            
+            try:
+                # Получаем пути к локальным файлам изображений
+                images = [img.local_path for img in batch_images]
+                if any(img is None for img in images):
+                    logger.warning(f"⚠ Батч {batch_num} содержит изображения без локального пути, получаем изображения по ссылкам...")
+                    images = [img_pil for img in batch_images if (img_pil := download_image(img.image_url)) is not None]
+                # Создаем векторы изображений
+                image_vectors = embedding_function(images)
+                
+                # Создаем точки для Qdrant
+                points = []
+                for img, vector in zip(batch_images, image_vectors):
+                    point = PointStruct(
+                        id=img.id,
+                        vector={"image": vector},
+                        payload={
+                            "image_id": img.id                        }
+                    )
+                    points.append(point)
+                
+                self.client.upsert(collection_name=collection_name, points=points, wait=True)
+                added_count += len(points)
+                logger.info(f"✓ Батч {batch_num}, 'images': {len(points)} изображений")
+            
+                if mark_vectorised_callback:
+                    # Помечаем изображения как векторизованные
+                    try:
+                        image_ids = [img.id for img in batch_images]
+                        mark_vectorised_callback(image_ids)
+                        logger.info(f"✓ Помечено {len(image_ids)} изображений как векторизованные")
+                    except Exception as e:
+                        logger.warning(f"⚠ Ошибка при пометке изображений как векторизованных: {e}")
+                
+            except Exception as e:
+                logger.error(f"✗ Ошибка батча {batch_num}: {e}")
+                import traceback
+                traceback.print_exc()
+                continue
+        
+        logger.info(f"✓ Итого добавлено: {added_count} изображений")
+        return added_count
+    
+    def search_images(
+        self,
+        query_vector: list[float],
+        limit: int = 10,
+        score_threshold: float = 0.0
+    ) -> list[tuple[float, Image]]:
+        """
+        Поиск похожих изображений по вектору запроса
+        
+        Args:
+            query_vector: Вектор запроса (embedding изображения)
+            limit: Количество результатов
+            score_threshold: Минимальный порог схожести
+        
+        Returns:
+            Список кортежей (score, Image) отсортированный по убыванию score
+        """
+        if not self.client:
+            logger.warning("Qdrant не подключен")
+            return []
+        
+        collection_name = self.collections.get(self.images_collection)
+        if not collection_name:
+            logger.error("Коллекция images не найдена")
+            return []
+        
+        try:
+            results = self.client.query_points(
+                collection_name=collection_name,
+                query=query_vector,
+                using="image",
+                limit=limit,
+                with_payload=True,
+                score_threshold=score_threshold
+            )
+            
+            # Формируем результаты как list[tuple[float, Image]]
+            output = []
+            for hit in results.points:
+                # Создаем Image из payload
+                image = Image(
+                    id=hit.payload.get("image_id"),
+                    page_id=hit.payload.get("page_id")
+                )
+                output.append((hit.score, image))
+            
+            logger.info(f"Найдено {len(output)} похожих изображений")
+            return output
+        
+        except Exception as e:
+            logger.error(f"Ошибка поиска изображений: {e}")
+            import traceback
+            traceback.print_exc()
+            return []

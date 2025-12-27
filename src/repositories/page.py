@@ -44,7 +44,8 @@ class PageRepository(BaseRepository[PageORM]):
         finally:
             session.close()
     
-    def get_by_site(self, site_id: int, limit: Optional[int] = None, confidence_score: Optional[int] = None) -> List[PageORM]:
+    def get_by_site(self, site_id: int, limit: Optional[int] = None, confidence_score: Optional[int] = None,
+                    offset: Optional[int] = None) -> List[PageORM]:
         """
         Получить все страницы определенного сайта
         
@@ -64,6 +65,9 @@ class PageRepository(BaseRepository[PageORM]):
             
             if limit:
                 query = query.limit(limit)
+            
+            if offset:
+                query = query.offset(offset)
             
             return query.all()
         finally:

@@ -27,13 +27,12 @@ from src.repositories.search_query import SearchQueryRepository
 from src.stages.parse.site_preparation_pipeline import SitePreparationPipeline
 from pathlib import Path
 from utils.languages import POPULAR_LANGUAGES
-logger = logging.getLogger(__name__)
-
 
 class AutoScraper:
     """Автоматический сборщик рецептов через DuckDuckGo"""
     
-    def __init__(self, debug_mode: bool = True, debug_port: Optional[int] = None):
+    def __init__(self, debug_mode: bool = True, debug_port: Optional[int] = None,
+                 custom_logger: Optional[logging.Logger] = None):
         """
         Инициализация скрапера
         
@@ -46,8 +45,12 @@ class AutoScraper:
         self.driver = None
         self.site_repository = SiteRepository()
         self.search_query_repository = SearchQueryRepository()
-        self.site_preparation_pipeline = SitePreparationPipeline() # все значения установлены как дефолтные
-        
+        self.site_preparation_pipeline = SitePreparationPipeline(debug_port=debug_port) # все значения установлены как дефолтные
+        if custom_logger:
+            self.logger = custom_logger
+        else:
+            self.logger = logging.getLogger(__name__)
+
     def connect_to_chrome(self):
         """Подключение к Chrome в отладочном режиме"""
         if self.driver:
@@ -60,7 +63,7 @@ class AutoScraper:
                 "debuggerAddress", 
                 f"localhost:{self.debug_port}"
             )
-            logger.info(f"Подключение к Chrome на порту {self.debug_port}")
+            self.logger.info(f"Подключение к Chrome на порту {self.debug_port}")
         else:
             chrome_options.add_argument("--start-maximized")
             chrome_options.add_argument("--disable-blink-features=AutomationControlled")
@@ -76,11 +79,11 @@ class AutoScraper:
             self.driver = webdriver.Chrome(options=chrome_options)
             self.driver.implicitly_wait(config.IMPLICIT_WAIT)
             self.driver.set_page_load_timeout(config.PAGE_LOAD_TIMEOUT)
-            logger.info("Успешное подключение к браузеру")
+            self.logger.info("Успешное подключение к браузеру")
         except WebDriverException as e:
-            logger.error(f"Ошибка подключения к браузеру: {e}")
+            self.logger.error(f"Ошибка подключения к браузеру: {e}")
             if self.debug_mode:
-                logger.error(
+                self.logger.error(
                     f"\nЗапустите Chrome командой:\n"
                     f"google-chrome --remote-debugging-port={self.debug_port} "
                     f"--user-data-dir=./chrome_debug_{self.debug_port}\n"
@@ -100,7 +103,7 @@ class AutoScraper:
         """
         self.connect_to_chrome()
         
-        logger.info(f"Поиск в DuckDuckGo: '{query}'")
+        self.logger.info(f"Поиск в DuckDuckGo: '{query}'")
         
         try:
             # Переходим на DuckDuckGo
@@ -160,18 +163,18 @@ class AutoScraper:
                     last_height = new_height
                     
                 except Exception as e:
-                    logger.warning(f"Ошибка при сборе ссылок: {e}")
+                    self.logger.warning(f"Ошибка при сборе ссылок: {e}")
                     break
             
             urls_list = list(urls)[:max_results]
-            logger.info(f"✓ Собрано {len(urls_list)} уникальных URL")
+            self.logger.info(f"✓ Собрано {len(urls_list)} уникальных URL")
             return urls_list
             
         except TimeoutException:
-            logger.error("Timeout при загрузке DuckDuckGo")
+            self.logger.error("Timeout при загрузке DuckDuckGo")
             return []
         except Exception as e:
-            logger.error(f"Ошибка поиска в DuckDuckGo: {e}")
+            self.logger.error(f"Ошибка поиска в DuckDuckGo: {e}")
             import traceback
             traceback.print_exc()
             return []
@@ -187,7 +190,7 @@ class AutoScraper:
         Returns:
             Словарь {url: site_id}
         """
-        logger.info(f"Создание сайтов из {len(urls)} URL...")
+        self.logger.info(f"Создание сайтов из {len(urls)} URL...")
         saved_urls = set()
 
         for url in urls:
@@ -206,15 +209,15 @@ class AutoScraper:
                 
                 site_orm = self.site_repository.create_or_get(site)
                 if site_orm.pattern is not None or site_orm.is_recipe_site:
-                    logger.info(f"✓ Сайт уже существует и является сайтом с рецептом: {base_url} (ID={site_orm.id})")
+                    self.logger.info(f"✓ Сайт уже существует и является сайтом с рецептом: {base_url} (ID={site_orm.id})")
                     continue  # Сайт уже существует
                 saved_urls.add(url)
                 
             except Exception as e:
-                logger.error(f"Ошибка создания сайта для URL {url}: {e}")
+                self.logger.error(f"Ошибка создания сайта для URL {url}: {e}")
                 continue
         
-        logger.info(f"✓ Подготовлено {len(saved_urls)} сайтов")
+        self.logger.info(f"✓ Подготовлено {len(saved_urls)} сайтов")
         return saved_urls
     
     def _check_pages_for_recipes(self, saved_urls: set) -> tuple[int, int]:
@@ -227,7 +230,7 @@ class AutoScraper:
         Returns:
             (количество_обработанных, количество_рецептов)
         """
-        logger.info(f"Проверка {len(saved_urls)} страниц на рецепты...")
+        self.logger.info(f"Проверка {len(saved_urls)} страниц на рецепты...")
         
         processed_count = 0
         recipe_count = 0
@@ -235,16 +238,16 @@ class AutoScraper:
         for url in saved_urls:
             try:
 
-                if self.site_preparation_pipeline.prepare_site(url, max_pages=90):
+                if self.site_preparation_pipeline.prepare_site(url, max_pages=60, driver=self.driver):
                     recipe_count += 1
                     
                 processed_count += 1
                 
             except Exception as e:
-                logger.error(f"Ошибка обработки URL {url}: {e}")
+                self.logger.error(f"Ошибка обработки URL {url}: {e}")
                 continue
         
-        logger.info(f"✓ Обработано {processed_count} URL, найдено {recipe_count} рецептов")
+        self.logger.info(f"✓ Обработано {processed_count} URL, найдено {recipe_count} рецептов")
         return processed_count, recipe_count
     
     def process_urls(self, urls: list[str], query_language: str, query_id: int) -> tuple[int, int]:
@@ -262,7 +265,7 @@ class AutoScraper:
         if not urls:
             return 0, 0
         
-        logger.info(f"Обработка {len(urls)} URL...")
+        self.logger.info(f"Обработка {len(urls)} URL...")
         
         # Шаг 1: Создаём все сайты в БД
         saved_urls = self._create_sites_from_urls(urls, query_language)
@@ -285,7 +288,7 @@ class AutoScraper:
         results_per_query: int = 10,
         min_unprocessed_sites: int = 100,
         generate_from_recipes: bool = True,
-        generate_with_gpt: bool = False
+        generate_with_gpt: bool = False,
     ):
         """
         Автоматический сбор рецептов
@@ -300,40 +303,40 @@ class AutoScraper:
         """
         try:
             # 0. Проверяем количество необработанных сайтов
-            logger.info("\n[0/4] Проверка количества необработанных сайтов...")
+            self.logger.info("\n[0/4] Проверка количества необработанных сайтов...")
             unprocessed_count = self.site_repository.count_sites_without_pattern()
             
-            logger.info(f"  Найдено необработанных сайтов (без паттерна): {unprocessed_count}")
-            logger.info(f"  Минимум требуется: {min_unprocessed_sites}")
+            self.logger.info(f"  Найдено необработанных сайтов (без паттерна): {unprocessed_count}")
+            self.logger.info(f"  Минимум требуется: {min_unprocessed_sites}")
             
             if unprocessed_count >= min_unprocessed_sites:
-                logger.info(f"\n{'='*70}")
-                logger.info("✓ ДОСТАТОЧНО НЕОБРАБОТАННЫХ САЙТОВ")
-                logger.info(f"  Необработанных сайтов: {unprocessed_count} >= {min_unprocessed_sites}")
-                logger.info("  Поиск новых сайтов не требуется")
-                logger.info(f"{'='*70}\n")
+                self.logger.info(f"\n{'='*70}")
+                self.logger.info("✓ ДОСТАТОЧНО НЕОБРАБОТАННЫХ САЙТОВ")
+                self.logger.info(f"  Необработанных сайтов: {unprocessed_count} >= {min_unprocessed_sites}")
+                self.logger.info("  Поиск новых сайтов не требуется")
+                self.logger.info(f"{'='*70}\n")
                 
                 # здесь проводим обработку уже имеющихся сайтов
-                logger.info("Начинаем обработку необработанных сайтов...\n")
+                self.logger.info("Начинаем обработку необработанных сайтов...\n")
                 sites = self.site_repository.get_unprocessed_sites(limit=min_unprocessed_sites, random_order=True) # получаем случайные необработанные сайты
                 for site in sites:
                     try:
-                        logger.info(f"\n=== Обработка сайта ID={site.id}, URL={site.base_url} ===")
-                        if self.site_preparation_pipeline.prepare_site(site.search_url, max_pages=90):
-                            logger.info(f"✓ Сайт ID={site.id} обработан и содержит рецепты")
+                        self.logger.info(f"\n=== Обработка сайта ID={site.id}, URL={site.base_url} ===")
+                        if self.site_preparation_pipeline.prepare_site(site.search_url, max_pages=60, custom_logger=self.logger):
+                            self.logger.info(f"✓ Сайт ID={site.id} обработан и содержит рецепты")
                         else:
-                            logger.info(f"→ Сайт ID={site.id} обработан, но рецепты не найдены")
+                            self.logger.info(f"→ Сайт ID={site.id} обработан, но рецепты не найдены")
                     except Exception as e:
-                        logger.error(f"Ошибка обработки сайта ID={site.id}, URL={site.base_url}: {e}")
+                        self.logger.error(f"Ошибка обработки сайта ID={site.id}, URL={site.base_url}: {e}")
                         continue
                 return
             
-            logger.info(f"→ Недостаточно необработанных сайтов ({unprocessed_count} < {min_unprocessed_sites})")
-            logger.info("→ Начинаем поиск новых сайтов через DuckDuckGo...\n")
+            self.logger.info(f"→ Недостаточно необработанных сайтов ({unprocessed_count} < {min_unprocessed_sites})")
+            self.logger.info("→ Начинаем поиск новых сайтов через DuckDuckGo...\n")
             
             generator = SearchQueryGenerator(max_non_searched=10, query_repository=self.search_query_repository)
             # 1. Проверяем и генерируем запросы если нужно
-            logger.info("\n[1/4] Проверка и генерация поисковых запросов...")
+            self.logger.info("\n[1/4] Проверка и генерация поисковых запросов...")
             if self.search_query_repository.get_unsearched_count() < min_queries:
                 # генерируем новые запросы, елси остлоьс меньше минимального
                 
@@ -342,10 +345,10 @@ class AutoScraper:
                 elif generate_from_recipes:
                     new_queries = generator.get_queries_from_existing_recipes(count=10)
                     if not new_queries:
-                        logger.warning("Не удалось сгенерировать запросы на основе существующих рецептов, пробуем GPT...")
+                        self.logger.warning("Не удалось сгенерировать запросы на основе существующих рецептов, пробуем GPT...")
                         new_queries = generator.generate_search_queries(count=10)
                 else:
-                    logger.warning("Нет способа сгенерировать новые запросы (generate_from_recipes и generate_with_gpt отключены)")
+                    self.logger.warning("Нет способа сгенерировать новые запросы (generate_from_recipes и generate_with_gpt отключены)")
                     new_queries = []
 
                 query_results = {}
@@ -354,29 +357,29 @@ class AutoScraper:
                     query_results[query] = translated
                 
                 generator.save_queries_to_db(query_results)
-                logger.info(f"Сгенерировано {len(new_queries)} новых поисковых запросов:")
+                self.logger.info(f"Сгенерировано {len(new_queries)} новых поисковых запросов:")
             
             # 2. Получаем неиспользованные запросы
-            logger.info("\n[2/4] Получение неиспользованных запросов...")
+            self.logger.info("\n[2/4] Получение неиспользованных запросов...")
             search_queries = self.search_query_repository.get_unsearched_queries(limit=queries_to_process)
             queries = [q.to_pydantic() for q in search_queries]
             
             if not queries:
-                logger.warning("Нет неиспользованных запросов")
+                self.logger.warning("Нет неиспользованных запросов")
                 return
             
-            logger.info(f"✓ Будет обработано {len(queries)} запросов")
+            self.logger.info(f"✓ Будет обработано {len(queries)} запросов")
             
             # 3. Обрабатываем каждый запрос
-            logger.info("\n[3/4] Поиск в DuckDuckGo...")
+            self.logger.info("\n[3/4] Поиск в DuckDuckGo...")
             
             total_urls = 0
             total_recipes = 0
             
             for idx, query in enumerate(queries, 1):
-                logger.info(f"\n--- Запрос {idx}/{len(queries)} ---")
-                logger.info(f"ID: {query.id}, Язык: {query.language}")
-                logger.info(f"Запрос: '{query.query}'")
+                self.logger.info(f"\n--- Запрос {idx}/{len(queries)} ---")
+                self.logger.info(f"ID: {query.id}, Язык: {query.language}")
+                self.logger.info(f"Запрос: '{query.query}'")
                 
                 # Ищем в DuckDuckGo
                 urls = self.search_duckduckgo(query.query, max_results=results_per_query)
@@ -386,28 +389,28 @@ class AutoScraper:
 
                 total_urls += processed
                 total_recipes += recipes
-                logger.info(f"✓ Запрос обработан: {processed} URL, {recipes} рецептов")
+                self.logger.info(f"✓ Запрос обработан: {processed} URL, {recipes} рецептов")
                 
                 # Задержка между запросами
                 time.sleep(3)
             
             # 4. Проверяем итоговое количество необработанных сайтов
-            logger.info("\n[4/4] Проверка итогов...")
+            self.logger.info("\n[4/4] Проверка итогов...")
             final_unprocessed_count = self.site_repository.count_sites_without_pattern()
             
             # Итоги
-            logger.info("\n" + "="*70)
-            logger.info("ИТОГИ ПОИСКА:")
-            logger.info(f"  Обработано запросов: {len(queries)}")
-            logger.info(f"  Найдено URL: {total_urls}")
-            logger.info(f"  Найдено рецептов: {total_recipes}")
-            logger.info(f"  Необработанных сайтов до: {unprocessed_count}")
-            logger.info(f"  Необработанных сайтов после: {final_unprocessed_count}")
-            logger.info(f"  Добавлено новых: {final_unprocessed_count - unprocessed_count}")
-            logger.info("="*70)
+            self.logger.info("\n" + "="*70)
+            self.logger.info("ИТОГИ ПОИСКА:")
+            self.logger.info(f"  Обработано запросов: {len(queries)}")
+            self.logger.info(f"  Найдено URL: {total_urls}")
+            self.logger.info(f"  Найдено рецептов: {total_recipes}")
+            self.logger.info(f"  Необработанных сайтов до: {unprocessed_count}")
+            self.logger.info(f"  Необработанных сайтов после: {final_unprocessed_count}")
+            self.logger.info(f"  Добавлено новых: {final_unprocessed_count - unprocessed_count}")
+            self.logger.info("="*70)
             
         except Exception as e:
-            logger.error(f"Ошибка при автоматическом сборе: {e}")
+            self.logger.error(f"Ошибка при автоматическом сборе: {e}")
             import traceback
             traceback.print_exc()
         finally:
@@ -418,4 +421,4 @@ class AutoScraper:
         """Закрытие всех подключений"""
         if self.driver and not self.debug_mode:
             self.driver.quit()
-            logger.info("WebDriver закрыт")
+            self.logger.info("WebDriver закрыт")

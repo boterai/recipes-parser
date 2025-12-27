@@ -16,8 +16,11 @@ from src.models.page import Recipe
 from src.models.search_config import ComponentWeights
 from src.common.db.qdrant import QdrantRecipeManager
 from src.common.db.clickhouse import ClickHouseManager
-from src.common.embedding import EmbeddingFunction
+from src.common.embedding import EmbeddingFunction, ImageEmbeddingFunction
 from src.repositories.page import PageRepository
+from src.repositories.image import ImageRepository
+from src.models.image import Image
+
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +41,7 @@ class RecipeVectorizer:
         self._vector_db = vector_db
         self._olap_database = olap_database
         self.page_repository = PageRepository()
+        self.image_repository = ImageRepository()
     
     @property
     def vector_db(self) -> QdrantRecipeManager:
@@ -104,7 +108,7 @@ class RecipeVectorizer:
                     logger.info(f"Все рецепты для сайта {site_id} уже векторизованы или отсутствуют")
                     break
                 print(f"Векторизуем партию из {len(recipes)} страниц, сайт {site_id}")
-                batch = self.vector_db.add_recipes(pages=recipes, embedding_function=embedding_function, batch_size=batch_size,
+                batch = self.vector_db.vectorise_recipes(pages=recipes, embedding_function=embedding_function, batch_size=batch_size,
                                               mark_vectorised_callback=self.olap_database.insert_recipes_batch)
                 total_vectorised += batch
                 total += len(recipes)
@@ -195,7 +199,12 @@ class RecipeVectorizer:
         
         return self.vectors_to_recipes(recipe.page_id, results)
     
-    def vectorise_images(self, image_paths: list[str], embed_function: EmbeddingFunction) -> list[list[float]]:
+    def vectorise_images(
+            self, 
+            embed_function: ImageEmbeddingFunction, 
+            limit: int  = 10, 
+            batch_size: int = 8
+            ) -> list[list[float]]:
         """
         Векторизация изображений рецептов
         
@@ -206,39 +215,48 @@ class RecipeVectorizer:
         Returns:
             Список векторов для каждого изображения
         """
-        embeddings = embed_function(texts=image_paths, is_image=True)
-        return embeddings
+        images = self.image_repository.get_not_vectorised(limit=limit)
+        if not images:
+            logger.info("Нет невекторизованных изображений для обработки")
+            return []
+        
+        return self.vector_db.vectorise_images(
+            images=images,
+            embedding_function=embed_function,
+            batch_size=batch_size,
+            mark_vectorised_callback=self.image_repository.mark_as_vectorised
+        )
     
-    def get_similar_recipes_by_images(
+    def get_similar_images(
             self,
-            image_paths: list[str],
             embed_function: EmbeddingFunction,
+            image_id: int,
             limit: int = 6,
             score_threshold: float = 0.0
-        ) -> list[float, Recipe]:
+        ) -> list[float, Image]:
         """
         Поиск похожих рецептов по изображениям
         
         Args:
-            image_paths: Список путей к изображениям
             embed_function: Функция для получения эмбеддингов
+            image_id: Идентификатор изображения для поиска похожих
             limit: Максимальное количество возвращаемых похожих рецептов
             score_threshold: Порог схожести для фильтрации результатов
             
         Returns:
-            Список кортежей (score, Recipe)
+            Список кортежей (score, Image)
         """
-        image_vectors = self.vectorise_images(image_paths, embed_function)
-        
-        results = self.vector_db.search_by_image_vectors(
-            image_vectors=image_vectors,
+
+        image_orm = self.image_repository.get_by_id(image_id)
+        if not image_orm:
+            logger.error(f"Image with id {image_id} not found")
+            return []
+
+        vectorised_query = embed_function(images=[image_orm.local_path])[0]
+        results = self.vector_db.search_images(
+            query_vector=vectorised_query,
             limit=limit,
             score_threshold=score_threshold
         )
-        
-        if len(results) == 0:
-            return []
-        
-        # Предполагается, что все результаты относятся к одному рецепту
-        first_result = results[0]
-        return self.vectors_to_recipes(first_result['recipe_id'], results)
+
+        return results

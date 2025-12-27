@@ -8,7 +8,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.common.embedding import get_embedding_function
+from src.common.embedding import get_embedding_function, get_image_embedding_function
 from src.stages.search.vectorise import RecipeVectorizer
 from src.models.recipe import Recipe
 
@@ -21,6 +21,15 @@ def add_recipes():
         embedding_function=embed_func,
         batch_size=batch_size,
         dims=dims)
+    
+def add_images(batch_size: int = 15):
+    # векторизует любые невекторизованные изображения рецептов и добавляет их в Qdrant
+    rv = RecipeVectorizer()
+    rv.vector_db.create_collections()
+    embed_func, dims = get_image_embedding_function(batch_size=batch_size)
+    rv.vectorise_images(
+        embed_function=embed_func,
+        limit=1000)
 
 def search_similar(recipe_id: int = 21427, use_weighted: bool = True,
                    score_threshold: float = 0.0, limit: int = 6):
@@ -68,5 +77,6 @@ def search_similar(recipe_id: int = 21427, use_weighted: bool = True,
 
 
 if __name__ == '__main__':
+    add_images()
     # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)
-    search_similar(recipe_id=19, use_weighted=False, score_threshold=0.0, limit=6)
+    #search_similar(recipe_id=19, use_weighted=False, score_threshold=0.0, limit=6)

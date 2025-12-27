@@ -318,10 +318,10 @@ URL: {url}
             recipe_ids = []
             not_recipe_ids = set()
 
-            for page in pages:
+            for num, page in enumerate(pages):
                 not_recipe_ids.add(page.id)
                 pages_to_analyze[page.id] = {"title": page.title, "url": page.url}
-                if len(pages_to_analyze) >= 15: # анализируем загоовки батчами по 15 штук
+                if len(pages_to_analyze) >= 15 or num == len(pages)-1: # анализируем загоовки батчами по 15 штук
                     ids = self.analyze_titles_with_gpt(pages_to_analyze)
                     recipe_ids.extend(ids)
                     not_recipe_ids.difference_update(ids)
@@ -338,8 +338,8 @@ URL: {url}
         return [], list(not_recipe_ids)
 
     def analyze_all_pages(self, site_id: Optional[int] = None, limit: Optional[int] = None, 
-                          filter_by_title: bool = False, recalculate: bool = False,
-                          page_ids: list = None, stop_analyse: Optional[int] = None) -> int:
+                          filter_by_title: bool = False, page_ids: list = None, 
+                          stop_analyse: Optional[int] = None) -> int:
         """
         Анализ всех страниц (или только указанного сайта)
         
