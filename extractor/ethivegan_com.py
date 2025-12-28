@@ -435,13 +435,13 @@ class EthiveganExtractor(BaseRecipeExtractor):
     
     def extract_tags(self) -> Optional[str]:
         """Извлечение тегов"""
-        # Список generic/нежелательных категорий для фильтрации
-        generic_categories = {'recipes', 'world cuisines', 'vegan recipes'}
-        
-        # Сначала пробуем из категорий на странице (более специфичные)
+        # Извлекаем теги из категорий на странице
         cat_links = self.soup.find_all('a', class_='penci-cat-name')
         if cat_links:
             tags = []
+            # Пропускаем слишком общие категории
+            generic_categories = {'recipes', 'world cuisines', 'vegan recipes'}
+            
             for link in cat_links:
                 cat_text = self.clean_text(link.get_text())
                 if cat_text and cat_text.lower() not in generic_categories:
@@ -458,31 +458,7 @@ class EthiveganExtractor(BaseRecipeExtractor):
                         unique_tags.append(tag)
                 return ', '.join(unique_tags)
         
-        # Альтернативно - из JSON-LD keywords
-        json_ld_scripts = self.soup.find_all('script', class_='penci-recipe-schema')
-        
-        for script in json_ld_scripts:
-            try:
-                data = json.loads(script.string)
-                if data.get('@type') == 'Recipe' and 'keywords' in data:
-                    keywords = data['keywords']
-                    # keywords могут быть строкой с запятыми
-                    if isinstance(keywords, str):
-                        # Нормализуем: удаляем дубликаты
-                        tags = [t.strip() for t in keywords.split(',') if t.strip()]
-                        # Удаляем дубликаты (case insensitive)
-                        unique_tags = []
-                        seen = set()
-                        for tag in tags:
-                            tag_lower = tag.lower()
-                            if tag_lower not in seen:
-                                seen.add(tag_lower)
-                                # Капитализируем первую букву
-                                unique_tags.append(tag.capitalize())
-                        return ', '.join(unique_tags)
-            except (json.JSONDecodeError, KeyError):
-                continue
-        
+        # Если категорий нет или все generic, возвращаем None
         return None
     
     def extract_image_urls(self) -> Optional[str]:
