@@ -315,9 +315,15 @@ class ImommyGrExtractor(BaseRecipeExtractor):
             if not section:
                 continue
             
-            # Паттерн для разделения: ищем место, где после буквы идет цифра
-            # Используем lookahead/lookbehind для сохранения цифр
-            parts = re.split(r'(?<=[α-ωά-ώa-zΑ-ΩΆ-Ώ]|\))(?=\d)', section)
+            # Добавляем пробелы перед числами, если их нет
+            # "κιμά50" -> "κιμά 50"
+            section = re.sub(r'([α-ωά-ώa-z])(\d)', r'\1 \2', section)
+            
+            # Добавляем пробелы перед известными словами
+            section = re.sub(r'([α-ωά-ώa-z])(χυμός|πράσο|πατάτα|κορν)', r'\1 \2', section, flags=re.IGNORECASE)
+            
+            # Паттерн для разделения: ищем место, где после буквы/пробела идет цифра
+            parts = re.split(r'(?<=[α-ωά-ώa-zΑ-ΩΆ-Ώ\s]|\))(?=\d)', section)
             
             for part in parts:
                 part = part.strip()
@@ -337,7 +343,7 @@ class ImommyGrExtractor(BaseRecipeExtractor):
         ingredients_section_found = False
         ingredients_text_parts = []
         
-        for elem in article_body.find_all(['h2', 'h3', 'p', 'strong']):
+        for elem in article_body.find_all(['h2', 'h3', 'p', 'ul', 'strong']):
             text = elem.get_text(strip=True)
             
             # Проверяем, является ли это заголовком ингредиентов
@@ -353,7 +359,8 @@ class ImommyGrExtractor(BaseRecipeExtractor):
                     if not re.search(r'(για|For|σούπα|αυγολέμονο)', text, re.IGNORECASE):
                         break
                 
-                if elem.name == 'p' and text:
+                # Собираем текст из <p> и <ul> элементов
+                if elem.name in ['p', 'ul'] and text:
                     ingredients_text_parts.append(text)
         
         if not ingredients_text_parts:
