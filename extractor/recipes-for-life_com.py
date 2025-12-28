@@ -24,7 +24,7 @@ class RecipesForLifeExtractor(BaseRecipeExtractor):
             duration: строка вида "PT20M" или "PT1H30M"
             
         Returns:
-            Время в минутах, например "90 minutes"
+            Время в формате "{число} minutes", например "90 minutes", или None если не удалось распарсить
         """
         if not duration or not duration.startswith('PT'):
             return None
@@ -113,19 +113,34 @@ class RecipesForLifeExtractor(BaseRecipeExtractor):
             '⅕': ' 1/5', '⅖': ' 2/5', '⅗': ' 3/5', '⅘': ' 4/5'
         }
         
+        # Replace fractions, handling both standalone and adjacent to numbers
         for fraction, replacement in fraction_map.items():
-            # Заменяем дробь, добавляя пробел только если он нужен
-            if text.startswith(fraction):
-                text = replacement.strip() + text[len(fraction):]
-            else:
+            if fraction in text:
+                # If fraction is at start of string, use replacement without leading space
+                if text.startswith(fraction):
+                    text = replacement.strip() + text[len(fraction):]
+                # Replace remaining occurrences (with space before)
                 text = text.replace(' ' + fraction, replacement)
                 text = text.replace(fraction, replacement)
+        
+        # Список возможных единиц измерения
+        units_list = [
+            'cups?', 'tablespoons?', 'teaspoons?', 'tbsps?', 'tsps?',
+            'pounds?', 'ounces?', 'lbs?', 'oz',
+            'grams?', 'kilograms?', 'kg', 'g',
+            'milliliters?', 'liters?', 'ml', 'l',
+            'pinch(?:es)?', 'dash(?:es)?',
+            'packages?', 'cans?', 'jars?', 'bottles?',
+            'inch(?:es)?', 'slices?', 'cloves?', 'bunches?', 'sprigs?',
+            'whole', 'halves?', 'quarters?', 'pieces?', 'heads?'
+        ]
         
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "2 cups flour", "1 tablespoon oil", "3 pounds chicken", "4 large eggs"
         # НЕ включаем large/medium/small в units, так как они являются частью названия ингредиента
         # Используем \b для word boundary чтобы "l" не матчился в "large"
-        pattern = r'^([\d\s/.,]+)?\s*(?:(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|kg|milliliters?|liters?|ml|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|heads?|g|l)\b\s+)?(.+)'
+        units_pattern = '|'.join(units_list)
+        pattern = rf'^([\d\s/.,]+)?\s*(?:({units_pattern})\b\s+)?(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
