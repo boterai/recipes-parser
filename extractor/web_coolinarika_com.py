@@ -99,7 +99,8 @@ class WebCoolnarikaExtractor(BaseRecipeExtractor):
             if quantity:
                 # Пытаемся разделить количество на число и единицы
                 # Примеры: "350-400g", "50g", "0.5l", "2 kom"
-                match = re.match(r'^([\d.,\-]+)\s*([a-zA-Zščćžđ]+)?$', quantity.strip())
+                # Используем \w для поддержки Unicode символов (включая хорватские диакритические знаки)
+                match = re.match(r'^([\d.,\-]+)\s*(\w+)?$', quantity.strip())
                 if match:
                     amount = match.group(1)
                     unit = match.group(2) if match.group(2) else None
@@ -254,7 +255,7 @@ class WebCoolnarikaExtractor(BaseRecipeExtractor):
                     # Убираем префикс "ps." или подобные
                     text = re.sub(r'^(ps\.|p\.s\.)\s*', '', text, flags=re.I)
                     # Берем первые 2-3 предложения как заметки
-                    sentences = re.split(r'\.\s+', text)[:3]
+                    sentences = re.split(r'[.!?]\s+', text)[:3]
                     note_text = '. '.join(sentences)
                     if not note_text.endswith('.'):
                         note_text += '.'
