@@ -392,13 +392,16 @@ class ImommyGrExtractor(BaseRecipeExtractor):
         instructions_section_found = False
         instructions_parts = []
         
-        for elem in article_body.find_all(['h2', 'h3', 'p']):
+        for elem in article_body.find_all(['h2', 'h3', 'p', 'ol', 'ul']):
             text = elem.get_text(strip=True)
             
             # Проверяем, является ли это заголовком инструкций
+            # Может быть как заголовок h2/h3, так и параграф с двоеточием
             if re.search(r'(Η\s+διαδικασία|Εκτέλεση|Παρασκευή|Οδηγίες)', text, re.IGNORECASE):
                 instructions_section_found = True
-                continue
+                # Если это параграф только с заголовком, не добавляем его
+                if elem.name == 'p' and text.endswith(':'):
+                    continue
             
             # Если нашли секцию инструкций, собираем текст
             if instructions_section_found:
@@ -406,8 +409,22 @@ class ImommyGrExtractor(BaseRecipeExtractor):
                 if elem.name in ['h2', 'h3']:
                     break
                 
-                if elem.name == 'p' and text:
-                    instructions_parts.append(self.clean_text(text))
+                # Собираем текст из параграфов и списков
+                if elem.name in ['p', 'ol', 'ul'] and text:
+                    # Для списков - извлекаем элементы списка
+                    if elem.name in ['ol', 'ul']:
+                        list_items = elem.find_all('li')
+                        for i, li in enumerate(list_items, 1):
+                            item_text = self.clean_text(li.get_text())
+                            if item_text:
+                                # Добавляем нумерацию если её нет
+                                if not re.match(r'^\d+\.', item_text):
+                                    item_text = f"{i}. {item_text}"
+                                instructions_parts.append(item_text)
+                    else:
+                        cleaned = self.clean_text(text)
+                        if cleaned:
+                            instructions_parts.append(cleaned)
         
         return ' '.join(instructions_parts) if instructions_parts else None
     
