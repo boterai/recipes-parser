@@ -399,13 +399,12 @@ class ImommyGrExtractor(BaseRecipeExtractor):
             # Может быть как заголовок h2/h3, так и параграф с двоеточием
             if re.search(r'(Η\s+διαδικασία|Εκτέλεση|Παρασκευή|Οδηγίες)', text, re.IGNORECASE):
                 instructions_section_found = True
-                # Если это параграф только с заголовком, не добавляем его
-                if elem.name == 'p' and text.endswith(':'):
-                    continue
+                # Пропускаем сам заголовок
+                continue
             
             # Если нашли секцию инструкций, собираем текст
             if instructions_section_found:
-                # Останавливаемся на следующем заголовке
+                # Останавливаемся на следующем заголовке (но не на первом - это был заголовок инструкций)
                 if elem.name in ['h2', 'h3']:
                     break
                 
