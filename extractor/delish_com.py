@@ -16,6 +16,26 @@ class DelishExtractor(BaseRecipeExtractor):
     """Экстрактор для delish.com"""
     
     @staticmethod
+    def format_amount(amount_str: str) -> Optional[str]:
+        """
+        Форматирует количество, преобразуя в число и удаляя .0 для целых чисел
+        
+        Args:
+            amount_str: строка с количеством
+            
+        Returns:
+            Отформатированное количество
+        """
+        if not amount_str:
+            return None
+        
+        try:
+            amount_val = float(amount_str)
+            return str(amount_val) if amount_val != int(amount_val) else str(int(amount_val))
+        except ValueError:
+            return amount_str
+    
+    @staticmethod
     def parse_iso_duration(duration: str) -> Optional[str]:
         """
         Конвертирует ISO 8601 duration в удобочитаемый формат
@@ -162,14 +182,10 @@ class DelishExtractor(BaseRecipeExtractor):
                         total += float(num) / float(denom)
                     else:
                         total += float(part)
-                amount = str(total) if total != int(total) else str(int(total))
+                amount = self.format_amount(str(total))
             else:
                 amount_str = amount_str.replace(',', '.')
-                try:
-                    amount_val = float(amount_str)
-                    amount = str(amount_val) if amount_val != int(amount_val) else str(int(amount_val))
-                except ValueError:
-                    amount = amount_str
+                amount = self.format_amount(amount_str)
         
         # Обработка единицы измерения
         unit = unit.strip() if unit else None
