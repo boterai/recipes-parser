@@ -1,0 +1,14 @@
+{
+    "dish_name": "Crustless Quiche",
+    "description": "A delicious, classic quiche without the hassle of a pastry shell.",
+    "ingredients": "[{\"name\": \"butter\", \"units\": \"Tbsp.\", \"amount\": 1}, {\"name\": \"cremini mushrooms\", \"units\": \"oz.\", \"amount\": 8}, {\"name\": \"shallot\", \"units\": \"minced\", \"amount\": 1}, {\"name\": \"spinach\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"Kosher salt\", \"units\": null, \"amount\": null}, {\"name\": \"Freshly ground black pepper\", \"units\": null, \"amount\": null}, {\"name\": \"large eggs\", \"units\": null, \"amount\": 8}, {\"name\": \"whole milk\", \"units\": \"cup\", \"amount\": 0.25}, {\"name\": \"oil-packed sun-dried tomatoes\", \"units\": \"cup\", \"amount\": 0.25}, {\"name\": \"freshly grated Parmesan\", \"units\": \"cup\", \"amount\": 0.25}]",
+    "instructions": "1. Preheat oven to 375°. In a medium skillet over medium heat, melt butter. Add mushrooms and let cook, undisturbed, for 2 minutes. Stir and continue to cook until mushrooms are tender and golden, 5 to 6 minutes. Add shallot and cook until fragrant, 1 minute. Add spinach and cook until wilted, 1 minute more. Season with salt and pepper and remove from heat. 2. In a large bowl, whisk together eggs and milk. Season with salt and pepper. Arrange mushroom mixture, tomatoes, and Parmesan in a 8” pie dish and pour over egg mixture. Bake until eggs are just set, 20-30 minutes. Let cool 3 minutes before slicing and serving.",
+    "nutrition_info": "171 calories per serving",
+    "category": "Main Course",
+    "prep_time": "20 minutes",
+    "cook_time": "20-30 minutes",
+    "total_time": "40 minutes",
+    "notes": "This quiche is versatile; feel free to experiment with different fillings.",
+    "tags": "quiche, breakfast, low-carb, easy, versatile",
+    "image_urls": null
+}

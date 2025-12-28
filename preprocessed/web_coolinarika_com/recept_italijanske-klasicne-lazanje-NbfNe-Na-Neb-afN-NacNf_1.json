@@ -1,0 +1,14 @@
+{
+    "dish_name": "italijanske klasične lazanje",
+    "description": "Lazanje su divno jelo za koje je potrebno malo znanja, ali puno truda i vremena.",
+    "ingredients": "[{\"name\": \"mlevenog mesa po izboru\", \"units\": \"g\", \"amount\": \"350-400\"}, {\"name\": \"paradajza\", \"units\": \"g\", \"amount\": \"400-500\"}, {\"name\": \"puter\", \"units\": \"g\", \"amount\": \"50\"}, {\"name\": \"brasno\", \"units\": \"g\", \"amount\": \"50\"}, {\"name\": \"mleka\", \"units\": \"l\", \"amount\": \"min. 0,5\"}, {\"name\": \"sira\", \"units\": \"g\", \"amount\": \"250-300\"}, {\"name\": \"brasna\", \"units\": \"g\", \"amount\": \"250-300\"}, {\"name\": \"jaja\", \"units\": null, \"amount\": \"1-2\"}, {\"name\": \"voda\", \"units\": null, \"amount\": null}, {\"name\": \"maslinovo ulje\", \"units\": null, \"amount\": null}, {\"name\": \"luk\", \"units\": null, \"amount\": null}, {\"name\": \"celer\", \"units\": null, \"amount\": null}, {\"name\": \"sargarepa\", \"units\": null, \"amount\": null}, {\"name\": \"so\", \"units\": null, \"amount\": null}, {\"name\": \"biber\", \"units\": null, \"amount\": null}, {\"name\": \"muskatni orascic\", \"units\": null, \"amount\": null}, {\"name\": \"italijanski zacini\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Pripremite bolonjez sos. 2. Napravite testo. 3. Pripremite besamel sos. 4. Kuvajte testo. 5. Redjajte lazanje. 6. Pecite lazanje. 7. Ostavite da odstoje. 8. Servirajte.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": "180 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Lazanje moraju biti vlažne, nikako suve. Možete praviti više verzija.",
+    "tags": "lazanje, bolonjez, italijanska kuhinja",
+    "image_urls": null
+}

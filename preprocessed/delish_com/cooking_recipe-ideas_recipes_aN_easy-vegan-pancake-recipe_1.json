@@ -1,0 +1,14 @@
+{
+    "dish_name": "Easy Vegan Pancake",
+    "description": "Fluffy vegan pancakes that are 100% possible without milk, butter, or eggs.",
+    "ingredients": "[{\"name\": \"all-purpose flour\", \"units\": \"cup\", \"amount\": \"1\"}, {\"name\": \"granulated sugar\", \"units\": \"Tbsp.\", \"amount\": \"1\"}, {\"name\": \"baking powder\", \"units\": \"Tbsp.\", \"amount\": \"1\"}, {\"name\": \"salt\", \"units\": \"tsp.\", \"amount\": \"0.25\"}, {\"name\": \"almond milk\", \"units\": \"cup\", \"amount\": \"1\"}, {\"name\": \"coconut oil\", \"units\": \"Tbsp.\", \"amount\": \"2\"}, {\"name\": \"Vegetable or coconut oil\", \"units\": \"for frying\", \"amount\": null}, {\"name\": \"Maple syrup\", \"units\": \"for serving\", \"amount\": null}, {\"name\": \"Fresh fruit\", \"units\": \"for serving (optional)\", \"amount\": null}]",
+    "instructions": "1. In a large bowl, whisk together flour, sugar, baking powder, and salt. Add almond milk and coconut oil and mix until smooth. 2. In a large skillet over medium low heat, heat oil. Using a 1/4 cup measure, pour batter into pan. Cook 2 to 3 minutes, and flip when you see bubbles forming around the edges of the pancakes. Cook 2 to 3 minutes more on the opposite side, until golden. (If making a large batch, preheat oven to 200° and place prepared pancakes on baking sheet in oven.) 3. When all batter has been used, serve with maple syrup and toppings of your choice.",
+    "nutrition_info": null,
+    "category": null,
+    "prep_time": "5 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "20 minutes",
+    "notes": "If your coconut oil has solidified, heat it up quickly in the microwave so it's easier to incorporate into the batter!",
+    "tags": null,
+    "image_urls": null
+}

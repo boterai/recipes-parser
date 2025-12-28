@@ -1,0 +1,14 @@
+{
+    "dish_name": "Lazanje s tunom",
+    "description": "Super ideja za dječju rođendansku zabavu: lazanje punjene sirom i prelivene umakom s tunom.",
+    "ingredients": "[{\"name\": \"lazanja\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"slatko vrhnje\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"Vegeta\", \"units\": \"žlica\", \"amount\": 1}, {\"name\": \"mlijeko\", \"units\": \"ml\", \"amount\": 300}, {\"name\": \"jaja\", \"units\": null, \"amount\": 2}, {\"name\": \"Gussnela Dolcela\", \"units\": \"žličice\", \"amount\": 2}, {\"name\": \"Eva tuna fileta u biljnom ulju\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"svježi sir\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"sir edamera\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"jaje\", \"units\": null, \"amount\": 1}, {\"name\": \"kiselo vrhnje\", \"units\": \"žlice\", \"amount\": 3}, {\"name\": \"nasjeckanog peršina\", \"units\": \"žlica\", \"amount\": 1}, {\"name\": \"sol\", \"units\": null, \"amount\": null}, {\"name\": \"Vegeta Maestro crni papar mljeveni\", \"units\": null, \"amount\": null}, {\"name\": \"edamera\", \"units\": \"g\", \"amount\": 50}]",
+    "instructions": "1. Mlijeko i slatko vrhnje pomiješajte, dodajte Vegetu, razmućena jaja i Gussnel razmućen u malo hladnog mlijeka. 2. Svježi sir pomiješajte s naribanim sirom, dodajte jaje, kiselo vrhnje, peršin, sol i papar. 3. Pleh (vel. 30×20 cm) premažite uljem, rasporedite dio lazanja, prelijte s malo mliječnog umaka, a zatim po lazanjama rasporedite trećinu mješavine sa sirom. 4. Po siru rasporedite trećinu količine tune. Po tuni rasporedite dio lazanja, prelijte ih mliječnim umakom i nastavite slagati dok ne potrošite namirnice. Završite slojem lazanja. 5. Prelijte preostalom količinom umaka, pospite naribanim sirom i pecite 30 minuta u pećnici zagrijanoj na 180°C.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": "60 minuta",
+    "cook_time": "30 minuta",
+    "total_time": "90 minuta",
+    "notes": "Pečene lazanje malo ohladite, a zatim narežite.",
+    "tags": "lazanje, tuna, glavno jelo",
+    "image_urls": null
+}

@@ -1,0 +1,14 @@
+{
+    "dish_name": "Trobojne lasagne od puretine",
+    "description": "Obožavam sama napraviti tijesto za lazanje. Ove sam radila od moje omiljene mljevene puretine, a u tri boje.",
+    "ingredients": "[{\"name\": \"jaja\", \"units\": \"kom\", \"amount\": 2}, {\"name\": \"špinat\", \"units\": \"žlice\", \"amount\": 2}, {\"name\": \"brašno\", \"units\": null, \"amount\": null}, {\"name\": \"mljevene puretine\", \"units\": \"dag\", \"amount\": \"50-70\"}, {\"name\": \"glavice luka\", \"units\": \"velike\", \"amount\": 2}, {\"name\": \"maslinovo ulje\", \"units\": null, \"amount\": null}, {\"name\": \"vegeta\", \"units\": null, \"amount\": null}, {\"name\": \"pasirane rajčice\", \"units\": \"l\", \"amount\": \"0.5\"}, {\"name\": \"pire od rajčice\", \"units\": \"žlice\", \"amount\": 2}, {\"name\": \"sol\", \"units\": null, \"amount\": null}, {\"name\": \"papar\", \"units\": null, \"amount\": null}, {\"name\": \"začinske trave\", \"units\": null, \"amount\": null}, {\"name\": \"mlijeka\", \"units\": \"dl\", \"amount\": 6}, {\"name\": \"ulja\", \"units\": null, \"amount\": null}, {\"name\": \"brašna\", \"units\": \"žlice\", \"amount\": 2}, {\"name\": \"soli\", \"units\": null, \"amount\": null}, {\"name\": \"papra\", \"units\": null, \"amount\": null}, {\"name\": \"muškatnog oraščića\", \"units\": null, \"amount\": null}, {\"name\": \"ribani parmezan\", \"units\": null, \"amount\": null}, {\"name\": \"sir za naribavanje\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Od sastojaka za tijesto zamijesite tvrđe tijesto kao za rezance. 2. Razvaljavajte na mašini te rezance prvo na deblje, zatim na tanke listove. Ako ne želite tijesto u bojama, načinite samo obično tijesto bez bojila. 3. Za umak od mesa na maslinovu ulju prepržite luk, meso, dodajte ostale začine i rajčice, tako da dobijete rjeđi umak. 4. Na nauljen pleh stavite prvo sloj tijesta, pa red umaka od mesa, pa naribajte sir, završite slojem tijesta. Redajte boje tijesta po želji. 5. Ako radite domaće tijesto, obavezno ga na više mjesta probušite, da se ne napuhne kod pečenja. 6. Za bechamel umak, zakipite mlijeko. U maloj šalici promiješajte ulje sa brašnom, dodajte ga vrelom mlijeku, miješajući pjenjačom, tako ćete dobiti bechamel bez i jedne grudice. U umak dodajte parmezan, sol, papar i muškatni oraščić. 7. Bechamel umak polijte po lazanjama i pecite u zagrijanoj pećnici oko 40 minuta.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "40 minutes",
+    "total_time": "120 minutes",
+    "notes": "Lazanje se služe uz zelenu salatu. Moji ukućani obožavaju na lazanje odozgo staviti veliku žlicu milerama, što nije dijetalno, ali je fino.",
+    "tags": null,
+    "image_urls": null
+}

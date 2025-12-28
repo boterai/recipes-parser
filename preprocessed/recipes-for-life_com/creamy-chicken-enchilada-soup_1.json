@@ -1,0 +1,14 @@
+{
+    "dish_name": "Creamy Chicken Enchilada Soup",
+    "description": "This creamy chicken enchilada soup delivers all the comfort of traditional enchiladas with none of the assembly frustration.",
+    "ingredients": "[{\"name\": \"olive oil\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"yellow onion\", \"units\": \"large\", \"amount\": 1}, {\"name\": \"garlic\", \"units\": \"cloves\", \"amount\": 3}, {\"name\": \"boneless, skinless chicken breasts\", \"units\": \"pound\", \"amount\": 1}, {\"name\": \"ground cumin\", \"units\": \"teaspoons\", \"amount\": 2}, {\"name\": \"chili powder\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"smoked paprika\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"chicken broth\", \"units\": \"cups\", \"amount\": 4}, {\"name\": \"red enchilada sauce\", \"units\": \"can (10 ounces)\", \"amount\": 1}, {\"name\": \"diced green chiles\", \"units\": \"can (4 ounces)\", \"amount\": 1}, {\"name\": \"black beans\", \"units\": \"can (15 ounces)\", \"amount\": 1}, {\"name\": \"corn kernels\", \"units\": \"can (15 ounces)\", \"amount\": 1}, {\"name\": \"cream cheese\", \"units\": \"ounces\", \"amount\": 4}, {\"name\": \"heavy cream\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"shredded Monterey Jack cheese\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"salt\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"black pepper\", \"units\": \"teaspoon\", \"amount\": 0.25}, {\"name\": \"fresh cilantro\", \"units\": \"for garnish\", \"amount\": null}]",
+    "instructions": "1. Heat olive oil in a large Dutch oven over medium heat. Add onion and sauté until translucent, 5-7 minutes. Add garlic and cook 1 minute more. 2. Add chicken breasts to the pot. Sprinkle with cumin, chili powder, and smoked paprika. Pour in chicken broth, enchilada sauce, and green chiles. Bring to a simmer, cover, and cook 15-20 minutes until chicken reaches 165°F internally. 3. Remove chicken to a plate and shred with two forks. Return shredded chicken to pot along with black beans and corn. Simmer 5 minutes. 4. Reduce heat to low. Add cream cheese and stir until completely melted, 3-4 minutes. Stir in heavy cream and shredded cheese until melted and creamy. 5. Season with salt and pepper. Ladle into bowls and garnish with fresh cilantro. Serve immediately.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "35 minutes",
+    "total_time": "50 minutes",
+    "notes": "If you want to take your soup game from amateur to authority figure, consider using rotisserie chicken for an even faster version.",
+    "tags": "soup,chicken,enchilada,creamy",
+    "image_urls": null
+}

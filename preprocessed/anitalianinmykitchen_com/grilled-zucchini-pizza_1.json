@@ -1,0 +1,14 @@
+{
+    "dish_name": "Grilled Zucchini Pizza",
+    "description": "Grilled Zucchini Pizza is a simple easy white pizza, made with mozzarella and fresh Arugula.",
+    "ingredients": "[{\"name\": \"Pizza dough\", \"units\": null, \"amount\": null}, {\"name\": \"olive oil\", \"units\": \"tablespoons\", \"amount\": \"2-3\"}, {\"name\": \"small or medium zucchini\", \"units\": null, \"amount\": \"2-4\"}, {\"name\": \"shredded firm mozzarella\", \"units\": \"cup\", \"amount\": \"1\"}, {\"name\": \"rucola leaves (arugula)\", \"units\": \"cup\", \"amount\": \"½-1\"}, {\"name\": \"parmesan cheese flakes\", \"units\": \"cup\", \"amount\": \"¼\"}]",
+    "instructions": "Pre heat oven to 450° (250° celsius). Lightly grease the a medium cookie sheet with half the olive oil. Form the pizza dough, either Homemade or store bought on the prepared cookie sheet, brush the dough with a little olive oil. Bake approximately 12 minutes or until golden. Remove the crust from the oven, top with the grilled zucchini and shredded cheese, bake 2-3 minutes or until the cheese has melted. Serve immediately topped with rocket leaves and parmesan flakes. Enjoy!",
+    "nutrition_info": "Calories: 285 kcal | Carbohydrates: 34 g | Protein: 11 g | Fat: 12 g | Saturated Fat: 4 g | Polyunsaturated Fat: 1 g | Monounsaturated Fat: 5 g | Cholesterol: 18 mg | Sodium: 661 mg | Potassium: 195 mg | Fiber: 2 g | Sugar: 6 g | Vitamin A: 329 IU | Vitamin C: 12 mg | Calcium: 157 mg | Iron: 2 mg",
+    "category": "Main Dish",
+    "prep_time": "30 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "45 minutes",
+    "notes": "Leftover pizza can be stored wrapped air tight in the fridge for up to 4 days or in the freezer for up to 2 months.",
+    "tags": "pizza, zucchini, Italian, main dish",
+    "image_urls": null
+}

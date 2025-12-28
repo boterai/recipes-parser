@@ -1,0 +1,14 @@
+{
+    "dish_name": "Durian Chia Seed Pudding",
+    "description": "A silky, custard-like texture with a nutty crunch, packed with nutrients and healthy fats.",
+    "ingredients": "[{\"name\": \"durian flesh\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"chia seeds\", \"units\": \"g\", \"amount\": 25}, {\"name\": \"vegan milk\", \"units\": \"ml\", \"amount\": 250}]",
+    "instructions": "Place the durian flesh and vegan milk in a blender and combine well. Transfer to a serving bowl or a tall glass. Stir in the chia seeds and set aside for a couple of hours or overnight.",
+    "nutrition_info": "200 calories, 20 grams fat",
+    "category": "Dessert",
+    "prep_time": "15 mins",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "vegan, paleo, dessert, breakfast, exotic",
+    "image_urls": null
+}

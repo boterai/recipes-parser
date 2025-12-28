@@ -1,0 +1,14 @@
+{
+    "dish_name": "Best Pizza Dough",
+    "description": "An easy, homemade pizza dough recipe that will become your favorite go to for pizza night.",
+    "ingredients": "[{\"name\": \"Water\", \"units\": \"cups\", \"amount\": \"2\"}, {\"name\": \"Sugar\", \"units\": \"pinch\", \"amount\": \"1\"}, {\"name\": \"Active dry yeast\", \"units\": \"tablespoons\", \"amount\": \"1.5\"}, {\"name\": \"Olive oil\", \"units\": \"tablespoons\", \"amount\": \"2\"}, {\"name\": \"All purpose flour or bread flour\", \"units\": \"cups\", \"amount\": \"5.25\"}, {\"name\": \"Salt\", \"units\": \"teaspoons\", \"amount\": \"1.5\"}]",
+    "instructions": "In the bowl of your stand up mixer (or a large bowl if you knead by hand) add the warm water and sugar, sprinkle the yeast on top, let sit for 5-10 minutes, then stir to combine. Add the olive oil, flour and salt, with the hook attachment start to combine on low speed, scrape the hook and then raise to medium speed, knead until you have a smooth elastic dough. Place the dough in a lightly oiled bowl, roll the dough to cover lightly with the oil, cover the bowl with plastic wrap and a large clean kitchen towel, leave in a warm draft free area until doubled in bulk. Pre-heat oven. Punch the dough down a few times and divide into 1-3 balls, let the dough rest. Place the dough in the desired prepared pizza or baking sheets and shape the dough into the desired shapes. Top with your favourite toppings, bake until crust is golden and cheese has melted.",
+    "nutrition_info": "Calories: 266 kcal | Carbohydrates: 50 g | Protein: 7 g | Fat: 3 g | Saturated Fat: 0.5 g | Polyunsaturated Fat: 1 g | Monounsaturated Fat: 2 g | Sodium: 353 mg | Potassium: 76 mg | Fiber: 2 g | Sugar: 0.3 g | Vitamin C: 0.002 mg | Calcium: 12 mg | Iron: 3 mg",
+    "category": "Main Dish",
+    "prep_time": "2 hours",
+    "cook_time": "25 minutes",
+    "total_time": "2 hours 25 minutes",
+    "notes": "Be sure to let the dough rest before forming it in the pan, resting will keep it from springing back. Use your hand to gently stretch the dough to fit the dough in the pan and not a rolling pin.",
+    "tags": "pizza, dough, Italian, homemade",
+    "image_urls": null
+}

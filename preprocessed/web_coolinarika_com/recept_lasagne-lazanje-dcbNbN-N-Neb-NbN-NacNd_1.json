@@ -1,0 +1,14 @@
+{
+    "dish_name": "Lasagne (Lazanje)",
+    "description": "Ovo su Lasagne od bolognese umaka s mljevenim mesom i beschamela na maslacu i mlijeku.",
+    "ingredients": "[{\"name\": \"Kora za lasagne\", \"units\": null, \"amount\": \"16-18\"}, {\"name\": \"Ulje\", \"units\": null, \"amount\": null}, {\"name\": \"Origno\", \"units\": null, \"amount\": null}, {\"name\": \"Ribanac, parmezan\", \"units\": \"po želji\", \"amount\": null}, {\"name\": \"Bolognese umak\", \"units\": null, \"amount\": null}, {\"name\": \"Ulje ili mast\", \"units\": null, \"amount\": null}, {\"name\": \"Crvenog luka\", \"units\": \"g\", \"amount\": \"400\"}, {\"name\": \"Miješanog mljevenog mesa\", \"units\": \"g\", \"amount\": \"450\"}, {\"name\": \"Češnjaka\", \"units\": \"režnja\", \"amount\": \"3\"}, {\"name\": \"Koncentrata rajčice\", \"units\": \"jušne žlice\", \"amount\": \"2\"}, {\"name\": \"Sol\", \"units\": null, \"amount\": null}, {\"name\": \"Biber\", \"units\": null, \"amount\": null}, {\"name\": \"Origano\", \"units\": null, \"amount\": null}, {\"name\": \"Mlijeka\", \"units\": \"l\", \"amount\": \"0.9\"}, {\"name\": \"Maslaca\", \"units\": \"g\", \"amount\": \"60\"}, {\"name\": \"Brašna\", \"units\": \"g\", \"amount\": \"60\"}, {\"name\": \"Sol\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Pripremimo vatrostalnu staklenu posudu ili drugu posudu u koju ćemo slagati kore tijesta za lasagne. Malo je pouljimo po stranicama. 2. Počnemo s pripremama Bolognese i Beschamel umaka potrebnih za lasagne. Pred kraj priprema umaka zagrijemo pećnicu na 220 °C. 3. U prethodno pripremljenu vatrostalnu zdjelu izlijemo malo Beschamel umaka na koji postavimo prvi sloj kora. Kore nije potrebno prethodno omekšati u vodi, jer će taj posao odraditi beshamel za vrijeme pečenja. 4. Na postavljene kore izlijemo malo Beschamel umaka, te na njega stavimo sloj Bolognese umaka. Ponovo postavimo sloj kora. 5. Na kore opet ide sloj Beschamel i Bolognese umaka. Slažemo redom dok imamo umaka (obično 3-4 kata) i završimo sa slojem kora koje zalijemo s Beschamelom, posipamo origanom i po želji s Ribancem ili Parmezanom. 6. Tako pripremljene lasagne stavimo u zagrijanu pećnicu na 220 °C da se peku jedno 20 minuta. 7. Nakon pečenja, lasagne izvadimo i razređemo na komade u vatrostalnoj posudi. Poslužimo na tanjure i - dobar tek!",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "20 minutes",
+    "total_time": "90 minutes",
+    "notes": "Recept je jednostavan, a jedino gdje treba malo pažnje jest izrada Beschamel umaka.",
+    "tags": "Lasagne, Bolognese, Beschamel",
+    "image_urls": null
+}

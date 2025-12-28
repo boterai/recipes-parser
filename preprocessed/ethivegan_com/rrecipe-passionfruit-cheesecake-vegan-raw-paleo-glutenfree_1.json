@@ -1,0 +1,14 @@
+{
+    "dish_name": "Passionfruit Cheesecake",
+    "description": "A creamy, tangy, and utterly indulgent raw dessert showcasing the vibrant, tropical flavour of passionfruit.",
+    "ingredients": "[{\"name\": \"passionfruit\", \"units\": null, \"amount\": 8}, {\"name\": \"raw unrefined cane sugar\", \"units\": \"g\", \"amount\": 40}, {\"name\": \"xanthan gum\", \"units\": \"tsp\", \"amount\": 0.5}, {\"name\": \"salt\", \"units\": \"pinch\", \"amount\": null}, {\"name\": \"Irish Moss\", \"units\": \"g\", \"amount\": 5}, {\"name\": \"filtered water\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"hemp hearts\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"almonds, blanched\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"xylitol\", \"units\": \"g\", \"amount\": 75}, {\"name\": \"cacao butter\", \"units\": \"g\", \"amount\": 60}, {\"name\": \"vanilla extract\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"lime juice\", \"units\": \"lime\", \"amount\": 0.5}, {\"name\": \"dates, destoned\", \"units\": \"g\", \"amount\": 35}, {\"name\": \"sultanas\", \"units\": \"g\", \"amount\": 85}, {\"name\": \"coconut desiccated\", \"units\": \"g\", \"amount\": 75}, {\"name\": \"pecans\", \"units\": \"g\", \"amount\": 75}]",
+    "instructions": "In a high-speed food processor mix together the dates, sultanas, coconut, and pecan until it forms a gelled consistency. Place the tart shells on top of acetate paper on a baking tray. Cut the acetate paper so that it can go round the edge of the tart shells. If you don’t have tart shells, use a cake tin with a loose bottom – which line with parchment paper and parchment paper round the sides. Use your hands and pat to form a biscuit. Repeat with each tart shell. Refrigerate overnight. Make the filling by soaking the Irish Moss in 150ml water and set aside overnight. Soak the almonds in the remaining 100ml water and set aside overnight too. In a high-speed blender and blend the hemp, almonds and xylitol until fine. Add in the Irish Moss. Continue to blend. Melt the cacao butter over a bain-marie until the butter melts. Pour into the blender with the hemp filling. Add in the vanilla extract, juice and salt. Combine. Transfer the filling into a large mixing bowl and then spoon the filling on top of the biscuit. Place the cheesecake in the freezer for at least a couple of hours. Make the topping by using a dough hook on a food mixer whizzing together the passionfruit, sugar and xanthan gum. Spoon over the cheesecake. Return to the freezer for at least a couple of hours or until ready to serve. When serving remove the acetate paper and serve on some dinky plates.",
+    "nutrition_info": "200 calories, 20 grams fat",
+    "category": "Dessert",
+    "prep_time": "30 mins",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "vegan, paleo, gluten-free, raw, dessert, cheesecake, passionfruit",
+    "image_urls": null
+}

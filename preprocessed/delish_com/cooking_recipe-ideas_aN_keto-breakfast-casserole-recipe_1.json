@@ -1,0 +1,14 @@
+{
+    "dish_name": "Keto Breakfast Casserole",
+    "description": "A savory, creamy breakfast casserole with Italian sausage, broccoli rabe, and basil.",
+    "ingredients": "[{\"name\": \"Butter\", \"units\": \"baking dish\", \"amount\": \"for greasing\"}, {\"name\": \"olive oil\", \"units\": \"Tbsp.\", \"amount\": \"2\"}, {\"name\": \"bulk sweet Italian sausage\", \"units\": \"lb.\", \"amount\": \"1\"}, {\"name\": \"large clove garlic\", \"units\": \"clove\", \"amount\": \"1\"}, {\"name\": \"Kosher salt\", \"units\": null, \"amount\": null}, {\"name\": \"broccoli rabe\", \"units\": \"bunch\", \"amount\": \"1\"}, {\"name\": \"Fontina cheese\", \"units\": \"oz.\", \"amount\": \"4\"}, {\"name\": \"eggs\", \"units\": null, \"amount\": \"12\"}, {\"name\": \"heavy cream or half & half\", \"units\": \"cups\", \"amount\": \"1 1/2\"}, {\"name\": \"basil leaves\", \"units\": \"cup\", \"amount\": \"0.25\"}, {\"name\": \"freshly ground black pepper\", \"units\": \"tsp.\", \"amount\": \"0.25\"}, {\"name\": \"ground nutmeg\", \"units\": \"tsp.\", \"amount\": \"0.125\"}]",
+    "instructions": "1. Adjust an oven rack to middle position. Preheat the oven to 350° and grease a 9” x 13” baking dish with butter. 2. In a large skillet over medium heat, heat oil. Cook sausage, breaking up with a spoon, until golden and cooked through, about 8 minutes. Transfer to a large bowl, and mix in the garlic. 3. Meanwhile, bring a medium pot of water to a boil, and season the water with 2 tablespoons salt. Blanch the broccoli rabe until tender, about 4 minutes. Drain and let cool. Using a kitchen towel, squeeze broccoli rabe to remove excess water. Transfer to a cutting board, and chop into ½” pieces. Add the broccoli rabe to the bowl, and mix until combined. 4. Transfer the mixture to the baking dish. Sprinkle the cheese over the top. 5. In a large bowl, whisk eggs, heavy cream, basil, 1½ teaspoons salt, pepper and nutmeg. Pour egg mixture into the baking dish. 6. Bake until just set in the center, 45 to 55 minutes. Let cool for 15 minutes before cutting into squares.",
+    "nutrition_info": null,
+    "category": "Breakfast",
+    "prep_time": "10 mins",
+    "cook_time": "1 hr 30 mins",
+    "total_time": "1 hr 30 mins",
+    "notes": "If you can’t find bulk sausage, buy sausage links and remove the meat from the casings. If Fontina isn't your thing, mozzarella or any white, creamy cheese would be equally great.",
+    "tags": "keto, breakfast, casserole",
+    "image_urls": null
+}

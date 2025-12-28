@@ -1,0 +1,14 @@
+{
+    "dish_name": "Vegetable Curry Laksa",
+    "description": "Vegetable Curry Laksa with long beans and carrots, laksa and curry leaves, garlic, ginger, paprika and vermicelli.",
+    "ingredients": "[{\"name\": \"coconut oil\", \"units\": \"tbs\", \"amount\": 2}, {\"name\": \"laksa leaves\", \"units\": null, \"amount\": \"small bunch\"}, {\"name\": \"curry leaves\", \"units\": null, \"amount\": \"small bunch\"}, {\"name\": \"garlic\", \"units\": \"cloves\", \"amount\": 6}, {\"name\": \"fresh ginger\", \"units\": \"inch\", \"amount\": 1}, {\"name\": \"onion\", \"units\": \"medium size\", \"amount\": 1}, {\"name\": \"coconut milk\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"rice vermicelli\", \"units\": \"g\", \"amount\": 75}, {\"name\": \"shallots\", \"units\": null, \"amount\": 5}, {\"name\": \"paprika\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"salt\", \"units\": null, \"amount\": \"pinch\"}, {\"name\": \"long beans\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"carrots\", \"units\": \"g\", \"amount\": 150}]",
+    "instructions": "Grind the curry and laksa leaves in a grinder. Sauté the leaves in the oil with the garlic, ginger and onions for about 3 to 4 minutes over a medium heat. Add the remaining ingredients. Stir periodically and cook for about 10 minutes or until the vermicelli is soft.",
+    "nutrition_info": "200 calories, 20 grams fat",
+    "category": "Main course",
+    "prep_time": "30 mins",
+    "cook_time": "15 mins",
+    "total_time": "45 mins",
+    "notes": null,
+    "tags": "vegan, curry, laksa, vegetable, main course",
+    "image_urls": null
+}

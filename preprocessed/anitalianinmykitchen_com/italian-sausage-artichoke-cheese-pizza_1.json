@@ -1,0 +1,14 @@
+{
+    "dish_name": "Italian Sausage & Artichoke Cheese Pizza",
+    "description": "A mouthwatering combination of robust flavors that is perfect for pizza night or any night!",
+    "ingredients": "[{\"name\": \"pre-made pizza or focaccia dough\", \"units\": null, \"amount\": 1}, {\"name\": \"Italian sausages\", \"units\": \"large\", \"amount\": \"2-3\"}, {\"name\": \"whole artichokes under oil\", \"units\": null, \"amount\": 3}, {\"name\": \"sun-dried tomatoes\", \"units\": null, \"amount\": \"4-5\"}, {\"name\": \"shredded firm mozzarella\", \"units\": \"cup\", \"amount\": \"½-¾\"}, {\"name\": \"black olives\", \"units\": null, \"amount\": 15}, {\"name\": \"rucola\", \"units\": \"cup\", \"amount\": \"¼-½\"}]",
+    "instructions": "Pre-heat oven to 450F / 180C lightly grease a pizza pan. Place pizza or focaccia dough on the pan, brush lightly with olive oil. Bake for approximately 10 minutes (or until lightly golden). While the pizza is baking, in a medium saucepan add ½ tablespoon olive oil and Italian sausage (removed from the casing and chop into small pieces) cook until browned, drain. Remove the pizza dough from the oven and sprinkle with half the mozzarella cheese, top with the drained sausage, sliced artichoke, sun-dried tomatoes, chopped olives, a little sprinkle of basil and oregano, top with the remaining mozzarella. Bake in the oven until the cheese has melted approximately 3-5 minutes. Top with shredded rucola if desired. Enjoy!",
+    "nutrition_info": "Calories: 497 kcal | Carbohydrates: 49 g | Protein: 16 g | Fat: 26 g | Saturated Fat: 7 g | Cholesterol: 42 mg | Sodium: 1480 mg | Potassium: 188 mg | Fiber: 2 g | Sugar: 6 g | Vitamin A: 420 IU | Vitamin C: 11 mg | Calcium: 24 mg | Iron: 3.7 mg",
+    "category": "Main Dish",
+    "prep_time": "10 minutes",
+    "cook_time": "13 minutes",
+    "total_time": "23 minutes",
+    "notes": "Store leftovers on a plate covered with plastic wrap and refrigerate. While cold pizza is delicious, if you would like to reheat the leftovers you may want to remove the arugula as it will wilt when hot. Reheat in the air fryer if you would like it to be crispy or the microwave if you are in a hurry.",
+    "tags": "pizza, Italian, main dish, cheese",
+    "image_urls": null
+}

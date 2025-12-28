@@ -1,0 +1,14 @@
+{
+    "dish_name": "Amaretti",
+    "description": "Rich aromatic, fragrant and bitter earthy, nutty and pillowy almond and apricot biscotti; Amaretti, Italian cookies.",
+    "ingredients": "[{\"name\": \"almonds\", \"units\": \"g\", \"amount\": 160}, {\"name\": \"apricot kernels\", \"units\": \"g\", \"amount\": 40}, {\"name\": \"unrefined cane sugar\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"aquafaba\", \"units\": \"ml\", \"amount\": 70}, {\"name\": \"almond extract\", \"units\": \"tsp\", \"amount\": 0.5}, {\"name\": \"cream of tartar\", \"units\": \"pinch\", \"amount\": 1}, {\"name\": \"xanthan gum\", \"units\": \"tsp\", \"amount\": 0.5}, {\"name\": \"Icing sugar\", \"units\": \"for dusting\", \"amount\": null}]",
+    "instructions": "In a high-speed blender grind the almonds, apricot kernels and sugar in a grinder. Transfer to a large mixing bowl. Using a mixer, whisk at medium speed the aquafaba until it goes fluffy. This will take around 5 minutes. Toss in the almond extract, cream of tartar and xanthan gum. Continue whizzing but increase the speed to high speed. Gently fold in the dry ingredients. Cover with cling film and refrigerate for an hour or two – the longer you leave it, the easier to work with. Pre-heat the oven to gas mark 180 degrees Celsius or if you have a fan oven 160 degrees Celsius. Line a baking tray with parchment paper. Take an ice-cream scoop, and scoop out some dough. Use a knife to sweep away any excess. Scoop onto the parchment paper. Repeat until your tray is full but make sure there is sufficient space to permit the cookies to spread out as they bake. Bake in the oven for 20 minutes. Remove the trays from the oven and allow the cookies to cool down. Dust with icing sugar before serving. Store in a sealed container.",
+    "nutrition_info": "200 calories, 20 grams fat",
+    "category": "Dessert",
+    "prep_time": "25 mins",
+    "cook_time": "20 mins",
+    "total_time": "45 mins",
+    "notes": "Amaretti is vegan and gluten-free. Anise Seeds you can purchase at your local Asian shop.",
+    "tags": "Dessert, Gluten Free, Vegan, Italian Cuisine",
+    "image_urls": null
+}

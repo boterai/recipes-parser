@@ -1,0 +1,14 @@
+{
+    "dish_name": "Jamaican Fried Chicken",
+    "description": "Crisp, golden, and bursting with island flavors, this Jamaican fried chicken recipe transports your taste buds straight to the vibrant streets of Kingston.",
+    "ingredients": "[{\"name\": \"chicken pieces\", \"units\": \"pounds\", \"amount\": 3}, {\"name\": \"buttermilk\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"Scotch bonnet peppers\", \"units\": \"pieces\", \"amount\": 4}, {\"name\": \"garlic\", \"units\": \"cloves\", \"amount\": 6}, {\"name\": \"fresh thyme leaves\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"ground allspice\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"ground ginger\", \"units\": \"teaspoons\", \"amount\": 2}, {\"name\": \"freshly grated nutmeg\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"brown sugar\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"salt\", \"units\": \"teaspoons\", \"amount\": 2}, {\"name\": \"black pepper\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"all-purpose flour\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"cornstarch\", \"units\": \"cup\", \"amount\": 0.25}, {\"name\": \"garlic powder\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"onion powder\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"paprika\", \"units\": \"teaspoons\", \"amount\": 2}, {\"name\": \"vegetable oil\", \"units\": \"quart\", \"amount\": 1}, {\"name\": \"limes\", \"units\": \"pieces\", \"amount\": 2}]",
+    "instructions": "1. Combine buttermilk, Scotch bonnet peppers, garlic, thyme, allspice, ginger, nutmeg, brown sugar, salt, and pepper in large bowl. Add chicken, ensuring pieces are submerged. Cover and refrigerate 4-24 hours. 2. Mix flour, cornstarch, garlic powder, onion powder, paprika, and additional salt/pepper in shallow dish. Divide between two plates. 3. Remove chicken from marinade, dredge in first flour plate, dip back in marinade, then dredge in second flour plate. Place on wire rack. 4. Heat oil in Dutch oven to 350°F. Fry chicken in batches 10-15 minutes until golden brown and internal temperature reaches 165°F (white meat) or 175°F (dark meat). 5. Transfer to wire rack to drain and rest 5-10 minutes. Serve with lime wedges.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "60 minutes",
+    "notes": null,
+    "tags": "Jamaican, Fried Chicken, Caribbean, Southern",
+    "image_urls": null
+}
