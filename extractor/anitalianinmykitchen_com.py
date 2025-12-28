@@ -128,8 +128,8 @@ class AnItalianInMyKitchenExtractor(BaseRecipeExtractor):
         text = self.clean_text(ingredient_str)
         
         # Паттерн для извлечения количества, единицы и названия
-        # Примеры: "2 cups water", "1½ tablespoons yeast", "1 pinch sugar"
-        pattern = r'^([\d\s/.,½¼¾⅓⅔⅛⅜⅝⅞]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?)?s?\s*(.+)'
+        # Примеры: "2 cups water", "1½ tablespoons yeast", "1 pinch sugar", "2-3 tablespoons oil"
+        pattern = r'^([\d\s/.,½¼¾⅓⅔⅛⅜⅝⅞\-]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?)?s?\s+(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -152,8 +152,9 @@ class AnItalianInMyKitchenExtractor(BaseRecipeExtractor):
             amount_str = amount_str.replace('⅓', '.33').replace('⅔', '.67')
             amount_str = amount_str.replace('⅛', '.125').replace('⅜', '.375').replace('⅝', '.625').replace('⅞', '.875')
             
+            # Сохраняем диапазоны как есть (например, "2-3")
             # Обработка дробей типа "1/2" или "1 1/2"
-            if '/' in amount_str:
+            if '/' in amount_str and '-' not in amount_str:
                 parts = amount_str.split()
                 total = 0
                 for part in parts:
@@ -164,12 +165,13 @@ class AnItalianInMyKitchenExtractor(BaseRecipeExtractor):
                         total += float(part)
                 amount = str(total)
             else:
-                amount = amount_str.replace(',', '.')
+                # Для диапазонов и обычных чисел оставляем как есть
+                amount = amount_str.replace(',', '.').strip()
         
         # Обработка единицы измерения
         unit = unit.strip() if unit else None
         
-        # Очистка названия
+        # Очистка названия - убираем лишние пробелы
         name = name.strip()
         
         return {
