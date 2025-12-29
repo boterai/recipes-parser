@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 import json
 import re
-from typing import Optional, List, Dict, Any
+from typing import Optional
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
@@ -242,12 +242,8 @@ class CleanFoodDirtyGirlExtractor(BaseRecipeExtractor):
         if instruction_groups:
             all_steps = []
             for group in instruction_groups:
-                # Добавляем заголовок группы как часть текста
-                group_name = group.find('h4', class_='wprm-recipe-instruction-group-name')
-                if group_name:
-                    group_text = self.clean_text(group_name.get_text())
-                    if group_text:
-                        all_steps.append(group_text)
+                # Заголовок группы не добавляем как отдельный шаг, чтобы не нарушать нумерацию
+                # (группы типа "Spices", "Everything else" не должны быть в инструкциях)
                 
                 # Добавляем все шаги из группы
                 wprm_instructions = group.find_all('li', class_='wprm-recipe-instruction')
@@ -309,6 +305,26 @@ class CleanFoodDirtyGirlExtractor(BaseRecipeExtractor):
         return None
     
     @staticmethod
+    def _format_time_parts(hours: int, minutes: int) -> Optional[str]:
+        """
+        Форматирует часы и минуты в читаемую строку
+        
+        Args:
+            hours: количество часов
+            minutes: количество минут
+            
+        Returns:
+            Время в формате "20 minutes" или "1 hour 30 minutes"
+        """
+        parts = []
+        if hours > 0:
+            parts.append(f"{hours} hour{'s' if hours > 1 else ''}")
+        if minutes > 0:
+            parts.append(f"{minutes} minute{'s' if minutes > 1 else ''}")
+        
+        return ' '.join(parts) if parts else None
+    
+    @staticmethod
     def parse_time_text(time_text: str) -> Optional[str]:
         """
         Парсинг времени из текста
@@ -338,14 +354,7 @@ class CleanFoodDirtyGirlExtractor(BaseRecipeExtractor):
         if min_match:
             minutes = int(min_match.group(1))
         
-        # Форматируем результат
-        parts = []
-        if hours > 0:
-            parts.append(f"{hours} hour{'s' if hours > 1 else ''}")
-        if minutes > 0:
-            parts.append(f"{minutes} minute{'s' if minutes > 1 else ''}")
-        
-        return ' '.join(parts) if parts else None
+        return CleanFoodDirtyGirlExtractor._format_time_parts(hours, minutes)
     
     def extract_prep_time(self) -> Optional[str]:
         """Извлечение времени подготовки"""
@@ -427,14 +436,7 @@ class CleanFoodDirtyGirlExtractor(BaseRecipeExtractor):
         if min_match:
             minutes = int(min_match.group(1))
         
-        # Форматируем результат
-        parts = []
-        if hours > 0:
-            parts.append(f"{hours} hour{'s' if hours > 1 else ''}")
-        if minutes > 0:
-            parts.append(f"{minutes} minute{'s' if minutes > 1 else ''}")
-        
-        return ' '.join(parts) if parts else None
+        return CleanFoodDirtyGirlExtractor._format_time_parts(hours, minutes)
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
