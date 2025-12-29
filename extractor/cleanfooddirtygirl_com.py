@@ -98,20 +98,24 @@ class CleanFoodDirtyGirlExtractor(BaseRecipeExtractor):
         return None
     
     @staticmethod
-    def parse_fraction(text: str) -> float:
+    def parse_fraction_to_decimal(text: str) -> Optional[float]:
         """
         Конвертирует дроби и смешанные числа в десятичные
         
         Args:
-            text: строка вида "1½", "2¼", "⅓", "1 1/2", "2 3/4"
+            text: строка вида "1½", "2¼", "⅓", "1 1/2", "2 3/4", "2-3"
             
         Returns:
-            Десятичное число
+            Десятичное число или None
         """
         if not text:
-            return 0
+            return None
         
-        # Заменяем Unicode дроби на числа
+        # Для диапазонов типа "2-3" берем первое число
+        if '-' in text and text.replace('-', '').replace(' ', '').replace('.', '').isdigit():
+            text = text.split('-')[0].strip()
+        
+        # Заменяем Unicode дроби на десятичные
         fraction_map = {
             '½': '0.5', '¼': '0.25', '¾': '0.75',
             '⅓': '0.33', '⅔': '0.67', '⅛': '0.125',
@@ -120,23 +124,22 @@ class CleanFoodDirtyGirlExtractor(BaseRecipeExtractor):
             '⅐': '0.14', '⅑': '0.11', '⅒': '0.1'
         }
         
-        original_text = text
         for fraction, decimal in fraction_map.items():
             if fraction in text:
                 # Если есть цифра перед дробью (например "1½"), это смешанное число
                 before_fraction = text.split(fraction)[0].strip()
                 if before_fraction and before_fraction[-1].isdigit():
                     # Извлекаем целую часть
-                    whole = re.search(r'(\d+)$', before_fraction)
-                    if whole:
-                        return float(whole.group(1)) + float(decimal)
+                    whole_match = re.search(r'(\d+)$', before_fraction)
+                    if whole_match:
+                        return float(whole_match.group(1)) + float(decimal)
                 # Иначе просто заменяем дробь
                 text = text.replace(fraction, decimal)
         
         # Обработка формата "1 1/2" или "2 3/4"
         if '/' in text:
             parts = text.split()
-            total = 0
+            total = 0.0
             for part in parts:
                 if '/' in part:
                     num, denom = part.split('/')
@@ -149,8 +152,7 @@ class CleanFoodDirtyGirlExtractor(BaseRecipeExtractor):
         try:
             return float(text.replace(',', '.'))
         except ValueError:
-            # Если не удалось распарсить, возвращаем 0
-            return 0
+            return None
     
     def extract_ingredients(self) -> Optional[str]:
         """Извлечение ингредиентов из WPRM структуры"""
@@ -170,17 +172,28 @@ class CleanFoodDirtyGirlExtractor(BaseRecipeExtractor):
             
             name = self.clean_text(name_span.get_text())
             
+            # Пропускаем ингредиенты явно помеченные как optional
+            # но НЕ пропускаем ингредиенты "for garnish" - они включаются
+            if '(optional)' in name.lower():
+                continue
+            
             # Очищаем название от лишних деталей (убираем описания после запятой)
             # Например: "zucchini, unpeeled and cut into ½-inch cubes" -> "zucchini"
             if ',' in name:
                 name = name.split(',')[0].strip()
             
+            # Конвертируем amount в число (int если целое, иначе float)
             amount = None
             if amount_span:
                 amount_text = self.clean_text(amount_span.get_text())
                 if amount_text:
-                    # Парсим дроби и смешанные числа
-                    amount = self.parse_fraction(amount_text)
+                    decimal_val = self.parse_fraction_to_decimal(amount_text)
+                    if decimal_val is not None:
+                        # Преобразуем в int если это целое число
+                        if decimal_val == int(decimal_val):
+                            amount = int(decimal_val)
+                        else:
+                            amount = decimal_val
             
             units = None
             if unit_span:
@@ -209,32 +222,63 @@ class CleanFoodDirtyGirlExtractor(BaseRecipeExtractor):
         if json_ld and 'recipeInstructions' in json_ld:
             instructions = json_ld['recipeInstructions']
             if isinstance(instructions, list):
-                for idx, step in enumerate(instructions, 1):
+                for step in instructions:
                     if isinstance(step, dict) and 'text' in step:
                         step_text = self.clean_text(step['text'])
-                        steps.append(f"{idx}. {step_text}")
+                        steps.append(step_text)
                     elif isinstance(step, str):
                         step_text = self.clean_text(step)
-                        steps.append(f"{idx}. {step_text}")
+                        steps.append(step_text)
             
             if steps:
-                return ' '.join(steps)
+                # Добавляем нумерацию: "1. ", "2. ", etc.
+                numbered_steps = [f"{idx}. {step}" for idx, step in enumerate(steps, 1)]
+                return ' '.join(numbered_steps)
         
         # Если JSON-LD не помог, ищем в WPRM HTML
-        wprm_instructions = self.soup.find_all('li', class_='wprm-recipe-instruction')
+        # Сначала ищем все группы инструкций с их заголовками
+        instruction_groups = self.soup.find_all('div', class_='wprm-recipe-instruction-group')
         
-        for instruction_li in wprm_instructions:
-            instruction_text_div = instruction_li.find('div', class_='wprm-recipe-instruction-text')
-            if instruction_text_div:
-                step_text = self.clean_text(instruction_text_div.get_text())
-                if step_text:
-                    steps.append(step_text)
+        if instruction_groups:
+            all_steps = []
+            for group in instruction_groups:
+                # Добавляем заголовок группы как часть текста
+                group_name = group.find('h4', class_='wprm-recipe-instruction-group-name')
+                if group_name:
+                    group_text = self.clean_text(group_name.get_text())
+                    if group_text:
+                        all_steps.append(group_text)
+                
+                # Добавляем все шаги из группы
+                wprm_instructions = group.find_all('li', class_='wprm-recipe-instruction')
+                for instruction_li in wprm_instructions:
+                    instruction_text_div = instruction_li.find('div', class_='wprm-recipe-instruction-text')
+                    if instruction_text_div:
+                        step_text = self.clean_text(instruction_text_div.get_text())
+                        if step_text:
+                            all_steps.append(step_text)
+            
+            if all_steps:
+                # Добавляем нумерацию
+                numbered_steps = [f"{idx}. {step}" for idx, step in enumerate(all_steps, 1)]
+                return ' '.join(numbered_steps)
+        else:
+            # Если нет групп, просто берем все инструкции
+            wprm_instructions = self.soup.find_all('li', class_='wprm-recipe-instruction')
+            
+            for instruction_li in wprm_instructions:
+                instruction_text_div = instruction_li.find('div', class_='wprm-recipe-instruction-text')
+                if instruction_text_div:
+                    step_text = self.clean_text(instruction_text_div.get_text())
+                    if step_text:
+                        steps.append(step_text)
+            
+            if steps:
+                # Добавляем нумерацию
+                numbered_steps = [f"{idx}. {step}" for idx, step in enumerate(steps, 1)]
+                return ' '.join(numbered_steps)
         
-        # Добавляем нумерацию если её нет
-        if steps and not re.match(r'^\d+\.', steps[0]):
-            steps = [f"{idx}. {step}" for idx, step in enumerate(steps, 1)]
-        
-        return ' '.join(steps) if steps else None
+        return None
     
     def extract_nutrition_info(self) -> Optional[str]:
         """Извлечение информации о питательности"""
