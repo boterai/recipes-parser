@@ -466,28 +466,6 @@ class ImommyGrExtractor(BaseRecipeExtractor):
         # Если категория рецепта, по умолчанию Main Course
         return 'Main Course'
     
-    def _extract_time_from_text(self, text: str) -> Optional[str]:
-        """Извлечение времени из текста"""
-        # Паттерны для поиска времени
-        patterns = [
-            r'(\d+)\s*(λεπτά|λεπτό|minutes?|mins?|min)',
-            r'(\d+)\s*(ώρα|ώρες|hours?|hrs?|hr)',
-        ]
-        
-        for pattern in patterns:
-            match = re.search(pattern, text, re.IGNORECASE)
-            if match:
-                number = match.group(1)
-                unit = match.group(2).lower()
-                
-                # Нормализуем единицу измерения
-                if 'λεπτ' in unit or 'min' in unit:
-                    return f"{number} minutes"
-                elif 'ώρ' in unit or 'hour' in unit or 'hr' in unit:
-                    return f"{number} hours"
-        
-        return None
-    
     def extract_prep_time(self) -> Optional[str]:
         """Извлечение времени подготовки"""
         # Ищем в тексте статьи упоминания времени подготовки
