@@ -36,6 +36,7 @@ class PageORM(Base):
     cook_time = Column(String(100))
     total_time = Column(String(100))
     description = Column(Text)
+    image_urls = Column(Text)  # TEXT - URL изображения
     notes = Column(Text)
     tags = Column(Text)
     

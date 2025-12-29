@@ -103,6 +103,41 @@ class ImageRepository(BaseRepository[ImageORM]):
         finally:
             session.close()
     
+    def bulk_create(self, images: List[ImageORM]) -> List[ImageORM]:
+        """
+        Массовое добавление изображений в базу данных
+        
+        Args:
+            images: Список объектов ImageORM для добавления
+        
+        Returns:
+            Список добавленных изображений с ID
+        """
+        if not images:
+            return []
+        
+        session = self.get_session()
+        try:
+            session.bulk_save_objects(images, return_defaults=True)
+            session.commit()
+            logger.info(f"Добавлено {len(images)} изображений в базу данных")
+            return images
+        except Exception as e:
+            session.rollback()
+            logger.error(f"Ошибка при массовом добавлении изображений, пробуем добавить по одному: {e}")
+            success_images = []
+            for img in images:
+                try:
+                    session.add(img)
+                    session.commit()
+                    success_images.append(img)
+                except Exception as ex:
+                    session.rollback()
+                    logger.error(f"Ошибка при добавлении изображения {img.image_url}: {ex}")
+            return success_images
+        finally:
+            session.close()
+    
     def mark_as_vectorised(self, image_ids: List[int]) -> int:
         """
         Пометить изображения как векторизованные

@@ -11,8 +11,8 @@ from config.db_config import QdrantConfig
 from src.models.recipe import Recipe
 from src.models.search_config import ComponentWeights, SearchProfiles
 from qdrant_client import QdrantClient
-from src.models.image import ImageORM, Image, download_image
-
+from src.models.image import ImageORM, Image, download_image, download_image_async
+import asyncio
 from qdrant_client.models import (
     Distance, VectorParams, PointStruct)
 
@@ -613,6 +613,106 @@ class QdrantRecipeManager:
                             logger.warning(f"⚠ Не удалось загрузить изображение: {img.image_url}")
                     else:
                         logger.warning(f"⚠ Изображение ID={img.id} без local_path и image_url, пропускаем")
+                
+                if not img_to_upload:
+                    logger.warning(f"⚠ Батч {batch_num} не содержит валидных изображений")
+                    continue
+                
+                # Создаем векторы изображений
+                image_vectors = embedding_function(img_to_upload)
+                
+                # Создаем точки для Qdrant
+                points = [
+                    PointStruct(
+                        id=img.id,
+                        vector={"image": vector},
+                        payload={
+                            "image_id": img.id,
+                            "page_id": img.page_id  # Добавляем page_id для связи
+                        }
+                    )
+                    for img, vector in zip(batch_to_process, image_vectors)
+                ]
+                
+                self.client.upsert(collection_name=collection_name, points=points, wait=True)
+                added_count += len(points)
+                logger.info(f"✓ Батч {batch_num}, 'images': {len(points)} изображений")
+            
+                # Помечаем изображения как векторизованные
+                if mark_vectorised_callback and batch_to_process:
+                    try:
+                        image_ids = [img.id for img in batch_to_process]
+                        mark_vectorised_callback(image_ids)
+                        logger.debug(f"✓ Помечено {len(image_ids)} изображений как векторизованные")
+                    except Exception as e:
+                        logger.warning(f"⚠ Ошибка при пометке изображений: {e}")
+                
+            except Exception as e:
+                logger.error(f"✗ Ошибка батча {batch_num}: {e}")
+                import traceback
+                traceback.print_exc()
+                continue
+        
+        logger.info(f"✓ Итого добавлено: {added_count} изображений")
+        return added_count
+    
+    async def vectorise_images_async(
+    self,
+    images: list[ImageORM],
+    embedding_function: ImageEmbeddingFunction,
+    batch_size: int = 10,
+    mark_vectorised_callback: callable = None
+) -> int:
+        """
+        Добавление изображений рецептов в коллекцию images
+        
+        Args:
+            images: Список объектов ImageORM с изображениями
+            embedding_function: Функция для создания эмбеддингов изображений
+            batch_size: Размер батча для upsert
+            mark_vectorised_callback: Callback для пометки изображений как векторизованных (принимает list[int] image_ids)
+        
+        Returns:
+            Количество успешно добавленных изображений
+        """
+        if not self.client:
+            raise QdrantNotConnectedError()
+        
+        collection_name = self.collections.get(self.images_collection)
+        if not collection_name:
+            logger.error("Коллекция images не найдена")
+            return 0
+        
+        added_count = 0
+        
+        for batch_num, batch_images in enumerate(batched(images, batch_size), 1):
+            try:
+                # Проверяем наличие локальных путей и загружаем по URL если нужно
+
+                batch_to_process = []  # Только изображения с валидными данными
+
+                img_to_upload = []
+                img_pil_tasks = []
+                
+                for img in batch_images:
+                    if img.local_path:
+                        img_to_upload.append(img.local_path)
+                        batch_to_process.append(img)
+                    elif img.image_url:
+                        # Загружаем изображение по URL
+                        img_pil_tasks.append(download_image_async(img.image_url))
+                    else:
+                        logger.warning(f"⚠ Изображение ID={img.id} без local_path и image_url, пропускаем")
+
+                # Выполняем асинхронную загрузку изображений по URL
+                if img_pil_tasks:
+                    downloaded_images = await asyncio.gather(*img_pil_tasks)
+                    for idx, img_pil in enumerate(downloaded_images):
+                        if img_pil:
+                            img_to_upload.append(img_pil)
+                            batch_to_process.append(batch_images[idx])
+                        else:
+                            logger.warning(f"⚠ Не удалось загрузить изображение: {batch_images[idx].image_url}")
                 
                 if not img_to_upload:
                     logger.warning(f"⚠ Батч {batch_num} не содержит валидных изображений")

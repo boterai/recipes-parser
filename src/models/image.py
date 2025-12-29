@@ -15,6 +15,8 @@ from PIL.Image import Image as PILImage
 import logging
 from io import BytesIO
 import os
+import aiohttp
+import asyncio
 
 PROXY = os.getenv('PROXY', None)
 logger = logging.getLogger(__name__)
@@ -144,6 +146,51 @@ def download_image(image_url: str, timeout: float = 30.0, max_retries: int = 3) 
                 logger.error(f"Failed to download image {image_url} after {max_retries} attempts: {e}")
                 return None
         except requests.RequestException as e:
+            logger.error(f"Failed to download image {image_url}: {e}")
+            return None
+        except Exception as e:
+            logger.error(f"Failed to decode image {image_url}: {e}")
+            return None
+    
+    return None
+
+
+async def download_image_async(image_url: str, max_retries: int = 3) -> PILImage | None:
+    """
+    Асинхронно скачать изображение по URL и вернуть как PIL.Image.Image (без сохранения на диск).
+    
+    Args:
+        image_url: URL изображения
+        timeout: Таймаут запроса в секундах (по умолчанию 30)
+        max_retries: Максимальное количество попыток (по умолчанию 3)
+    
+    Returns:
+        PIL.Image.Image или None при ошибке
+    """
+    for attempt in range(max_retries):
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(
+                    image_url,
+                    headers={
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                    },
+                    proxy=PROXY
+                ) as response:
+                    response.raise_for_status()
+                    content = await response.read()
+                    img = PIL.open(BytesIO(content))
+                    img.load()
+                    return img
+
+        except asyncio.TimeoutError as e:
+            if attempt < max_retries - 1:
+                logger.warning(f"Timeout downloading image {image_url} (attempt {attempt + 1}/{max_retries}), retrying...")
+                continue
+            else:
+                logger.error(f"Failed to download image {image_url} after {max_retries} attempts: {e}")
+                return None
+        except aiohttp.ClientError as e:
             logger.error(f"Failed to download image {image_url}: {e}")
             return None
         except Exception as e:

@@ -1,5 +1,5 @@
-import requests
 import logging
+import asyncio
 import os
 import sys
 from pathlib import Path
@@ -9,8 +9,8 @@ from src.common.embedding import get_image_embedding_function
 from src.stages.search.vectorise import RecipeVectorizer
 from src.repositories.page import PageRepository
 from src.repositories.image import ImageRepository
-from src.models.image import ImageORM, download_image
-
+from src.models.image import ImageORM, download_image_async
+from itertools import batched
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -19,7 +19,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def validate_and_save_image(image_url: str, save_dir: str = "images", timeout: float = 15.0) -> str | None:
+async def validate_and_save_image(image_url: str, save_dir: str = "images") -> str | None:
     """
     Проверяет валидность URL, скачивает изображение и сохраняет локально.
     
@@ -33,7 +33,7 @@ def validate_and_save_image(image_url: str, save_dir: str = "images", timeout: f
     """
     try:
         # Скачиваем изображение как PIL.Image
-        img = download_image(image_url, timeout=timeout)
+        img = await download_image_async(image_url)
         if img is None:
             return None
         
@@ -62,7 +62,7 @@ def validate_and_save_image(image_url: str, save_dir: str = "images", timeout: f
         logger.error(f"Failed to validate/save image {image_url}: {e}")
         return None
 
-def migrate_image_urls(save_image: bool = False):
+async def migrate_image_urls(save_image: bool = False, batch_size: int = 10):
     """
     переносит image_urls из таблицы pages в таблицу images
     1. для каждой страницы с image_urls
@@ -72,49 +72,64 @@ def migrate_image_urls(save_image: bool = False):
     pr = PageRepository()
     ir = ImageRepository()
 
+    error_pages = []
     for site in pr.get_recipe_sites():
-        pages = pr.get_pages_without_images(site_id=site)
-        logger.info(f"Processing site {site}, found {len(pages)} pages with image URLs")
+        while  (pages := pr.get_pages_without_images(site_id=site, limit=batch_size, exclude_pages=error_pages)):
+            if not pages:
+                break
+            logger.info(f"Processing site {site}, found {len(pages)} pages batch with image URLs")
+            
 
-        for page in pages:
-            url: str = page.image_urls
-            if not url:
-                continue
-            if ',' in url:
-                url_list: list[str] = url.split(',')
-                url_list = [u.strip() for u in url_list if u.strip()]
-            else:
-                url_list = [url.strip()]
-
-            for image_url in url_list:
-                existing_images: ImageORM = ir.get_by_page_id(page.id)
-                if existing_images:
-                    logger.info(f"Image already exists in DB: {image_url}")
+            # получаем все image_urls из страниц с привязкой к page_id
+            url_page_mapping = []  # [(url, page_id), ...]
+            for page in pages:
+                url: str = page.image_urls
+                if not url:
                     continue
-                
-                # Скачиваем и сохраняем изображение
-                local_path = None
-                if save_image:
-                    local_path = validate_and_save_image(image_url)
-                    if local_path is None:
-                        logger.warning(f"Skipping invalid/failed image URL: {image_url}")
-                        continue
-                
+                if ',' in url:
+                    urls = [u.strip() for u in url.split(',') if u.strip()]
+                    url_page_mapping.extend([(u, page.id) for u in urls])
+                else:
+                    url_page_mapping.append((url.strip(), page.id))
+            
+            if not url_page_mapping:
+                logger.info(f"No image URLs found for site {site}")
+                continue
+            
+            # скачиваем и сохраняем изображения
+            if save_image:
+                tasks = [validate_and_save_image(url) for url, _ in url_page_mapping]
+                saved_paths = await asyncio.gather(*tasks)
+            else:
+                saved_paths = [None] * len(url_page_mapping)
+            
+            # создаем записи изображений
+            new_images = []
+            for (image_url, page_id), saved_path in zip(url_page_mapping, saved_paths):
                 new_image = ImageORM(
-                    page_id=page.id,
+                    page_id=page_id,
                     image_url=image_url,
-                    local_path=local_path,
+                    local_path=saved_path,
                     vectorised=False
                 )
-                ir.upsert(new_image)
-                logger.info(f"Added new image to DB: {image_url}")
+                new_images.append(new_image)
+            
+            if new_images:
+                updated_img = ir.bulk_create(new_images)
+                if len(updated_img) < len(new_images):
+                    logger.warning(f"Some images were not added to DB for site {site}")
+                    error_img = set(new_images) - set(updated_img)
+                    for img in error_img:
+                        error_pages.append(img.page_id)
 
-def vectorise_images():
+                logger.info(f"Added {len(new_images)} images to DB for site {site}")
+
+async def vectorise_images():
     rv = RecipeVectorizer()
     embed_function, _ = get_image_embedding_function(
         batch_size=16
     )
-    rv.vectorise_images(
+    await rv.vectorise_images_async(
         embed_function=embed_function,
         limit=1000
     )
@@ -136,4 +151,6 @@ def search_similar(image_id: int = 1, limit: int = 6):
 
 
 if __name__ == "__main__":
-    migrate_image_urls(True)
+    asyncio.run(migrate_image_urls(save_image=True))
+    #asyncio.run(vectorise_images())
+    #migrate_image_urls(True)

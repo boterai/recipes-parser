@@ -457,7 +457,8 @@ class PageRepository(BaseRepository[PageORM]):
     
     def get_pages_without_images(self, site_id: Optional[int] = None, 
                                   is_recipe_only: bool = True,
-                                  limit: Optional[int] = None) -> List[PageORM]:
+                                  limit: Optional[int] = None, 
+                                  exclude_pages: Optional[list[int]] = None) -> List[PageORM]:
         """
         Получить страницы, для которых нет записей в таблице images
         
@@ -477,6 +478,9 @@ class PageRepository(BaseRepository[PageORM]):
             ).filter(
                 ImageORM.id == None  # Нет записей в images
             )
+
+            if exclude_pages:
+                query = query.filter(~PageORM.id.in_(exclude_pages))
             
             if is_recipe_only:
                 query = query.filter(PageORM.is_recipe == True)
