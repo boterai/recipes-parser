@@ -47,11 +47,14 @@ class VeganhomeItExtractor(BaseRecipeExtractor):
         """
         Парсинг строки ингредиента в структурированный формат
         
-        Args:
-            ingredient_text: Строка вида "250 g di polenta istantanea" или "2 cespi di radicchio"
-            
-        Returns:
-            dict: {"name": "polenta istantanea", "amount": 250, "units": "g"} или None
+        Patterns to handle:
+        - "250 g di polenta istantanea" -> {name: "polenta istantanea", units: "g", amount: 250}
+        - "1 litro di acqua" -> {name: "acqua", units: "litro", amount: 1}
+        - "un cucchiaio succo di limone" -> {name: "succo di limone", units: "cucchiaio", amount: 1}
+        - "un cucchiaio di semi di lino tritati" -> {name: "semi di lino tritati", units: "cucchiaio", amount: 1}
+        - "un pizzico di sale" -> {name: "sale", units: "pizzico", amount: 1} OR {name: "sale", units: None, amount: "un pizzico"}
+        - "una manciata di piselli freschi" -> {name: "piselli freschi", units: None, amount: "una manciata"}
+        - "riso basmati a piacere" -> {name: "riso basmati", units: "a piacere", amount: None}
         """
         if not ingredient_text:
             return None
@@ -59,115 +62,138 @@ class VeganhomeItExtractor(BaseRecipeExtractor):
         # Чистим текст
         text = self.clean_text(ingredient_text)
         
-        # Паттерн 1: Количество + единица + "di" + название
-        # Примеры: "250 g di polenta", "200 grammi di insalata", "2 cespi di radicchio"
-        pattern1 = r'^([\d.,]+)\s+(grammi?|g|kg|litri?|ml|cespi?|cucchiai[oi]?|cucchiaini?|pizzichi?)\s+(?:di\s+)?(.+)$'
-        
+        # Pattern 1: Number + unit + "di" + name
+        # Examples: "250 g di polenta istantanea", "1 litro di acqua", "200 grammi di insalata"
+        pattern1 = r'^(\d+(?:[.,]\d+)?)\s+(g|grammi?|kg|litro?|ml|cespi?)\s+di\s+(.+)$'
         match = re.match(pattern1, text, re.IGNORECASE)
-        
         if match:
             amount_str, unit, name = match.groups()
+            amount = float(amount_str.replace(',', '.')) if '.' in amount_str or ',' in amount_str else int(amount_str)
+            # Remove parenthetical notes
+            name = re.sub(r'\s*\([^)]+\)\s*', ' ', name).strip()
+            return {
+                "name": name,
+                "units": unit,
+                "amount": amount
+            }
+        
+        # Pattern 2: Number + unit + "di" + name (for cucchiai/cucchiaini)
+        # Examples: "2 cucchiai di olio", "3 cucchiai di olio", "1 cucchiaino di curcuma"
+        pattern2 = r'^(\d+(?:[.,]\d+)?)\s+(cucchiaio|cucchiai|cucchiaino|cucchiaini)\s+di\s+(.+)$'
+        match = re.match(pattern2, text, re.IGNORECASE)
+        if match:
+            amount_str, unit, name = match.groups()
+            amount = float(amount_str.replace(',', '.')) if '.' in amount_str or ',' in amount_str else int(amount_str)
+            name = re.sub(r'\s*\([^)]+\)\s*', ' ', name).strip()
+            return {
+                "name": name,
+                "units": unit,
+                "amount": amount
+            }
+        
+        # Pattern 3: "un/una" + unit + "di" + name
+        # Examples: "un cucchiaio di semi di lino tritati", "un cucchiaino di tahini", "un pizzico di sale"
+        # This is tricky because "un pizzico" can be either units="pizzico" or amount="un pizzico"
+        pattern3 = r'^(un[ao]?)\s+(cucchiaio|cucchiai|cucchiaino|cucchiaini|pizzico)\s+di\s+(.+)$'
+        match = re.match(pattern3, text, re.IGNORECASE)
+        if match:
+            quant, unit, name = match.groups()
+            name = re.sub(r'\s*\([^)]+\)\s*', ' ', name).strip()
             
-            # Обработка количества
-            amount = None
-            if amount_str:
-                amount_str = amount_str.strip().replace(',', '.')
-                try:
-                    if '.' in amount_str:
-                        amount = float(amount_str)
-                    else:
-                        amount = int(amount_str)
-                except ValueError:
-                    amount = amount_str
+            # For cucchiaio/cucchiaino: always extract as units
+            if 'cucchiai' in unit.lower() or 'cucchiaino' in unit.lower() or 'cucchiaini' in unit.lower():
+                return {
+                    "name": name,
+                    "units": unit,
+                    "amount": 1
+                }
             
-            # Очистка названия
-            name = self.clean_text(name)
+            # For pizzico: check if it's a simple ingredient (1 word) or complex (multiple words)
+            # Simple ingredients like "sale" get units="pizzico"
+            # Complex ingredients like "basilico tritato" get amount="un pizzico"
+            if 'pizzico' in unit.lower() or 'pizzichi' in unit.lower():
+                # Check if the name is simple (one word, common ingredient)
+                # Common simple kitchen ingredients
+                simple_ingredients = ['sale', 'pepe', 'zucchero', 'farina', 'olio', 'acqua']
+                name_words = name.split()
+                
+                if len(name_words) == 1 and name.lower() in simple_ingredients:
+                    # Simple ingredient: extract units
+                    return {
+                        "name": name,
+                        "units": "pizzico",
+                        "amount": 1
+                    }
+                else:
+                    # Complex ingredient: keep "un pizzico" as amount
+                    return {
+                        "name": name,
+                        "units": None,
+                        "amount": "un pizzico"
+                    }
             
             return {
                 "name": name,
-                "units": unit.strip(),
+                "units": unit,
+                "amount": 1
+            }
+        
+        # Pattern 4: "un/una" + unit + name (without "di")
+        # Examples: "un cucchiaio succo di limone", "mezzo cucchiaio succo di arancia"
+        pattern4 = r'^(un[ao]?|mezz[ao]?)\s+(cucchiaio|cucchiai|cucchiaino|cucchiaini)\s+(.+)$'
+        match = re.match(pattern4, text, re.IGNORECASE)
+        if match:
+            quant, unit, name = match.groups()
+            name = re.sub(r'\s*\([^)]+\)\s*', ' ', name).strip()
+            
+            amount = 1 if quant.lower().startswith('un') else 0.5
+            return {
+                "name": name,
+                "units": unit,
                 "amount": amount
             }
         
-        # Паттерн 2: Специальные слова-количества (un, una, mezzo, mezza, una manciata) + cucchiaio/cucchiaino/pizzico + di + название
-        # Примеры: "un cucchiaio di succo di limone", "mezzo cucchiaio succo di arancia", "un pizzico di sale", "una manciata di piselli"
-        pattern2 = r'^(un[oa]?|mezz[oa]?|una\s+manciata)\s+(cucchiai[oi]?|cucchiaini?|pizzichi?)?\s*(?:di\s+)?(.+)$'
-        
-        match2 = re.match(pattern2, text, re.IGNORECASE)
-        
-        if match2:
-            quantity_word, unit, name = match2.groups()
-            
-            # Преобразуем слова в числа
-            amount = None
-            quantity_lower = quantity_word.lower().strip()
-            if quantity_lower.startswith('un'):
-                amount = 1
-            elif quantity_lower.startswith('mezz'):
-                amount = 0.5
-            elif 'manciata' in quantity_lower:
-                # "una manciata" - это специальное количество, оставляем как текст
-                return {
-                    "name": name.strip(),
-                    "units": None,
-                    "amount": "una manciata"
-                }
-            
-            # Если есть единица измерения (cucchiaio, pizzico и т.д.), используем её
-            # Иначе количество остаётся в тексте названия
-            if unit:
-                name = self.clean_text(name)
-                return {
-                    "name": name,
-                    "units": unit.strip(),
-                    "amount": amount
-                }
-            else:
-                # Если нет единицы, то это тип "un pizzico di sale" или "una carota"
-                # В этом случае количество идёт в название
-                return {
-                    "name": name.strip(),
-                    "units": None,
-                    "amount": "un pizzico" if 'pizzico' in quantity_lower else ("un" if quantity_lower.startswith('un') else quantity_word)
-                }
-        
-        # Паттерн 3: Просто количество + единица + "di" + название (без "di" в начале)
-        # Примеры: "1 litro di acqua", "2 cespi di radicchio"
-        pattern3a = r'^([\d.,]+)\s+(grammi?|g|kg|litri?|ml|cespi?|cucchiai[oi]?|cucchiaini?|pizzichi?)\s+(?:di\s+)?(.+)$'
-        match3a = re.match(pattern3a, text, re.IGNORECASE)
-        
-        if match3a:
-            amount_str, unit, name = match3a.groups()
-            try:
-                amount = float(amount_str.replace(',', '.')) if '.' in amount_str or ',' in amount_str else int(amount_str)
-            except ValueError:
-                amount = None
-            
+        # Pattern 5: "una manciata di" + name
+        pattern5 = r'^una\s+manciata\s+di\s+(.+)$'
+        match = re.match(pattern5, text, re.IGNORECASE)
+        if match:
+            name = match.group(1)
+            # Remove parenthetical notes
+            name = re.sub(r'\s*\([^)]+\)\s*', ' ', name).strip()
             return {
-                "name": self.clean_text(name),
-                "units": unit.strip(),
-                "amount": amount
+                "name": name,
+                "units": None,
+                "amount": "una manciata"
             }
         
-        # Паттерн 3b: Просто количество + название (без единицы)
-        # Примеры: "1 carota", "2 pomodori", "10 pomodori datterino"
-        pattern3 = r'^([\d.,]+)\s+(.+)$'
-        match3 = re.match(pattern3, text)
-        
-        if match3:
-            amount_str, name = match3.groups()
-            try:
-                amount = float(amount_str.replace(',', '.')) if '.' in amount_str or ',' in amount_str else int(amount_str)
-            except ValueError:
-                amount = None
-            
+        # Pattern 6: Simple number + name (no unit)
+        # Examples: "1 carota", "2 pomodori", "1 gambo di sedano"
+        pattern6 = r'^(\d+)\s+(.+)$'
+        match = re.match(pattern6, text)
+        if match:
+            amount_str, name = match.groups()
+            amount = int(amount_str)
+            name = re.sub(r'\s*\([^)]+\)\s*', ' ', name).strip()
             return {
-                "name": self.clean_text(name),
+                "name": name,
                 "units": None,
                 "amount": amount
             }
         
-        # Если вообще не нашли число, возвращаем только название
+        # Pattern 7: Name + "a piacere"
+        # Example: "riso basmati a piacere"
+        pattern7 = r'^(.+?)\s+a\s+piacere$'
+        match = re.match(pattern7, text, re.IGNORECASE)
+        if match:
+            name = match.group(1).strip()
+            return {
+                "name": name,
+                "units": "a piacere",
+                "amount": None
+            }
+        
+        # Pattern 8: Just ingredient name (no amount, no unit)
+        # Examples: "sale", "olio extravergine d'oliva"
         return {
             "name": text,
             "units": None,
@@ -362,7 +388,7 @@ class VeganhomeItExtractor(BaseRecipeExtractor):
             # Берем следующий параграф
             next_p = notes_header.find_next('p')
             if next_p:
-                text = next_p.get_text(strip=True)
+                text = next_p.get_text(separator=' ', strip=True)
                 # Убираем лишние точки в конце
                 text = re.sub(r'\.{2,}$', '', text)
                 # Добавляем финальную точку, если её нет
@@ -371,7 +397,7 @@ class VeganhomeItExtractor(BaseRecipeExtractor):
                 text = self.clean_text(text)
                 return text if text else None
         
-        # НЕ извлекаем copyright как notes - это не соответствует reference JSON
+        # НЕ извлекаем copyright как notes - только явные Note секции
         return None
     
     def extract_tags(self) -> Optional[str]:
