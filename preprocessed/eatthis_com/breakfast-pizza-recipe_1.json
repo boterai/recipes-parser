@@ -1,0 +1,14 @@
+{
+    "dish_name": "Breakfast Pizza",
+    "description": "A healthy Mexican-inspired breakfast pizza using whole-wheat English muffins as the base.",
+    "ingredients": "[{\"name\": \"butter\", \"units\": \"Tbsp\", \"amount\": \"0.5\"}, {\"name\": \"eggs\", \"units\": \"units\", \"amount\": \"6\"}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"black pepper\", \"units\": null, \"amount\": null}, {\"name\": \"ham\", \"units\": \"oz\", \"amount\": \"4\"}, {\"name\": \"whole wheat or multigrain English muffins\", \"units\": \"units\", \"amount\": \"4\"}, {\"name\": \"prepared salsa\", \"units\": \"cup\", \"amount\": \"1\"}, {\"name\": \"shredded low-fat Jack or Cheddar cheese\", \"units\": \"cup\", \"amount\": \"1\"}]",
+    "instructions": "Preheat the broiler. Heat the butter in a large nonstick pan. When the butter is fully melted, season the eggs with salt and pepper, then add to the pan, along with the ham strips. Cook, using a wooden spoon or rubber spatula to keep stirring the eggs as they set. Remove the pan from the heat about 30 seconds before the eggs are fully done (they’ll continue to cook in the pan and in the oven). Slather each English muffin half with a good spoonful of salsa. Divide the eggs among the English muffins, then top with the cheese. Place all the English muffins on a baking sheet and broil (6″ from the heat is ideal) until the cheese is fully melted and browned around the edges.",
+    "nutrition_info": "350 calories, 19 g fat (8 g saturated), 900 mg sodium",
+    "category": "Breakfast",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "These individual pizzas have Mexican flavors at the base, but breakfast pizza can be interpreted in dozens of different ways.",
+    "tags": "Breakfast, Easy Recipes, Healthy Breakfast Recipes, Healthy Egg Recipes, Healthy Foods, Pizza",
+    "image_urls": null
+}

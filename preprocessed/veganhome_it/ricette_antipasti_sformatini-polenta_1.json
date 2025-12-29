@@ -1,0 +1,14 @@
+{
+    "dish_name": "Sformatini di polenta",
+    "description": "Ricetta vegan di sformatini di polenta con radicchio.",
+    "ingredients": "[{\"name\": \"polenta istantanea\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"acqua\", \"units\": \"litro\", \"amount\": 1}, {\"name\": \"radicchio rosso di Treviso\", \"units\": \"cespi\", \"amount\": 2}, {\"name\": \"olio extravergine d'oliva\", \"units\": null, \"amount\": null}, {\"name\": \"sale\", \"units\": null, \"amount\": null}]",
+    "instructions": "Pulire e lavare il radicchio; farlo stufare in un tegame con l'olio e tenerlo da parte. Intanto mettere al fuoco una pentola con l'acqua, salare e portare a ebollizione. Togliere dal fuoco, unire la farina di mais a pioggia, mescolare bene e rimettere sul fuoco per pochi minuti. Spennellare con l'olio uno stampo per muffins, ricoprire il fondo e le pareti di ogni incavo con la polenta preparata, lavorando con le mani inumidite per non bruciarsi, aggiungere il radicchio stufato, ricoprire con altra polenta, livellare bene e cucinare in forno a 200° per circa 20 minuti. Rovesciare gli sformatini su un vassoio e servire ben caldi.",
+    "nutrition_info": null,
+    "category": "Antipasti",
+    "prep_time": null,
+    "cook_time": "20 minutes",
+    "total_time": "45 minutes",
+    "notes": "Il ripieno di questi sformatini può cambiare secondo i gusti personali: funghi trifolati, patè vegetali, ragù di seitan.",
+    "tags": null,
+    "image_urls": null
+}

@@ -1,0 +1,14 @@
+{
+    "dish_name": "Curry vegan",
+    "description": null,
+    "ingredients": "[{\"name\": \"patate\", \"units\": null, \"amount\": 2}, {\"name\": \"carote\", \"units\": null, \"amount\": 2}, {\"name\": \"cipolla\", \"units\": null, \"amount\": 1}, {\"name\": \"pomodori\", \"units\": null, \"amount\": 2}, {\"name\": \"gambo di sedano\", \"units\": null, \"amount\": 1}, {\"name\": \"scatola di funghi\", \"units\": null, \"amount\": 1}, {\"name\": \"spicchi d'aglio\", \"units\": null, \"amount\": 2}, {\"name\": \"curry\", \"units\": \"cucchiaini\", \"amount\": 2}, {\"name\": \"cumino in polvere\", \"units\": \"cucchiaini\", \"amount\": 2}, {\"name\": \"curcuma\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"cardamomo\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"riso basmati\", \"units\": \"a piacere\", \"amount\": null}]",
+    "instructions": "Portare ad ebollizione mezzo litro d'acqua e cuocerci tutte le verdure mondate e tagliate a piccoli pezzi. A fuoco basso, aggiungere gli spicchi d'aglio tritati e le spezie. Coprire e lasciar sobbollire fino a completa cottura di patate e carote. Accompagnare con riso basmati bollito.",
+    "nutrition_info": null,
+    "category": "Piatti Unici",
+    "prep_time": null,
+    "cook_time": "60 minutes",
+    "total_time": "60 minutes",
+    "notes": null,
+    "tags": null,
+    "image_urls": null
+}

@@ -1,0 +1,14 @@
+{
+    "dish_name": "Grilled Pizza",
+    "description": "Take your pizza making experience to the next level by making Grilled Pizzas with pizza dough, and your choice of pizza sauce and toppings!",
+    "ingredients": "[{\"name\": \"Pizza dough\", \"units\": \"batch\", \"amount\": \"1\"}, {\"name\": \"olive oil\", \"units\": \"Tablespoons\", \"amount\": \"2\"}, {\"name\": \"Pizza sauce\", \"units\": null, \"amount\": null}, {\"name\": \"Desired Toppings\", \"units\": null, \"amount\": null}]",
+    "instructions": "Make sure grill is well cleaned and oiled, to prevent the crust from sticking. Preheat it to 425 degrees (medium-high heat). Divide pizza dough into about 5-8 portions (depending on how big and thick you want your pizza crust). Stretch or roll dough into desired size and thinness and place on a piece of parchment paper. Brush tops of the prepared dough with oil, then lift the parchment the crust is on and carefully flip the crusts onto the grill, oil side down. Peel the parchment paper off. Cover and cook for 2-3 minutes and check for doneness with tongs to see if the bottom side has grill marks and is golden brown. Flip the pizzas onto a plate and add sauce and toppings to the cooked side. Lower the grill heat slightly and slide pizzas back onto the grill to cook the bottom side for another 3-5 minutes, until cheese is melted and bottom crust is golden.",
+    "nutrition_info": "Calories: 125 kcal, Sodium: 1 mg",
+    "category": "Main Course",
+    "prep_time": "20 minutes",
+    "cook_time": "8 minutes",
+    "total_time": "28 minutes",
+    "notes": "If it's your first time grilling pizza, you could flatten a tiny piece of the dough and test it out on the grill first, before making a larger pizza.",
+    "tags": "grilled, pizza, main course",
+    "image_urls": null
+}

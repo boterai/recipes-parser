@@ -1,0 +1,14 @@
+{
+    "dish_name": "Protein Pizza",
+    "description": "A delicious high protein Pizza Crust recipe you can feel good about eating! It's flavorful, thin crust, and on the table in 30 minutes.",
+    "ingredients": "[{\"name\": \"all-purpose flour\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"baking powder\", \"units\": \"teaspoons\", \"amount\": 1.5}, {\"name\": \"Italian seasoning\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"salt\", \"units\": \"teaspoon\", \"amount\": 0.25}, {\"name\": \"plain Greek yogurt\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"pizza sauce\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"shredded mozzarella cheese\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"turkey pepperoni\", \"units\": \"cup\", \"amount\": 0.5}]",
+    "instructions": "Preheat oven to 400 degrees F. Mix flour, baking powder, Italian seasoning and salt in a bowl. Stir Greek yogurt into flour mixture and mix well, to form a dough. Place a piece of parchment paper on the counter and dust lightly with flour. Using well-floured hands, scoop dough onto parchment and roll into a 14-inch circle, dusting the top with flour to keep it from sticking. Transfer the dough to a pizza stone or large baking sheet and pre-bake dough for 8 minutes. Remove from oven then add sauce and toppings. Bake for an additional 10 minutes, or until cheese is melted and crust is golden.",
+    "nutrition_info": "Calories: 310 kcal, Carbohydrates: 30 g, Protein: 24 g, Fat: 10 g, Saturated Fat: 5 g, Polyunsaturated Fat: 1 g, Monounsaturated Fat: 3 g, Trans Fat: 0.003 g, Cholesterol: 61 mg, Sodium: 1193 mg, Potassium: 356 mg, Fiber: 2 g, Sugar: 3 g, Vitamin A: 348 IU, Vitamin C: 2 mg, Calcium: 310 mg, Iron: 3 mg",
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "30 minutes",
+    "notes": "Greek Yogurt: Cottage cheese may be substituted for greek yogurt, just make sure to blend it first. Gluten-free Adaptation: Substitute all-purpose flour with gluten free 1:1 all-purpose flour.",
+    "tags": "high protein, pizza, healthy, quick",
+    "image_urls": null
+}

@@ -1,0 +1,14 @@
+{
+    "dish_name": "Insalata con rucola e pistacchi",
+    "description": null,
+    "ingredients": "[{\"name\": \"insalata riccia\", \"units\": \"grammi\", \"amount\": 200}, {\"name\": \"radicchio rosso lungo\", \"units\": \"grammi\", \"amount\": 100}, {\"name\": \"rughetta\", \"units\": \"grammi\", \"amount\": 30}, {\"name\": \"carota\", \"units\": null, \"amount\": 1}, {\"name\": \"pistacchi triturati\", \"units\": \"grammi\", \"amount\": 30}, {\"name\": \"olio extravergine d'oliva\", \"units\": \"cucchiai\", \"amount\": 2}, {\"name\": \"succo di limone\", \"units\": \"cucchiaio\", \"amount\": 1}, {\"name\": \"succo di arancia\", \"units\": \"cucchiaio\", \"amount\": 0.5}, {\"name\": \"sale\", \"units\": \"pizzico\", \"amount\": 1}, {\"name\": \"semi di lino tritati\", \"units\": \"cucchiaio\", \"amount\": 1}]",
+    "instructions": "Affettare finemente l'insalata, la rucola e il radicchio. Aggiungere la carota tagliata a julienne. Aggiungere gli altri ingredienti e mescolare il tutto.",
+    "nutrition_info": null,
+    "category": "Insalatone",
+    "prep_time": "10 minuti",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "questa ricetta può essere ripubblicata su altri siti e materiali informativi vegan/animalisti, solo citando la fonte e il link (VeganHome.it - link a questa pagina)",
+    "tags": null,
+    "image_urls": null
+}

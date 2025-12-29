@@ -1,0 +1,14 @@
+{
+    "dish_name": "Vegan Pineapple Fried Rice",
+    "description": "Vegan Pineapple Fried Rice ~ sweet, savory and spicy! So easy to make and takes 30 minutes on the stove.",
+    "ingredients": "[{\"name\": \"coconut oil\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"red onion\", \"units\": \"small\", \"amount\": 1}, {\"name\": \"garlic\", \"units\": \"cloves\", \"amount\": 3}, {\"name\": \"fresh ginger\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"crushed red pepper\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"carrots\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"pineapple chunks\", \"units\": \"cups\", \"amount\": 1.5}, {\"name\": \"cooked rice\", \"units\": \"cups\", \"amount\": 3}, {\"name\": \"green onion\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"gluten-free tamari\", \"units\": \"tablespoons\", \"amount\": 3}, {\"name\": \"curry powder\", \"units\": \"teaspoons\", \"amount\": 1.5}, {\"name\": \"frozen peas\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"roasted cashews\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"cilantro\", \"units\": \"cup\", \"amount\": 0.25}]",
+    "instructions": "Whisk the tamari and curry powder together. Set aside. Heat coconut oil in a large pan or wok over medium heat. Add onions and sauté for 2-3 minutes, until softened. Now add the garlic, ginger, red chili pepper flakes and carrots. Sauté 7-9 minutes or until carrots are tender. Add the pineapple chunks and sauté until slightly browned, about 4-5 minutes. Add tamari, rice, peas and green onions. Stir frequently. Taste for seasoning and add more if needed. Cook about 4-5 minutes, until all ingredients are combined and heated through. Remove from heat and serve with optional toppings.",
+    "nutrition_info": "Calories: 452 kcal, Carbohydrates: 57 g, Protein: 9 g, Fat: 13 g, Saturated Fat: 7 g, Sodium: 436 mg, Potassium: 624 mg, Fiber: 6 g, Sugar: 27 g, Vitamin A: 5855 IU, Vitamin C: 32.4 mg, Calcium: 85 mg, Iron: 2.9 mg",
+    "category": "Main Course, Side Dish",
+    "prep_time": "10 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "30 minutes",
+    "notes": "This dish works best with cold, day-old rice because it's drier than freshly cooked and it will keep a firmer texture.",
+    "tags": "vegan, gluten-free, rice, quick meal, Thai cuisine",
+    "image_urls": null
+}

@@ -1,0 +1,14 @@
+{
+    "dish_name": "Insalata mista con piselli",
+    "description": null,
+    "ingredients": "[{\"name\": \"finocchio\", \"units\": null, \"amount\": 1}, {\"name\": \"carote\", \"units\": null, \"amount\": 2}, {\"name\": \"pomodori datterino\", \"units\": null, \"amount\": 10}, {\"name\": \"carciofi\", \"units\": null, \"amount\": 2}, {\"name\": \"piselli freschi\", \"units\": null, \"amount\": \"una manciata\"}, {\"name\": \"olive in salamoia\", \"units\": \"grammi\", \"amount\": 50}, {\"name\": \"basilico tritato\", \"units\": null, \"amount\": \"un pizzico\"}, {\"name\": \"sale\", \"units\": null, \"amount\": \"un pizzico\"}, {\"name\": \"succo di limone\", \"units\": \"cucchiaio\", \"amount\": 1}, {\"name\": \"tahini\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"olio extra-vergine di oliva\", \"units\": \"cucchiai\", \"amount\": 3}]",
+    "instructions": "Tagliare le verdure in fette sottilissime con la mandolina, o a julienne, poi aggiungervi il basilico (o il prezzemolo) e le olive ben triturati. Aggiungere i piselli, il sale, il succo di limone, la tahini e l’olio e mescolare il tutto.",
+    "nutrition_info": null,
+    "category": "Insalatone",
+    "prep_time": "15 minuti",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null,
+    "image_urls": null
+}

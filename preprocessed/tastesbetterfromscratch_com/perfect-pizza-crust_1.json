@@ -1,0 +1,14 @@
+{
+    "dish_name": "Pizza Dough",
+    "description": "This homemade Pizza Dough recipe is fool-proof and makes the best pizza in the oven, air fryer, pizza oven, or on the grill.",
+    "ingredients": "[{\"name\": \"active dry yeast\", \"units\": \"teaspoons\", \"amount\": \"2 1/4\"}, {\"name\": \"granulated sugar\", \"units\": \"teaspoons\", \"amount\": \"2\"}, {\"name\": \"warm water\", \"units\": \"cups\", \"amount\": \"1 1/2\"}, {\"name\": \"olive oil\", \"units\": \"Tablespoons\", \"amount\": \"3\"}, {\"name\": \"salt\", \"units\": \"teaspoons\", \"amount\": \"1 1/2\"}, {\"name\": \"white vinegar\", \"units\": \"teaspoon\", \"amount\": \"1\"}, {\"name\": \"bread flour\", \"units\": \"cups\", \"amount\": \"3 3/4-4\"}]",
+    "instructions": "Combine ½ cup of the warm water with the sugar and yeast. Stir to dissolve the yeast then let rest for 5 minutes. Add the remaining warm water, olive oil, salt, and vinegar. Gradually add flour and knead for about 7 minutes. Allow to rise for 1 to 1.5 hours. Divide dough and roll out to desired size. Preheat oven to 450°F and pre-bake for 3-4 minutes. Add toppings and bake for 8-15 more minutes.",
+    "nutrition_info": "Calories: 424 kcal, Carbohydrates: 70 g, Protein: 12 g, Fat: 10 g, Saturated Fat: 1 g, Sodium: 704 mg, Fiber: 3 g, Sugar: 2 g.",
+    "category": "Main Course",
+    "prep_time": "1 hour 30 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "1 hour 40 minutes",
+    "notes": "You can make the dough ahead and refrigerate or freeze it for later use.",
+    "tags": "pizza, dough, homemade, main course",
+    "image_urls": null
+}

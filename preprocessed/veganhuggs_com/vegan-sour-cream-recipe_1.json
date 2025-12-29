@@ -1,0 +1,14 @@
+{
+    "dish_name": "Vegan Sour Cream",
+    "description": "This Vegan Sour Cream Recipe requires just 5 ingredients and comes together easily. It's so rich, tangy, and creamy that you'll want to dollop it on everything!",
+    "ingredients": "[{\"name\": \"raw cashews\", \"units\": \"cup\", \"amount\": \"¾\"}, {\"name\": \"non-dairy yogurt\", \"units\": \"cup\", \"amount\": \"½\"}, {\"name\": \"lemon juice\", \"units\": \"tablespoons\", \"amount\": \"1-2\"}, {\"name\": \"apple cider vinegar\", \"units\": \"teaspoon\", \"amount\": \"¾\"}, {\"name\": \"sea salt\", \"units\": \"teaspoon\", \"amount\": \"½-¾\"}]",
+    "instructions": "Drain and rinse the cashews. Discard soaking water. Add all the ingredients to a high-powered blender (starting with the yogurt and lemon juice). Blend on high until creamy and smooth. This could take a few minutes. Scrape down sides as needed. Taste to see if it needs more lemon, salt or vinegar. Pour into an airtight container in the fridge for 1-2 hours to firm it up. It will keep about 4-5 days.",
+    "nutrition_info": "Calories: 76 kcal, Carbohydrates: 5 g, Protein: 2 g, Fat: 5 g, Sodium: 148 mg, Potassium: 79 mg, Sugar: 1 g, Vitamin C: 2.6 mg, Calcium: 23 mg, Iron: 0.8 mg",
+    "category": "Condiment, Spread",
+    "prep_time": "10 minutes",
+    "cook_time": null,
+    "total_time": "10 minutes",
+    "notes": "If you're unsure how salty or tangy you want the sour cream to be, it's best to use less lemon, vinegar and salt to start. You can always taste and add more after blending. The cashews must soak for a minimum of 4-6 hours, or they will produce gritty results.",
+    "tags": "vegan, sour cream, condiment",
+    "image_urls": null
+}

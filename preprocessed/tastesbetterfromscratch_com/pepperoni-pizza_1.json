@@ -1,0 +1,14 @@
+{
+    "dish_name": "Pepperoni Pizza",
+    "description": "Easy homemade Pepperoni Pizza made with homemade or store-bought pizza dough is so EASY and delicious, and way cheaper than eating out!",
+    "ingredients": "[{\"name\": \"active dry yeast\", \"units\": \"teaspoons\", \"amount\": \"2 1/4\"}, {\"name\": \"granulated sugar\", \"units\": \"teaspoons\", \"amount\": \"2\"}, {\"name\": \"warm water\", \"units\": \"cups\", \"amount\": \"1 1/2\"}, {\"name\": \"olive oil\", \"units\": \"Tablespoons\", \"amount\": \"3\"}, {\"name\": \"salt\", \"units\": \"teaspoons\", \"amount\": \"1 1/2\"}, {\"name\": \"white vinegar\", \"units\": \"teaspoon\", \"amount\": \"1\"}, {\"name\": \"bread flour\", \"units\": \"cups\", \"amount\": \"3 ¾ – 4\"}, {\"name\": \"pizza sauce\", \"units\": \"cup\", \"amount\": \"1\"}, {\"name\": \"pepperoni\", \"units\": \"cups\", \"amount\": \"2\"}, {\"name\": \"shredded mozzarella cheese\", \"units\": \"cups\", \"amount\": \"4\"}, {\"name\": \"freshly grated parmesan cheese\", \"units\": \"cup\", \"amount\": \"0.5\"}, {\"name\": \"Italian seasoning\", \"units\": \"teaspoon\", \"amount\": \"1\"}]",
+    "instructions": "1. Make the Pizza Dough: Combine warm water with sugar and yeast. Let rest for 5 minutes. Add remaining warm water, olive oil, salt, and vinegar. Mix and knead for about 7 minutes. Allow to rise for 1 to 1.5 hours. 2. Roll out the dough and divide into pieces. 3. Preheat oven to 450°F. Pre-bake dough for 3-4 minutes. 4. Add pizza sauce and toppings. Bake for 5-12 minutes until golden.",
+    "nutrition_info": "Calories: 305, Carbohydrates: 24g, Protein: 14g, Fat: 17g, Saturated Fat: 7g, Cholesterol: 39mg, Sodium: 746mg, Potassium: 146mg, Fiber: 1g, Sugar: 1g.",
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "20 minutes",
+    "notes": "You can use store-bought dough if preferred. Variations include adding hot honey, fresh basil, or different meats.",
+    "tags": "pizza, pepperoni, homemade, main course",
+    "image_urls": null
+}

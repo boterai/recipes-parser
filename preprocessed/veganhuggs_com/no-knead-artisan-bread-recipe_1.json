@@ -1,0 +1,14 @@
+{
+    "dish_name": "No Knead Artisan Bread",
+    "description": "With just 4 simple ingredients, you can make this No Knead Artisan Bread Recipe. It's surprisingly easy to make, too - just make the dough, let it rest, then bake it in the oven for 40 minutes. No kneading involved! The crust is golden and crackly, while the inside is soft and fluffy.",
+    "ingredients": "[{\"name\": \"All-purpose flour\", \"units\": \"cups\", \"amount\": \"3 cups + 2 tablespoons\"}, {\"name\": \"Sea salt\", \"units\": \"teaspoons\", \"amount\": \"1 ½ teaspoons\"}, {\"name\": \"Instant dry yeast\", \"units\": \"teaspoons\", \"amount\": \"½ teaspoon\"}, {\"name\": \"Water\", \"units\": \"cups\", \"amount\": \"1 ½ cups\"}]",
+    "instructions": "1. Whisk together the flour, salt, and yeast in a large bowl until combined. 2. Stir in the hot water until just combined and a sticky and shaggy dough forms. Don't overwork the dough. Use a spatula to scrape the sides if needed. 3. Cover with plastic wrap or a towel and place in a warm spot in your kitchen. Let the dough rest for 3 hours. 4. Liberally flour your work surface. Using a spatula, scrape the dough onto work surface and sprinkle top with flour. Using a bench scraper or floured hands, fold the dough in towards the center about 6-8 times. No need to knead! 5. Tuck in the bottom edges to form a round shape. 6. Place the dough on top of parchment paper. Lift up the paper and place it into a large bowl. Cover with a towel or plastic wrap and let it sit for 30 minutes. Place a 4-6 qt dutch oven with the lid into your oven and set it to 450 °F. The pot should heat up for the entire duration of the dough resting time. 7. Take the pot out of the oven. Pick up the paper with the dough and place it into the pot and cover with lid. Place the pot back in the oven for 30 minutes. Remove the lid and bake for an additional 8-12 minutes to crisp the top. Remove from oven and set out on a cooling rack.",
+    "nutrition_info": "Calories: 152 kcal per slice",
+    "category": "Bread",
+    "prep_time": "10 minutes",
+    "cook_time": "40 minutes",
+    "total_time": "4 hours 20 minutes",
+    "notes": "Make sure your water is hot, but not boiling hot or it will kill the yeast. Let the bread completely cool before slicing so it can finish cooking inside. Use a serrated knife to make the bread easy to slice.",
+    "tags": "bread, vegan, no knead",
+    "image_urls": null
+}

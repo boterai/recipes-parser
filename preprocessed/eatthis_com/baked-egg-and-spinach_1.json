@@ -1,0 +1,14 @@
+{
+    "dish_name": "Baked Egg With Mushrooms and Spinach",
+    "description": "This is the protein-packed breakfast that'll put your standard scrambled eggs to shame.",
+    "ingredients": "[{\"name\": \"olive oil\", \"units\": \"Tbsp\", \"amount\": 1}, {\"name\": \"small onion\", \"units\": \"unit\", \"amount\": 1}, {\"name\": \"mushrooms\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"Canadian bacon or deli ham\", \"units\": \"slices\", \"amount\": 4}, {\"name\": \"frozen spinach\", \"units\": \"bag\", \"amount\": 0.5}, {\"name\": \"roasted green chiles\", \"units\": \"can\", \"amount\": 0.5}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"black pepper\", \"units\": null, \"amount\": null}, {\"name\": \"eggs\", \"units\": \"unit\", \"amount\": 4}]",
+    "instructions": "Preheat the oven to 375°F. Heat the oil in a large skillet set over medium heat. Add the onion and cook for about 3 minutes, until translucent. Add the mushrooms and cook for about 5 minutes, until lightly browned. Stir in the bacon, spinach, and chiles, and cook for a few minutes, until the spinach is heated through. If any water from the spinach accumulates in the pan, carefully drain. Season with salt and pepper. Divide the mixture among 4 6-ounce oven-safe ramekins that have been lightly greased with butter. Carefully crack an egg into each, making sure to keep the yolks intact. Place the ramekins in a baking dish and bake until the whites are just set but the yolks are still runny, about 10 minutes.",
+    "nutrition_info": "150 calories, 9 g fat (2.5 g saturated), 560 mg sodium",
+    "category": "Breakfast",
+    "prep_time": "10 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "20 minutes",
+    "notes": "Toss one of these in the oven when you wake up, and it will be ready to eat when you get out of the shower. Keep it fresh and exciting by changing the supporting ingredients as often as possible.",
+    "tags": "Breakfast, Easy Recipes, Eggs, Healthy Breakfast Recipes, Healthy Egg Recipes",
+    "image_urls": null
+}

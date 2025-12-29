@@ -1,0 +1,14 @@
+{
+    "dish_name": "Healthy Peanut Butter and Banana Oatmeal",
+    "description": "A healthy oatmeal recipe with peanut butter and banana, perfect for breakfast.",
+    "ingredients": "[{\"name\": \"water\", \"units\": \"cups\", \"amount\": 4.5}, {\"name\": \"rolled oats\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"salt\", \"units\": \"pinch\", \"amount\": null}, {\"name\": \"bananas\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"peanut butter\", \"units\": \"Tbsp\", \"amount\": 2}, {\"name\": \"chopped almonds\", \"units\": \"cup\", \"amount\": 0.25}, {\"name\": \"agave syrup\", \"units\": \"Tbsp\", \"amount\": 2}]",
+    "instructions": "In a medium saucepan, bring the water to a boil. Turn the heat down to low and add the oatmeal and salt. Cook, stirring occasionally, for about 5 minutes, until the oats are tender and have absorbed most of the liquid. Add the bananas, peanut butter, almonds, and agave syrup and stir to incorporate evenly. If the oatmeal is too thick, add a splash of milk.",
+    "nutrition_info": "320 calories, 10 g fat (1 g saturated), 17 g sugar",
+    "category": "Healthy Breakfast",
+    "prep_time": null,
+    "cook_time": "5 minutes",
+    "total_time": null,
+    "notes": "Peanut butter and banana may be our favorite oatmeal embellishment, but there are dozens of ways to trick out a plain bowl of boiled oats.",
+    "tags": "Healthy, Breakfast, Oatmeal",
+    "image_urls": null
+}
