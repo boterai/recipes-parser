@@ -565,12 +565,12 @@ class QdrantRecipeManager:
             return []
     
     def vectorise_images(
-        self,
-        images: list[ImageORM],
-        embedding_function: ImageEmbeddingFunction,
-        batch_size: int = 10,
-        mark_vectorised_callback: callable = None
-    ) -> int:
+    self,
+    images: list[ImageORM],
+    embedding_function: ImageEmbeddingFunction,
+    batch_size: int = 10,
+    mark_vectorised_callback: callable = None
+) -> int:
         """
         Добавление изображений рецептов в коллекцию images
         
@@ -593,42 +593,59 @@ class QdrantRecipeManager:
         
         added_count = 0
         
-        for batch_num, start in enumerate(range(0, len(images), batch_size), 1):
-            end = min(start + batch_size, len(images))
-            batch_images = images[start:end]
-            
+        for batch_num, batch_images in enumerate(batched(images, batch_size), 1):
             try:
-                # Получаем пути к локальным файлам изображений
-                images = [img.local_path for img in batch_images]
-                if any(img is None for img in images):
-                    logger.warning(f"⚠ Батч {batch_num} содержит изображения без локального пути, получаем изображения по ссылкам...")
-                    images = [img_pil for img in batch_images if (img_pil := download_image(img.image_url)) is not None]
+                # Проверяем наличие локальных путей и загружаем по URL если нужно
+                img_to_upload = []
+                batch_to_process = []  # Только изображения с валидными данными
+                
+                for img in batch_images:
+                    if img.local_path:
+                        img_to_upload.append(img.local_path)
+                        batch_to_process.append(img)
+                    elif img.image_url:
+                        # Загружаем изображение по URL
+                        img_pil = download_image(img.image_url)
+                        if img_pil:
+                            img_to_upload.append(img_pil)
+                            batch_to_process.append(img)
+                        else:
+                            logger.warning(f"⚠ Не удалось загрузить изображение: {img.image_url}")
+                    else:
+                        logger.warning(f"⚠ Изображение ID={img.id} без local_path и image_url, пропускаем")
+                
+                if not img_to_upload:
+                    logger.warning(f"⚠ Батч {batch_num} не содержит валидных изображений")
+                    continue
+                
                 # Создаем векторы изображений
-                image_vectors = embedding_function(images)
+                image_vectors = embedding_function(img_to_upload)
                 
                 # Создаем точки для Qdrant
-                points = []
-                for img, vector in zip(batch_images, image_vectors):
-                    point = PointStruct(
+                points = [
+                    PointStruct(
                         id=img.id,
                         vector={"image": vector},
                         payload={
-                            "image_id": img.id                        }
+                            "image_id": img.id,
+                            "page_id": img.page_id  # Добавляем page_id для связи
+                        }
                     )
-                    points.append(point)
+                    for img, vector in zip(batch_to_process, image_vectors)
+                ]
                 
                 self.client.upsert(collection_name=collection_name, points=points, wait=True)
                 added_count += len(points)
                 logger.info(f"✓ Батч {batch_num}, 'images': {len(points)} изображений")
             
-                if mark_vectorised_callback:
-                    # Помечаем изображения как векторизованные
+                # Помечаем изображения как векторизованные
+                if mark_vectorised_callback and batch_to_process:
                     try:
-                        image_ids = [img.id for img in batch_images]
+                        image_ids = [img.id for img in batch_to_process]
                         mark_vectorised_callback(image_ids)
-                        logger.info(f"✓ Помечено {len(image_ids)} изображений как векторизованные")
+                        logger.debug(f"✓ Помечено {len(image_ids)} изображений как векторизованные")
                     except Exception as e:
-                        logger.warning(f"⚠ Ошибка при пометке изображений как векторизованных: {e}")
+                        logger.warning(f"⚠ Ошибка при пометке изображений: {e}")
                 
             except Exception as e:
                 logger.error(f"✗ Ошибка батча {batch_num}: {e}")
@@ -638,7 +655,7 @@ class QdrantRecipeManager:
         
         logger.info(f"✓ Итого добавлено: {added_count} изображений")
         return added_count
-    
+        
     def search_images(
         self,
         query_vector: list[float],
