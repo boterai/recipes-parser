@@ -84,14 +84,25 @@ class TastesBetterFromScratchExtractor(BaseRecipeExtractor):
         if min_match:
             minutes = int(min_match.group(1))
         
-        # Форматируем результат
-        parts = []
-        if hours > 0:
-            parts.append(f"{hours} hour{'s' if hours > 1 else ''}")
-        if minutes > 0:
-            parts.append(f"{minutes} minute{'s' if minutes > 1 else ''}")
+        # Конвертируем все в минуты для компактного формата
+        total_minutes = hours * 60 + minutes
         
-        return ' '.join(parts) if parts else None
+        if total_minutes == 0:
+            return None
+        
+        # Форматируем результат
+        # Если меньше 60 минут - просто минуты
+        if total_minutes < 60:
+            return f"{total_minutes} minutes"
+        # Если кратно часам - только часы
+        elif total_minutes % 60 == 0:
+            hrs = total_minutes // 60
+            return f"{hrs} hour{'s' if hrs > 1 else ''}"
+        # Иначе - часы и минуты
+        else:
+            hrs = total_minutes // 60
+            mins = total_minutes % 60
+            return f"{hrs} hour{'s' if hrs > 1 else ''} {mins} minutes"
     
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
@@ -338,77 +349,102 @@ class TastesBetterFromScratchExtractor(BaseRecipeExtractor):
             # Калории
             if 'calories' in nutrition:
                 cal_text = str(nutrition['calories'])
-                # Извлекаем только число и добавляем "kcal" если нужно
+                # Извлекаем только число
                 cal_match = re.search(r'(\d+)', cal_text)
                 if cal_match:
                     calories = cal_match.group(1)
-                    if 'kcal' in cal_text.lower():
-                        parts.append(f"Calories: {calories} kcal")
-                    else:
-                        parts.append(f"Calories: {calories}")
+                    parts.append(f"Calories: {calories} kcal")
             
             # Углеводы
             if 'carbohydrateContent' in nutrition:
                 carb_text = str(nutrition['carbohydrateContent'])
                 carb_match = re.search(r'([\d.]+)\s*g', carb_text)
                 if carb_match:
-                    parts.append(f"Carbohydrates: {carb_match.group(1)}g")
+                    val = carb_match.group(1)
+                    # Удаляем .0 если есть
+                    if '.' in val and float(val) == int(float(val)):
+                        val = str(int(float(val)))
+                    parts.append(f"Carbohydrates: {val} g")
             
             # Белки
             if 'proteinContent' in nutrition:
                 prot_text = str(nutrition['proteinContent'])
                 prot_match = re.search(r'([\d.]+)\s*g', prot_text)
                 if prot_match:
-                    parts.append(f"Protein: {prot_match.group(1)}g")
+                    val = prot_match.group(1)
+                    if '.' in val and float(val) == int(float(val)):
+                        val = str(int(float(val)))
+                    parts.append(f"Protein: {val} g")
             
             # Жиры
             if 'fatContent' in nutrition:
                 fat_text = str(nutrition['fatContent'])
                 fat_match = re.search(r'([\d.]+)\s*g', fat_text)
                 if fat_match:
-                    parts.append(f"Fat: {fat_match.group(1)}g")
+                    val = fat_match.group(1)
+                    if '.' in val and float(val) == int(float(val)):
+                        val = str(int(float(val)))
+                    parts.append(f"Fat: {val} g")
             
             # Насыщенные жиры
             if 'saturatedFatContent' in nutrition:
                 sat_fat_text = str(nutrition['saturatedFatContent'])
                 sat_fat_match = re.search(r'([\d.]+)\s*g', sat_fat_text)
                 if sat_fat_match:
-                    parts.append(f"Saturated Fat: {sat_fat_match.group(1)}g")
+                    val = sat_fat_match.group(1)
+                    if '.' in val and float(val) == int(float(val)):
+                        val = str(int(float(val)))
+                    parts.append(f"Saturated Fat: {val} g")
             
             # Холестерин
             if 'cholesterolContent' in nutrition:
                 chol_text = str(nutrition['cholesterolContent'])
                 chol_match = re.search(r'([\d.]+)\s*mg', chol_text)
                 if chol_match:
-                    parts.append(f"Cholesterol: {chol_match.group(1)}mg")
+                    val = chol_match.group(1)
+                    if '.' in val and float(val) == int(float(val)):
+                        val = str(int(float(val)))
+                    parts.append(f"Cholesterol: {val} mg")
             
             # Натрий
             if 'sodiumContent' in nutrition:
                 sodium_text = str(nutrition['sodiumContent'])
                 sodium_match = re.search(r'([\d.]+)\s*mg', sodium_text)
                 if sodium_match:
-                    parts.append(f"Sodium: {sodium_match.group(1)}mg")
+                    val = sodium_match.group(1)
+                    if '.' in val and float(val) == int(float(val)):
+                        val = str(int(float(val)))
+                    parts.append(f"Sodium: {val} mg")
             
             # Калий
             if 'potassiumContent' in nutrition:
                 potassium_text = str(nutrition['potassiumContent'])
                 potassium_match = re.search(r'([\d.]+)\s*mg', potassium_text)
                 if potassium_match:
-                    parts.append(f"Potassium: {potassium_match.group(1)}mg")
+                    val = potassium_match.group(1)
+                    if '.' in val and float(val) == int(float(val)):
+                        val = str(int(float(val)))
+                    parts.append(f"Potassium: {val} mg")
             
             # Клетчатка
             if 'fiberContent' in nutrition:
                 fiber_text = str(nutrition['fiberContent'])
                 fiber_match = re.search(r'([\d.]+)\s*g', fiber_text)
                 if fiber_match:
-                    parts.append(f"Fiber: {fiber_match.group(1)}g")
+                    val = fiber_match.group(1)
+                    if '.' in val and float(val) == int(float(val)):
+                        val = str(int(float(val)))
+                    parts.append(f"Fiber: {val} g")
             
             # Сахар
             if 'sugarContent' in nutrition:
                 sugar_text = str(nutrition['sugarContent'])
                 sugar_match = re.search(r'([\d.]+)\s*g', sugar_text)
                 if sugar_match:
-                    parts.append(f"Sugar: {sugar_match.group(1)}g")
+                    val = sugar_match.group(1)
+                    if '.' in val and float(val) == int(float(val)):
+                        val = str(int(float(val)))
+                    parts.append(f"Sugar: {val} g")
             
             # Возвращаем все части через запятую и пробел
             return ', '.join(parts) if parts else None
