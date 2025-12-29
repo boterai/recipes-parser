@@ -85,7 +85,7 @@ class EatThisExtractor(BaseRecipeExtractor):
             name = re.sub(r'\s+(Recipe|Eat This Not That).*$', '', name, flags=re.IGNORECASE)
             # Убираем начальные фразы типа "A 10-Minute"
             name = re.sub(r'^(A\s+)?\d+(-|\s+)?Minute\s+', '', name, flags=re.IGNORECASE)
-            name = re.sub(r'^(Healthy\s+)?', '', name, flags=re.IGNORECASE)
+            name = re.sub(r'^Healthy\s+', '', name, flags=re.IGNORECASE)
             return self.clean_text(name)
         
         return None
@@ -138,7 +138,7 @@ class EatThisExtractor(BaseRecipeExtractor):
         
         # Паттерн для извлечения количества, единицы и названия
         # Расширяем pattern для поиска "(X oz.) bag" и подобных конструкций
-        pattern = r'^([\d\s/.,]+)?\s*(?:\([\d\s.,]+\s*(?:oz|g|kg|lb|ml|l)\.\?\s*\))?\s*(Tbsp|tbsp|Tsp|tsp|cups?|tablespoons?|teaspoons?|pounds?|ounces?|lbs?|lb|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|pinch|dash(?:es)?|packages?|pkg|cans?|can|jars?|bottles?|inch(?:es)?|slices?|slice|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|piece|head|heads|bag|bags|units?|unit)?\s*(.+)'
+        pattern = r'^([\d\s/.,]+)?\s*(?:\([\d\s.,]+\s*(?:oz|g|kg|lb|ml|l)\.?\s*\))?\s*(Tbsp|tbsp|Tsp|tsp|cups?|tablespoons?|teaspoons?|pounds?|ounces?|lbs?|lb|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|pinch|dash(?:es)?|packages?|pkg|cans?|can|jars?|bottles?|inch(?:es)?|slices?|slice|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|piece|head|heads|bag|bags|units?|unit)?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -218,7 +218,7 @@ class EatThisExtractor(BaseRecipeExtractor):
             # Фильтруем и собираем ингредиенты (пропускаем "chopped", "sliced" и т.д.)
             skip_words = ['chopped', 'sliced', 'diced', 'minced', 'thawed', 'beaten', 'peeled', 
                          'halved', 'quartered', 'grated', 'shredded', 'crushed']
-            skip_phrases = ['split and lightly toasted', 'cut into thin strips', 'lightly toasted']
+            skip_phrases = ['split and lightly toasted', 'lightly toasted']
             
             i = 0
             while i < len(raw_ingredients):
@@ -226,11 +226,6 @@ class EatThisExtractor(BaseRecipeExtractor):
                 
                 # Пропускаем слова-действия
                 if ing_text.lower() in skip_words:
-                    i += 1
-                    continue
-                
-                # Пропускаем фразы-действия
-                if any(phrase in ing_text.lower() for phrase in skip_phrases):
                     i += 1
                     continue
                 
@@ -247,6 +242,10 @@ class EatThisExtractor(BaseRecipeExtractor):
                     else:
                         i += 1
                         continue
+                # Пропускаем фразы-действия
+                elif any(phrase in ing_text.lower() for phrase in skip_phrases):
+                    i += 1
+                    continue
                 # Если строка начинается со скобки типа "(10 oz.) bag...", это продолжение
                 elif ing_text.startswith('('):
                     # Пропускаем, так как это уже должно быть обработано
@@ -262,7 +261,7 @@ class EatThisExtractor(BaseRecipeExtractor):
                     full_text = re.sub(r'\s+to taste', '', full_text, flags=re.IGNORECASE)
                     parts = re.split(r'\s+and\s+', full_text, flags=re.IGNORECASE)
                     for part in parts:
-                        part = part.strip().lower()  # Lowercase for consistency
+                        part = part.strip()
                         parsed = self.parse_ingredient(part)
                         if parsed:
                             ingredients.append(parsed)
@@ -365,17 +364,22 @@ class EatThisExtractor(BaseRecipeExtractor):
             return self.parse_iso_duration(recipe_data['totalTime'])
         
         # Если totalTime нет, но есть prep и cook time, суммируем их
-        prep_time = self.extract_prep_time()
-        cook_time = self.extract_cook_time()
-        
-        if prep_time and cook_time:
-            # Извлекаем числа из строк вида "10 minutes"
-            prep_match = re.search(r'(\d+)', prep_time)
-            cook_match = re.search(r'(\d+)', cook_time)
+        if recipe_data:
+            prep_time_iso = recipe_data.get('prepTime')
+            cook_time_iso = recipe_data.get('cookTime')
             
-            if prep_match and cook_match:
-                total_minutes = int(prep_match.group(1)) + int(cook_match.group(1))
-                return f"{total_minutes} minutes"
+            if prep_time_iso and cook_time_iso:
+                prep_time = self.parse_iso_duration(prep_time_iso)
+                cook_time = self.parse_iso_duration(cook_time_iso)
+                
+                if prep_time and cook_time:
+                    # Извлекаем числа из строк вида "10 minutes"
+                    prep_match = re.search(r'(\d+)', prep_time)
+                    cook_match = re.search(r'(\d+)', cook_time)
+                    
+                    if prep_match and cook_match:
+                        total_minutes = int(prep_match.group(1)) + int(cook_match.group(1))
+                        return f"{total_minutes} minutes"
         
         return None
     
