@@ -3,6 +3,7 @@
 """
 
 import sys
+import os
 from pathlib import Path
 import json
 import re
@@ -146,7 +147,20 @@ class VeganhuggsExtractor(BaseRecipeExtractor):
             text = text.replace(fraction, decimal)
         
         # Паттерн для извлечения количества, единицы и названия
-        pattern = r'^([\d\s/.,+-]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|small|medium|large)?\s*(.+)'
+        # Список единиц измерения
+        units_list = [
+            'cups?', 'tablespoons?', 'teaspoons?', 'tbsps?', 'tsps?',
+            'pounds?', 'ounces?', 'lbs?', 'oz',
+            'grams?', 'kilograms?', 'g', 'kg',
+            'milliliters?', 'liters?', 'ml', 'l',
+            'pinch(?:es)?', 'dash(?:es)?',
+            'packages?', 'cans?', 'jars?', 'bottles?',
+            'inch(?:es)?', 'slices?', 'cloves?', 'bunches?', 'sprigs?',
+            'whole', 'halves?', 'quarters?', 'pieces?', 'head', 'heads',
+            'small', 'medium', 'large'
+        ]
+        units_pattern = '|'.join(units_list)
+        pattern = rf'^([\d\s/.,+-]+)?\s*({units_pattern})?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -185,12 +199,17 @@ class VeganhuggsExtractor(BaseRecipeExtractor):
                                     num = frac_parts[0].strip()
                                     denom = frac_parts[1].strip()
                                     # Проверяем, что можем конвертировать в число
-                                    if num and denom and num.replace('.', '').isdigit() and denom.replace('.', '').isdigit():
+                                    try:
                                         total += float(num) / float(denom)
-                            elif part.replace('.', '').replace('-', '').isdigit():
-                                total += float(part)
+                                    except (ValueError, ZeroDivisionError):
+                                        pass
+                            else:
+                                try:
+                                    total += float(part)
+                                except ValueError:
+                                    pass
                         amount = str(total) if total > 0 else amount_str
-                    except:
+                    except (ValueError, ZeroDivisionError):
                         # Если не получилось распарсить, оставляем как есть
                         amount = amount_str
                 else:
@@ -512,7 +531,6 @@ class VeganhuggsExtractor(BaseRecipeExtractor):
 
 
 def main():
-    import os
     # Обрабатываем папку preprocessed/veganhuggs_com
     preprocessed_dir = os.path.join("preprocessed", "veganhuggs_com")
     if os.path.exists(preprocessed_dir) and os.path.isdir(preprocessed_dir):
