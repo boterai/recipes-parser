@@ -140,7 +140,6 @@ class RecipeExtractor:
         
         if recipe_data is None:
             return None
-        
         # Если ключевые поля отсутствуют, помечаем как не рецепт
         key_fields = ['dish_name', 'ingredients', 'instructions']
         if not all(field in recipe_data and recipe_data[field] for field in key_fields):

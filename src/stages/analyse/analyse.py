@@ -242,11 +242,10 @@ URL: {url}
                 nutrition_info=analysis.get("nutrition_info"),
                 notes=analysis.get("notes"),
                 tags=analysis.get("tags"),
-                ingredients=ingredients,
-                image_urls=analysis.get("image_urls"),  # Оставляем без изменений
+                ingredients=ingredients
             )
 
-            self.page_repository.update(page_orm)
+            self.page_repository.create_or_update_with_images(page_orm, image_urls=analysis.get("image_urls", []))
             
             logger.info(f"Страница ID {page_id} обновлена в БД")
             return True

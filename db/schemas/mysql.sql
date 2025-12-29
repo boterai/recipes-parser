@@ -31,7 +31,6 @@ CREATE TABLE IF NOT EXISTS pages (
     prep_time VARCHAR(100),
     cook_time VARCHAR(100),
     total_time VARCHAR(100),
-    image_urls TEXT, -- TODO вероятно лучше мигрировать на отдельную таблицу полнотсью и удалить это поле
     description TEXT,
     notes TEXT,
     tags TEXT, -- теги через запятую (лучше бы мигрировать на JSON)

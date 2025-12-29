@@ -8,9 +8,10 @@ from decimal import Decimal
 from pydantic import BaseModel, Field, field_validator
 import json
 from sqlalchemy import Column, Integer, String, Boolean, DECIMAL, TIMESTAMP, Text, ForeignKey, text, Index
+from sqlalchemy.orm import relationship
 from src.models.base import Base
 from src.models.recipe import Recipe
-
+from src.models.image import ImageORM
 
 class PageORM(Base):
     """SQLAlchemy модель для таблицы pages"""
@@ -34,7 +35,6 @@ class PageORM(Base):
     prep_time = Column(String(100))
     cook_time = Column(String(100))
     total_time = Column(String(100))
-    image_urls = Column(Text)
     description = Column(Text)
     notes = Column(Text)
     tags = Column(Text)
@@ -45,6 +45,14 @@ class PageORM(Base):
     
     # Метаданные
     created_at = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'))
+    
+    # Relationships
+    images = relationship(
+        "ImageORM",
+        back_populates="page",
+        cascade="all, delete-orphan",
+        lazy="select"
+    )
     
     # Индексы
     __table_args__ = (
@@ -217,10 +225,17 @@ class Page(BaseModel):
             PageORM (SQLAlchemy модель)
         """
         data = self.model_dump(
-            exclude={'id', 'created_at', 'metadata_path'},
+            exclude={'id', 'created_at', 'metadata_path', 'image_urls'},
             exclude_none=exclude_none
         )
-        return PageORM(**data)
+        page =  PageORM(**data)
+        if self.image_urls is not None:
+            images = [
+                    ImageORM(page_id=self.id, image_url=url.strip())
+                    for url in self.image_urls.split(",") if url.strip()
+                ]
+            page.images = images
+        return page
     
     def update_orm(self, page_orm: PageORM, exclude_none: bool = True) -> PageORM:
         """
