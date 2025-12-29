@@ -222,6 +222,12 @@ class SitePreparationPipeline:
                 filter_by_title=True,
                 stop_analyse=self.min_recipes
             )
+
+            if recipes_found == 0: # по идее должен бвть хотя бы 1 рецепт по первой ссылке, если его нет, то выходим
+                logger.warning("✗ Не найдено рецептов на сайте после первичного анализа")
+                explorer.close()
+                self.site_repository.mark_site_as_searched(site_orm.id)
+                return False
             
             logger.info(f"✓ Найдено рецептов: {recipes_found}")
             

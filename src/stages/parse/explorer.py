@@ -353,7 +353,8 @@ class SiteExplorer:
             return False
 
         try:
-            self.page_repository.create_or_update(recipe_data)
+            image_urls = recipe_data.image_urls.split(",") if recipe_data.image_urls else []
+            self.page_repository.create_or_update_with_images(recipe_data, image_urls=image_urls)
         except Exception as e:
             self.logger.error(f"Ошибка сохранения страницы в БД: {e}")
             return False

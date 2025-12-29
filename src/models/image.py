@@ -7,13 +7,16 @@ from typing import Optional
 import hashlib
 from pydantic import BaseModel
 from sqlalchemy import Column, Integer, String, Boolean, TIMESTAMP, ForeignKey, text, Index
+from sqlalchemy.orm import relationship
 from src.models.base import Base
 import requests
 from PIL import Image as PIL
 from PIL.Image import Image as PILImage
 import logging
 from io import BytesIO
+import os
 
+PROXY = os.getenv('PROXY', None)
 logger = logging.getLogger(__name__)
 
 class ImageORM(Base):
@@ -29,6 +32,9 @@ class ImageORM(Base):
     remote_storage_url = Column(String(500))
     created_at = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'))
     vectorised = Column(Boolean, default=False)
+    
+    # Relationships
+    page = relationship("PageORM", back_populates="images")
     
     # Индексы (image_url_hash индекс создан в MySQL, не нужен здесь)
     __table_args__ = (
@@ -119,6 +125,10 @@ def download_image(image_url: str, timeout: float = 30.0, max_retries: int = 3) 
                 headers={
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
                 },
+                proxies={
+                    "http": PROXY,
+                    "https": PROXY
+                } if PROXY else None
             )
             response.raise_for_status()
 

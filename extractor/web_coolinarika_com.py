@@ -16,6 +16,26 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class WebCoolnarikaExtractor(BaseRecipeExtractor):
     """Экстрактор для web.coolinarika.com"""
     
+    def _get_json_ld(self) -> Optional[dict]:
+        """
+        Извлечение данных из JSON-LD структуры schema.org
+        
+        Returns:
+            Словарь с данными рецепта или None
+        """
+        json_ld_script = self.soup.find('script', {'type': 'application/ld+json'})
+        if not json_ld_script:
+            return None
+        
+        try:
+            data = json.loads(json_ld_script.string)
+            if data.get('@type') == 'Recipe':
+                return data
+        except (json.JSONDecodeError, KeyError, AttributeError):
+            return None
+        
+        return None
+    
     def _get_next_data(self) -> Optional[dict]:
         """
         Извлечение данных из __NEXT_DATA__ скрипта
@@ -118,6 +138,48 @@ class WebCoolnarikaExtractor(BaseRecipeExtractor):
     
     def extract_instructions(self) -> Optional[str]:
         """Извлечение инструкций приготовления"""
+        # Пробуем извлечь из JSON-LD (там полные инструкции)
+        json_ld = self._get_json_ld()
+        
+        if json_ld and 'recipeInstructions' in json_ld:
+            instructions = json_ld['recipeInstructions']
+            
+            if isinstance(instructions, list):
+                steps = []
+                
+                for idx, step in enumerate(instructions, 1):
+                    if isinstance(step, dict) and 'text' in step:
+                        text = step['text']
+                        text = self.clean_text(text)
+                        
+                        # Убираем префиксы типа "prvo-", "drugo-", "cetvrto-" и двоеточия
+                        text = re.sub(r'^[a-z]+\s*-\s*', '', text, flags=re.I)
+                        text = text.rstrip(':')
+                        
+                        # Пропускаем заметки (ps., p.s.)
+                        if re.match(r'^(ps\.|p\.s\.)\s+', text.lower()):
+                            continue
+                        
+                        if text:
+                            # Берем первое предложение или первые 500 символов
+                            sentences = re.split(r'(?<=[.!?])\s+', text)
+                            if sentences:
+                                first_sentence = sentences[0]
+                                # Если предложение слишком длинное, обрезаем
+                                if len(first_sentence) > 500:
+                                    first_sentence = first_sentence[:497] + '...'
+                                
+                                # Форматируем: первая буква заглавная
+                                first_sentence = first_sentence[0].upper() + first_sentence[1:] if len(first_sentence) > 1 else first_sentence.upper()
+                                
+                                if not first_sentence.endswith(('.', '!', '?')):
+                                    first_sentence += '.'
+                                
+                                steps.append(f"{idx}. {first_sentence}")
+                
+                return ' '.join(steps) if steps else None
+        
+        # Fallback: пробуем старый метод через _get_next_data
         recipe_data = self._get_next_data()
         
         if not recipe_data or 'preparation_steps' not in recipe_data:
@@ -126,35 +188,22 @@ class WebCoolnarikaExtractor(BaseRecipeExtractor):
         steps = []
         
         for idx, step in enumerate(recipe_data['preparation_steps'], 1):
-            # description может содержать HTML
             description = step.get('description', '')
             if description:
-                # Парсим HTML для извлечения заголовков шагов
                 soup_step = BeautifulSoup(description, 'lxml')
-                
-                # Ищем заголовок в <strong> тегах
                 strong_tag = soup_step.find('strong')
                 if strong_tag:
                     title = strong_tag.get_text(strip=True)
                     title = self.clean_text(title)
-                    
-                    # Убираем префиксы типа "prvo-", "drugo-", "cetvrto-", и двоеточия
                     title = re.sub(r'^[a-z]+\s*-\s*', '', title, flags=re.I)
                     title = title.rstrip(':')
-                    
-                    # Убираем "opet" (again) из названий
                     title = re.sub(r'\bopet\s+', '', title, flags=re.I)
                     
                     if title:
-                        # Форматируем: первая буква заглавная, остальные строчные
                         title = title.capitalize()
-                        # Добавляем точку в конец
                         if not title.endswith('.'):
                             title += '.'
                         steps.append(f"{idx}. {title}")
-                else:
-                    # Если нет заголовка, пропускаем этот шаг (например, ps.)
-                    pass
         
         return ' '.join(steps) if steps else None
     
@@ -235,12 +284,36 @@ class WebCoolnarikaExtractor(BaseRecipeExtractor):
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение дополнительных заметок"""
+        # Пробуем извлечь из JSON-LD (последний шаг может быть заметкой)
+        json_ld = self._get_json_ld()
+        
+        if json_ld and 'recipeInstructions' in json_ld:
+            instructions = json_ld['recipeInstructions']
+            
+            if isinstance(instructions, list) and len(instructions) > 0:
+                last_step = instructions[-1]
+                
+                if isinstance(last_step, dict) and 'text' in last_step:
+                    text = last_step['text']
+                    text = self.clean_text(text)
+                    
+                    # Проверяем, является ли это заметкой
+                    if re.match(r'^(ps\.|p\.s\.)\s+', text.lower()):
+                        # Убираем префикс "ps."
+                        text = re.sub(r'^(ps\.|p\.s\.)\s*', '', text, flags=re.I)
+                        # Берем первые 2-3 предложения
+                        sentences = re.split(r'(?<=[.!?])\s+', text)[:3]
+                        note_text = '. '.join(sentences)
+                        if not note_text.endswith('.'):
+                            note_text += '.'
+                        return note_text.capitalize()
+        
+        # Fallback: старый метод
         recipe_data = self._get_next_data()
         
         if not recipe_data:
             return None
         
-        # Проверяем последний шаг приготовления - он может содержать заметки
         if 'preparation_steps' in recipe_data and recipe_data['preparation_steps']:
             last_step = recipe_data['preparation_steps'][-1]
             description = last_step.get('description', '')
@@ -250,11 +323,8 @@ class WebCoolnarikaExtractor(BaseRecipeExtractor):
                 text = soup_step.get_text(separator=' ', strip=True)
                 text = self.clean_text(text)
                 
-                # Проверяем, является ли это заметкой (начинается с ps., p.s., napomena и т.д.)
                 if re.match(r'^(ps\.|p\.s\.|napomena|savjet|tip|važno|note)', text.lower()):
-                    # Убираем префикс "ps." или подобные
                     text = re.sub(r'^(ps\.|p\.s\.)\s*', '', text, flags=re.I)
-                    # Берем первые 2-3 предложения как заметки
                     sentences = re.split(r'[.!?]\s+', text)[:3]
                     note_text = '. '.join(sentences)
                     if not note_text.endswith('.'):
@@ -290,12 +360,24 @@ class WebCoolnarikaExtractor(BaseRecipeExtractor):
     
     def extract_image_urls(self) -> Optional[str]:
         """Извлечение URL изображений рецепта"""
+        # Пробуем извлечь из JSON-LD (там полный URL)
+        json_ld = self._get_json_ld()
+        
+        if json_ld and 'image' in json_ld:
+            image = json_ld['image']
+            
+            # image может быть строкой или списком
+            if isinstance(image, str):
+                return image
+            elif isinstance(image, list) and len(image) > 0:
+                # Если список, берем первое изображение
+                return image[0] if isinstance(image[0], str) else None
+        
+        # Fallback: пробуем старый метод через _get_next_data
         recipe_data = self._get_next_data()
         
         if not recipe_data:
             return None
-        
-        image_urls = []
         
         # Ищем основное изображение
         if 'image' in recipe_data and recipe_data['image']:
@@ -318,8 +400,6 @@ class WebCoolnarikaExtractor(BaseRecipeExtractor):
                         # Аналогично, нужен URL, но есть только ID
                         pass
         
-        # Так как точный URL неизвестен, возвращаем None
-        # В реальной ситуации нужно было бы исследовать, как формируются URL
         return None
     
     def extract_all(self) -> dict:

@@ -24,3 +24,4 @@ scripts/words.py
 parser_issue.md
 *_extracted.json
 preprocessed/
+/images/

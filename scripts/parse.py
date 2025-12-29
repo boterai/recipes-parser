@@ -247,7 +247,7 @@ if __name__ == "__main__":
     parser.add_argument(
         '--modules',
         type=str,
-        default=["lamaistas_lt", "domacirecepti_net", "24kitchen_nl", "simplyrecipes_com", "speedinfo_com_ua"],
+        default=["web_coolinarika_com", "domacirecepti_net", "24kitchen_nl", "simplyrecipes_com", "speedinfo_com_ua"],
         help='Имя модуля экстрактора для одиночного запуска (по умолчанию: 24kitchen_nl)'
     )
     

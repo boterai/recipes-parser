@@ -8,6 +8,7 @@ from sqlalchemy import and_, func
 
 from src.repositories.base import BaseRepository
 from src.models.page import PageORM, Page
+from src.models.image import ImageORM
 from src.common.db.connection import get_db_connection
 
 logger = logging.getLogger(__name__)
@@ -177,6 +178,125 @@ class PageRepository(BaseRepository[PageORM]):
             logger.debug(f"✓ Создана новая страница ID={created.id}: {page_data.url}")
             return created
     
+    def create_with_images(self, page_data: Page, image_urls: List[str]) -> Optional[PageORM]:
+        """
+        Создать страницу с изображениями в одной транзакции
+        
+        Args:
+            page_data: Pydantic модель с данными страницы
+            image_urls: Список URL изображений
+        
+        Returns:
+            PageORM объект с загруженными images или None при ошибке
+        """
+        session = self.get_session()
+        try:
+            # Создаем ORM объект страницы
+            page_orm = page_data.to_orm()
+            
+            # Добавляем изображения через relationship
+            if image_urls:
+                page_orm.images = [
+                    ImageORM(image_url=url) 
+                    for url in image_urls
+                ]
+            
+            # Сохраняем в одной транзакции (images сохранятся автоматически благодаря cascade)
+            session.add(page_orm)
+            session.commit()
+            
+            # Обновляем объект чтобы получить актуальные данные
+            session.refresh(page_orm)
+            
+            logger.debug(f"✓ Создана страница ID={page_orm.id} с {len(image_urls)} изображениями: {page_data.url}")
+            return page_orm
+            
+        except Exception as e:
+            session.rollback()
+            logger.error(f"Ошибка создания страницы с изображениями: {e}")
+            return None
+        finally:
+            session.close()
+    
+    def create_or_update_with_images(self, page_data: Page, image_urls: List[str], 
+                                      replace_images: bool = False) -> Optional[PageORM]:
+        """
+        Создать новую страницу с изображениями или обновить существующую
+        
+        Args:
+            page_data: Pydantic модель с данными страницы
+            image_urls: Список URL изображений для добавления
+            replace_images: Если True, заменяет все существующие изображения, иначе добавляет новые
+        
+        Returns:
+            PageORM объект с загруженными images
+        """
+        session = self.get_session()
+        try:
+            # Проверяем существование по site_id + url в той же сессии
+            existing = session.query(PageORM).filter(
+                and_(
+                    PageORM.site_id == page_data.site_id,
+                    PageORM.url == page_data.url
+                )
+            ).first()
+            
+            if existing:
+                # Обновляем существующую страницу
+                # Обновляем поля страницы
+                page_data.update_orm(existing)
+                
+                if image_urls:
+                    if replace_images:
+                        # Заменяем все изображения
+                        existing.images.clear()
+                        existing.images = [
+                            ImageORM(image_url=url)
+                            for url in image_urls
+                        ]
+                        logger.debug(f"✓ Заменено {len(image_urls)} изображений для страницы ID={existing.id}")
+                    else:
+                        # Добавляем только новые (проверяем дубликаты)
+                        existing_urls = {img.image_url for img in existing.images}
+                        new_images = [
+                            ImageORM(image_url=url)
+                            for url in image_urls
+                            if url not in existing_urls
+                        ]
+                        existing.images.extend(new_images)
+                        logger.debug(f"✓ Добавлено {len(new_images)} новых изображений для страницы ID={existing.id}")
+                
+                session.commit()
+                session.refresh(existing)
+                
+                logger.debug(f"✓ Обновлена страница ID={existing.id}: {page_data.url}")
+                return existing
+            else:
+                # Создаем новую страницу с изображениями
+                page_orm = page_data.to_orm()
+                
+                # Добавляем изображения через relationship
+                if image_urls:
+                    page_orm.images = [
+                        ImageORM(image_url=url) 
+                        for url in image_urls
+                    ]
+                
+                # Сохраняем в одной транзакции
+                session.add(page_orm)
+                session.commit()
+                session.refresh(page_orm)
+                
+                logger.debug(f"✓ Создана страница ID={page_orm.id} с {len(image_urls)} изображениями: {page_data.url}")
+                return page_orm
+                
+        except Exception as e:
+            session.rollback()
+            logger.error(f"Ошибка обновления страницы с изображениями: {e}")
+            return None
+        finally:
+            session.close()
+    
     def count_recipes_by_site(self, site_id: int) -> int:
         """
         Подсчитать количество рецептов для сайта
@@ -332,5 +452,41 @@ class PageRepository(BaseRepository[PageORM]):
             ).distinct().all()
             site_ids = [sid[0] for sid in site_ids]
             return site_ids
+        finally:
+            session.close()
+    
+    def get_pages_without_images(self, site_id: Optional[int] = None, 
+                                  is_recipe_only: bool = True,
+                                  limit: Optional[int] = None) -> List[PageORM]:
+        """
+        Получить страницы, для которых нет записей в таблице images
+        
+        Args:
+            site_id: ID сайта (опционально)
+            is_recipe_only: Если True, только страницы с is_recipe=True (по умолчанию True)
+            limit: Максимальное количество страниц
+        
+        Returns:
+            Список PageORM объектов без изображений
+        """
+        session = self.get_session()
+        try:
+            # LEFT JOIN для поиска страниц без изображений
+            query = session.query(PageORM).outerjoin(
+                ImageORM, PageORM.id == ImageORM.page_id
+            ).filter(
+                ImageORM.id == None  # Нет записей в images
+            )
+            
+            if is_recipe_only:
+                query = query.filter(PageORM.is_recipe == True)
+            
+            if site_id:
+                query = query.filter(PageORM.site_id == site_id)
+            
+            if limit:
+                query = query.limit(limit)
+            
+            return query.all()
         finally:
             session.close()

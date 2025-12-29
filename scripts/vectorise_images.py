@@ -19,7 +19,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def validate_and_save_image(image_url: str, save_dir: str = "images", timeout: float = 30.0) -> str | None:
+def validate_and_save_image(image_url: str, save_dir: str = "images", timeout: float = 15.0) -> str | None:
     """
     Проверяет валидность URL, скачивает изображение и сохраняет локально.
     
@@ -73,7 +73,8 @@ def migrate_image_urls(save_image: bool = False):
     ir = ImageRepository()
 
     for site in pr.get_recipe_sites():
-        pages = pr.get_by_site(site_id=site)
+        pages = pr.get_pages_without_images(site_id=site)
+        logger.info(f"Processing site {site}, found {len(pages)} pages with image URLs")
 
         for page in pages:
             url: str = page.image_urls
@@ -135,4 +136,4 @@ def search_similar(image_id: int = 1, limit: int = 6):
 
 
 if __name__ == "__main__":
-    vectorise_images()
+    migrate_image_urls(True)
