@@ -241,7 +241,7 @@ class TandooriTreatExtractor(BaseRecipeExtractor):
                     units = unit
             
             # Удаляем фразы "or more", "adjust to taste" и т.д.
-            name = re.sub(r'\b(or more|if needed|optional|optonal|adjust to taste|to taste|as needed)\b', '', name, flags=re.IGNORECASE)
+            name = re.sub(r'\b(or more|if needed|optional|adjust to taste|to taste|as needed)\b', '', name, flags=re.IGNORECASE)
             # Очистка "or" в конце
             name = re.sub(r'\s+or\s*$', '', name, flags=re.IGNORECASE)
             name = re.sub(r'[,;]+$', '', name).strip()
