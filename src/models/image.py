@@ -155,7 +155,7 @@ def download_image(image_url: str, timeout: float = 30.0, max_retries: int = 3) 
     return None
 
 
-async def download_image_async(image_url: str, max_retries: int = 3) -> PILImage | None:
+async def download_image_async(image_url: str, max_retries: int = 3, use_proxy: bool = True) -> PILImage | None:
     """
     Асинхронно скачать изображение по URL и вернуть как PIL.Image.Image (без сохранения на диск).
     
@@ -167,6 +167,10 @@ async def download_image_async(image_url: str, max_retries: int = 3) -> PILImage
     Returns:
         PIL.Image.Image или None при ошибке
     """
+    proxy = None
+    if use_proxy:
+        proxy = PROXY
+
     for attempt in range(max_retries):
         try:
             async with aiohttp.ClientSession() as session:
@@ -175,7 +179,7 @@ async def download_image_async(image_url: str, max_retries: int = 3) -> PILImage
                     headers={
                         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
                     },
-                    proxy=PROXY
+                    proxy=proxy
                 ) as response:
                     response.raise_for_status()
                     content = await response.read()

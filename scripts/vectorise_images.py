@@ -19,7 +19,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-async def validate_and_save_image(image_url: str, save_dir: str = "images") -> str | None:
+async def validate_and_save_image(image_url: str, save_dir: str = "images", use_proxy: bool = True) -> str | None:
     """
     Проверяет валидность URL, скачивает изображение и сохраняет локально.
     
@@ -33,7 +33,7 @@ async def validate_and_save_image(image_url: str, save_dir: str = "images") -> s
     """
     try:
         # Скачиваем изображение как PIL.Image
-        img = await download_image_async(image_url)
+        img = await download_image_async(image_url, use_proxy=use_proxy)
         if img is None:
             return None
         
@@ -72,8 +72,10 @@ async def migrate_image_urls(save_image: bool = False, batch_size: int = 10):
     pr = PageRepository()
     ir = ImageRepository()
 
-    error_pages = []
     for site in pr.get_recipe_sites():
+        if site <= 5:
+            continue
+        error_pages = []
         while  (pages := pr.get_pages_without_images(site_id=site, limit=batch_size, exclude_pages=error_pages)):
             if not pages:
                 break
@@ -98,7 +100,7 @@ async def migrate_image_urls(save_image: bool = False, batch_size: int = 10):
             
             # скачиваем и сохраняем изображения
             if save_image:
-                tasks = [validate_and_save_image(url) for url, _ in url_page_mapping]
+                tasks = [validate_and_save_image(url, use_proxy=True) for url, _ in url_page_mapping]
                 saved_paths = await asyncio.gather(*tasks)
             else:
                 saved_paths = [None] * len(url_page_mapping)
