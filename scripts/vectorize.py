@@ -11,6 +11,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.common.embedding import get_embedding_function, get_image_embedding_function
 from src.stages.search.vectorise import RecipeVectorizer
 from src.models.recipe import Recipe
+from src.stages.search.similarity import SimilaritySearcher, ClusterParams
 
 def add_recipes():
     batch_size = 15 # примерный размер батча для векторизации и добавления в Qdrant при котором не происходит timeout
@@ -22,15 +23,6 @@ def add_recipes():
         batch_size=batch_size,
         dims=dims)
     
-def add_images(batch_size: int = 15):
-    # векторизует любые невекторизованные изображения рецептов и добавляет их в Qdrant
-    rv = RecipeVectorizer()
-    rv.vector_db.create_collections()
-    embed_func, dims = get_image_embedding_function(batch_size=batch_size)
-    rv.vectorise_images(
-        embed_function=embed_func,
-        limit=1000)
-
 def search_similar(recipe_id: int = 21427, use_weighted: bool = True,
                    score_threshold: float = 0.0, limit: int = 6):
     """Поиск похожих рецептов для заданного recipe_id и вывод их на экран
@@ -75,8 +67,18 @@ def search_similar(recipe_id: int = 21427, use_weighted: bool = True,
         print(f"ID: {sim_recipe.page_id}, Блюдо: {sim_recipe.dish_name}, Score: {score}")
 
 
+def find_all_similar():
+    ss = SimilaritySearcher()
+    # clusters = ss.build_full_text_clusters_via_qdrant(ClusterParams()) # долго работает, поэтому загружаем уже готовые кластеры
+    ss.load_clusters_from_file("recipe_clusters/full_text_clusters92.txt")
+    ss.process_and_save_clusters(offest=20)
+
+
+
+
 
 if __name__ == '__main__':
-    add_images()
+    find_all_similar()
+    #add_recipes()
     # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)
     #search_similar(recipe_id=19, use_weighted=False, score_threshold=0.0, limit=6)

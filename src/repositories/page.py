@@ -75,7 +75,8 @@ class PageRepository(BaseRepository[PageORM]):
             session.close()
     
     def get_recipes(self, site_id: Optional[int] = None, language: Optional[str] = None, 
-                    limit: Optional[int] = None, random_order: bool = False) -> List[PageORM]:
+                    limit: Optional[int] = None, random_order: bool = False,
+                    page_ids: Optional[list[int]] = None) -> List[PageORM]:
         """
         Получить страницы с рецептами
         
@@ -92,6 +93,9 @@ class PageRepository(BaseRepository[PageORM]):
         try:
             query = session.query(PageORM).filter(PageORM.is_recipe == True, PageORM.instructions != None, PageORM.instructions != "",
                                                   PageORM.ingredients != None)
+            
+            if page_ids:
+                query = query.filter(PageORM.id.in_(page_ids))
             
             if site_id:
                 query = query.filter(PageORM.site_id == site_id)
@@ -476,7 +480,7 @@ class PageRepository(BaseRepository[PageORM]):
             query = session.query(PageORM).outerjoin(
                 ImageORM, PageORM.id == ImageORM.page_id
             ).filter(
-                ImageORM.id == None  # Нет записей в images
+                ImageORM.id == None, PageORM.image_urls != None  # Нет записей в images
             )
 
             if exclude_pages:

@@ -13,6 +13,8 @@ from src.models.search_config import ComponentWeights, SearchProfiles
 from qdrant_client import QdrantClient
 from src.models.image import ImageORM, Image, download_image, download_image_async
 import asyncio
+from qdrant_client.models import QueryRequest
+from collections.abc import Iterator
 from qdrant_client.models import (
     Distance, VectorParams, PointStruct)
 
@@ -44,7 +46,7 @@ class QdrantRecipeManager:
     _client = None
     _initialized = False
 
-    def __new__(cls):
+    def __new__(cls, *args, **kwargs):
         if cls._instance is None:
             cls._instance = super(QdrantRecipeManager, cls).__new__(cls)
         return cls._instance
@@ -86,7 +88,7 @@ class QdrantRecipeManager:
         """Установка клиента ClickHouse"""
         self._client = value
         
-    def connect(self, retry_attempts: int = 3, retry_delay: float = 2.0) -> bool:
+    def connect(self, retry_attempts: int = 3, retry_delay: float = 2.0, timeout: float = 30.0) -> bool:
         """Установка подключения к Qdrant с повторными попытками
         
         Args:
@@ -117,7 +119,7 @@ class QdrantRecipeManager:
                     'port': params.get('port', '6333'),
                     'api_key': params.get('api_key'),
                     'https': params.get('https', False),
-                    'timeout': 40  # увеличенный таймаут для больших операций
+                    'timeout': timeout
                 }
                 
                 # Добавляем прокси если указан в конфигурации
@@ -366,7 +368,7 @@ class QdrantRecipeManager:
                 for col_type, collection_name in self.collections.items():
                     if col_type == "full":
                         self._add_to_full_collection(batch, collection_name, embedding_function, batch_num)
-                    elif col_type == "mv":
+                    elif col_type == "mv": # TODO: подумать нужна ли вообще мультивекторная коллекция при наличии full
                         self._add_to_multivector_collection(batch, collection_name, embedding_function, batch_num)
                 
                 added_count += len(batch)
@@ -381,7 +383,7 @@ class QdrantRecipeManager:
                 traceback.print_exc()
                 continue
         
-        logger.info(f"✓ Итого добавлено: {added_count} рецептов в {len(self.collections)} коллекций")
+        logger.info(f"✓ Итого добавлено: {added_count} рецептов в {len(self.collections) - 1} коллекций")
         return added_count
     
     def search_full(
@@ -657,12 +659,12 @@ class QdrantRecipeManager:
         return added_count
     
     async def vectorise_images_async(
-    self,
-    images: list[ImageORM],
-    embedding_function: ImageEmbeddingFunction,
-    batch_size: int = 10,
-    mark_vectorised_callback: callable = None
-) -> int:
+            self,
+            images: list[ImageORM],
+            embedding_function: ImageEmbeddingFunction,
+            batch_size: int = 10,
+            mark_vectorised_callback: callable = None
+        ) -> int:
         """
         Добавление изображений рецептов в коллекцию images
         
@@ -810,3 +812,142 @@ class QdrantRecipeManager:
             import traceback
             traceback.print_exc()
             return []
+        
+    def iter_point_ids(self, collection_name: str = "full", batch_size: int = 1000) -> Iterator[list[int]]:
+        """Итератор по ids в коллекции (без payload/векторов)."""
+        if not self.client:
+            raise QdrantNotConnectedError()
+
+        collection = self.collections.get(collection_name)
+        offset = None
+
+        while True:
+            points, offset = self.client.scroll(
+                collection_name=collection,
+                limit=batch_size,
+                offset=offset,
+                with_payload=False,
+                with_vectors=False,
+            )
+            ids = [int(p.id) for p in points]
+            if ids:
+                yield ids
+            if offset is None:
+                break
+
+    def retrieve_vectors(self, ids: list[int], collection_name: str = "full", using: str = "dense") -> dict[int, list[float]]:
+        """
+        Получить named-vector 'dense' для списка ids из full-коллекции.
+        Возвращает {page_id: vector}.
+        """
+        if not self.client:
+            raise QdrantNotConnectedError()
+
+        collection = self.collections.get(collection_name)
+        points = self.client.retrieve(
+            collection_name=collection,
+            ids=ids,
+            with_vectors=True,
+            with_payload=False,
+        )
+
+        out: dict[int, list[float]] = {}
+        for p in points:
+            vec = None
+            if p.vector is None:
+                continue
+            vec = p.vector.get(using)
+
+            if vec is None:
+                continue
+
+            out[int(p.id)] = list(vec)
+        return out
+
+    def retrieve_vectors_multi(
+        self,
+        ids: list[int],
+        collection_name: str = "mv",
+        using_list: list[str] | None = None,
+    ) -> dict[int, dict[str, list[float]]]:
+        """Получить несколько named-векторов для каждого id одним retrieve.
+
+        Полезно для мультивекторной коллекции: достаем сразу ingredients/description/...
+
+        Returns:
+            {point_id: {using_name: vector}}
+        """
+        if not self.client:
+            raise QdrantNotConnectedError()
+
+        collection = self.collections.get(collection_name)
+        if not collection:
+            raise QdrantCollectionNotFoundError(collection_name)
+
+        points = self.client.retrieve(
+            collection_name=collection,
+            ids=ids,
+            with_vectors=True,
+            with_payload=False,
+        )
+
+        out: dict[int, dict[str, list[float]]] = {}
+        for p in points:
+            if p.vector is None:
+                continue
+            if not isinstance(p.vector, dict):
+                continue
+
+            vecs: dict[str, list[float]] = {}
+
+            if using_list is None:
+                for k, v in p.vector.items():
+                    if v is None:
+                        continue
+                    vecs[str(k)] = list(v)
+            else:
+                for using in using_list:
+                    v = p.vector.get(using)
+                    if v is None:
+                        continue
+                    vecs[using] = list(v)
+
+            if vecs:
+                out[int(p.id)] = vecs
+
+        return out
+
+    def query_batch(
+        self,
+        vectors: list[list[float]],
+        collection_name: str = "full",
+        using: str = "dense",
+        limit: int = 30,
+        score_threshold: float = 0.0,
+    ) -> list[list[dict[str, Any]]]:
+        """
+        Batch kNN по full-коллекции.
+        Возвращает на каждый query-вектор список: [{"recipe_id": int, "score": float}, ...]
+        """
+        if not self.client:
+            raise QdrantNotConnectedError()
+
+        collection = self.collections.get(collection_name)
+
+        requests = [
+            QueryRequest(
+                query=v,
+                using=using,
+                limit=limit,
+                score_threshold=score_threshold,
+                with_payload=False,
+            )
+            for v in vectors
+        ]
+        resp = self.client.query_batch_points(collection_name=collection, requests=requests)
+        out: list[list[dict[str, Any]]] = []
+        for r in resp:
+            out.append([{"recipe_id": int(p.id), "score": float(p.score)} for p in r.points])
+        return out
+
+
