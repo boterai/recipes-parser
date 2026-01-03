@@ -225,7 +225,8 @@ class BudapestCookingClassExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1 cup all-purpose flour"
             
         Returns:
-            dict: {"name": "flour", "amount": "1", "unit": "cup"}
+            dict: {"name": "flour", "amount": "1", "unit": "cup"} или None
+            Примечание: amount всегда возвращается как строка (или None)
         """
         if not ingredient_text:
             return None
@@ -244,8 +245,21 @@ class BudapestCookingClassExtractor(BaseRecipeExtractor):
         for fraction, decimal in fraction_map.items():
             text = text.replace(fraction, decimal)
         
+        # Список единиц измерения для ingredients
+        units = [
+            'cups?', 'tablespoons?', 'teaspoons?', 'tbsps?', 'tsps?',
+            'pounds?', 'ounces?', 'lbs?', 'oz',
+            'grams?', 'kilograms?', 'kg',
+            'milliliters?', 'liters?', 'ml',
+            'pinch(?:es)?', 'dash(?:es)?',
+            'packages?', 'packs?', 'cans?', 'jars?', 'bottles?',
+            'inch(?:es)?', 'slices?', 'cloves?', 'bunches?', 'sprigs?',
+            'whole', 'halves?', 'quarters?', 'pieces?', 'head', 'heads'
+        ]
+        units_pattern = '|'.join(units)
+        
         # Сначала пытаемся паттерн с единицей измерения
-        pattern_with_unit = r'^([\d\s/.,]+)\s+(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|kg|milliliters?|liters?|ml|pinch(?:es)?|dash(?:es)?|packages?|packs?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads)\s+(.+)'
+        pattern_with_unit = rf'^([\d\s/.,]+)\s+({units_pattern})\s+(.+)'
         
         match = re.match(pattern_with_unit, text, re.IGNORECASE)
         
