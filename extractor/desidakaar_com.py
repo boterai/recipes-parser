@@ -173,7 +173,8 @@ class DesidakaarExtractor(BaseRecipeExtractor):
             text = text.replace(fraction, decimal)
         
         # Паттерн для извлечения количества, единицы и названия
-        pattern = r'^([\d\s/.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|packs?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads)?\s*(.+)'
+        # Для одно-буквенных единиц (g, l) требуем число перед ними
+        pattern = r'^([\d\s/.,]+)\s+(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|packs?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads)\s+(.+)|^([\d\s/.,]+)?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -185,7 +186,14 @@ class DesidakaarExtractor(BaseRecipeExtractor):
                 "unit": None
             }
         
-        amount_str, unit, name = match.groups()
+        # Паттерн имеет две альтернативы:
+        # Группа 1-3: amount + unit + name (с единицей)
+        # Группа 4-5: amount + name (без единицы)
+        groups = match.groups()
+        if groups[0] is not None:  # Совпало первое правило (с единицей)
+            amount_str, unit, name = groups[0], groups[1], groups[2]
+        else:  # Совпало второе правило (без единицы)
+            amount_str, unit, name = groups[3], None, groups[4]
         
         # Обработка количества
         amount = None
@@ -200,10 +208,27 @@ class DesidakaarExtractor(BaseRecipeExtractor):
                         num, denom = part.split('/')
                         total += float(num) / float(denom)
                     else:
-                        total += float(part)
+                        try:
+                            total += float(part)
+                        except ValueError:
+                            # Если не число, пропускаем
+                            pass
                 amount = str(total)
             else:
-                amount = amount_str.replace(',', '.')
+                # Обработка обычных чисел и смешанных дробей (после замены unicode)
+                # Может быть "2 0.5" после замены "2 ½"
+                parts = amount_str.split()
+                if len(parts) > 1:
+                    # Смешанное число
+                    total = 0
+                    for part in parts:
+                        try:
+                            total += float(part.replace(',', '.'))
+                        except ValueError:
+                            pass
+                    amount = str(total) if total > 0 else amount_str
+                else:
+                    amount = amount_str.replace(',', '.')
         
         # Обработка единицы измерения
         unit = unit.strip() if unit else None
