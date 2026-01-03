@@ -1,0 +1,14 @@
+{
+    "dish_name": "Hungarian Goulash",
+    "description": "Learn to make authentic Hungarian Goulash with this traditional recipe from Budapest Cooking Class. A hearty beef stew with paprika.",
+    "ingredients": "[{\"name\": \"beef chuck, cubed\", \"amount\": \"1\", \"unit\": \"kg\"}, {\"name\": \"large onions, diced\", \"amount\": \"2\", \"unit\": null}, {\"name\": \"Hungarian paprika\", \"amount\": \"3\", \"unit\": \"tablespoons\"}, {\"name\": \"tomato paste\", \"amount\": \"2\", \"unit\": \"tablespoons\"}, {\"name\": \"garlic, minced\", \"amount\": \"4\", \"unit\": \"cloves\"}, {\"name\": \"bay leaves\", \"amount\": \"2\", \"unit\": null}, {\"name\": \"caraway seeds\", \"amount\": \"1\", \"unit\": \"teaspoon\"}, {\"name\": \"beef stock\", \"amount\": \"500\", \"unit\": \"ml\"}, {\"name\": \"large potatoes, cubed\", \"amount\": \"2\", \"unit\": null}, {\"name\": \"carrots, sliced\", \"amount\": \"2\", \"unit\": null}, {\"name\": \"red bell pepper, diced\", \"amount\": \"1\", \"unit\": null}, {\"name\": \"Salt and pepper to taste\", \"amount\": null, \"unit\": null}, {\"name\": \"vegetable oil\", \"amount\": \"2\", \"unit\": \"tablespoons\"}]",
+    "instructions": "1. Heat oil in a large pot over medium-high heat. Add the beef cubes and brown them on all sides, about 5-7 minutes. Remove and set aside. 2. In the same pot, add the diced onions and cook until soft and translucent, about 5 minutes. 3. Add the minced garlic and cook for another minute until fragrant. 4. Stir in the paprika and tomato paste, mixing well with the onions for about 1 minute. 5. Return the beef to the pot. Add the bay leaves, caraway seeds, and beef stock. Bring to a boil, then reduce heat to low. 6. Cover and simmer for 1.5 hours, stirring occasionally, until the beef is tender. 7. Add the potatoes, carrots, and bell pepper. Continue cooking for another 30 minutes until vegetables are tender. 8. Season with salt and pepper to taste. Remove bay leaves before serving. 9. Serve hot with crusty bread or Hungarian csipetke dumplings.",
+    "nutrition_info": "385 kcal; 32/18/22",
+    "category": "Main Course",
+    "prep_time": "20 minutes",
+    "cook_time": "2 hours",
+    "total_time": "2 hours 20 minutes",
+    "notes": "For the best flavor, use authentic Hungarian sweet paprika. The quality of paprika makes a huge difference in this dish. You can adjust the amount based on your preference for spiciness.",
+    "tags": "hungarian cuisine, beef dishes, traditional recipes, main course, stew, comfort food",
+    "image_urls": "https://budapestcookingclass.com/images/goulash-main.jpg,https://budapestcookingclass.com/images/goulash-step1.jpg,https://budapestcookingclass.com/images/goulash-twitter.jpg"
+}
