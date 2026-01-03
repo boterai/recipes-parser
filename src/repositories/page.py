@@ -222,7 +222,7 @@ class PageRepository(BaseRepository[PageORM]):
         finally:
             session.close()
     
-    def create_or_update_with_images(self, page_data: Page, image_urls: List[str], 
+    def create_or_update_with_images(self, page_orm: PageORM, image_urls: List[str], 
                                       replace_images: bool = False) -> Optional[PageORM]:
         """
         Создать новую страницу с изображениями или обновить существующую
@@ -237,18 +237,12 @@ class PageRepository(BaseRepository[PageORM]):
         """
         session = self.get_session()
         try:
-            # Проверяем существование по site_id + url в той же сессии
-            existing = session.query(PageORM).filter(
-                and_(
-                    PageORM.site_id == page_data.site_id,
-                    PageORM.url == page_data.url
-                )
-            ).first()
-            
+            existing = session.query(PageORM).filter(PageORM.id == page_orm.id).first()
+
             if existing:
                 # Обновляем существующую страницу
                 # Обновляем поля страницы
-                page_data.update_orm(existing)
+                existing.update_from_page(page_orm)
                 
                 if image_urls:
                     if replace_images:
@@ -273,12 +267,9 @@ class PageRepository(BaseRepository[PageORM]):
                 session.commit()
                 session.refresh(existing)
                 
-                logger.debug(f"✓ Обновлена страница ID={existing.id}: {page_data.url}")
+                logger.debug(f"✓ Обновлена страница ID={existing.id}: {existing.url}")
                 return existing
             else:
-                # Создаем новую страницу с изображениями
-                page_orm = page_data.to_orm()
-                
                 # Добавляем изображения через relationship
                 if image_urls:
                     page_orm.images = [
@@ -291,7 +282,7 @@ class PageRepository(BaseRepository[PageORM]):
                 session.commit()
                 session.refresh(page_orm)
                 
-                logger.debug(f"✓ Создана страница ID={page_orm.id} с {len(image_urls)} изображениями: {page_data.url}")
+                logger.debug(f"✓ Создана страница ID={page_orm.id} с {len(image_urls)} изображениями: {page_orm.url}")
                 return page_orm
                 
         except Exception as e:

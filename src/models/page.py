@@ -89,6 +89,36 @@ class PageORM(Base):
                 setattr(self, key, value)
         
         return self
+    
+    def update_from_page(self, other: 'PageORM', exclude: Optional[set] = None) -> 'PageORM':
+        """
+        Обновить поля из другого объекта PageORM (только не нулевые поля)
+        
+        Args:
+            other: Другой объект PageORM, из которого берутся данные
+            exclude: Набор полей для исключения из обновления
+        
+        Returns:
+            Self (для chaining)
+        """
+        exclude = exclude or {'id', 'created_at'}
+        
+        # Получаем все поля ORM модели
+        for column in self.__table__.columns:
+            field_name = column.name
+            
+            # Пропускаем исключенные поля
+            if field_name in exclude:
+                continue
+            
+            # Получаем значение из другого объекта
+            other_value = getattr(other, field_name, None)
+            
+            # Обновляем только если значение не None
+            if other_value is not None:
+                setattr(self, field_name, other_value)
+        
+        return self
 
 class Page(BaseModel):
     """Модель спарсенной страницы"""

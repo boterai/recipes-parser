@@ -455,7 +455,11 @@ Return ONLY JSON array of IDs representing similar recipes."""
             self.similarity_repository.save_cluster_with_members(similar_clusters)
             logger.info(f"Saved cluster {num + 1}/{len(self.clusters)} with {len(similar_clusters)} members.")
         
-
+    def save_clusters_to_file(self, filepath: str) -> None:
+        """Сохраняет текущие кластеры в файл в формате JSON."""
+        with open(filepath, 'w') as f:
+            f.write(json.dumps(self.clusters, indent=2))
+        logger.info(f"Saved clusters to file {filepath}.")
 
 if __name__ == "__main__":
     ss = SimilaritySearcher(

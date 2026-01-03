@@ -8,11 +8,10 @@ import os
 import json
 import shutil
 from pathlib import Path
-from typing import Optional, List
-from urllib.parse import urlparse
+from typing import Optional
 from selenium import webdriver
 if __name__ == "__main__":
-    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 from src.stages.parse.explorer import SiteExplorer, run_explorer
 from src.stages.analyse.analyse import RecipeAnalyzer
@@ -451,3 +450,7 @@ class SitePreparationPipeline:
         self.analyzer.close()
         logger.info("Pipeline закрыт")
 
+if __name__ == "__main__":
+    sp = SitePreparationPipeline()
+    sp.prepare_site("https://afkarjadida.com/")
+    pass

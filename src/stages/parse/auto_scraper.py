@@ -361,7 +361,7 @@ class AutoScraper:
             
             # 2. Получаем неиспользованные запросы
             self.logger.info("\n[2/4] Получение неиспользованных запросов...")
-            search_queries = self.search_query_repository.get_unsearched_queries(limit=queries_to_process)
+            search_queries = self.search_query_repository.get_unsearched_queries(limit=queries_to_process, random_order=True)
             queries = [q.to_pydantic() for q in search_queries]
             
             if not queries:

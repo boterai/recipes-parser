@@ -18,7 +18,7 @@ if __name__ == "__main__":
     import sys
     sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
-from src.models.page import PageORM
+from src.models.page import PageORM, Page
 from src.repositories.page import PageRepository
 from src.repositories.site import SiteRepository
 from src.common.gpt_client import GPTClient
@@ -228,10 +228,10 @@ URL: {url}
             if isinstance(analysis.get("instructions"), list):
                 analysis["instructions"] = ' '.join(analysis["instructions"])
 
-            page_orm = PageORM(
+            page = PageORM(
                 id=page_id,
                 is_recipe=analysis.get("is_recipe", False),
-                confidence_score=Decimal(str(analysis.get("confidence_score", 0))),
+                confidence_score=float(str(analysis.get("confidence_score", 0))),
                 dish_name=analysis.get("dish_name"),
                 description=analysis.get("description"),
                 instructions=analysis.get("instructions"),
@@ -242,10 +242,11 @@ URL: {url}
                 nutrition_info=analysis.get("nutrition_info"),
                 notes=analysis.get("notes"),
                 tags=analysis.get("tags"),
-                ingredients=ingredients
+                ingredients=ingredients,
+                
             )
 
-            self.page_repository.create_or_update_with_images(page_orm, image_urls=analysis.get("image_urls", []))
+            self.page_repository.create_or_update_with_images(page, image_urls=analysis.get("image_urls", []))
             
             logger.info(f"Страница ID {page_id} обновлена в БД")
             return True
