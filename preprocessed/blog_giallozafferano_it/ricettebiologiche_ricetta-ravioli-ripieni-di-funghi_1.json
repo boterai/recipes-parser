@@ -1,0 +1,14 @@
+{
+    "dish_name": "Ravioli ripieni di funghi",
+    "description": "Ricetta di pasta fatta in casa con un ripieno di funghi carpinelli.",
+    "ingredients": "[{\"name\": \"funghi\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"patate\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"parmigiano grattugiato\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"uovo\", \"units\": null, \"amount\": 1}, {\"name\": \"olio extravergine d’oliva\", \"units\": \"g\", \"amount\": 30}, {\"name\": \"sale\", \"units\": \"g\", \"amount\": 10}, {\"name\": \"uova\", \"units\": null, \"amount\": 3}, {\"name\": \"acqua\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"farina 00\", \"units\": \"g\", \"amount\": 400}]",
+    "instructions": "1. Preparate i funghi e le patate per il ripieno. Pulite i funghi, cuoceteli a fuoco lento con poco olio extravergine di oliva e un pizzico di sale. 2. Cuoceteli a fuoco lento, usando lo stesso metodo consigliato per fare la salsa di funghi carpinelli. 3. Ora mettete a bollire le patate; riducetele a purea, salatele e rompeteci un’uovo, aggiungete il parmigiano grattugiato, amalgamate tutti gli ingredienti, il composto dovrà essere consistente. 4. Al purè di patate dovete aggiungere la salsa di funghi, mescolate bene. 5. Usate questo composto per riempire i ravioli. 6. Preparate la pasta: fate l’impasto con le uova e la farina, fate la sfoglia a mano con il matterello o con la macchina per fare la pasta. Usate lo stampo dei ravioli per dare la forma e riempite con la salsa di funghi i ravioli.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": "1 hour",
+    "cook_time": "30 minutes",
+    "total_time": "1 hour 30 minutes",
+    "notes": "Questi ravioli al ripieno di funghi possono essere conditi con ragù di carne o possono essere conditi in bianco con salvia e burro.",
+    "tags": "pasta, ravioli, funghi, italiano",
+    "image_urls": null
+}

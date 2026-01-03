@@ -1,0 +1,14 @@
+{
+    "dish_name": "Conchiglioni ripieni ai funghi",
+    "description": "Un primo piatto al forno preparato con i conchiglioni rigati farciti con un composto di ricotta, parmigiano, mozzarella e funghi porcini.",
+    "ingredients": "[{\"name\": \"Pasta corta tipo conchiglioni\", \"units\": \"gr\", \"amount\": 250}, {\"name\": \"Besciamella\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"Funghi porcini surgelati\", \"units\": \"gr\", \"amount\": 400}, {\"name\": \"Ricotta\", \"units\": \"gr\", \"amount\": 300}, {\"name\": \"Mozzarella\", \"units\": \"gr\", \"amount\": 100}, {\"name\": \"Porro\", \"units\": \"gr\", \"amount\": 100}, {\"name\": \"Parmigiano grattugiato\", \"units\": \"gr\", \"amount\": 60}, {\"name\": \"vino bianco\", \"units\": \"ml\", \"amount\": 60}, {\"name\": \"Prezzemolo\", \"units\": \"ciuffo\", \"amount\": 1}, {\"name\": \"Burro\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Olio extravergine di oliva\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Sale\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"pepe\", \"units\": \"q.b.\", \"amount\": null}]",
+    "instructions": "1. Lascia appassire il porro in un tegame con olio. 2. Unisci i porcini e insaporisci. 3. Mescola ricotta, mozzarella e parmigiano con i funghi. 4. Cuoci la pasta per 5 minuti. 5. Asciuga i conchiglioni. 6. Distribuisci besciamella in una pirofila e farcisci i conchiglioni. 7. Copri con besciamella e parmigiano. 8. Cuoci in forno a 200 °C per 30-40 minuti. 9. Servi.",
+    "nutrition_info": null,
+    "category": "Primi piatti",
+    "prep_time": "40 minutes",
+    "cook_time": "50 minutes",
+    "total_time": "90 minutes",
+    "notes": "Puoi sostituire i funghi con zucchine o altri ingredienti a piacere. Conservare in frigo per 1 giorno.",
+    "tags": "pasta, funghi, forno, ricetta",
+    "image_urls": null
+}

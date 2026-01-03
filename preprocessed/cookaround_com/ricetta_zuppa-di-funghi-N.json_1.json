@@ -1,0 +1,14 @@
+{
+    "dish_name": "Zuppa di funghi",
+    "description": "La zuppa di funghi è una deliziosa pietanza che ben si presta ad essere realizzata quando i primi freddi cominciano a farsi sentire nella stagione autunnale.",
+    "ingredients": "[{\"name\": \"Champignon\", \"units\": \"gr\", \"amount\": 350}, {\"name\": \"Funghi pioppini\", \"units\": \"gr\", \"amount\": 250}, {\"name\": \"Funghi porcini\", \"units\": \"gr\", \"amount\": 300}, {\"name\": \"Brodo di verdure\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Cipolle\", \"units\": \"gr\", \"amount\": 50}, {\"name\": \"Sedano\", \"units\": \"gr\", \"amount\": 40}, {\"name\": \"Carote\", \"units\": \"gr\", \"amount\": 35}, {\"name\": \"Pane\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Spicchio di aglio\", \"units\": null, \"amount\": 1}, {\"name\": \"Olio extravergine d'oliva (EVO)\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Sale\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Peperoncino rosso piccante\", \"units\": null, \"amount\": 1}, {\"name\": \"Prezzemolo\", \"units\": \"ciuffo\", \"amount\": 1}]",
+    "instructions": "1. Quando volete realizzare la ricetta della zuppa di funghi per prima cosa pulite e tagliateteli a pezzetti. 2. Poi, possibilmente di terracotta, rosolate in olio extravergine d'oliva un trito fine di cipolla, sedano e carote. Unite il peperoncino a fette e l’aglio. 3. Quando il soffritto sarà ben rosolato, unite gli champignon tagliati a pezzetti ed i pioppini, quindi lasciate rosolare per pochi minuti e salate adeguatamente. Versate subito il brodo fino a coprire il tutto e lasciate andare per 30 minuti. 4. Nel frattempo, fate tostare il pane in forno. 5. Unite anche i porcini a pezzi nel tegame e proseguite per 10 minuti. Servirte la zuppa in monoporzioni accompagnata dal pane tostato e prezzemolo tritato.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": "10 min",
+    "cook_time": "30 min",
+    "total_time": "40 min",
+    "notes": "Non ho la pentola di terracotta che posso usare? Una pentola dai bordi alti andrà benissimo! Posso utilizzare un misto di funghi surgelati? Sì certo, anche se i freschi ovviamnete hanno tutt'altro sapore! Quanto tempo si conserva? Puoi conservarla in frigorifero per due giorni.",
+    "tags": "zuppa, funghi, comfort food, autunno",
+    "image_urls": null
+}

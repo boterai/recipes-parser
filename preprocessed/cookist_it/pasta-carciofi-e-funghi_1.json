@@ -1,0 +1,14 @@
+{
+    "dish_name": "Pasta carciofi e funghi",
+    "description": "La pasta carciofi e funghi è un primo vegetariano facile e gustoso, perfetto da portare in tavola per un pranzo di famiglia o una cena con ospiti.",
+    "ingredients": "[{\"name\": \"Tagliatelle secche all’uovo\", \"units\": \"gr\", \"amount\": 300}, {\"name\": \"Funghi misti\", \"units\": \"gr\", \"amount\": 250}, {\"name\": \"Ricotta\", \"units\": \"gr\", \"amount\": 100}, {\"name\": \"Carciofi\", \"units\": null, \"amount\": 3}, {\"name\": \"Aglio\", \"units\": \"spicchio\", \"amount\": 1}, {\"name\": \"vino bianco\", \"units\": \"bicchiere\", \"amount\": 0.5}, {\"name\": \"Prezzemolo fresco\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"pepe\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Sale\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Olio extravergine di oliva\", \"units\": \"q.b.\", \"amount\": null}]",
+    "instructions": "Pulisci i carciofi: rimuovi le foglie esterne più dure e coriacee, recidi le punte e i gambi ed elimina la barbetta interna. Taglia i carciofi in spicchi e immergili in una ciotola con dell'acqua acidulata con il succo del limone. Monda i funghi, strofinali delicatamente con un panno umido per rimuovere eventuali residui di terra e riducili a fettine. Scalda un filo d'olio in una padella antiaderente, unisci un trito di aglio e prezzemolo e fai insaporire per qualche istante. Aggiungi al soffritto i carciofi, ben sgocciolati, e lasciali ammorbidire per qualche minuto, mescolando di tanto in tanto, quindi versa anche i funghi, aggiusta di sale e di pepe, sfuma con il vino bianco e prosegui la cottura per circa 10 minuti. Lessa le tagliatelle in abbondante acqua bollente leggermente salata, scolale al dente e portale a cottura direttamente nella padella con il condimento insieme a un mestolo di acqua bollente. Nel frattempo, raccogli in una ciotola la ricotta ben scolata dal siero, aggiusta di sale e di pepe e unisci un po' di prezzemolo tritato e 1-2 cucchiai di acqua di cottura della pasta, quindi riduci tutto in crema con i rebbi di una forchetta. Leva la pasta dal fuoco, aggiungi la crema di ricotta e manteca accuratamente. Distribuisci la pasta carciofi e funghi sui piatti individuali, porta in tavola e servi.",
+    "nutrition_info": null,
+    "category": "Primi piatti",
+    "prep_time": "30 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "50 minutes",
+    "notes": "Puoi arricchire il piatto con pomodorini, salsiccia, pancetta o gamberi. Puoi sostituire la ricotta con altri formaggi freschi.",
+    "tags": "vegetariano, pasta, facile",
+    "image_urls": null
+}

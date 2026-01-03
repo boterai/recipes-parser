@@ -1,0 +1,14 @@
+{
+    "dish_name": "Patè di funghi",
+    "description": "Il patè di funghi è una preparazione diffusa in lungo e in largo, buona, semplice e versatile, che regala gran sapore alle nostre aperture in tavola.",
+    "ingredients": "[{\"name\": \"Funghi champignon\", \"units\": \"gr\", \"amount\": 400}, {\"name\": \"Mandorle\", \"units\": \"gr\", \"amount\": 125}, {\"name\": \"Burro\", \"units\": \"gr\", \"amount\": 60}, {\"name\": \"Cipolle\", \"units\": \"piccola\", \"amount\": 1}, {\"name\": \"Spicchio di aglio\", \"units\": null, \"amount\": 3}, {\"name\": \"Panna pastorizzata\", \"units\": \"cucchiai da tavola\", \"amount\": 2}, {\"name\": \"Prezzemolo\", \"units\": \"ciuffo\", \"amount\": 1}, {\"name\": \"Sale\", \"units\": null, \"amount\": \"q.b.\"}, {\"name\": \"Pane tostato\", \"units\": null, \"amount\": \"q.b.\"}]",
+    "instructions": "1. Scaldate il burro e un giro d'olio extravergine d'oliva in una casseruola, unite la cipolla tritata finemente e l'aglio tritato e fate rosolare a fuoco medio-basso. 2. Pulite e tagliate finemente gli champignon e aggiungeteli alla casseruola. 3. Aggiungete un pizzico di sale e lasciate cuocere per circa 5 minuti. Trasferite i funghi in una ciotola, aggiungetevi le mandorle e frullate con un frullatore ad immersione. 4. Aggiungete la panna pastorizzata, sale se necessario e amalgamate il tutto. 5. Trasferite i funghi frullati in una pirofila quadrata ricoperta da pellicola trasparente, livellate il patè e copritelo con altra pellicola. Riponete in frigorifero e lasciate riposare per almeno 4 ore prima di servirlo. 6. Sformate il patè e servitelo con del pane tostato.",
+    "nutrition_info": null,
+    "category": "Antipasti",
+    "prep_time": "15 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "4 hours 30 minutes",
+    "notes": "+ 4 ore di raffreddamento. Posso utilizzare anche un mix di funghi? Sì certo, puoi usare i funghi che ti piacciono di più. Ho dei funghi surgelati, vanno bene anche quelli? Andranno benissimo, falli decongelare in frigorifero e poi cuocili come da ricetta.",
+    "tags": "patè, funghi, antipasti",
+    "image_urls": null
+}

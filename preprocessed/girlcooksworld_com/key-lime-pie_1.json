@@ -1,0 +1,14 @@
+{
+    "dish_name": "Traditional Key Lime Pie",
+    "description": "A refreshing dessert with a tart lime filling contrasted by a creamy topping.",
+    "ingredients": "[{\"name\": \"whole grain graham cracker crumbs\", \"units\": \"cup\", \"amount\": \"1 1/2\"}, {\"name\": \"melted butter\", \"units\": \"T.\", \"amount\": \"4\"}, {\"name\": \"while cane sugar\", \"units\": \"cup\", \"amount\": \"0.5\"}, {\"name\": \"eggs\", \"units\": null, \"amount\": \"2\"}, {\"name\": \"sweetened condensed milk\", \"units\": \"ounces\", \"amount\": \"28\"}, {\"name\": \"lime juice\", \"units\": \"cup\", \"amount\": \"1\"}, {\"name\": \"freshly zested lime zest\", \"units\": \"T.\", \"amount\": \"1\"}, {\"name\": \"sour cream\", \"units\": \"cup\", \"amount\": \"1\"}, {\"name\": \"raw honey\", \"units\": \"T.\", \"amount\": \"3\"}, {\"name\": \"additional lime zest\", \"units\": null, \"amount\": null}, {\"name\": \"lime wheels\", \"units\": null, \"amount\": null}]",
+    "instructions": "Preheat the oven to 375 degrees. Combine melted butter with graham cracker crumbs and sugar. Transfer the crust mixture onto a glass pie plate and spread evenly. Bake for 20 minutes or until slightly browned. Lower the oven temperature to 325 degrees. Whisk the eggs in a large mixing bowl. Add in the lime juice, lime zest, and sweetened condensed milk. Stir to combine. Pour the filling onto the baked pie crust. Bake for 15 minutes or until the center looks set. Chill for at least two hours. Combine the sour cream and honey in a bowl. Spread on top of the chilled pie. Sprinkle with lime zest and decorate with lime wheels.",
+    "nutrition_info": null,
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "35 minutes",
+    "total_time": "2 hours 50 minutes",
+    "notes": "Limes contain plenty of vitamin C, making this dessert good for winter.",
+    "tags": "dessert, pie, key lime",
+    "image_urls": null
+}

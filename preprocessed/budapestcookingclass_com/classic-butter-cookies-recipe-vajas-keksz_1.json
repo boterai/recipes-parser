@@ -1,0 +1,14 @@
+{
+    "dish_name": "Classic Butter Cookies",
+    "description": "Classic butter cookies are one of those cookies that everyone loves. The homemade version is way better than what you would find in the grocery stores.",
+    "ingredients": "[{\"name\": \"white sugar\", \"units\": \"grams\", \"amount\": 100}, {\"name\": \"unsalted butter\", \"units\": \"grams\", \"amount\": 200}, {\"name\": \"all purpose flour\", \"units\": \"grams\", \"amount\": 300}, {\"name\": \"vanilla sugar\", \"units\": \"sachet\", \"amount\": 1}, {\"name\": \"egg yolk\", \"units\": null, \"amount\": 1}, {\"name\": \"salt\", \"units\": \"pinch\", \"amount\": null}]",
+    "instructions": "Cube the butter and beat it with the sugar until fluffy. Mix in the vanilla extract (if you are using extract not vanilla sugar) and the egg yolk. Sift in the flour and combine. Divide the dough in half, wrap each half tightly in plastic wrap and refrigerate for an hour. Preheat the oven to 375 F. Between 2 pieces of parchment paper, roll the dough out to 1/5-inch thickness. Cut the dough into as many cookies as possible. Place the cookies on the prepared baking sheet. Sprinkle the top of each cookie with sugar. Bake them for about 12-15 minutes, or until is starts to brown. Cool completely before serving your delicious classic butter cookies.",
+    "nutrition_info": null,
+    "category": "Dessert",
+    "prep_time": "60 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "120 minutes",
+    "notes": null,
+    "tags": null,
+    "image_urls": null
+}

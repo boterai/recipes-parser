@@ -1,0 +1,14 @@
+{
+    "dish_name": "Gamberi con melograno",
+    "description": "Una ricetta porta fortuna da servire come secondo o antipasto di Capodanno.",
+    "ingredients": "[{\"name\": \"mazzancolle\", \"units\": null, \"amount\": 20}, {\"name\": \"melograni\", \"units\": null, \"amount\": 2}, {\"name\": \"prezzemolo\", \"units\": \"ciuffo\", \"amount\": 1}, {\"name\": \"sale\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"pepe\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"olio extravergine d’oliva\", \"units\": \"q.b.\", \"amount\": null}]",
+    "instructions": "Per fare i gamberi al melograno, comincia a pulire le mazzancolle eliminando la testa, il carapace e il budello. Sciacquale sotto l’acqua corrente ed asciugale con un pezzo di carta assorbente. Dopodiché, spremi il succo di un melograno e mezzo, filtralo e versalo in una scodella. Mettici dentro i gamberi a marinare per circa 30 minuti, aggiungendo anche un filo d’olio extravergine d’oliva. Trascorso il tempo necessario, scola i gamberi e scottali velocemente su una padella antiaderente bella calda, unta con un filo d’olio extravergine d’oliva. Ci vorranno giusto 2-3 minuti per lato. Se vuoi, aggiungi anche un po’ di marinatura. Regola quindi di sale e di pepe e preparati ad impiattare. Sistema i gamberi scottati su un vassoio da portata e completa l’opera con qualche chicco di melograno per decorare ed una spolverata di prezzemolo fresco tritato al coltello.",
+    "nutrition_info": null,
+    "category": "Secondi Piatti",
+    "prep_time": "30 minutes",
+    "cook_time": "6 minutes",
+    "total_time": "36 minutes",
+    "notes": "Puoi insaporire ulteriormente la ricetta, aggiungendo alla marinatura anche un po’ di timo, uno spicchio d’aglio, del succo di limone o di lime e del pepe rosa in grani.",
+    "tags": "gamberi, melograno, Capodanno, antipasto, secondo",
+    "image_urls": null
+}

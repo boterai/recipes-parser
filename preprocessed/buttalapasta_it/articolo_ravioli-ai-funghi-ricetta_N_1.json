@@ -1,0 +1,14 @@
+{
+    "dish_name": "Ravioli ai funghi",
+    "description": "Ricetta dei ravioli ai funghi, un primo piatto superlativo ma molto facile da realizzare.",
+    "ingredients": "[{\"name\": \"ravioli ripieni di ricotta e funghi\", \"units\": \"gr\", \"amount\": 500}, {\"name\": \"funghi porcini o misti\", \"units\": \"gr\", \"amount\": 400}, {\"name\": \"aglio\", \"units\": \"spicchi\", \"amount\": 2}, {\"name\": \"prezzemolo\", \"units\": \"quanto basta\", \"amount\": null}, {\"name\": \"olio extra vergine di oliva\", \"units\": \"cucchiai\", \"amount\": 2}, {\"name\": \"sale\", \"units\": \"pizzico\", \"amount\": null}, {\"name\": \"pepe nero\", \"units\": \"macinata\", \"amount\": null}]",
+    "instructions": "Iniziate la preparazione della ricetta dei ravioli ai funghi mondando e pulendo questi ultimi se sono freschi. Poi tagliateli a fettine regolari. Se usate i funghi surgelati già tagliati passate allo step successivo, altrimenti se sono interi fateli prima scongelare in frigorifero per una notte e poi affettateli. A questo punto fate scaldare in una padella un paio di cucchiai di olio extra vergine di oliva insieme agli spicchi di aglio schiacciati. Aggiungete i funghi freschi o surgelati e spadellate per circa 20 minuti fino a che saranno belli morbidi, togliete gli spicchi di aglio e regolate di sale e di pepe nero. Unite anche gran parte del prezzemolo tritato. In una pentola portate a ebollizione abbondante acqua salata e cuocete i ravioli per alcuni minuti, prelevateli con un mestolo forato e versateli direttamente nella padella con il condimento, mescolate delicatamente, impiattate e terminate con una spolverata di prezzemolo tritato.",
+    "nutrition_info": null,
+    "category": "Primi Piatti",
+    "prep_time": null,
+    "cook_time": "20 minutes",
+    "total_time": null,
+    "notes": "Potete aggiungere delle scaglie di formaggio Parmigiano e un paio di cucchiai di panna per rendere il condimento più cremoso e ricco.",
+    "tags": "ravioli, funghi, primo piatto, ricetta facile",
+    "image_urls": null
+}

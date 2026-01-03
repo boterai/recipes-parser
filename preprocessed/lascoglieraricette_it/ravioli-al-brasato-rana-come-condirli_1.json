@@ -1,0 +1,14 @@
+{
+    "dish_name": "Ravioli al Brasato Rana",
+    "description": "Consigli utili su come condire i ravioli al brasato Rana per creare un piatto delizioso e ben bilanciato.",
+    "ingredients": "[{\"name\": \"Ravioli al brasato Rana\", \"units\": null, \"amount\": null}, {\"name\": \"Burro\", \"units\": null, \"amount\": null}, {\"name\": \"Foglie di salvia\", \"units\": null, \"amount\": null}, {\"name\": \"Pepe nero\", \"units\": null, \"amount\": null}, {\"name\": \"Parmigiano grattugiato\", \"units\": null, \"amount\": null}, {\"name\": \"Pomodoro fresco\", \"units\": null, \"amount\": null}, {\"name\": \"Funghi porcini\", \"units\": null, \"amount\": null}]",
+    "instructions": "In una pentola capiente, portare a ebollizione abbondante acqua salata. Aggiungere i ravioli al brasato Rana e cuocerli per circa 2-3 minuti, finché non vengono a galla. Nel frattempo, in una padella a parte, sciogliere il burro a fuoco medio-basso. Aggiungere le foglie di salvia e farle dorare leggermente. Aggiungere una generosa spolverata di pepe nero e mescolare bene. Scolare i ravioli al brasato Rana e aggiungerli alla padella con il burro e la salvia. Mescolare delicatamente i ravioli per farli insaporire e aggiungere il parmigiano grattugiato a piacere. Per una variante, preparare una salsa di pomodoro fresco o una crema di funghi porcini e condirli con i ravioli. Assaggiare e regolare il condimento a proprio piacimento. Servire i ravioli al brasato Rana caldi e gustosi.",
+    "nutrition_info": null,
+    "category": "Primi Piatti",
+    "prep_time": null,
+    "cook_time": "2-3 minutes",
+    "total_time": null,
+    "notes": "Utilizzare burro di qualità per un gusto eccezionale. Assaggiare spesso per regolare il condimento a proprio gusto.",
+    "tags": "ravioli, brasato, cucina italiana, primo piatto",
+    "image_urls": null
+}

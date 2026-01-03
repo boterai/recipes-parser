@@ -1,0 +1,14 @@
+{
+    "dish_name": "Fusilli agli champignon",
+    "description": null,
+    "ingredients": "[{\"name\": \"fusilli\", \"units\": \"g\", \"amount\": 280}, {\"name\": \"champignon\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"cipolla bianca\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"aglio\", \"units\": \"spicchio\", \"amount\": 1}, {\"name\": \"zafferano risodoro CANNAMELA\", \"units\": \"bustina\", \"amount\": 1}, {\"name\": \"parmigiano grattugiato\", \"units\": \"g\", \"amount\": 30}, {\"name\": \"olio extravergine di oliva\", \"units\": \"g\", \"amount\": 20}, {\"name\": \"vino bianco secco\", \"units\": \"g\", \"amount\": 70}, {\"name\": \"brodo vegetale\", \"units\": \"g\", \"amount\": 70}, {\"name\": \"sale\", \"units\": \"qb\", \"amount\": null}]",
+    "instructions": "1. Pulire i funghi: eliminare il terriccio e passarli con un panno umido. 2. In una casseruola soffriggere nell’olio la cipolla tritata con l’aglio, poi unire i funghi puliti e tagliati a fettine. 3. Rosolare e irrorare con il vino. 4. Regolare di sale e bagnare con 4-5 cucchiai di brodo vegetale. 5. Dopo 6/7 min di cottura, aromatizzare con lo zafferano risodoro CANNAMELA sciolto in 2-3 cucchiai di brodo caldo e portare a cottura. 6. Lessare la pasta in abbondante acqua salata, scolarla al dente e passarla in padella con il sugo di funghi e zafferano e il formaggio parmigiano.",
+    "nutrition_info": null,
+    "category": "Primo",
+    "prep_time": "20 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null,
+    "image_urls": null
+}

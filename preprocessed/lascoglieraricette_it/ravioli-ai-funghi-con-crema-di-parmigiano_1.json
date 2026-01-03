@@ -1,0 +1,14 @@
+{
+    "dish_name": "Ravioli ai funghi con crema di parmigiano",
+    "description": "Scopri come preparare dei deliziosi ravioli ai funghi con una cremosa salsa al parmigiano.",
+    "ingredients": "[{\"name\": \"Funghi freschi\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"Aglio\", \"units\": \"spicchi\", \"amount\": 2}, {\"name\": \"Olio extravergine d’oliva\", \"units\": \"cucchiai\", \"amount\": 3}, {\"name\": \"Timo\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Sale\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Pepe\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Latte\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"Parmigiano grattugiato\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"Pasta per ravioli\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"Panna fresca\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"Acqua di cottura della pasta\", \"units\": \"q.b.\", \"amount\": null}]",
+    "instructions": "Iniziamo a pulire i funghi: rimuoviamo il terriccio attaccato alla base e poi utilizziamo un panno bagnato per eliminare eventuali residui di terra. Infine, con un pennellino, rimuoviamo i granelli rimasti all’interno. Tagliamo i funghi a fette di circa mezzo centimetro. Se non abbiamo funghi porcini freschi, possiamo utilizzare un mix di prataioli, champignon e funghi porcini secchi precedentemente reidratati. Passiamo poi ai fornelli. In una padella, scaldiamo 3 cucchiai di olio extravergine d’oliva e aggiungiamo 2 spicchi d’aglio schiacciati. Facciamo insaporire l’olio sfogliando del timo a piacere. Regoliamo di sale e pepe e facciamo cuocere a fuoco alto per 7-8 minuti, mescolando di tanto in tanto, fino a far rosolare bene i funghi. Nel frattempo, prepariamo la crema di parmigiano. In un pentolino poniamo 250 ml di latte e aggiungiamo 150 g di parmigiano grattugiato. Mescoliamo costantemente fino ad ottenere una crema liscia. Se desideriamo una crema più corposa, possiamo sostituire il latte con la stessa quantità di panna fresca. Quando la pasta per i ravioli è cotta al dente, scoliamola e tuffiamola nella padella con i funghi. Facciamo una bella saltata a fuoco spento e aggiungiamo la crema di parmigiano. Se necessario, aggiungiamo un po’ di acqua di cottura della pasta per rendere il tutto più cremoso. Infine, grattiamo un po’ di pepe fresco e impiattiamo. Assaporiamo il risultato finale.",
+    "nutrition_info": null,
+    "category": "Primi Piatti",
+    "prep_time": null,
+    "cook_time": "30 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "ravioli, funghi, parmigiano, pasta",
+    "image_urls": null
+}

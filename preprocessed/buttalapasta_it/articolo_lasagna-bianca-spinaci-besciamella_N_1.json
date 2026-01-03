@@ -1,0 +1,14 @@
+{
+    "dish_name": "Lasagna bianca spinaci e besciamella",
+    "description": "Una ricetta di lasagna bianca con spinaci e besciamella, ideale per le feste.",
+    "ingredients": "[{\"name\": \"lasagne all’uovo\", \"units\": \"g\", \"amount\": \"250\"}, {\"name\": \"spinaci\", \"units\": \"g\", \"amount\": \"800-1000\"}, {\"name\": \"parmigiano reggiano\", \"units\": \"g\", \"amount\": \"150-200\"}, {\"name\": \"mozzarella o Fior di latte\", \"units\": \"g\", \"amount\": \"250\"}, {\"name\": \"burro\", \"units\": null, \"amount\": \"q.b.\"}, {\"name\": \"aglio\", \"units\": \"clove\", \"amount\": \"1\"}, {\"name\": \"latte intero\", \"units\": \"l\", \"amount\": \"1\"}, {\"name\": \"farina 00\", \"units\": \"g\", \"amount\": \"80\"}, {\"name\": \"sale\", \"units\": null, \"amount\": \"q.b.\"}, {\"name\": \"noce moscata\", \"units\": null, \"amount\": \"abbondante\"}]",
+    "instructions": "Cuocere gli spinaci in padella con olio o burro e aglio. Strizzare e tritare. Preparare la besciamella con burro, farina e latte. Unire spinaci alla besciamella. Comporre la lasagna alternando strati di pasta, besciamella e mozzarella. Cuocere in forno a 200° per 20-25 minuti.",
+    "nutrition_info": null,
+    "category": "Primi Piatti",
+    "prep_time": null,
+    "cook_time": "25 minutes",
+    "total_time": null,
+    "notes": "Per un sapore extra, cospargere con pecorino romano o granella di nocciole prima di servire.",
+    "tags": "lasagna, spinaci, besciamella, primo piatto",
+    "image_urls": null
+}

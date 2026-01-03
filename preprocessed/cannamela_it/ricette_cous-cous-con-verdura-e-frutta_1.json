@@ -1,0 +1,14 @@
+{
+    "dish_name": "Cous cous con verdura e frutta",
+    "description": null,
+    "ingredients": "[{\"name\": \"cous cous precotto\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"albicocche disidratate ammollate in acqua\", \"units\": \"pieces\", \"amount\": 5}, {\"name\": \"uvetta ammollata\", \"units\": \"g\", \"amount\": 20}, {\"name\": \"cipolla\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"carote grattugiate\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"legumi misti lessati (ceci, fagioli)\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"melanzane mondate e tagliate a dadini\", \"units\": \"g\", \"amount\": 600}, {\"name\": \"olio extravergine di oliva\", \"units\": \"g\", \"amount\": 40}, {\"name\": \"Spezie per Cous Cous CANNAMELA\", \"units\": \"g\", \"amount\": 5}, {\"name\": \"peperoncino liofilizzato CANNAMELA\", \"units\": null, \"amount\": null}, {\"name\": \"sale\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Friggete uniformemente in olio extravergine le melanzane, poi scolatele, trasferitele su carta da cucina e salatele. Conservatele in caldo. 2. In una casseruola soffriggete in olio la cipolla e le carote. 3. Unite i legumi e 5 g di Spezie per Cous Cous Cannamela. 4. Ricoprite con acqua e cuocete per 10 minuti prima di controllare di sale. 5. Unite la frutta disidratata tagliando le albicocche in 4 spicchi. Insaporite ancora per 5 minuti. 6. Cuocete il cous cous nel modo consueto, poi distribuitelo sul piatto da portata. 7. Ricoprite con le verdure e i legumi, poi completate con le melanzane fritte. Spolverizzate con peperoncino liofilizzato Cannamela e servite.",
+    "nutrition_info": null,
+    "category": "Primo",
+    "prep_time": "20 MIN",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null,
+    "image_urls": null
+}

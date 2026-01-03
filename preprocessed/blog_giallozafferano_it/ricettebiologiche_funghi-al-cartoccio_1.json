@@ -1,0 +1,14 @@
+{
+    "dish_name": "Funghi al cartoccio",
+    "description": "Ricetta facile, veloce e biologica per cucinare funghi al cartoccio.",
+    "ingredients": "[{\"name\": \"funghi\", \"units\": null, \"amount\": \"q.b.\"}, {\"name\": \"olio di oliva extravergine\", \"units\": \"filo\", \"amount\": \"1\"}, {\"name\": \"sale\", \"units\": null, \"amount\": \"q.b.\"}]",
+    "instructions": "Pulite bene i funghi, preparateli per la cottura. I funghi più grandi, come i sanguinelli, vanno fatti a pezzi, abbastanza grandi, per diminuire i tempi di cottura. Prendete dei pezzi di carta stagnola e metteteci sopra i funghi, salati e con una spruzzata di succo di limone. Preparate i cartocci separando le diverse qualità di funghi, così potrete assaporare ciascun tipo di fungo. Chiudete i funghi nella carta stagnola e poneteli sulla griglia a cuocere sulla brace. La cottura durerà circa 15 minuti. Se non potete cuocere i funghi alla griglia, mettete i cartocci nel forno, a temperatura alta, 180°, per 20 minuti; quando il liquido che si forma durante la cottura sarà ben asciutto, potrete togliere i funghi dalla griglia, la stessa cosa vale per la cottura nel forno. A fine cottura potete aprire i cartocci e condite i funghi con un filo d’olio extravergine di oliva.",
+    "nutrition_info": null,
+    "category": "Antipasto",
+    "prep_time": null,
+    "cook_time": "15 minutes",
+    "total_time": "35 minutes",
+    "notes": "I funghi cotti in questo modo conservano un sapore e un profumo unico e possono accompagnare sia il pesce che la carne, ma vanno benissimo anche da soli o con una fettina di formaggio.",
+    "tags": "funghi, cartoccio, ricetta biologica, cucina italiana",
+    "image_urls": null
+}

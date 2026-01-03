@@ -1,0 +1,14 @@
+{
+    "dish_name": "Ravioli di barbabietola al gorgonzola",
+    "description": "I ravioli di barbabietola al gorgonzola sono un primo piatto particolare e raffinato.",
+    "ingredients": "[{\"name\": \"farina\", \"units\": \"gr\", \"amount\": 250}, {\"name\": \"uovo\", \"units\": \"unit\", \"amount\": 1}, {\"name\": \"barbabietole rosse\", \"units\": \"gr\", \"amount\": 100}, {\"name\": \"gorgonzola\", \"units\": \"gr\", \"amount\": 200}, {\"name\": \"panna fresca\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"parmigiano\", \"units\": \"gr\", \"amount\": 100}, {\"name\": \"noce moscata\", \"units\": null, \"amount\": null}, {\"name\": \"sale\", \"units\": null, \"amount\": null}]",
+    "instructions": "Preparare la purea di barbabietola, frullandola con un mixer ad immersione. Mettete in una ciotola la farina, fate un buco al centro, mettete l' uovo, il sale e la purea di barbabietola. Impastare partendo dal centro e facendo assorbire man mano tutta la farina fino ad ottenere un impasto liscio e di colore omogeneo. Fare una palla, coprirla con un canovaccio e far riposare per 30 minuti. Stendete ora l’impasto in sfoglie sottili con l'ausilio di una macchina per le sfoglie o con il mattarello. Prendere una sfoglia e disporre i pezzetti di gorgonzola, creando dei mucchietti di ripieno separati uni dagli altri. Appoggiare sopra un’altra sfoglia. Con l’aiuto di un coppapasta tondo, ricavate i ravioli sigillando bene i bordi. Preparate ora la fonduta al parmigiano facendo sciogliere il formaggio nella panna fresca. Cuocere fino a far addensare il tutto. Cuocere i ravioli in una pentola con abbondante acqua salata. Scolateli non appena saliranno in superficie. Versate in ogni piatto un mestolo di fonduta al parmigiano e poggiate i ravioli al gorgonzola sopra e servite.",
+    "nutrition_info": null,
+    "category": "Primi piatti",
+    "prep_time": "30 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "40 minutes",
+    "notes": null,
+    "tags": null,
+    "image_urls": null
+}

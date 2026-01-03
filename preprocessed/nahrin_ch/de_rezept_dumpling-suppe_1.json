@@ -1,0 +1,14 @@
+{
+    "dish_name": "Dumpling-Suppe",
+    "description": "In nur 20 Minuten zauberst du eine asiatische Suppe mit Dumplings, Ingwer, Knoblauch und dem aromatischen Geschmack von Nahrin Rinder Fond Intenso & Puro.",
+    "ingredients": "[{\"name\": \"Ingwer\", \"units\": \"cm\", \"amount\": \"2-3\"}, {\"name\": \"Knoblauchzehen\", \"units\": null, \"amount\": \"2\"}, {\"name\": \"Frühlingszwiebel\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"Babyspinat\", \"units\": \"g\", \"amount\": \"100\"}, {\"name\": \"Champignons\", \"units\": \"g\", \"amount\": \"100\"}, {\"name\": \"Sojasauce\", \"units\": \"EL\", \"amount\": \"1-2\"}, {\"name\": \"Dumplings\", \"units\": null, \"amount\": \"10\"}, {\"name\": \"Nahrin Rinder Fond Intenso & Puro\", \"units\": \"dl\", \"amount\": \"5\"}, {\"name\": \"Chiliöl\", \"units\": \"EL\", \"amount\": \"1-2\"}, {\"name\": \"Petersilie\", \"units\": \"Bund\", \"amount\": \"0.5\"}]",
+    "instructions": "Knoblauch und Ingwer fein hacken. In einem Topf den Rinder Fond erhitzen, Knoblauch und Ingwer hinzufügen. Frühlingszwiebel in Ringe schneiden und mit Dumplings und Champignons zum Nahrin Rinderfond Intenso & Puro geben, ca. 5 Minuten kochen. Spinat und Sojasauce einrühren, mit Chiliöl abschmecken und mit gehackter Petersilie servieren.",
+    "nutrition_info": null,
+    "category": "Suppe",
+    "prep_time": "10 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "20 minutes",
+    "notes": "Für eine schnelle Zubereitung können Sie tiefgefrorene Dumplings verwenden – wählen Sie je nach Geschmack zwischen verschiedenen Füllungen wie Gemüse, Rind, Poulet oder Schwein.",
+    "tags": "Gemüse, Suppe, Einfach und schnell",
+    "image_urls": null
+}

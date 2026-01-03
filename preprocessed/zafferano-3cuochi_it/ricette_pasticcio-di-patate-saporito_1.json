@@ -1,0 +1,14 @@
+{
+    "dish_name": "Pasticcio di patate saporito",
+    "description": "Il pasticcio di patate saporito è un piatto comfort food che incanta con la sua combinazione di morbide patate, sapori avvolgenti e ingredienti gustosi.",
+    "ingredients": "[{\"name\": \"patate\", \"units\": \"kg\", \"amount\": 1}, {\"name\": \"cipolle\", \"units\": \"medie\", \"amount\": 2}, {\"name\": \"bacon\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"uova\", \"units\": null, \"amount\": 4}, {\"name\": \"zafferano\", \"units\": \"bustina\", \"amount\": 1}, {\"name\": \"prezzemolo\", \"units\": \"mazzetto\", \"amount\": 1}, {\"name\": \"olio extra vergine di oliva\", \"units\": \"cucchiai\", \"amount\": 4}, {\"name\": \"sale\", \"units\": null, \"amount\": null}, {\"name\": \"pepe\", \"units\": null, \"amount\": null}, {\"name\": \"foglie di rucola\", \"units\": \"per contornare\", \"amount\": null}]",
+    "instructions": "Sbucciate le cipolle e affettatele a fette non troppo sottili. Pelate le patate e tagliatele a rotelle; tagliate il bacon a pezzettini. Fate rosolare in padella con l’olio caldo le patate, girando continuamente. Aggiungete le cipolle e il bacon, mettete il coperchio e cuocete per 8 minuti circa a fiamma bassa. Aggiungete un bicchiere di acqua calda in cui avrete sciolto lo zafferano. Scoperchiate e cuocete fino a quando le patate saranno cotte. Unite le uova leggermente sbattute, girate con una paletta di legno, regolate di sale e di pepe; unite qualche fogliolina di prezzemolo spezzettata e servite il pasticcio ben caldo contornando con foglioline di rucola.",
+    "nutrition_info": null,
+    "category": null,
+    "prep_time": null,
+    "cook_time": "30 minutes",
+    "total_time": null,
+    "notes": "Per conservare correttamente il pasticcio di patate saporito, è consigliabile avvolgerlo bene con pellicola trasparente o conservarlo in un contenitore ermetico. Il pasticcio di patate saporito si conserva in frigorifero per circa 3-5 giorni.",
+    "tags": null,
+    "image_urls": null
+}

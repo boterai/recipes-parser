@@ -1,0 +1,14 @@
+{
+    "dish_name": "Funghi ripieni",
+    "description": "I funghi ripieni sono una ricetta sfiziosa e saporita, preparata con gli champignon, privati dei gambi e farciti poi con un composto frullato a base di pane raffermo, parmigiano grattugiato, prezzemolo, aglio, sale, pepe e gambi dei funghi sminuzzati.",
+    "ingredients": "[{\"name\": \"Funghi champignon già puliti\", \"units\": \"gr\", \"amount\": 360}, {\"name\": \"Parmigiano grattugiato\", \"units\": \"gr\", \"amount\": 45}, {\"name\": \"Pane raffermo\", \"units\": \"gr\", \"amount\": 40}, {\"name\": \"Aglio\", \"units\": \"spicchio\", \"amount\": 1}, {\"name\": \"Prezzemolo\", \"units\": \"ciuffo\", \"amount\": 1}, {\"name\": \"Olio extravergine di oliva\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Sale\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"pepe\", \"units\": \"q.b.\", \"amount\": null}]",
+    "instructions": "1. Pulisci gli champignon con un panno umido. 2. Stacca i gambi e tagliali a pezzetti. 3. Raccogli i gambi nel mixer con la mollica di pane. 4. Aggiungi il parmigiano grattugiato. 5. Profuma con prezzemolo e aglio. 6. Aggiusta di sale e pepe e versa olio. 7. Frulla fino a ottenere un composto omogeneo. 8. Sala le cappelle dei funghi. 9. Riempi gli champignon con il composto. 10. Sistema i funghi in una pirofila. 11. Cospargi con parmigiano. 12. Irrora con olio e cuoci in forno a 180 °C per 20 minuti. 13. Sforna e servi.",
+    "nutrition_info": null,
+    "category": "Antipasti",
+    "prep_time": "10 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "30 minutes",
+    "notes": "Ottimi come antipasto o finger food. Possono essere arricchiti con salsiccia o altri ingredienti.",
+    "tags": "funghi, ripieni, antipasto, facile",
+    "image_urls": null
+}

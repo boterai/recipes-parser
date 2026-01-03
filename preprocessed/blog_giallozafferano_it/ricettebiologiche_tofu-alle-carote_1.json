@@ -1,0 +1,14 @@
+{
+    "dish_name": "Tofu alle carote",
+    "description": "Ricetta Tofu facile per chi vuole mangiare bene, con poche calorie, e senza introdurre le proteine animali nella propria alimentazione.",
+    "ingredients": "[{\"name\": \"tofu\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"carote\", \"units\": null, \"amount\": 4}, {\"name\": \"Olio extravergine di oliva\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"sale\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"pepe nero\", \"units\": \"pizzico\", \"amount\": 1}]",
+    "instructions": "Pulite e carote e mettetele a bollire in acqua abbondante. Quando le carote saranno cotte le dovrete tagliare a rondelline. Mettete le carote tagliate in una padella cn poco olio di oliva, un pizzico di sale e passatele al fuoco per due minuti. Aggiungete alle carote il tofu, tagliato a dadini. Fatelo insaporire con le carote per cinque minuti. Prima di spegnere il gas date una leggera spolverata di pepe nero.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": "5 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "15 minutes",
+    "notes": null,
+    "tags": "vegan, vegetarian, easy, quick",
+    "image_urls": null
+}

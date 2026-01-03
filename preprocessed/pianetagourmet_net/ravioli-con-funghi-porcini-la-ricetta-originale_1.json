@@ -1,0 +1,14 @@
+{
+    "dish_name": "Ravioli con funghi porcini",
+    "description": "Ricetta originale dei ravioli con funghi porcini, un piatto gustoso e semplice da preparare.",
+    "ingredients": "[{\"name\": \"farina 00\", \"units\": \"kilogram\", \"amount\": 1}, {\"name\": \"uova\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"olio extravergine di oliva\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"acqua\", \"units\": null, \"amount\": null}, {\"name\": \"ricotta\", \"units\": \"grams\", \"amount\": 750}, {\"name\": \"uova\", \"units\": \"pieces\", \"amount\": 3}, {\"name\": \"burro\", \"units\": \"grams\", \"amount\": 80}, {\"name\": \"prezzemolo tritato\", \"units\": null, \"amount\": null}, {\"name\": \"sale\", \"units\": null, \"amount\": null}, {\"name\": \"pepe\", \"units\": null, \"amount\": null}, {\"name\": \"funghi porcini\", \"units\": \"grams\", \"amount\": 500}, {\"name\": \"aglio\", \"units\": \"clove\", \"amount\": 1}, {\"name\": \"parmigiano grattugiato\", \"units\": null, \"amount\": null}]",
+    "instructions": "Pulire i funghi porcini e tagliarli a pezzetti. Metterli in una padella con aglio e burro per pochi minuti. Scolare e continuare la cottura fino alla doratura. Unire il prezzemolo. In una terrina mescolare ricotta ed uova con sale, pepe e formaggio. Incorporare i funghi trifolati. Disporre la farina a fontana e fare un buco al centro. Versare le uova, acqua tiepida, sale e olio. Impastare fino ad ottenere una pasta morbida. Stendere e ricavare dischetti. Farcire e chiudere a mezza luna. Asciugare e lessare in acqua bollente per 4 minuti. Condire con salsa di pomodoro o burro e completare con parmigiano.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "4 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "ravioli, funghi, porcini, ricetta, pasta",
+    "image_urls": null
+}

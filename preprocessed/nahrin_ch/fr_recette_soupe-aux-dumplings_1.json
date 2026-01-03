@@ -1,0 +1,14 @@
+{
+    "dish_name": "Soupe aux dumplings",
+    "description": "Cette soupe relevée au gingembre, à l’ail et au goût aromatique du fond de bœuf Intenso & Puro Nahrin, avec des quenelles tendres, des épinards et des champignons dans un délicieux bouillon.",
+    "ingredients": "[{\"name\": \"gingembre\", \"units\": \"cm\", \"amount\": \"2-3\"}, {\"name\": \"gousses d’ail\", \"units\": null, \"amount\": \"2\"}, {\"name\": \"oignon de printemps\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"pousses d’épinard\", \"units\": \"g\", \"amount\": \"100\"}, {\"name\": \"champignons\", \"units\": \"g\", \"amount\": \"100\"}, {\"name\": \"sauce soja\", \"units\": \"cs\", \"amount\": \"1-2\"}, {\"name\": \"quenelles\", \"units\": null, \"amount\": \"10\"}, {\"name\": \"bouillon de bœuf Intenso & Puro Nahrin\", \"units\": \"dl\", \"amount\": \"5\"}, {\"name\": \"huile pimentée\", \"units\": \"cs\", \"amount\": \"1-2\"}, {\"name\": \"persil\", \"units\": \"bouquet\", \"amount\": \"0.5\"}]",
+    "instructions": "Hacher finement l’ail et le gingembre. Dans une casserole, faire chauffer le fond de bœuf, ajouter l’ail et le gingembre. Couper les oignons de printemps en rondelles et les verser dans le fond de bœuf Intenso & Puro Nahrin avec les quenelles et les champignons. Poursuivre la cuisson pendant environ 5 minutes. Incorporer les épinards et la sauce soja, rectifier l’assaisonnement avec l’huile pimentée, garnir de persil haché et servir.",
+    "nutrition_info": null,
+    "category": "soupe",
+    "prep_time": "10 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "20 minutes",
+    "notes": "Pour une préparation rapide, vous pouvez utiliser des dumplings surgelés.",
+    "tags": "légumes, soupe, rapide et facile",
+    "image_urls": null
+}

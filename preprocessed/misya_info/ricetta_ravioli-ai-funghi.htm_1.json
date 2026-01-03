@@ -1,0 +1,14 @@
+{
+    "dish_name": "Ravioli ai funghi",
+    "description": "I ravioli ai funghi sono un primo piatto decisamente saporito che vi consiglio assolutamente di provare, se vi piacciono i funghi.",
+    "ingredients": "[{\"name\": \"farina 00\", \"units\": \"gr\", \"amount\": 200}, {\"name\": \"uova\", \"units\": \"pcs\", \"amount\": 2}, {\"name\": \"funghi misti\", \"units\": \"gr\", \"amount\": 400}, {\"name\": \"stracchino\", \"units\": \"gr\", \"amount\": 200}, {\"name\": \"grana grattugiato\", \"units\": \"gr\", \"amount\": 50}, {\"name\": \"aglio\", \"units\": \"clove\", \"amount\": 1}, {\"name\": \"prezzemolo\", \"units\": null, \"amount\": null}, {\"name\": \"sale\", \"units\": null, \"amount\": null}, {\"name\": \"pepe\", \"units\": null, \"amount\": null}, {\"name\": \"olio di oliva extravergine\", \"units\": null, \"amount\": null}, {\"name\": \"burro\", \"units\": \"gr\", \"amount\": 80}, {\"name\": \"noci\", \"units\": \"gr\", \"amount\": 50}, {\"name\": \"salvia\", \"units\": null, \"amount\": null}]",
+    "instructions": "Fate scaldare l'olio in una padella con l'aglio, quindi aggiungete i funghi e cuocete per 10 minuti. Nel frattempo preparate la pasta all'uovo. Tritate grossolanamente i funghi e amalgamateli con stracchino, pepe e grana. Distribuite il ripieno su un lato della sfoglia, ripiegateci sopra il lato libero della sfoglia e ritagliate i ravioli. Mettete a bollire l'acqua per lessare i ravioli e preparate il condimento. Cuocete i ravioli per 2-3 minuti e scolateli nel condimento.",
+    "nutrition_info": null,
+    "category": "Primi piatti",
+    "prep_time": "50 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "1 hour",
+    "notes": "Per un'alternativa, si può sostituire lo stracchino con ricotta di pecora.",
+    "tags": "ravioli, funghi, pasta, primo piatto",
+    "image_urls": null
+}

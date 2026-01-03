@@ -1,0 +1,14 @@
+{
+    "dish_name": "Pasta fresca all’uovo",
+    "description": "Ricetta base della pasta fresca all’uovo prevede l'utilizzo di 1 uovo e una presa di sale ogni 100 gr di farina.",
+    "ingredients": "[{\"name\": \"farina 00\", \"units\": \"gr\", \"amount\": 200}, {\"name\": \"uova\", \"units\": null, \"amount\": 2}, {\"name\": \"sale\", \"units\": null, \"amount\": null}]",
+    "instructions": "Setacciate la farina su una spianatoia e formate la fontana al centro, quindi mettete al centro le uova e un pizzico di sale. Sbattete con una forchetta le uova e iniziate ad incorporare la farina con la punta delle dita, partendo dai bordi della fontana. Lavorate il composto con le mani facendo amalgamare gli ingredienti per 15-20 minuti. Continuate in questo modo, tirando la pasta, riavvolgendola su se stessa e schiacciandola con i pugni, fino ad ottenere un impasto omogeneo. La pasta dovrà essere liscia, elastica e piuttosto soda. Raccogliete l'impasto formando una palla, avvolgetelo nella pellicola e fatela riposare per 30 minuti. Riprendete quindi la pasta, dividetela in vari panetti più piccoli e stendete le sfoglie. La sfoglia può essere tirata a mano, con il matterello o con la tirasfoglie.",
+    "nutrition_info": null,
+    "category": "Ricette Base",
+    "prep_time": "30 minutes",
+    "cook_time": "5 minutes",
+    "total_time": "35 minutes",
+    "notes": null,
+    "tags": null,
+    "image_urls": null
+}

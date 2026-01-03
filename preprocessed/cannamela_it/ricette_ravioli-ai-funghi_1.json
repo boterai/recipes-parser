@@ -1,0 +1,14 @@
+{
+    "dish_name": "Ravioli ai funghi",
+    "description": null,
+    "ingredients": "[{\"name\": \"pasta fresca all'uovo\", \"units\": \"g\", \"amount\": 350}, {\"name\": \"funghi misti\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"parmigiano grattugiato\", \"units\": \"g\", \"amount\": 70}, {\"name\": \"mollica di pane\", \"units\": \"g\", \"amount\": 30}, {\"name\": \"vino bianco\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"prezzemolo in foglie CANNAMELA\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"aglio macinato CANNAMELA\", \"units\": \"cucchiaino\", \"amount\": 0.5}, {\"name\": \"pepe nero macinato CANNAMELA\", \"units\": \"pizzichi\", \"amount\": 3}, {\"name\": \"burro\", \"units\": \"g\", \"amount\": 20}, {\"name\": \"uova piccole\", \"units\": null, \"amount\": 2}, {\"name\": \"sale\", \"units\": null, \"amount\": null}, {\"name\": \"burro\", \"units\": \"g\", \"amount\": 40}, {\"name\": \"parmigiano\", \"units\": \"g\", \"amount\": 40}]",
+    "instructions": "1. Rosolare nel burro i funghi. 2. Aggiungere 1/2 cucchiaino di aglio macinato CANNAMELA e 1 cucchiaino di prezzemolo in foglie CANNAMELA. 3. Dopo 10 min di cottura sfumare con il vino bianco e aromatizzare con 1 pizzico di pepe nero macinato CANNAMELA. Salare. 4. Cuocere il sugo per 20 min, poi lasciar raffreddare e aggiungere le uova. 5. Completare la farcia con il formaggio e la mollica di pane. 6. Con l’apposita macchinetta stendere sottile la pasta all’uovo. 7. Ritagliare dei quadrati di pasta di circa 8 cm di lato e farcirli con un cucchiaino di ripieno. 8. Piegare i ravioli a triangolo e trasferirli su un canovaccio pulito spolverizzato con semola di grano duro. 9. Procedere a realizzare i ravioli fino ad esaurire pasta e farcia. 10. Sciogliere il burro in una larga padella e aggiungere 2 pizzichi di pepe nero macinato CANNAMELA. 11. Lessare i ravioli in abbondante acqua salata, scolarli al dente e passarli in padella con il burro e abbondante formaggio grattugiato.",
+    "nutrition_info": null,
+    "category": "Primo",
+    "prep_time": null,
+    "cook_time": "50 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": null,
+    "image_urls": null
+}

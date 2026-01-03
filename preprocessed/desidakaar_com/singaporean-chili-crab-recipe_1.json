@@ -1,0 +1,14 @@
+{
+    "dish_name": "Singaporean Chili Crab",
+    "description": "Chili crab is a seafood dish from Singapore, known for its sweet and savory sauce based on tomato and chili.",
+    "ingredients": "[{\"name\": \"cornstarch\", \"units\": \"tablespoon\", \"amount\": \"1\"}, {\"name\": \"peanut oil\", \"units\": \"tablespoons\", \"amount\": \"7\"}, {\"name\": \"minced shallots\", \"units\": \"cup\", \"amount\": \"0.5\"}, {\"name\": \"grated ginger\", \"units\": \"tablespoons\", \"amount\": \"3\"}, {\"name\": \"garlic\", \"units\": \"tablespoons\", \"amount\": \"3\"}, {\"name\": \"Thai Chilies\", \"units\": \"whole\", \"amount\": \"4\"}, {\"name\": \"Dungeness crab\", \"units\": \"whole\", \"amount\": \"2\"}, {\"name\": \"chicken broth\", \"units\": \"cups\", \"amount\": \"2\"}, {\"name\": \"tomato paste\", \"units\": \"cup\", \"amount\": \"0.25\"}, {\"name\": \"hot sweet chili sauce\", \"units\": \"cup\", \"amount\": \"0.5\"}, {\"name\": \"large egg\", \"units\": \"beaten\", \"amount\": \"1\"}, {\"name\": \"green onions\", \"units\": \"cup\", \"amount\": \"0.5\"}, {\"name\": \"Chinese parsley\", \"units\": \"cup\", \"amount\": \"1\"}]",
+    "instructions": "Step 1: In a small bowl, stir cornstarch with 2 tablespoons of water; set aside. In a large wok with a lid, heat oil over medium heat until simmering. Stir in shallots, ginger, garlic, and chilies. Cook until fragrant; stir about 1 minute. Step 2: Add the crab pieces and broth. Increase heat to medium-high and bring to a boil. Cover loosely and gently boil. Decrease heat if necessary until crab has turned red and is nearly cooked. Step 3: Remove cover and stir in tomato paste and chili sauce. Simmer 1 minute and season to taste with salt, sugar, or chili sauce. Stir in cornstarch and boil to thicken. Step 4: Remove from heat and stir in egg. Stir in green onions. Ladle into a serving dish, sprinkle with Chinese parsley. Then serve.",
+    "nutrition_info": "Per serving has 437 calories, 12 g of total fat, 30 g of carbohydrates and 51 g of protein.",
+    "category": "Main Dish",
+    "prep_time": "30 minutes",
+    "cook_time": "60 minutes",
+    "total_time": "90 minutes",
+    "notes": "Chili Crab is hailed as one of Singapore’s national dishes. It is traditionally consumed with bare hands.",
+    "tags": "seafood, Singaporean, main dish",
+    "image_urls": null
+}

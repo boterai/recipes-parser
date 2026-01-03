@@ -1,0 +1,14 @@
+{
+    "dish_name": "Risotto alla milanese con funghi porcini",
+    "description": "Un piatto emblematico della tradizione gastronomica italiana, il risotto alla milanese con funghi porcini è un'autentica delizia che combina sapori ricchi e una storia culinaria affascinante.",
+    "ingredients": "[{\"name\": \"riso\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"burro\", \"units\": \"g\", \"amount\": 120}, {\"name\": \"Parmigiano Reggiano\", \"units\": \"g\", \"amount\": 120}, {\"name\": \"funghi porcini\", \"units\": null, \"amount\": null}, {\"name\": \"cipolla\", \"units\": \"g\", \"amount\": 60}, {\"name\": \"brodo di carne\", \"units\": null, \"amount\": null}, {\"name\": \"zafferano\", \"units\": \"bustine\", \"amount\": 2}, {\"name\": \"vino bianco\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"prezzemolo\", \"units\": null, \"amount\": null}, {\"name\": \"sale e pepe\", \"units\": null, \"amount\": \"q.b.\"}]",
+    "instructions": "In un tegame fate rosolare la cipolla tritata con poco burro. Unite il riso, fatelo abbrustolire, mescolando sempre col cucchiaio di legno. Prima che scurisca bagnatelo con un mestolo di brodo e, man mano che si consuma, aggiungetene ancora. Quando il risotto è quasi a cottura unite lo zafferano che avrete già sciolto in poco brodo. Mescolate e amalgamate con una spruzzata di vino. Rimescolate, togliete dal fuoco e mantecate il risotto con burro e Parmigiano Reggiano grattugiato. A parte preparate l’intingolo di funghi: fate rosolare uno spicchio d’aglio nell’olio, aggiungete i porcini e, dopo aver tolto l’aglio, fateli insaporire per alcuni minuti con una spruzzata di vino bianco, aggiustandoli di sale e pepe. Terminate la cottura con mezzo bicchiere di brodo ed una spolverata di prezzemolo tritato. Serviteli adagiati sul risotto.",
+    "nutrition_info": null,
+    "category": null,
+    "prep_time": "40 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null,
+    "image_urls": null
+}

@@ -1,0 +1,14 @@
+{
+    "dish_name": "أقماع التورتيلا بحشوة الدجاج والفطر",
+    "description": "وصفة أقماع التورتيلا بحشوة الدجاج والمشروم.",
+    "ingredients": "[{\"name\": \"خبز تورتيلا\", \"units\": null, \"amount\": null}, {\"name\": \"بيض\", \"units\": null, \"amount\": null}, {\"name\": \"سمسم\", \"units\": null, \"amount\": null}, {\"name\": \"صدور دجاج مسلوقة\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"مشروم\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"بصل صغير مفروم\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"ملح\", \"units\": null, \"amount\": null}, {\"name\": \"فلفل\", \"units\": null, \"amount\": null}, {\"name\": \"جبنة كريمي\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"جبن شيدر\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"رمان\", \"units\": null, \"amount\": null}, {\"name\": \"ذرة\", \"units\": null, \"amount\": null}]",
+    "instructions": "يُقطع التورتيلا إلى نصفين ويُلف كل نصف ليشكل قرطاساً ويُغلق بعود أسنان. يُدهن سطح القرطاس بالبيض ويرش بالسمسم ثم يُخبز في فرن ساخن حتى يحمر ويأخذ اللون الذهبي. تُخلط مكونات الحشوة من الدجاج المسلوق والمشروم والبصل وتتبّل بالملح والفلفل، ثم تُحشى بها التورتيلا المحضّرة. يُغطّى الوجه بالرمان أو الذرة وتُقدّم الأقماع مع صلصة المايونيز والكاتشب كجانب.",
+    "nutrition_info": null,
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null,
+    "image_urls": null
+}

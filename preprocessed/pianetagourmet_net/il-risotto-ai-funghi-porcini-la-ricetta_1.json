@@ -1,0 +1,14 @@
+{
+    "dish_name": "Risotto ai funghi porcini",
+    "description": "E’ uno dei piatti che fa autunno il risotto ai funghi porcini.",
+    "ingredients": "[{\"name\": \"riso\", \"units\": \"grammi\", \"amount\": 300}, {\"name\": \"parmigiano\", \"units\": \"grammi\", \"amount\": 50}, {\"name\": \"funghi porcini\", \"units\": \"medi\", \"amount\": 4}, {\"name\": \"vino bianco secco\", \"units\": \"bicchiere\", \"amount\": 1}, {\"name\": \"olio extravergine di oliva\", \"units\": null, \"amount\": null}, {\"name\": \"aglio\", \"units\": null, \"amount\": null}, {\"name\": \"prezzemolo\", \"units\": null, \"amount\": null}, {\"name\": \"cipolla\", \"units\": null, \"amount\": 1}, {\"name\": \"carota\", \"units\": null, \"amount\": 1}, {\"name\": \"basilico\", \"units\": null, \"amount\": null}, {\"name\": \"acqua\", \"units\": null, \"amount\": null}, {\"name\": \"sale\", \"units\": null, \"amount\": null}]",
+    "instructions": "La prima cosa da fare è preparare il brodo. In una pentola affettiamo finemente una cipolla, sbucciamo e tagliamo a pezzetti un paio di patate e una carota. Aggiungiamo basilico e olio extravergine di oliva e versiamo acqua abbondante coprendo tutti gli ingredienti. Facciamo cuocere finché il liquido non si riduce della metà del suo volume iniziale e teniamo in caldo. A questo punto dedichiamoci ai funghi che dobbiamo pulire avendo cura di non farli rompere con uno straccetto umido. Tagliamo con un coltello la parte finale dei gambi, quindi affettiamoli nel senso della lunghezza. Prepariamoli versando in una pentola un cucchiaio di olio extravergine e uno spicchio d’aglio. Mescoliamo di tanto in tanto e a fine cottura raccogliamoli con un mestolo forato e sistemiamoli su un piatto. Aggiungiamo al fondo di cottura dei funghi il riso e lasciamolo tostare pochi minuti mescolando. Bagnamo con il vino e facciamolo evaporare unendo il brodo bollente a mestoli man mano che si asciuga e portiamo a cottura. Regoliamo, se necessario, di sale e aggiungiamo i porcini cotti e il prezzemolo tritato. Lasciamo insaporire qualche minuto tenendo sul fuoco e incorporiamo il formaggio mantecando un po'.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Preferiamo funghi freschi ai secchi per garantire più sapore.",
+    "tags": "risotto, funghi, porcini, autunno",
+    "image_urls": null
+}

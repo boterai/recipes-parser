@@ -1,0 +1,14 @@
+{
+    "dish_name": "Hungarian Mushroom Soup",
+    "description": "The Hungarian Mushroom Soup, locally known as gombaleves, is relatively quick to make and primarily a mushroom soup with rich flavors from various ingredients.",
+    "ingredients": "[{\"name\": \"unsalted butter\", \"units\": \"tablespoons\", \"amount\": 4}, {\"name\": \"chopped onions\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"fresh mushrooms\", \"units\": \"pound\", \"amount\": 1}, {\"name\": \"dried dill weed\", \"units\": \"teaspoons\", \"amount\": 2}, {\"name\": \"paprika\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"soy sauce\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"chicken broth\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"milk\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"all-purpose flour\", \"units\": \"tablespoons\", \"amount\": 3}, {\"name\": \"salt\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"ground black pepper\", \"units\": \"to taste\", \"amount\": null}, {\"name\": \"lemon juice\", \"units\": \"teaspoons\", \"amount\": 2}, {\"name\": \"chopped fresh parsley\", \"units\": \"cup\", \"amount\": 0.25}, {\"name\": \"sour cream\", \"units\": \"cup\", \"amount\": 0.5}]",
+    "instructions": "Step 1: Melt the butter over medium heat in a big pot. Step 2: Saute the buttered onions for five minutes. Step 3: Add the chestnuts and saute for another 5 minutes. Stir in the dill, paprika, broth, and soy sauce. Reduce heat for 15 minutes, cover, and simmer. Step 4: In a separate bowl, whisk together the milk and the flour. Pour it into the soup and mix well. Cover and cook for another 15 minutes, stirring occasionally. Step 5: Stir in the salt, ground black pepper, lemon juice, parsley, and sour cream. Step 6: Mix and heat for about 3 to 5 minutes over low heat; do not boil. Serve right away.",
+    "nutrition_info": "Per serving has 201 calories; 13.5 g fat; 14.8 g carbohydrates; 7.5 g protein; 32 mg cholesterol; and 829 mg sodium.",
+    "category": "Soup",
+    "prep_time": "15 minutes",
+    "cook_time": "45 minutes",
+    "total_time": "1 hour",
+    "notes": "Mushrooms are incredibly healthy and good for your body. They’re low in calories and excellent sources of fiber and protein.",
+    "tags": "soup, Hungarian, mushroom",
+    "image_urls": null
+}

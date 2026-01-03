@@ -1,0 +1,14 @@
+{
+    "dish_name": "Ravioli ricotta e prosciutto",
+    "description": "Fare i ravioli in casa è più semplice di quanto non si immagini, basta preparare una buona pasta fresca e farcire con ricotta e prosciutto crudo.",
+    "ingredients": "[{\"name\": \"farina\", \"units\": \"gr\", \"amount\": 200}, {\"name\": \"uova\", \"units\": null, \"amount\": 2}, {\"name\": \"olio\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"ricotta\", \"units\": \"gr\", \"amount\": 100}, {\"name\": \"prosciutto crudo\", \"units\": \"gr\", \"amount\": 80}, {\"name\": \"parmigiano\", \"units\": \"gr\", \"amount\": 30}, {\"name\": \"noce moscata\", \"units\": null, \"amount\": null}, {\"name\": \"sale\", \"units\": null, \"amount\": null}]",
+    "instructions": "In una ciotola o su un piano disponete la farina a fontana con al centro le uova. Con la punta delle dita iniziate a impastare dal centro rompendo le uova ed incorporando man mano la farina. Impastate a lungo aggiungendo un cucchiaino d'olio fino ad ottenere una pasta liscia ed elastica. Coprite la pasta al l'uovo con un panno pulito e fate riposare per 30 minuti. Preparate ora il ripieno tritando il prosciutto crudo dolce e mescolandolo insieme alla ricotta, il parmigiano, la noce moscata e un pizzico di sale. Riprendete la sfoglia e dividela in 4 pezzi più piccoli. Appiattire con un mattarello un pezzetto di impasto per volta, poi passatelo nella macchina per la pasta. Poggiate le sfoglie ottenute su un piano intervallando con un pò di farina tra una sfoglia e l'altra. Su una sfoglia disponete mucchietti di ripieno, poi ricoprite con un'altra sfoglia di uguale misura e fate aderire bene i bordi. Con una rotellina tagliapasta ricavate dei quadratini che saranno i vostri ravioli. Cuocete la pasta in abbondante acqua salata per 8/10 minuti. Poi sollevateli con una schiumarola, versateli nella padella con il condimento e fate insaporire.",
+    "nutrition_info": null,
+    "category": "Primi piatti",
+    "prep_time": "30 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "1 hour 10 minutes",
+    "notes": null,
+    "tags": "pasta,ravioli,ricotta,prosciutto",
+    "image_urls": null
+}

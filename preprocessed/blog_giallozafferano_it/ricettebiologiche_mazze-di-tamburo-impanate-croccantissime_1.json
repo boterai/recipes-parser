@@ -1,0 +1,14 @@
+{
+    "dish_name": "Mazze di tamburo impanate croccantissime",
+    "description": "Ricetta delle Mazze di tamburo impanate croccantissime, un piatto delizioso a base di funghi.",
+    "ingredients": "[{\"name\": \"mazze di tamburo\", \"units\": \"pieces\", \"amount\": 6}, {\"name\": \"uova\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"pane grattugiato\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"sale\", \"units\": \"g\", \"amount\": 6}, {\"name\": \"olio di semi di girasole\", \"units\": \"ml\", \"amount\": 150}, {\"name\": \"olio extravergine d’oliva\", \"units\": \"g\", \"amount\": 30}]",
+    "instructions": "1. Lavate le mazze di tamburo e togliete i gambi. 2. Battete le uova e salatele. 3. Passate i cappelli dei funghi nelle uova e poi nel pane grattugiato. 4. Cuocete in padella con olio extravergine di oliva per 5 minuti per lato o in forno a 180° per 20 minuti.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "20 minutes",
+    "notes": "L'uovo può essere sostituito con latte in caso di intolleranza. Le mazze di tamburo possono essere conservate in freezer.",
+    "tags": "fungi, impanati, fritti, ricetta italiana",
+    "image_urls": null
+}

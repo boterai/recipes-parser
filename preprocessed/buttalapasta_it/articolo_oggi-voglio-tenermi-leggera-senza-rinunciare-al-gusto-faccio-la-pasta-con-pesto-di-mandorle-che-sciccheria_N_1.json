@@ -1,0 +1,14 @@
+{
+    "dish_name": "Pasta con pesto di mandorle",
+    "description": "Una pasta cremosa e delicata con pesto di mandorle, facile e veloce da preparare.",
+    "ingredients": "[{\"name\": \"pasta\", \"units\": \"grams\", \"amount\": 340}, {\"name\": \"mandorle pelate\", \"units\": \"grams\", \"amount\": 120}, {\"name\": \"mandorle non pelate\", \"units\": \"grams\", \"amount\": 40}, {\"name\": \"limone fresco\", \"units\": \"unit\", \"amount\": 1}, {\"name\": \"olio d'oliva\", \"units\": \"grams\", \"amount\": 40}, {\"name\": \"sale\", \"units\": null, \"amount\": null}, {\"name\": \"acqua di cottura\", \"units\": null, \"amount\": null}, {\"name\": \"aromi\", \"units\": null, \"amount\": null}]",
+    "instructions": "Portare a bollore l'acqua, salare e calare la pasta. Frullare le mandorle, aggiungere l'olio d'oliva e lavorare per ottenere una crema. Aggiungere il succo di limone e lavorare ancora. Unire il pesto alla pasta scolata e mescolare.",
+    "nutrition_info": null,
+    "category": "Primi Piatti",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Se il composto risulta troppo pastoso, aggiungere un po' di acqua di cottura della pasta.",
+    "tags": "pasta, pesto, mandorle, ricetta leggera",
+    "image_urls": null
+}

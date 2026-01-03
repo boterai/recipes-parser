@@ -1,0 +1,14 @@
+{
+    "dish_name": "Ravioli ripieni di funghi e formaggio",
+    "description": "I ravioli ripieni di funghi e formaggio sono una deliziosa opzione per un pasto di famiglia o una cena romantica.",
+    "ingredients": "[{\"name\": \"farina 00\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"uova\", \"units\": null, \"amount\": 2}, {\"name\": \"sale\", \"units\": null, \"amount\": null}, {\"name\": \"funghi misti\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"formaggio grattugiato (es. parmigiano reggiano)\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"formaggio cremoso (es. ricotta)\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"aglio\", \"units\": \"spicchio\", \"amount\": 1}, {\"name\": \"prezzemolo fresco tritato\", \"units\": null, \"amount\": null}, {\"name\": \"sale e pepe\", \"units\": \"qb\", \"amount\": null}, {\"name\": \"burro\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"foglie di salvia fresca\", \"units\": null, \"amount\": null}]",
+    "instructions": "Iniziate a preparare la pasta: mescolate la farina con le uova e un pizzico di sale fino ad ottenere un impasto liscio ed elastico. Lasciate riposare la pasta per circa 30 minuti coprendola con della pellicola trasparente. Nel frattempo preparate il ripieno: pulite e tritate finemente i funghi misti e rosolateli in padella con l’aglio tritato e del prezzemolo fresco. Lasciate raffreddare. In una ciotola, mescolate i formaggi grattugiati e cremosi con i funghi, aggiungendo sale e pepe a piacere. Stendete la pasta con un matterello o con la macchina per la pasta, formando delle sfoglie sottili. Con un coppapasta o un bicchiere, ricavate dei dischi di pasta. Mettete un cucchiaino di ripieno al centro di ogni disco di pasta e richiudeteli a mezzaluna, premendo bene i bordi per sigillare i ravioli. Cuocete i ravioli in abbondante acqua salata bollente per circa 3-4 minuti, finché non vengono a galla. Scolateli con una schiumarola e teneteli da parte. Per la salsa, sciogliete il burro in una padella antiaderente insieme alle foglie di salvia, aggiungendo sale e pepe a piacere. Versate la salsa sui ravioli appena scolati e serviteli ben caldi, guarnendoli con altro prezzemolo fresco tritato.",
+    "nutrition_info": null,
+    "category": "Primi Piatti",
+    "prep_time": "30 minutes",
+    "cook_time": "4 minutes",
+    "total_time": "34 minutes",
+    "notes": null,
+    "tags": "ravioli, funghi, formaggio, pasta",
+    "image_urls": null
+}

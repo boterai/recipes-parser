@@ -1,0 +1,14 @@
+{
+    "dish_name": "Ravioli con crema di funghi e zafferano",
+    "description": "Un primo piatto da leccarsi i baffi con ravioli, crema di funghi e zafferano.",
+    "ingredients": "[{\"name\": \"Zafferano 3 Cuochi\", \"units\": \"bustine\", \"amount\": 2}, {\"name\": \"ravioli ricotta e spinaci\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"funghi misti o champignon\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"scalogno\", \"units\": \"pezzo\", \"amount\": 1}, {\"name\": \"spicchio d’aglio\", \"units\": \"pezzo\", \"amount\": 1}, {\"name\": \"latte\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"panna fresca\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"olio extravergine di oliva\", \"units\": \"cucchiai\", \"amount\": 4}, {\"name\": \"formaggio grattugiato\", \"units\": \"g\", \"amount\": 40}, {\"name\": \"prezzemolo o timo\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"sale\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"pepe\", \"units\": \"q.b.\", \"amount\": null}]",
+    "instructions": "Pulite i funghi, tritate scalogno e aglio, fate appassire in padella, unite i funghi e saltate. Aggiungete latte e panna con zafferano, cuocete e regolate di sale. Lessate i ravioli e insaporiteli con la crema.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": "60 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Oltre alla ricetta, ci sono altre specialità comfort food con funghi e zafferano.",
+    "tags": "pasta, funghi, zafferano, primo piatto",
+    "image_urls": null
+}

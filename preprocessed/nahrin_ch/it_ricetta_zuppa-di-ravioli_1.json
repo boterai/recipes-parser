@@ -1,0 +1,14 @@
+{
+    "dish_name": "Zuppa di ravioli",
+    "description": "Una zuppa piccante con zenzero, aglio e tutto il gusto aromatico del Fondo di manzo Intenso & Puro Nahrin, pronta in soli 20 minuti.",
+    "ingredients": "[{\"name\": \"Radice di zenzero\", \"units\": \"cm\", \"amount\": \"2-3\"}, {\"name\": \"spicchi d’aglio\", \"units\": null, \"amount\": \"2\"}, {\"name\": \"cipollotto\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"spinaci baby\", \"units\": \"g\", \"amount\": \"100\"}, {\"name\": \"funghi champignon\", \"units\": \"g\", \"amount\": \"100\"}, {\"name\": \"salsa di soia\", \"units\": \"c.\", \"amount\": \"1-2\"}, {\"name\": \"ravioli\", \"units\": null, \"amount\": \"10\"}, {\"name\": \"Fondo di manzo Intenso & Puro Nahrin\", \"units\": \"dl\", \"amount\": \"5\"}, {\"name\": \"olio al peperoncino\", \"units\": \"c.\", \"amount\": \"1-2\"}, {\"name\": \"prezzemolo\", \"units\": \"mazzetto\", \"amount\": \"0.5\"}]",
+    "instructions": "Tritare finemente l’aglio e lo zenzero. Riscaldare il fondo di manzo in una pentola, aggiungere l’aglio e lo zenzero. Tagliare il cipollotto a rondelle e unirlo al fondo di manzo Intenso & Puro Nahrin insieme ai ravioli e ai funghi, cuocere per circa 5 minuti. Incorporare gli spinaci e la salsa di soia, condire con l’olio al peperoncino e servire con il prezzemolo tritato.",
+    "nutrition_info": null,
+    "category": "zuppa",
+    "prep_time": "10 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "20 minutes",
+    "notes": "Per una preparazione veloce, potete utilizzare dei dumplings surgelati – scegliete in base ai vostri gusti tra diverse farciture come verdure, manzo, pollo o maiale.",
+    "tags": "zuppa, facile e veloce",
+    "image_urls": null
+}

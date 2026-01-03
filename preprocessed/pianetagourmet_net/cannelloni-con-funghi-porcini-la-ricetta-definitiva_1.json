@@ -1,0 +1,14 @@
+{
+    "dish_name": "Cannelloni con funghi porcini",
+    "description": "Ricetta per preparare cannelloni con funghi porcini, un piatto ideale per il pranzo della domenica o una ricorrenza speciale.",
+    "ingredients": "[{\"name\": \"sfoglie di pasta all’uovo\", \"units\": \"pieces\", \"amount\": 6}, {\"name\": \"carne macinata di vitello\", \"units\": \"grams\", \"amount\": 400}, {\"name\": \"salsiccia di vitello\", \"units\": \"grams\", \"amount\": 200}, {\"name\": \"sedano\", \"units\": \"grams\", \"amount\": 100}, {\"name\": \"carote\", \"units\": \"grams\", \"amount\": 100}, {\"name\": \"cipolle\", \"units\": \"grams\", \"amount\": 100}, {\"name\": \"funghi porcini secchi\", \"units\": \"grams\", \"amount\": 30}, {\"name\": \"uovo\", \"units\": \"pieces\", \"amount\": 1}, {\"name\": \"tuorlo\", \"units\": \"pieces\", \"amount\": 1}, {\"name\": \"parmigiano reggiano\", \"units\": null, \"amount\": null}, {\"name\": \"vino bianco secco\", \"units\": null, \"amount\": null}, {\"name\": \"olio extravergine di oliva\", \"units\": null, \"amount\": null}, {\"name\": \"sale\", \"units\": null, \"amount\": null}, {\"name\": \"pepe\", \"units\": null, \"amount\": null}, {\"name\": \"noce moscata\", \"units\": null, \"amount\": null}, {\"name\": \"salsa di pomodoro\", \"units\": null, \"amount\": null}]",
+    "instructions": "Laviamo con cura i funghi. Puliamo il gambo e tagliamoli a fettine. Soffriggiamo la cipolla con olio, sedano, carote e carne macinata. Aggiungiamo i funghi e lasciamo insaporire. Tagliamo la pasta in rettangoli, farciamo e sistemiamo in una pirofila con salsa di pomodoro. Cospargiamo con sugo e parmigiano, inforniamo a 180° C per 20 minuti.",
+    "nutrition_info": null,
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "20 minutes",
+    "total_time": null,
+    "notes": "Può essere preparato anche in versione vegetariana con ricotta e spinaci.",
+    "tags": "cannelloni, funghi, porcini, ricetta, piatto principale",
+    "image_urls": null
+}
