@@ -15,8 +15,19 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class DesidakaarExtractor(BaseRecipeExtractor):
     """Экстрактор для desidakaar.com"""
     
+    def __init__(self, html_path: str):
+        """
+        Args:
+            html_path: Путь к HTML файлу
+        """
+        super().__init__(html_path)
+        self._json_ld_cache: Optional[dict] = None
+    
     def _get_json_ld_data(self) -> Optional[dict]:
-        """Извлечение данных JSON-LD из страницы"""
+        """Извлечение данных JSON-LD из страницы (с кешированием)"""
+        if self._json_ld_cache is not None:
+            return self._json_ld_cache
+        
         json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
         
         for script in json_ld_scripts:
@@ -33,8 +44,10 @@ class DesidakaarExtractor(BaseRecipeExtractor):
                         if isinstance(item, dict):
                             item_type = item.get('@type', '')
                             if isinstance(item_type, list) and 'Recipe' in item_type:
+                                self._json_ld_cache = item
                                 return item
                             elif item_type == 'Recipe':
+                                self._json_ld_cache = item
                                 return item
                 elif isinstance(data, dict):
                     # Проверяем @graph
@@ -43,14 +56,18 @@ class DesidakaarExtractor(BaseRecipeExtractor):
                             if isinstance(item, dict):
                                 item_type = item.get('@type', '')
                                 if isinstance(item_type, list) and 'Recipe' in item_type:
+                                    self._json_ld_cache = item
                                     return item
                                 elif item_type == 'Recipe':
+                                    self._json_ld_cache = item
                                     return item
                     # Проверяем сам объект
                     item_type = data.get('@type', '')
                     if isinstance(item_type, list) and 'Recipe' in item_type:
+                        self._json_ld_cache = data
                         return data
                     elif item_type == 'Recipe':
+                        self._json_ld_cache = data
                         return data
                         
             except (json.JSONDecodeError, KeyError, AttributeError):
@@ -173,8 +190,23 @@ class DesidakaarExtractor(BaseRecipeExtractor):
             text = text.replace(fraction, decimal)
         
         # Паттерн для извлечения количества, единицы и названия
-        # Для одно-буквенных единиц (g, l) требуем число перед ними
-        pattern = r'^([\d\s/.,]+)\s+(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|packs?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads)\s+(.+)|^([\d\s/.,]+)?\s*(.+)'
+        # Используем re.VERBOSE для читаемости
+        # Список единиц измерения
+        units = (
+            r'cups?|tablespoons?|teaspoons?|tbsps?|tsps?|'
+            r'pounds?|ounces?|lbs?|oz|'
+            r'grams?|kilograms?|g|kg|'
+            r'milliliters?|liters?|ml|l|'
+            r'pinch(?:es)?|dash(?:es)?|'
+            r'packages?|packs?|cans?|jars?|bottles?|'
+            r'inch(?:es)?|slices?|cloves?|bunches?|sprigs?|'
+            r'whole|halves?|quarters?|pieces?|head|heads'
+        )
+        
+        # Два варианта паттерна:
+        # 1. Количество + единица + название (для случаев с единицей измерения)
+        # 2. Количество (опционально) + название (для случаев без единицы)
+        pattern = rf'^([\d\s/.,]+)\s+({units})\s+(.+)|^([\d\s/.,]+)?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
