@@ -1,0 +1,14 @@
+{
+    "dish_name": "torta di mele",
+    "description": "la torta di mele è un dolce classico italiano, soffice e profumato, perfetto per la colazione o la merenda.",
+    "ingredients": "[{\"name\": \"farina 00\", \"amount\": \"300\", \"unit\": \"g\"}, {\"name\": \"zucchero\", \"amount\": \"200\", \"unit\": \"g\"}, {\"name\": \"uova\", \"amount\": \"3\", \"unit\": \"\"}, {\"name\": \"latte\", \"amount\": \"100\", \"unit\": \"ml\"}, {\"name\": \"burro\", \"amount\": \"80\", \"unit\": \"g\"}, {\"name\": \"mele\", \"amount\": \"3\", \"unit\": \"\"}, {\"name\": \"lievito per dolci\", \"amount\": \"1\", \"unit\": \"bustina\"}, {\"name\": \"sale\", \"amount\": \"1\", \"unit\": \"pizzico\"}, {\"name\": \"buccia di limone grattugiata\", \"amount\": null, \"unit\": null}]",
+    "instructions": "1. sbattere le uova con lo zucchero fino ad ottenere un composto spumoso. 2. aggiungere il burro fuso e il latte, mescolando bene. 3. incorporare la farina setacciata con il lievito e un pizzico di sale. 4. pelare le mele e tagliarle a cubetti, aggiungerle all'impasto con la buccia di limone grattugiata. 5. versare in una tortiera imburrata e infarinata. 6. cuocere in forno preriscaldato a 180°c per 40 minuti.",
+    "nutrition_info": "280 kcal; 5/12/38",
+    "category": "dolci",
+    "prep_time": "20",
+    "cook_time": "40",
+    "total_time": "60",
+    "notes": "potete sostituire il burro con olio di semi per una versione più leggera. per un risultato ottimale, utilizzate mele renette o golden.",
+    "tags": "dolci, torta, mele, colazione, merenda",
+    "image_urls": "https://misya.info/wp-content/uploads/2015/05/torta-di-mele.jpg,https://misya.info/wp-content/uploads/2015/05/torta-di-mele-step1.jpg,https://misya.info/wp-content/uploads/2015/05/torta-di-mele-step2.jpg"
+}
