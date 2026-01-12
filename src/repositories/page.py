@@ -222,7 +222,7 @@ class PageRepository(BaseRepository[PageORM]):
         finally:
             session.close()
     
-    def create_or_update_with_images(self, page_orm: PageORM, image_urls: List[str], 
+    def create_or_update_with_images(self, page_orm: PageORM|Page, image_urls: List[str], 
                                       replace_images: bool = False) -> Optional[PageORM]:
         """
         Создать новую страницу с изображениями или обновить существующую
@@ -237,7 +237,7 @@ class PageRepository(BaseRepository[PageORM]):
         """
         session = self.get_session()
         try:
-            existing = session.query(PageORM).filter(PageORM.id == page_orm.id).first()
+            existing = session.query(PageORM).filter(PageORM.url == page_orm.url).first()
 
             if existing:
                 # Обновляем существующую страницу
@@ -270,6 +270,8 @@ class PageRepository(BaseRepository[PageORM]):
                 logger.debug(f"✓ Обновлена страница ID={existing.id}: {existing.url}")
                 return existing
             else:
+                page_orm = page_orm if isinstance(page_orm, PageORM) else page_orm.to_orm()
+
                 # Добавляем изображения через relationship
                 if image_urls:
                     page_orm.images = [

@@ -160,6 +160,11 @@ class DesidakaarExtractor(BaseRecipeExtractor):
         if og_desc and og_desc.get('content'):
             return self.clean_text(og_desc['content'])
         
+        # Microdata fallback: itemprop="description"
+        desc_elem = self.soup.find(attrs={'itemprop': 'description'})
+        if desc_elem:
+            return self.clean_text(desc_elem.get_text())
+        
         return None
     
     def parse_ingredient(self, ingredient_text: str) -> Optional[dict]:
@@ -330,6 +335,34 @@ class DesidakaarExtractor(BaseRecipeExtractor):
                 if ingredients:
                     break
         
+        # Fallback: find headings that contain 'ingredient' and parse following lists/paragraphs
+        if not ingredients:
+            for header in self.soup.find_all(['h1', 'h2', 'h3', 'h4']):
+                if header.get_text(strip=True) and re.search(r'ingredient', header.get_text(), re.I):
+                    sibling = header.find_next_sibling()
+                    while sibling:
+                        # stop on next heading
+                        if sibling.name and re.match(r'h[1-6]', sibling.name):
+                            break
+                        if sibling.name in ['ul', 'ol']:
+                            for li in sibling.find_all('li'):
+                                it = self.clean_text(li.get_text(separator=' ', strip=True))
+                                parsed = self.parse_ingredient(it)
+                                if parsed:
+                                    ingredients.append(parsed)
+                            break
+                        if sibling.name == 'p':
+                            lines = [ln.strip() for ln in sibling.get_text(separator='\n').split('\n') if ln.strip()]
+                            for line in lines:
+                                parsed = self.parse_ingredient(line)
+                                if parsed:
+                                    ingredients.append(parsed)
+                            if ingredients:
+                                break
+                        sibling = sibling.find_next_sibling()
+                    if ingredients:
+                        break
+        
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
     def extract_steps(self) -> Optional[str]:
@@ -382,6 +415,30 @@ class DesidakaarExtractor(BaseRecipeExtractor):
                 
                 if steps:
                     break
+        
+        # Fallback: find headings that indicate steps/instructions and collect following content
+        if not steps:
+            for header in self.soup.find_all(['h1', 'h2', 'h3', 'h4']):
+                if header.get_text(strip=True) and re.search(r'(step|instruction|method|preparation|direction|how to|steps)', header.get_text(), re.I):
+                    sibling = header.find_next_sibling()
+                    while sibling:
+                        if sibling.name and re.match(r'h[1-6]', sibling.name):
+                            break
+                        if sibling.name in ['p', 'li']:
+                            text = self.clean_text(sibling.get_text(separator=' ', strip=True))
+                            if text:
+                                # split long paragraphs into sentences to create steps
+                                parts = [s.strip() for s in re.split(r'\.\s+|\n', text) if s.strip()]
+                                for part in parts:
+                                    steps.append(part)
+                        if sibling.name in ['ul', 'ol']:
+                            for li in sibling.find_all('li'):
+                                lt = self.clean_text(li.get_text(separator=' ', strip=True))
+                                if lt:
+                                    steps.append(lt)
+                        sibling = sibling.find_next_sibling()
+                    if steps:
+                        break
         
         # Если нумерация не была в HTML, добавляем её
         if steps and not re.match(r'^\d+\.', steps[0]):
@@ -483,7 +540,10 @@ class DesidakaarExtractor(BaseRecipeExtractor):
             if time_elem.get('datetime'):
                 return self.parse_iso_duration(time_elem['datetime'])
             # Или берем текст
-            return self.clean_text(time_elem.get_text())
+            text = self.clean_text(time_elem.get_text())
+            if text and text.startswith('PT'):
+                return self.parse_iso_duration(text)
+            return text
         
         return None
     
@@ -501,7 +561,10 @@ class DesidakaarExtractor(BaseRecipeExtractor):
             if time_elem.get('datetime'):
                 return self.parse_iso_duration(time_elem['datetime'])
             # Или берем текст
-            return self.clean_text(time_elem.get_text())
+            text = self.clean_text(time_elem.get_text())
+            if text and text.startswith('PT'):
+                return self.parse_iso_duration(text)
+            return text
         
         return None
     
@@ -519,7 +582,10 @@ class DesidakaarExtractor(BaseRecipeExtractor):
             if time_elem.get('datetime'):
                 return self.parse_iso_duration(time_elem['datetime'])
             # Или берем текст
-            return self.clean_text(time_elem.get_text())
+            text = self.clean_text(time_elem.get_text())
+            if text and text.startswith('PT'):
+                return self.parse_iso_duration(text)
+            return text
         
         return None
     

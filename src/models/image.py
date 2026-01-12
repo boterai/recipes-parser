@@ -94,7 +94,7 @@ class Image(BaseModel):
     image_url_hash: Optional[str] = None
     local_path: Optional[str] = None
     remote_storage_url: Optional[str] = None
-    vectorised: bool = False
+    vectorised: Optional[bool] = False
     
     # Метаданные
     created_at: Optional[datetime] = None

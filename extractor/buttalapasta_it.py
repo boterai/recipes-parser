@@ -287,6 +287,34 @@ class ButtalaPastaExtractor(BaseRecipeExtractor):
                 if ingredients:
                     break
         
+        # Fallback: заголовки (напр. <h2>/<h3>) с текстом 'ingredienti' и последующие списки/параграфы
+        if not ingredients:
+            for header in self.soup.find_all(['h1','h2','h3','h4']):
+                header_text = header.get_text(strip=True)
+                if header_text and re.search(r'ingredienti|ingredient', header_text, re.I):
+                    sibling = header.find_next_sibling()
+                    while sibling:
+                        if sibling.name and re.match(r'h[1-6]', sibling.name):
+                            break
+                        if sibling.name in ['ul','ol']:
+                            for li in sibling.find_all('li'):
+                                it = self.clean_text(li.get_text(separator=' ', strip=True))
+                                parsed = self.parse_ingredient(it)
+                                if parsed:
+                                    ingredients.append(parsed)
+                            break
+                        if sibling.name == 'p':
+                            lines = [ln.strip() for ln in sibling.get_text(separator='\n').split('\n') if ln.strip()]
+                            for line in lines:
+                                parsed = self.parse_ingredient(line)
+                                if parsed:
+                                    ingredients.append(parsed)
+                            if ingredients:
+                                break
+                        sibling = sibling.find_next_sibling()
+                    if ingredients:
+                        break
+        
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
     def extract_steps(self) -> Optional[str]:
@@ -347,6 +375,30 @@ class ButtalaPastaExtractor(BaseRecipeExtractor):
                 
                 if steps:
                     break
+        
+        # Fallback: заголовки с шагами (итальянские ключевые слова) и сбор следующего контента
+        if not steps:
+            for header in self.soup.find_all(['h1','h2','h3','h4']):
+                header_text = header.get_text(strip=True)
+                if header_text and re.search(r'(come si prepar|come si fa|come preparare|preparaz|procediment|come si prepara la)', header_text, re.I):
+                    sibling = header.find_next_sibling()
+                    while sibling:
+                        if sibling.name and re.match(r'h[1-6]', sibling.name):
+                            break
+                        if sibling.name in ['ol','ul']:
+                            for li in sibling.find_all('li'):
+                                lt = self.clean_text(li.get_text(separator=' ', strip=True))
+                                if lt:
+                                    steps.append(lt)
+                        if sibling.name == 'p':
+                            text = self.clean_text(sibling.get_text(separator=' ', strip=True))
+                            if text:
+                                parts = [s.strip() for s in re.split(r'\.\s+|\n', text) if s.strip()]
+                                for part in parts:
+                                    steps.append(part)
+                        sibling = sibling.find_next_sibling()
+                    if steps:
+                        break
         
         return ' '.join(steps) if steps else None
     

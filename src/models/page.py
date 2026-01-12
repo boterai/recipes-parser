@@ -11,7 +11,7 @@ from sqlalchemy import Column, Integer, String, Boolean, DECIMAL, TIMESTAMP, Tex
 from sqlalchemy.orm import relationship
 from src.models.base import Base
 from src.models.recipe import Recipe
-from src.models.image import ImageORM
+from src.models.image import ImageORM, Image
 
 class PageORM(Base):
     """SQLAlchemy модель для таблицы pages"""
@@ -145,12 +145,13 @@ class Page(BaseModel):
     total_time: Optional[str] = None  # VARCHAR(100) - "1 hour 15 minutes"
     notes: Optional[str] = None  # TEXT - дополнительные заметки или советы
     image_urls: Optional[str] = None  # TEXT - URL изображения
+    images: Optional[list[Image]] = None  # Список объектов изображений (при наличии)
     tags: Optional[str] = None  # TEXT - теги через запятую
 
     
     # Оценка достоверности
     confidence_score: Optional[float] = Field(default=float('0.00'))
-    is_recipe: bool = False
+    is_recipe: Optional[bool] = False
     
     # Метаданные
     created_at: Optional[datetime] = None

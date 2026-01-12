@@ -234,7 +234,7 @@ if __name__ == "__main__":
         '--ports',
         type=int,
         nargs='+',
-        default=[9222, 9223],
+        default=[9222, 9223, 9224, 9225],
         help='Список портов для параллельного запуска (по умолчанию: 9222 9223 9224)'
     )
     parser.add_argument(
@@ -247,13 +247,13 @@ if __name__ == "__main__":
     parser.add_argument(
         '--modules',
         type=str,
-        default=["web_coolinarika_com", "domacirecepti_net", "24kitchen_nl", "simplyrecipes_com", "speedinfo_com_ua"],
+        default=["buttalapasta_it", "desidakaar_com", "budapestcookingclass_com", "simplyrecipes_com", "speedinfo_com_ua"],
         help='Имя модуля экстрактора для одиночного запуска (по умолчанию: 24kitchen_nl)'
     )
     
     args = parser.parse_args()
     
     if args.parallel:
-        run_parallel(ports=args.ports, max_workers=args.workers)
+        run_parallel(ports=args.ports, max_workers=args.workers, modules=args.modules)
     else:
         main(args.modules[0], args.ports[0])
