@@ -7,6 +7,7 @@ from pathlib import Path
 import json
 import re
 from typing import Optional, List, Dict
+from bs4 import BeautifulSoup
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
@@ -14,6 +15,38 @@ from extractor.base import BaseRecipeExtractor, process_directory
 
 class GirlCooksWorldExtractor(BaseRecipeExtractor):
     """Экстрактор для girlcooksworld.com"""
+    
+    # Список единиц измерения для парсинга ингредиентов
+    UNITS = [
+        'cups?', 'tablespoons?', 'teaspoons?', 'tbsps?', 'tsps?', r't\.',
+        'pounds?', 'ounces?', 'lbs?', 'oz',
+        'grams?', 'kilograms?', 'g', 'kg',
+        'milliliters?', 'liters?', 'ml', 'l',
+        'pinch(?:es)?', 'dash(?:es)?',
+        'packages?', 'cans?', 'jars?', 'bottles?',
+        'inch(?:es)?', 'slices?', 'cloves?', 'bunches?', 'sprigs?',
+        'whole', 'halves?', 'quarters?', 'pieces?', 'head', 'heads', 'stalk'
+    ]
+    
+    # Описательные слова, которые нужно удалять из названий ингредиентов
+    INGREDIENT_DESCRIPTORS = [
+        'to taste', 'as needed', 'or more', 'if needed', 'optional',
+        'for garnish', 'divided', 'seeded and minced', 'seeded', 'minced',
+        'chopped', 'finely chopped', 'roughly chopped',
+        'bruised and woody ends trimmed', 'bruised', 'trimmed',
+        'woody ends trimmed', 'in their juice'
+    ]
+    
+    # Приоритетные категории для выбора основной категории рецепта
+    PRIORITY_CATEGORIES = [
+        'Main Dishes', 'Dessert', 'Appetizers', 'Salad', 'Soup', 'Breakfast'
+    ]
+    
+    # Ключевые слова для пропуска при поиске заметок
+    SKIP_KEYWORDS = ['share', 'print', 'pin', 'related']
+    
+    # Ключевые слова для фильтрации тегов
+    FILTERED_TAGS = ['done']
     
     def _get_json_ld_data(self) -> Optional[dict]:
         """Извлечение данных JSON-LD из страницы (Article metadata)"""
@@ -101,7 +134,8 @@ class GirlCooksWorldExtractor(BaseRecipeExtractor):
         # Паттерн для извлечения количества, единицы и названия
         # Поддерживает: "1 cup flour", "2 tablespoons butter", "1/2 teaspoon salt", "1-1/2 cups water"
         # Но НЕ "1 medium onion" где medium - это размер, а не единица
-        pattern = r'^([\d\s/\-.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|t\.|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|stalk)\s+(.+)'
+        units_pattern = '|'.join(self.UNITS)
+        pattern = rf'^([\d\s/\-.,]+)?\s*({units_pattern})\s+(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -144,7 +178,8 @@ class GirlCooksWorldExtractor(BaseRecipeExtractor):
         # Удаляем описательные слова и фразы, но только если они в конце или после запятой
         # "garlic, minced" -> "garlic"
         # "Jalapeno pepper, seeded and minced" -> "Jalapeno pepper"
-        name = re.sub(r',\s*\b(to taste|as needed|or more|if needed|optional|for garnish|divided|seeded and minced|seeded|minced|chopped|finely chopped|roughly chopped|bruised and woody ends trimmed|bruised|trimmed|woody ends trimmed|in their juice)\b.*$', '', name, flags=re.IGNORECASE)
+        descriptors_pattern = '|'.join(re.escape(d) for d in self.INGREDIENT_DESCRIPTORS)
+        name = re.sub(rf',\s*\b({descriptors_pattern})\b.*$', '', name, flags=re.IGNORECASE)
         
         # Удаляем лишние пробелы и запятые
         name = re.sub(r'[,;]+$', '', name)
@@ -191,8 +226,7 @@ class GirlCooksWorldExtractor(BaseRecipeExtractor):
             
             for part in parts:
                 # Удаляем HTML теги
-                from bs4 import BeautifulSoup as BS
-                clean = BS(part, 'lxml').get_text().strip()
+                clean = BeautifulSoup(part, 'lxml').get_text().strip()
                 # Удаляем ведущие звездочки
                 clean = re.sub(r'^\*\s*', '', clean)
                 
@@ -243,8 +277,7 @@ class GirlCooksWorldExtractor(BaseRecipeExtractor):
             if isinstance(sections, list) and sections:
                 # Предпочитаем "Main Dishes", "Dessert" и другие основные категории
                 # Ищем в списке приоритетные категории
-                priority_categories = ['Main Dishes', 'Dessert', 'Appetizers', 'Salad', 'Soup', 'Breakfast']
-                for cat in priority_categories:
+                for cat in self.PRIORITY_CATEGORIES:
                     if cat in sections:
                         return self.clean_text(cat)
                 # Если нет приоритетных, возвращаем последнюю (обычно более специфичная)
@@ -325,7 +358,7 @@ class GirlCooksWorldExtractor(BaseRecipeExtractor):
                 for elem in recipe_div.find_next_siblings(['p', 'div']):
                     text = self.clean_text(elem.get_text())
                     # Прекращаем, если встретили другую секцию
-                    if any(keyword in text.lower() for keyword in ['share', 'print', 'pin', 'related']):
+                    if any(keyword in text.lower() for keyword in self.SKIP_KEYWORDS):
                         break
                     if text and len(text) > 10:
                         notes_text.append(text)
@@ -344,7 +377,7 @@ class GirlCooksWorldExtractor(BaseRecipeExtractor):
             keywords = json_ld['keywords']
             if isinstance(keywords, list):
                 # Фильтруем служебные теги
-                filtered = [k.lower() for k in keywords if k.lower() not in ['done']]
+                filtered = [k.lower() for k in keywords if k.lower() not in self.FILTERED_TAGS]
                 return ', '.join(filtered) if filtered else None
             elif isinstance(keywords, str):
                 return keywords.lower()
