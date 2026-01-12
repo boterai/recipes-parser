@@ -100,19 +100,28 @@ class GirlCooksWorldExtractor(BaseRecipeExtractor):
         
         # Паттерн для извлечения количества, единицы и названия
         # Поддерживает: "1 cup flour", "2 tablespoons butter", "1/2 teaspoon salt", "1-1/2 cups water"
-        pattern = r'^([\d\s/\-.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|t\.|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|medium|large|small|stalk)?\s*(.+)'
+        # Но НЕ "1 medium onion" где medium - это размер, а не единица
+        pattern = r'^([\d\s/\-.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|t\.|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|stalk)\s+(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
-        if not match:
-            # Если паттерн не совпал, возвращаем только название
-            return {
-                "name": text,
-                "amount": None,
-                "units": None
-            }
-        
-        amount_str, unit, name = match.groups()
+        if match:
+            amount_str, unit, name = match.groups()
+        else:
+            # Попробуем без единицы, но с размером (medium, large, small)
+            # "1 medium onion" -> amount=1, unit=None, name="medium onion"
+            size_pattern = r'^([\d\s/\-.,]+)?\s*(.+)'
+            size_match = re.match(size_pattern, text, re.IGNORECASE)
+            if size_match:
+                amount_str, name = size_match.groups()
+                unit = None
+            else:
+                # Если ничего не совпало, возвращаем только название
+                return {
+                    "name": text,
+                    "amount": None,
+                    "units": None
+                }
         
         # Обработка количества
         amount = None
@@ -126,23 +135,35 @@ class GirlCooksWorldExtractor(BaseRecipeExtractor):
         unit = unit.strip() if unit else None
         
         # Очистка названия
-        # Сначала удаляем скобочные пояснения, но не из середины названия
-        # Удаляем скобки только если они в начале или в конце, или если весь текст в скобках
-        name_cleaned = name
-        # Удаляем скобки в начале строки
-        name_cleaned = re.sub(r'^\([^)]*\)\s*', '', name_cleaned)
+        # Сначала сохраняем оригинальное имя для проверки
+        original_name = name
         
-        # Удаляем фразы "to taste", "as needed", "optional" и т.д.
-        name_cleaned = re.sub(r',?\s*\b(to taste|as needed|or more|if needed|optional|for garnish|divided|seeded and minced|seeded|minced|chopped|finely chopped|roughly chopped|bruised and woody ends trimmed|bruised|trimmed|woody ends trimmed|in their juice)\b.*$', '', name_cleaned, flags=re.IGNORECASE)
+        # Удаляем скобочные пояснения из начала
+        name = re.sub(r'^\([^)]*\)\s*', '', name)
+        
+        # Удаляем описательные слова и фразы, но только если они в конце или после запятой
+        # "garlic, minced" -> "garlic"
+        # "Jalapeno pepper, seeded and minced" -> "Jalapeno pepper"
+        name = re.sub(r',\s*\b(to taste|as needed|or more|if needed|optional|for garnish|divided|seeded and minced|seeded|minced|chopped|finely chopped|roughly chopped|bruised and woody ends trimmed|bruised|trimmed|woody ends trimmed|in their juice)\b.*$', '', name, flags=re.IGNORECASE)
+        
         # Удаляем лишние пробелы и запятые
-        name_cleaned = re.sub(r'[,;]+$', '', name_cleaned)
-        name_cleaned = re.sub(r'\s+', ' ', name_cleaned).strip()
+        name = re.sub(r'[,;]+$', '', name)
+        name = re.sub(r'\s+', ' ', name).strip()
         
-        if not name_cleaned or len(name_cleaned) < 2:
+        # Если имя стало слишком коротким после очистки, но оригинал был длинным,
+        # возможно мы удалили слишком много
+        if len(name) < 3 and len(original_name) > 10:
+            # Попробуем более щадящую очистку
+            name = original_name
+            # Удаляем только после запятой
+            name = re.sub(r',.*$', '', name)
+            name = name.strip()
+        
+        if not name or len(name) < 2:
             return None
         
         return {
-            "name": name_cleaned,
+            "name": name,
             "amount": amount,
             "units": unit
         }
