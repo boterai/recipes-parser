@@ -28,7 +28,6 @@ class MisyaInfoExtractor(BaseRecipeExtractor):
         r'g|kg|ml|l|cucchiai?|cucchiaini?|bustine?|pizzichi?|'
         r'q\.b\.|litri?|etti?|grammi?|mele?|uova?|costa?'
     )
-    """Экстрактор для misya.info"""
     
     @staticmethod
     def parse_iso_duration(duration: str) -> Optional[str]:
@@ -303,15 +302,22 @@ class MisyaInfoExtractor(BaseRecipeExtractor):
             amount_str = amount_str.strip()
             # Обработка дробей типа "1/2" или "1 1/2"
             if '/' in amount_str:
-                parts = amount_str.split()
-                total = 0
-                for part in parts:
-                    if '/' in part:
-                        num, denom = part.split('/')
-                        total += float(num) / float(denom)
-                    else:
-                        total += float(part)
-                amount = str(total)
+                try:
+                    parts = amount_str.split()
+                    total = 0
+                    for part in parts:
+                        if '/' in part:
+                            num, denom = part.split('/')
+                            if float(denom) == 0:
+                                # Игнорируем некорректные дроби
+                                continue
+                            total += float(num) / float(denom)
+                        else:
+                            total += float(part)
+                    amount = str(total) if total > 0 else None
+                except (ValueError, ZeroDivisionError):
+                    # Если не удалось распарсить количество, оставляем как есть
+                    amount = amount_str.replace(',', '.')
             else:
                 amount = amount_str.replace(',', '.')
         
