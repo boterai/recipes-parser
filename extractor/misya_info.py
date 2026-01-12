@@ -1,5 +1,5 @@
 """
-Экстрактор данных рецептов для сайта misya.info
+экстрактор данных рецептов для сайта misya.info
 """
 
 import sys
@@ -13,6 +13,21 @@ from extractor.base import BaseRecipeExtractor, process_directory
 
 
 class MisyaInfoExtractor(BaseRecipeExtractor):
+    """Экстрактор для misya.info"""
+    
+    # Константа для маппинга Unicode дробей
+    FRACTION_MAP = {
+        '½': '0.5', '¼': '0.25', '¾': '0.75',
+        '⅓': '0.33', '⅔': '0.67', '⅛': '0.125',
+        '⅜': '0.375', '⅝': '0.625', '⅞': '0.875',
+        '⅕': '0.2', '⅖': '0.4', '⅗': '0.6', '⅘': '0.8'
+    }
+    
+    # Константа для итальянских единиц измерения
+    ITALIAN_UNITS = (
+        r'g|kg|ml|l|cucchiai?|cucchiaini?|bustine?|pizzichi?|'
+        r'q\.b\.|litri?|etti?|grammi?|mele?|uova?|costa?'
+    )
     """Экстрактор для misya.info"""
     
     @staticmethod
@@ -263,19 +278,12 @@ class MisyaInfoExtractor(BaseRecipeExtractor):
         text = self.clean_text(ingredient_text).lower()
         
         # Заменяем Unicode дроби на числа
-        fraction_map = {
-            '½': '0.5', '¼': '0.25', '¾': '0.75',
-            '⅓': '0.33', '⅔': '0.67', '⅛': '0.125',
-            '⅜': '0.375', '⅝': '0.625', '⅞': '0.875',
-            '⅕': '0.2', '⅖': '0.4', '⅗': '0.6', '⅘': '0.8'
-        }
-        
-        for fraction, decimal in fraction_map.items():
+        for fraction, decimal in self.FRACTION_MAP.items():
             text = text.replace(fraction, decimal)
         
         # Паттерн для итальянского формата: "300g farina" или "3 uova"
         # Поддержка q.b. (quanto basta - по вкусу)
-        pattern = r'^([\d\s/.,]+)?\s*(g|kg|ml|l|cucchiai?|cucchiaini?|bustine?|pizzichi?|q\.b\.|litri?|etti?|grammi?|mele?|uova?|costa?)?\s*(.+)'
+        pattern = rf'^([\d\s/.,]+)?\s*({self.ITALIAN_UNITS})?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
