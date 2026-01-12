@@ -307,8 +307,14 @@ class MisyaInfoExtractor(BaseRecipeExtractor):
                     total = 0
                     for part in parts:
                         if '/' in part:
-                            num, denom = part.split('/')
-                            if float(denom) == 0:
+                            # Разделяем на максимум 2 части для обработки дробей
+                            fraction_parts = part.split('/', 1)
+                            if len(fraction_parts) != 2:
+                                # Пропускаем некорректные дроби
+                                continue
+                            num, denom = fraction_parts
+                            # Проверяем деление на ноль до конвертации в float
+                            if denom.strip() == '0' or denom.strip() == '0.0':
                                 # Игнорируем некорректные дроби
                                 continue
                             total += float(num) / float(denom)
