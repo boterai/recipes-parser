@@ -21,13 +21,6 @@ from src.common.db.clickhouse import ClickHouseManager
 logger = logging.getLogger(__name__)
 
 
-class SimilaritySearchType:
-    FULL_TEXT = 'full_text'
-    WEIGHTED = 'weighted'
-    INGREDIENTS = 'ingredients'
-    IMAGE = 'image'
-
-
 class SimilarityMetric:
     COSINE = 'cosine'
     DOT = 'dot'
@@ -179,9 +172,9 @@ class SimilaritySearcher:
         self.clusters = []
         self.cluster_filepath = None
 
-    def build_full_text_clusters_via_qdrant(
+    def build_clusters(
         self,
-        params: ClusterParams = ClusterParams()
+        params: ClusterParams
     ) -> list[list[int]]:
         """
         Кластеры по full_text из Qdrant full-коллекции.
@@ -189,14 +182,22 @@ class SimilaritySearcher:
         """
 
         q = QdrantRecipeManager(collection_prefix=self.qd_collection_prefix)
-        q.connect(timeout=120.0) # увеличенный таймаут для долгих операций
+        q.connect(timeout=200.0) # увеличенный таймаут для долгих операций
 
         dsu = _DSU()
         processed = 0
         rng = random.Random(params.sample_seed)
 
-        collection_name = params.collection_name or "full"
-        using = params.using or "dense"
+        if params.collection_name is None:
+            logger.error("params.collection_name is None")
+            return []
+        
+        if params.using is None:
+            logger.error("params.using is None")
+            return []
+        
+        collection_name = params.collection_name
+        using = params.using
 
         for ids in q.iter_point_ids(batch_size=params.scroll_batch, collection_name=collection_name):
             ids = _apply_sampling_and_limits(
@@ -242,10 +243,28 @@ class SimilaritySearcher:
         
         self.clusters = _build_clusters_from_dsu(dsu, params.min_cluster_size)
         return self.clusters
+    
+    def build_ingredients_clusters_via_qdrant(self, 
+                                              params: ClusterParams = None) -> list[list[int]]:
+        """Кластеры по ингредиентам из Qdrant ingredients-коллекции."""
+        if params is None:
+            params = ClusterParams()
+        params.collection_name = "mv"
+        params.using = "ingredients"
+        return self.build_clusters(params=params)
+    
+    def build_full_text_clusters_via_qdrant(self,
+                                 params: ClusterParams = None) -> list[list[int]]:
+        """Кластеры по full_text из Qdrant full-коллекции."""
+        if params is None:
+            params = ClusterParams()
+        params.collection_name = "full"
+        params.using = "dense"
+        return self.build_clusters(params=params)
 
     def build_weighted_mv_clusters_via_qdrant(
         self,
-        params: ClusterParams = ClusterParams()
+        params: ClusterParams = None
     ) -> list[list[int]]:
         """Кластеры по multivector: делаем несколько kNN запросов (по компонентам) и сливаем score.
 
@@ -255,6 +274,9 @@ class SimilaritySearcher:
         - `params.components` определяет, по каким named-векторам искать
         - `params.component_weights` если пустой, используется равномерное распределение по components
         """
+
+        if params is None:
+            params = ClusterParams()
 
         q = QdrantRecipeManager(collection_prefix=self.qd_collection_prefix)
         q.connect()
@@ -427,7 +449,6 @@ Return ONLY JSON array of IDs representing similar recipes."""
             logger.error(f"Error calling GPT for cluster analysis: {e}")
             return []
         
-
     def process_and_save_clusters(self, offest: Optional[int] = 0) -> None:
         """
         processes loaded clusters, asks GPT to filter them, and saves to DB, skips already saved clusters.
@@ -462,23 +483,19 @@ Return ONLY JSON array of IDs representing similar recipes."""
         logger.info(f"Saved clusters to file {filepath}.")
 
 if __name__ == "__main__":
-    ss = SimilaritySearcher(
-        search_type=SimilaritySearchType.FULL_TEXT,
-        model_name="text-embedding-3-small",
-        metric=SimilarityMetric.COSINE,
-    )
-    # показывает более хорошие кластеры, чем weighted
-    clusters = ss.build_full_text_clusters_via_qdrant(
+    ss = SimilaritySearcher()
+    clusters = ss.build_clusters(
         params=ClusterParams(
-            #max_recipes=500,
-            limit=20,
-            score_threshold=0.94,
-            scroll_batch=1000,
-            query_batch=16,
-            collection_name="full",
+            max_recipes=500,
+            limit=15,
+            score_threshold=0.9,
+            scroll_batch=500,
+            query_batch=8,
+            collection_name="mv",
+            using="ingredients",
         )
     )
-    with open("full_text_clusters94.txt", "w") as f:
+    with open("ingredients_clusters90.txt", "w") as f:
         f.write(json.dumps(clusters, indent=2))
 
     for c in clusters:
