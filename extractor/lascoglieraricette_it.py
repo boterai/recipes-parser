@@ -40,12 +40,20 @@ class LascoglieraricetteItExtractor(BaseRecipeExtractor):
         # Ищем через itemprop
         name_elem = self.soup.find(attrs={'itemprop': 'headline'})
         if name_elem:
-            return self.clean_text(name_elem.get_text())
+            name = self.clean_text(name_elem.get_text())
+            # Убираем подзаголовок после двоеточия, если есть
+            if ':' in name:
+                name = name.split(':')[0].strip()
+            return name
         
         # Альтернативно - через h1
         h1 = self.soup.find('h1')
         if h1:
-            return self.clean_text(h1.get_text())
+            name = self.clean_text(h1.get_text())
+            # Убираем подзаголовок после двоеточия, если есть
+            if ':' in name:
+                name = name.split(':')[0].strip()
+            return name
         
         return None
     
@@ -68,24 +76,22 @@ class LascoglieraricetteItExtractor(BaseRecipeExtractor):
         Парсинг строки ингредиента в структурированный формат
         
         Args:
-            text: Строка вида "Funghi freschi 300 g" или "Sale q.b."
+            text: Строка вида "Funghi freschi 300 g" или "Sale q.b." или "200 g di farina"
             
         Returns:
             dict: {"name": "...", "units": "...", "amount": ...}
         """
         text = self.clean_text(text)
         
-        # Паттерн для ингредиентов с количеством и единицами
-        # Примеры: "Funghi freschi 300 g", "Aglio 2 spicchi"
-        match = re.search(r'^(.+?)\s+([\d,\.]+)\s*(.+)$', text)
+        # Паттерн 1: Количество в начале (например, "200 g di farina")
+        match = re.search(r'^([\d,\.]+)\s*([a-zA-Z]+)\s+di\s+(.+)$', text, re.IGNORECASE)
         if match:
-            name, amount_str, unit = match.groups()
+            amount_str, unit, name = match.groups()
             # Убираем скобки и комментарии из названия
             name = re.sub(r'\([^)]*\).*$', '', name).strip()
             # Конвертируем amount в число
             try:
                 amount = float(amount_str.replace(',', '.'))
-                # Если это целое число, возвращаем int
                 if amount.is_integer():
                     amount = int(amount)
             except (ValueError, AttributeError):
@@ -97,15 +103,69 @@ class LascoglieraricetteItExtractor(BaseRecipeExtractor):
                 "amount": amount
             }
         
-        # Паттерн для ингредиентов с q.b. (quanto basta - сколько нужно)
+        # Паттерн 2: Название в начале (например, "Funghi freschi 300 g")
+        match = re.search(r'^(.+?)\s+([\d,\.]+)\s*(.+)$', text)
+        if match:
+            name, amount_str, unit = match.groups()
+            # Убираем скобки и комментарии из названия
+            name = re.sub(r'\([^)]*\).*$', '', name).strip()
+            # Конвертируем amount в число
+            try:
+                amount = float(amount_str.replace(',', '.'))
+                if amount.is_integer():
+                    amount = int(amount)
+            except (ValueError, AttributeError):
+                amount = amount_str
+            
+            return {
+                "name": name,
+                "units": unit.strip(),
+                "amount": amount
+            }
+        
+        # Паттерн 3: Только число в начале (например, "2 uova")
+        match = re.search(r'^([\d,\.]+)\s+(.+)$', text)
+        if match:
+            amount_str, name = match.groups()
+            # Убираем скобки и комментарии из названия
+            name = re.sub(r'\([^)]*\).*$', '', name).strip()
+            # Конвертируем amount в число
+            try:
+                amount = float(amount_str.replace(',', '.'))
+                if amount.is_integer():
+                    amount = int(amount)
+            except (ValueError, AttributeError):
+                amount = amount_str
+            
+            return {
+                "name": name,
+                "units": None,
+                "amount": amount
+            }
+        
+        # Паттерн 4: q.b. (quanto basta - сколько нужно)
         match = re.search(r'^(.+?)\s+(q\.b\.|a piacere).*$', text, re.IGNORECASE)
         if match:
             name = match.group(1).strip()
+            # Убираем "un pizzico di" и подобные фразы
+            name = re.sub(r'^(un pizzico di|una presa di|quanto basta di)\s+', '', name, flags=re.IGNORECASE)
             # Убираем скобки и комментарии
             name = re.sub(r'\([^)]*\).*$', '', name).strip()
             return {
                 "name": name,
                 "units": "q.b.",
+                "amount": None
+            }
+        
+        # Паттерн 5: Описательные фразы (например, "un pizzico di sale")
+        match = re.search(r'^(un pizzico di|una presa di)\s+(.+)$', text, re.IGNORECASE)
+        if match:
+            name = match.group(2).strip()
+            # Убираем скобки и комментарии
+            name = re.sub(r'\([^)]*\).*$', '', name).strip()
+            return {
+                "name": name,
+                "units": None,
                 "amount": None
             }
         
