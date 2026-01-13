@@ -5,7 +5,8 @@ import json
 import logging
 import random
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, Literal
+import os
 
 if __name__ == "__main__":
     import sys
@@ -18,13 +19,12 @@ from src.repositories.similarity import RecipeSimilarity
 from src.models.recipe import Recipe
 from src.common.db.clickhouse import ClickHouseManager
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[logging.StreamHandler()]
+)
 logger = logging.getLogger(__name__)
-
-
-class SimilarityMetric:
-    COSINE = 'cosine'
-    DOT = 'dot'
-    EUCLID = 'euclid'
 
 
 class _DSU:
@@ -131,7 +131,7 @@ def _union_top_neighbors(dsu: _DSU, aggregated: dict[int, dict[int, float]], lim
             dsu.union(int(sid), int(dst_id))
 
 
-@dataclass(frozen=True)
+@dataclass()
 class ClusterParams:
     limit: int = 25               # top-K соседей на рецепт
     score_threshold: float = 0.92 # порог
@@ -143,20 +143,9 @@ class ClusterParams:
     collection_name: str = "full"
     using: str = "dense"
 
-    # weighted-mv параметры: делаем несколько запросов (по компонентам) и сливаем результаты
-    components: list[str] = field(default_factory=lambda: [
-        "ingredients",
-        "description",
-        "instructions",
-        "dish_name",
-        "tags",
-        "meta",
-    ])
-    component_weights: dict[str, float] = field(default_factory=dict)
-    candidate_multiplier: int = 3  # сколько кандидатов брать с каждого компонента (limit * multiplier)
-
     # Ограничение выборки (для тестового прогона)
     max_recipes: int | None = None              # обработать не больше N рецептов всего
+    last_point_id: Optional[int] = None         # с какого id наичнать итерацию
     sample_per_scroll_batch: int | None = None  # случайно взять N ids из каждого scroll батча
     sample_seed: int = 42                       # seed для воспроизводимой выборки
 
@@ -169,22 +158,52 @@ class SimilaritySearcher:
         self.clickhouse_manager = ClickHouseManager()
         if not self.clickhouse_manager.connect(): # перенести куда-нибудь не сюда или не использвоать тут clickhuouse
             raise RuntimeError("Failed to connect to ClickHouse")
-        self.clusters = []
-        self.cluster_filepath = None
+
+        self.last_id: int | None = None
+        self.dsu: _DSU = _DSU()
+
+    def save_dsu_state(self, filepath: str) -> None:
+        """Сохраняет состояние DSU в файл."""
+        state = {
+            "parent": self.dsu.parent,
+            "rank": self.dsu.rank,
+            "last_id": self.last_id
+        }
+        with open(filepath, 'w') as f:
+            json.dump(state, f, indent=2)
+        logger.info(f"Saved DSU state to {filepath}")
+
+    def load_dsu_state(self, filepath: str) -> None:
+        """Загружает состояние DSU из файла."""
+        if not os.path.exists(filepath):
+            logger.warning(f"DSU state file {filepath} not found, starting fresh")
+            return
+        
+        with open(filepath, 'r') as f:
+            state = json.load(f)
+        
+        # Восстанавливаем DSU
+        self.dsu.parent = {int(k): int(v) for k, v in state["parent"].items()}
+        self.dsu.rank = {int(k): int(v) for k, v in state["rank"].items()}
+        self.last_id = state.get("last_id")
+        logger.info(f"Loaded DSU state from {filepath} (last_id={self.last_id}, nodes={len(self.dsu.parent)})")
+
 
     def build_clusters(
         self,
-        params: ClusterParams
+        params: ClusterParams, 
+        reuse_dsu: bool = True,
     ) -> list[list[int]]:
         """
-        Кластеры по full_text из Qdrant full-коллекции.
-        Предпосылка: point_id в Qdrant == pages.id, и named vector = 'dense'.
+        Кластеры по коллекциям из Qdrant.
+        Предпосылка: point_id в Qdrant == pages.id, и named vector = params.using
         """
-
         q = QdrantRecipeManager(collection_prefix=self.qd_collection_prefix)
-        q.connect(timeout=200.0) # увеличенный таймаут для долгих операций
+        q.connect(timeout=210.0) # увеличенный таймаут для долгих операций
+        
+        if not reuse_dsu or self.dsu is None:
+            self.dsu = _DSU()
 
-        dsu = _DSU()
         processed = 0
         rng = random.Random(params.sample_seed)
 
@@ -196,10 +215,10 @@ class SimilaritySearcher:
             logger.error("params.using is None")
             return []
         
-        collection_name = params.collection_name
-        using = params.using
+        if params.last_point_id is not None:
+            self.last_id = params.last_point_id
 
-        for ids in q.iter_point_ids(batch_size=params.scroll_batch, collection_name=collection_name):
+        for ids in q.iter_point_ids(batch_size=params.scroll_batch, collection_name=params.collection_name, last_point_id=self.last_id):
             ids = _apply_sampling_and_limits(
                 ids,
                 rng=rng,
@@ -207,165 +226,76 @@ class SimilaritySearcher:
                 max_recipes=params.max_recipes,
                 sample_per_scroll_batch=params.sample_per_scroll_batch,
             )
-            if not ids:
+            if not ids or ids == [self.last_id]:
+                self.last_id = None
+                logger.info("No more ids to process, stopping.")
                 break
-
+            
             for i in range(0, len(ids), params.query_batch):
                 sub_ids = ids[i:i + params.query_batch]
-                vec_map = q.retrieve_vectors(sub_ids, collection_name=collection_name, using=using)
+                vec_map = q.retrieve_vectors(sub_ids, collection_name=params.collection_name, using=params.using)
                 if not vec_map:
                     continue
 
                 src_ids = list(vec_map.keys())
                 vectors = [vec_map[rid] for rid in src_ids]
 
-                batch_hits = q.query_batch(
-                    collection_name=collection_name,
-                    using=using,
-                    vectors=vectors,
-                    limit=params.limit,
-                    score_threshold=params.score_threshold,
-                )
+                for attempt in range(3):  # retry up to 3 times
+                    try:
+                        batch_hits = q.query_batch(
+                            collection_name=params.collection_name,
+                            using=params.using,
+                            vectors=vectors,
+                            limit=params.limit,
+                            score_threshold=params.score_threshold,
+                        )
+                        break  # success, exit retry loop
+                    except TimeoutError:
+                        if attempt == 2:
+                            logger.error("Max retries reached for Qdrant query_batch, aborting.")
+                            raise
+                        logger.error(f"Timeout during Qdrant query_batch, retry attempt {attempt + 1}")
+                        continue
 
                 for src_id, hits in zip(src_ids, batch_hits):
                     for h in hits:
                         dst_id = int(h["recipe_id"])
                         if dst_id != src_id:
-                            dsu.union(src_id, dst_id)
+                            self.dsu.union(src_id, dst_id)
 
                 processed += len(src_ids)
                 if params.max_recipes is not None and processed >= params.max_recipes:
                     break
+            
+            self.last_id = max(ids) # сохраняем последний обработанный id
 
             logger.info("Processed %d recipes...", processed)
             if params.max_recipes is not None and processed >= params.max_recipes:
                 break
-        
-        self.clusters = _build_clusters_from_dsu(dsu, params.min_cluster_size)
-        return self.clusters
+
+        return _build_clusters_from_dsu(self.dsu, params.min_cluster_size)
     
-    def build_ingredients_clusters_via_qdrant(self, 
-                                              params: ClusterParams = None) -> list[list[int]]:
+    def build_clusters_from_collection(self, 
+                                        params: ClusterParams = None, 
+                                        build_type: Literal["image", "full", "ingredients"] = "full") -> list[list[int]]:
         """Кластеры по ингредиентам из Qdrant ingredients-коллекции."""
         if params is None:
             params = ClusterParams()
-        params.collection_name = "mv"
-        params.using = "ingredients"
+        if build_type == "image":
+            params.collection_name = "images"
+            params.using = "image"
+        elif build_type == "ingredients":
+            params.collection_name = "mv"
+            params.using = "ingredients"
+        else:  # full
+            params.collection_name = "full"
+            params.using = "dense"
         return self.build_clusters(params=params)
-    
-    def build_full_text_clusters_via_qdrant(self,
-                                 params: ClusterParams = None) -> list[list[int]]:
-        """Кластеры по full_text из Qdrant full-коллекции."""
-        if params is None:
-            params = ClusterParams()
-        params.collection_name = "full"
-        params.using = "dense"
-        return self.build_clusters(params=params)
-
-    def build_weighted_mv_clusters_via_qdrant(
-        self,
-        params: ClusterParams = None
-    ) -> list[list[int]]:
-        """Кластеры по multivector: делаем несколько kNN запросов (по компонентам) и сливаем score.
-
-        Важно:
-        - `params.collection_name` должен быть "mv" (по умолчанию)
-        - `params.using` игнорируется
-        - `params.components` определяет, по каким named-векторам искать
-        - `params.component_weights` если пустой, используется равномерное распределение по components
-        """
-
-        if params is None:
-            params = ClusterParams()
-
-        q = QdrantRecipeManager(collection_prefix=self.qd_collection_prefix)
-        q.connect()
-
-        dsu = _DSU()
-        processed = 0
-        rng = random.Random(params.sample_seed)
-
-        collection_name = params.collection_name or "mv"
-        components, weights = _normalize_mv_weights(params.components, params.component_weights)
-        search_limit = max(1, int(params.limit) * max(1, int(params.candidate_multiplier)))
-
-        for ids in q.iter_point_ids(batch_size=params.scroll_batch, collection_name=collection_name):
-            ids = _apply_sampling_and_limits(
-                ids,
-                rng=rng,
-                processed=processed,
-                max_recipes=params.max_recipes,
-                sample_per_scroll_batch=params.sample_per_scroll_batch,
-            )
-            if not ids:
-                break
-
-            for i in range(0, len(ids), params.query_batch):
-                sub_ids = ids[i:i + params.query_batch]
-
-                vecs_by_id = q.retrieve_vectors_multi(
-                    sub_ids,
-                    collection_name=collection_name,
-                    using_list=components,
-                )
-                if not vecs_by_id:
-                    continue
-
-                src_ids = list(vecs_by_id.keys())
-                aggregated: dict[int, dict[int, float]] = {sid: {} for sid in src_ids}
-
-                for comp in components:
-                    weight = float(weights.get(comp, 0.0))
-                    if weight <= 0.0:
-                        continue
-
-                    src_ids_comp: list[int] = []
-                    vectors_comp: list[list[float]] = []
-                    for sid in src_ids:
-                        v = vecs_by_id.get(sid, {}).get(comp)
-                        if v is None:
-                            continue
-                        src_ids_comp.append(sid)
-                        vectors_comp.append(v)
-
-                    if not vectors_comp:
-                        continue
-
-                    comp_hits = q.query_batch(
-                        vectors=vectors_comp,
-                        collection_name=collection_name,
-                        using=comp,
-                        limit=search_limit,
-                        score_threshold=params.score_threshold,
-                    )
-
-                    _merge_component_hits(
-                        aggregated=aggregated,
-                        src_ids=src_ids_comp,
-                        hits_per_src=comp_hits,
-                        weight=weight,
-                    )
-
-                _union_top_neighbors(dsu, aggregated, params.limit)
-
-                processed += len(src_ids)
-                if params.max_recipes is not None and processed >= params.max_recipes:
-                    break
-
-            logger.info("Processed %d recipes...", processed)
-            if params.max_recipes is not None and processed >= params.max_recipes:
-                break
-
-        self.clusters = _build_clusters_from_dsu(dsu, params.min_cluster_size)
-        return self.clusters
     
     def load_clusters_from_file(self, filepath: str) -> list[list[int]]:
         """Загружает кластеры из файла в формате JSON."""
-        if self.cluster_filepath is None:
-            self.cluster_filepath = filepath
         with open(filepath, 'r') as f:
             clusters = json.load(f)
-        self.clusters = clusters
         return clusters
 
     def is_cluster_present(self, cluster: list[int]) -> bool:
@@ -449,74 +379,76 @@ Return ONLY JSON array of IDs representing similar recipes."""
             logger.error(f"Error calling GPT for cluster analysis: {e}")
             return []
         
-    def process_and_save_clusters(self, offest: Optional[int] = 0) -> None:
+    def process_and_save_clusters(self, clusters: list[list[int]], filepath: Optional[str] = None) -> None:
         """
         processes loaded clusters, asks GPT to filter them, and saves to DB, skips already saved clusters.
         """
-        if not self.clusters:
+        if not clusters:
             logger.warning("No clusters to process.")
             return
         
-        for num, cluster in enumerate(self.clusters[offest:], start=offest):
+        for num, cluster in enumerate(clusters):
             if self.is_cluster_present(cluster):
                 continue
             similar_clusters = self.ask_chatgpt_about_cluster(cluster)
             if set(similar_clusters) != set(cluster):
-                self.clusters[num] = similar_clusters
-                if self.cluster_filepath:
+                clusters[num] = similar_clusters
+                if filepath:
                     # Обновляем файл кластеров после любого обновления, чтобы не терять прогресс
-                    with open(self.cluster_filepath, 'w') as f:
-                        f.write(json.dumps(self.clusters, indent=2))
-                    logger.info(f"Updated cluster file {self.cluster_filepath} after GPT filtering.")
+                    with open(filepath, 'w') as f:
+                        f.write(json.dumps(clusters, indent=2))
+                    logger.info(f"Updated cluster file {filepath} after GPT filtering.")
             
             if not similar_clusters:
                 logger.info("Skipping empty cluster after GPT filtering.")
                 continue
             
             self.similarity_repository.save_cluster_with_members(similar_clusters)
-            logger.info(f"Saved cluster {num + 1}/{len(self.clusters)} with {len(similar_clusters)} members.")
+            logger.info(f"Saved cluster {num + 1}/{len(clusters)} with {len(similar_clusters)} members.")
         
-    def save_clusters_to_file(self, filepath: str) -> None:
+    def save_clusters_to_file(self, filepath: str, clusters: list[list[int]]) -> None:
         """Сохраняет текущие кластеры в файл в формате JSON."""
         with open(filepath, 'w') as f:
-            f.write(json.dumps(self.clusters, indent=2))
+            f.write(json.dumps(clusters, indent=2))
         logger.info(f"Saved clusters to file {filepath}.")
 
 if __name__ == "__main__":
+    filepath = "recipe_clusters/instructions_clusters95_no_batch.txt"
+    dsu_filepath = "recipe_clusters/full94_dsu_state.json"
     ss = SimilaritySearcher()
-    clusters = ss.build_clusters(
-        params=ClusterParams(
-            max_recipes=500,
-            limit=15,
-            score_threshold=0.9,
-            scroll_batch=500,
-            query_batch=8,
-            collection_name="mv",
-            using="ingredients",
+    # при полном запуске иногда возникает таймаут, поэтому можно использваоть запуск частями, указывая max_recipes
+    clusters = ss.build_clusters_from_collection(
+            params=ClusterParams(
+                max_recipes=None,
+                limit=30,
+                score_threshold=0.95,
+                scroll_batch=500,
+                query_batch=32,
+            ),
+            build_type="instructions"
         )
-    )
-    with open("ingredients_clusters90.txt", "w") as f:
-        f.write(json.dumps(clusters, indent=2))
+    ss.save_clusters_to_file(filepath, clusters)
 
-    for c in clusters:
-        print(c)
+    if False:  #
+        ss.load_dsu_state(dsu_filepath)
+        while True:
+            clusters = ss.build_clusters_from_collection(
+                params=ClusterParams(
+                    max_recipes=1000,
+                    limit=30,
+                    score_threshold=0.94,
+                    scroll_batch=500,
+                    query_batch=32
+                ),
+                build_type="full"
+            )
+            ss.save_dsu_state(dsu_filepath)
+            print(f"Total clusters found: {len(clusters)}")
+            print("Last processed ID:", ss.last_id)
+            ss.save_clusters_to_file(filepath, clusters)
+            if ss.last_id is None:
+                logger.info("Processing complete.")
+                break
 
-
-    """
-    ss.search_type = SimilaritySearchType.WEIGHTED
-    clusters = ss.build_weighted_mv_clusters_via_qdrant(
-        params=ClusterParams(
-            max_recipes=500,
-            limit=25,
-            score_threshold=0.90,
-            scroll_batch=1000,
-            query_batch=32,
-            collection_name="mv",
-            # пример: берём только ingredients+instructions (остальные можно оставить по умолчанию)
-            components=["ingredients", "instructions", "dish_name", "tags"],
-            component_weights={"ingredients": 0.4, "instructions": 0.3, "dish_name": 0.2, "tags": 0.1},
-            candidate_multiplier=3
-        )
-    )
-    for c in clusters:
-        print(c)"""
+        final_clusters = _build_clusters_from_dsu(ss.dsu, min_cluster_size=2)
+        ss.save_clusters_to_file(filepath, final_clusters)

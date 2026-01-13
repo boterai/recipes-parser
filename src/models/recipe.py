@@ -29,11 +29,10 @@ class Recipe(BaseModel):
     # системные поля
     vectorised: Optional[bool] = False  # было ли произведено векторное представление рецепта   
 
-    def get_multivector_data(self, max_instruction_length: int = 400, max_description_length: int = 150) -> dict:
+    def get_multivector_data(self, max_instruction_length: int = 400) -> dict:
         """Подготавливает данные для мульти-векторного эмбеддинга"""
         return {
                 "ingredients": self.ingredient_to_str(),
-                "description": self.description[:max_description_length] or "",
                 "instructions": self.instructions[:max_instruction_length] or "",
                 "dish_name": self.dish_name or "",
                 "tags": self.tags_to_str(),

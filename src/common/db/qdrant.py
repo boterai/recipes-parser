@@ -187,10 +187,6 @@ class QdrantRecipeManager:
                                 size=dims,
                                 distance=Distance.COSINE
                             ),
-                            "description": VectorParams(
-                                size=dims,
-                                distance=Distance.COSINE,
-                            ),
                             "instructions": VectorParams(
                                 size=dims,
                                 distance=Distance.COSINE,
@@ -431,148 +427,13 @@ class QdrantRecipeManager:
             traceback.print_exc()
             return []
     
-    def search_multivector_weighted(
-        self,
-        recipe: Recipe,
-        limit: int = 10,
-        embedding_function: EmbeddingFunction = None,
-        score_threshold: float = 0.0,
-        component_weights: Optional[ComponentWeights] = None
-    ) -> list[dict[str, Any]]:
-        """
-        Взвешенный поиск по мультивекторной коллекции с приоритетами компонентов
-        
-        Выполняет отдельный поиск по каждому компоненту рецепта, затем объединяет
-        результаты с учетом весов компонентов.
-        
-        Args:
-            recipe: Рецепт для поиска похожих
-            limit: Количество финальных результатов
-            embedding_function: Функция для создания эмбеддинга
-            score_threshold: Минимальный порог схожести
-            component_weights: Словарь весов для компонентов
-        
-        Returns:
-            Список рецептов с взвешенным score
-        """
-        if not self.client:
-            logger.warning("Qdrant не подключен")
-            return []
-        
-        collection_name = self.collections.get(self.mv_collection)
-        if not collection_name:
-            logger.error("Мультивекторная коллекция не найдена")
-            return []
-        
-        # Веса по умолчанию (сумма = 1.0)
-        if component_weights is None:
-            component_weights = SearchProfiles.BALANCED
-
-        weights_dict = component_weights.to_dict()
-            
-        try:
-            # Подготовка компонентов запроса
-            comp_texts = recipe.get_multivector_data()
-            
-            # Фильтруем пустые компоненты
-            comp_texts = {k: v for k, v in comp_texts.items() if v.strip()}
-            
-            if not comp_texts:
-                logger.warning("Нет компонентов для поиска")
-                return []
-            
-            # Фильтруем компоненты с нулевым весом перед созданием эмбеддингов
-            comp_texts = {k: v for k, v in comp_texts.items() if weights_dict.get(k, 0) > 0}
-            
-            if not comp_texts:
-                logger.warning("Все компоненты имеют нулевой вес")
-                return []
-            
-            # Создаем эмбеддинги только для компонентов с ненулевым весом
-            texts_list = list(comp_texts.values())
-            keys_list = list(comp_texts.keys())
-            dense_vecs = embedding_function(texts_list, is_query=True)
-            
-            # Словарь для накопления score по каждому recipe_id
-            # {recipe_id: {"total_score": float, "component_scores": {component: score}, "payload": dict}}
-            recipe_scores = {}
-            
-            # Выполняем поиск по каждому компоненту
-            search_limit = limit * 3  # Берем больше кандидатов для каждого компонента
-            
-            for idx, component_name in enumerate(keys_list):
-                weight = weights_dict.get(component_name, 0)
-                if weight == 0:
-                    continue
-                
-                try:
-                    # Поиск по этому компоненту
-                    results = self.client.query_points(
-                        collection_name=collection_name,
-                        query=dense_vecs[idx],
-                        using=component_name,
-                        limit=search_limit,
-                        with_payload=True,
-                        score_threshold=score_threshold
-                    )
-                    
-                    # Обрабатываем результаты
-                    for hit in results.points:
-                        recipe_id = hit.id
-                        component_score = hit.score * weight  # Взвешенный score
-                        
-                        if recipe_id not in recipe_scores:
-                            recipe_scores[recipe_id] = {
-                                "total_score": 0.0,
-                                "component_scores": {},
-                                "payload": hit.payload,
-                                "matches": 0  # Количество компонентов с совпадениями
-                            }
-                        
-                        recipe_scores[recipe_id]["total_score"] += component_score
-                        recipe_scores[recipe_id]["component_scores"][component_name] = hit.score
-                        recipe_scores[recipe_id]["matches"] += 1
-                    
-                    logger.debug(f"Компонент '{component_name}': найдено {len(results.points)} рецептов")
-                
-                except Exception as e:
-                    logger.warning(f"Ошибка поиска по компоненту '{component_name}': {e}")
-                    continue
-            
-            # Сортируем по итоговому взвешенному score
-            sorted_recipes = sorted(
-                recipe_scores.items(),
-                key=lambda x: (x[1]["total_score"], x[1]["matches"]),  # Сначала по score, потом по количеству совпадений
-                reverse=True
-            )[:limit]
-            
-            # Форматируем результаты
-            results = []
-            for recipe_id, data in sorted_recipes:
-                results.append({
-                    "recipe_id": recipe_id,
-                    "score": data["total_score"],
-                    "dish_name": data["payload"].get("dish_name"),
-                    "component_scores": data["component_scores"],  # Детализация по компонентам
-                    "matches": data["matches"]  # Количество совпавших компонентов
-                })
-            
-            logger.info(f"Найдено {len(results)} рецептов с взвешенным поиском")
-            return results
-            
-        except Exception as e:
-            logger.error(f"Ошибка взвешенного поиска: {e}")
-            import traceback
-            traceback.print_exc()
-            return []
-    
     def vectorise_images(
-    self,
-    images: list[ImageORM],
-    embedding_function: ImageEmbeddingFunction,
-    batch_size: int = 10,
-    mark_vectorised_callback: callable = None
-) -> int:
+        self,
+        images: list[ImageORM],
+        embedding_function: ImageEmbeddingFunction,
+        batch_size: int = 10,
+        mark_vectorised_callback: callable = None
+    ) -> int:
         """
         Добавление изображений рецептов в коллекцию images
         
@@ -813,13 +674,19 @@ class QdrantRecipeManager:
             traceback.print_exc()
             return []
         
-    def iter_point_ids(self, collection_name: str = "full", batch_size: int = 1000) -> Iterator[list[int]]:
-        """Итератор по ids в коллекции (без payload/векторов)."""
+    def iter_point_ids(self, collection_name: str = "full", batch_size: int = 1000, last_point_id: int = None) -> Iterator[list[int]]:
+        """
+        Итератор по ids в коллекции (без payload/векторов).
+        Args:
+            collection_name: Имя коллекции
+            batch_size: Размер батча для скрола
+            last_point_id: Начальный point_id для скрола (если нужно продолжить с определенного места)
+        """
         if not self.client:
             raise QdrantNotConnectedError()
 
         collection = self.collections.get(collection_name)
-        offset = None
+        offset = last_point_id
 
         while True:
             points, offset = self.client.scroll(
@@ -835,9 +702,9 @@ class QdrantRecipeManager:
             if offset is None:
                 break
 
-    def retrieve_vectors(self, ids: list[int], collection_name: str = "full", using: str = "dense") -> dict[int, list[float]]:
+    def retrieve_vectors(self, ids: list[int], collection_name: str, using: str) -> dict[int, list[float]]:
         """
-        Получить named-vector 'dense' для списка ids из full-коллекции.
+        Получить named-vector  для списка ids из коллекции.
         Возвращает {page_id: vector}.
         """
         if not self.client:
@@ -920,13 +787,13 @@ class QdrantRecipeManager:
     def query_batch(
         self,
         vectors: list[list[float]],
-        collection_name: str = "full",
-        using: str = "dense",
+        collection_name: str,
+        using: str,
         limit: int = 30,
         score_threshold: float = 0.0,
     ) -> list[list[dict[str, Any]]]:
         """
-        Batch kNN по full-коллекции.
+        Batch kNN по коллекции.
         Возвращает на каждый query-вектор список: [{"recipe_id": int, "score": float}, ...]
         """
         if not self.client:

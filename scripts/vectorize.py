@@ -4,14 +4,21 @@
 
 import sys
 from pathlib import Path
-
+import logging
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.common.embedding import get_embedding_function, get_image_embedding_function
 from src.stages.search.vectorise import RecipeVectorizer
 from src.models.recipe import Recipe
-from src.stages.search.similarity import SimilaritySearcher, ClusterParams
+from src.stages.search.similarity import SimilaritySearcher, ClusterParams, _build_clusters_from_dsu
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[logging.StreamHandler()]
+)
 
 def add_recipes():
     batch_size = 15 # примерный размер батча для векторизации и добавления в Qdrant при котором не происходит timeout
@@ -67,18 +74,43 @@ def search_similar(recipe_id: int = 21427, use_weighted: bool = True,
         print(f"ID: {sim_recipe.page_id}, Блюдо: {sim_recipe.dish_name}, Score: {score}")
 
 
-def find_all_similar():
+def create_similarity_clusters(filepath: str, dsu_filepath: str):
+    """Создание кластеров похожих рецептов и сохранение их в файл."""
     ss = SimilaritySearcher()
-    # clusters = ss.build_full_text_clusters_via_qdrant(ClusterParams()) # долго работает, поэтому загружаем уже готовые кластеры
-    ss.load_clusters_from_file("recipe_clusters/full_text_clusters92.txt")
-    ss.process_and_save_clusters(offest=20)
+    ss.load_dsu_state(dsu_filepath)
+    while True:
+        clusters = ss.build_clusters(
+            params=ClusterParams(
+                max_recipes=1000,
+                limit=30,
+                score_threshold=0.95,
+                scroll_batch=500,
+                query_batch=32,
+                collection_name="mv",
+                using="ingredients",
+            )
+        )
+        ss.save_dsu_state(dsu_filepath)
+        print(f"Total clusters found: {len(clusters)}")
+        print("Last processed ID:", ss.last_id)
+        ss.save_clusters_to_file(filepath, clusters)
+        if ss.last_id is None:
+            logger.info("Processing complete.")
+            break
 
+    final_clusters = _build_clusters_from_dsu(ss.dsu, min_cluster_size=2)
+    ss.save_clusters_to_file(filepath, final_clusters)
 
-
-
+def check_and_save_similarity_clusters(filepath: str):
+    """Проверка наличия недобавленных рецептов в кластеры и сохранение обновлённых кластеров."""
+    ss = SimilaritySearcher()
+    clusters = ss.load_clusters_from_file(filepath)
+    ss.process_and_save_clusters(clusters=clusters, filepath=filepath)
 
 if __name__ == '__main__':
-    find_all_similar()
+    filepath = "recipe_clusters/full_clusters95_no_batch.txt"
+    dsu_filepath = "recipe_clusters/ingredients95_dsu_state.json"
+    check_and_save_similarity_clusters(filepath)
     #add_recipes()
     # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)
     #search_similar(recipe_id=19, use_weighted=False, score_threshold=0.0, limit=6)

@@ -261,7 +261,7 @@ class RecipeVectorizer:
             image_id: int,
             limit: int = 6,
             score_threshold: float = 0.0
-        ) -> list[float, Image]:
+        ) -> list[tuple[float, Image]]:
         """
         Поиск похожих рецептов по изображениям
         
