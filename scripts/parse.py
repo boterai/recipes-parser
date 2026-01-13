@@ -8,6 +8,8 @@ import logging
 from pathlib import Path
 import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import threading
+import queue
 
 # Добавление корневой директории в PYTHONPATH
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -29,29 +31,6 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
-
-SITES_CONFIG = {
-    1: {
-        'name': '24kitchen_nl',
-        'debug_port': 9222,
-    },
-    2: {
-        'name': 'speedinfo_com_ua',
-        'debug_port': 9223,
-    },
-    3: {
-        'name': 'onedaywetakeatrain_fi',
-        'debug_port': 9224,
-    },
-    4: {
-        'name': 'chefkoch_de',
-        'debug_port': 9225,
-    },
-    5: {
-        'name': 'kitchen_sayidaty_net',
-        'debug_port': 9226,
-    }
-}
 
 
 def setup_thread_logger(module_name: str, port: int) -> logging.Logger:
@@ -157,7 +136,8 @@ def main(module_name: str = "24kitchen_nl", port: int = 9222):
     )
 
 
-def run_parallel(ports: list[int], max_workers: int = None, modules: list[str] = None):
+def run_parallel(ports: list[int], max_workers: int = None, modules: list[str] = None, 
+                 max_urls: int = 2500, max_depth: int = 4):
     """
     Запуск парсеров в нескольких потоках с отдельными логами
     
@@ -170,54 +150,96 @@ def run_parallel(ports: list[int], max_workers: int = None, modules: list[str] =
     logger.info(f"{'='*60}")
     
     parser = RecipeParserRunner(extractor_dir="extractor")
+
+    if not modules:
+        modules = parser.available_extractors.copy()
+    else:
+        modules.extend(parser.available_extractors)
+        modules = list(set(modules))
     
-    # Выбираем случайные уникальные модули
-    if modules is None:
-        random_modules = set()
-        while len(random_modules) < len(ports):
-            random_extractor = parser.get_random_extractor()
-            if random_extractor is None:
-                logger.error("Нет доступных экстракторов для выбора")
-                return
-            random_modules.add(random_extractor)
-        
-        random_modules = list(random_modules)
-        modules = random_modules
+    logger.info(f"\nВсего модулей: {len(modules)}, Портов: {len(ports)}")
     
-    # Логируем план
-    logger.info("\nПлан запуска:")
-    for i, (port, module) in enumerate(zip(ports, modules), 1):
-        logger.info(f"  [{i}] {module} → port {port} → logs/{module}_{port}.log")
+    # Очередь свободных портов
+    free_ports = queue.Queue()
+    for port in ports:
+        free_ports.put(port)
     
-    logger.info(f"\n{'='*60}\n")
+    # Очередь модулей для обработки
+    module_queue = queue.Queue()
+    for module in modules:
+        module_queue.put(module)
     
-    # Запускаем в потоках
+    # Счетчики результатов
+    results = {
+        "success": 0,
+        "failed": 0,
+        "lock": threading.Lock()
+    }
+    
     max_workers = max_workers or len(ports)
     
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
+
+        futures = {}
         # Создаем futures
-        futures = {
-            executor.submit(
-                run_parser_thread, 
-                module, 
-                port, 
-                max_urls=5000, 
-                max_depth=4
-            ): (module, port)
-            for port, module in zip(ports, modules)
-        }
-        
-        # Ждем завершения
-        for future in as_completed(futures):
-            module, port = futures[future]
-            try:
-                future.result()
-                logger.info(f"✓ Поток {module}:{port} завершен")
-            except Exception as e:
-                logger.error(f"✗ Ошибка в потоке {module}:{port}: {e}")
+        while not free_ports.empty() and not module_queue.empty():
+            port = free_ports.get()
+            module = module_queue.get()
+            
+            future = executor.submit(
+                run_parser_thread,
+                module,
+                port,
+                max_urls,
+                max_depth
+            )
+            futures[future] = (module, port)
+            logger.info(f"▶ Запущен: {module} → port {port}")
+    
+        # Обрабатываем завершенные задачи и запускаем новые на освободившихся портах
+        while futures:
+            # Ждем завершения хотя бы одной задачи
+            as_completed(futures.keys())
+            
+            for future in as_completed(futures.keys()):
+                module, port = futures.pop(future)
+                
+                try:
+                    future.result()
+                    with results["lock"]:
+                        results["success"] += 1
+                        success_count = results["success"]
+                    logger.info(f"✓ Завершен [{success_count}/{len(modules)}]: {module}:{port}")
+                except Exception as e:
+                    with results["lock"]:
+                        results["failed"] += 1
+                        failed_count = results["failed"]
+                    logger.error(f"✗ Ошибка [{failed_count}]: {module}:{port} - {e}")
+                
+                # Порт освободился → возвращаем в очередь
+                free_ports.put(port)
+                
+                # Если есть необработанные модули → запускаем на освободившемся порту
+                if not module_queue.empty():
+                    freed_port = free_ports.get()  # берем освободившийся порт
+                    next_module = module_queue.get()
+                    
+                    new_future = executor.submit(
+                        run_parser_thread,
+                        next_module,
+                        freed_port,
+                        max_urls,
+                        max_depth
+                    )
+                    futures[new_future] = (next_module, freed_port)
+                    logger.info(f"▶ Запущен: {next_module} → port {freed_port} (после {module})")
+                
+                # Обрабатываем только одну завершенную задачу за итерацию
+                break
     
     logger.info(f"\n{'='*60}")
     logger.info("ВСЕ ПАРСЕРЫ ЗАВЕРШЕНЫ")
+    logger.info(f"Успешно: {results['success']}, Ошибок: {results['failed']}")
     logger.info(f"Логи сохранены в: {LOGS_DIR}")
     logger.info(f"{'='*60}")
 
@@ -227,7 +249,7 @@ if __name__ == "__main__":
     parser.add_argument(
         '--parallel',
         action='store_true',
-        default=False,
+        default=True,
         help='Запустить в нескольких потоках'
     )
     parser.add_argument(
@@ -247,7 +269,7 @@ if __name__ == "__main__":
     parser.add_argument(
         '--modules',
         type=str,
-        default=["buttalapasta_it", "desidakaar_com", "budapestcookingclass_com", "simplyrecipes_com", "speedinfo_com_ua"],
+        default=["onedaywetakeatrain_fi", "desidakaar_com", "budapestcookingclass_com", "simplyrecipes_com", "speedinfo_com_ua"],
         help='Имя модуля экстрактора для одиночного запуска (по умолчанию: 24kitchen_nl)'
     )
     

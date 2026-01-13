@@ -252,7 +252,7 @@ class OnedaywetakeatrainFiExtractor(BaseRecipeExtractor):
         return json.dumps(all_ingredients, ensure_ascii=False) if all_ingredients else None
     
     def extract_steps(self) -> Optional[str]:
-        """Извлечение инструкций приготовления"""
+        """Извлечение инструкций приготовления на основе структуры HTML"""
         # Ищем главную секцию с контентом
         body_div = self.soup.find('div', id='body')
         if not body_div:
@@ -261,43 +261,112 @@ class OnedaywetakeatrainFiExtractor(BaseRecipeExtractor):
         # Получаем все параграфы
         paragraphs = body_div.find_all('p')
         
-        # Инструкции обычно находятся в том же параграфе, что и ингредиенты
-        # Они начинаются с глаголов действия (с заглавной буквы после ингредиентов)
-        for p in paragraphs:
+        all_instructions = []
+        
+        # Определяем индекс последнего параграфа с ингредиентами
+        # Ингредиенты обычно содержат числа с единицами измерения и <br> теги
+        last_ingredient_index = -1
+        
+        for i, p in enumerate(paragraphs):
             html_content = str(p)
+            text = p.get_text(strip=True)
             
-            # Ищем параграф с ингредиентами и инструкциями
-            if '<br>' in html_content or '<br/>' in html_content:
-                # Разбиваем по <br>
-                text_parts = p.get_text(separator='|||BR|||').split('|||BR|||')
-                lines = [line.strip() for line in text_parts if line.strip()]
+            # Проверяем признаки ингредиентов
+            has_br = '<br>' in html_content or '<br/>' in html_content
+            has_units = bool(re.search(r'\d+[,.\-]?\d*\s*(dl|g|kg|l|ml|rkl|tl|kpl|viipaleina)', text, re.IGNORECASE))
+            has_measure_words = bool(re.search(r'\b(kourallinen|hyppysellinen|ripaus|tilkka|hieman|vähän)\b', text, re.IGNORECASE))
+            
+            # Если параграф содержит признаки ингредиентов, запоминаем его индекс
+            if (has_br and has_units) or has_measure_words:
+                last_ingredient_index = i
+            
+            # Пропускаем очень короткие параграфы, которые являются заголовками
+            # Например: "Lisäksi", "4 annosta"
+            if len(text) < 15 and not has_units:
+                continue
+        
+        # Теперь извлекаем инструкции из параграфов ПОСЛЕ ингредиентов
+        # Стратегия 1: Параграфы с тегами <strong> после ингредиентов
+        for i, p in enumerate(paragraphs):
+            # Пропускаем параграфы до и включая последний с ингредиентами
+            if i <= last_ingredient_index:
+                continue
+            
+            strong_tags = p.find_all('strong')
+            text = p.get_text(separator=' ', strip=True)
+            
+            # Пропускаем параграфы с примечаниями о рецепте
+            if 'resepti on matkakertomuksesta' in text.lower() or 'resepti on artikkelista' in text.lower():
+                break
+            
+            # Пропускаем слишком короткие параграфы (вероятно, пустые или заметки)
+            if len(text) < 10:
+                continue
+            
+            # Если параграф содержит теги <strong>, это скорее всего инструкция
+            if strong_tags and len(strong_tags) > 0:
+                # Проверяем, что это не заголовок раздела
+                # Заголовки обычно: очень короткие, полностью в strong, содержат слова типа "Lisäksi", "Ainekset"
+                strong_text = strong_tags[0].get_text(strip=True).lower()
                 
-                # Ищем начало инструкций (обычно после ингредиентов)
-                # Инструкции начинаются с глагола в повелительном наклонении
-                instruction_lines = []
-                found_ingredients = False
-                in_instructions = False
+                # Список слов, которые указывают на заголовки разделов (не инструкции)
+                section_headers = ['lisäksi', 'ainekset', 'valmistus', 'ohje', 'resepti', 'annosta']
                 
-                for line in lines:
-                    # Если нашли строку с количеством, это ингредиенты
-                    if re.search(r'\d+[,.]?\d*\s*(dl|g|kg|l|ml|rkl|tl|kpl)', line, re.IGNORECASE) or \
-                       re.search(r'^(kourallinen|hyppysellinen)', line, re.IGNORECASE):
-                        found_ingredients = True
-                        in_instructions = False
-                    # Проверяем начало инструкций: глагол с заглавной буквы или выделенный strong
-                    elif found_ingredients and not in_instructions:
-                        # Инструкции начинаются с глагола (Laita, Sekoita, Lisää, и т.д.)
-                        if re.match(r'^[A-ZÄÖÅ][a-zäöå]+', line):
-                            in_instructions = True
+                # Если strong содержит только заголовок раздела - пропускаем
+                if any(header in strong_text for header in section_headers) and len(text) < 30:
+                    continue
+                
+                # Это инструкция
+                full_text = re.sub(r'\s+', ' ', text)
+                all_instructions.append(self.clean_text(full_text))
+        
+        # Стратегия 2: Если не нашли инструкции с тегами strong,
+        # пробуем найти их в параграфах с <br> (старый формат - всё в одном параграфе)
+        if not all_instructions:
+            for p in paragraphs:
+                html_content = str(p)
+                
+                # Ищем параграф с ингредиентами и инструкциями (длинный параграф с <br>)
+                if '<br>' in html_content or '<br/>' in html_content:
+                    # Разбиваем по <br>
+                    text_parts = p.get_text(separator='|||BR|||').split('|||BR|||')
+                    lines = [line.strip() for line in text_parts if line.strip()]
+                    
+                    # Если слишком мало строк, это не комбинированный параграф
+                    if len(lines) < 5:
+                        continue
+                    
+                    # Ищем начало инструкций (обычно после ингредиентов)
+                    instruction_lines = []
+                    found_ingredients = False
+                    in_instructions = False
+                    
+                    for line in lines:
+                        # Если нашли строку с количеством, это ингредиенты
+                        if re.search(r'\d+[,.]?\d*\s*(dl|g|kg|l|ml|rkl|tl|kpl)', line, re.IGNORECASE) or \
+                           re.search(r'^(kourallinen|hyppysellinen)', line, re.IGNORECASE):
+                            found_ingredients = True
+                            in_instructions = False
+                        # Проверяем начало инструкций: предложение с заглавной буквы после ингредиентов
+                        elif found_ingredients and not in_instructions:
+                            # Инструкции обычно начинаются с заглавной буквы и достаточно длинные
+                            if re.match(r'^[A-ZÄÖÅ]', line) and len(line) > 15:
+                                in_instructions = True
+                                instruction_lines.append(line)
+                        # Продолжение инструкций
+                        elif in_instructions:
+                            # Если строка слишком короткая или это примечание - останавливаемся
+                            if len(line) < 10:
+                                break
                             instruction_lines.append(line)
-                    # Продолжение инструкций
-                    elif in_instructions:
-                        instruction_lines.append(line)
-                
-                if instruction_lines:
-                    # Объединяем все инструкции
-                    instructions = ' '.join(instruction_lines)
-                    return self.clean_text(instructions)
+                    
+                    if instruction_lines:
+                        all_instructions.extend(instruction_lines)
+                        break  # Нашли параграф с инструкциями, больше не ищем
+        
+        # Возвращаем все инструкции как одну строку
+        if all_instructions:
+            return ' '.join(all_instructions)
         
         return None
     
