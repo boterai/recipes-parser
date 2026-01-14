@@ -3,7 +3,7 @@ import logging
 from pathlib import Path
 # Добавление корневой директории в PYTHONPATH
 sys.path.insert(0, str(Path(__file__).parent.parent))
-
+import asyncio
 from src.stages.translate import Translator
 
 # Настройка логирования
@@ -18,9 +18,8 @@ logger = logging.getLogger(__name__)
 
 def main():
     translator = Translator(target_language="en")
-
-    translator.translate_and_save_batch(site_id=258,batch_size=15) # большой батч только, если целевой язык совпадает с исходным
-    #translator.translate_all(batch_size=10)
+    #translator.translate_and_save_batch(site_id=258,batch_size=15) # большой батч только, если целевой язык совпадает с исходным
+    asyncio.run(translator.translate_all(batch_size=9))
 
 if __name__ == "__main__":
     main()

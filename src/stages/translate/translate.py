@@ -5,6 +5,7 @@ import random
 from pathlib import Path
 from typing import  Optional
 import logging
+import asyncio
 
 if __name__ == "__main__":
     import sys
@@ -53,43 +54,8 @@ class Translator:
         if self.olap_db.connect() is False:
             logger.error("Не удалось подключиться к ClickHouse")
             raise RuntimeError("ClickHouse connection failed")
-    
-    def translate_and_save_page(self, page_id: int, overwrite: bool = False) -> Optional[Recipe]:
-        """
-        Переводит и сохраняет страницу с рецептом в БД
         
-        Args:
-            page: Объект страницы для перевода
-        
-        Returns:
-            Переведенный объект Page или None в случае ошибки
-        """
-
-        if overwrite is False:
-            recipes: Recipe = self.olap_db.get_recipes_by_ids([page_id], table_name=self.olap_table)
-            if recipes:
-                recipe = recipes[0]
-                logger.info(f"Рецепт с ID={page_id} уже переведен и сохранен в таблице recipe_ru")
-                return recipe
-
-        # Получаем страницу из БД
-        page = self.page_repository.get_by_id(page_id)
-        if not page:
-            logger.error(f"Страница с ID={page_id} не найдена в БД")
-            return None
-        recipe = page.to_pydantic().to_recipe()
-        # Переводим страницу
-        translated_recipe = self.translate_recipe(recipe)
-        if not translated_recipe:
-            logger.error(f"Не удалось перевести страницу с ID={page_id}")
-            return None
-        # Сохраняем перевод в БД
-        if self.olap_db.insert_recipes_batch([translated_recipe], table_name=self.olap_table) != 1:
-            logger.error(f"Ошибка при сохранении перевода страницы ID={page_id} в ClickHouse")
-            return None
-        return translated_recipe
-        
-    def translate_and_save_batch(self, site_id: int = None, batch_size: int = 100, start_from_id: Optional[int] = None):
+    async def translate_and_save_batch(self, site_id: int = None, batch_size: int = 100, start_from_id: Optional[int] = None):
         """
         Переводит пакет страниц с рецептами для заданного site_id
         
@@ -100,7 +66,7 @@ class Translator:
         """
         # Если указан start_from_id, работаем в режиме последовательной обработки
         if start_from_id is not None:
-            self._sequential_translate(site_id, batch_size, start_from_id)
+            await self._sequential_translate(site_id, batch_size, start_from_id)
             return
         
         # сравниваем ID из OLAP и MySQL
@@ -113,7 +79,7 @@ class Translator:
         # Если нет переведенных страниц, переходим к последовательному режиму
         if len(translated_ids) == 0:
             logger.info("Нет переведенных страниц. Переход к последовательному режиму обработки...")
-            self._sequential_translate(site_id, batch_size, start_from_id=0)
+            await self._sequential_translate(site_id, batch_size, start_from_id=0)
             return
         
         mysql_ids = set(self.page_repository.get_recipes_ids(site_id=site_id))
@@ -136,7 +102,7 @@ class Translator:
         if min_untranslated_id > max_translated_id:
             logger.info(f"Все непереведенные страницы (начиная с ID={min_untranslated_id}) идут после переведенных (до ID={max_translated_id})")
             logger.info("Переход к последовательному режиму обработки...")
-            self._sequential_translate(site_id, batch_size, start_from_id=min_untranslated_id)
+            await self._sequential_translate(site_id, batch_size, start_from_id=min_untranslated_id)
             return
         
         # Обрабатываем только непереведенные ID батчами
@@ -150,9 +116,9 @@ class Translator:
             if pages:
                 pages_data = [page.to_pydantic() for page in pages]
                 logger.info(f"Обработка батча {i // batch_size + 1}/{(len(untranslated_ids) + batch_size - 1) // batch_size}")
-                self._process_batch(pages_data)
+                await self._process_batch(pages_data)
     
-    def _sequential_translate(self, site_id: int, batch_size: int, start_from_id: int):
+    async def _sequential_translate(self, site_id: int, batch_size: int, start_from_id: int):
         """
         Последовательная обработка страниц начиная с указанного ID
         
@@ -183,7 +149,7 @@ class Translator:
                     break
                 
                 pages_data = [page.to_pydantic() for page in pages_orm]
-                self._process_batch(pages_data)
+                await self._process_batch(pages_data)
                 last_processed_id = pages_data[-1].id
                 
                 # Если получили меньше страниц чем batch_size, значит это последний батч
@@ -191,7 +157,7 @@ class Translator:
                     logger.info("Это был последний батч. Все страницы обработаны!")
                     break
     
-    def _process_batch(self, pages_data: list[Page]):
+    async def _process_batch(self, pages_data: list[Page]):
         """
         Вспомогательный метод для обработки батча страниц
         
@@ -202,6 +168,7 @@ class Translator:
         
         # Шаг 1: Переводим весь батч
         translated_recipes = []
+        transaltion_tasks = []
         for i, page_data in enumerate(pages_data, 1):
             try:
                 recipe = page_data.to_recipe()
@@ -213,28 +180,30 @@ class Translator:
                     translated_recipe = recipe
                     translated_recipe.list_fields_to_lower()
                     logger.info(f"✓ Страница ID={recipe.page_id} уже на целевом языке {self.target_language}")
+                    if translated_recipe:
+                        translated_recipes.append(translated_recipe)
                 else:
-                    translated_recipe = self.translate_recipe(recipe)
-                    # Пауза между запросами к GPT API
-                    time.sleep(random.uniform(.2, 1))
-                
-                if translated_recipe:
-                    translated_recipes.append(translated_recipe)
-                    logger.info(f"✓ Страница ID={recipe.page_id} успешно переведена")
-                else:
-                    logger.warning(f"✗ Не удалось перевести страницу ID={recipe.page_id}")
+                    transaltion_tasks.append(self.translate_recipe(recipe))
                 
             except Exception as e:
                 logger.error(f"Ошибка при переводе страницы ID={page_data}: {e}")
                 continue
         
+        if transaltion_tasks:
+            translated_results = await asyncio.gather(*transaltion_tasks, return_exceptions=True)
+            for result in translated_results:
+                if isinstance(result, Exception):
+                    logger.error(f"Ошибка при асинхронном переводе: {result}")
+                elif result:
+                    translated_recipes.append(result)
         # Шаг 2: Сохраняем весь переведенный батч в БД одной транзакцией
         if self.olap_db.insert_recipes_batch(translated_recipes, table_name=self.olap_table) == len(translated_recipes):
             logger.info(f"✓ Батч из {len(translated_recipes)} переведенных страниц успешно сохранен в ClickHouse")
         else:
             logger.warning("⚠ Частичная ошибка при сохранении батча")
 
-    def translate_recipe(self, recipe: Recipe) -> Optional[Recipe]:
+
+    async def translate_recipe(self, recipe: Recipe) -> Optional[Recipe]:
         """
         Переводит данные рецепта на целевой язык
         
@@ -263,7 +232,7 @@ IMPORTANT:
             user_prompt = json.dumps(recipe_data, ensure_ascii=False)
             
             # Отправляем запрос к GPT
-            response = self.gpt_client.request(
+            response = await self.gpt_client.async_request(
                 system_prompt=system_prompt,
                 user_prompt=user_prompt,
                 model="gpt-3.5-turbo",
@@ -298,7 +267,7 @@ IMPORTANT:
             logger.error(f"Ошибка при переводе страницы ID={recipe.page_id}: {e}")
             return None
 
-    def translate_all(self, site_ids: Optional[list[int]] = None, batch_size: int = 10):
+    async def translate_all(self, site_ids: Optional[list[int]] = None, batch_size: int = 10):
         """
         Основной метод для перевода всех страниц с рецептами
         """        
@@ -309,5 +278,5 @@ IMPORTANT:
                 return
         
         for i in site_ids:
-            self.translate_and_save_batch(site_id=i, batch_size=batch_size)
+            await self.translate_and_save_batch(site_id=i, batch_size=batch_size)
             

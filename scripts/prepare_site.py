@@ -161,7 +161,7 @@ if __name__ == "__main__":
     parser.add_argument(
         '--parallel',
         action='store_true',
-        default=False,
+        default=True,
         help='Запустить в нескольких потоках'
     )
     parser.add_argument(

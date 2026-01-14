@@ -32,21 +32,44 @@ class SearchQueryRepository(BaseRepository[SearchQueryORM]):
         with self.get_session() as session:
             return session.query(SearchQueryORM).filter(SearchQueryORM.url_count == 0).count()
     
-    def get_unsearched_queries(self, limit: Optional[int] = None, random_order: bool = False) -> List[SearchQueryORM]:
+    def get_unsearched_queries(self, limit: Optional[int] = None, random_order: bool = False, unique_languages: bool = False) -> List[SearchQueryORM]:
         """
         Получить неиспользованные поисковые запросы
         
         Args:
             limit: Максимальное количество запросов
+            random_order: Случайный порядок
+            unique_languages: Вернуть только один запрос на каждый уникальный язык
         
         Returns:
             Список неиспользованных запросов
         """
         with self.get_session() as session:
-            query = session.query(SearchQueryORM).filter(SearchQueryORM.url_count == 0).order_by(SearchQueryORM.created_at.asc())
+            query = session.query(SearchQueryORM).filter(SearchQueryORM.url_count == 0)
 
+            if unique_languages:
+                # Подзапрос: получить минимальный ID для каждого языка
+                subquery = (
+                    session.query(
+                        SearchQueryORM.language,
+                        func.min(SearchQueryORM.id).label('min_id')
+                    )
+                    .filter(SearchQueryORM.url_count == 0)
+                    .group_by(SearchQueryORM.language)
+                    .subquery()
+                )
+                
+                # Фильтруем основной запрос по результатам подзапроса
+                query = query.join(
+                    subquery,
+                    (SearchQueryORM.language == subquery.c.language) &
+                    (SearchQueryORM.id == subquery.c.min_id)
+                )
+            
             if random_order:
                 query = query.order_by(func.random())
+            else:
+                query = query.order_by(SearchQueryORM.created_at.asc())
 
             if limit:
                 query = query.limit(limit)

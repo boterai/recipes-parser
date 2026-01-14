@@ -9,6 +9,8 @@ import requests
 from typing import Optional, Any
 from dotenv import load_dotenv
 import re
+import asyncio
+import aiohttp
 # Загрузка переменных окружения
 load_dotenv()
 
@@ -42,55 +44,141 @@ class GPTClient:
     def _normalize_json(self, text: str) -> str:
         """
         Нормализация JSON от GPT (исправление частых ошибок)
+        """
+        # 1. Удалить/экранировать кавычки только внутри строковых значений,
+        #    не трогая ключи и синтаксис JSON.
+        def clean_string_value(match: re.Match) -> str:
+            prefix = match.group(1)      # "key": "
+            value = match.group(2)       # raw string value
+            # Убираем неэкранированные кавычки внутри значения
+            cleaned = re.sub(r'(?<!\\)"', '', value)
+            return f'{prefix}{cleaned}"'
+
+        text = re.sub(
+            r'("(?P<key>[^"]+)"\s*:\s*")(?P<val>(?:\\.|[^"\\])*)"',  # ключ + строковое значение
+            clean_string_value,
+            text
+        )
+
+        return text
+    
+    async def async_request(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        model: str = GPT_MODEL_MINI,
+        temperature: float = 0.1,
+        max_tokens: Optional[int] = None,
+        timeout: int = 30,
+        retry_attempts: int = 3
+    ) -> dict[str, Any]:
+        """
+        Асинхронный запрос к ChatGPT API с повторными попытками
         
         Args:
-            text: JSON строка от GPT
+            system_prompt: Системный промпт (роль ассистента)
+            user_prompt: Пользовательский промпт (задание)
+            model: Модель GPT для использования
+            temperature: Температура генерации (0-1)
+            max_tokens: Максимальное количество токенов в ответе
+            timeout: Таймаут запроса в секундах
+            retry_attempts: Количество попыток при ошибках
             
         Returns:
-            Исправленная JSON строка
-        """
-        # 1. Исправить неэкранированные кавычки внутри строковых значений
-        # Ищем паттерн: "key": "value with "unescaped" quotes"
-        # Экранируем только кавычки ВНУТРИ значений, не трогая обрамляющие
-        def escape_inner_quotes(match):
-            full_match = match.group(0)
-            key_part = match.group(1)  # "key": "
-            value_part = match.group(2)  # содержимое до закрывающей "
+            Распарсенный JSON ответ от GPT
             
-            # Экранируем все кавычки внутри значения
-            escaped_value = value_part.replace('"', '\\"')
-            return f'{key_part}{escaped_value}"'
+        Raises:
+            Exception: При ошибке запроса или парсинга
+        """
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.api_key}"
+        }
         
-        # Паттерн: "ключ": "значение с возможными "кавычками" внутри"
-        # Ищем от начала ключа до следующей " которая идет после : и пробелов
-        text = re.sub(
-            r'("(?:dish_name|description|instructions|category)":\s*")([^"]*(?:"[^"]*)*)"',
-            escape_inner_quotes,
-            text
-        )
+        payload = {
+            "model": model,
+            "messages": [
+                {
+                    "role": "system",
+                    "content": system_prompt
+                },
+                {
+                    "role": "user",
+                    "content": user_prompt
+                }
+            ],
+            "temperature": temperature,
+        }
         
-        # 2. Исправить дроби (1/4 -> 0.25)
-        def replace_fraction(match):
-            numerator = float(match.group(1))
-            denominator = float(match.group(2))
-            return str(numerator / denominator)
+        if max_tokens:
+            payload["max_tokens"] = max_tokens
         
-        text = re.sub(
-            r'"amount":\s*(\d+)/(\d+)',
-            lambda m: f'"amount": {replace_fraction(m)}',
-            text
-        )
+        last_exception = None
         
-        text = re.sub(
-            r'"amount":\s*"(\d+)/(\d+)"',
-            lambda m: f'"amount": "{float(m.group(1)) / float(m.group(2))}"',
-            text
-        )
+        # Настройка прокси для aiohttp
+        connector = None
+        if self.proxy:
+            connector = aiohttp.TCPConnector()
         
-        # 3. Удалить trailing commas
-        text = re.sub(r',(\s*[}\]])', r'\1', text)
+        timeout_obj = aiohttp.ClientTimeout(total=timeout)
         
-        return text
+        for attempt in range(retry_attempts):
+            try:
+                async with aiohttp.ClientSession(connector=connector, timeout=timeout_obj) as session:
+                    async with session.post(
+                        self.api_url,
+                        headers=headers,
+                        json=payload,
+                        proxy=self.proxy if self.proxy else None
+                    ) as response:
+                        response.raise_for_status()
+                        response_data = await response.json()
+                        result_text = response_data['choices'][0]['message']['content'].strip()
+                        
+                        # Очистка от markdown форматирования
+                        result_text = self._clean_markdown(result_text)
+                        result = json.loads(result_text)
+                        
+                        return result
+                
+            except json.JSONDecodeError as e:
+                logger.error(f"Ошибка парсинга JSON от GPT: {e}")
+                logger.error(f"Ответ GPT: {result_text if 'result_text' in locals() else 'N/A'}")
+                last_exception = e
+                # JSON ошибки не повторяем
+                break
+                
+            except aiohttp.ClientResponseError as e:
+                # Если 403 (Forbidden) - не повторяем, это ошибка авторизации
+                if e.status == 403:
+                    logger.error("Ошибка 403 (Forbidden): проверьте API ключ")
+                    raise
+                
+                last_exception = e
+                if attempt < retry_attempts - 1:
+                    # Экспоненциальная задержка: 2^attempt секунд (1, 2, 4, 8...)
+                    delay = 2 ** attempt
+                    logger.warning(f"HTTP ошибка {e.status}: попытка {attempt + 1}/{retry_attempts}. Повтор через {delay}с...")
+                    await asyncio.sleep(delay)
+                else:
+                    logger.error(f"Ошибка HTTP запроса к GPT после {retry_attempts} попыток: {e}")
+                    
+            except (aiohttp.ClientError, asyncio.TimeoutError) as e:
+                last_exception = e
+                if attempt < retry_attempts - 1:
+                    delay = 2 ** attempt
+                    logger.warning(f"Ошибка запроса к GPT: попытка {attempt + 1}/{retry_attempts}. Повтор через {delay}с...")
+                    await asyncio.sleep(delay)
+                else:
+                    logger.error(f"Ошибка запроса к GPT после {retry_attempts} попыток: {e}")
+                    
+            except Exception as e:
+                logger.error(f"Неожиданная ошибка запроса к GPT: {e}")
+                last_exception = e
+                break
+        
+        # Если дошли сюда - все попытки исчерпаны
+        raise last_exception if last_exception else Exception("Неизвестная ошибка запроса к GPT")
     
     def request(
         self,
@@ -164,10 +252,6 @@ class GPTClient:
                 
                 # Очистка от markdown форматирования
                 result_text = self._clean_markdown(result_text)
-
-                result_text = self._normalize_json(result_text)
-                
-                # Парсинг JSON
                 result = json.loads(result_text)
                 
                 return result
