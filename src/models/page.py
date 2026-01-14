@@ -5,10 +5,11 @@
 from datetime import datetime
 from typing import Optional, Any
 from decimal import Decimal
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 import json
 from sqlalchemy import Column, Integer, String, Boolean, DECIMAL, TIMESTAMP, Text, ForeignKey, text, Index
 from sqlalchemy.orm import relationship
+from sqlalchemy.inspection import inspect
 from src.models.base import Base
 from src.models.recipe import Recipe
 from src.models.image import ImageORM, Image
@@ -36,7 +37,6 @@ class PageORM(Base):
     cook_time = Column(String(100))
     total_time = Column(String(100))
     description = Column(Text)
-    image_urls = Column(Text)  # TEXT - URL изображения
     notes = Column(Text)
     tags = Column(Text)
     
@@ -156,6 +156,22 @@ class Page(BaseModel):
     # Метаданные
     created_at: Optional[datetime] = None
 
+    @model_validator(mode='before')
+    @classmethod
+    def handle_orm_images(cls, data):
+        """Игнорировать поле images при конвертации из ORM для избежания lazy load ошибки"""
+        # Если это ORM объект (PageORM), удаляем images из данных для валидации
+        if hasattr(data, '__tablename__'):  # Проверка что это SQLAlchemy модель
+            # Проверяем, загружено ли поле images (не вызывая lazy load)
+            insp = inspect(data)
+            if 'images' in insp.unloaded:
+                # Создаем словарь из атрибутов, исключая images
+                orm_dict = {}
+                for column in data.__table__.columns:
+                    orm_dict[column.name] = getattr(data, column.name, None)
+                return orm_dict
+        return data
+
     def to_json(self) -> dict:
         """Преобразование модели в JSON-совместимый словарь"""
         data = self.model_dump(mode='json', exclude_none=True)
@@ -166,7 +182,7 @@ class Page(BaseModel):
         recipe_fields = [
             'dish_name', 'description', 'ingredients', 'instructions', 'nutrition_info',
             'category', 'prep_time', 'cook_time','total_time', 
-            'notes', 'tags', 'image_urls'
+            'notes', 'tags'
         ]
         data = {field: getattr(self, field) for field in recipe_fields}
         return data

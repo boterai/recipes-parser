@@ -3,6 +3,7 @@
 """
 
 import sys
+import os
 from pathlib import Path
 import logging
 
@@ -12,6 +13,9 @@ from src.common.embedding import get_embedding_function, get_image_embedding_fun
 from src.stages.search.vectorise import RecipeVectorizer
 from src.models.recipe import Recipe
 from src.stages.search.similarity import SimilaritySearcher, ClusterParams, _build_clusters_from_dsu
+from src.common.embedding import get_image_embedding_function
+from src.stages.search.vectorise import RecipeVectorizer
+from src.models.image import ImageORM, download_image_async
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -20,7 +24,7 @@ logging.basicConfig(
     handlers=[logging.StreamHandler()]
 )
 
-def add_recipes():
+def vectorise_recipes():
     batch_size = 15 # примерный размер батча для векторизации и добавления в Qdrant при котором не происходит timeout
     rv = RecipeVectorizer()
 
@@ -73,6 +77,58 @@ def search_similar(recipe_id: int = 21427, use_weighted: bool = True,
     for score, sim_recipe in similar_recipes:
         print(f"ID: {sim_recipe.page_id}, Блюдо: {sim_recipe.dish_name}, Score: {score}")
 
+async def validate_and_save_image(image_url: str, save_dir: str = "images", use_proxy: bool = True) -> str | None:
+    """
+    Проверяет валидность URL, скачивает изображение и сохраняет локально.
+    
+    Args:
+        image_url: URL изображения для проверки и скачивания
+        save_dir: Директория для сохранения (по умолчанию: ./images)
+        timeout: Таймаут запроса в секундах
+    
+    Returns:
+        Путь к сохраненному файлу или None при ошибке
+    """
+    try:
+        # Скачиваем изображение как PIL.Image
+        img = await download_image_async(image_url, use_proxy=use_proxy)
+        if img is None:
+            return None
+        
+        os.makedirs(save_dir, exist_ok=True)
+        
+        hash_name = ImageORM.hash_url(image_url)[:16]
+        
+        img_format = img.format or 'JPEG'
+        ext = '.jpg' if img_format == 'JPEG' else f'.{img_format.lower()}'
+        
+        filename = hash_name + ext
+        file_path = os.path.join(save_dir, filename)
+        
+        if img.mode in ('RGBA', 'P', 'LA'):
+            img = img.convert('RGB')
+            ext = '.jpg'
+            filename = hash_name + ext
+            file_path = os.path.join(save_dir, filename)
+        
+        img.save(file_path, quality=90, optimize=True)
+        
+        logger.info(f"Saved image: {image_url} -> {file_path}")
+        return file_path
+        
+    except Exception as e:
+        logger.error(f"Failed to validate/save image {image_url}: {e}")
+        return None
+
+async def vectorise_images():
+    rv = RecipeVectorizer()
+    embed_function, _ = get_image_embedding_function(
+        batch_size=16
+    )
+    await rv.vectorise_images_async(
+        embed_function=embed_function,
+        limit=1000
+    )
 
 def create_similarity_clusters(filepath: str, dsu_filepath: str):
     """Создание кластеров похожих рецептов и сохранение их в файл."""
@@ -110,7 +166,7 @@ def check_and_save_similarity_clusters(filepath: str):
 if __name__ == '__main__':
     filepath = "recipe_clusters/full_clusters95_no_batch.txt"
     dsu_filepath = "recipe_clusters/ingredients95_dsu_state.json"
-    check_and_save_similarity_clusters(filepath)
-    #add_recipes()
+    #check_and_save_similarity_clusters(filepath)
+    vectorise_recipes()
     # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)
     #search_similar(recipe_id=19, use_weighted=False, score_threshold=0.0, limit=6)

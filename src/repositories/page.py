@@ -373,8 +373,7 @@ class PageRepository(BaseRepository[PageORM]):
                     'category': page.category,
                     'nutrition_info': page.nutrition_info,
                     'notes': page.notes,
-                    'tags': page.tags,
-                    'image_urls': page.image_urls
+                    'tags': page.tags
                 }
                 mappings.append(mapping)
             
@@ -449,45 +448,5 @@ class PageRepository(BaseRepository[PageORM]):
             ).distinct().all()
             site_ids = [sid[0] for sid in site_ids]
             return site_ids
-        finally:
-            session.close()
-    
-    def get_pages_without_images(self, site_id: Optional[int] = None, 
-                                  is_recipe_only: bool = True,
-                                  limit: Optional[int] = None, 
-                                  exclude_pages: Optional[list[int]] = None) -> List[PageORM]:
-        """
-        Получить страницы, для которых нет записей в таблице images
-        
-        Args:
-            site_id: ID сайта (опционально)
-            is_recipe_only: Если True, только страницы с is_recipe=True (по умолчанию True)
-            limit: Максимальное количество страниц
-        
-        Returns:
-            Список PageORM объектов без изображений
-        """
-        session = self.get_session()
-        try:
-            # LEFT JOIN для поиска страниц без изображений
-            query = session.query(PageORM).outerjoin(
-                ImageORM, PageORM.id == ImageORM.page_id
-            ).filter(
-                ImageORM.id == None, PageORM.image_urls != None  # Нет записей в images
-            )
-
-            if exclude_pages:
-                query = query.filter(~PageORM.id.in_(exclude_pages))
-            
-            if is_recipe_only:
-                query = query.filter(PageORM.is_recipe == True)
-            
-            if site_id:
-                query = query.filter(PageORM.site_id == site_id)
-            
-            if limit:
-                query = query.limit(limit)
-            
-            return query.all()
         finally:
             session.close()

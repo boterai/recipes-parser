@@ -252,12 +252,13 @@ class Translator:
 
 IMPORTANT:
 1. Translate completely and accurately these fields: "dish_name", "description", "ingredients", "tags", "category", "instructions"
-2. Return the result in the same JSON format without changing the structure or adding any comments
+2. Return the result in the same valid JSON format without changing the structure or adding any comments
 3. If a field is null or empty, leave it as is
 4. Preserve all measurements, numbers, and formatting
 5. Keep the translation natural and culinary-appropriate for the target language
-6. CRITICAL: Escape all double quotes (") inside string values with backslash (\\"). For example: "tofu \\"steaks\\"" not "tofu "steaks""
-7. Return ONLY valid JSON, no markdown formatting, no extra text"""
+6. CRITICAL: Never use double quotes (") inside string values. Remove them entirely. For example: "tofu steaks" not "tofu "steaks"", use: tofu steaks. Check Instructions and Ingredients carefully.
+7. Return ONLY valid JSON, no markdown formatting, no extra text
+"""
 
             user_prompt = json.dumps(recipe_data, ensure_ascii=False)
             

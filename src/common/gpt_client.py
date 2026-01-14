@@ -49,28 +49,45 @@ class GPTClient:
         Returns:
             Исправленная JSON строка
         """
-        # 1. Исправить дроби (1/4 -> 0.25)
+        # 1. Исправить неэкранированные кавычки внутри строковых значений
+        # Ищем паттерн: "key": "value with "unescaped" quotes"
+        # Экранируем только кавычки ВНУТРИ значений, не трогая обрамляющие
+        def escape_inner_quotes(match):
+            full_match = match.group(0)
+            key_part = match.group(1)  # "key": "
+            value_part = match.group(2)  # содержимое до закрывающей "
+            
+            # Экранируем все кавычки внутри значения
+            escaped_value = value_part.replace('"', '\\"')
+            return f'{key_part}{escaped_value}"'
+        
+        # Паттерн: "ключ": "значение с возможными "кавычками" внутри"
+        # Ищем от начала ключа до следующей " которая идет после : и пробелов
+        text = re.sub(
+            r'("(?:dish_name|description|instructions|category)":\s*")([^"]*(?:"[^"]*)*)"',
+            escape_inner_quotes,
+            text
+        )
+        
+        # 2. Исправить дроби (1/4 -> 0.25)
         def replace_fraction(match):
             numerator = float(match.group(1))
             denominator = float(match.group(2))
             return str(numerator / denominator)
         
-        # Находим дроби в значениях amount (не в строках!)
         text = re.sub(
             r'"amount":\s*(\d+)/(\d+)',
             lambda m: f'"amount": {replace_fraction(m)}',
             text
         )
         
-        # 2. Исправить дроби в строковых значениях ("1/2" -> "0.5")
-        # Только если они не в кавычках как часть текста
         text = re.sub(
             r'"amount":\s*"(\d+)/(\d+)"',
             lambda m: f'"amount": "{float(m.group(1)) / float(m.group(2))}"',
             text
         )
         
-        # 3. Удалить trailing commas (запятые перед закрывающими скобками)
+        # 3. Удалить trailing commas
         text = re.sub(r',(\s*[}\]])', r'\1', text)
         
         return text
@@ -212,3 +229,10 @@ class GPTClient:
             text = text[:-3]
         
         return text.strip()
+
+if __name__ == "__main__":
+    client = GPTClient()
+    data = '{"dish_name": "Crushed Crispy Oven-Baked Potatoes", "description": "Crushed crispy oven-baked potatoes are something in between boiled and roasted (we use this expression without a negative connotation, just to describe the essence of the dish, its texture). Tender on the inside but crispy on the outside. It resembles either potato pancakes or hash browns, but turns out softer than classic hash browns and more interesting than regular baked potatoes. The secret lies in crushing boiled potatoes, turning them into thick flat cakes with jagged edges, and then baking them until crispy. Crushed potatoes baked in the oven will surprise both kids and adults, and are very easy to make!", "ingredients": ["potatoes", "olive oil", "dried garlic", "dried rosemary", "salt", "ground black pepper", "sweet paprika"], "tags": ["potatoes", "oven dishes", "side dish", "oven-baked potatoes"], "category": "main course", "instructions": "Step 1: Thoroughly scrub the potatoes with a brush. Choose potatoes of roughly the same size so they cook evenly. In a large pot, bring salted water to a boil. Add the potatoes to the boiling water and cook for 20-25 minutes after it starts boiling, until they are soft but not falling apart. The potatoes should be easily pierced with a fork. Step 2: Preheat the oven to 220°C. Line a baking sheet with parchment paper and grease it with 1 tbsp of olive oil. Place the boiled potatoes on the baking sheet. Take a wooden masher or a cup and gently press down on each potato to flatten them to a thickness of 2-2.5 cm. Step 3: In a small bowl, mix the remaining olive oil with dried garlic, rosemary, paprika, salt, and pepper. Generously spread this flavorful mixture on each potato "pancaked", making sure the oil gets into all the cracks. Step 4: Place the baking sheet in the preheated oven for 15-20 minutes. Do not flip the potatoes during cooking. Check for doneness by the golden-brown crispy edges and surface. For extra crispiness, you can turn on the grill for 3-4 minutes at the end of cooking. Step 5: The crushed, oven-baked potatoes are ready. Remove from the oven and let them rest for 2-3 minutes. Serve hot, optionally sprinkled with coarse sea salt and fresh rosemary. Perfect with sour cream or Greek yogurt-based sauces."}'
+    data = client._normalize_json(data)
+    js = json.loads(data)
+    print("Before normalization:", js)
