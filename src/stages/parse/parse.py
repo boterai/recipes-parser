@@ -69,7 +69,8 @@ class RecipeParserRunner:
         port: int = 9222,
         max_urls: int = 5000,
         max_depth: int = 4,
-        custom_logger: Optional[logging.Logger] = None
+        custom_logger: Optional[logging.Logger] = None,
+        max_no_recipe_pages: Optional[int] = None
     ) -> bool:
         """
         Запуск парсинга с указанным или случайным модулем
@@ -129,7 +130,8 @@ class RecipeParserRunner:
                 check_url=True,
                 debug_port=port,
                 helper_links=helper_links,
-                custom_logger=custom_logger
+                custom_logger=custom_logger,
+                max_no_recipe_pages=max_no_recipe_pages
             )
             
             custom_logger.info(f"Парсинг {module_name} завершен успешно")

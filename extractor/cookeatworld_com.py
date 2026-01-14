@@ -261,10 +261,11 @@ class CookeatWorldExtractor(BaseRecipeExtractor):
     def extract_steps(self) -> Optional[str]:
         """Извлечение шагов приготовления"""
         recipe_data = self.get_recipe_json_ld()
+        steps = []
         
+        # Сначала пытаемся извлечь из JSON-LD
         if recipe_data and 'recipeInstructions' in recipe_data:
             instructions = recipe_data['recipeInstructions']
-            steps = []
             
             if isinstance(instructions, list):
                 for step in instructions:
@@ -284,11 +285,40 @@ class CookeatWorldExtractor(BaseRecipeExtractor):
                         step_text = self.clean_text(step)
                         if step_text:
                             steps.append(step_text)
-            
-            # Возвращаем как JSON список
-            return json.dumps(steps, ensure_ascii=False) if steps else None
         
-        return None
+        # Fallback: извлекаем из HTML если ничего не нашли в JSON-LD
+        if not steps:
+            # Ищем контейнер с инструкциями
+            instructions_container = self.soup.find(class_=re.compile(r'wprm-recipe-instructions-container', re.I))
+            
+            if instructions_container:
+                # Ищем все списки с инструкциями (могут быть группы)
+                instruction_lists = instructions_container.find_all(class_=re.compile(r'wprm-recipe-instructions', re.I))
+                
+                for inst_list in instruction_lists:
+                    # Проверяем есть ли заголовок группы перед списком
+                    group_name = None
+                    prev_sibling = inst_list.find_previous_sibling(class_=re.compile(r'wprm-recipe-instruction-group-name', re.I))
+                    if prev_sibling:
+                        group_name = self.clean_text(prev_sibling.get_text())
+                    
+                    # Извлекаем каждый шаг
+                    instruction_items = inst_list.find_all(class_=re.compile(r'wprm-recipe-instruction\b', re.I))
+                    
+                    for item in instruction_items:
+                        # Ищем текст инструкции
+                        text_div = item.find(class_=re.compile(r'wprm-recipe-instruction-text', re.I))
+                        if text_div:
+                            step_text = self.clean_text(text_div.get_text(separator=' ', strip=True))
+                            if step_text:
+                                # Если есть название группы, добавляем его к первому шагу этой группы
+                                if group_name and len(steps) == 0:
+                                    step_text = f"{group_name}: {step_text}"
+                                    group_name = None  # Используем только один раз
+                                steps.append(step_text)
+        
+        # Возвращаем как JSON список
+        return ' '.join(steps) if steps else None
     
     def extract_nutrition_info(self) -> Optional[str]:
         """Извлечение информации о питательности в формате: 202 kcal; 2/11/27"""

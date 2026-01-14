@@ -7,6 +7,7 @@ import time
 import json
 import re
 import random
+import threading
 from pathlib import Path
 from urllib.parse import urlparse, urljoin
 from typing import Set, Dict, List, Optional
@@ -43,7 +44,8 @@ class SiteExplorer:
     
     def __init__(self, base_url: str, debug_mode: bool = True, recipe_pattern: str = None,
                  max_errors: int = 3, max_urls_per_pattern: int = None, debug_port: int = None,
-                 driver: webdriver.Chrome = None, custom_logger: logging.Logger = None):
+                 driver: webdriver.Chrome = None, custom_logger: logging.Logger = None, 
+                 max_no_recipe_pages: Optional[int] = None):
         """
         Args:
             base_url: Базовый URL сайта
@@ -52,6 +54,9 @@ class SiteExplorer:
             max_errors: Максимальное количество ошибок подряд перед остановкой
             max_urls_per_pattern: Максимальное количество URL на один паттерн (None = без ограничений)
             debug_port: Порт для подключения к Chrome (по умолчанию из config)
+            driver: Переданный экземпляр webdriver.Chrome (если None, создается новый)
+            custom_logger: Пользовательский логгер (если None, используется стандартный)
+            max_no_recipe_pages: Максимальное количество страниц без рецепта подряд (None = без ограничений). Если указано прерывает исследвоание сайта при достижении лимита
         """
         self.debug_mode = debug_mode
         self.debug_port = debug_port if debug_port is not None else config.CHROME_DEBUG_PORT
@@ -110,7 +115,8 @@ class SiteExplorer:
         # Инициализация экстрактора для проверки и извлечения рецептов
         self.recipe_extractor = None
         self.recipe_extractor = RecipeExtractor()
-
+        self.max_no_recipe_pages: Optional[int] = max_no_recipe_pages 
+        self.no_recipe_page_count: int = 0  # Счетчик страниц без рецепта подряд
 
     def set_pattern(self, pattern: str):
         self.site.pattern = pattern
@@ -336,6 +342,8 @@ class SiteExplorer:
         # Извлекаем полные данные рецепта
         recipe_data: Optional[Page] = self.recipe_extractor.extract_and_update_page(page)
         if not recipe_data:
+            self.logger.info(f"  ✗ Рецепт не найден на {url}")
+            self.no_recipe_page_count += 1
             return False
 
         if (self.site.language is None or self.site.language != language) and language != 'unknown':
@@ -350,6 +358,7 @@ class SiteExplorer:
         
         if recipe_data.is_recipe is False:
             self.logger.info(f"  ✗ Рецепт не найден на {url}")
+            self.no_recipe_page_count += 1
             return False
 
         try:
@@ -357,10 +366,12 @@ class SiteExplorer:
             self.page_repository.create_or_update_with_images(recipe_data, image_urls=image_urls)
         except Exception as e:
             self.logger.error(f"Ошибка сохранения страницы в БД: {e}")
+            self.no_recipe_page_count += 1
             return False
         
         dish_name = recipe_data.dish_name or "Без названия"
         self.logger.info(f"  ✓ Рецепт '{dish_name}' сохранен в БД")
+        self.no_recipe_page_count = 0 # сброс счетчика страниц без рецепта
         return True
     
     def should_explore_url(self, url: str) -> bool:
@@ -819,6 +830,57 @@ class SiteExplorer:
                     self.exploration_queue = priority_urls + other_urls
                     self.logger.info(f"  ↑ {len(priority_urls)} URL от успешного источника передвинуты в начало очереди")
     
+    def _navigate_with_timeout(self, url: str, timeout: int = 90) -> bool:
+        """
+        Переход на страницу с гарантированным timeout через отдельный поток
+        
+        Args:
+            url: URL для загрузки
+            timeout: Максимальное время ожидания в секундах
+            
+        Returns:
+            True если загрузка успешна, False если timeout
+        """
+        load_complete = threading.Event()
+        navigation_error = [None]  # Для передачи исключений из потока
+        
+        def navigate():
+            try:
+                self.driver.get(url)
+                load_complete.set()
+            except Exception as e:
+                navigation_error[0] = e
+                load_complete.set()
+        
+        # Запуск загрузки в отдельном потоке
+        nav_thread = threading.Thread(target=navigate, daemon=True)
+        nav_thread.start()
+        
+        # Ожидание с timeout
+        if not load_complete.wait(timeout=timeout):
+            # Timeout - принудительная остановка
+            self.logger.warning(f"⏱ Timeout {timeout}s при загрузке, останавливаем")
+            try:
+                self.driver.execute_script("window.stop();")
+            except Exception:
+                pass
+            return False
+        
+        # Проверка на ошибки навигации
+        if navigation_error[0]:
+            if isinstance(navigation_error[0], TimeoutException):
+                self.logger.warning("⏱ Selenium TimeoutException при загрузке")
+                try:
+                    self.driver.execute_script("window.stop();")
+                except Exception:
+                    pass
+                return False
+            else:
+                # Другие ошибки пробрасываем
+                raise navigation_error[0]
+        
+        return True
+    
     def explore(self, max_urls: int = 100, max_depth: int = 3, session_urls: bool = True, 
                 check_pages_with_extractor:bool = False, check_url: bool = False) -> int:
         """
@@ -858,6 +920,11 @@ class SiteExplorer:
         last_strategy = self.recipe_regex is not None  # Для отслеживания переключений
 
         while queue and urls_explored < max_urls:
+            
+            # Проверка лимита страниц без рецепта подряд
+            if self.max_no_recipe_pages and self.no_recipe_page_count >= self.max_no_recipe_pages:
+                self.logger.info(f"🚫 Превышен лимит {self.max_no_recipe_pages} страниц без рецепта подряд, остановка исследования")
+                break
             # Выбираем стратегию: если паттерна нет - идем вглубь (LIFO), иначе вширь (FIFO)
             has_recipe_pattern = self.recipe_regex is not None
             
@@ -888,28 +955,12 @@ class SiteExplorer:
                 
                 # Засекаем время начала загрузки
                 page_load_start = time.time()
-                MAX_PAGE_LOAD_TIME = 90  # Максимум 90 секунд на всю загрузку
                 
-                # Переход на страницу с обработкой timeout
-                try:
-                    self.driver.get(current_url)
-                except TimeoutException:
-                    self.logger.warning(f"⏱ Timeout при загрузке {current_url}")
-                    # Останавливаем загрузку принудительно
-                    try:
-                        self.driver.execute_script("window.stop();")
-                    except Exception:
-                        pass
-                except Exception as e:
-                    self.logger.error(f"Ошибка при переходе на {current_url}: {e}")
+                # Используем новый метод с гарантированным timeout
+                if not self._navigate_with_timeout(current_url, timeout=90):
+                    self.logger.error("Не удалось загрузить страницу, пропускаем")
                     self.failed_urls.add(current_url)
                     err_count += 1
-                    continue
-                
-                # Проверка времени загрузки
-                if time.time() - page_load_start > MAX_PAGE_LOAD_TIME:
-                    self.logger.warning("⏱ Страница загружается слишком долго, пропускаем")
-                    self.failed_urls.add(current_url)
                     continue
                 
                 # Более надежное ожидание загрузки
@@ -956,13 +1007,8 @@ class SiteExplorer:
                 except Exception as e:
                     self.logger.debug(f"Ошибка проверки защиты: {e}")
                 
-                # Финальная проверка времени
+                # Логирование времени загрузки
                 total_load_time = time.time() - page_load_start
-                if total_load_time > MAX_PAGE_LOAD_TIME:
-                    self.logger.warning(f"⏱ Превышено время загрузки ({total_load_time:.1f}s), пропускаем")
-                    self.failed_urls.add(current_url)
-                    continue
-                
                 self.logger.debug(f"  ✓ Страница загружена за {total_load_time:.1f}s")
                 
                 # Адаптивная задержка: короче в начале, длиннее после каждых 10 запросов
@@ -1083,7 +1129,8 @@ def explore_site(url: str, max_urls: int = 1000, max_depth: int = 4, recipe_patt
                  check_url: bool = False,
                  max_urls_per_pattern: int = None, debug_port: int = 9222,
                  helper_links: List[str] = None,
-                 custom_logger: Optional[logging.Logger] = None) -> int:
+                 custom_logger: Optional[logging.Logger] = None,
+                 max_no_recipe_pages: Optional[int] = None) -> int:
     """
     Функция для исследования сайта с обработкой ошибок и прерываний
     
@@ -1097,6 +1144,8 @@ def explore_site(url: str, max_urls: int = 1000, max_depth: int = 4, recipe_patt
         max_urls_per_pattern: Максимальное количество URL на один паттерн (None = без ограничений)
         debug_port: Порт для подключения к Chrome
         helper_links: Список вспомогательных ссылок для начала исследования
+        max_no_recipe_pages: Максимальное количество страниц без рецепта подряд (None = без ограничений)
+        custom_logger: Пользовательский логгер (если None, используется стандартный)
     
     Returns:
         Количество исследованных URL
@@ -1112,7 +1161,8 @@ def explore_site(url: str, max_urls: int = 1000, max_depth: int = 4, recipe_patt
             debug_mode=True, 
             recipe_pattern=recipe_pattern, 
             max_urls_per_pattern=max_urls_per_pattern,
-            custom_logger=custom_logger
+            custom_logger=custom_logger,
+            max_no_recipe_pages=max_no_recipe_pages
         )
         
         if helper_links:

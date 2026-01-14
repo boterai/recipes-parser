@@ -10,6 +10,7 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
 import queue
+from typing import Optional
 
 # Добавление корневой директории в PYTHONPATH
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -77,7 +78,8 @@ def setup_thread_logger(module_name: str, port: int) -> logging.Logger:
     return thread_logger
 
 
-def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_depth: int = 4):
+def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_depth: int = 4, 
+                      max_no_recipe_pages: Optional[int] = 20):
     """
     Запуск парсера в отдельном потоке с собственным логгером
     
@@ -86,6 +88,7 @@ def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_dep
         port: Порт Chrome
         max_urls: Максимальное количество URL
         max_depth: Максимальная глубина обхода
+        max_no_recipe_pages: Максимальное количество страниц без рецептов перед остановкой
     """
     # Создаем отдельный логгер для этого потока
     thread_logger = setup_thread_logger(module_name, port)
@@ -104,7 +107,8 @@ def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_dep
             port=port, 
             max_urls=max_urls, 
             max_depth=max_depth,
-            custom_logger=thread_logger
+            custom_logger=thread_logger,
+            max_no_recipe_pages=max_no_recipe_pages
         )
         
         thread_logger.info(f"✓ Парсинг {module_name} завершен успешно")
@@ -132,7 +136,8 @@ def main(module_name: str = "24kitchen_nl", port: int = 9222):
         port=port, 
         max_urls=5000, 
         max_depth=4,
-        custom_logger=main_logger
+        custom_logger=main_logger,
+        max_no_recipe_pages=20
     )
 
 
@@ -256,7 +261,7 @@ if __name__ == "__main__":
         '--ports',
         type=int,
         nargs='+',
-        default=[9222, 9223, 9224, 9225],
+        default=[9222, 9223, 9224],
         help='Список портов для параллельного запуска (по умолчанию: 9222 9223 9224)'
     )
     parser.add_argument(
@@ -269,7 +274,7 @@ if __name__ == "__main__":
     parser.add_argument(
         '--modules',
         type=str,
-        default=["onedaywetakeatrain_fi", "desidakaar_com", "budapestcookingclass_com", "simplyrecipes_com", "speedinfo_com_ua"],
+        default=["cookeatworld_com", "desidakaar_com", "budapestcookingclass_com", "simplyrecipes_com", "speedinfo_com_ua"],
         help='Имя модуля экстрактора для одиночного запуска (по умолчанию: 24kitchen_nl)'
     )
     
