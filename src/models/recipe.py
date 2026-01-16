@@ -1,9 +1,12 @@
 from typing import Optional
 from pydantic import BaseModel
+import json
+import logging
+
 
 class Recipe(BaseModel):
     """Recipe entity with fields optimized for similarity search.
-    рецепты могут раниться в БД, переведенные на какой-то конкретный язык
+    рецепты хранятся в Clickhouse, переведенные на какой-то конкретный язык
     """
     # page id in Mysql
     page_id: int
@@ -17,7 +20,7 @@ class Recipe(BaseModel):
     # Structured content
     ingredients: list[str]
     tags: Optional[list[str]] = None
-    
+    ingredients_with_amounts: Optional[list[dict]] = None  # список словарей с name и amount
 
     # Meta
     cook_time: Optional[str] = None
@@ -105,4 +108,18 @@ class Recipe(BaseModel):
         if self.tags:
             self.tags = [t.strip().lower() for t in self.tags]
     
-    
+    def fill_ingredients_with_amounts(self, page_repository):
+        """Заполняет ingredients_with_amounts на основе ingredients, если оно пусто"""
+        page_data = page_repository.get_by_id(self.page_id)
+        ingredients_with_amounts: list[dict] = []
+        try:
+            ingredients_with_amounts = json.loads(page_data.ingredients or "[]")
+        except json.JSONDecodeError:
+            logging.warning(f"Ошибка декодирования ingredients_with_amounts для страницы ID={self.page_id}")
+            return
+        if page_data and page_data.ingredients:
+            for name, full_data in zip(self.ingredients, ingredients_with_amounts):
+                if full_data:
+                    ingredients_with_amounts.append({"name": name, "amount": full_data.get("amount", ""),"unit": full_data.get("unit", "")})
+            self.ingredients_with_amounts = ingredients_with_amounts
+

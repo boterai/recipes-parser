@@ -97,3 +97,20 @@ CREATE TABLE IF NOT EXISTS recipe_similarities (
 
     INDEX idx_cluster_id (cluster_id)
 ) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS merged_recipes (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    pages_hash_sha256 CHAR(64) NOT NULL,     -- SHA2("1,15,23", 256)
+    pages_csv LONGTEXT NOT NULL,              -- "1,15,23" - CSV ID страниц рецептов в кластере
+    -- Данные нового рецепта (NULL = отсутствует)
+    dish_name VARCHAR(500), -- 100 % обязательное поле
+    ingredients JSON, -- 100% обязательное поле
+    description TEXT,
+    instructions TEXT, -- 100% обязательное поле
+    nutrition_info TEXT,
+    prep_time VARCHAR(100),
+    cook_time VARCHAR(100),
+    merge_comments TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_pages_hash (pages_hash_sha256)
+) ENGINE=InnoDB;

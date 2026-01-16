@@ -6,6 +6,7 @@ import sys
 import os
 from pathlib import Path
 import logging
+import asyncio
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -127,7 +128,7 @@ async def vectorise_images():
     )
     await rv.vectorise_images_async(
         embed_function=embed_function,
-        limit=1000
+        limit=5000
     )
 
 def create_similarity_clusters(filepath: str, dsu_filepath: str):
@@ -168,5 +169,6 @@ if __name__ == '__main__':
     dsu_filepath = "recipe_clusters/ingredients95_dsu_state.json"
     #check_and_save_similarity_clusters(filepath)
     vectorise_recipes()
+    #asyncio.run(vectorise_images())
     # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)
     #search_similar(recipe_id=19, use_weighted=False, score_threshold=0.0, limit=6)

@@ -711,12 +711,21 @@ class QdrantRecipeManager:
             raise QdrantNotConnectedError()
 
         collection = self.collections.get(collection_name)
-        points = self.client.retrieve(
-            collection_name=collection,
-            ids=ids,
-            with_vectors=True,
-            with_payload=False,
-        )
+
+        for attempt in range(3):
+            try:
+                points = self.client.retrieve(
+                    collection_name=collection,
+                    ids=ids,
+                    with_vectors=True,
+                    with_payload=False,
+                )
+            except Exception as e:
+                logger.warning(f"Ошибка retrieve_vectors (попытка {attempt + 1}/3): {e}")
+                time.sleep(2 ** attempt)
+                if self.connect():
+                    continue
+                else: raise e
 
         out: dict[int, list[float]] = {}
         for p in points:

@@ -278,5 +278,7 @@ IMPORTANT:
                 return
         
         for i in site_ids:
+            if i < 32:
+                continue  # пропускаем сайты с маленькими ID (тестовые и т.п.)
             await self.translate_and_save_batch(site_id=i, batch_size=batch_size)
             

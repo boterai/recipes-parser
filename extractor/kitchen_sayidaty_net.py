@@ -231,10 +231,10 @@ class KitchenSayidatyNetExtractor(BaseRecipeExtractor):
                 
                 # Возвращаем в формате JSON массива
                 if steps:
-                    return json.dumps(steps, ensure_ascii=False)
+                    return ' '.join(steps)
                 else:
                     # Если не получилось разбить, возвращаем весь текст как один шаг
-                    return json.dumps([self.clean_text(instructions)], ensure_ascii=False)
+                    return self.clean_text(instructions)
         
         # Альтернативно - из HTML
         # Ищем div с классом preparation-area

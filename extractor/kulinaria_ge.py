@@ -307,7 +307,7 @@ class KulinariaGeExtractor(BaseRecipeExtractor):
                                 steps.append(part)
         
         # Возвращаем как JSON список строк
-        return json.dumps(steps, ensure_ascii=False) if steps else None
+        return ' '.join(steps) if steps else None
     
     def extract_nutrition_info(self) -> Optional[str]:
         """Извлечение информации о питательности"""

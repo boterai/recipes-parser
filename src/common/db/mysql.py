@@ -3,14 +3,11 @@
 """
 import time
 import logging
-from typing import Optional
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.exc import SQLAlchemyError
 
 from config.db_config import MySQLConfig
-from src.models import Page
-from src.models import Recipe
 logger = logging.getLogger(__name__)
 
 
