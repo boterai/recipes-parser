@@ -168,7 +168,7 @@ if __name__ == '__main__':
     filepath = "recipe_clusters/full_clusters95_no_batch.txt"
     dsu_filepath = "recipe_clusters/ingredients95_dsu_state.json"
     #check_and_save_similarity_clusters(filepath)
-    vectorise_recipes()
-    #asyncio.run(vectorise_images())
+    #vectorise_recipes()
+    asyncio.run(vectorise_images())
     # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)
     #search_similar(recipe_id=19, use_weighted=False, score_threshold=0.0, limit=6)

@@ -112,6 +112,7 @@ class Recipe(BaseModel):
         """Заполняет ingredients_with_amounts на основе ingredients, если оно пусто"""
         page_data = page_repository.get_by_id(self.page_id)
         ingredients_with_amounts: list[dict] = []
+        normalised_ingredients = []
         try:
             ingredients_with_amounts = json.loads(page_data.ingredients or "[]")
         except json.JSONDecodeError:
@@ -120,6 +121,6 @@ class Recipe(BaseModel):
         if page_data and page_data.ingredients:
             for name, full_data in zip(self.ingredients, ingredients_with_amounts):
                 if full_data:
-                    ingredients_with_amounts.append({"name": name, "amount": full_data.get("amount", ""),"unit": full_data.get("unit", "")})
-            self.ingredients_with_amounts = ingredients_with_amounts
+                    normalised_ingredients.append({"name": name, "amount": full_data.get("amount", ""),"unit": full_data.get("unit", "")})
+            self.ingredients_with_amounts = normalised_ingredients
 

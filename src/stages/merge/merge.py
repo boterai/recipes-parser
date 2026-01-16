@@ -232,7 +232,10 @@ CRITICAL RULES:
 6. CONSISTENCY CHECK: Numbers/amounts in instructions MUST match ingredients_with_amounts exactly
    - If ingredient list says "100g sugar", instructions must also say "100g sugar"
    - All quantities referenced in instructions must appear in ingredients list
-7. The result MUST be executable and consistent
+7. INGREDIENT USAGE: Every ingredient MUST be used in instructions
+   - If an ingredient is not mentioned/used in cooking steps, DO NOT include it
+   - Only list ingredients that are actually needed for the recipe
+8. The result MUST be executable and consistent
 
 Return ONLY valid JSON (no markdown, no comments):
 {{
@@ -298,12 +301,6 @@ Create the best executable recipe combining elements from all sources."""
             
         except Exception as e:
             logger.error(f"GPT multi-merge failed: {e}")
-            logger.warning("Fallback to sequential merge")
-            # Фоллбэк: последовательно объединяем через обычный метод
-            result = recipes[0]
-            for recipe in recipes[1:]:
-                result = await self.merge_with_gpt(result, recipe)
-            return result
         
     def _create_merged_from_gpt_result(
         self,
@@ -366,7 +363,10 @@ CRITICAL RULES:
 7. CONSISTENCY CHECK: Numbers/amounts in instructions MUST match ingredients_with_amounts exactly
    - If ingredient list says "200g flour", instructions must also say "200g flour"
    - Ensure all quantities referenced in instructions appear in ingredients list
-8. The result must be a complete, executable recipe
+8. INGREDIENT USAGE: Every ingredient MUST be used in instructions
+   - If an ingredient is not mentioned/used in cooking steps, DO NOT include it
+   - Only list ingredients that are actually needed for the recipe
+9. The result must be a complete, executable recipe
 
 Return ONLY valid JSON (no markdown, no comments):
 {
@@ -433,7 +433,6 @@ Create the best possible merged version."""
             
         except Exception as e:
             logger.error(f"GPT merge failed: {e}")
-            logger.warning("Fallback to heuristic merge")
     
     async def validate_with_gpt(
         self,
@@ -571,6 +570,9 @@ class ClusterVariationGenerator:
 
                     # GPT объединяет оба рецепта
                     variation = await self.merger.merge_with_gpt(recipe1, recipe2)
+                    if not variation:
+                        logger.warning(f"GPT merge вернул пустой результат для {recipe1.page_id}-{recipe2.page_id}")
+                        continue
                     # Валидация
                     if validate_gpt:
                         is_valid, reason = await self.merger.validate_with_gpt(recipe1, variation)
@@ -645,7 +647,9 @@ class ClusterVariationGenerator:
         try:
             # Объединяем через гибридный метод
             variation = await self.merger.merge_with_best_base_gpt(recipes)
-            
+            if not variation:
+                logger.warning("Best-base GPT merge вернул пустой результат")
+                return None
             # Валидация
             if validate_gpt: # предполагается, что базовый рецепт - recipes[0]
                 is_valid, reason = await self.merger.validate_with_gpt(recipes[0], variation)
@@ -688,14 +692,17 @@ if __name__ == "__main__":
     from itertools import batched
     import asyncio
     logging.basicConfig(level=logging.INFO)
-
+    cl = [4978,7772,34395]
     async def example():
         generator = ClusterVariationGenerator()
         
         # Пример кластера
-        cluster = [53324,53334,53335,53344, 53345,53346]
+        cluster = [7872,
+    7882,
+    7887,
+    33645]
         random.shuffle(cluster)
-        pairwises = await generator.create_variations_pairwise_gpt(cluster=cluster, validate_gpt=True, save_to_db=True, max_variations=1)
+        pairwises = await generator.create_variations_pairwise_gpt(cluster=cluster, validate_gpt=False, save_to_db=True, max_variations=2)
         print(f"Создано {len(pairwises)} попарных вариаций через GPT.")
         pairwise = await generator.create_variation_best_base_gpt(cluster=cluster, validate_gpt=False, save_to_db=True)
         print(f"Создана 1 вариация лучшим базовым через GPT:    {pairwise.dish_name if pairwise else 'нет вариации'}")
