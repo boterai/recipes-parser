@@ -106,7 +106,7 @@ class TurkischeRezepteExtractor(BaseRecipeExtractor):
                 try:
                     parts = amount_str.split('/')
                     amount = str(float(parts[0]) / float(parts[1]))
-                except:
+                except (ValueError, ZeroDivisionError):
                     amount = amount_str
             else:
                 amount = amount_str.replace(',', '.')
