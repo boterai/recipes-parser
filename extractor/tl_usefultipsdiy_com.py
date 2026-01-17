@@ -37,8 +37,17 @@ class TlUsefulTipsDiyExtractor(BaseRecipeExtractor):
                 match = re.search(pattern, h1_text, re.I)
                 if match:
                     name = match.group(1)
-                    # Capitalize properly
-                    return name.title() if name else name
+                    # Remove trailing punctuation
+                    name = name.rstrip(':.,;')
+                    # Normalize case: first letter of each word capitalized, rest lowercase for "ng"
+                    words = name.split()
+                    normalized = []
+                    for word in words:
+                        if word.lower() == 'ng':
+                            normalized.append('ng')
+                        else:
+                            normalized.append(word.capitalize())
+                    return ' '.join(normalized)
             
             # Если паттерны не помогли, пытаемся извлечь название блюда из длинного заголовка
             # Ищем паттерн с двоеточием (обычно название до двоеточия)
@@ -157,6 +166,8 @@ class TlUsefulTipsDiyExtractor(BaseRecipeExtractor):
             # Очищаем название от артиклей и предлогов
             name = re.sub(r'^(ng|na|sa|ang)\s+', '', name, flags=re.I)
             name = re.sub(r',.*$', '', name)  # Удаляем все после запятой
+            # Удаляем модификаторы типа "granulated", "fresh", etc.
+            name = re.sub(r'^(granulated|fresh|dried|frozen|whole|ground)\s+', '', name, flags=re.I)
             name = name.strip()
             
             # Нормализуем единицы (ML -> mL)
@@ -382,17 +393,18 @@ class TlUsefulTipsDiyExtractor(BaseRecipeExtractor):
         keywords_meta = self.soup.find('meta', attrs={'name': 'keywords'})
         if keywords_meta and keywords_meta.get('content'):
             tags_str = keywords_meta['content']
-            tags = [tag.strip() for tag in tags_str.split(',') if tag.strip()]
+            tags = [tag.strip().lower() for tag in tags_str.split(',') if tag.strip()]
         
         # Если не нашли, пытаемся извлечь из JSON-LD
         if not tags:
             json_ld = self.soup.find('script', type='application/ld+json')
             if json_ld:
                 try:
+                    import json
                     data = json.loads(json_ld.string)
                     if 'keywords' in data and data['keywords']:
                         tags_str = data['keywords']
-                        tags = [tag.strip() for tag in tags_str.split(',') if tag.strip()]
+                        tags = [tag.strip().lower() for tag in tags_str.split(',') if tag.strip()]
                 except:
                     pass
         
@@ -406,12 +418,39 @@ class TlUsefulTipsDiyExtractor(BaseRecipeExtractor):
                 words = re.findall(r'\b\w+\b', dish_name.lower())
                 # Фильтруем служебные слова
                 stopwords = {'ang', 'ng', 'sa', 'na', 'at', 'kung', 'para', 'mga', 'may'}
-                tags = [w for w in words if w not in stopwords and len(w) > 3][:4]
+                key_words = [w for w in words if w not in stopwords and len(w) > 3]
+                tags.extend(key_words[:3])  # Берем первые 3 ключевых слова
             
             if category:
-                tags.append(category.lower())
+                cat_lower = category.lower()
+                if cat_lower not in tags:
+                    tags.append(cat_lower)
+            
+            # Добавляем дополнительные теги на основе содержимого
+            # Проверяем ingredients для определения типа блюда
+            ingredients = self.extract_ingredients()
+            if ingredients:
+                try:
+                    import json
+                    ing_list = json.loads(ingredients)
+                    # Проверяем на сладкое (sugar, honey, etc.)
+                    sweet_ingredients = ['asukal', 'sugar', 'honey', 'jam', 'matamis']
+                    has_sweet = any(any(sweet in ing['name'].lower() for sweet in sweet_ingredients) 
+                                  for ing in ing_list if isinstance(ing, dict) and 'name' in ing)
+                    if has_sweet and 'dessert' not in tags:
+                        tags.append('dessert')
+                except:
+                    pass
         
-        return ', '.join(tags) if tags else None
+        # Удаляем дубликаты, сохраняя порядок
+        seen = set()
+        unique_tags = []
+        for tag in tags:
+            if tag and tag not in seen and len(tag) > 2:
+                seen.add(tag)
+                unique_tags.append(tag)
+        
+        return ', '.join(unique_tags) if unique_tags else None
     
     def extract_image_urls(self) -> Optional[str]:
         """
