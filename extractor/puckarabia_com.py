@@ -221,7 +221,7 @@ class PuckarabiaExtractor(BaseRecipeExtractor):
         
         # Паттерн для извлечения количества, единицы и названия (арабские и английские единицы)
         # Важно: более длинные варианты (множественное число) должны быть в начале
-        pattern = r'^([\d\s/.,]+|نصف|ربع|ثلثي|ثلاثة أرباع|حسب الذوق)?\s*(كيلوغرام|ملعقة كبيرة|ملعقة صغيرة|ميلليتر|milliliters?|tablespoons?|teaspoons?|كيلو|أكواب|كوب|فصوص|فص|حبات|حبة|جرام|غرام|لتر|رشة|cups?|tbsps?|tsps?|pounds?|ounces?|liters?|lbs?|oz|kg|pinch(?:es)?|dash(?:es)?|packages?|packs?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|grams?|g\b|ml\b|l\b|مل\b|غ\b|ج\b)?\s*(.+)'
+        pattern = r'^([\d\s/.,]+|نصف|ربع|ثلثي|ثلاثة أرباع|حسب الذوق)?\s*(كيلوغرام|ملاعق كبيرة|ملعقة كبيرة|ملاعق صغيرة|ملعقة صغيرة|ميلليتر|milliliters?|tablespoons?|teaspoons?|كيلو|أكواب|كوب|فصوص|فص|حبات|حبة|جرام|غرام|لتر|رشة|cups?|tbsps?|tsps?|pounds?|ounces?|liters?|lbs?|oz|kg|pinch(?:es)?|dash(?:es)?|packages?|packs?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|grams?|g\b|ml\b|l\b|مل\b|غ\b|ج\b)?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
