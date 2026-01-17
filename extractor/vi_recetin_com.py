@@ -152,73 +152,90 @@ class ViRecetinComExtractor(BaseRecipeExtractor):
     def _parse_ingredient_text(self, text: str) -> Optional[Dict[str, Any]]:
         """
         Parse ingredient text to extract name, amount, and units.
-        Example: "2 ức gà" -> {name: "ức gà", amount: "2", units: "pieces"}
+        Example: "2 ức gà" -> {name: "ức gà", units: "pieces", amount: 2}
+        Format matches reference: name, units, amount (with amount as numeric when possible)
         """
         try:
             # Pattern to match number at the beginning
-            # Examples: "2 ức gà", "60 gr. bởi Maizena"
+            # Examples: "2 ức gà", "60 gr. bởi Maizena", "1 muỗng cà phê muối"
             
-            # Try to find amount at the beginning
-            amount_match = re.match(r'^(\d+(?:[,.]\\d+)?)\s*(?:gr\.|ml\.|thìa|muỗng|quả|lát|ít|phút)?\s*(.+)', text, re.IGNORECASE)
+            # Try to find amount at the beginning (integer or decimal)
+            amount_match = re.match(r'^(\d+(?:[,.]\\d+)?)\s+', text, re.IGNORECASE)
             
             if amount_match:
-                amount = amount_match.group(1)
-                rest = amount_match.group(2).strip()
+                amount_str = amount_match.group(1).replace(',', '.')
+                # Try to convert to integer if possible, otherwise float
+                try:
+                    amount = int(amount_str) if '.' not in amount_str else float(amount_str)
+                except ValueError:
+                    amount = None
                 
-                # Try to identify unit
-                units = self._identify_unit(text, rest)
-                name = self._extract_ingredient_name(rest)
+                # Get the rest of the text after the amount
+                rest = text[amount_match.end():].strip()
+                
+                # Try to identify and remove unit from beginning of rest
+                units, name = self._extract_unit_and_name(rest)
                 
                 return {
                     'name': name,
-                    'amount': amount,
-                    'units': units
+                    'units': units,
+                    'amount': amount
                 }
             else:
                 # No amount found, just ingredient name
                 return {
                     'name': text,
-                    'amount': None,
-                    'units': None
+                    'units': None,
+                    'amount': None
                 }
                 
         except Exception as e:
             logger.warning(f"Error parsing ingredient text '{text}': {e}")
             return {
                 'name': text,
-                'amount': None,
-                'units': None
+                'units': None,
+                'amount': None
             }
     
-    def _identify_unit(self, original_text: str, remaining_text: str) -> Optional[str]:
-        """Identify the unit of measurement from text."""
-        text_lower = original_text.lower()
+    def _extract_unit_and_name(self, text: str) -> tuple:
+        """
+        Extract unit and ingredient name from text.
+        Returns (units, name) tuple.
+        Example: "gr. bởi Maizena" -> ("grams", "Maizena")
+        Example: "ức gà" -> ("pieces", "gà")
+        """
+        text_lower = text.lower()
         
-        # Map Vietnamese units to standard units
-        unit_mappings = {
-            'gr': 'grams',
-            'ml': 'ml',
-            'thìa': 'tablespoons',
-            'muỗng cà phê': 'teaspoon',
-            'muỗng': 'tablespoons',
-            'quả': 'pieces',
-            'ức': 'pieces',
-            'lát': 'slices',
-            'cup': 'cup',
-            'kg': 'kg'
-        }
+        # Map Vietnamese units to standard units with their regex patterns
+        unit_patterns = [
+            (r'^gr\.?\s+(?:bởi|của)?\s*', 'grams'),
+            (r'^ml\.?\s+(?:bởi|của)?\s*', 'ml'),
+            (r'^thìa\s+cà\s+phê\s+', 'teaspoon'),
+            (r'^thìa\s+', 'tablespoons'),
+            (r'^muỗng\s+cà\s+phê\s+', 'teaspoon'),
+            (r'^muỗng\s+', 'tablespoons'),
+            (r'^quả\s+', 'pieces'),
+            (r'^ức\s+', 'pieces'),  # chicken breast
+            (r'^lát\s+', 'slices'),
+            (r'^cup\s+', 'cup'),
+            (r'^kg\.?\s+(?:bởi|của)?\s*', 'kg'),
+        ]
         
-        for key, value in unit_mappings.items():
-            if key in text_lower:
-                return value
+        for pattern, unit in unit_patterns:
+            match = re.match(pattern, text_lower, re.IGNORECASE)
+            if match:
+                # Remove the unit and common words from the beginning
+                name = text[match.end():].strip()
+                # Remove common Vietnamese prep words and clean up
+                name = re.sub(r'^(?:bởi|của)\s+', '', name, flags=re.IGNORECASE).strip()
+                # Remove trailing comma and extra text after comma
+                name = name.split(',')[0].strip()
+                return (unit, name)
         
-        return None
-    
-    def _extract_ingredient_name(self, text: str) -> str:
-        """Extract ingredient name from text, removing units."""
-        # Remove common unit prefixes
-        cleaned = re.sub(r'^(?:gr\.|ml\.|của|bởi|thìa|muỗng)\s+', '', text, flags=re.IGNORECASE)
-        return cleaned.strip()
+        # No unit found
+        # Still clean up the name
+        name = text.split(',')[0].strip()
+        return (None, name)
     
     def _extract_instructions(self, soup: BeautifulSoup) -> Optional[str]:
         """Extract cooking instructions."""
