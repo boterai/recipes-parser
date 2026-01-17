@@ -122,6 +122,8 @@ class StilKurirExtractor(BaseRecipeExtractor):
                 pass
             
             # Очистка названия
+            # Удаляем начальные одиночные буквы (артефакты парсинга типа "r putera")
+            name = re.sub(r'^[a-zA-Z]\s+', '', name)
             # Удаляем скобки и содержимое
             name = re.sub(r'\([^)]*\)', '', name)
             # Удаляем запятые в конце
@@ -135,7 +137,9 @@ class StilKurirExtractor(BaseRecipeExtractor):
             }
         else:
             # Если паттерн не совпал, возвращаем только название
-            # Убираем запятые в конце
+            # Удаляем начальные одиночные буквы
+            text = re.sub(r'^[a-zA-Z]\s+', '', text)
+            # Удаляем запятые в конце
             name = re.sub(r',\s*$', '', text)
             return {
                 "name": name.strip(),
@@ -313,16 +317,24 @@ class StilKurirExtractor(BaseRecipeExtractor):
         # Ищем в meta-тегах
         og_image = self.soup.find('meta', property='og:image')
         if og_image and og_image.get('content'):
-            urls.append(og_image['content'])
+            url = og_image['content']
+            # Проверяем, что это не логотип
+            if 'logo' not in url.lower() and 'icon' not in url.lower():
+                urls.append(url)
         
         twitter_image = self.soup.find('meta', attrs={'name': 'twitter:image'})
         if twitter_image and twitter_image.get('content'):
-            urls.append(twitter_image['content'])
+            url = twitter_image['content']
+            if 'logo' not in url.lower() and 'icon' not in url.lower():
+                urls.append(url)
         
         # Ищем изображения в <picture> и <img> тегах
         for img in self.soup.find_all('img'):
             src = img.get('src')
             if src and 'static-stil.kurir.rs' in src:
+                # Пропускаем логотипы и иконки
+                if any(skip in src.lower() for skip in ['logo', 'icon', 'povrataknakuriritalic']):
+                    continue
                 if src not in urls:
                     urls.append(src)
                 if len(urls) >= 3:
