@@ -1,0 +1,12 @@
+{
+    "dish_name": "angel hair med geitost, brokkoli og ristede pinjekjerner",
+    "description": null,
+    "ingredients": "[{\"name\": \"ekstra jomfru olivenolje\", \"units\": \"ss\", \"amount\": \"1\"}, {\"name\": \"brokkolibuketter\", \"units\": \"kopper\", \"amount\": \"3\"}, {\"name\": \"Kosher-salt\", \"units\": null, \"amount\": null}, {\"name\": \"nykvernet svart pepper\", \"units\": null, \"amount\": null}, {\"name\": \"kyllingkraft\", \"units\": \"kopper\", \"amount\": \"1 ½\"}, {\"name\": \"ferske timianblader\", \"units\": \"teskje\", \"amount\": \"1\"}, {\"name\": \"usaltet smør\", \"units\": \"ss\", \"amount\": \"4\"}, {\"name\": \"geitost\", \"units\": \"gram\", \"amount\": \"115\"}, {\"name\": \"fersk eller butikkjøpt angel hair-pasta\", \"units\": \"gram\", \"amount\": \"340\"}, {\"name\": \"ristet pinjekjerner\", \"units\": \"ss\", \"amount\": \"2\"}]",
+    "instructions": "1. Kok opp en stor kjele med vann. 2. Varm opp olivenoljen i en stor stekepanne. På middels høy varme, stek broccolibukettene under omrøring etter behov, i 2 til 3 minutter. Krydre lett med salt og pepper. Overfør til en skål og sett til side til bruk. 3. Deglaser pannen med kraften, og tilsett timianbladene. Kok opp og la det redusere til halvparten. Tilsett smør og geitosten, og rør sammen til osten smelter. Hold varm. 4. I mellomtiden, tilsett litt salt i den kokende vannet og kok pastaen til den er al dente, ca. 1 minutt for fersk pasta. (Kok ferdigpakket pasta i henhold til anvisningene på pakken). Sil av vannet godt og bland pastaen med den reserverte broccolien i stekepannen. Varm opp til gjennomvarming, ca. 2 minutter. Krydre med salt og pepper etter smak. 5. For å servere, fordel pastaen på 4 varme tallerkener. Strø over ristet pinjekjerner og pynt med en kvist timian.",
+    "category": "hovedrett",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": "20 minutter",
+    "notes": null,
+    "tags": "pasta, middag, lett, sunn, geitost, brokkoli, pinjekjerner"
+}

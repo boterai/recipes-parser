@@ -1,0 +1,12 @@
+{
+    "dish_name": "vegetable couscous med marokkansk pesto",
+    "description": null,
+    "ingredients": "[{\"name\": \"fersk koriander\", \"units\": \"kopp\", \"amount\": \"1\"}, {\"name\": \"fersk persille\", \"units\": \"kopp\", \"amount\": \"1/2\"}, {\"name\": \"hele mandler\", \"units\": \"spiseskjeer\", \"amount\": \"2\"}, {\"name\": \"hvitløk\", \"units\": \"fedd\", \"amount\": \"1/2\"}, {\"name\": \"ekstra virgin olivenolje\", \"units\": \"kopp\", \"amount\": \"1/4\"}, {\"name\": \"Koshersalt\", \"units\": null, \"amount\": null}, {\"name\": \"usaltet smør\", \"units\": \"spiseskjeer\", \"amount\": \"4\"}, {\"name\": \"Koshersalt\", \"units\": null, \"amount\": null}, {\"name\": \"løk\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"kanelstang\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"hermetiske tomater\", \"units\": \"boks (ca. 400 g)\", \"amount\": \"1\"}, {\"name\": \"gulrøtter\", \"units\": \"små\", \"amount\": \"2\"}, {\"name\": \"zucchini og/eller sveitsisk kål\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"rosiner\", \"units\": \"kopp\", \"amount\": \"1/3\"}, {\"name\": \"nykvernet pepper\", \"units\": null, \"amount\": null}, {\"name\": \"fullkornscouscous\", \"units\": \"kopper\", \"amount\": \"1 1/2\"}]",
+    "instructions": "1. Lag pestoen: Bland koriander, persilleblader, mandler og hvitløk i en food processor; puls til det er grovhakket. Tilsett olivenolje og 1/2 teskje salt; kjør til det er jevnt og glatt. 2. Forbered grønnsakene til couscousen: Varm opp en stor, tykkbunnet gryte på middels varme. Tilsett 3 ss smør og 1 teskje salt; kok til smøret begynner å bli brunt. Tilsett løken. Bind sammen de reserverte persille-stilkene og kanelstangen med hyssing; legg dem i gryten. Kok, rør av og til, til løken er lett brunet, ca. 5 minutter. Tilsett tomatene, 1 kopp vann, gulrøtter, squash og/eller grønnkål, rosiner, 1 1/2 teskje salt og pepper etter smak. Kok, rør av og til, til grønnsakene er sprøtt møre, ca. 15 minutter. Fjern persille og kanelstangen. 3. I mellomtiden, kok couscousen etter anvisning på pakken. Tilsett den resterende spiseskjeen smør, smak til med salt og pepper, og luft opp med en gaffel. Legg grønnsakene og pestoen oppå couscousen.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "15 minutes",
+    "total_time": "35 minutes",
+    "notes": null,
+    "tags": "vegetar,couscous,marokkansk,pesto,enkel,sunn"
+}

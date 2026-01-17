@@ -66,7 +66,6 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
                 ingredients=merged_recipe.ingredients,
                 instructions=merged_recipe.instructions,
                 description=merged_recipe.description,
-                nutrition_info=merged_recipe.nutrition_info,
                 prep_time=merged_recipe.prep_time,
                 cook_time=merged_recipe.cook_time,
                 merge_comments=merged_recipe.merge_comments
@@ -149,7 +148,6 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
                     ingredients=merged_recipe.ingredients,
                     instructions=merged_recipe.instructions,
                     description=merged_recipe.description,
-                    nutrition_info=merged_recipe.nutrition_info,
                     prep_time=merged_recipe.prep_time,
                     cook_time=merged_recipe.cook_time,
                     merge_comments=merged_recipe.merge_comments

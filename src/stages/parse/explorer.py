@@ -24,14 +24,12 @@ if __name__ == "__main__":
     sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 import config.config as config
-from src.common.db.mysql import MySQlManager
 from src.stages.extract.recipe_extractor import RecipeExtractor
 from src.stages.analyse.analyse import RecipeAnalyzer
 from src.repositories.site import SiteRepository
 from src.repositories.page import PageRepository
 from src.models.site import Site
-import sqlalchemy
-from src.models.page import Page, PageORM
+from src.models.page import Page
 # Настройка логирования
 logging.basicConfig(
     level=logging.INFO,
@@ -980,7 +978,7 @@ class SiteExplorer:
                         self.logger.error("Страница не загрузилась, пропускаем")
                         self.failed_urls.add(current_url)
                         continue
-                
+                     
                 # Проверка на Cloudflare/Captcha
                 try:
                     page_title = self.driver.title.lower()

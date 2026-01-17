@@ -1,0 +1,12 @@
+{
+    "dish_name": "Instant Pot Basmati Rice",
+    "description": "Perfectly cooked Indian Basmati rice made in an instant pot or pressure cooker.",
+    "ingredients": "[{\"name\": \"Basmati Rice\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"Water\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"Ghee or Oil\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"Salt\", \"units\": \"teaspoon\", \"amount\": 0.5}]",
+    "instructions": "Wash basmati rice until the water runs clear. If soaking, soak the rice in excess water for 1 hour. After the soaking time is done, rinse the rice. Add the water and rice to the instant pot. If using, add the ghee and salt. Start the instant pot in manual or pressure cook mode for 4 minutes at high pressure with vent in sealing position. When the instant pot beeps, do 5 minutes natural pressure release, which means release the pressure manually 5 minutes after the instant pot beeps. Fluff the rice with a ladle or fork. Let them stand for 5 more minutes. Rice is ready to be served with your favorite curry.",
+    "category": "Side Dish",
+    "prep_time": "5 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "20 minutes",
+    "notes": "I add 1:1 rice to water ratio in this recipe as I soaked the rice. You could change the rice to water ratio to 1:1.25 if not soaking the rice. If you like very soft rice, then you can increase the water to 1.5 cups for 1 cup of rice.",
+    "tags": "Gluten-free, Vegetarian"
+}

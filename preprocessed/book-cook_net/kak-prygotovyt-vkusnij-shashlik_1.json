@@ -1,0 +1,12 @@
+{
+    "dish_name": "шашлык",
+    "description": "Рецепт приготовления вкусного шашлыка с рекомендациями по выбору мяса и мангала.",
+    "ingredients": "[{\"name\": \"мясо\", \"units\": null, \"amount\": null}, {\"name\": \"лук\", \"units\": null, \"amount\": null}, {\"name\": \"уксус\", \"units\": null, \"amount\": null}, {\"name\": \"перец\", \"units\": null, \"amount\": null}, {\"name\": \"вода\", \"units\": null, \"amount\": null}, {\"name\": \"масло\", \"units\": null, \"amount\": null}, {\"name\": \"соль\", \"units\": null, \"amount\": null}, {\"name\": \"специи\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Выберите качественное мясо. 2. Приготовьте маринад из лука, уксуса, перца и воды. 3. Замаринуйте мясо на 12 часов. 4. Разожгите мангал с помощью сухих дров или угля. 5. Жарьте мясо на шампурах, контролируя огонь.",
+    "category": "Main Course",
+    "prep_time": "12 hours",
+    "cook_time": "30 minutes",
+    "total_time": "12 hours 30 minutes",
+    "notes": "Важно не передерживать мясо в маринаде. Используйте качественные шампура и мангал.",
+    "tags": "шашлык, мясо, гриль, пикник"
+}

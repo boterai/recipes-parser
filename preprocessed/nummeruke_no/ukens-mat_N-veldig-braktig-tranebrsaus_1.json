@@ -1,0 +1,12 @@
+{
+    "dish_name": "very berry cranberriesaus",
+    "description": "enkel oppskrift",
+    "ingredients": "[{\"name\": \"ferske eller frosne tranebær\", \"units\": \"poser\", \"amount\": 2}, {\"name\": \"appelsinjuice\", \"units\": \"kopp\", \"amount\": 1}, {\"name\": \"brunt sukker\", \"units\": \"kopp\", \"amount\": 0.5}, {\"name\": \"vanlig sukker\", \"units\": \"kopp\", \"amount\": 0.5}, {\"name\": \"whisky\", \"units\": \"kopp\", \"amount\": 0.5}, {\"name\": \"blåbær\", \"units\": \"kopp\", \"amount\": 1}, {\"name\": \"bringebær\", \"units\": \"kopp\", \"amount\": 0.5}]",
+    "instructions": "Legg tranebærene, appelsinjuicen, brunt sukker, vanlig sukker og whiskey i en stor kjele, og kok opp på middels høy varme. Skru ned varmen og la det småkoke i 15 minutter. Tilsett blåbær og bringebær, og kok i ytterligere 3 til 4 minutter. La det avkjøle, før du overfører det til en glasskrukke og oppbevarer det i kjøleskapet til det er kaldt og har fått en tykk konsistens.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "15 minutes",
+    "total_time": "25 minutes",
+    "notes": null,
+    "tags": "cranberry, bær, saus, høst, enkel, søt, frisk"
+}
