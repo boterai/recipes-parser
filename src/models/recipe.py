@@ -26,7 +26,6 @@ class Recipe(BaseModel):
     cook_time: Optional[str] = None
     prep_time: Optional[str] = None
     total_time: Optional[str] = None
-    nutrition_info: Optional[str] = None
     category: Optional[str] = None
 
     # системные поля
@@ -63,8 +62,6 @@ class Recipe(BaseModel):
             meta_parts.append(f"Prep time: {self.prep_time}")
         if self.total_time:
             meta_parts.append(f"Total time: {self.total_time}")
-        if self.nutrition_info:
-            meta_parts.append(f"Calories: {self.nutrition_info}")
         return "; ".join(meta_parts)
     
     def get_full_recipe_str(self) -> str:

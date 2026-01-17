@@ -12,7 +12,6 @@ CREATE TABLE IF NOT EXISTS recipe_en -- таблица переводов рец
     cook_time String DEFAULT '',
     prep_time String DEFAULT '',
     total_time String DEFAULT '',
-    nutrition_info String DEFAULT '',
     category String DEFAULT '',
     vectorised BOOLEAN DEFAULT FALSE, -- была ли векторизация рецепта
     last_updated DateTime DEFAULT now()

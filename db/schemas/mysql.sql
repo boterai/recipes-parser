@@ -26,7 +26,6 @@ CREATE TABLE IF NOT EXISTS pages (
     ingredients JSON, -- 100% обязательное поле
     instructions TEXT, -- 100% обязательное поле
     dish_name VARCHAR(500), -- 100 % обязательное поле
-    nutrition_info TEXT,
     category VARCHAR(255),
     prep_time VARCHAR(100),
     cook_time VARCHAR(100),

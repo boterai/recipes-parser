@@ -25,7 +25,6 @@ class MergedRecipeORM(Base):
     ingredients = Column(JSON)  # 100% обязательное поле - список ингредиентов с amounts
     description = Column(Text)
     instructions = Column(Text)  # 100% обязательное поле
-    nutrition_info = Column(Text)
     prep_time = Column(String(100))
     cook_time = Column(String(100))
 
@@ -56,7 +55,6 @@ class MergedRecipeORM(Base):
             ingredients=self.ingredients,
             description=self.description,
             instructions=self.instructions,
-            nutrition_info=self.nutrition_info,
             prep_time=self.prep_time,
             cook_time=self.cook_time,
             merge_comments=self.merge_comments,
@@ -79,7 +77,6 @@ class MergedRecipe(BaseModel):
     ingredients: Optional[list[dict]] = None
     description: Optional[str] = None
     instructions: Optional[str] = None
-    nutrition_info: Optional[str] = None
     prep_time: Optional[str] = None
     cook_time: Optional[str] = None
     
@@ -132,7 +129,6 @@ class MergedRecipe(BaseModel):
             ingredients=orm_obj.ingredients,
             description=orm_obj.description,
             instructions=orm_obj.instructions,
-            nutrition_info=orm_obj.nutrition_info,
             prep_time=orm_obj.prep_time,
             cook_time=orm_obj.cook_time,
             merge_comments=orm_obj.merge_comments,

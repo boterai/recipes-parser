@@ -179,7 +179,6 @@ URL: {url}
     "cook_time": "время приготовления (например, '30 minutes') или null",
     "total_time": "общее время (например, '45 minutes') или null",
     "category": "категория/тип блюда (например, 'Dessert', 'Main Course') или null",
-    "nutrition_info": "информация о питательной ценности в текстовом формате или null",
     "notes": "дополнительные заметки, советы, замены ингредиентов или null",
     "tags": "теги через запятую или null"
 }}
@@ -239,7 +238,6 @@ URL: {url}
                 cook_time=analysis.get("cook_time"),
                 total_time=analysis.get("total_time"),
                 category=analysis.get("category"),
-                nutrition_info=analysis.get("nutrition_info"),
                 notes=analysis.get("notes"),
                 tags=analysis.get("tags"),
                 ingredients=ingredients,
