@@ -1,0 +1,12 @@
+{
+    "dish_name": "Jafa kolač na zdrav način",
+    "description": "Omiljeni kolač na nešto malo drugačiji način - zdrava varijanta.",
+    "ingredients": "[{\"name\": \"ovsenih pahuljica\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"vode\", \"units\": \"ml\", \"amount\": 150}, {\"name\": \"praška za pecivo\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"vanilin šećera\", \"units\": \"kesica\", \"amount\": 1}, {\"name\": \"narandža - sitno narendana kora\", \"units\": null, \"amount\": 1}, {\"name\": \"sveže naceđenog soka od pomorandže\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"meda\", \"units\": \"kašike\", \"amount\": 2}, {\"name\": \"želatina\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"crne čokolade\", \"units\": \"g\", \"amount\": 150}]",
+    "instructions": "Priprema biskvita: Staviti u blender ovsene pahuljice, vodu, prašak za pecivo, vanilin šećer i sitno narendanu koricu od pomorandže. Blendirati da dobijete ujednačenu gustu smesu (gušće nego za palačinke). Smesu sipajte u papirnate korpice stavljene u kalupe za mafine (otprilike po 1 kašika). Pecite u zagrejanoj rerni na 170 stepeni C oko 15 minuta. Ostavite kolač u kalupima da se ohladi na sobnoj temperaturi. Priprema želea: Pomešati sveže naceđen sok od pomorandže, med i želatin i zagrevati na umerenoj temperaturi uz mešanje do ključanja. Čim izbije prvi ključ skloniti sa ringle i staviti da se prohladi 10 minuta. Sipati preko ohlađenih biskvitića (otprilike po dve kašike), pa staviti u frižider (i dalje u kalupima) na nekoliko sati da se žele dobro stegne. Priprema glazure: Otopiti čokoladu na pari pa sipati preko želea (otprilike po 1 ravna kašika). Vratiti u frižider da se glazura stegne. Izvaditi kolač iz korpice i poslužiti.",
+    "category": "Deserti",
+    "prep_time": null,
+    "cook_time": "15 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "ovsene pahuljice, prašak za pecivo, vanilin šećer, narandža, narandžine korice, sok od pomorandže, med, želatin, čokolada"
+}

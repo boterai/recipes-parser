@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tarte folhada de natas e leite condensado",
+    "description": "Esta sobremesa é daquelas obrtigatórias de experimentar! Tarte folhada já é das receitas que reune mais fãs, agora imagine se lhe dissermos que tem leite condensado.",
+    "ingredients": "[{\"name\": \"massa folhada estendida\", \"units\": \"rolo\", \"amount\": 1}, {\"name\": \"leite condensado\", \"units\": \"lata\", \"amount\": 1}, {\"name\": \"ovos\", \"units\": \"m\", \"amount\": 2}, {\"name\": \"gemas\", \"units\": \"m\", \"amount\": 5}, {\"name\": \"natas\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"Canela em pó\", \"units\": null, \"amount\": null}, {\"name\": \"Açúcar em pó\", \"units\": null, \"amount\": null}]",
+    "instructions": "Misture bem o leite condensado com os ovos e as gemas e depois adicione as natas, em fio e mexendo sempre. Desenrole a massa folhada, forre uma forma 22 cm de diâmetro com ela, mantendo o papel vegetal que a acompanha por baixo, e pique o fundo com um garfo. Deite o creme na tarteira e leve ao forno, pré-aquecido a 180ºc, por cerca de 40 minutos. Retire, deixe arrefecer e leve ao frigorífico durante, pelo menos, 1 hora. Sirva polvilhada com canela e açúcar em pó.",
+    "category": "Dessert",
+    "prep_time": "55 minutes",
+    "cook_time": "55 minutes",
+    "total_time": "1 hour 50 minutes",
+    "notes": null,
+    "tags": "doces, receitas de doces, receitas de sobremesas, receitas económicas, receitas faceis, sobremesa com leite condensado, sobremesa com natas, sobremesa fácil, sobremesas, tarte folhada de natas e leite condensado"
+}

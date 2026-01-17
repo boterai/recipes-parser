@@ -1,0 +1,12 @@
+{
+    "dish_name": "Doce de maçã",
+    "description": "Este delicioso e simples doce de maçã caseiro é perfeito para servir ao pequeno-almoço! É um doce saudável, fresco e bastante agradável.",
+    "ingredients": "[{\"name\": \"maçãs vermelhas\", \"units\": \"unidades\", \"amount\": 5}, {\"name\": \"açúcar\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"pau de canela\", \"units\": \"unidade\", \"amount\": 1}, {\"name\": \"água\", \"units\": \"ml\", \"amount\": 200}]",
+    "instructions": "Passo 1: Lave, descasque, retire as sementes e corte as maçãs em pequenos pedaços. Passo 2: Num tacho, adicione a maçã cortada em pequenos pedaços, o açúcar, o pau de canela e a água. Mexa e deixe ferver em lume médio-alto. Passo 3: Quando começar a ferver, reduza para lume brando e deixe cozinhar cerca de 30 minutos até atingir o ponto de estrada (quando se passa uma colher de pau no fundo do tacho e ela deixa um rasto como uma estrada), mexendo de vez em quando. Passo 4: Desligue o lume, retire o pau de canela e deixe arrefecer até à temperatura ambiente. Passo 5: Reserve o doce no frigorífico num frasco bem fechado.",
+    "category": "Sobremesas",
+    "prep_time": "5 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "35 minutes",
+    "notes": "Se quiser fazer mais quantidade de doce, basta dobrar a quantidade de ingredientes (10 maçãs vermelhas médias, 300 g de açúcar, 2 paus de canela e 400 ml de água).",
+    "tags": "fáceis, para o pequeno-almoço, receitas, sobremesas"
+}

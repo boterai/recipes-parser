@@ -1,0 +1,12 @@
+{
+    "dish_name": "버섯 청경채볶음",
+    "description": "Блюдо из жареных грибов и 청경채 (китайская капуста), приготовленное с соевым соусом и крахмалом.",
+    "ingredients": "[{\"name\": \"버섯\", \"units\": null, \"amount\": null}, {\"name\": \"청경채\", \"units\": null, \"amount\": null}, {\"name\": \"기름\", \"units\": \"T\", \"amount\": \"1\"}, {\"name\": \"소금\", \"units\": null, \"amount\": null}, {\"name\": \"올리고당\", \"units\": null, \"amount\": null}, {\"name\": \"간장\", \"units\": null, \"amount\": null}, {\"name\": \"전분\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. 버섯과 청경채를 세척후 적당히 썬다. 2. 기름 1T에 버섯을 먼저 볶는다. 3. 그 다음 청경채를 넣고 4. 올리고당 먼저 넣고 5. 간장을 넣어 볶아요. 6. 마지막에 전분을 물에 살짝 풀어 부어주세요.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "버섯향이 강해서 파기름을 생략해도 됨.",
+    "tags": "버섯 청경채볶음, 버섯요리, 청경채"
+}

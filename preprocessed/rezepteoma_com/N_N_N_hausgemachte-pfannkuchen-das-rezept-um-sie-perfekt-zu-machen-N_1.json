@@ -1,0 +1,12 @@
+{
+    "dish_name": "Hausgemachte Pfannkuchen",
+    "description": "Рецепт домашних блинов, чтобы сделать их идеально.",
+    "ingredients": "[{\"name\": \"Mehl\", \"units\": \"g\", \"amount\": 90}, {\"name\": \"Zucker\", \"units\": \"g\", \"amount\": 20}, {\"name\": \"Salz\", \"units\": \"Prise\", \"amount\": 1}, {\"name\": \"Eier\", \"units\": \"ganz\", \"amount\": 2}, {\"name\": \"Eigelb\", \"units\": null, \"amount\": 1}, {\"name\": \"Sonnenblumenkernöl\", \"units\": \"g\", \"amount\": 30}, {\"name\": \"Milch\", \"units\": \"g\", \"amount\": 240}]",
+    "instructions": "Mehl, Zucker und Salz in einer Schüssel vermischen. Anschließend die Eier und das Eigelb hinzufügen. Zum Schluss Milch und Öl hinzufügen. Gut vermischen, bis eine glatte Paste entsteht. Einen Löffel davon in eine heiße Pfanne geben und auf beiden Seiten anbraten. Füllen Sie das Feld nach Ihren Wünschen aus.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

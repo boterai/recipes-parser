@@ -1,0 +1,12 @@
+{
+    "dish_name": "Veganiški blyneliai su mėlynėmis",
+    "description": null,
+    "ingredients": "[{\"name\": \"avižinių dribsnių\", \"units\": \"g\", \"amount\": 60}, {\"name\": \"miltų\", \"units\": \"g\", \"amount\": 120}, {\"name\": \"kepimo miltelių\", \"units\": \"valg. šaukš.\", \"amount\": 0.5}, {\"name\": \"cukranendrių cukraus\", \"units\": \"valg. šaukš.\", \"amount\": 2}, {\"name\": \"jūros druskos\", \"units\": \"arbat. šaukš.\", \"amount\": 0.25}, {\"name\": \"lydyto veganiško sviesto arba rapsų aliejaus\", \"units\": \"g\", \"amount\": 80}, {\"name\": \"augalinio pieno arba vandens\", \"units\": \"g\", \"amount\": 260}, {\"name\": \"mėlynių\", \"units\": \"stiklinės\", \"amount\": 1}, {\"name\": \"veganiško sviesto\", \"units\": \"kiekis kepimui\", \"amount\": null}]",
+    "instructions": "Smulkintuve susmulkinkite dribsnius, turi išeiti avižiniai miltai. Dideliame Inde sumaišykite avižinius ir paprastus miltus, druską, kepimo miltelius ir cukrų. Įpilkite aliejų/sviestą, pieną ir suberkite mėlynes. Viską atsargiai išmaišykite. Įkaitinkite keptuve. Padėkite gabaliuką sviesto. Kai sviestas išsilydys kepkite ant jo blynelius. Viens blynelis kepa apie 5 minutes.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "5 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

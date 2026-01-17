@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pommes de terre rôties au miel et à la moutarde",
+    "description": "Une recette gourmande et originale de pommes de terre au four, légèrement sucrées et acidulées.",
+    "ingredients": "[{\"name\": \"Pommes de terre\", \"units\": null, \"amount\": null}, {\"name\": \"Moutarde\", \"units\": null, \"amount\": null}, {\"name\": \"Poivre\", \"units\": null, \"amount\": null}, {\"name\": \"Miel\", \"units\": null, \"amount\": null}, {\"name\": \"Huile d’olive extra vierge\", \"units\": null, \"amount\": null}, {\"name\": \"Beurre\", \"units\": null, \"amount\": null}, {\"name\": \"Romarin\", \"units\": null, \"amount\": null}, {\"name\": \"Une gousse d’ail\", \"units\": null, \"amount\": null}, {\"name\": \"Thym\", \"units\": null, \"amount\": null}, {\"name\": \"Épices au choix\", \"units\": null, \"amount\": null}]",
+    "instructions": "Éplucher les pommes de terre, les rincer à l’eau plusieurs fois pour éliminer l’amidon. Puis, les couper en deux et les laisser reposer au moins 15 minutes dans de l’eau froide. Pendant ce temps, porter beaucoup d’eau salée à ébullition. Y verser les pommes de terre. Les faire blanchir pendant 3 minutes. Les égoutter parfaitement et les laisser tiédir. Préparer l’assaisonnement dans un saladier, en mélangeant de la moutarde, du miel et du poivre (quantités au goût). Ajouter les pommes de terre égouttées, des épices, du thym et du romarin et la gousse d’ail non pelée. Mélanger le tout avec les mains pour bien enrober les pommes de terre. Placer les pommes de terre ainsi assaisonnées sur une plaque à pâtisserie graissée à la fois avec de l’huile et un peu de beurre. Enfourner à haute température pour 30 à 35 minutes. S’assurer qu’elles sont bien cuites avant de les sortir du four. Pour cela, embrocher une pomme de terre avec une fourchette. Celle-ci doit pénétrer sans difficulté. À ce stade, les pommes de terre rôties au miel et à la moutarde sont prêtes. Retirer du four et servir chaud.",
+    "category": "Plats",
+    "prep_time": "15 minutes",
+    "cook_time": "40 minutes",
+    "total_time": "55 minutes",
+    "notes": null,
+    "tags": null
+}

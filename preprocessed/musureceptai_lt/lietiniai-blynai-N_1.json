@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lietiniai blynai",
+    "description": null,
+    "ingredients": "[{\"name\": \"pieno\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"kiaušinių\", \"units\": null, \"amount\": 3}, {\"name\": \"miltų\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"aliejaus\", \"units\": \"g\", \"amount\": 30}, {\"name\": \"cukraus\", \"units\": \"g\", \"amount\": 30}, {\"name\": \"žiuosnelis druskos\", \"units\": null, \"amount\": null}]",
+    "instructions": "Kiaušinius suplakame su cukrumi ir druska. Įpilame 100-200 ml pieno ir išplakti. Suberti visus miltus ir vėl suplakti. Gauname vientisą masę ir į ją įpilame likusį pieną, išmaišome ir įpilame aliejų ir vėl viską išmaišome. Keptuvėje įkaitiname truputi aliejaus (tik prieš pirmą kepimą) ir kepame blynus. Paduoti blynus galima su uogienę, uogom, medum, šokoladų ir t.t.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

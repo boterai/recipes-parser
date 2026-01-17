@@ -1,0 +1,12 @@
+{
+    "dish_name": "토마토 커리",
+    "description": "비건 토마토 커리, 얼린 두부와 다양한 야채를 사용한 간단한 레시피.",
+    "ingredients": "[{\"name\": \"대파\", \"units\": null, \"amount\": null}, {\"name\": \"편마늘\", \"units\": null, \"amount\": null}, {\"name\": \"양파\", \"units\": null, \"amount\": null}, {\"name\": \"감자\", \"units\": null, \"amount\": null}, {\"name\": \"당근\", \"units\": null, \"amount\": null}, {\"name\": \"파프리카\", \"units\": null, \"amount\": null}, {\"name\": \"애호박\", \"units\": null, \"amount\": null}, {\"name\": \"브로콜리\", \"units\": null, \"amount\": null}, {\"name\": \"토마토\", \"units\": \"개\", \"amount\": \"2\"}, {\"name\": \"버섯\", \"units\": null, \"amount\": null}, {\"name\": \"양배추\", \"units\": null, \"amount\": null}, {\"name\": \"얼린두부\", \"units\": null, \"amount\": null}, {\"name\": \"물\", \"units\": null, \"amount\": null}, {\"name\": \"카레가루\", \"units\": null, \"amount\": null}, {\"name\": \"강황분말\", \"units\": null, \"amount\": null}, {\"name\": \"가람마살라\", \"units\": null, \"amount\": null}, {\"name\": \"전분가루\", \"units\": null, \"amount\": null}, {\"name\": \"쌀가루\", \"units\": null, \"amount\": null}, {\"name\": \"간장\", \"units\": null, \"amount\": null}, {\"name\": \"소금\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. 기름에 대파, 편마늘을 먼저 구워 파기름을 냅니다. 2. 집에 있는 야채를 아무거나 넣고 모든 재료를 다 넣고 푹 끓여줍니다. 3. 물과 카레가루를 넣습니다. 4. 얼린두부가 없을 땐 두부, 버섯 등을 구워 장식합니다.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "토마토는 4 등분하여 넣고 껍질만 따로 집게로 건져 빼버리면 편해요.",
+    "tags": "비건 카레, 토마토 커리, 얼린두부 커리"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Easy Pepper Steak",
+    "description": null,
+    "ingredients": "[{\"name\": \"reduced-sodium soy sauce\", \"units\": \"cup\", \"amount\": \"1/4\"}, {\"name\": \"reduced-sodium chicken broth\", \"units\": \"cup\", \"amount\": \"1/2\"}, {\"name\": \"sherry cooking wine\", \"units\": \"cup\", \"amount\": \"1/4\"}, {\"name\": \"oyster sauce\", \"units\": \"Tbsp.\", \"amount\": \"2\"}, {\"name\": \"cornstarch\", \"units\": \"Tbsp.\", \"amount\": \"1\"}, {\"name\": \"vegetable oil\", \"units\": \"Tbsp.\", \"amount\": \"2\"}, {\"name\": \"top sirloin steak\", \"units\": \"lb.\", \"amount\": \"1\"}, {\"name\": \"ground black pepper\", \"units\": \"tsp.\", \"amount\": \"1\"}, {\"name\": \"Chinese 5-spice\", \"units\": \"tsp.\", \"amount\": \"1/2\"}, {\"name\": \"bell peppers\", \"units\": null, \"amount\": \"2\"}, {\"name\": \"garlic cloves\", \"units\": null, \"amount\": \"3\"}, {\"name\": \"cooked white rice\", \"units\": null, \"amount\": null}, {\"name\": \"sliced green onion\", \"units\": null, \"amount\": null}, {\"name\": \"sesame seeds\", \"units\": null, \"amount\": null}]",
+    "instructions": "Directions at thepioneerwoman.com",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

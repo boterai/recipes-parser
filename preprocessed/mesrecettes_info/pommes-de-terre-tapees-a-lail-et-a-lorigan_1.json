@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pommes de terre tapées à l'ail et à l'origan",
+    "description": "Pommes de terre cuites à l'eau, aplaties et cuites au four avec de l'ail et de l'origan.",
+    "ingredients": "[{\"name\": \"pommes de terre\", \"units\": \"g\", \"amount\": 800}, {\"name\": \"origan\", \"units\": \"cs\", \"amount\": 2}, {\"name\": \"huile d'olive\", \"units\": \"cs\", \"amount\": 2}, {\"name\": \"gousses d'ail\", \"units\": null, \"amount\": 8}, {\"name\": \"fleur de sel\", \"units\": null, \"amount\": null}, {\"name\": \"poivre\", \"units\": null, \"amount\": null}]",
+    "instructions": "Lavez les pommes de terre, mettez-les dans une grande casserole ou dans une cocotte et recouvrez d’eau. Portez à ébullition, ajoutez du gros sel, baissez le feu puis faites frémir pendant 15 minutes. Les pommes de terre doivent être tendres mais pas complètement cuites. Préchauffez votre four à 200°C. Égouttez les pommes de terre, déposez-les sur une planche puis aplatissez-les à l’aide d’une cuillère en bois ou d’un presse purée, afin d’obtenir des galettes d’environ 1,5 cm d’épaisseur. Mettez-lez dans un grand plat, ajoutez l’huile d’olive, les gousses d’ail non pelées et mélangez délicatement. Pour la cuisson, il est important que vos pommes de terre soient sur une seule couche. Enfournez pour une vingtaine de minutes, jusqu’à ce que les pommes de terre soient bien dorées, en les retournant à mi-cuisson. Servez avec de la fleur de sel, l’origan et le poivre du moulin.",
+    "category": "Plats",
+    "prep_time": "15 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "35 minutes",
+    "notes": null,
+    "tags": "pommes de terre, ail, origan"
+}

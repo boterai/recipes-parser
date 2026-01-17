@@ -1,0 +1,12 @@
+{
+    "dish_name": "Rigatoni alla boscaiola",
+    "description": "Ein traditioneller erster Gang der italienischen Küche, reichhaltig und köstlich.",
+    "ingredients": "[{\"name\": \"Geschälte Tomaten\", \"units\": \"gr\", \"amount\": 400}, {\"name\": \"Rigatoni\", \"units\": \"gr\", \"amount\": 360}, {\"name\": \"Champignons\", \"units\": \"gr\", \"amount\": 300}, {\"name\": \"Geschälte Erbsen\", \"units\": \"gr\", \"amount\": 200}, {\"name\": \"Kochsahne\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"gewürfelter geräucherter Speck\", \"units\": \"gr\", \"amount\": 100}, {\"name\": \"getrocknete Steinpilze\", \"units\": \"gr\", \"amount\": 50}, {\"name\": \"Knoblauch\", \"units\": \"clove\", \"amount\": 1}, {\"name\": \"Frische Petersilie\", \"units\": \"bunch\", \"amount\": 1}, {\"name\": \"Natives Olivenöl extra\", \"units\": \"qb\", \"amount\": null}, {\"name\": \"Verkauf\", \"units\": \"qb\", \"amount\": null}, {\"name\": \"Baby\", \"units\": \"qb\", \"amount\": null}]",
+    "instructions": "1. Schneiden Sie das erdige Ende des Pilzstiels ab und entfernen Sie es. 2. Reiben Sie die Pilze mit Küchenpapier oder einem feuchten Tuch gut ab. 3. Die Pilze gleichmäßig schneiden. 4. Tauchen Sie die getrockneten Pilze in warmes Wasser. 5. Den Knoblauch und Petersilie fein hacken. 6. Den Speck anbraten. 7. Öl, Knoblauch und Petersilie hinzufügen. 8. Getrocknete Pilze hacken und in die Pfanne geben. 9. Champignons hinzufügen und kochen. 10. Erbsen dazugeben. 11. Geschälte Tomaten hinzufügen und köcheln lassen. 12. Sahne hinzufügen. 13. Nudeln kochen und mit der Soße vermengen. 14. Mit Pfeffer und Petersilie abschließen. 15. Heiß servieren.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Das Dressing kann im Voraus zubereitet und bis zu einem Tag im Kühlschrank aufbewahrt werden.",
+    "tags": "italienisch, pasta, Hauptgericht"
+}

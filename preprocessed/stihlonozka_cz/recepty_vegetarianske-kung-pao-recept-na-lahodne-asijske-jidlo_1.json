@@ -1,0 +1,12 @@
+{
+    "dish_name": "Vegetariánské Kung Pao",
+    "description": "Recept na lahodné asijské jídlo, které je jednoduché na přípravu a plné chuti.",
+    "ingredients": "[{\"name\": \"Tofu\", \"units\": \"g\", \"amount\": \"300\"}, {\"name\": \"Červená paprika\", \"units\": \"ks\", \"amount\": \"1\"}, {\"name\": \"Chilli papričky\", \"units\": \"ks\", \"amount\": \"1-2\"}, {\"name\": \"Arašídové máslo\", \"units\": \"lžíce\", \"amount\": \"2\"}]",
+    "instructions": "Nejprve nakrájejte tofu na kostičky a osmažte je dozlatova na pánvi. Poté přidejte nakrájenou zeleninu, česnek a chilli papričky, a restujte dalších pár minut. Nakonec přimíchejte arašídy a připravenou omáčku z sójové omáčky, rýžového octa a koření. Jídlo podávejte horké s vařenou rýží.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "45 minutes",
+    "notes": "Můžete experimentovat s různými druhy zeleniny nebo bylinkami podle toho, co máte doma.",
+    "tags": "vegetariánské, asijské, kung pao"
+}

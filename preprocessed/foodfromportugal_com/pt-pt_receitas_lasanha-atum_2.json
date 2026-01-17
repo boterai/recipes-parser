@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lasanha de atum",
+    "description": "Esta deliciosa e tenra lasanha de atum é perfeita para si! É uma refeição cremosa e cheia de sabores.",
+    "ingredients": "[{\"name\": \"atum em conserva\", \"units\": \"g\", \"amount\": 375}, {\"name\": \"natas\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"molho béchamel\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"massa fresca para lasanha\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"azeite\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"polpa de tomate\", \"units\": \"ml\", \"amount\": 150}, {\"name\": \"cebola média\", \"units\": null, \"amount\": 1}, {\"name\": \"queijo parmesão ralado\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"alho em pó\", \"units\": \"colher de chá\", \"amount\": 1}]",
+    "instructions": "Escorra e lasque o atum com um garfo. Num tacho, deite o azeite e a cebola picada. Refogue em lume brando até a cebola alourar ligeiramente, mexendo de vez em quando. Adicione o atum, a polpa de tomate e o alho em pó. Mexa e cozinhe em lume médio-baixo cerca de 5 minutos, mexendo de vez em quando. Desligue o lume e deixe arrefecer um pouco. Numa taça, misture o béchamel e as natas; reserve. Pré-aqueça o forno a 180ºC. Coloque no fundo de uma assadeira uma folha de lasanha e, por cima, uma camada de atum. E assim por diante até terminar com uma folha de lasanha. Regue com a mistura de béchamel e polvilhe com queijo parmesão ralado. Leve ao forno cerca de 45 minutos ou até dourar. Desligue o forno e sirva.",
+    "category": "Prato principal",
+    "prep_time": "10 minutes",
+    "cook_time": "55 minutes",
+    "total_time": "1:05 h",
+    "notes": "Se preferir, pode fazer o recheio com tomates frescos em vez de polpa de tomate. Nós aconselhamos sempre a fazer este tipo de receitas com queijo parmesão ou cheddar mas pode experimentar fazer com outro tipo de queijo. Se gosta de ovo, pode adicionar rodelas de ovo cozido ao recheio de atum. Se sobrar, guarde a lasanha no frigorífico num recipiente hermeticamente fechado.",
+    "tags": "massa, peixe, lasanha, atum"
+}

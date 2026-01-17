@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kabak Çorbası",
+    "description": "Kabak çorbası, sağlıklı ve düşük kalorili bir çorba tarifidir.",
+    "ingredients": "[{\"name\": \"kabak\", \"units\": null, \"amount\": 2}, {\"name\": \"tereyağı\", \"units\": \"g\", \"amount\": 25}, {\"name\": \"un\", \"units\": \"yemek kaşığı\", \"amount\": 1}, {\"name\": \"süt\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"su\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"dereotu\", \"units\": null, \"amount\": \"yarım demet\"}, {\"name\": \"tuz\", \"units\": null, \"amount\": null}, {\"name\": \"tereyağı\", \"units\": \"g\", \"amount\": 20}, {\"name\": \"kırmızı pul biber\", \"units\": \"tatlı kaşığı\", \"amount\": 1}]",
+    "instructions": "İlk olarak kabakları yıkayın, kabuklarını soyun ve ince ince rendeleyin. Tereyağını tencerede eritin ve üzerine unu ilave edip hafif sararıncaya kadar kavurun. Sütü su ile karıştırıp unun içerisine yavaş yavaş eklerken karıştırmaya devam edin. Kaynamaya başlayınca rendelenmiş kabakları ilave edin. Kısık ateşte 15 dakika pişirin. Daha sonra blenderdan geçirin. Ocaktan aldıktan sonra dereotunu ince kıyarak çorbaya ekleyin. Küçük bir tavada tereyağını eritip kırmızı pul biber ekleyin. Çorbayı servis kaselerine alın. Üzerine biberli yağ döküp ve kıyılmış dereotu serpiştirin. Afiyet olsun.",
+    "category": "Çorba",
+    "prep_time": "15 minutes",
+    "cook_time": "25 minutes",
+    "total_time": "40 minutes",
+    "notes": "Çorbanın içerisine çok fazla un koymak istemiyorsanız, bir adet patates ekleyerek tadını dengeleyebilirsiniz. Kabak çorbasının içerisine süt yerine krema ilave ederek, koyu bir kıvam elde edebilirsiniz.",
+    "tags": "çorba, sağlıklı, sebze"
+}

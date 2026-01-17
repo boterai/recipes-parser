@@ -1,0 +1,12 @@
+{
+    "dish_name": "Su Böreği",
+    "description": "Türkischer Wasserbörek, zart, buttrig und schichtweise mit Käse gefüllt.",
+    "ingredients": "[{\"name\": \"Eier\", \"units\": \"pieces\", \"amount\": 6}, {\"name\": \"Wasser\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"Salz\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"Mehl\", \"units\": \"nach Bedarf\", \"amount\": null}, {\"name\": \"Geriebener Schafskäse oder Feta\", \"units\": null, \"amount\": null}, {\"name\": \"Petersilie\", \"units\": \"bunch\", \"amount\": 0.5}, {\"name\": \"Butter\", \"units\": \"grams\", \"amount\": 500}, {\"name\": \"Salzwasser\", \"units\": null, \"amount\": null}]",
+    "instructions": "Eier und Wasser vermischen. Mehl und Salz nach und nach zugeben. Einen festen Teig kneten, der nicht klebt. In 12 Kugeln teilen und abgedeckt 30 Minuten ruhen lassen. Käse reiben und mit gehackter Petersilie vermischen. Butter schmelzen. Jede Kugel sehr dünn ausrollen. Einen großen Topf mit Salzwasser zum Kochen bringen – genug Salz zugeben, sonst geht der Teig kaputt! Teigblätter vorsichtig ins kochende Wasser, etwa 1 Minute garen, mit Schaumlöffel herausnehmen und kurz in kaltes Wasser tauchen. Backform mit Butter einfetten. 4 Teigblätter „faltig“ hineinlegen und mit Butter bestreichen. Hälfte der Käsemischung darauf. Weitere 4 Teigblätter, Butter, restlichen Käse. Mit den letzten 4 Teigblättern abschließen, großzügig mit Butter bestreichen. In Stücke vorschneiden. Bei 200 Grad backen, bis goldbraun.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "120 minutes",
+    "total_time": "150 minutes",
+    "notes": "Die Teigblätter „faltig“ legen, nicht glatt – das macht den Börek luftiger. Das kalte Wasser nach jedem 3. Teigblatt wechseln.",
+    "tags": "Türkisch, Börek, Käse, Hauptgericht"
+}

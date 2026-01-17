@@ -1,0 +1,12 @@
+{
+    "dish_name": "Cipolla Bhaji",
+    "description": "Questa ricetta di bhaji di cipolla è facile da fare, l’accompagnamento perfetto per il tuo curry preferito!",
+    "ingredients": "[{\"name\": \"cipolla affettata finemente\", \"units\": null, \"amount\": 1}, {\"name\": \"farina\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"curcuma\", \"units\": \"cucchiaino\", \"amount\": 0.5}, {\"name\": \"polvere di peperoncino\", \"units\": \"cucchiaino\", \"amount\": 0.5}, {\"name\": \"lievito in polvere\", \"units\": \"cucchiaino\", \"amount\": 0.5}, {\"name\": \"acqua\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"sale e pepe\", \"units\": \"A piacere\", \"amount\": null}]",
+    "instructions": "Mescolare tutti gli ingredienti secchi in una ciotola Aggiungere lentamente l’acqua fino ad ottenere una consistenza densa e liscia Mettere in frigo per circa 1 ora Tagliare sottilmente le cipolle a fette e metterle a bagno in acqua fredda Una volta passata l’ora, scolare bene le cipolle, aggiungerle al composto e mescolare Prendete abbastanza cipolle per fare una palla che stia nel palmo delle vostre mani e mettetela nel cestello Cook & Crisp del Ninja Foodi Multi-Cooker Impostate il Ninja Foodi Multi-Cooker sull’impostazione air crisp a 200 gradi e cuocete per 8-10 minuti a seconda di quanto vi piacciono croccanti Godetevi",
+    "category": "Antipasti",
+    "prep_time": "1 hour",
+    "cook_time": "10 minutes",
+    "total_time": "1 hour 15 minutes",
+    "notes": null,
+    "tags": "Vegano, Vegetariane, Contorni"
+}

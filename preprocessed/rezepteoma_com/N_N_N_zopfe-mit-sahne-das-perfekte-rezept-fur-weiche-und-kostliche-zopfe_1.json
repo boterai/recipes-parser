@@ -1,0 +1,12 @@
+{
+    "dish_name": "Zöpfe mit Sahne",
+    "description": "Das perfekte Rezept für weiche und köstliche Zöpfe.",
+    "ingredients": "[{\"name\": \"warme Milch\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"Trockenhefe\", \"units\": \"g\", \"amount\": 7}, {\"name\": \"Zucker\", \"units\": \"g\", \"amount\": 80}, {\"name\": \"Ei\", \"units\": null, \"amount\": 1}, {\"name\": \"Samenöl\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"Salz\", \"units\": \"Prise\", \"amount\": 1}, {\"name\": \"Vanillezucker\", \"units\": \"g\", \"amount\": 8}, {\"name\": \"Weizenmehl\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"weiche Butter\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"Eigelb\", \"units\": null, \"amount\": 2}, {\"name\": \"Maisstärke\", \"units\": \"g\", \"amount\": 35}, {\"name\": \"Zucker\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"Vanillezucker\", \"units\": \"g\", \"amount\": 8}, {\"name\": \"Milch\", \"units\": \"ml\", \"amount\": 260}, {\"name\": \"Aprikosen- oder Erdbeermarmelade\", \"units\": null, \"amount\": null}, {\"name\": \"Gehackte und gehobelte Mandeln\", \"units\": null, \"amount\": null}, {\"name\": \"Eigelb\", \"units\": null, \"amount\": 1}, {\"name\": \"Milch\", \"units\": \"Tropfen\", \"amount\": 1}]",
+    "instructions": "1. Den Teig vorbereiten: Zu Beginn die Hefe mit Zucker in warmer Milch auflösen und 15 Minuten ruhen lassen. Danach Ei, Öl, Salz, Vanillezucker, Mehl und Butter hinzufügen. Alles gut verkneten, bis ein homogener Teig entsteht. Diesen zu einem Laib formen und für eine Stunde an einem warmen Ort ruhen lassen. 2. Vanillepudding kochen: Eigelb, Maisstärke, Zucker und Vanillezucker in einem Topf vermengen. Nach und nach die Milch einrühren und unter Rühren auf mittlerer Hitze zum Kochen bringen. 3. Teig ausrollen und Zöpfe formen: Den Teig auf einer bemehlten Fläche ausrollen. Die Hälfte des Teigs mit dem abgekühlten Vanillepudding füllen und zu Zöpfen flechten. 4. Die Zöpfe backen: Die Zöpfe auf ein Backblech legen, mit einer Mischung aus Eigelb und Milch bestreichen und bei 180 Grad für etwa 15 Minuten goldbraun backen. 5. Servieren und Genießen: Die Zöpfe können mit Marmelade und frischen Mandeln verziert werden.",
+    "category": "Dessert",
+    "prep_time": "1 hour",
+    "cook_time": "15 minutes",
+    "total_time": "1 hour 15 minutes",
+    "notes": "Die Zöpfe können auch mit anderen Marmeladensorten gefüllt werden.",
+    "tags": "Brot, Dessert, Gebäck"
+}

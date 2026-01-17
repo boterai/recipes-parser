@@ -1,0 +1,12 @@
+{
+    "dish_name": "patong ng tsokolate",
+    "description": "Isang masarap na patong ng tsokolate na perpekto para sa mga cake.",
+    "ingredients": "[{\"name\": \"matunaw ang tsokolate\", \"units\": \"gr\", \"amount\": 130}, {\"name\": \"likidong cream\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"mantikilya\", \"units\": \"gr\", \"amount\": 20}, {\"name\": \"tubig\", \"units\": \"tablespoons\", \"amount\": 2}]",
+    "instructions": "1. Ilagay ang cream sa kasirola sa katamtamang init at hayaang pakuluan. 2. Chopin ang tsokolate. 3. Kapag ang cream ay dumating sa pigsa, alisin mula sa apoy at idagdag ang tsokolate at mantikilya. 4. Pukawin hanggang matunaw ang tsokolate. 5. Idagdag ang tubig at pukawin. 6. Ihanda ang cake at ibuhos ang patong ng tsokolate.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Siguraduhing gamitin ang magandang kalidad ng tsokolate.",
+    "tags": "cake, dessert, tsokolate"
+}

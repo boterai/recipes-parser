@@ -1,0 +1,12 @@
+{
+    "dish_name": "Đuveć od praziluka",
+    "description": "Đuveč od praziluka sa ljutom paprikom.",
+    "ingredients": "[{\"name\": \"praziluk\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"paradajz\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"pirinča\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"suva ljuta paprika\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"vode\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"mlevene paprike\", \"units\": \"kašika\", \"amount\": 1}, {\"name\": \"ulje\", \"units\": null, \"amount\": null}, {\"name\": \"so\", \"units\": null, \"amount\": null}, {\"name\": \"biber\", \"units\": null, \"amount\": null}]",
+    "instructions": "Praziluk isecite na tanke duge komade. Komade praziluka stavite u šerpu na vatri sa kipućom vodom da se obari. Komade praziluka pritisnite da se pokriju vodom. Paradajze očistite i isecite na krugove. Šerpu sa obarenim paradajzom sklonite sa vatre, i sa rupičastom kašikom izvadite komade praziluka i stavite ih na tanjir. Obareni praziluk isecite na komade i pržite u tiganju sa ugrejanim uljem. Ljutu papriku sitno iseckajte. Komade ljute paprike dodajte u tiganj. I pirinač isto dodajte u tiganj. U tiganj dodajte kašiku crvene mlevene paprike i nalijte vodu u tiganj. Posolite, nabiberite, i promešajte. Sadržaj tiganja stavite u keramički tanjir za pečenje. Na to poređajte krugove paradajza. Posolite, nabiberite i dodajte ulje. Pecite 40 minuta na 200 stepeni.",
+    "category": "Glavna jela",
+    "prep_time": null,
+    "cook_time": "40 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "đuveć od praziluka, praziluk, paradajz, mlevene paprike"
+}

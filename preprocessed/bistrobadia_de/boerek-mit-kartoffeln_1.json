@@ -1,0 +1,12 @@
+{
+    "dish_name": "Börek mit Kartoffeln",
+    "description": "Ein herzhaftes und delikates Gericht, das wie ein warmer Kuchen ist und mit Kartoffeln gefüllt wird.",
+    "ingredients": "[{\"name\": \"Butter\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"Joghurt\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"Vollmilch\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"Ei\", \"units\": \"M\", \"amount\": 1}, {\"name\": \"Salz\", \"units\": null, \"amount\": null}, {\"name\": \"Pfeffer\", \"units\": null, \"amount\": null}, {\"name\": \"Kartoffeln\", \"units\": \"g\", \"amount\": 1000}, {\"name\": \"Zwiebel\", \"units\": null, \"amount\": 1}, {\"name\": \"Knoblauchzehe\", \"units\": null, \"amount\": 1}, {\"name\": \"Olivenöl\", \"units\": \"Esslöffel\", \"amount\": 1}, {\"name\": \"Paprikapulver edelsüß\", \"units\": \"Teelöffel\", \"amount\": 1}, {\"name\": \"glatte Petersilie\", \"units\": \"g\", \"amount\": 15}, {\"name\": \"Yufkateigblätter\", \"units\": null, \"amount\": 10}, {\"name\": \"Eigelb\", \"units\": \"M\", \"amount\": 1}, {\"name\": \"Sesamsamen\", \"units\": \"Esslöffel\", \"amount\": 1}]",
+    "instructions": "1. Butter schmelzen und mit Milch, Joghurt und Ei cremig rühren. Mit Salz und Pfeffer abschmecken. 2. Kartoffeln gar kochen und Zwiebeln sowie Knoblauch dünsten. Alles zusammen mit Petersilie zu einem Stampf zerdrücken und mit Gewürzen abschmecken. 3. Yufkateigblätter in die Form legen, Sauce über die Teigblätter träufeln, Kartoffelmasse darauf verteilen und wieder ein Teigblatt darauf legen. Vorgang wiederholen. 4. Oberflächen mit Eigelb abstreichen, einklappen, mit Sesam bestreuen und im Backofen backen.",
+    "category": "Main Course",
+    "prep_time": "20 minutes",
+    "cook_time": "50 minutes",
+    "total_time": "70 minutes",
+    "notes": "Für eine vegane Variante die Milchprodukte gegen pflanzliche Alternativen austauschen.",
+    "tags": "Börek, Kartoffeln, vegetarisch, Hauptgericht"
+}

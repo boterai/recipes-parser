@@ -1,0 +1,12 @@
+{
+    "dish_name": "Insalata Mexican Style con dressing allo yogurt e lime",
+    "description": "Una insalata fresca e colorata con un dressing allo yogurt e lime, perfetta come piatto unico leggero o contorno.",
+    "ingredients": "[{\"name\": \"peperone rosso\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"peperone giallo\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"cipolla rossa grande\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"mais in scatola\", \"units\": \"g\", \"amount\": 340}, {\"name\": \"fagioli neri in scatola\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"jalapeños\", \"units\": \"to taste\", \"amount\": null}, {\"name\": \"salsa fresca\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"yogurt naturale\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"lime\", \"units\": \"piece\", \"amount\": 2}, {\"name\": \"miele\", \"units\": \"teaspoons\", \"amount\": 2}, {\"name\": \"sale fino\", \"units\": \"to taste\", \"amount\": null}, {\"name\": \"tortilla chips\", \"units\": \"to taste\", \"amount\": null}, {\"name\": \"feta\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"menta fresca\", \"units\": \"tablespoons\", \"amount\": 2}]",
+    "instructions": "Prepara i peperoni a dadini regolari; trita la cipolla rossa fine. Unisci peperoni, cipolla, mais, fagioli e jalapeños in una ciotola. Aggiungi la salsa e mescola. In un'altra ciotola emulsiona yogurt, succo e scorza di lime, miele e sale. Versa il dressing al momento di servire, mescola e completa con tortilla chips, feta e menta.",
+    "category": "Contorno",
+    "prep_time": "10 minutes",
+    "cook_time": null,
+    "total_time": "10 minutes",
+    "notes": "Puoi aggiungere pollo, gamberi o avocado per un piatto unico più ricco. La ricetta è naturalmente senza glutine.",
+    "tags": "insalata, messicana, fresca, leggera"
+}

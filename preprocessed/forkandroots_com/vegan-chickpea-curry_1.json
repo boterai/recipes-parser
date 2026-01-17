@@ -1,0 +1,12 @@
+{
+    "dish_name": "Vegan Chickpea Curry",
+    "description": "This rich, aromatic plant-based curry combines creamy coconut milk with protein-packed chickpeas and perfectly balanced spices. Restaurant-quality Indian comfort food that’s better and more affordable than takeout.",
+    "ingredients": "[{\"name\": \"coconut oil\", \"units\": \"tbsp\", \"amount\": 1}, {\"name\": \"onion\", \"units\": \"unit\", \"amount\": 1}, {\"name\": \"garlic\", \"units\": \"cloves\", \"amount\": 3}, {\"name\": \"fresh ginger\", \"units\": \"tbsp\", \"amount\": 1}, {\"name\": \"bell pepper\", \"units\": \"unit\", \"amount\": 1}, {\"name\": \"chickpeas\", \"units\": \"can (14 oz)\", \"amount\": 1}, {\"name\": \"diced tomatoes\", \"units\": \"can (14 oz)\", \"amount\": 1}, {\"name\": \"full-fat coconut milk\", \"units\": \"can (14 oz)\", \"amount\": 1}, {\"name\": \"vegetable broth\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"curry powder\", \"units\": \"tbsp\", \"amount\": 2}, {\"name\": \"ground cumin\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"turmeric\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"paprika\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"cayenne pepper\", \"units\": \"tsp\", \"amount\": 0.5}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"pepper\", \"units\": null, \"amount\": null}, {\"name\": \"fresh cilantro\", \"units\": null, \"amount\": null}]",
+    "instructions": "Heat coconut oil in a large pot over medium heat. Sauté diced onion until translucent, about 5 minutes. Add minced garlic and fresh grated ginger, cooking for just another minute until fragrant. Add diced bell pepper and cook for 3-4 minutes until it starts to soften. Add chickpeas, diced tomatoes, coconut milk, and vegetable broth. Stir to combine. Add curry powder, cumin, turmeric, paprika, cayenne, salt, and pepper. Stir well. Bring to a gentle simmer and cook for 20-25 minutes. Adjust seasoning to your taste preferences. Serve hot over basmati rice or with warm naan, garnished with fresh cilantro.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Fresh spices create superior flavor. Full-fat coconut milk is essential for proper richness. Gentle simmering develops complexity.",
+    "tags": "Plant-based, chickpea curry, coconut milk curry, vegan Indian food, comfort food"
+}

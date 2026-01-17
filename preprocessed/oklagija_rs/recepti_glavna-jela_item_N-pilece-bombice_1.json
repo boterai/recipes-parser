@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pileće bombice",
+    "description": "Loptice od pilećeg mesa.",
+    "ingredients": "[{\"name\": \"pileće meso bez kostiju\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"šunka\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"kisela pavlaka\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"kačkavalj edamer\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"feta sir\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"susam\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"putera\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"vegeta\", \"units\": null, \"amount\": null}, {\"name\": \"maslinovo ulje\", \"units\": null, \"amount\": null}, {\"name\": \"manja tegla kiselih krastavaca\", \"units\": null, \"amount\": 1}]",
+    "instructions": "Pileće meso začinite, stavite malo maslinovog ulja i ostavite da odstoji 1-2 sata. Zatim sitno iseckajte, dodajte susam i pržite na puteru. Ostavite da se ohladi, pa dodajte sitno seckanu šunku, sitno seckani sir edamer (pola) i sitno seckane krastavce. U smesu dodajte feta sir, izdrobljen viljuškom, a onda dodajte i pavlaku i opet promešajte. Formirajte loptice i valjajte ih u preostalu polovinu edamera koju ste prethodno narendali.",
+    "category": "Glavna jela",
+    "prep_time": "120 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "piletina, slani zalogajčići, šunka, feta, susuam"
+}

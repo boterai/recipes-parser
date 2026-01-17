@@ -1,0 +1,12 @@
+{
+    "dish_name": "Acılı Kapuska",
+    "description": "Sağlıklı ve acılı kapuska tarifi.",
+    "ingredients": "[{\"name\": \"Knorr domatesli makarna sosu\", \"units\": \"paket\", \"amount\": 1}, {\"name\": \"su\", \"units\": \"ml\", \"amount\": 375}, {\"name\": \"erişte\", \"units\": \"gram\", \"amount\": 250}, {\"name\": \"az yağlı dana kıyma\", \"units\": \"gram\", \"amount\": 200}, {\"name\": \"soğan\", \"units\": \"шт\", \"amount\": 1}, {\"name\": \"sarımsak\", \"units\": \"diş\", \"amount\": 1}, {\"name\": \"ince dilimlenmiş maydanoz\", \"units\": \"çay bardağı\", \"amount\": 1}, {\"name\": \"dövülmüş ceviz içi\", \"units\": \"çay bardağı\", \"amount\": 1}, {\"name\": \"tereyağı\", \"units\": \"çorba kaşığı\", \"amount\": 1}]",
+    "instructions": "Teflon bir tavada 1 yemek kaşığı tereyağını eritin. Ezilmiş sarımsak ve küp doğranmış soğanı ilave edip 5 dakika orta ateşte soteleyin. Kıymayı ilave edip rengi dönünceye kadar pişirin. Tavaya 375 ml. soğuk suyu ve Knorr Domatesli Makarna Sosu’nu ekleyip kaynayıncaya kadar pişirin. Kaynadıktan sonra altını kısarak, arada bir karıştırarak 5 dakika boyunca pişirmeye devam edin. Dişe gelir kıvamda haşlayıp, süzdüğünüz makarnayı sosla karıştırın. Üzerine ince kıyılmış maydanoz ve dövülmüş ceviz içlerini ekleyip, sıcak olarak servis edin.",
+    "category": null,
+    "prep_time": "20 dakika",
+    "cook_time": "25 dakika",
+    "total_time": "45 dakika",
+    "notes": null,
+    "tags": null
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lasanha de atum e legumes",
+    "description": "Receita de Lasanha de atum e legumes. Descubra como cozinhar a receita de Lasanha de atum e legumes de maneira prática e deliciosa com a Teleculinária!",
+    "ingredients": "[{\"name\": \"atum em conserva\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"cenoura\", \"units\": null, \"amount\": 1}, {\"name\": \"courgette\", \"units\": null, \"amount\": 1}, {\"name\": \"alho-francês\", \"units\": null, \"amount\": 1}, {\"name\": \"cebola média\", \"units\": null, \"amount\": 1}, {\"name\": \"queijo ralado\", \"units\": \"g\", \"amount\": 120}, {\"name\": \"bechamel\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"folhas de lasanha\", \"units\": \"embalagem\", \"amount\": 1}, {\"name\": \"tomate pelado\", \"units\": \"lata pequena\", \"amount\": 1}, {\"name\": \"azeite\", \"units\": \"colheres (sopa)\", \"amount\": 2}, {\"name\": \"Salsa picada\", \"units\": \"ramo\", \"amount\": 1}, {\"name\": \"oregãos e piripiri\", \"units\": \"(q.b.)\", \"amount\": null}, {\"name\": \"Sal e pimenta\", \"units\": \"(q.b.)\", \"amount\": null}]",
+    "instructions": "Lave e descasque a cebola e pique-a. Escorra o atum. Leve ao lume um tacho com o azeite, junte a cebola, o tomate pelado picado e deixe cozinhar em lume brando. Adicione o atum e envolva bem, deixe ferver um pouco e tempere com sal, pimenta, piripíri e salsa picada. Descasque e lave a cenoura e a courgette, lave e arranje o alho-francês, rale a cenoura, corte a courgette em meias-luas e o alho-francês em rodelas finas. Leve ao lume uma colher (sopa) de azeite e salteie os legumes, tempere com sal e pimenta e reserve. Num tabuleiro de louça ou pirex coloque uma camada da mistura do atum, por cima uma folha de lasanha e depois, uma camada de legumes, repita as camadas até terminarem os ingredientes, sendo que a última camada deve ser de atum. Verta por cima o molho bechamel, polvilhe com o queijo e os orégãos e leve ao forno pré-aquecido a 180ºC durante 25 minutos.",
+    "category": null,
+    "prep_time": "1 hour",
+    "cook_time": "1 hour",
+    "total_time": "1 hour",
+    "notes": "Para um almoço ou jantar fenomenal, nada melhor do que uma lasanha de atum e legumes, não acha? Se quer surpreender os seus convidados, experimente esta lasanha! Afinal, quem é que resiste a receitas de atum?",
+    "tags": "atum, lasanha de atum com legumes, lasanhas, legumes, receitas económicas, receitas faceis"
+}

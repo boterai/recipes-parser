@@ -1,0 +1,12 @@
+{
+    "dish_name": "Musaka sa piletinom",
+    "description": "Jednostavno brzo jelo sa krompirom i piletinom nalik na musaku.",
+    "ingredients": "[{\"name\": \"crni luk\", \"units\": \"glavica\", \"amount\": 1}, {\"name\": \"krompir\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"so\", \"units\": \"po ukusu\", \"amount\": null}, {\"name\": \"biber\", \"units\": \"po ukusu\", \"amount\": null}, {\"name\": \"pileći file\", \"units\": \"g\", \"amount\": 350}, {\"name\": \"maslinovo ulje\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"jaje\", \"units\": null, \"amount\": 1}, {\"name\": \"majonez\", \"units\": \"kašike\", \"amount\": 2}, {\"name\": \"kačkavalj\", \"units\": \"g\", \"amount\": 30}]",
+    "instructions": "Pileći file iseći tanko na male komade veličine zalogaja (kao tanke medaljone). Staviti u činiji, posoliti i pobiberiti pa preliti maslinovim uljem, izmešati i u frižideru ostaviti da se marinira bar pola sata (do sat vremena). Sa malo ulja iz marinade podmazati dno i stranice manje tepsije. Crni luk iseći na kolutove i poređati na dno tepsije. Krompir iseći na tanke kolutove (kao za musaku) i poređati preko crnog luka. Posoliti i pobiberiti po ukusu. Preko krompira rasporediti mariniranu piletinu sa sve marinadom. Prekriti tepsiju alufolijom i peći u zagrejanoj rerni na 200 stepeni C oko 45 minuta. Umutiti jaje sa dve dobro napunjene kašike majoneza i sitno narendanim kačkavaljem. Ukloniti foliju sa jela, sipati pripremljeni preliv preko mesa i vratiti u rernu (otkriveno) na 180 stepeni C oko 15 do 20 minuta da se lepo zapeče.",
+    "category": "Glavna jela",
+    "prep_time": "30 minutes",
+    "cook_time": "60 minutes",
+    "total_time": "90 minutes",
+    "notes": null,
+    "tags": "luk, krompir, biber, piletina, majonez, jaja, kačkavalj"
+}

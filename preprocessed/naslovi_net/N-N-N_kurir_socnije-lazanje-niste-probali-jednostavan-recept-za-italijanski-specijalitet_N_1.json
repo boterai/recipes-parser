@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sočnije lazanje",
+    "description": "Jednostavan recept za italijanski specijalitet.",
+    "ingredients": "[{\"name\": \"crni luk\", \"units\": \"head\", \"amount\": 1}, {\"name\": \"prazi luk\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"ulje\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"svinjsko mleveno meso\", \"units\": \"g\", \"amount\": 450}, {\"name\": \"so\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"crni biber\", \"units\": null, \"amount\": \"to taste\"}, {\"name\": \"beli biber\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"paradajz pire\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"kore za lazanje\", \"units\": \"package\", \"amount\": 1}, {\"name\": \"brašno\", \"units\": \"tablespoons\", \"amount\": 3}, {\"name\": \"mleko\", \"units\": \"ml\", \"amount\": 650}, {\"name\": \"mozzarella\", \"units\": \"g\", \"amount\": 200}]",
+    "instructions": "Na ulju prodinstajte sitno seckani crni i prazi luk.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

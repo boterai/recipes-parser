@@ -1,0 +1,12 @@
+{
+    "dish_name": "Velouté de courge butternut et lentilles corail",
+    "description": null,
+    "ingredients": "[{\"name\": \"huile d'olive\", \"units\": \"ml\", \"amount\": \"10\"}, {\"name\": \"oignon\", \"units\": null, \"amount\": \"1/2\"}, {\"name\": \"gousse d'ail\", \"units\": null, \"amount\": \"1/2\"}, {\"name\": \"courge Butternut\", \"units\": null, \"amount\": \"1/2\"}, {\"name\": \"lentilles corail sèches\", \"units\": \"ml\", \"amount\": \"90\"}, {\"name\": \"sel\", \"units\": null, \"amount\": null}, {\"name\": \"poivre\", \"units\": null, \"amount\": null}, {\"name\": \"lait de coco léger\", \"units\": \"ml\", \"amount\": \"30\"}, {\"name\": \"graines de citrouille\", \"units\": \"ml\", \"amount\": \"30\"}]",
+    "instructions": "Dans une casserole, à feu moyen, chauffer l’huile. Cuire l’oignon et l’ail jusqu’à ce qu’ils soient tendres, soit environ 4 minutes. Incorporer les dés de courge et les lentilles corail et bien mélanger. Ajouter de l’eau pour recouvrir les dés de courge, puis assaisonner de sel et de poivre. Laisser mijoter environ 25 minutes, jusqu’à ce que les dés de courge soient bien tendres. Mixer à l’aide d’un mixeur plongeant ou au mélangeur. Au moment de servir, verser le lait de coco et garnir de graines de citrouille.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "25 minutes",
+    "total_time": null,
+    "notes": "Les lentilles corail sont une bonne source de protéines et de fer. De plus, elles ne nécessitent aucun trempage et cuisent rapidement.",
+    "tags": null
+}

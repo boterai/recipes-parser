@@ -1,0 +1,12 @@
+{
+    "dish_name": "Börek mit Hackfleisch",
+    "description": "Börek mit Hackfleisch ist ein türkisches Gericht, das zur Mittagszeit mit abgekühlte Ayran und am Morgen zum Frühstück mit seiner saftigen Füllung, dem Hackfleisch, das mit wenig Öl, Zwiebel und den Gewürzen gebraten wird, serviert wird.",
+    "ingredients": "[{\"name\": \"Mehl\", \"units\": \"KG\", \"amount\": 1}, {\"name\": \"Wasser\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"Salz\", \"units\": \"TL\", \"amount\": 1}, {\"name\": \"Essig\", \"units\": \"EL\", \"amount\": 1}, {\"name\": \"Schafskäse\", \"units\": null, \"amount\": null}, {\"name\": \"Petersilie\", \"units\": null, \"amount\": null}, {\"name\": \"Paprikapulver\", \"units\": \"TL\", \"amount\": 1}, {\"name\": \"Paprikaflocken\", \"units\": \"TL\", \"amount\": 1}, {\"name\": \"Hackfleisch\", \"units\": \"KG\", \"amount\": 0.5}, {\"name\": \"Kapia Paprika\", \"units\": null, \"amount\": 1}, {\"name\": \"Tomatenmark\", \"units\": \"EL\", \"amount\": 1}, {\"name\": \"Butter\", \"units\": null, \"amount\": null}, {\"name\": \"Öl\", \"units\": null, \"amount\": null}]",
+    "instructions": "Alle Zutaten für den Teig einer Schale zugeben und einen weichen Teig kneten bis er nicht mehr klebt. Teig in eine Tüte legen und ruhen lassen, in dieser Zeit Füllung zubereiten. Käse mit den Händen zerkleinern und Petersilie klein hacken. Alle Zutaten für die Käsefüllung einer Schale geben und vermischen. Hackfleisch in ca 50 ml Wasser braten, nacheinander Tomatenmark, Salz und Gewürze, klein geschnittene Paprika und klein gehackte Petersilie dazugeben und vermischen. Teig in mittelgroße Stücke teilen, kugeln und jeweils ein Stück Butter darauf geben. Tüte über die Kugeln legen und Teig etwas ruhen lassen. Teig mit den Händen ganz dünn ausrollen, die obere Seite zur Mitte falten und Füllung darauf geben. Das Ganze einrollen und formen. Börek auf das Blech legen und bei 185 Grad vorgeheizten Ofen backen bis es goldbraun wird.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Achten sie darauf, dass das Hackfleisch wenig Fett hat. Der Zucker, den sie zum einschmieren verwenden hilft dazu, dass die Börek besser gebacken werden.",
+    "tags": "Börek, türkische Küche"
+}

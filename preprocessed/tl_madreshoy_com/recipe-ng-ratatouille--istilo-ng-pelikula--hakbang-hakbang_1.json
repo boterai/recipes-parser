@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ratatouille",
+    "description": "Isang komprehensibong gabay sa paghahanda ng recipe ng ratatouille sa estilo ng pelikula, hakbang-hakbang.",
+    "ingredients": "[{\"name\": \"kamatis\", \"units\": \"pieces\", \"amount\": 3}, {\"name\": \"aubergine\", \"units\": \"medium\", \"amount\": 1}, {\"name\": \"zucchini\", \"units\": \"medium\", \"amount\": 1}, {\"name\": \"sarsa ng kamatis\", \"units\": \"grams\", \"amount\": 200}, {\"name\": \"bawang\", \"units\": null, \"amount\": null}, {\"name\": \"sibuyas\", \"units\": null, \"amount\": null}, {\"name\": \"paminta\", \"units\": null, \"amount\": null}, {\"name\": \"asin\", \"units\": null, \"amount\": null}, {\"name\": \"extra virgin langis ng oliba\", \"units\": null, \"amount\": null}, {\"name\": \"pinatuyong thyme\", \"units\": null, \"amount\": null}, {\"name\": \"balsamic vinegar\", \"units\": null, \"amount\": null}, {\"name\": \"mozzarella keso\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Ihanda ang base sauce o ratatouille. 2. Hiwain at ihanda ang hiniwang mga gulay. 3. Buuin ang fountain ayon sa istilo ng pelikula. 4. Timplahan bago i-bake. 5. Pagbe-bake: temperatura, oras, at mga trick para sa perpektong tekstura.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "1 hour",
+    "total_time": "1 hour 30 minutes",
+    "notes": "Maaari itong ihain mainit o malamig mula sa refrigerator. Mas masarap ito kinabukasan.",
+    "tags": "vegetarian, French, oven-baked"
+}

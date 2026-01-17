@@ -1,0 +1,12 @@
+{
+    "dish_name": "Patatesli Börek",
+    "description": "Knusprige Teigschichten, cremige Kartoffelfüllung – dieser Börek aus dem Ofen ist Comfort Food pur.",
+    "ingredients": "[{\"name\": \"Kartoffeln\", \"units\": \"pieces\", \"amount\": 4}, {\"name\": \"Zwiebel\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"Salz\", \"units\": null, \"amount\": null}, {\"name\": \"Pfeffer\", \"units\": null, \"amount\": null}, {\"name\": \"Petersilie\", \"units\": null, \"amount\": null}, {\"name\": \"Yufka-Teig\", \"units\": \"sheets\", \"amount\": 6}, {\"name\": \"Butter\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"Eigelb\", \"units\": \"piece\", \"amount\": 1}]",
+    "instructions": "Gekochte Kartoffeln stampfen. Fein geschnittene Zwiebel anbraten und zu den Kartoffeln geben. Mit Salz, Pfeffer und Petersilie würzen. Yufka-Blätter einzeln mit Butter bestreichen und übereinander legen. Kartoffelfüllung verteilen und einrollen oder zusammenfalten. Mit Eigelb bestreichen und bei 180°C goldbraun backen.",
+    "category": null,
+    "prep_time": "45 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Kartoffeln gut abkühlen lassen, bevor du sie füllst.",
+    "tags": null
+}

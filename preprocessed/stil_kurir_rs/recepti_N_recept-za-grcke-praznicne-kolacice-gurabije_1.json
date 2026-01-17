@@ -1,0 +1,12 @@
+{
+    "dish_name": "grčke praznične kolačiće gurabije",
+    "description": "Tradicionalni recept za ukusne praznične kolačiće koji se pripremaju u Grčkoj za Božić.",
+    "ingredients": "[{\"name\": \"putera\", \"units\": \"gr\", \"amount\": 250}, {\"name\": \"šećera u prahu\", \"units\": \"gr\", \"amount\": 70}, {\"name\": \"jaje\", \"units\": \"pcs\", \"amount\": 1}, {\"name\": \"vanilin šećer\", \"units\": \"pcs\", \"amount\": 1}, {\"name\": \"ruma ili konjaka (metaxe)\", \"units\": \"kašike\", \"amount\": 2}, {\"name\": \"soda bikarbone\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"badem\", \"units\": \"gr\", \"amount\": 100}, {\"name\": \"belog brašna\", \"units\": \"gr\", \"amount\": 400}, {\"name\": \"šećera u prahu\", \"units\": \"gr\", \"amount\": 500}, {\"name\": \"vanilin šećer za posipanje\", \"units\": \"pcs\", \"amount\": 1}]",
+    "instructions": "Umutiti puter i šećer u prahu, dodati jaje i vanilin šećer i umutiti mikserom. Zatim dodati postepeno brašno, usitnjene pečene bademe, rum, sodu bikarbonu. Možete nastaviti da sastojke mesite rukama. Oblikovati gurabije po želji (kao loptice, polumesece ili kako vam volja), poređati u pleh i peći 20 min na 180°C. Kada se ohlade uvaljati ih u šećer u prahu pomešan vanilin šećerom.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "20 minutes",
+    "total_time": null,
+    "notes": "Praznici mogu da počnu.",
+    "tags": "gurbije, praznični kolačići, grčka kuhinja"
+}

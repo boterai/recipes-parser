@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gà tái chanh sốt chua ngọt đậm đà",
+    "description": "Công thức gà chanh Trung Quốc với nước sốt chua ngọt.",
+    "ingredients": "[{\"name\": \"ức gà\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"xì dầu\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"muối\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"trứng lớn\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"Maizena\", \"units\": \"grams\", \"amount\": 60}, {\"name\": \"bột nở\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"tiêu\", \"units\": null, \"amount\": null}, {\"name\": \"dầu để chiên\", \"units\": null, \"amount\": null}, {\"name\": \"đường\", \"units\": \"grams\", \"amount\": 80}, {\"name\": \"canh gà\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"bột ngô\", \"units\": \"grams\", \"amount\": 25}, {\"name\": \"nước chanh\", \"units\": null, \"amount\": null}, {\"name\": \"chanh\", \"units\": \"slices\", \"amount\": 3}, {\"name\": \"dầu\", \"units\": \"grams\", \"amount\": 30}, {\"name\": \"nước dứa\", \"units\": null, \"amount\": null}, {\"name\": \"muối\", \"units\": null, \"amount\": null}]",
+    "instructions": "Ướp gà với nước tương và 30 thìa muối rồi để ngăn mát tủ lạnh khoảng XNUMX phút. Để làm phần bột cho món bột gà, chúng ta đánh trứng cùng với bột ngô, men nở và một ít hạt tiêu. Chúng tôi bôi những miếng thịt gà trong bột này. Bây giờ chúng ta chiên gà trong dầu nóng cho đến khi vàng đều các mặt. Chúng tôi loại bỏ nó đến một nguồn bằng giấy thấm để loại bỏ dầu thừa. Chuẩn bị nước sốt chanh bằng cách trộn đường, nước dùng gà, 25 gam bột ngô, nước cốt chanh, dầu và một ít nước ép dứa. Chúng tôi muối một chút và trộn đều nước sốt trong chảo hoặc chảo sâu trên lửa nhỏ cho đến khi đạt đến điểm sôi. Sau đó, chúng tôi thêm thịt gà và các lát chanh, trộn đều và nấu trong vài phút cho đến khi nước sốt đặc lại.",
+    "category": "thịt",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

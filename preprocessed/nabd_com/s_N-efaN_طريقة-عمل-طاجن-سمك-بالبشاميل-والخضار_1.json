@@ -1,0 +1,12 @@
+{
+    "dish_name": "طاجن سمك بالبشاميل والخضار",
+    "description": "طاجن سمك بالبشاميل والخضار من الأكلات الغير تقليدية التي لا يعرفها الكثير من الأشخاص، ويمكنك تطبيقها في المنزل بمذاق لذيذ.",
+    "ingredients": "[{\"name\": \"سمك فيليه\", \"units\": null, \"amount\": null}, {\"name\": \"كرات\", \"units\": null, \"amount\": null}, {\"name\": \"كرفس\", \"units\": null, \"amount\": null}, {\"name\": \"بصل\", \"units\": null, \"amount\": null}, {\"name\": \"ثوم\", \"units\": null, \"amount\": null}, {\"name\": \"بطاطس\", \"units\": null, \"amount\": null}, {\"name\": \"كوسة\", \"units\": null, \"amount\": null}, {\"name\": \"جزر\", \"units\": null, \"amount\": null}, {\"name\": \"لبن\", \"units\": null, \"amount\": null}, {\"name\": \"كريمة لباني\", \"units\": null, \"amount\": null}, {\"name\": \"زبدة\", \"units\": null, \"amount\": null}, {\"name\": \"دقيق\", \"units\": null, \"amount\": null}, {\"name\": \"كزبرة خضراء\", \"units\": null, \"amount\": null}, {\"name\": \"شبت\", \"units\": null, \"amount\": null}, {\"name\": \"فلفل ألوان\", \"units\": null, \"amount\": null}, {\"name\": \"عصير ليمون\", \"units\": null, \"amount\": null}, {\"name\": \"زعتر\", \"units\": null, \"amount\": null}, {\"name\": \"روزماري\", \"units\": null, \"amount\": null}, {\"name\": \"جبنة موتزاريلا\", \"units\": null, \"amount\": null}]",
+    "instructions": "يتبل السمك بكل البهارات والملح والفلفل ثم يشوح في الزيت ثم يضاف.....",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

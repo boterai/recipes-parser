@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tequila Sparkle",
+    "description": "Кавовый drink с текилой, молоком и ликером.",
+    "ingredients": "[{\"name\": \"tequila\", \"units\": \"ml\", \"amount\": 20}, {\"name\": \"milk\", \"units\": \"ml\", \"amount\": 75}, {\"name\": \"coffee liqueur\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"cream\", \"units\": \"ml\", \"amount\": 75}]",
+    "instructions": "Смешать ингредиенты в шейкере, налить в бокал и подавать. Можно добавить кубики кофейного льда.",
+    "category": "Drink",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Можно подавать в бокале для маргариты, но без соли.",
+    "tags": "cocktail, tequila, coffee"
+}

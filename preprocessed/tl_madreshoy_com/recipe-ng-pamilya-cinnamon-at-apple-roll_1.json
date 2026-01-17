@@ -1,0 +1,12 @@
+{
+    "dish_name": "Cinnamon Apple Rolls",
+    "description": "A delicious family recipe for homemade cinnamon apple rolls, perfect for a cold autumn afternoon.",
+    "ingredients": "[{\"name\": \"milk\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"yeast\", \"units\": \"packet\", \"amount\": 1}, {\"name\": \"eggs\", \"units\": null, \"amount\": 2}, {\"name\": \"sugar\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"butter\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"all-purpose flour\", \"units\": \"cups\", \"amount\": 4.5}, {\"name\": \"apples\", \"units\": null, \"amount\": 2}, {\"name\": \"brown sugar\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"ground cinnamon\", \"units\": \"teaspoons\", \"amount\": 3}, {\"name\": \"butter\", \"units\": \"tablespoons\", \"amount\": 2}]",
+    "instructions": "1. In a small bowl, mix warm milk with yeast and let it rest for about 15 minutes. 2. In a large bowl, mix eggs, melted butter, sugar, and a pinch of salt. 3. Add the milk and yeast mixture and mix until combined. 4. Gradually add flour, mixing until smooth. 5. Knead for about 5 minutes. 6. Form a ball with the dough and place it in an oiled bowl. Cover and let rise for 1 hour. 7. Mix brown sugar and cinnamon. 8. Roll out the dough into a rectangle. 9. Brush with butter and sprinkle with the sugar-cinnamon mixture. 10. Peel and dice apples, add to the dough. 11. Roll the dough and refrigerate for 15 minutes. 12. Cut into 12 pieces. 13. Place in a baking dish and let rise for 30 minutes. 14. Preheat oven to 180ºC and bake for 20-25 minutes. 15. Cool on a rack and optionally sprinkle with icing sugar.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "25 minutes",
+    "total_time": "1 hour 40 minutes",
+    "notes": "You can prepare a vanilla glaze by mixing one cup of sugar with two tablespoons of vanilla essence.",
+    "tags": "cinnamon, apple, rolls, dessert, baking"
+}

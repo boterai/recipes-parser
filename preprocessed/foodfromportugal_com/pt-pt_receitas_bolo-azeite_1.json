@@ -1,0 +1,12 @@
+{
+    "dish_name": "Bolo de Azeite Caseiro",
+    "description": "Esta receita simples de bolo de azeite caseiro é perfeita para um pequeno-almoço rápido e saboroso!",
+    "ingredients": "[{\"name\": \"azeite\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"açúcar\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"ovos\", \"units\": \"M\", \"amount\": 3}, {\"name\": \"farinha de trigo\", \"units\": \"g\", \"amount\": 175}, {\"name\": \"raspa de limão\", \"units\": \"unit\", \"amount\": 1}, {\"name\": \"mel\", \"units\": \"colher de sopa\", \"amount\": 1}, {\"name\": \"iogurte grego\", \"units\": \"g\", \"amount\": 125}, {\"name\": \"fermento em pó\", \"units\": \"colher de chá\", \"amount\": 1}]",
+    "instructions": "Pré-aqueça o forno a 180ºC. Unte uma forma de bolos rectangular com manteiga e polvilhe o interior da forma com um pouco de farinha. Numa taça grande, misture com uma vara de arames os ovos, açúcar e a raspa de limão até obter uma mistura homogénea. Deite o iogurte, mel e misture cerca de 1 a 2 minutos ou até ficar bem incorporado. Adicione a farinha de trigo e o fermento em pó e bata até obter uma mistura cremosa e homogénea. Com uma espátula de borracha, raspe as laterais e o fundo da taça. Deite a massa na forma de bolos. Leve ao forno cerca de 35 minutos. Espete um palito no meio e, se sair seco o bolo está cozido. Retire o bolo do forno e deixe arrefecer cerca de 15 minutos. Retire o bolo da forma e coloque o bolo numa grelha antiaderente ou numa travessa retangular. Deixe arrefecer até à temperatura ambiente e sirva.",
+    "category": "Bolos",
+    "prep_time": "15 minutes",
+    "cook_time": "35 minutes",
+    "total_time": "50 minutes",
+    "notes": "Coloque a grelha do forno no meio para cozedura uniforme. Não abra totalmente a porta do forno quando o bolo estiver cozido.",
+    "tags": "pequeno-almoço, bolo, sobremesa, fácil"
+}

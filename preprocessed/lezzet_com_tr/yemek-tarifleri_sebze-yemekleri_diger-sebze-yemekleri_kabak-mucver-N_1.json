@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kabak Mücveri",
+    "description": "Kabak Mücveri, kabak ile yapılan pratik bir yemektir.",
+    "ingredients": "[{\"name\": \"kabak\", \"units\": \"pieces\", \"amount\": 3}, {\"name\": \"taze soğan\", \"units\": \"pieces\", \"amount\": 3}, {\"name\": \"karabiber\", \"units\": null, \"amount\": null}, {\"name\": \"dereotu\", \"units\": \"bunch\", \"amount\": 1}, {\"name\": \"beyaz peynir\", \"units\": \"grams\", \"amount\": 75}, {\"name\": \"yumurta\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"un\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"toz beyaz biber\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"tuz\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"zeytinyağı veya ayçiçek yağı\", \"units\": \"cups\", \"amount\": 1.5}]",
+    "instructions": "Tarifte kullanılacak kabakları iyice yıkayın. Uçlarını kesin ve kabuklarını soyun. Kabakları, rendenin ince tarafıyla büyük bir kaseye rendeleyin. Hafif bir şekilde sıkarak suyunu süzün. Üzerine yumurtaları ekleyin. Bu esnada taze soğanı doğrayın ve dereotunu ince ince kıyın. Malzemeleri kabakların üzerine ekleyin. Tuzu alınmış beyaz peyniri elinizle ufalayın. Tüm malzemeleri güzelce karıştırın. Bu esnada tavaya ayçiçek yağı ekleyin ve kızdırın. Kabak karışımından bir kaşık alıp tavaya dökün ve hafifçe yayın. Kabakları önlü arkalı olacak şekilde kızarttıktan sonra, kağıt havlu serili servis tabağına alın. Afiyet olsun.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "30 minutes",
+    "notes": "Kabağın içinde bulunan çekirdekler, sağlık açısından oldukça önemlidir. Bu nedenle rendeleme işlemi esnasında çekirdeklerini atmamaya dikkat edin.",
+    "tags": "vegetarian, easy, quick, zucchini"
+}

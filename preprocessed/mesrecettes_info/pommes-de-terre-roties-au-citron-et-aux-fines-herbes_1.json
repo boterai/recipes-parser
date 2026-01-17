@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pommes de terre rôties au citron et aux fines herbes",
+    "description": "Ces délicieuses pommes de terre accompagnent à la perfection tous vos plats principaux.",
+    "ingredients": "[{\"name\": \"pommes de terre\", \"units\": \"kg\", \"amount\": \"1\"}, {\"name\": \"huile d’olive\", \"units\": \"tasse\", \"amount\": \"1/3\"}, {\"name\": \"origan séché\", \"units\": \"càc\", \"amount\": \"1.5\"}, {\"name\": \"Sel\", \"units\": null, \"amount\": null}, {\"name\": \"Poivre noir\", \"units\": null, \"amount\": null}, {\"name\": \"jus de citron frais\", \"units\": \"tasse\", \"amount\": \"1/4\"}, {\"name\": \"ail émincé\", \"units\": \"càs\", \"amount\": \"1\"}, {\"name\": \"persil frais haché\", \"units\": \"càs\", \"amount\": \"3\"}]",
+    "instructions": "Préchauffer le four à 200 °. Éplucher les pommes de terre, les rincer à l’eau et les découper en petits cubes de même taille. Les placer au centre d’une plaque à pâtisserie. Les arroser de l’huile d’olive. Saupoudrer d’origan, de sel et de poivre, puis mélanger pour enrober uniformément. Étalez les pommes de terre en une couche uniforme sur la plaque à pâtisserie. Faire rôtir dans le four préchauffé pendant 30 à 35 minutes, jusqu’à ce qu’elles soient il soit presque légèrement dorées, en secouant à mi-cuisson. Retirer du four, regrouper les pommes de terre au centre de la plaque. Les arroser de jus de citron, saupoudrer d’ail, remuer pour enrober. Les répandre en une couche uniforme. Faire rôtir les pommes de terre 10 minutes de plus ou jusqu’à ce qu’elles soient complètement tendres et dorées par endroits. Saupoudrer de persil. Les pommes de terre rôties au citron et aux fines herbes sont prêtes à être servies.",
+    "category": "Plats",
+    "prep_time": "10 minutes",
+    "cook_time": "45 minutes",
+    "total_time": "55 minutes",
+    "notes": null,
+    "tags": null
+}

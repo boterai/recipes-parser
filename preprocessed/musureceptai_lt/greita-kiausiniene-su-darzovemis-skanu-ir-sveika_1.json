@@ -1,0 +1,12 @@
+{
+    "dish_name": "Greita kiaušinienė su daržovėmis",
+    "description": "Lengvas ir sveikas receptas kiaušinienei su daržovėmis.",
+    "ingredients": "[{\"name\": \"kiaušiniai\", \"units\": \"vnt.\", \"amount\": 4}, {\"name\": \"pienas\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"svogūnas\", \"units\": \"vnt.\", \"amount\": 1}, {\"name\": \"raudonoji paprika\", \"units\": \"vnt.\", \"amount\": 1}, {\"name\": \"žalia paprika\", \"units\": \"vnt.\", \"amount\": 1}, {\"name\": \"švieži špinatai\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"pomidorai\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"alyvuogių aliejus\", \"units\": \"šaukštas\", \"amount\": 1}, {\"name\": \"druska\", \"units\": null, \"amount\": null}, {\"name\": \"pipirai\", \"units\": null, \"amount\": null}, {\"name\": \"baziliko lapeliai\", \"units\": null, \"amount\": null}, {\"name\": \"fetos sūris\", \"units\": \"g\", \"amount\": 50}]",
+    "instructions": "1. Supjaustykite svogūną smulkiais gabalėliais. Nuplaukite ir supjaustykite paprikas juostelėmis. Pomidorus supjaustykite mažais kubeliais. Jei naudojate špinatus, švelniai nuplaukite lapus. 2. Įkaitinkite keptuvę su alyvuogių aliejaus. Apkeptkite svogūną apie 1 minutę, kol suminkštės. Įdėkite paprikas ir pomidorus, kepkite 2–3 minutes. 3. Kiaušinius suplakite su pienu, druska ir pipirais. Supilkite kiaušinių mišinį ant apkepintų daržovių. 4. Pabaigoje įmaišykite šviežius špinatus ir baziliką. Patiekite su skrudinta pilno grūdo duona.",
+    "category": null,
+    "prep_time": "15 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Patiekite su žaliais kokteiliais arba lengvais citrusinių vaisių sultimis.",
+    "tags": "pusryčiai, sveikas, greitas"
+}

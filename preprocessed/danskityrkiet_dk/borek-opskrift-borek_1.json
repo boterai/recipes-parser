@@ -1,0 +1,12 @@
+{
+    "dish_name": "Peynirli Tepsi Börek",
+    "description": "Tyrkisk börek med fetaost og persille.",
+    "ingredients": "[{\"name\": \"yufkabrød eller filodej\", \"units\": null, \"amount\": \"8-10\"}, {\"name\": \"fetaost\", \"units\": \"gram\", \"amount\": \"500\"}, {\"name\": \"bredbladet persille\", \"units\": \"bundt\", \"amount\": \"1\"}, {\"name\": \"mælk\", \"units\": \"ml\", \"amount\": \"750\"}, {\"name\": \"æg\", \"units\": null, \"amount\": \"3\"}, {\"name\": \"salt\", \"units\": \"tsk\", \"amount\": \"1\"}, {\"name\": \"olie\", \"units\": \"til pensling\", \"amount\": null}, {\"name\": \"smør\", \"units\": \"til pensling\", \"amount\": null}]",
+    "instructions": "Start med at lave fyldet. Fetaost og groft hakket persille blandes grundigt i en skål, så osten smuldrer. Pisk æg, salt og mælk sammen i en anden skål. Mælkeblandingen tilfører yufkabrødene fugtighed, så de ikke tørrer ud, ved bagning i ovnen. En börek lægges sammen som en lagkage. I bunden lægges yufkabrød, efterfulgt af mælkeblandingen og dernæst fyldet af fetaost og persille. Disse tre lag gentages 6 gange og der afsluttes med mælkeblandingen. Pensl en bradepande med olie og læg det det første yufkabrød på. Hæld ca. 1 dl mælkeblanding over yufkabrødet og fordel ost og persille ligeligt. Gentag processen med yufkabrød, mælkeblanding samt ost og persille, til hele osteblandingen er brugt. Afslut med et yufkabrød og pensl med den sidste mælkeblanding. Bag börek i en forvarmet ovn ved 180 grader i 20 minutter. Tag böreken ud, pensl overfladen med smør og bag den i yderligere 20 minutter. Server börek lun.",
+    "category": null,
+    "prep_time": "75 minutes",
+    "cook_time": "40 minutes",
+    "total_time": null,
+    "notes": "Bemærk at fyldet ikke dækker hele yufkabrødet. Fordelingen af lidt ost og persille imellem hvert lag yufka, giver en luftig börek. Ønskes en mere kompakt börek, lægges kun 1-2 lag med ost og persille, men stadig mælkeblanding imellem hvert lag.",
+    "tags": "börek, tyrkisk, fetaost, persille"
+}

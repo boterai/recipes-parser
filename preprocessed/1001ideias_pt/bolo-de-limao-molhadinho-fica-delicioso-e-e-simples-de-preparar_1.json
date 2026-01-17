@@ -1,0 +1,12 @@
+{
+    "dish_name": "Bolo de limão molhadinho",
+    "description": "Irresistível bolo de limão que fica com um sabor muito bom e especial.",
+    "ingredients": "[{\"name\": \"limões grandes\", \"units\": null, \"amount\": 2}, {\"name\": \"farinha\", \"units\": \"g\", \"amount\": 60}, {\"name\": \"sal fino\", \"units\": \"pitada\", \"amount\": 1}, {\"name\": \"açúcar\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"ovos grandes\", \"units\": null, \"amount\": 3}, {\"name\": \"leite\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"manteiga para untar\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"leite condensado\", \"units\": \"lata\", \"amount\": 0.5}, {\"name\": \"sumo de limão\", \"units\": null, \"amount\": 1}, {\"name\": \"raspas de limão\", \"units\": \"opcional\", \"amount\": null}]",
+    "instructions": "Pré-aqueça o forno a 180°C e unte uma forma com manteiga e farinha. Bata no liquidificador os ovos, o óleo, o leite, o açúcar e o suco de limão até obter uma mistura homogênea. Em uma tigela, peneire a farinha de trigo e adicione a mistura do liquidificador. Mexa delicadamente até incorporar bem. Acrescente o fermento em pó e as raspas de limão, misturando levemente. Despeje a massa na forma e leve ao forno por cerca de 30 a 40 minutos, ou até que, ao espetar um palito, ele saia limpo. Para a cobertura, misture o leite condensado com o suco de limão até formar um creme consistente. Após desenformar o bolo, cubra com a mistura de leite condensado e decore com raspas de limão, se desejar.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "30-40 minutes",
+    "total_time": null,
+    "notes": "Se quiser um sabor mais intenso, adicione mais raspas de limão à massa. Sirva o bolo gelado para uma sobremesa refrescante!",
+    "tags": "bolo de limão, bolo de limão fácil, Bolo de limão húmido, Bolo de limão molhadinho, bolos doces, bolos fofos"
+}

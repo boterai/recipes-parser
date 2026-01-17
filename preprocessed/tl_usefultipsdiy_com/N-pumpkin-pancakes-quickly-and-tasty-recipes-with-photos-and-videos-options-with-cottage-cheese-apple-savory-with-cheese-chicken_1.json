@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pumpkin Pancakes",
+    "description": "Delicious and quick pumpkin pancakes with various options including sweet and savory variations.",
+    "ingredients": "[{\"name\": \"pumpkin puree\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"flour\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"milk\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"butter\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"sugar\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"baking powder\", \"units\": \"teaspoons\", \"amount\": 1.5}, {\"name\": \"coconut flakes\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"vanilla\", \"units\": null, \"amount\": null}, {\"name\": \"cinnamon\", \"units\": null, \"amount\": null}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"vegetable oil\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Sift flour with baking powder, add sugar and a pinch of salt, then mix in coconut, vanilla, and cinnamon. 2. Grate the pumpkin. 3. Melt butter. 4. Combine pumpkin with milk and dry ingredients, then add melted butter. 5. Heat a pan with oil and pour in the batter. 6. Cook until golden brown on both sides.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "25 minutes",
+    "notes": "Serve with honey, jam, or sour cream.",
+    "tags": "pancakes, pumpkin, dessert, quick"
+}

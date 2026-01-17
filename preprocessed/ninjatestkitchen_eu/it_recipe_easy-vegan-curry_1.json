@@ -1,0 +1,12 @@
+{
+    "dish_name": "Curry vegano facile",
+    "description": "Cremoso e saporito curry di patate dolci, piselli e spinaci.",
+    "ingredients": "[{\"name\": \"cumino\", \"units\": \"cucchiaio\", \"amount\": \"1\"}, {\"name\": \"zenzero\", \"units\": \"cucchiaino\", \"amount\": \"1\"}, {\"name\": \"curcuma\", \"units\": \"cucchiaino\", \"amount\": \"1\"}, {\"name\": \"coriandolo\", \"units\": \"cucchiaino\", \"amount\": \"1 1/2\"}, {\"name\": \"peperoncino in polvere\", \"units\": \"cucchiaino\", \"amount\": \"1/2\"}, {\"name\": \"cipolla\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"aglio\", \"units\": \"spicchi\", \"amount\": \"4\"}, {\"name\": \"patata dolce\", \"units\": null, \"amount\": \"1 grande\"}, {\"name\": \"ceci\", \"units\": \"barattolo\", \"amount\": \"1\"}, {\"name\": \"latte di cocco\", \"units\": \"barattolo\", \"amount\": \"1\"}, {\"name\": \"spinaci\", \"units\": \"borsa\", \"amount\": \"1\"}, {\"name\": \"sale\", \"units\": null, \"amount\": \"A piacere\"}, {\"name\": \"pepe\", \"units\": null, \"amount\": \"A piacere\"}]",
+    "instructions": "1. Tritare la cipolla e la patata dolce. 2. Cuoci la tua patata dolce aggiungendo 125ml di acqua nella pentola Ninja Foodi Multi-Cooker, metti la patata dolce nel cestello per cuocere e friggere e monta il coperchio a pressione. Selezionare pressione, bassa temperatura e cuocere per 3 minuti. Una volta completato, rilasciare attentamente il vapore girando il sigillo nella posizione di rilascio rapido. Quindi rimuovere il coperchio, estrarre la patata dolce e metterla da una parte. 3. Mescolare le spezie nel latte di cocco e versare nella pentola principale di Foodi. Aggiungete i ceci e gli spinaci. Mettete il coperchio a pressione, impostate su alto e cuocete per 6 minuti. 4. Rilasciare con cura il vapore secondo il procedimento di cui sopra e togliere il coperchio a pressione. Mescolare il contenuto della pentola, aggiungere la patata dolce e mettere il coperchio croccante. Selezionare il grill e avviare per 5 minuti. 5. Servire con riso, naan e onion bhaji.",
+    "category": "Main Course",
+    "prep_time": "5 min",
+    "cook_time": "15 min",
+    "total_time": "20 min",
+    "notes": "Compatibile con Multicooker 7-in-1 Ninja Foodi da 6 L.",
+    "tags": "vegan, curry, main course"
+}

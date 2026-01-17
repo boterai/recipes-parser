@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pommes de terre rôties au citron",
+    "description": null,
+    "ingredients": "[{\"name\": \"pommes de terre\", \"units\": \"lb\", \"amount\": \"3\"}, {\"name\": \"huile d'olive\", \"units\": \"tasse\", \"amount\": \"1/3\"}, {\"name\": \"romarin\", \"units\": \"brins\", \"amount\": \"3\"}, {\"name\": \"jus de citron\", \"units\": \"tasse\", \"amount\": \"1/4\"}, {\"name\": \"sel\", \"units\": \"c. à thé\", \"amount\": \"3/4\"}, {\"name\": \"poivre\", \"units\": \"c. à thé\", \"amount\": \"1/4\"}]",
+    "instructions": "Pelez les pommes de terre et coupez-les en deux (ou en quatre, si elles sont grosses). Dans une poêle en fonte ou une poêle allant au four, ou dans un plat en métal, mélangez les pommes de terre avec l'huile et le romarin. Arrosez-les du jus de citron, et saupoudrez-les du sel et du poivre. Versez suffisamment d'eau dans la poêle pour couvrir la paroi jusqu'à une hauteur de 3/4 po (2 cm). Faites cuire au four préchauffé à 350°F (180°C) jusqu'à ce que le liquide se soit évaporé et que les pommes de terre soient légèrement dorées (retournez-les quelques fois en cours de cuisson).",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

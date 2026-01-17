@@ -1,0 +1,12 @@
+{
+    "dish_name": "Mì lasagna cà chua và cá ngừ",
+    "description": "Công thức dễ dàng và đầy đủ với sốt béchamel, sốt cà chua, cá ngừ và mì ống cho món lasagna.",
+    "ingredients": "[{\"name\": \"mì lasagna không nướng\", \"units\": \"món\", \"amount\": 12}, {\"name\": \"dầu\", \"units\": null, \"amount\": \"1 chút\"}, {\"name\": \"hành tây nhỏ\", \"units\": \"củ\", \"amount\": 1}, {\"name\": \"cùi cà chua\", \"units\": \"lon\", \"amount\": 1}, {\"name\": \"cá ngừ\", \"units\": \"lon\", \"amount\": 2}, {\"name\": \"muối\", \"units\": null, \"amount\": null}, {\"name\": \"lá húng quế\", \"units\": null, \"amount\": \"một số\"}, {\"name\": \"dầu\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"bột mì\", \"units\": \"g\", \"amount\": 70}, {\"name\": \"sữa\", \"units\": \"g\", \"amount\": 700}, {\"name\": \"hạt nhục đậu khấu\", \"units\": null, \"amount\": null}, {\"name\": \"muối\", \"units\": null, \"amount\": null}, {\"name\": \"Mozzarella\", \"units\": null, \"amount\": null}]",
+    "instructions": "Chúng tôi cho một lượng dầu nhỏ vào chảo. Cắt nhỏ hành tây và chần sơ. Sau khi luộc chín, cho cà chua vào nấu khoảng 15 phút cùng với lá húng quế và một chút muối. Chúng tôi đã đặt. Mặt khác, chúng tôi chuẩn bị bechamel. Ta cho dầu vào chảo, khi nóng ta cho bột vào. Chúng tôi nấu nó trong một phút và chúng tôi thêm sữa, từng chút một và không ngừng khuấy. Chúng tôi thêm nhục đậu khấu xay, dồi dào và muối. Chúng tôi đã đặt. Chúng tôi để ráo cá ngừ và đặt trước. Trong một món ăn phù hợp với lò nướng, chúng tôi sẽ lắp ráp món lasagna của chúng tôi. Chúng tôi đặt một cái chảo béchamel trên đế. Phủ hai hoặc ba tấm lasagna (tùy vào kích thước của chúng nhưng lý tưởng nhất là đặt chúng sao cho phủ kín khuôn). Trên mì ống, chúng tôi đặt nước sốt cà chua và một ít cá ngừ. Nếu chúng ta muốn, hãy đặt một ít bechamel và phủ các tấm lasagna. Thêm nhiều bechamel và lặp lại các lớp một lần nữa. Cuối cùng, chúng tôi phủ tất cả mọi thứ với thêm bechamel và với mozzarella (đã ráo nước) hoặc với pho mát bào. Nướng ở 180º trong khoảng 30 phút.",
+    "category": "mì ống",
+    "prep_time": null,
+    "cook_time": "30 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

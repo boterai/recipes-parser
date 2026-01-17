@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sopa da Pedra",
+    "description": "Uma sopa tradicional da cozinha portuguesa, originária de Almeirim, rica em carne, enchidos, feijão, couve, batatas e cenoura.",
+    "ingredients": "[{\"name\": \"carne de porco\", \"units\": \"g\", \"amount\": \"700\"}, {\"name\": \"chouriço de carne\", \"units\": \"g\", \"amount\": \"100\"}, {\"name\": \"morcela\", \"units\": \"g\", \"amount\": \"100\"}, {\"name\": \"batata\", \"units\": \"g\", \"amount\": \"600\"}, {\"name\": \"feijão encarnado\", \"units\": \"g\", \"amount\": \"500\"}, {\"name\": \"cebolas\", \"units\": null, \"amount\": \"2\"}, {\"name\": \"dentes de alho\", \"units\": null, \"amount\": \"2\"}, {\"name\": \"folhas de louro\", \"units\": null, \"amount\": \"2\"}, {\"name\": \"coentro\", \"units\": null, \"amount\": \"a gosto\"}, {\"name\": \"sal\", \"units\": null, \"amount\": \"a gosto\"}, {\"name\": \"pimenta\", \"units\": null, \"amount\": \"a gosto\"}, {\"name\": \"pedra\", \"units\": null, \"amount\": \"1\"}]",
+    "instructions": "Coloque as carnes de porco e o feijão de molho na água de um dia para o outro. Escalde a orelha de porco em água fervente. Em uma panela com água fervente, coloque a pedra, o feijão, as carnes e os temperos, exceto o coentro. Depois que as carnes cozinharem, retire-as da panela, fatie e reserve. Adicione as batatas e o coentro. Quando as batatas estiverem boas, devolva as carnes à panela, misture bem e sirva.",
+    "category": "Main Course",
+    "prep_time": "1440 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Tradicionalmente, coloca-se a pedra no fundo da terrina e guarda-se para a próxima vez que for confecionada.",
+    "tags": "sopa, portuguesa, legumes, pedra"
+}

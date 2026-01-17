@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lasanha de Queijo",
+    "description": "Lasanha de queijo é aquele prato que sempre agrada todo mundo. Feita com camadas de massa, muito queijo derretido e um molho bechamel que é de deixar qualquer um com água na boca.",
+    "ingredients": "[{\"name\": \"massa para lasanha\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"queijo muçarela ralado\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"queijo parmesão ralado\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"queijo provolone ralado\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"leite\", \"units\": \"liter\", \"amount\": 1}, {\"name\": \"manteiga\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"farinha de trigo\", \"units\": \"colheres de sopa\", \"amount\": 2}, {\"name\": \"sal\", \"units\": null, \"amount\": null}, {\"name\": \"pimenta-do-reino\", \"units\": null, \"amount\": null}, {\"name\": \"noz-moscada\", \"units\": null, \"amount\": null}]",
+    "instructions": "Preparar o molho bechamel: Em uma panela, derreta a manteiga e adicione a farinha de trigo. Cozinhe por alguns minutos até formar uma pasta dourada. Aos poucos, vá adicionando o leite, mexendo sempre para não empelotar. Cozinhe até o molho engrossar. Tempere com sal, pimenta-do-reino e noz-moscada a gosto. Reserve. Montar a lasanha: Em um refratário, comece com uma camada de molho bechamel. Em seguida, coloque uma camada de massa de lasanha. Cubra com uma camada de muçarela, uma de provolone e uma de parmesão. Repita o processo até encher o refratário, terminando com uma camada de queijos. Assar: Cubra o refratário com papel alumínio e leve ao forno preaquecido a 180°C por cerca de 30 minutos. Retire o papel alumínio e deixe assar por mais 10 minutos, ou até os queijos estarem bem derretidos e dourados. Servir: Deixe a lasanha descansar por alguns minutos antes de cortar e servir.",
+    "category": "Prato Principal",
+    "prep_time": null,
+    "cook_time": "40 minutes",
+    "total_time": null,
+    "notes": "Você pode variar os queijos de acordo com o seu gosto. Gouda e gorgonzola também ficam incríveis nessa receita. Para um molho mais cremoso, use creme de leite no lugar de uma parte do leite. Essa lasanha é perfeita para congelar. Monte-a normalmente, cubra bem com papel alumínio e filme plástico, e congele antes de assar. Experimente adicionar ervas frescas como manjericão ou orégano entre as camadas de queijo. Dá um toque especial.",
+    "tags": "almoço, jantar, lasanha, massa, prato principal"
+}

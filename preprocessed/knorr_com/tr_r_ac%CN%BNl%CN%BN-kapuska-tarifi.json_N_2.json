@@ -1,0 +1,12 @@
+{
+    "dish_name": "Acılı Kapuska",
+    "description": "Sağlıklı ve acılı kapuska tarifi.",
+    "ingredients": "[{\"name\": \"Knorr Acılı Baharatlı fırında tavuk çeşnisi\", \"units\": \"paket\", \"amount\": 1}, {\"name\": \"ince kıyılmış beyaz lahana\", \"units\": \"gram\", \"amount\": 750}, {\"name\": \"ince doğranmış kuru soğan\", \"units\": \"adet\", \"amount\": 1}, {\"name\": \"küp küp doğranmış havuç\", \"units\": \"adet\", \"amount\": 2}, {\"name\": \"pirinç\", \"units\": \"çorba kaşığı\", \"amount\": 2}, {\"name\": \"zeytinyağı\", \"units\": \"çorba kaşığı\", \"amount\": 1}, {\"name\": \"sıcak su\", \"units\": \"çay bardağı\", \"amount\": 1}]",
+    "instructions": "Knorr Acılı Baharatlı Fırında Tavuk Çeşnisi'nin içinden çıkan fırın poşedine tüm malzemeleri ekleyin. Sebzeli karışımın üzerine Knorr Acılı Baharatlı Fırında Tavuk Çeşni'sini serpiştirin. Poşedin ağzını kapatıp, kürdan ile 3 delik açın. 190 derecede ön ısıtma yaptığınız fırında 40-45 dk arası pişirin. Yanında arzunuza göre sarımsaklı yoğurt ile sıcak servis yapın. Afiyet olsun!",
+    "category": null,
+    "prep_time": "5 minutes",
+    "cook_time": "40-45 minutes",
+    "total_time": "45 minutes",
+    "notes": null,
+    "tags": null
+}

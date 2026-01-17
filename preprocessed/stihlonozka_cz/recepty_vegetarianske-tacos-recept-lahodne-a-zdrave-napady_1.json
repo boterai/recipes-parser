@@ -1,0 +1,12 @@
+{
+    "dish_name": "Vegetariánské Tacos",
+    "description": "Lahodné a zdravé nápady pro vegetariánské tacos plné chutí a zdraví.",
+    "ingredients": "[{\"name\": \"Tortilly\", \"units\": null, \"amount\": null}, {\"name\": \"Fazole\", \"units\": null, \"amount\": null}, {\"name\": \"Čerstvá zelenina\", \"units\": null, \"amount\": null}, {\"name\": \"Sýry\", \"units\": null, \"amount\": null}, {\"name\": \"Koření\", \"units\": null, \"amount\": null}, {\"name\": \"Salsa\", \"units\": null, \"amount\": null}, {\"name\": \"Limeta\", \"units\": null, \"amount\": null}]",
+    "instructions": "Na pánvi si osmahněte cibuli a papriku, poté přidejte fazole a koření. Vše dobře promíchejte a nechte zahřát. Následně naplňte tortilly směsí a přidejte čerstvou zeleninu a sýr. Na závěr pokapejte limetovou šťávou a přidejte salsa podle chuti.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "vegetariánské, tacos, zdravé, recept"
+}

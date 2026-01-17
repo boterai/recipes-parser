@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kartoffel-Börek",
+    "description": "Kartoffel-Börek ist wie ein warmer Umarmung, die dir in kalten Winterabenden ein Lächeln ins Gesicht zaubert.",
+    "ingredients": "[{\"name\": \"Kartoffeln\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"Feta-Käse\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"Zwiebel\", \"units\": \"small\", \"amount\": 1}, {\"name\": \"frische Petersilie\", \"units\": \"EL\", \"amount\": 2}, {\"name\": \"Salz\", \"units\": \"TL\", \"amount\": 1}, {\"name\": \"schwarzer Pfeffer\", \"units\": \"TL\", \"amount\": 0.5}, {\"name\": \"Paprika\", \"units\": \"TL\", \"amount\": 0.5}, {\"name\": \"Yufka-Teig\", \"units\": \"Pck.\", \"amount\": 1}, {\"name\": \"Butter\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"Ei\", \"units\": \"for brushing\", \"amount\": 1}]",
+    "instructions": "Heize den Ofen auf 200°C vor. Schäle die Kartoffeln und koche sie in Salzwasser, bis sie weich sind. Lass die gekochten Kartoffeln abkühlen und püriere sie anschließend. Füge Salz, Pfeffer und nach Belieben Gewürze zu dem Kartoffelpüree hinzu. Nimm den Blätterteig aus der Verpackung und rolle ihn leicht aus. Schneide den Blätterteig in Quadrate oder Rechtecke. Löffle eine Portion des Kartoffelpürees in die Mitte jedes Teigstücks. Falte den Teig über die Füllung und drücke die Ränder gut zusammen, um sie zu versiegeln. Lege die Börek auf ein mit Backpapier ausgelegtes Blech. Verquirle ein Ei und bestreiche die Oberseite der Börek damit. Backe die Börek im vorgeheizten Ofen für etwa 25-30 Minuten, bis sie goldbraun sind. Nimm die Börek aus dem Ofen und lasse sie kurz abkühlen, bevor du sie servierst.",
+    "category": null,
+    "prep_time": "15 minutes",
+    "cook_time": "20 minutes",
+    "total_time": null,
+    "notes": "Bewahre übrig gebliebene Börek im Kühlschrank auf. Erwärme sie im Ofen für Knusprigkeit. Serviere mit einem frischen Salat. Für mehr Geschmack, Gewürze hinzufügen!",
+    "tags": null
+}

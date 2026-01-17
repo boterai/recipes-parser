@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lulas recheadas à Lagareiro",
+    "description": "Receita fácil e com um sabor tão bom.",
+    "ingredients": "[{\"name\": \"lulas congeladas\", \"units\": \"kg\", \"amount\": 1.5}, {\"name\": \"batatinhas\", \"units\": \"kg\", \"amount\": 1.5}, {\"name\": \"fatias de presunto\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"sal\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"salsa\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"palitos\", \"units\": null, \"amount\": null}, {\"name\": \"azeite\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"vinagre\", \"units\": \"dl\", \"amount\": 0.5}, {\"name\": \"dentes de alho\", \"units\": null, \"amount\": 2}, {\"name\": \"salsa ou coentros picados\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"colorau\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"pimenta\", \"units\": null, \"amount\": null}]",
+    "instructions": "Amanhe (tirar a pele e limpar) e lave bem as lulas, deixando os sacos inteiros. Recheie-os com uma fatia de presunto, a cabeça e tentáculos das lulas e prenda a abertura com palitos. Tempere as lulas recheadas com pouco sal (uma vez que o presunto já é salgado) e grelhe-as. Lave as batatas com a casca envolva-as em sal grosso, asse-as no forno e depois dê-lhes uma ligeira pancada com o punho. Agora faça o molho, misturando bem todos os ingredientes mencionados. A qualidade da lula é essencial. Podem ser congeladas, mas as que já vêm limpas depois de grelhadas podem ficar rijas. Eu compro congeladas com pele e limpo-as. Já sem cabeça o tamanho não deve ser superior a 10 cm, a medida ideal é 8 cm. Eu grelho as lulas no grelhador elétrico. Coloco água já quente no grelhador e deixo as resistências aquecer muito bem, assim como a grelha onde vou colocar as lulas. É o primeiro fator para não colarem muito. Seque a lula da humidade natural e envolva-as muito ligeiramente com um pouco de azeite. Colocam-se na grelha e fique atento porque grelham rápido. Estando grelhadas colocam-se de imediato na travessa com as batatas e regam-se com o azeite e alho fervido.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "A qualidade da lula é essencial. Podem ser congeladas, mas as que já vêm limpas depois de grelhadas podem ficar rijas.",
+    "tags": "lulas recheadas, lulas à lagareiro, receitas fáceis, receitas de peixe"
+}

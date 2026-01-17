@@ -1,0 +1,12 @@
+{
+    "dish_name": "Feijoada de lingueirão",
+    "description": "Uma combinação perfeita de sabores do mar e da terra, ideal para uma refeição reconfortante.",
+    "ingredients": "[{\"name\": \"Lingueirão\", \"units\": \"kg\", \"amount\": 1}, {\"name\": \"Chouriço mouro\", \"units\": null, \"amount\": 1}, {\"name\": \"Feijão-branco cozido\", \"units\": \"g\", \"amount\": 600}, {\"name\": \"Cenouras\", \"units\": null, \"amount\": 2}, {\"name\": \"Tomates\", \"units\": null, \"amount\": 2}, {\"name\": \"Cebolas\", \"units\": null, \"amount\": 2}, {\"name\": \"Dentes de alho\", \"units\": null, \"amount\": 2}, {\"name\": \"Vinho branco\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"Azeite\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"Coentros picados\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Sal\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Pimenta\", \"units\": \"q.b.\", \"amount\": null}]",
+    "instructions": "Leve ao lume um tacho com água abundante, temperada com sal, e deixe levantar fervura. Junte o lingueirão e deixe cozinhar até abrir. Escorra e reserve parte da água. Descasque e pique as cebolas e os alhos; descasque e corte as cenouras em meias-luas; corte também o chouriço em meias-luas. Leve ao lume um tacho com o azeite, junte os ingredientes anteriores e deixe refogar. Regue com o vinho branco, adicione os tomates, cortado em pequenos cubos e mexa. Acrescente depois o feijão cozido e a água do lingueirão e envolva. Deixe ferver durante cerca de 10 a 15 minutos. De seguida, retifique o sal, tempere com pimenta e junte o miolo do lingueirão. Sirva polvilhado com coentros picados.",
+    "category": null,
+    "prep_time": "45 minutes",
+    "cook_time": null,
+    "total_time": "45 minutes",
+    "notes": "A feijoada de lingueirão é uma deliciosa variação da tradicional feijoada, incorporando os sabores do mar com os sabores tradicionais de uma feijoada.",
+    "tags": "feijão, feijoada, lingueirão, receita com feijão"
+}

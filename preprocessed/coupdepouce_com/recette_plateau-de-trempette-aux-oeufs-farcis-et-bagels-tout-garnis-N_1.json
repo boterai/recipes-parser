@@ -1,0 +1,12 @@
+{
+    "dish_name": "Plateau de trempette aux œufs farcis et bagels tout garnis",
+    "description": "Un plateau de trempette d’œufs farcis « tout bagel » prêt en moins de 30 minutes, personnalisable et plein de saveur.",
+    "ingredients": "[{\"name\": \"oeufs\", \"units\": \"gros\", \"amount\": 12}, {\"name\": \"bagels\", \"units\": \"au choix\", \"amount\": 4}, {\"name\": \"mayonnaise\", \"units\": \"tasse\", \"amount\": 0.25}, {\"name\": \"fromage à la crème\", \"units\": \"tasse\", \"amount\": 0.5}, {\"name\": \"moutarde de Dijon\", \"units\": \"c. à soupe\", \"amount\": 2}, {\"name\": \"lait\", \"units\": \"c. à soupe\", \"amount\": 2}, {\"name\": \"jus de citron\", \"units\": \"c. à soupe\", \"amount\": 1}, {\"name\": \"sauce Worcestershire\", \"units\": \"c. à thé\", \"amount\": 2}, {\"name\": \"sauce piquante\", \"units\": \"c. à thé\", \"amount\": 2}, {\"name\": \"ail en poudre\", \"units\": \"c. à thé\", \"amount\": 0.5}, {\"name\": \"oignon en poudre\", \"units\": \"c. à thé\", \"amount\": 0.5}, {\"name\": \"paprika\", \"units\": \"c. à thé\", \"amount\": 0.5}, {\"name\": \"sel\", \"units\": \"c. à thé\", \"amount\": 0.5}, {\"name\": \"assaisonnement plein goût pour bagel\", \"units\": \"c. à soupe\", \"amount\": 1}, {\"name\": \"cornichon sucrés\", \"units\": \"tasse\", \"amount\": 0.25}, {\"name\": \"céleri frais\", \"units\": null, \"amount\": null}, {\"name\": \"Chips de bagel\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Déposer les œufs froids en une seule couche dans une casserole. Couvrir d’eau froide et porter à ébullition. Retirer du feu et laisser reposer 12 minutes. Refroidir et écaler les œufs. 2. Préchauffer le four à 350 °F. Couper les bagels et les cuire au four jusqu’à ce qu’ils soient dorés. 3. Mixer les jaunes et blancs d’œufs avec les autres ingrédients jusqu’à l’obtention d’un mélange lisse. 4. Étaler sur un plateau et garnir avec les ingrédients réservés.",
+    "category": null,
+    "prep_time": "10 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "30 minutes",
+    "notes": null,
+    "tags": null
+}

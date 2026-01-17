@@ -1,0 +1,12 @@
+{
+    "dish_name": "Punch kem tự làm",
+    "description": "Một thức uống thơm ngon để nâng ly chúc mừng, với rượu rum lâu năm, hương vani và quế, và trên hết là vị ngọt ngào và tinh tế.",
+    "ingredients": "[{\"name\": \"bột làm bánh flan\", \"units\": \"gói\", \"amount\": \"1/2\"}, {\"name\": \"rượu rum\", \"units\": \"ly\", \"amount\": \"1/2\"}, {\"name\": \"sữa đặc\", \"units\": \"lon\", \"amount\": \"1\"}, {\"name\": \"chiết xuất vani\", \"units\": \"thìa cà phê\", \"amount\": \"1\"}, {\"name\": \"quế xay\", \"units\": \"muỗng cà phê\", \"amount\": \"1/2\"}]",
+    "instructions": "Để làm loại kem hoặc rượu mùi này, chúng ta cần làm bánh flan. Hãy làm điều đó với một nửa phong bì. Chúng tôi làm theo hướng dẫn để pha nửa gói bột làm bánh flan. Thông thường, bạn trộn bột trong gói với sữa và đun sôi. Sau đó, để nguội trong cùng một cái nồi và nó được để cho đông cứng lại. Sau khi bánh flan được làm xong, chúng ta có thể làm kem. Chúng ta sẽ làm điều đó bằng máy xay thực phẩm hoặc trong một cái bát rồi trộn bằng máy trộn. Cho các nguyên liệu sau vào máy xay thực phẩm hoặc tô trộn: bánh flan đã đông, lon sữa đặc, một thìa cà phê chiết xuất vani, nửa thìa cà phê bột quế và nửa cốc rượu rum lâu năm. Trộn đều trong 1 phút. Thức uống này dành cho uống lạnh nhé hoặc dùng với đá.",
+    "category": "đồ uống",
+    "prep_time": "10M",
+    "cook_time": "8M",
+    "total_time": "18M",
+    "notes": null,
+    "tags": null
+}

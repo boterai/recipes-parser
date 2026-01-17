@@ -1,0 +1,12 @@
+{
+    "dish_name": "شوربة الفطر بالرافيولي",
+    "description": "شوربة كريمية دافئة ومشبّعة تجمع بين نعومة شوربة الفطر و الرافيولي المحشية.",
+    "ingredients": "[{\"name\": \"فطر\", \"units\": \"كوب\", \"amount\": 2}, {\"name\": \"بصلة صغيرة\", \"units\": \"عدد\", \"amount\": 1}, {\"name\": \"ثوم\", \"units\": \"فص\", \"amount\": 2}, {\"name\": \"زبدة\", \"units\": \"ملعقة كبيرة\", \"amount\": 2}, {\"name\": \"زيت زيتون\", \"units\": \"ملعقة كبيرة\", \"amount\": 1}, {\"name\": \"مرق دجاج أو خضار\", \"units\": \"أكواب\", \"amount\": 3}, {\"name\": \"كريمة طهي\", \"units\": \"كوب\", \"amount\": 1}, {\"name\": \"ملح\", \"units\": null, \"amount\": null}, {\"name\": \"فلفل أسود\", \"units\": null, \"amount\": null}, {\"name\": \"زعتر أو أوريغانو\", \"units\": null, \"amount\": null}, {\"name\": \"رافيولي جاهز\", \"units\": \"جم\", \"amount\": 250}, {\"name\": \"بقدونس\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. سخّني الزبدة والزيت في قدر، أضيفي البصل والفطر وقلبي حتى يتحمروا.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

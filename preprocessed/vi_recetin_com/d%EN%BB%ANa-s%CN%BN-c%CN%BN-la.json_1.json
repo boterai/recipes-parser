@@ -1,0 +1,12 @@
+{
+    "dish_name": "Dứa sô cô la",
+    "description": "Món tráng miệng sô cô la hình quả dứa này",
+    "ingredients": "[{\"name\": \"bánh quy Oreo\", \"units\": \"g\", \"amount\": 225}, {\"name\": \"phô mai kem loại Philadelphia\", \"units\": \"g\", \"amount\": 125}, {\"name\": \"vụn sô cô la, loại Chocapic\", \"units\": null, \"amount\": null}, {\"name\": \"đường đóng băng để trang trí\", \"units\": null, \"amount\": null}]",
+    "instructions": "Trong máy xay thực phẩm, chúng ta cho 225g bánh quy kiểu Oreo vào và nghiền nát. Trong máy Thermomix, chúng ta lập trình... 10 giây ở tốc độ 5. Thêm 125g phô mai kem và trộn lại. Lập trình 15 giây ở tốc độ 2,5. Chúng ta để bột nghỉ. Có thể cho vào tủ lạnh khoảng 1 giờ để nó chắc chắn hơn nhiều. Sau khi hỗn hợp nguội, chúng ta có thể vo thành viên. Chúng ta sẽ hoàn thành... những quả bóng có hình dạng hơi nhọn để sau này nó sẽ có hình dạng của một quả dứa. Sau khi tạo hình xong, chúng ta đặt những mảnh sô cô la lên trên như vảy cá. Khi hoàn thành, chúng tôi rắc thêm đường bột lên trên.",
+    "category": "món tráng miệng",
+    "prep_time": "25M",
+    "cook_time": null,
+    "total_time": "25M",
+    "notes": null,
+    "tags": "dessert, chocolate, pineapple"
+}

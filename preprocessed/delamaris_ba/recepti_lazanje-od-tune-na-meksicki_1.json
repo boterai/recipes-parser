@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lazanje od tune „na meksički“",
+    "description": "Sočna lazanja s tunom i meksičkim okusom, idealna za brzi ručak ili večeru.",
+    "ingredients": "[{\"name\": \"mlijeko\", \"units\": \"ml\", \"amount\": 700}, {\"name\": \"brašna\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"maslaca\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"sol\", \"units\": null, \"amount\": null}, {\"name\": \"papar\", \"units\": null, \"amount\": null}, {\"name\": \"muškatni oraščić\", \"units\": null, \"amount\": null}, {\"name\": \"Tuna Mexicana\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"rajčice u komadićima\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"kuhanog kukuruza\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"crvenog graha\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"lazanja\", \"units\": \"listova\", \"amount\": 12}, {\"name\": \"gaude\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"tvrdog sira\", \"units\": \"g\", \"amount\": 60}]",
+    "instructions": "1. Bešamel: U zdjelici rastopite maslac i na njemu popržite brašno. Polijte mlijekom i dobro promiješajte metlicom da biste dobili homogenu smjesu. U zdjelicu istresite sol, papar i muškatni oraščić. Bešamel miješajte metlicom dok ne postane gust. 2. Nadjev od tune: U posudu istresite tunu s povrćem, dodajte ocijeđeni kuhani kukuruz, crveni grah i rajčice. Posolite i popaprite po ukusu. 3. Lazanje: Premažite dno pekača bešamelom, stavite tri lista lazanja, sloj nadjeva od tune, ribanu gaudu, i ponavljajte slojeve. Na kraju stavite bešamel, ribanu gaudu i tvrdog sira. Pecite 40 minuta na 200 °C.",
+    "category": "Main Course",
+    "prep_time": "60 min",
+    "cook_time": null,
+    "total_time": "60 min",
+    "notes": null,
+    "tags": "lazanja,tuna,meksički"
+}

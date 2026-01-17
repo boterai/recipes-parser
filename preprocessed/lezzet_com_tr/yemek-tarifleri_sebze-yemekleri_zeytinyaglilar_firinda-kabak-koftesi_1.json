@@ -1,0 +1,12 @@
+{
+    "dish_name": "Fırında Kabak Köftesi",
+    "description": "Lezzetli ve düşük kalorili bir kabak yemeği.",
+    "ingredients": "[{\"name\": \"kabak\", \"units\": null, \"amount\": 6}, {\"name\": \"dereotu\", \"units\": \"demet\", \"amount\": 1}, {\"name\": \"maydanoz\", \"units\": \"demet\", \"amount\": 0.5}, {\"name\": \"taze soğan\", \"units\": null, \"amount\": 5}, {\"name\": \"zeytinyağı\", \"units\": \"çay bardağı\", \"amount\": 1}, {\"name\": \"yumurta\", \"units\": null, \"amount\": 2}, {\"name\": \"un\", \"units\": \"çay bardağı\", \"amount\": 1.5}, {\"name\": \"rendelenmiş kaşar peyniri\", \"units\": \"gr\", \"amount\": 50}, {\"name\": \"beyaz peynir\", \"units\": \"gr\", \"amount\": 150}, {\"name\": \"kabartma tozu\", \"units\": \"paket\", \"amount\": 0.5}, {\"name\": \"tuz\", \"units\": null, \"amount\": null}, {\"name\": \"karabiber\", \"units\": null, \"amount\": null}]",
+    "instructions": "Öncelikle kabakları temizleyip rendeleyin ve 10 dakika süreyle süzgeçte bekletin. Elinizle suyunu sıkarak iyice süzün. Maydanoz ve dereotunu temizleyip ince ince kıyın. Taze soğanları temizleyip doğrayın. Başka bir kapta beyaz peyniri ufalayın. Yumurta, kabartma tozu, un, beyaz peynir ve zeytinyağını çukur bir kaba alıp karıştırın. Kabak, dereotu, maydanoz, taze soğan, tuz ve karabiberi ilave edip harmanlayın. Karışımı yağlanmış fırın tepsisine döküp yayın. Önceden ısıtılmış 180 dereceye ayarlı fırında 10 dakika pişirin. Üzerine kaşar peynirini serpiştirip 10 dakika daha pişirin. Afiyet olsun.",
+    "category": "Sebze Yemekleri",
+    "prep_time": "10 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "30 minutes",
+    "notes": "Kabakları rendeledikten sonra iyice süzmezseniz kabak suyunu salar. Bu durumda daha fazla un eklemek zorunda kalırsınız.",
+    "tags": "kabak, köfte, fırın, zeytinyağlı, sebze"
+}

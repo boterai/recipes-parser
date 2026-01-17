@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pržene okruglice od riže sa skušom i umakom od kikirikija",
+    "description": "Pržene okruglice od riže sa skušom poslužene s umakom od kikirikija.",
+    "ingredients": "[{\"name\": \"glatkoga bijelog brašna\", \"units\": \"g\", \"amount\": 45}, {\"name\": \"ledeno hladne vode\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"kuhane riže\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"Skuša Izola Brand\", \"units\": \"g\", \"amount\": 125}, {\"name\": \"sitno nasjeckani luk\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"sitno nasjeckani čili\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"korica limete\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"sok limete\", \"units\": \"piece\", \"amount\": 0.5}, {\"name\": \"umaka od soje\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"svježe naribanog đumbira\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"garam masale\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"mljevene kurkume\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"svježeg korijandra\", \"units\": \"bunch\", \"amount\": 1}, {\"name\": \"biljnog ulja\", \"units\": \"liter\", \"amount\": 1}, {\"name\": \"maslaca od kikirikija\", \"units\": \"g\", \"amount\": 70}, {\"name\": \"slatkog čili umaka\", \"units\": \"g\", \"amount\": 30}, {\"name\": \"sok limete\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"svježe naribanog đumbira\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"vode\", \"units\": \"ml\", \"amount\": 70}]",
+    "instructions": "Rižino brašno i vodu promiješajte u šalici i čuvajte u hladnjaku do upotrebe. U većoj zdjeli promiješajte kuhanu rižu, knedle od skuše, nasjeckani čili, koricu limete, sok limete, umak od soje, nasjeckani luk, naribani đumbir, garam masalu, kurkumu i nasjeckani korijandar. Oblikujte u 12 okruglica. Zagrijte ulje do 170-175 °C. Pržite okruglice 3 minute. Poslužite s umakom od kikirikija.",
+    "category": null,
+    "prep_time": "30 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Upotreba tempure omogućuje da jelo bude manje masno i hrskavo. Okruglice možete čuvati u zamrzivaču do tri mjeseca.",
+    "tags": "pržene, okruglice, riža, skuša, umak od kikirikija"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Curry di Ceci",
+    "description": "Il Curry di Ceci è un piatto vegano facile, cremoso e ricco di sapore, ispirato alla cucina indiana.",
+    "ingredients": "[{\"name\": \"olio d’oliva\", \"units\": \"cucchiaio\", \"amount\": 1}, {\"name\": \"aglio\", \"units\": \"spicchi\", \"amount\": 3}, {\"name\": \"cipolla\", \"units\": \"pezzo\", \"amount\": 1}, {\"name\": \"ceci in scatola\", \"units\": \"g\", \"amount\": 800}, {\"name\": \"curry dolce in polvere\", \"units\": \"cucchiai\", \"amount\": 2}, {\"name\": \"paprika affumicata dolce\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"peperoncino in fiocchi\", \"units\": \"cucchiaino\", \"amount\": 0.25}, {\"name\": \"concentrato di pomodoro\", \"units\": \"cucchiai\", \"amount\": 3}, {\"name\": \"latte di cocco\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"sale marino\", \"units\": \"cucchiaino\", \"amount\": 0.5}, {\"name\": \"spinaci freschi\", \"units\": \"g\", \"amount\": 240}, {\"name\": \"chutney di mango\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"garam masala\", \"units\": \"cucchiaino\", \"amount\": 1}]",
+    "instructions": "1. Inizia scaldando l’olio in una casseruola capiente. Aggiungi la cipolla e l’aglio, facendoli rosolare dolcemente per circa 5-6 minuti. 2. Unisci il curry dolce, la paprika affumicata e i fiocchi di peperoncino. Tostare le spezie per qualche secondo. 3. Aggiungi i ceci, il concentrato di pomodoro e il latte di cocco. Mescola bene e lascia sobbollire a fuoco medio per circa 40 minuti. 4. Quando la salsa si sarà addensata, incorpora il chutney di mango, il garam masala e gli spinaci freschi.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "40 minutes",
+    "total_time": null,
+    "notes": "Il Curry di Ceci si conserva in frigorifero per 3 giorni e può essere congelato fino a 3 mesi.",
+    "tags": "vegan, curry, ceci, piatto unico"
+}

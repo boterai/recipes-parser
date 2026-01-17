@@ -1,0 +1,12 @@
+{
+    "dish_name": "Poached Egg",
+    "description": "A traditional French dish that allows you to enjoy soft egg yolk, reminiscent of cream, and delicious protein.",
+    "ingredients": "[{\"name\": \"eggs\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"olive oil\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Cut a square of cling film about 20 cm on each side. 2. Place the cling film on the table and brush with olive oil. 3. Lift the edges and transfer the cling film to a small bowl, then pour the egg into it. 4. Tie the edges of the film tightly to form a pouch. 5. Repeat for the required number of eggs. 6. Submerge the pouches in boiling water and cook for 2-3 minutes. 7. Remove the poached eggs from the water, cool slightly, remove the cling film, and place on a plate.",
+    "category": "Breakfast",
+    "prep_time": "5 minutes",
+    "cook_time": "3 minutes",
+    "total_time": "8 minutes",
+    "notes": "The olive oil can be replaced with refined sunflower oil.",
+    "tags": "breakfast, eggs, poached"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Zuppa di Patate e Porri",
+    "description": "Una zuppa cremosa e ricca di sapore, perfetta per le serate fredde.",
+    "ingredients": "[{\"name\": \"burro\", \"units\": \"cucchiai\", \"amount\": 3}, {\"name\": \"porri\", \"units\": \"grandi\", \"amount\": 4}, {\"name\": \"aglio\", \"units\": \"spicchi\", \"amount\": 3}, {\"name\": \"patate\", \"units\": \"g\", \"amount\": 900}, {\"name\": \"brodo di pollo o vegetale\", \"units\": \"litri\", \"amount\": 1.7}, {\"name\": \"foglie d'alloro\", \"units\": null, \"amount\": 2}, {\"name\": \"timo fresco\", \"units\": \"rametti\", \"amount\": 3}, {\"name\": \"sale\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"pepe nero macinato\", \"units\": \"cucchiaino\", \"amount\": 0.25}, {\"name\": \"panna fresca da cucina\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"erba cipollina o timo fresco tritato\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Pulire e preparare i porri. 2. Soffriggere porri e aglio. 3. Cuocere le patate. 4. Frullare la zuppa. 5. Aggiungere la panna. 6. Servire.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "30 minutes",
+    "total_time": null,
+    "notes": "Per una versione più leggera, sostituire la panna con latte o yogurt greco.",
+    "tags": "zuppa, patate, porri, francese"
+}

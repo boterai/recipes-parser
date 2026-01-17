@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lasanha de atum",
+    "description": "Uma lasanha de atum deliciosa e fácil de preparar.",
+    "ingredients": "[{\"name\": \"Folhas de lasanha\", \"units\": null, \"amount\": null}, {\"name\": \"Atum escorrido\", \"units\": \"latas\", \"amount\": 2}, {\"name\": \"Cebola média picada\", \"units\": null, \"amount\": 1}, {\"name\": \"Tomate pelado\", \"units\": \"lata\", \"amount\": 1}, {\"name\": \"Azeite\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Sal\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Salsa picada\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Molho bechamel\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Queijo mozzarella ralado\", \"units\": \"q.b.\", \"amount\": null}]",
+    "instructions": "Num tacho, aqueça um fio de azeite e refogue a cebola até ficar translúcida. Adicione o atum escorrido e o tomate pelado. Deixe cozinhar em lume brando durante cerca de 10 minutos. Tempere com sal e salsa picada. Num tabuleiro de forno, espalhe uma camada de molho bechamel no fundo. Coloque uma camada de folhas de lasanha, depois uma camada do recheio de atum. Repita até esgotar os ingredientes, terminando com uma camada de folhas de lasanha. Cubra com o restante molho bechamel e polvilhe generosamente com queijo mozzarella ralado. Leve ao forno pré-aquecido a 180 °C durante cerca de 25-30 minutos ou até dourar por cima.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "30 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "atum, lasanha, receitas portuguesas"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "دونتس بحشو الشوكولاتة",
+    "description": "دونتس بحشو الشوكولاتة من الحلويات التي يعشقها الصغار لأنها تتمتع بمذاق شهي ومختلف عن الحلويات الأخرى.",
+    "ingredients": "[{\"name\": \"دقيق\", \"units\": \"كوب\", \"amount\": 3}, {\"name\": \"زبدة\", \"units\": \"ملعقة كبيرة\", \"amount\": 3}, {\"name\": \"خميرة فورية\", \"units\": \"ملعقة كبيرة\", \"amount\": 1}, {\"name\": \"بيكنج بودر\", \"units\": \"ملعقة كبيرة\", \"amount\": 1}, {\"name\": \"بيضة\", \"units\": null, \"amount\": 1}, {\"name\": \"فانيليا\", \"units\": null, \"amount\": null}, {\"name\": \"ملح\", \"units\": null, \"amount\": null}, {\"name\": \"سكر\", \"units\": \"ملعقة كبيرة\", \"amount\": 1}, {\"name\": \"ماء\", \"units\": \"للعجن\", \"amount\": null}, {\"name\": \"زيت\", \"units\": \"للقلي\", \"amount\": null}, {\"name\": \"شوكولاتة كريمي\", \"units\": \"للحشو\", \"amount\": null}, {\"name\": \"سكر بودرة\", \"units\": \"للوجه\", \"amount\": null}]",
+    "instructions": "يخلط الدقيق والخميرة والسكر والملح والبيكنج بودر.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "دونتس, حلويات, شوكولاتة"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tyrkisk te",
+    "description": "Opskrift på tyrkisk te, en type te lavet af løse sorte teblade.",
+    "ingredients": "[{\"name\": \"te\", \"units\": \"spiseskefulde\", \"amount\": \"1.5-2\"}, {\"name\": \"vand\", \"units\": null, \"amount\": null}, {\"name\": \"sukker\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Start med at putte 1,5-2 spiseskefulde te i den lille kande, hæld lidt vand i kanden. Kør kanden rundt i cirkler, så vand og te bliver blandet, hæld derefter vandet fra, så den våde te bliver tilbage i kanden. Ved at skylle tebladene, frigiver de mere smag og det fjerner noget af bitterheden. 2. Fyld den store kande med vand og sæt den lille kande ovenpå den store kande med et låg på. Når vandet i den store kande koger, hældes noget af vandet over i den lille kande, så den er lidt over halv fuld. 3. Kom mere vand i den store kande og når det koger så skru ned til svag varme. Når tebladene er sunket til bunds, er teen færdig. Det tager ca. 10-15 min. 4. Hæld lidt te op i glasset (så det dækker ca. en tredjedel). Jo mere te du putter i, jo mere intens er smagen. Fyld op med det varme vand fra den store kande. Server med sukker.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "10-15 minutes",
+    "total_time": null,
+    "notes": "Hvis du oplever der kommer lidt tegrums med i glasset, så kan man i de fleste større supermarkeder eller 82 sali pazar finde et tyrkisk tefilter.",
+    "tags": "te, tyrkisk te, çay"
+}

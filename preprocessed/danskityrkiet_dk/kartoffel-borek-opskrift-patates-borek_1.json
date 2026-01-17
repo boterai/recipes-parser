@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kartoffel börek",
+    "description": "Tyrkisk kartoffel börek smager så fuglene synger og så er det ingen gang lyv.",
+    "ingredients": "[{\"name\": \"kartofler\", \"units\": \"større\", \"amount\": 3}, {\"name\": \"løg\", \"units\": \"større\", \"amount\": 1}, {\"name\": \"æg\", \"units\": \"stykker\", \"amount\": 3}, {\"name\": \"revet kasar peynir eller mozarella ost\", \"units\": \"stor håndfuld\", \"amount\": 1}, {\"name\": \"olie\", \"units\": \"dl\", \"amount\": 0.5}, {\"name\": \"mel\", \"units\": \"spsk.\", \"amount\": 1}, {\"name\": \"bagepulver\", \"units\": \"tsk\", \"amount\": 1}, {\"name\": \"chiliflager\", \"units\": \"tsk\", \"amount\": 0.5}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"peber\", \"units\": null, \"amount\": null}, {\"name\": \"sesam- og nigellafrø\", \"units\": null, \"amount\": null}, {\"name\": \"frisk persille\", \"units\": null, \"amount\": null}]",
+    "instructions": "Start med at skrælle og rive kartofler på den grove side af rivejernet. Riv derefter løget på den fine side. Bland kartofler og løg sammen med de resterende ingredienser og rør godt sammen. Hæld blandingen i smurt form, drys sesam- og nigellafrø udover kartoffelblandingen. Bag den i midten af ovnen ved 180 grader varmluft i ca. 25-30 minutter. Server den hjemmelavede börek lun, sammen med agurk, tomat, oliven og tyrkisk te.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "30 minutes",
+    "total_time": null,
+    "notes": "Den kan også sagtens nydes kold.",
+    "tags": "börek, kartoffel, tyrkisk"
+}

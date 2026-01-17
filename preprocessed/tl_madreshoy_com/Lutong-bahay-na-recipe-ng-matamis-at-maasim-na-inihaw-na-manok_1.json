@@ -1,0 +1,12 @@
+{
+    "dish_name": "Matamis at Maasim na Inihaw na Manok",
+    "description": "Isang ulam na inihaw na manok na may matamis at maasim na sarsa, na puno ng lasa at maaaring iakma sa mga sangkap na mayroon ka.",
+    "ingredients": "[{\"name\": \"manok\", \"units\": null, \"amount\": null}, {\"name\": \"matamis na sarsa ng sili\", \"units\": null, \"amount\": null}, {\"name\": \"katas ng dayap o lemon\", \"units\": null, \"amount\": null}, {\"name\": \"sariwang luya\", \"units\": null, \"amount\": null}, {\"name\": \"suka\", \"units\": null, \"amount\": null}, {\"name\": \"brown sugar\", \"units\": null, \"amount\": null}, {\"name\": \"honey\", \"units\": null, \"amount\": null}, {\"name\": \"tomato paste\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Ihanda ang manok sa pamamagitan ng pag-marinade o pag-kuskos ng mga pampalasa. 2. I-bake ang manok sa oven sa 200 °C sa loob ng 20 minuto. 3. Ihanda ang matamis at maasim na sarsa sa pamamagitan ng pag-gisa ng bawang at sili, at idagdag ang mga pangunahing sangkap. 4. Pahiran ang manok ng sarsa at ibalik sa oven para sa karagdagang pagluluto.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Maaari mong palitan ang mga sangkap ayon sa kung ano ang mayroon ka sa pantry. Ang sarsa ay maaaring i-adjust para sa tamis at asim ayon sa panlasa.",
+    "tags": "manok, inihaw, matamis, maasim, Asyano"
+}

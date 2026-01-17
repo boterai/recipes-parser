@@ -1,0 +1,12 @@
+{
+    "dish_name": "Keks torta sa malinama",
+    "description": "Keks torta sa pudingom, malinama i čokoladom, kremasto, bez pečenja.",
+    "ingredients": "[{\"name\": \"pti ber keksa\", \"units\": \"g\", \"amount\": 600}, {\"name\": \"mleka\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"puding od vanile\", \"units\": \"kesice\", \"amount\": 2}, {\"name\": \"mleka\", \"units\": \"dl\", \"amount\": 7}, {\"name\": \"šećera\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"maslaca\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"malina\", \"units\": \"g\", \"amount\": 350}, {\"name\": \"vode\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"šećera\", \"units\": \"kašike\", \"amount\": 4}, {\"name\": \"puding od vanile\", \"units\": \"kesica\", \"amount\": 1}, {\"name\": \"vode\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"čokolade\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"ulja\", \"units\": \"kašike\", \"amount\": 4}]",
+    "instructions": "Priprema žutog fila: razmutiti puding (2 kesice) sa šećerom (100 g) u 1 dl hladnog mleka da nema grudvica. Ostatak mleka (6 dl) stavite da provri pa kad provri zakuvajte razmućeni puding. Skuvan krem prekrijte samolepljivom folijom da se ne stvara korica i ostavite da se skroz ohladi. Penasto (mikserom) umutite maslac pa postepeno, uz stalno mućenje, dodajte kašiku po kašiku ohlađenog pudinga da dobijete glatku kremu. Priprema fila od malina: stavite maline sa 4 kašike šećera i 30 ml vode u šerpu da provre. Posebno razmutite jedan puding od vanile u 1dl vode da nema grudvice. Kad maline provre izgnječite ih ili štapnim mikserom ili gnječilicom za pire pa u malinama zakuvajterazmućeni puding. Pripremljen fil ostavite da se prohladi petnaestak minuta. Na tacnu za tortu poređajte pti ber keks namočen u mlako mleko. Preko sipajte trećinu žutog fila pa preko njega trećinu fila od malina, pa opet red keksa, pa žutog fila i red fila od malina. Završite sa redom keksa. Ostavite u frižider na jedno sat vremena da se ohladi i stegne. Priprema glazure: nalomkanu čokoladu pomešanu sa uljem otopite na nižoj temperaturi, kratko prohladite i prelijte tortu.",
+    "category": "Deserti",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": "1 hour",
+    "notes": null,
+    "tags": "petit ber, keks, mleko, puding od vanile, maslac, maline, čokolada"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Varškėčiai",
+    "description": "Varškėčiai - это блюдо, приготовленное из творога, яиц и муки, обжаренное на сковороде.",
+    "ingredients": "[{\"name\": \"varškės\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"kiaušinis\", \"units\": \"шт.\", \"amount\": 1}, {\"name\": \"miltų\", \"units\": \"g\", \"amount\": 70}, {\"name\": \"cukraus\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"vanilinio cukraus\", \"units\": \"g\", \"amount\": 10}, {\"name\": \"druskos\", \"units\": null, \"amount\": null}]",
+    "instructions": "Varškę, kiaušinius, cukrų, druską, vanilinį cukrų pertrinti, kad gautusi vientisa masė. Miltų reikia dėti tiek, kad gautusi minkšta masė, kad galima būtų pasiimti rankomis. Ant miltais pabarstytais lentos formuojame rutuliukus ir prispaudžiame juos, kad gautusi paplotėliai. Ir keptuvėje įkaitintame aliejuje apkepame paplotėlius. Varškėčius galima pateikti su uogiene, grietine, uogomis, tepamais kremais su riešutais, jogurtu.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

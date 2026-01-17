@@ -1,0 +1,12 @@
+{
+    "dish_name": "Börek aux pommes de terre",
+    "description": "Un plat savoureux et délicat à base de pommes de terre, idéal comme comfort food.",
+    "ingredients": "[{\"name\": \"Beurre\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"Yaourt\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"Lait\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"Œuf\", \"units\": \"M\", \"amount\": 1}, {\"name\": \"Sel\", \"units\": null, \"amount\": null}, {\"name\": \"Poivre\", \"units\": null, \"amount\": null}, {\"name\": \"Pommes de terre\", \"units\": \"Kg\", \"amount\": 1}, {\"name\": \"Oignon\", \"units\": null, \"amount\": 1}, {\"name\": \"Gousse d'ail\", \"units\": null, \"amount\": 1}, {\"name\": \"Huile d'olive\", \"units\": \"Cuillère à soupe\", \"amount\": 1}, {\"name\": \"Paprika doux en poudre\", \"units\": \"Cuillère à café\", \"amount\": 1}, {\"name\": \"Persil plat\", \"units\": \"g\", \"amount\": 15}, {\"name\": \"Feuilles de pâte à yufka\", \"units\": null, \"amount\": 10}, {\"name\": \"Jaune d'œuf\", \"units\": \"M\", \"amount\": 1}, {\"name\": \"Graines de sésame\", \"units\": \"Cuillère à soupe\", \"amount\": 1}]",
+    "instructions": "1. Faire fondre le beurre, retirer la casserole du feu et mélanger avec le lait et le yaourt. Incorporer l'œuf et assaisonner avec du sel et du poivre. 2. Éplucher les pommes de terre et les faire cuire à point dans une casserole d'eau salée. Couper en petits morceaux. 3. Éplucher et hacher finement l'oignon et l'ail. 4. Faire chauffer l'huile dans une poêle et y faire revenir l'oignon pendant 2 à 3 minutes. Ajouter l'ail et les épices et faire revenir pendant 1 minute. 5. Tapisser un moule démontable de papier sulfurisé et graisser le bord. Préchauffer le four à 180° C. 6. Égoutter les pommes de terre et les écraser avec les oignons, l'ail et le persil. 7. Tapisser le moule de feuilles de pâte à yufka, répartir la masse de pommes de terre et recouvrir d'une feuille de pâte. Répéter jusqu'à épuisement des ingrédients. 8. Badigeonner de jaune d'œuf et saupoudrer de graines de sésame. 9. Cuire au four pendant environ 30 minutes jusqu'à ce que le börek soit croustillant.",
+    "category": "Main Course",
+    "prep_time": "20 minutes",
+    "cook_time": "50 minutes",
+    "total_time": "70 minutes",
+    "notes": "Pour une version végétalienne, remplacer les produits laitiers par des alternatives végétales.",
+    "tags": "börek, pommes de terre, plat principal, végétarien"
+}

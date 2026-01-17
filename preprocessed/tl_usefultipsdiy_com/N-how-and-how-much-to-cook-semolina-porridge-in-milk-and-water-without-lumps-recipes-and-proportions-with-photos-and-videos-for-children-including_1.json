@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lugaw ng Semolina",
+    "description": "Masarap na lugaw na gawa sa semolina na may gatas o tubig, na walang mga bugal.",
+    "ingredients": "[{\"name\": \"gatas\", \"units\": \"mL\", \"amount\": 500}, {\"name\": \"semolina\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"mantikilya\", \"units\": \"g\", \"amount\": 30}, {\"name\": \"asukal\", \"units\": \"g\", \"amount\": 20}, {\"name\": \"asin\", \"units\": \"teaspoon\", \"amount\": 0.33}]",
+    "instructions": "1. Ibuhos ang malamig na tubig sa isang kasirola at ibuhos ito ng gatas. 2. Hintaying kumulo ang likido, magdagdag ng asin at asukal. 3. Habang hinalo ang gatas, dahan-dahang ibuhos ang semolina. 4. Dalhin muli ang sinigang sa isang pigsa habang patuloy na hinalo. 5. Maghintay ng 3-5 minuto, takpan ang kawali at alisin mula sa init. 6. Hayaang umupo ang semolina sa loob ng 8-10 minuto bago ihain.",
+    "category": "Breakfast",
+    "prep_time": "10 minutes",
+    "cook_time": "5 minutes",
+    "total_time": "15 minutes",
+    "notes": "Maaari itong ihain na may mantikilya at asukal o iba pang mga toppings tulad ng prutas o jam.",
+    "tags": "semolina, lugaw, breakfast, dessert"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Saftiger Marzipankuchen",
+    "description": "Ein saftiger Marzipankuchen, der beim ersten Bissen auf der Zunge zergeht und den Gaumen mit einer süßen, nussigen Umarmung umschmeichelt.",
+    "ingredients": "[{\"name\": \"Marzipan\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"Butter\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"Zucker\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"Eier\", \"units\": null, \"amount\": 3}, {\"name\": \"Mehl\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"Backpulver\", \"units\": \"TL\", \"amount\": 1}, {\"name\": \"Salz\", \"units\": \"Prise\", \"amount\": 1}, {\"name\": \"Vanilleextrakt\", \"units\": \"TL\", \"amount\": 1}, {\"name\": \"Puderzucker\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Ofen vorheizen auf 180 Grad Celsius. Springform einfetten und mit Mehl bestäuben. 2. Marzipan in eine große Rührschüssel zerbröckeln. Butter und Zucker hinzufügen und gut verrühren. 3. Eier nacheinander hinzufügen und gut unterrühren. 4. Mehl, Backpulver und Salz vermengen und über die feuchten Zutaten sieben. 5. Vanilleextrakt hinzufügen und vorsichtig unterheben. 6. Teig in die Springform gießen und 30-35 Minuten backen. Abkühlen lassen und mit Puderzucker bestäuben.",
+    "category": "Dessert",
+    "prep_time": "60 minutes",
+    "cook_time": "45 minutes",
+    "total_time": "105 minutes",
+    "notes": "Bewahre den Kuchen in Folie auf, damit er frisch bleibt. Erhitze ihn leicht im Ofen, um die Textur zu verbessern.",
+    "tags": "Kuchen, Dessert, Marzipan"
+}

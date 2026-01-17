@@ -1,0 +1,12 @@
+{
+    "dish_name": "Börek with potatoes",
+    "description": "A hearty and delicious vegetarian börek filled with potatoes, perfect as a comfort food.",
+    "ingredients": "[{\"name\": \"Butter\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"Yogurt\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"Whole milk\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"Egg\", \"units\": \"M\", \"amount\": 1}, {\"name\": \"Salt\", \"units\": null, \"amount\": null}, {\"name\": \"Pepper\", \"units\": null, \"amount\": null}, {\"name\": \"Potatoes\", \"units\": \"kg\", \"amount\": 1}, {\"name\": \"Onion\", \"units\": null, \"amount\": 1}, {\"name\": \"Garlic clove\", \"units\": null, \"amount\": 1}, {\"name\": \"Olive oil\", \"units\": \"Tablespoon\", \"amount\": 1}, {\"name\": \"Sweet paprika powder\", \"units\": \"Teaspoon\", \"amount\": 1}, {\"name\": \"Flat-leaf parsley\", \"units\": \"g\", \"amount\": 15}, {\"name\": \"Yufka dough sheets\", \"units\": null, \"amount\": 10}, {\"name\": \"Egg yolk\", \"units\": \"M\", \"amount\": 1}, {\"name\": \"Sesame seeds\", \"units\": \"Tablespoon\", \"amount\": 1}]",
+    "instructions": "1. Melt the butter, remove from heat and mix with milk and yogurt. Stir in the egg and season with salt and pepper. 2. Peel and cook the potatoes in salted water. Chop onion and garlic, sauté in oil. 3. Mash potatoes with onion, garlic, and parsley. 4. Line a springform tin with yufka dough, layer with potato mixture, repeat until all ingredients are used. 5. Brush with egg yolk, sprinkle with sesame seeds, and bake at 180°C for approx. 30 minutes until crispy.",
+    "category": "Main Course",
+    "prep_time": "20 minutes",
+    "cook_time": "50 minutes",
+    "total_time": "70 minutes",
+    "notes": "For a vegan version, replace dairy with plant-based alternatives and use plant-based milk for brushing.",
+    "tags": "börek, potatoes, vegetarian, comfort food"
+}

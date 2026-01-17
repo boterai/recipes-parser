@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lazanje",
+    "description": "Originalni italijanski recept za lazanje sa domaćim testom.",
+    "ingredients": "[{\"name\": \"brašno '00'\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"brašno od durum pšenice\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"jaja\", \"units\": \"pieces\", \"amount\": 4}, {\"name\": \"mleveno meso (govedina i svinjetina)\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"crni luk\", \"units\": \"pieces\", \"amount\": 1}, {\"name\": \"beli luk\", \"units\": \"cloves\", \"amount\": 2}, {\"name\": \"paradajz pire\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"suvo crveno vino\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"maslinovo ulje\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"kore za lazanje\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"mocarela\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"rendani parmezan\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"so\", \"units\": null, \"amount\": null}, {\"name\": \"biber\", \"units\": null, \"amount\": null}, {\"name\": \"sveži listovi bosiljka\", \"units\": null, \"amount\": null}, {\"name\": \"putar\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"brašno\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"mleko\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"muskatni oraščić\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. U većem tiganju zagrejati maslinovo ulje i prodinstati sitno seckani crni luk i beli luk dok ne postanu zlatnožuti. 2. Dodati mleveno meso i propržiti dok ne dobije zlatnu boju. 3. Sipati crveno vino i pustiti da alkohol ispari. 4. Dodati paradajz pire, posoliti, pobiberiti i kuvati na laganoj vatri 30-40 minuta, povremeno mešajući. 5. U šerpi na srednjoj temperaturi otopiti puter, zatim dodati brašno i mešati dok se ne dobije glatka smesa. 6. Postepeno dodavati mleko, neprestano mešajući, dok sos ne postane gust i kremast. 7. Na dno pravougaone posude za pečenje naneti tanak sloj ragu sosa. 8. Preko sosa poređati kore za lazanje, zatim naneti sloj ragu sosa, sloj bešamel sosa i nekoliko kriški mocarele. 9. Ponavljati postupak dok se ne potroše svi sastojci, završavajući slojem bešamela i rendanim parmezanom. 10. Zagrejati rernu na 180°C. 11. Peći lazanje 30-40 minuta, dok ne dobiju zlatnu koricu.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "30-40 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "recept, lazanje, italijanski kuvar"
+}

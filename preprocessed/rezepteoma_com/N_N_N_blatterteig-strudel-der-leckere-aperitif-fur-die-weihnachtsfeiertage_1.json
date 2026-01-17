@@ -1,0 +1,12 @@
+{
+    "dish_name": "Blätterteig-Strudel",
+    "description": "der leckere Aperitif für die Weihnachtsfeiertage",
+    "ingredients": "[{\"name\": \"Speck\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"Emmentaler\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"Parmesan\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"getrocknete Tomaten\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"Blätterteig\", \"units\": \"rechteckiger\", \"amount\": 1}, {\"name\": \"Ei\", \"units\": null, \"amount\": 1}]",
+    "instructions": "Den Blätterteig gut ausrollen und ein Ei damit bestreichen. Anschließend Parmesan, Speck, Emmentaler und getrocknete Tomaten hinzufügen. Alles aufrollen und in Scheiben schneiden, sodass Rollen entstehen. Bei 190° 15-20 Minuten backen.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "15-20 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

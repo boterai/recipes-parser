@@ -1,0 +1,12 @@
+{
+    "dish_name": "Piernikowy Biały Rosjanin",
+    "description": "Wariacja na temat jednego z klasyków, czyli Białego Rosjanina.",
+    "ingredients": "[{\"name\": \"wódka\", \"units\": \"ml\", \"amount\": 40}, {\"name\": \"likier Kahlua\", \"units\": \"ml\", \"amount\": 20}, {\"name\": \"mleko zagęszczone niesłodzone\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"przyprawa do piernika\", \"units\": \"łyżeczka\", \"amount\": 1}, {\"name\": \"kostki lodu\", \"units\": null, \"amount\": null}, {\"name\": \"laska cynamonu\", \"units\": null, \"amount\": null}]",
+    "instructions": "Do shakera z kostkami lodu wlewamy mleko i dodajemy przyprawę piernikową. Wstrząsamy do połączenia składników. Do szklanki na lód wlewamy wódkę, likier kawowy i dodajemy zawartość shakera.",
+    "category": "Drinki",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Można użyć smakowej wódki, np. orzechowej.",
+    "tags": "drink, koktajl, wódka, Kahlua"
+}

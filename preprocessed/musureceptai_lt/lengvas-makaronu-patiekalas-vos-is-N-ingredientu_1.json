@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lengvas makaronų patiekalas",
+    "description": "Lengvas makaronų receptas keturiais ingredientais",
+    "ingredients": "[{\"name\": \"makaronai\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"švieži pomidorai arba kokteilių pomidorai\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"alyvuogių aliejus\", \"units\": \"šaukštai\", \"amount\": 2}, {\"name\": \"švieži bazilikai, krapai arba petražolės\", \"units\": \"šaukštai\", \"amount\": 2}]",
+    "instructions": "1. Užvirkite dideliame puode pasūdytą vandenį ir virkite makaronus pagal pakuotės instrukcijas (al dente). Nusausinkite, bet šiek tiek makaronų virimo vandens palikite. 2. Įkaitinkite alyvuogių aliejų didelėje keptuvėje. Sudėkite supjaustytus šviežius (arba kokteilių) pomidorus ir kepkite ant vidutinės ugnies 3–5 minutes, kol pomidorų sultys išsiskleis. 3. Į keptuvę įmaišykite nusausintus makaronus ir, jei reikia, pridėkite šiek tiek makaronų virimo vandens, kad padažas taptų kreminis. 4. Pabaigoje sumaišykite šviežiai pjaustytus bazilikus, krapus ar petražoles. Trumpai apšildykite, kad išsaugotumėte žolelių aromatą.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "25–30 minutes",
+    "total_time": null,
+    "notes": "Norint stipresnio skonio, įdėkite 1–2 smulkintus česnako skiltelius arba šiek tiek raudonųjų pipirų dribsniukų. Patiekite su lengvomis daržovių salotomis arba pabarstykite trintų parmezano drožlėmis.",
+    "tags": "makaronai, lengvas, greitas"
+}

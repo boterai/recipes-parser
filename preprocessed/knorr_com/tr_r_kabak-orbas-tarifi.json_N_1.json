@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kabak Çorbası",
+    "description": "Labne peynirli, rokalı kabak çorbası tarifi ile ön yargılar bir kez daha yıkılıyor.",
+    "ingredients": "[{\"name\": \"dolmalık kabak\", \"units\": \"adet\", \"amount\": 5}, {\"name\": \"soğan\", \"units\": \"adet\", \"amount\": 1}, {\"name\": \"sarımsak\", \"units\": \"diş\", \"amount\": 3}, {\"name\": \"orta boy patates\", \"units\": \"adet\", \"amount\": 1}, {\"name\": \"Knorr tavuk suyu bulyon\", \"units\": \"küp\", \"amount\": 1}, {\"name\": \"zeytinyağı\", \"units\": \"çorba kaşığı\", \"amount\": 2}, {\"name\": \"labne peynir\", \"units\": \"çorba kaşığı\", \"amount\": 4}, {\"name\": \"dereotu\", \"units\": \"sap\", \"amount\": 15}, {\"name\": \"roka\", \"units\": \"demet\", \"amount\": 1}, {\"name\": \"su\", \"units\": \"bardak\", \"amount\": 6}]",
+    "instructions": "Pişirme: Yüksek ateşe koyduğunuz çorba tenceresinde yağı eritin ve ince ince doğradığınız soğanlarınızı ve sarımsağı ilave edin. Soğanlar hafiften yumuşayınca ince doğranmış patatesleri ekleyin. Ardından Knorr Tavuk Suyu Bulyon’u ekleyin. Ateşi kısıp tencerenin kapağını kapattıktan sonra 5 dakika en kısık ateste pişirin. Kabakları ufak parçalar halinde kesin ve soğan ve patateslere ilave edin. Suyu ekledikten sonra yüksek ateşte arada karıştırarak 10 dakika pişirin. Dereotunu, labne peynirin yarısını ve rokayı ekledikten sonra bir el blenderi yardımı ile çorbayı pürüzsüz bir kıvam alıncaya dek çekin. Daha ince kıvamlı bir çorba isterseniz, 1-2 su bardağı sıcak su daha ilave edebilirsiniz. Üzerine kalan labne peyniri ve bir kaç dal dereotu ile servis edin. Afiyet olsun.",
+    "category": null,
+    "prep_time": "20 Dakika",
+    "cook_time": "20 Dakika",
+    "total_time": "40 Dakika",
+    "notes": null,
+    "tags": null
+}

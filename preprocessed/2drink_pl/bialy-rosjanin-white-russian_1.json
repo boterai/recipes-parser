@@ -1,0 +1,12 @@
+{
+    "dish_name": "Biały Rosjanin (White Russian)",
+    "description": "Drink dla tych, którzy lubią deserowe smaki i niecodzienne drinki.",
+    "ingredients": "[{\"name\": \"wódka\", \"units\": \"ml\", \"amount\": 40}, {\"name\": \"likier kawowy\", \"units\": \"ml\", \"amount\": 20}, {\"name\": \"kostki lodu\", \"units\": null, \"amount\": null}, {\"name\": \"skondensowane mleczko\", \"units\": \"ml\", \"amount\": 30}]",
+    "instructions": "Do szklanki wrzucić lód, wlać wódkę i likier kawowy, zamieszać. Na wierzch wlać delikatnie po ściance lub łyżeczce mleczko. Można też wlać mleczko po prostu i zamieszać.",
+    "category": "Drinki",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Nie polecam dawać więcej niż 3 kostki lodu.",
+    "tags": "drink, wódka, deserowe smaki"
+}
