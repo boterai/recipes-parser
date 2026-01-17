@@ -148,8 +148,8 @@ class PipingPotCurryExtractor(BaseRecipeExtractor):
         
         return None
     
-    def extract_ingredients(self) -> Optional[list]:
-        """Извлечение ингредиентов в формате списка словарей"""
+    def extract_ingredients(self) -> Optional[str]:
+        """Извлечение ингредиентов в формате JSON строки"""
         json_ld = self._get_json_ld_data()
         
         ingredients = []
@@ -182,7 +182,7 @@ class PipingPotCurryExtractor(BaseRecipeExtractor):
                         parsed = {
                             "name": self.clean_text(name_elem.get_text()),
                             "amount": self.clean_text(amount_elem.get_text()) if amount_elem.get_text() else None,
-                            "unit": self.clean_text(unit_elem.get_text()) if unit_elem and unit_elem.get_text() else None
+                            "units": self.clean_text(unit_elem.get_text()) if unit_elem and unit_elem.get_text() else None
                         }
                         if parsed["name"]:
                             ingredients.append(parsed)
@@ -197,7 +197,7 @@ class PipingPotCurryExtractor(BaseRecipeExtractor):
                             if parsed:
                                 ingredients.append(parsed)
         
-        return ingredients if ingredients else None
+        return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
     def parse_ingredient(self, ingredient_text: str) -> Optional[dict]:
         """
@@ -207,7 +207,7 @@ class PipingPotCurryExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1 cup all-purpose flour"
             
         Returns:
-            dict: {"name": "flour", "amount": "1", "unit": "cup"}
+            dict: {"name": "flour", "amount": "1", "units": "cup"}
         """
         if not ingredient_text:
             return None
@@ -266,7 +266,7 @@ class PipingPotCurryExtractor(BaseRecipeExtractor):
                 return {
                     "name": name,
                     "amount": amount,
-                    "unit": None
+                    "units": None
                 }
         
         # Обычный паттерн для ингредиентов с единицами измерения
@@ -279,7 +279,7 @@ class PipingPotCurryExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "unit": None
+                "units": None
             }
         
         amount_str, unit, name = match.groups()
@@ -303,7 +303,7 @@ class PipingPotCurryExtractor(BaseRecipeExtractor):
                 amount = amount_str.replace(',', '.')
         
         # Обработка единицы измерения
-        unit = unit.strip() if unit else None
+        units = unit.strip() if unit else None
         
         # Очистка названия
         # Удаляем скобки с содержимым
@@ -322,10 +322,10 @@ class PipingPotCurryExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "unit": unit
+            "units": units
         }
     
-    def extract_instructions(self) -> Optional[str]:
+    def extract_steps(self) -> Optional[str]:
         """Извлечение шагов приготовления"""
         json_ld = self._get_json_ld_data()
         
@@ -605,19 +605,11 @@ class PipingPotCurryExtractor(BaseRecipeExtractor):
         Returns:
             Словарь с данными рецепта со всеми обязательными полями
         """
-        # Извлекаем ингредиенты как список
-        ingredients_list = self.extract_ingredients()
-        
-        # Преобразуем список ингредиентов в JSON строку, если есть
-        ingredients_json = None
-        if ingredients_list:
-            ingredients_json = json.dumps(ingredients_list, ensure_ascii=False)
-        
         return {
             "dish_name": self.extract_dish_name(),
             "description": self.extract_description(),
-            "ingredients": ingredients_json,
-            "instructions": self.extract_instructions(),
+            "ingredients": self.extract_ingredients(),
+            "instructions": self.extract_steps(),
             "category": self.extract_category(),
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
