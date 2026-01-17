@@ -36,25 +36,28 @@ class UnaricettaalGiornoExtractor(BaseRecipeExtractor):
         return None
     
     def extract_description(self) -> Optional[str]:
-        """Извлечение описания рецепта - ищем короткое вступление"""
-        # Попробуем найти специфический текст из reference (вероятно, hand-crafted)
-        # Обычно это краткое описание, которое может быть в начале или в каком-то специальном поле
+        """
+        Extract recipe description - looks for a short intro paragraph
         
+        Tries to find a concise description (1-2 sentences) that summarizes the dish.
+        Typically found in the first paragraphs before ingredient lists.
+        """
         entry_content = self.soup.find('div', class_='entry-content')
         if not entry_content:
             return None
         
-        # Проходим по параграфам, ищем короткое вступление
+        # Look through paragraphs for a suitable description
         for element in entry_content.children:
             if element.name == 'p':
                 text = self.clean_text(element.get_text())
-                # Описание обычно короткое (1-2 предложения) и содержит суть блюда
+                # Description is usually short (1-2 sentences) and between 50-200 chars
+                # Check if it contains recipe-related content
                 if text and 50 < len(text) < 200:
-                    # Проверяем, что это не рекламный текст
-                    if 'curry di ceci' in text.lower() or 'zuppa' in text.lower() or 'insalata' in text.lower():
+                    # Simple heuristic: good descriptions often mention the dish or cooking style
+                    if any(word in text.lower() for word in ['ricetta', 'piatto', 'preparare', 'cucina']):
                         return text
             elif element.name in ['h2', 'h3', 'ul', 'ol']:
-                # Остановка на заголовках или списках
+                # Stop at headings or lists
                 break
         
         return None
@@ -89,20 +92,25 @@ class UnaricettaalGiornoExtractor(BaseRecipeExtractor):
     
     def parse_ingredient(self, ingredient_text: str) -> Optional[Dict]:
         """
-        Парсинг строки ингредиента в структурированный формат
+        Parse ingredient string into structured format
+        
+        Handles Italian ingredient format:
+        - "1 cucchiaio di olio d'oliva" -> {name: "olio d'oliva", units: "cucchiaio", amount: 1}
+        - "800 g di ceci in scatola" -> {name: "ceci in scatola", units: "g", amount: 800}
+        - "3 spicchi d'aglio" -> {name: "aglio", units: "spicchi", amount: 3}
         
         Args:
-            ingredient_text: Строка вида "1 cucchiaio di olio d'oliva" или "800 g di ceci in scatola"
+            ingredient_text: Raw ingredient text from HTML
             
         Returns:
-            dict: {"name": "olio d'oliva", "units": "cucchiaio", "amount": 1}
+            dict with name, units, and amount keys, or None if parsing fails
         """
         if not ingredient_text:
             return None
         
         text = self.clean_text(ingredient_text).lower()
         
-        # Заменяем Unicode дроби на числа
+        # Replace Unicode fractions with decimals
         fraction_map = {
             '½': '0.5', '¼': '0.25', '¾': '0.75',
             '⅓': '0.33', '⅔': '0.67', '⅛': '0.125',
@@ -112,8 +120,9 @@ class UnaricettaalGiornoExtractor(BaseRecipeExtractor):
         for fraction, decimal in fraction_map.items():
             text = text.replace(fraction, decimal)
         
-        # Паттерн 1: "количество единица_измерения di название"
-        # Примеры: "1 cucchiaio di olio", "800 g di ceci", "3 spicchi di aglio"
+        # Pattern 1: "quantity unit di/d' name"
+        # Examples: "1 cucchiaio di olio", "800 g di ceci", "3 spicchi d'aglio"
+        # Groups: (amount)(unit)(name)
         pattern1 = r"^([\d\s/.,]+)\s+(cucchiai?o?|cucchiaini?o?|spicchi?o?|g|kg|ml|l|litri?o?|pezz[oi]|grande|piccol[oa]|ramett[io]|foglie?)\s+(?:di\s+|d')?(.+)$"
         
         match = re.match(pattern1, text, re.IGNORECASE)
@@ -121,18 +130,10 @@ class UnaricettaalGiornoExtractor(BaseRecipeExtractor):
         if match:
             amount_str, units, name = match.groups()
             
-            # Нормализация количества
-            try:
-                amount = self._normalize_amount(amount_str)
-                # Конвертируем в int если это целое число
-                if amount and '.' in str(amount):
-                    amount = float(amount)
-                else:
-                    amount = int(float(amount)) if amount else None
-            except:
-                amount = amount_str.strip() if amount_str else None
+            # Normalize amount (convert to int/float)
+            amount = self._safe_normalize_amount(amount_str)
             
-            # Очистка названия
+            # Clean name
             name = self._clean_ingredient_name(name)
             
             return {
@@ -141,22 +142,14 @@ class UnaricettaalGiornoExtractor(BaseRecipeExtractor):
                 "amount": amount
             }
         
-        # Паттерн 2: "количество название" (без единиц)
-        # Примеры: "1 cipolla", "2 lime"
+        # Pattern 2: "quantity name" (without units)
+        # Examples: "1 cipolla", "2 lime"
         pattern2 = r'^([\d\s/.,]+)\s+(.+)$'
         match2 = re.match(pattern2, text)
         
         if match2:
             amount_str, name = match2.groups()
-            try:
-                amount = self._normalize_amount(amount_str)
-                if amount and '.' in str(amount):
-                    amount = float(amount)
-                else:
-                    amount = int(float(amount)) if amount else None
-            except:
-                amount = amount_str.strip() if amount_str else None
-            
+            amount = self._safe_normalize_amount(amount_str)
             name = self._clean_ingredient_name(name)
             
             return {
@@ -165,7 +158,7 @@ class UnaricettaalGiornoExtractor(BaseRecipeExtractor):
                 "amount": amount
             }
         
-        # Паттерн 3: только название (без количества)
+        # Pattern 3: just name (no quantity)
         name = self._clean_ingredient_name(text)
         return {
             "name": name,
@@ -173,14 +166,57 @@ class UnaricettaalGiornoExtractor(BaseRecipeExtractor):
             "amount": None
         }
     
+    def _safe_normalize_amount(self, amount_str: Optional[str]) -> Optional[int]:
+        """
+        Safely normalize amount string to number
+        
+        Handles fractions and decimal numbers, converts to int if possible.
+        Returns None on parse errors.
+        
+        Args:
+            amount_str: String representation of amount
+            
+        Returns:
+            Normalized amount as int or float, or None if conversion fails
+        """
+        if not amount_str:
+            return None
+        
+        try:
+            normalized = self._normalize_amount(amount_str)
+            if not normalized:
+                return None
+            
+            # Convert to float first
+            value = float(normalized)
+            
+            # If it's a whole number, return as int
+            if value.is_integer():
+                return int(value)
+            return value
+            
+        except (ValueError, TypeError, AttributeError):
+            # Return None on any conversion error
+            return None
+    
     def _normalize_amount(self, amount_str: str) -> Optional[str]:
-        """Нормализация количества (обработка дробей)"""
+        """
+        Normalize amount by converting fractions to decimals
+        
+        Handles fractions like "1/2" or "1 1/2"
+        
+        Args:
+            amount_str: Amount string potentially containing fractions
+            
+        Returns:
+            Normalized decimal string, or None if input is empty
+        """
         if not amount_str:
             return None
         
         amount_str = amount_str.strip()
         
-        # Обработка дробей типа "1/2" или "1 1/2"
+        # Handle fractions like "1/2" or "1 1/2"
         if '/' in amount_str:
             parts = amount_str.split()
             total = 0.0
@@ -195,16 +231,30 @@ class UnaricettaalGiornoExtractor(BaseRecipeExtractor):
             return amount_str.replace(',', '.')
     
     def _clean_ingredient_name(self, name: str) -> str:
-        """Очистка названия ингредиента"""
-        # Удаляем "di" или "d'" в начале
-        name = re.sub(r"^(?:di\s+|d[''])", '', name)
-        # Удаляем скобки с содержимым
+        """
+        Clean ingredient name by removing prefixes, descriptions, and extra text
+        
+        Removes:
+        - Italian prepositions "di" and "d'" from the beginning (handles both ASCII and Unicode apostrophes)
+        - Parenthetical content
+        - Comma-separated descriptions (", tritata", ", schiacciati")
+        - Common phrases ("q.b.", "quanto basta", "a piacere", etc.)
+        
+        Args:
+            name: Raw ingredient name
+            
+        Returns:
+            Cleaned ingredient name
+        """
+        # Remove "di" or "d'" prefix (handles ASCII ' and Unicode ' " apostrophes)
+        name = re.sub(r"^(?:di\s+|d['''\"\u2019\u2018])", '', name)
+        # Remove parenthetical content
         name = re.sub(r'\([^)]*\)', '', name)
-        # Удаляем запятую и все что после нее (описания типа ", tritata", ", schiacciati")
+        # Remove comma and everything after (descriptions like ", tritata", ", schiacciati")
         name = re.sub(r',.*$', '', name)
-        # Удаляем фразы "q.b.", "quanto basta", "a piacere", "opzionale"
+        # Remove common phrases
         name = re.sub(r'\b(q\.?b\.?|quanto basta|a piacere|opzionale?|per guarnire)\b', '', name, flags=re.IGNORECASE)
-        # Удаляем лишние пробелы и запятые
+        # Clean up extra whitespace and trailing punctuation
         name = re.sub(r'[,;]+$', '', name)
         name = re.sub(r'\s+', ' ', name).strip()
         return name
