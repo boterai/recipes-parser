@@ -83,46 +83,48 @@ class TlMadreshoyComExtractor(BaseRecipeExtractor):
         """
         ingredients = []
         
-        # Ищем в тексте статьи секции с ингредиентами
-        # Обычно они находятся в списках <ul> или <li>
-        
-        # Попытка 1: ищем списки в основном контенте
-        content_area = self.soup.find(class_=re.compile(r'post-content|article-content|entry-content', re.I))
-        if content_area:
-            # Ищем списки
-            lists = content_area.find_all('ul')
-            for ul in lists:
-                items = ul.find_all('li')
-                for item in items:
-                    text = self.clean_text(item.get_text())
-                    if text and len(text) > 2:
-                        # Парсим ингредиент
-                        parsed = self._parse_ingredient(text)
-                        if parsed:
-                            ingredients.append(parsed)
+        # Сначала пробуем из JSON-LD articleBody
+        json_ld = self._get_json_ld_data()
+        if json_ld and 'articleBody' in json_ld:
+            article_body = json_ld['articleBody']
+            # Ищем секцию ингредиентов в тексте
+            lines = article_body.split('\n')
+            in_ingredients_section = False
+            
+            for line in lines:
+                line = line.strip()
+                # Проверяем начало секции ингредиентов
+                if any(keyword in line.lower() for keyword in ['sangkap', 'ingredients', 'kailangan']):
+                    in_ingredients_section = True
+                    continue
                 
-                # Если нашли хотя бы несколько ингредиентов, останавливаемся
-                if len(ingredients) >= 3:
+                # Проверяем конец секции (начало инструкций)
+                if in_ingredients_section and any(keyword in line.lower() for keyword in ['paano', 'hakbang', 'step', 'instruction']):
                     break
+                
+                # Извлекаем ингредиенты
+                if in_ingredients_section and line:
+                    parsed = self._parse_ingredient(line)
+                    if parsed and parsed['name']:
+                        ingredients.append(parsed)
         
-        # Если ничего не нашли, пробуем более общий поиск
+        # Если не нашли в JSON-LD, ищем в HTML
         if not ingredients:
-            # Ищем параграфы с ключевыми словами
-            all_paragraphs = self.soup.find_all('p')
-            for p in all_paragraphs:
-                text = self.clean_text(p.get_text().lower())
-                if any(keyword in text for keyword in ['sangkap', 'ingredients', 'kailangan']):
-                    # Берем следующие элементы как возможные ингредиенты
-                    next_sibling = p.find_next_sibling()
-                    if next_sibling and next_sibling.name == 'ul':
-                        items = next_sibling.find_all('li')
-                        for item in items:
-                            item_text = self.clean_text(item.get_text())
-                            if item_text:
-                                parsed = self._parse_ingredient(item_text)
-                                if parsed:
-                                    ingredients.append(parsed)
-                    break
+            content_area = self.soup.find(class_=re.compile(r'post-content|article-content|entry-content', re.I))
+            if content_area:
+                # Ищем списки
+                lists = content_area.find_all('ul')
+                for ul in lists:
+                    items = ul.find_all('li')
+                    for item in items:
+                        text = self.clean_text(item.get_text())
+                        if text and len(text) > 2:
+                            parsed = self._parse_ingredient(text)
+                            if parsed and parsed['name']:
+                                ingredients.append(parsed)
+                    
+                    if len(ingredients) >= 3:
+                        break
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
@@ -171,34 +173,60 @@ class TlMadreshoyComExtractor(BaseRecipeExtractor):
         """Извлечение шагов приготовления в виде строки"""
         steps = []
         
-        # Ищем в основном контенте
-        content_area = self.soup.find(class_=re.compile(r'post-content|article-content|entry-content', re.I))
-        
-        if content_area:
-            # Ищем нумерованные списки (ol)
-            ordered_lists = content_area.find_all('ol')
-            for ol in ordered_lists:
-                items = ol.find_all('li')
-                for idx, item in enumerate(items, 1):
-                    step_text = self.clean_text(item.get_text())
-                    if step_text:
-                        # Если шаг уже начинается с числа, не добавляем
-                        if not re.match(r'^\d+\.', step_text):
-                            steps.append(f"{idx}. {step_text}")
-                        else:
-                            steps.append(step_text)
-                
-                if steps:
-                    break
+        # Сначала пробуем из JSON-LD articleBody
+        json_ld = self._get_json_ld_data()
+        if json_ld and 'articleBody' in json_ld:
+            article_body = json_ld['articleBody']
+            # Ищем секцию инструкций в тексте
+            lines = article_body.split('\n')
+            in_instructions_section = False
             
-            # Если не нашли ol, ищем абзацы с шагами
-            if not steps:
-                paragraphs = content_area.find_all('p')
-                for p in paragraphs:
-                    text = self.clean_text(p.get_text())
-                    # Проверяем, начинается ли с цифры (возможно это шаг)
-                    if text and re.match(r'^\d+\.', text):
-                        steps.append(text)
+            for line in lines:
+                line = line.strip()
+                # Проверяем начало секции инструкций
+                if any(keyword in line.lower() for keyword in ['paano', 'hakbang', 'step', 'instruction', 'preparation']):
+                    in_instructions_section = True
+                    continue
+                
+                # Извлекаем шаги
+                if in_instructions_section and line:
+                    # Проверяем, начинается ли с цифры или маркера шага
+                    if re.match(r'^\d+\.?\s', line) or re.match(r'^-\s', line):
+                        steps.append(line)
+                    # Или просто текст после секции инструкций
+                    elif len(steps) > 0:  # Уже начали собирать шаги
+                        # Останавливаемся на новой секции
+                        if any(keyword in line.lower() for keyword in ['sangkap', 'note', 'tip']):
+                            break
+                        steps.append(line)
+        
+        # Если не нашли в JSON-LD, ищем в HTML
+        if not steps:
+            content_area = self.soup.find(class_=re.compile(r'post-content|article-content|entry-content', re.I))
+            
+            if content_area:
+                # Ищем нумерованные списки (ol)
+                ordered_lists = content_area.find_all('ol')
+                for ol in ordered_lists:
+                    items = ol.find_all('li')
+                    for idx, item in enumerate(items, 1):
+                        step_text = self.clean_text(item.get_text())
+                        if step_text:
+                            if not re.match(r'^\d+\.', step_text):
+                                steps.append(f"{idx}. {step_text}")
+                            else:
+                                steps.append(step_text)
+                    
+                    if steps:
+                        break
+                
+                # Если не нашли ol, ищем абзацы с шагами
+                if not steps:
+                    paragraphs = content_area.find_all('p')
+                    for p in paragraphs:
+                        text = self.clean_text(p.get_text())
+                        if text and re.match(r'^\d+\.', text):
+                            steps.append(text)
         
         return ' '.join(steps) if steps else None
     
@@ -323,12 +351,15 @@ class TlMadreshoyComExtractor(BaseRecipeExtractor):
         # 1. Пробуем из мета-тегов
         og_image = self.soup.find('meta', property='og:image')
         if og_image and og_image.get('content'):
-            urls.append(og_image['content'])
+            img_url = og_image['content']
+            # Фильтруем placeholder SVG
+            if not img_url.startswith('data:image/svg'):
+                urls.append(img_url)
         
         twitter_image = self.soup.find('meta', {'name': 'twitter:image'})
         if twitter_image and twitter_image.get('content'):
             img_url = twitter_image['content']
-            if img_url not in urls:
+            if img_url not in urls and not img_url.startswith('data:image/svg'):
                 urls.append(img_url)
         
         # 2. Пробуем из JSON-LD
@@ -337,9 +368,9 @@ class TlMadreshoyComExtractor(BaseRecipeExtractor):
             img = json_ld['image']
             if isinstance(img, dict) and 'url' in img:
                 img_url = img['url']
-                if img_url not in urls:
+                if img_url not in urls and not img_url.startswith('data:image/svg'):
                     urls.append(img_url)
-            elif isinstance(img, str) and img not in urls:
+            elif isinstance(img, str) and img not in urls and not img.startswith('data:image/svg'):
                 urls.append(img)
         
         # 3. Ищем изображения в основном контенте
@@ -348,8 +379,8 @@ class TlMadreshoyComExtractor(BaseRecipeExtractor):
             images = content_area.find_all('img', src=True)
             for img in images:
                 src = img['src']
-                # Фильтруем маленькие изображения и иконки
-                if src and not any(x in src.lower() for x in ['icon', 'logo', 'avatar', 'emoji']):
+                # Фильтруем маленькие изображения, иконки и placeholder SVG
+                if src and not any(x in src.lower() for x in ['icon', 'logo', 'avatar', 'emoji']) and not src.startswith('data:image/svg'):
                     # Проверяем размер если указан
                     width = img.get('width')
                     if width and int(width) < 100:
