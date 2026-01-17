@@ -196,8 +196,8 @@ class UnaricettaalGiornoExtractor(BaseRecipeExtractor):
     
     def _clean_ingredient_name(self, name: str) -> str:
         """Очистка названия ингредиента"""
-        # Удаляем "di" в начале
-        name = re.sub(r'^\s*di\s+', '', name)
+        # Удаляем "di" или "d'" в начале
+        name = re.sub(r"^(?:di\s+|d[''])", '', name)
         # Удаляем скобки с содержимым
         name = re.sub(r'\([^)]*\)', '', name)
         # Удаляем запятую и все что после нее (описания типа ", tritata", ", schiacciati")
