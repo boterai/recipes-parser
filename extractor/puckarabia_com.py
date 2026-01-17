@@ -219,7 +219,11 @@ class PuckarabiaExtractor(BaseRecipeExtractor):
         for fraction, decimal in fraction_map.items():
             text = text.replace(fraction, decimal)
         
-        # Паттерн для извлечения количества, единицы и названия (арабские и английские единицы)
+        # Паттерн для извлечения количества, единицы и названия
+        # Формат: (amount)? (unit)? (name)
+        # - amount: число, дробь, или слова типа "нصف", "حسب الذوق"
+        # - unit: единицы измерения (арабские и английские, длинные формы первыми)
+        # - name: название ингредиента
         # Важно: более длинные варианты (множественное число) должны быть в начале
         pattern = r'^([\d\s/.,]+|نصف|ربع|ثلثي|ثلاثة أرباع|حسب الذوق)?\s*(كيلوغرام|ملاعق كبيرة|ملعقة كبيرة|ملاعق صغيرة|ملعقة صغيرة|ميلليتر|milliliters?|tablespoons?|teaspoons?|كيلو|أكواب|كوب|فصوص|فص|حبات|حبة|جرام|غرام|لتر|رشة|cups?|tbsps?|tsps?|pounds?|ounces?|liters?|lbs?|oz|kg|pinch(?:es)?|dash(?:es)?|packages?|packs?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|grams?|g\b|ml\b|l\b|مل\b|غ\b|ج\b)?\s*(.+)'
         
@@ -250,7 +254,7 @@ class PuckarabiaExtractor(BaseRecipeExtractor):
                     else:
                         try:
                             total += float(part)
-                        except:
+                        except (ValueError, TypeError):
                             pass
                 amount = str(total) if total > 0 else amount_str
             else:
@@ -472,8 +476,9 @@ class PuckarabiaExtractor(BaseRecipeExtractor):
         if not tags_list:
             return None
         
-        # Фильтрация тегов
-        filtered_tags = []
+        # Фильтрация тегов и удаление дубликатов
+        seen = set()
+        unique_tags = []
         for tag in tags_list:
             tag_lower = tag.lower()
             
@@ -485,16 +490,12 @@ class PuckarabiaExtractor(BaseRecipeExtractor):
             if len(tag) < 3:
                 continue
             
-            filtered_tags.append(tag)
-        
-        # Удаляем дубликаты, сохраняя порядок
-        seen = set()
-        unique_tags = []
-        for tag in filtered_tags:
-            tag_lower = tag.lower()
-            if tag_lower not in seen:
-                seen.add(tag_lower)
-                unique_tags.append(tag)
+            # Пропускаем дубликаты
+            if tag_lower in seen:
+                continue
+            
+            seen.add(tag_lower)
+            unique_tags.append(tag)
         
         # Возвращаем как строку через запятую с пробелом
         return ', '.join(unique_tags) if unique_tags else None
