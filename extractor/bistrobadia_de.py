@@ -340,8 +340,24 @@ class BistroBadiaExtractor(BaseRecipeExtractor):
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
-        # На bistrobadia.de notes обычно нет в JSON-LD
-        # Можно попробовать поискать в HTML, но для соответствия примерам вернем None
+        # Ищем заметки/советы в HTML (обычно содержат "Tipp:" или подобное)
+        # Часто это параграфы с Tipp:, Hinweis:, Note:, etc.
+        
+        # Ищем все параграфы
+        paragraphs = self.soup.find_all('p')
+        
+        for p in paragraphs:
+            # Используем separator=' ' чтобы сохранить пробелы между тегами
+            text = p.get_text(separator=' ', strip=True)
+            # Проверяем, начинается ли с Tipp:, Hinweis:, Note: и т.д.
+            if text and any(keyword in text for keyword in ['Tipp:', 'Hinweis:', 'Note:', 'Notiz:']):
+                # Извлекаем текст после ключевого слова
+                # Удаляем "Tipp:", "Hinweis:" и т.д. из начала
+                cleaned = re.sub(r'^(Tipp|Hinweis|Note|Notiz)\s*:\s*', '', text, flags=re.IGNORECASE)
+                cleaned = self.clean_text(cleaned)
+                if cleaned:
+                    return cleaned
+        
         return None
     
     def extract_tags(self) -> Optional[str]:
