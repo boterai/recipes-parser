@@ -84,10 +84,10 @@ class LezzetComTrExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "2 kabak" или "500 ml süt"
             
         Returns:
-            dict: {"name": "kabak", "amount": "2", "unit": None}
+            dict: {"name": "kabak", "amount": "2", "units": None}
         """
         if not ingredient_text:
-            return {"name": None, "amount": None, "unit": None}
+            return {"name": None, "amount": None, "units": None}
         
         # Чистим текст
         text = self.clean_text(ingredient_text).lower()
@@ -115,10 +115,10 @@ class LezzetComTrExtractor(BaseRecipeExtractor):
             unit_match = re.match(unit_pattern, rest, re.IGNORECASE)
             
             if unit_match:
-                unit = unit_match.group(1).strip()
+                units = unit_match.group(1).strip()
                 name = unit_match.group(2).strip()
             else:
-                unit = None
+                units = None
                 name = rest
         else:
             # Если нет числа в начале, проверяем фразы типа "Yarım demet"
@@ -129,15 +129,15 @@ class LezzetComTrExtractor(BaseRecipeExtractor):
                 
                 if unit_match:
                     amount = unit_match.group(1).strip()
-                    unit = unit_match.group(2).strip()
+                    units = unit_match.group(2).strip()
                     name = unit_match.group(3).strip()
                 else:
                     amount = None
-                    unit = None
+                    units = None
                     name = text
             else:
                 amount = None
-                unit = None
+                units = None
                 name = text
         
         # Очистка названия от лишних фраз
@@ -148,7 +148,7 @@ class LezzetComTrExtractor(BaseRecipeExtractor):
         return {
             "name": name if name else None,
             "amount": amount if amount else None,
-            "unit": unit if unit else None
+            "units": units if units else None
         }
     
     def extract_ingredients(self) -> Optional[str]:
