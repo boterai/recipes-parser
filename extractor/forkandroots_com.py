@@ -231,84 +231,108 @@ class ForkAndRootsExtractor(BaseRecipeExtractor):
         }
     
     def extract_instructions(self) -> Optional[str]:
-        """Извлечение шагов приготовления из JSON-LD"""
-        recipe_data = self._get_recipe_json_ld()
-        if not recipe_data or 'recipeInstructions' not in recipe_data:
-            return None
-        
-        instructions = recipe_data['recipeInstructions']
+        """Извлечение шагов приготовления - упрощенная версия из HTML"""
         steps = []
         
-        # Паттерны для фильтрации нерелевантных шагов
-        skip_patterns = [
-            r'^calories?\s*\d+',
-            r'^carbohydrates?\s*\d+',
-            r'^protein\s*\d+',
-            r'^fat\s*\d+',
-            r'^fiber\s*\d+',
-            r'^iron\s*\d+',
-            r'^folate\s*\d+',
-            r'^potassium\s*\d+',
-            r'^fresh spices',
-            r'^full-fat coconut',
-            r'^gentle simmering',
-            r'^taste and adjust',
-            r'^flavors improve',
-            r'^refrigerate for',
-            r'^freezes beautifully',
-            r'^reheat gently',
-            r'^traditional style',
-            r'^grain bowl',
-            r'^with fresh additions',
-            r'^complete the feast',
-            r'^\d+%?\s*dv',
-            r'^serve over',
-            r'^add roasted',
-            r'^pour over',
-            r'^top with'
-        ]
+        # Ищем список инструкций в HTML (тег <ol> внутри блока инструкций)
+        instructions_div = self.soup.find('div', class_=re.compile(r'tasty-recipes-instructions', re.I))
         
-        if isinstance(instructions, list):
-            for step in instructions:
-                if isinstance(step, dict):
-                    # Комбинируем name и text если есть
-                    step_text = []
-                    if 'name' in step and step['name']:
-                        step_name = step['name']
-                        # Проверяем, не является ли это нерелевантной информацией
-                        skip = False
-                        for pattern in skip_patterns:
-                            if re.match(pattern, step_name.lower()):
-                                skip = True
-                                break
-                        if not skip:
-                            step_text.append(step_name)
+        if instructions_div:
+            # Ищем основной список шагов (первый <ol>)
+            ol_elem = instructions_div.find('ol')
+            if ol_elem:
+                # Извлекаем все <li> элементы
+                li_elements = ol_elem.find_all('li', recursive=False)
+                
+                for li in li_elements:
+                    # Получаем текст, игнорируя теги
+                    step_text = li.get_text(separator=' ', strip=True)
+                    # Очищаем текст
+                    step_text = self.clean_text(step_text)
                     
-                    if 'text' in step and step['text']:
-                        step_text.append(step['text'])
-                    
-                    if step_text:
-                        combined = ' '.join(step_text)
-                        cleaned = self.clean_text(combined)
-                        # Дополнительная проверка всего текста
-                        skip = False
-                        for pattern in skip_patterns:
-                            if re.match(pattern, cleaned.lower()):
-                                skip = True
-                                break
-                        if not skip and len(cleaned) > 10:  # Минимум 10 символов
-                            steps.append(cleaned)
-                elif isinstance(step, str):
-                    cleaned = self.clean_text(step)
-                    skip = False
-                    for pattern in skip_patterns:
-                        if re.match(pattern, cleaned.lower()):
-                            skip = True
-                            break
-                    if not skip and len(cleaned) > 10:
-                        steps.append(cleaned)
-        elif isinstance(instructions, str):
-            steps.append(self.clean_text(instructions))
+                    if step_text and len(step_text) > 10:
+                        # Упрощаем текст - убираем лишние детали
+                        # Убираем вводные фразы типа "The aroma should be", "Don't rush", "Your kitchen should smell"
+                        step_text = re.sub(r'\.\s+(The|This|It|Your|Don\'t|You).*?\.', '.', step_text)
+                        # Убираем финальные описательные фразы
+                        step_text = re.sub(r'[—\-]\s*.*$', '', step_text)
+                        
+                        step_text = self.clean_text(step_text)
+                        steps.append(step_text)
+        
+        # Если не нашли в HTML, пробуем JSON-LD с фильтрацией
+        if not steps:
+            recipe_data = self._get_recipe_json_ld()
+            if recipe_data and 'recipeInstructions' in recipe_data:
+                instructions = recipe_data['recipeInstructions']
+                
+                # Паттерны для фильтрации нерелевантных шагов
+                skip_patterns = [
+                    r'^calories?\s*\d+',
+                    r'^carbohydrates?\s*\d+',
+                    r'^protein\s*\d+',
+                    r'^fat\s*\d+',
+                    r'^fiber\s*\d+',
+                    r'^iron\s*\d+',
+                    r'^folate\s*\d+',
+                    r'^potassium\s*\d+',
+                    r'^fresh spices',
+                    r'^full-fat coconut',
+                    r'^gentle simmering',
+                    r'^taste and adjust',
+                    r'^flavors improve',
+                    r'^refrigerate for',
+                    r'^freezes beautifully',
+                    r'^reheat gently',
+                    r'^traditional style',
+                    r'^grain bowl',
+                    r'^with fresh additions',
+                    r'^complete the feast',
+                    r'^\d+%?\s*dv',
+                    r'^serve over',
+                    r'^add roasted',
+                    r'^pour over',
+                    r'^top with'
+                ]
+                
+                if isinstance(instructions, list):
+                    for step in instructions:
+                        if isinstance(step, dict):
+                            step_text = []
+                            if 'name' in step and step['name']:
+                                step_name = step['name']
+                                skip = False
+                                for pattern in skip_patterns:
+                                    if re.match(pattern, step_name.lower()):
+                                        skip = True
+                                        break
+                                if not skip:
+                                    step_text.append(step_name)
+                            
+                            if 'text' in step and step['text']:
+                                step_text.append(step['text'])
+                            
+                            if step_text:
+                                combined = ' '.join(step_text)
+                                cleaned = self.clean_text(combined)
+                                skip = False
+                                for pattern in skip_patterns:
+                                    if re.match(pattern, cleaned.lower()):
+                                        skip = True
+                                        break
+                                if not skip and len(cleaned) > 10:
+                                    steps.append(cleaned)
+                        elif isinstance(step, str):
+                            cleaned = self.clean_text(step)
+                            skip = False
+                            for pattern in skip_patterns:
+                                if re.match(pattern, cleaned.lower()):
+                                    skip = True
+                                    break
+                            if not skip and len(cleaned) > 10:
+                                steps.append(cleaned)
+                elif isinstance(instructions, str):
+                    steps.append(self.clean_text(instructions))
         
         return ' '.join(steps) if steps else None
     
@@ -426,12 +450,16 @@ class ForkAndRootsExtractor(BaseRecipeExtractor):
         
         # Ищем шаги, которые выглядят как заметки (содержат ключевые слова)
         note_keywords = [
+            'don\'t skip',
+            'use full-fat',
+            'this tastes',
+            'make it ahead',
+            'the curry will',
             'fresh spices',
             'full-fat coconut',
             'gentle simmering',
-            'don\'t skip',
-            'use full-fat',
-            'this tastes'
+            'canned version',
+            'just add a splash'
         ]
         
         # Исключаем определенные фразы
@@ -460,18 +488,26 @@ class ForkAndRootsExtractor(BaseRecipeExtractor):
                     # Ищем ключевые слова для заметок
                     for keyword in note_keywords:
                         if keyword in step_name or keyword in step_text:
-                            # Это заметка - берем name без лишних слов
-                            if 'name' in step:
+                            # Это заметка - берем name и/или text
+                            note_parts = []
+                            if 'name' in step and step['name']:
                                 note_text = step['name']
                                 # Убираем части после "—" если есть
                                 note_text = re.sub(r'—.*$', '', note_text).strip()
-                                # Убираем финальную точку если есть
-                                note_text = re.sub(r'\.$', '', note_text).strip()
-                                notes.append(self.clean_text(note_text))
+                                note_parts.append(self.clean_text(note_text))
+                            if 'text' in step and step['text']:
+                                note_parts.append(self.clean_text(step['text']))
+                            
+                            if note_parts:
+                                notes.append(' '.join(note_parts))
                             break
         
         if notes:
-            return '. '.join(notes) + '.'
+            # Объединяем заметки
+            result = ' '.join(notes)
+            # Убираем дублирующиеся точки
+            result = re.sub(r'\.+', '.', result)
+            return result
         
         return None
     
@@ -492,7 +528,7 @@ class ForkAndRootsExtractor(BaseRecipeExtractor):
         else:
             return None
         
-        # Упрощаем теги - берем только ключевые слова
+        # Упрощаем теги - извлекаем ключевые слова
         seen = set()
         for tag in raw_tags:
             if not tag or len(tag) < 3:
@@ -500,18 +536,26 @@ class ForkAndRootsExtractor(BaseRecipeExtractor):
             
             tag_lower = tag.lower()
             
-            # Пропускаем очень длинные теги (вероятно фразы)
-            if len(tag) > 40:
-                continue
+            # Проп ускаем очень длинные теги (вероятно фразы) и берем основные слова
+            if len(tag) > 30:
+                # Извлекаем ключевые слова из длинной фразы
+                words = tag.split()
+                for word in words:
+                    word = word.strip(',-.')
+                    word_lower = word.lower()
+                    if len(word) >= 4 and word_lower not in seen:
+                        # Пропускаем стоп-слова
+                        if word_lower not in ['with', 'from', 'this', 'that', 'recipe', 'food', 'based']:
+                            seen.add(word_lower)
+                            tags.append(word)
+                            if len(tags) >= 5:
+                                break
+            else:
+                # Короткий тег - берем как есть
+                if tag_lower not in seen:
+                    seen.add(tag_lower)
+                    tags.append(tag)
             
-            # Проверяем дубликаты
-            if tag_lower in seen:
-                continue
-            
-            seen.add(tag_lower)
-            tags.append(tag)
-            
-            # Ограничиваем количество тегов
             if len(tags) >= 5:
                 break
         
