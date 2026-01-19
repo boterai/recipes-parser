@@ -23,7 +23,9 @@ class NabdExtractor(BaseRecipeExtractor):
         for p in paragraphs:
             text = p.get_text()
             # Параграф с рецептом содержит слова "مقادير" и "طريقة تحضير"
-            if 'مقادير' in text and 'طريقة تحضير' in text:
+            # ИЛИ просто "طريقة" (для некоторых вариантов)
+            if ('مقادير' in text and 'طريقة تحضير' in text) or \
+               ('طريقة' in text and '<br' in str(p)):
                 return p  # Возвращаем элемент BeautifulSoup, а не текст
         
         return None
@@ -36,8 +38,11 @@ class NabdExtractor(BaseRecipeExtractor):
             title = og_title['content']
             # Убираем префикс сайта (например, "مرايتي |")
             title = re.sub(r'^[^|]+\|\s*', '', title)
-            # Убираем суффиксы типа "طريقة عمل", "طريقة", ".."
+            # Убираем фразы типа "تشعرك بالدفء.."
+            title = re.sub(r'^[^.]+\.\.\s*', '', title)
+            # Убираем суффиксы типа "طريقة عمل", "طريقة", "..", "لذيذة وشهية"
             title = re.sub(r'(طريقة\s+عمل\s+|طريقة\s+|\.\.)', '', title)
+            title = re.sub(r'\s+(لذيذة\s+وشهية|شهية|لذيذة)\s*$', '', title)
             title = self.clean_text(title)
             return title if title else None
         
@@ -46,7 +51,9 @@ class NabdExtractor(BaseRecipeExtractor):
         if title_tag:
             title = title_tag.get_text()
             title = re.sub(r'^[^|]+\|\s*', '', title)
+            title = re.sub(r'^[^.]+\.\.\s*', '', title)
             title = re.sub(r'(طريقة\s+عمل\s+|طريقة\s+|\.\.)', '', title)
+            title = re.sub(r'\s+(لذيذة\s+وشهية|شهية|لذيذة)\s*$', '', title)
             title = self.clean_text(title)
             return title if title else None
         
@@ -96,8 +103,13 @@ class NabdExtractor(BaseRecipeExtractor):
         recipe_html = str(recipe_paragraph)
         
         # Паттерн для извлечения ингредиентов
-        # Ищем текст между "مقادير" и "طريقة тحضير"
+        # Вариант 1: Ищем текст между "مقادير" и "طريقة тحضير"
         match = re.search(r'مقادير[^<]*?(.*?)طريقة تحضير', recipe_html, re.DOTALL)
+        
+        # Вариант 2: Если "مقادير" нет, ищем до "طريقة" (начало - это ингредиенты)
+        if not match:
+            match = re.search(r'^<p[^>]*>(.*?)طريقة[^<]*?<', recipe_html, re.DOTALL)
+        
         if not match:
             return None
         
@@ -214,10 +226,17 @@ class NabdExtractor(BaseRecipeExtractor):
             }
         
         # Если не совпало ни с одним паттерном, возвращаем только название
+        # Для некоторых ингредиентов без количества по умолчанию amount=1
+        # Например: "بيضة", "بصلة"
         name = self._clean_ingredient_name(text)
+        
+        # Проверяем, является ли это счётным ингредиентом в единственном числе
+        countable_items = ['بيضة', 'بصلة', 'ثومة', 'طماطم', 'خيار', 'جزر', 'كوسة']
+        amount = 1 if any(name.endswith(item) or name == item for item in countable_items) else None
+        
         return {
             "name": name,
-            "amount": None,
+            "amount": amount,
             "units": None
         }
     
@@ -234,11 +253,15 @@ class NabdExtractor(BaseRecipeExtractor):
         if not recipe_paragraph:
             return None
         
-        # Ищем текст после "طريقة تحضير"
         # Получаем HTML-строку параграфа
         recipe_html = str(recipe_paragraph)
-
+        
+        # Ищем текст после "طريقة تحضير" или "طريقة"
         match = re.search(r'طريقة تحضير[^<]*?(.*?)(?:لقراءة المقال|$)', recipe_html, re.DOTALL)
+        if not match:
+            # Пробуем с просто "طريقة" и берем часть после нее
+            match = re.search(r'طريقة[^<]*?<br[^>]*>(.*?)(?:لقراءة المقال|$)', recipe_html, re.DOTALL)
+        
         if not match:
             return None
         
@@ -252,6 +275,14 @@ class NabdExtractor(BaseRecipeExtractor):
         
         # Убираем суффиксы типа "تضاف....." или "...."
         instructions_text = re.sub(r'\.{2,}.*$', '', instructions_text)
+        
+        # Убираем префикс с названием блюда, если он есть (например, "دونتس بحشو الشوكولاتة يخلط...")
+        # Ищем повторяющиеся слова из начала и удаляем их
+        dish_name = self.extract_dish_name()
+        if dish_name:
+            # Простое удаление названия блюда из начала инструкций
+            if instructions_text.startswith(dish_name):
+                instructions_text = instructions_text[len(dish_name):].strip()
         
         return instructions_text if instructions_text else None
     
