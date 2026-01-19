@@ -17,17 +17,17 @@ class MesRecettesExtractor(BaseRecipeExtractor):
     
     def extract_dish_name(self) -> Optional[str]:
         """Extract recipe name"""
-        # Ищем в мета-теге og:title
+        # Look in og:title meta tag
         og_title = self.soup.find('meta', property='og:title')
         if og_title and og_title.get('content'):
             return self.clean_text(og_title['content'])
         
-        # Альтернативно - в title
+        # Alternatively - in title tag
         title_tag = self.soup.find('title')
         if title_tag:
             return self.clean_text(title_tag.get_text())
         
-        # Ищем h1
+        # Look for h1
         h1 = self.soup.find('h1')
         if h1:
             return self.clean_text(h1.get_text())
@@ -36,12 +36,12 @@ class MesRecettesExtractor(BaseRecipeExtractor):
     
     def extract_description(self) -> Optional[str]:
         """Extract recipe description"""
-        # Ищем в meta description
+        # Look in meta description
         meta_desc = self.soup.find('meta', {'name': 'description'})
         if meta_desc and meta_desc.get('content'):
             return self.clean_text(meta_desc['content'])
         
-        # Альтернативно - из og:description
+        # Alternatively - from og:description
         og_desc = self.soup.find('meta', property='og:description')
         if og_desc and og_desc.get('content'):
             return self.clean_text(og_desc['content'])
@@ -61,17 +61,17 @@ class MesRecettesExtractor(BaseRecipeExtractor):
         if not line:
             return None
         
-        # Чистим текст
+        # Clean the text
         text = self.clean_text(line).strip()
         
-        # Пропускаем пустые строки
+        # Skip empty lines
         if not text or len(text) < 2:
             return None
         
-        # Сокращения единиц измерения
+        # Unit abbreviations
         unit_map = {
-            'càs': 'càs',  # cuillère à soupe
-            'càc': 'càc',  # cuillère à café
+            'càs': 'càs',  # tablespoon
+            'càc': 'càc',  # teaspoon
             'tasse': 'tasse',
             'tasses': 'tasse',
             'kg': 'kg',
@@ -82,14 +82,14 @@ class MesRecettesExtractor(BaseRecipeExtractor):
             'cc': 'càc',
         }
         
-        # Паттерн для извлечения количества, единицы и названия
-        # Примеры: "1 kg de pommes de terre", "1/3 tasse d'huile d'olive", "1,5 càc d'origan séché"
+        # Pattern to extract amount, unit, and name
+        # Examples: "1 kg de pommes de terre", "1/3 tasse d'huile d'olive", "1,5 càc d'origan séché"
         pattern = r'^([\d\s/.,]+)\s*(kg|g|ml|l|tasse|tasses|càs|càc|c\.|cc)?\s*(?:de|d\'|d\')?\s*(.+)$'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
         if not match:
-            # Если паттерн не совпал, возвращаем только название без количества и единиц
+            # If pattern doesn't match, return only the name without amount and units
             return {
                 "name": text,
                 "amount": None,
@@ -136,24 +136,24 @@ class MesRecettesExtractor(BaseRecipeExtractor):
                 # Replace comma with dot for decimal numbers
                 amount = amount_str.replace(',', '.')
         
-        # Обработка единицы измерения
+        # Handle unit of measurement
         if unit:
             unit = unit.strip().lower()
             unit = unit_map.get(unit, unit)
         
-        # Очистка названия от предлогов "de", "d'"
+        # Clean name from prepositions "de", "d'"
         if name:
-            # Убираем начальные "d'" или "de " в начале (включая разные типы апострофов)
+            # Remove leading "d'" or "de " at the start (including different types of apostrophes)
             # U+2019 - right single quotation mark
             name = re.sub(r"^d['''\u2019\`´]?\s*", '', name)
             name = re.sub(r'^de\s+', '', name)
-            # Убираем оставшиеся одиночные апострофы в начале
+            # Remove remaining single apostrophes at the start
             name = re.sub(r"^['''\u2019\`´]\s*", '', name)
         
         
-        # Удаляем скобки с содержимым
+        # Remove brackets with contents
         name = re.sub(r'\([^)]*\)', '', name)
-        # Удаляем лишние пробелы и запятые
+        # Remove extra spaces and commas
         name = re.sub(r'[,;]+$', '', name)
         name = re.sub(r'\s+', ' ', name).strip()
         
@@ -170,24 +170,24 @@ class MesRecettesExtractor(BaseRecipeExtractor):
         """Extract ingredients list"""
         ingredients = []
         
-        # Ищем заголовок "Ingrédients"
+        # Look for heading "Ingrédients"
         ingredients_heading = self.soup.find('h2', id='ingredients')
         if not ingredients_heading:
             ingredients_heading = self.soup.find('h2', string=re.compile(r'Ingr[ée]dients?', re.I))
         
         if ingredients_heading:
-            # Ищем следующий параграф после заголовка
+            # Look for next paragraph after heading
             next_elem = ingredients_heading.find_next_sibling('p')
             if next_elem:
-                # Получаем текст, заменяя <br> на разделитель
-                # Используем get_text с separator для корректной обработки <br>
+                # Get text, replacing <br> with separator
+                # Use get_text with separator for correct handling <br>
                 for br in next_elem.find_all('br'):
-                    br.replace_with('|||')  # Временный разделитель
+                    br.replace_with('|||')  # Temporary separator
                 
                 full_text = next_elem.get_text()
                 lines = full_text.split('|||')
                 
-                # Парсим каждую строку ингредиента
+                # Parse each ingredient line
                 for line in lines:
                     line = self.clean_text(line)
                     if line:
@@ -250,18 +250,18 @@ class MesRecettesExtractor(BaseRecipeExtractor):
     
     def extract_category(self) -> Optional[str]:
         """Extract recipe category"""
-        # Ищем в JSON-LD breadcrumb
+        # Look in JSON-LD breadcrumb
         scripts = self.soup.find_all('script', type='application/ld+json')
         for script in scripts:
             try:
                 data = json.loads(script.string)
                 
-                # Обработка @graph
+                # Handle @graph
                 if '@graph' in data:
                     for item in data['@graph']:
                         if item.get('@type') == 'BreadcrumbList':
                             items = item.get('itemListElement', [])
-                            # Берем последний элемент хлебных крошек (обычно категория)
+                            # Take the last breadcrumb element (usually the category)
                             if items and len(items) > 1:
                                 last_item = items[-1]
                                 category = last_item.get('name')
@@ -270,12 +270,12 @@ class MesRecettesExtractor(BaseRecipeExtractor):
             except (json.JSONDecodeError, KeyError):
                 continue
         
-        # Альтернативно ищем в ссылках категорий
+        # Alternatively look in category links
         cat_div = self.soup.find('div', class_='taxonomy-category')
         if cat_div:
             links = cat_div.find_all('a')
             if links:
-                # Берем первую категорию
+                # Take the first category
                 return self.clean_text(links[0].get_text())
         
         return None
@@ -285,23 +285,23 @@ class MesRecettesExtractor(BaseRecipeExtractor):
         Extract time information
         
         Returns:
-            Кортеж (prep_time, cook_time, total_time)
+            Tuple (prep_time, cook_time, total_time)
         """
         prep_time = None
         cook_time = None
         total_time = None
         
-        # Ищем параграф с временем
-        # Формат: "Préparation: 10 minutes<br>Cuisson: 45 minutes<br>..."
-        # Обычно идет ПЕРЕД заголовком "Ingrédients"
+        # Look for time paragraph
+        # Format: "Préparation: 10 minutes<br>Cuisson: 45 minutes<br>..."
+        # Usually comes BEFORE the heading "Ingrédients"
         paragraphs = self.soup.find_all('p')
         
         for p in paragraphs:
             text = p.get_text()
             
-            # Проверяем, содержит ли параграф информацию о времени
+            # Check if paragraph contains time information
             if re.search(r'Pr[ée]paration\s*:', text, re.I) or re.search(r'Cuisson\s*:', text, re.I):
-                # Заменяем <br> на разделитель
+                # Replace <br> with separator
                 for br in p.find_all('br'):
                     br.replace_with('|||')
                 
@@ -316,7 +316,7 @@ class MesRecettesExtractor(BaseRecipeExtractor):
                     if prep_match:
                         prep_time = self.clean_text(prep_match.group(1))
                     
-                    # Cuisson: 45 minutes или Cuisson: environ 40 minutes
+                    # Cuisson: 45 minutes or Cuisson: environ 40 minutes
                     cook_match = re.search(r'Cuisson\s*:\s*(?:environ\s*)?(\d+\s*(?:minutes?|heures?))', line, re.I)
                     if cook_match:
                         cook_time = self.clean_text(cook_match.group(1))
@@ -326,7 +326,7 @@ class MesRecettesExtractor(BaseRecipeExtractor):
                     if total_match:
                         total_time = self.clean_text(total_match.group(1))
                 
-                # Если нашли хотя бы одно значение, прерываем поиск
+                # If found at least one value, stop searching
                 if prep_time or cook_time or total_time:
                     break
         
@@ -347,14 +347,14 @@ class MesRecettesExtractor(BaseRecipeExtractor):
     
     def extract_notes(self) -> Optional[str]:
         """Extract notes and tips"""
-        # Для этого сайта заметки обычно отсутствуют
-        # Можно искать секции типа "Conseil", "Astuce", "Note" и т.д.
+        # Notes are usually absent on this site
+        # Can look for sections like "Conseil", "Astuce", "Note" etc.
         notes_keywords = ['conseil', 'astuce', 'note', 'remarque']
         
         for keyword in notes_keywords:
             heading = self.soup.find(['h2', 'h3', 'h4'], string=re.compile(keyword, re.I))
             if heading:
-                # Собираем текст из следующих параграфов
+                # Collect text from following paragraphs
                 notes_parts = []
                 current = heading.find_next_sibling()
                 while current and current.name == 'p':
@@ -370,27 +370,27 @@ class MesRecettesExtractor(BaseRecipeExtractor):
     
     def extract_tags(self) -> Optional[str]:
         """Extract recipe tags"""
-        # На этом сайте теги обычно отсутствуют в HTML
-        # Можно попробовать извлечь из категорий или ключевых слов
+        # Tags are usually absent in HTML on this site
+        # Can try to extract from categories or keywords
         return None
     
     def extract_image_urls(self) -> Optional[str]:
         """Extract image URLs"""
         urls = []
         
-        # 1. Ищем в мета-тегах
-        # og:image - обычно главное изображение
+        # 1. Look in meta tags
+        # og:image - usually the main image
         og_image = self.soup.find('meta', property='og:image')
         if og_image and og_image.get('content'):
             urls.append(og_image['content'])
         
-        # 2. Ищем в JSON-LD
+        # 2. Look in JSON-LD
         scripts = self.soup.find_all('script', type='application/ld+json')
         for script in scripts:
             try:
                 data = json.loads(script.string)
                 
-                # Обработка @graph
+                # Handle @graph
                 if '@graph' in data:
                     for item in data['@graph']:
                         # ImageObject
@@ -402,7 +402,7 @@ class MesRecettesExtractor(BaseRecipeExtractor):
             except (json.JSONDecodeError, KeyError):
                 continue
         
-        # Убираем дубликаты, сохраняя порядок
+        # Remove duplicates, preserving order
         if urls:
             seen = set()
             unique_urls = []
@@ -419,7 +419,7 @@ class MesRecettesExtractor(BaseRecipeExtractor):
         Extract all recipe data
         
         Returns:
-            Словарь с данными рецепта
+            Dictionary with recipe data
         """
         dish_name = self.extract_dish_name()
         description = self.extract_description()
@@ -452,15 +452,15 @@ def main():
     """
     import os
     
-    # Обрабатываем папку preprocessed/mesrecettes_info
+    # Process folder preprocessed/mesrecettes_info
     recipes_dir = os.path.join("preprocessed", "mesrecettes_info")
     
     if os.path.exists(recipes_dir) and os.path.isdir(recipes_dir):
         process_directory(MesRecettesExtractor, str(recipes_dir))
         return
     
-    print(f"Директория не найдена: {recipes_dir}")
-    print("Использование: python mesrecettes_info.py")
+    print(f"Directory not found: {recipes_dir}")
+    print("Usage: python mesrecettes_info.py")
 
 
 if __name__ == "__main__":
