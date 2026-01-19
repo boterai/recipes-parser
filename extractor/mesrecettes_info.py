@@ -135,10 +135,11 @@ class MesRecettesExtractor(BaseRecipeExtractor):
         # Очистка названия от предлогов "de", "d'"
         if name:
             # Убираем начальные "d'" или "de " в начале (включая разные типы апострофов)
-            name = re.sub(r"^d[''\`´]?\s*", '', name)
+            # U+2019 - right single quotation mark
+            name = re.sub(r"^d['''\u2019\`´]?\s*", '', name)
             name = re.sub(r'^de\s+', '', name)
             # Убираем оставшиеся одиночные апострофы в начале
-            name = re.sub(r"^[''\`´]\s*", '', name)
+            name = re.sub(r"^['''\u2019\`´]\s*", '', name)
         
         
         # Удаляем скобки с содержимым
