@@ -167,6 +167,11 @@ def check_and_save_similarity_clusters(filepath: str):
 if __name__ == '__main__':
     filepath = "recipe_clusters/full_clusters95_no_batch.txt"
     dsu_filepath = "recipe_clusters/ingredients95_dsu_state.json"
+    from src.models.recipe import Recipe
+    import json
+    with open("src/models/schemas/translated_recipe.json", "w", encoding="utf-8") as f:
+        f.write(json.dumps(Recipe.model_json_schema(), indent=2, ensure_ascii=False))
+    
     #check_and_save_similarity_clusters(filepath)
     #vectorise_recipes()
     asyncio.run(vectorise_images())

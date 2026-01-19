@@ -21,7 +21,7 @@ if __name__ == "__main__":
 from src.models.page import PageORM, Page
 from src.repositories.page import PageRepository
 from src.repositories.site import SiteRepository
-from src.common.gpt_client import GPTClient
+from src.common.gpt.gpt_client import GPTClient
 
 # Загрузка переменных окружения
 load_dotenv()

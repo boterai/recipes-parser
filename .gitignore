@@ -16,7 +16,6 @@ parsed/
 recipes/*
 recipes/
 vector_db/*
-tests/*
 qdrant_storage/*
 docs/*
 .env

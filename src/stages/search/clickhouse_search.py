@@ -1,5 +1,5 @@
 from src.common.db.clickhouse import ClickHouseManager
-from src.common.gpt_client import GPTClient
+from src.common.gpt.gpt_client import GPTClient
 from src.models.recipe import Recipe
 from typing import Optional
 import logging

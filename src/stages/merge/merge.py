@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
 from src.models.page import Recipe
 from src.models.merged_recipe import MergedRecipe, MergedRecipeORM
-from src.common.gpt_client import GPTClient
+from src.common.gpt.gpt_client import GPTClient
 from src.common.db.clickhouse import ClickHouseManager
 from src.repositories.page import PageRepository
 from src.repositories.merged_recipe import MergedRecipeRepository

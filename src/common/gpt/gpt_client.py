@@ -70,7 +70,8 @@ class GPTClient:
         temperature: float = 0.1,
         max_tokens: Optional[int] = None,
         timeout: int = 30,
-        retry_attempts: int = 3
+        retry_attempts: int = 3,
+        response_schema: Optional[dict] = None
     ) -> dict[str, Any]:
         """
         Асинхронный запрос к ChatGPT API с повторными попытками
@@ -83,6 +84,7 @@ class GPTClient:
             max_tokens: Максимальное количество токенов в ответе
             timeout: Таймаут запроса в секундах
             retry_attempts: Количество попыток при ошибках
+            response_schema: Схема валидации ответа (опционально), помогает вычищать ответ от двойных кавычек и лишних символов 
             
         Returns:
             Распарсенный JSON ответ от GPT
