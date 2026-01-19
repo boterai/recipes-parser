@@ -80,32 +80,92 @@ class RezepteomaComExtractor(BaseRecipeExtractor):
         
         # Ищем параграф, содержащий "Zutaten:"
         entry_content = self.soup.find('div', class_='entry-content')
-        if not entry_content:
-            return None
-        
-        # Ищем параграф с текстом "Zutaten:"
-        for p in entry_content.find_all('p'):
-            text = p.get_text()
-            if 'Zutaten:' in text:
-                # Извлекаем ингредиенты из p.contents, которые разделены <br/> тегами
-                # p.contents содержит список: ['Zutaten:', <br/>, '100g Speck', <br/>, ...]
-                for content in p.contents:
-                    # Пропускаем br теги
-                    if hasattr(content, 'name') and content.name == 'br':
-                        continue
+        if entry_content:
+            # Ищем параграф с текстом "Zutaten:" и ингредиентами на той же строке
+            for p in entry_content.find_all('p'):
+                text = p.get_text()
+                if 'Zutaten:' in text and len(text) > len('Zutaten:') + 10:
+                    # Извлекаем ингредиенты из p.contents, которые разделены <br/> тегами
+                    # p.contents содержит список: ['Zutaten:', <br/>, '100g Speck', <br/>, ...]
+                    for content in p.contents:
+                        # Пропускаем br теги
+                        if hasattr(content, 'name') and content.name == 'br':
+                            continue
+                        
+                        # Берем только строки (текстовые узлы)
+                        if isinstance(content, str):
+                            line = content.strip()
+                            # Пропускаем "Zutaten:", "Richtungen:", "Vorbereitung:" и пустые строки
+                            if line and not line.startswith(('Zutaten', 'Richtungen', 'Vorbereitung')):
+                                parsed = self.parse_ingredient(line)
+                                if parsed:
+                                    ingredients.append(parsed)
                     
-                    # Берем только строки (текстовые узлы)
-                    if isinstance(content, str):
-                        line = content.strip()
-                        # Пропускаем "Zutaten:" и пустые строки
-                        if line and not line.startswith('Zutaten'):
-                            parsed = self.parse_ingredient(line)
-                            if parsed:
-                                ingredients.append(parsed)
-                
-                break
+                    break
+        
+        # Если ингредиенты не найдены, пробуем извлечь из og:description
+        if not ingredients:
+            og_desc = self.soup.find('meta', property='og:description')
+            if og_desc and og_desc.get('content'):
+                desc = og_desc['content']
+                # Ищем секцию "Zutaten" в описании
+                if 'Zutaten' in desc:
+                    # Извлекаем текст после "Zutaten" до "[…]" или конца
+                    zutaten_match = re.search(r'Zutaten\s+(.+?)(?:\s*\[…\]|$)', desc, re.DOTALL)
+                    if zutaten_match:
+                        zutaten_text = zutaten_match.group(1)
+                        # Разбиваем по паттерну: "Название количество единица"
+                        # Примеры: "Geschälte Tomaten 400 gr", "Rigatoni 360 gr"
+                        lines = zutaten_text.split('\n')
+                        for line in lines:
+                            line = line.strip()
+                            if line:
+                                # Попытка парсинга в формате "название количество единица"
+                                parsed = self.parse_ingredient_from_description(line)
+                                if parsed:
+                                    ingredients.append(parsed)
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
+    
+    def parse_ingredient_from_description(self, text: str) -> Optional[dict]:
+        """
+        Парсинг ингредиента из og:description
+        Формат: "Geschälte Tomaten 400 gr" -> {"name": "Geschälte Tomaten", "amount": 400, "units": "gr"}
+        """
+        if not text:
+            return None
+        
+        text = self.clean_text(text)
+        
+        # Паттерн: название в начале, затем количество и единица в конце
+        # Примеры: "Geschälte Tomaten 400 gr", "Ei 1", "Knoblauch 1 clove"
+        pattern = r'^(.+?)\s+(\d+(?:[.,]\d+)?)\s*(gr|g|kg|ml|l|clove|bunch|qb)?$'
+        match = re.match(pattern, text, re.IGNORECASE)
+        
+        if match:
+            name, amount_str, unit = match.groups()
+            
+            # Обработка количества
+            if amount_str:
+                if '.' in amount_str or ',' in amount_str:
+                    amount = float(amount_str.replace(',', '.'))
+                else:
+                    amount = int(amount_str)
+            else:
+                amount = None
+            
+            return {
+                "name": self.clean_text(name),
+                "units": unit if unit else None,
+                "amount": amount
+            }
+        
+        # Если не совпал паттерн, возвращаем просто название
+        return {
+            "name": text,
+            "units": None,
+            "amount": None
+        }
     
     def parse_ingredient(self, ingredient_text: str) -> Optional[dict]:
         """
@@ -119,9 +179,9 @@ class RezepteomaComExtractor(BaseRecipeExtractor):
         text = self.clean_text(ingredient_text)
         
         # Паттерн для извлечения количества, единицы и названия
-        # Примеры: "100g Speck", "1 rechteckiger Blätterteig", "2 Eier", "50g getrocknete Tomaten"
+        # Примеры: "100g Speck", "1 rechteckiger Blätterteig", "2 Eier", "50g getrocknete Tomaten", "2 ganze Eier"
         # Сначала пробуем паттерн с единицей измерения сразу после числа (без пробела или с пробелом)
-        pattern1 = r'^(\d+(?:[.,]\d+)?)\s*(g|kg|ml|l|EL|TL|Prise|Prisen|rechteckiger|ganz)?\s+(.+)$'
+        pattern1 = r'^(\d+(?:[.,]\d+)?)\s*(g|kg|ml|l|EL|TL|Prise|Prisen|rechteckiger|ganz|ganze)?\s+(.+)$'
         match = re.match(pattern1, text, re.IGNORECASE)
         
         if match:
@@ -136,8 +196,10 @@ class RezepteomaComExtractor(BaseRecipeExtractor):
             else:
                 amount = None
             
-            # Обработка единицы измерения
-            unit = unit if unit else None
+            # Обработка единицы измерения - нормализуем "ganze" -> "ganz"
+            if unit:
+                if unit.lower() == 'ganze':
+                    unit = 'ganz'
             
             # Очистка названия
             name = self.clean_text(name)
@@ -178,7 +240,14 @@ class RezepteomaComExtractor(BaseRecipeExtractor):
                     steps.append(step_text)
         
         # Объединяем все шаги в одну строку через пробел
-        return ' '.join(steps) if steps else None
+        if steps:
+            instructions = ' '.join(steps)
+            # Добавляем точку в конце, если её нет
+            if not instructions.endswith(('.', '!', '?')):
+                instructions += '.'
+            return instructions
+        
+        return None
     
     def extract_cook_time(self) -> Optional[str]:
         """Извлечение времени приготовления из текста инструкций"""
