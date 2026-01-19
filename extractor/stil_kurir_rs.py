@@ -26,62 +26,39 @@ class StilKurirExtractor(BaseRecipeExtractor):
     
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
-        # Сначала пробуем извлечь из canonical URL или title tag
+        # Извлекаем из title tag
         title_tag = self.soup.find('title')
         if title_tag:
             title = self.clean_text(title_tag.get_text())
-            # Формат: "Originalni italijanski recept za lazanje | Stil"
-            # Берем часть до первого разделителя
+            # Format: "Recept za X | Stil" or "Originalni... recept za X | Stil"
             if '|' in title:
                 title = title.split('|')[0].strip()
-            # Извлекаем ключевое слово (обычно последнее существительное)
-            # Ищем паттерн "recept za X" или просто "X"
-            if 'recept za' in title.lower():
-                # Берем всё после "recept za"
-                parts = re.split(r'recept\s+za\s+', title, flags=re.IGNORECASE)
-                if len(parts) > 1:
-                    return parts[-1].strip()
-            # Если есть двоеточие, берем первое существительное после него
-            if ':' in title:
-                after_colon = title.split(':')[-1].strip()
-                # Извлекаем первое значимое слово
-                words = after_colon.split()
-                if words:
-                    return words[0].capitalize()
-        
-        # Ищем в заголовке h1
-        h1 = self.soup.find('h1')
-        if h1:
-            text = self.clean_text(h1.get_text())
-            # Ищем "recept za X"
-            if 'recept za' in text.lower():
-                parts = re.split(r'recept\s+za\s+', text, flags=re.IGNORECASE)
-                if len(parts) > 1:
-                    return parts[-1].strip()
+            
+            # Extract dish name from "recept za X" or "Recept za X"
+            match = re.search(r'recept\s+za\s+(.+)', title, re.IGNORECASE)
+            if match:
+                dish_name = match.group(1).strip()
+                # Capitalize first letter if it's a simple single-word dish
+                words = dish_name.split()
+                if len(words) == 1:
+                    dish_name = dish_name.capitalize()
+                return dish_name
         
         return None
     
     def extract_description(self) -> Optional[str]:
         """Извлечение описания рецепта"""
-        # Сначала пробуем найти в <meta name="title">
-        meta_title = self.soup.find('meta', {'name': 'title'})
-        if meta_title and meta_title.get('content'):
-            desc = self.clean_text(meta_title['content'])
-            if len(desc) > 20:
-                return desc
-        
-        # Ищем в og:description
-        og_desc = self.soup.find('meta', property='og:description')
-        if og_desc and og_desc.get('content'):
-            desc = self.clean_text(og_desc['content'])
-            # Проверяем, что это не просто "Stil 2024"
-            if len(desc) > 20 and desc != 'Stil 2024':
-                return desc
-        
         # Ищем в meta description
         meta_desc = self.soup.find('meta', {'name': 'description'})
         if meta_desc and meta_desc.get('content'):
             desc = self.clean_text(meta_desc['content'])
+            if len(desc) > 20 and desc != 'Stil 2024':
+                return desc
+        
+        # Альтернатива - из og:description
+        og_desc = self.soup.find('meta', property='og:description')
+        if og_desc and og_desc.get('content'):
+            desc = self.clean_text(og_desc['content'])
             if len(desc) > 20 and desc != 'Stil 2024':
                 return desc
         
@@ -92,7 +69,7 @@ class StilKurirExtractor(BaseRecipeExtractor):
         Парсинг строки ингредиента в структурированный формат
         
         Args:
-            text: Строка вида "200 g brašna" или "2 čena belog luka"
+            text: Строка вида "200 g (1 ½ šolje) „00" mekog pšeničnog brašna"
             
         Returns:
             dict: {"name": "...", "amount": ..., "units": "..."}
@@ -101,12 +78,15 @@ class StilKurirExtractor(BaseRecipeExtractor):
             return None
         
         text = self.clean_text(text)
+        original_text = text
         
-        # Паттерн: число + единица + название
-        # Примеры: "200 g brašna", "500 ml mleka", "2 kašike maslinovog ulja"
-        pattern = r'^(\d+(?:[.,]\d+)?)\s*(g|gr|kg|ml|l|kašik[ea]?|čen[a]?|kom[a]?|pieces?|pcs|tablespoons?|teaspoons?|tbsps?|tsps?|šolj[ea]?|cups?)?\s*(.+)'
+        # Удаляем запятые в конце
+        text = re.sub(r',\s*$', '', text).strip()
         
-        match = re.match(pattern, text, re.IGNORECASE)
+        # Паттерн 1: число + единица + название
+        # Примеры: "200 g (1 ½ šolje) „00" mekog pšeničnog brašna"
+        pattern1 = r'^(\d+(?:[.,]\d+)?)\s+(g|gr|kg|ml|l|kašik[ea]?|čen[a]?|kom[a]?|glavica?|pcs?|pieces?|cloves?|tablespoons?)\s+(.+)'
+        match = re.match(pattern1, text, re.IGNORECASE)
         
         if match:
             amount_str, unit, name = match.groups()
@@ -114,38 +94,143 @@ class StilKurirExtractor(BaseRecipeExtractor):
             # Обработка количества
             amount = amount_str.replace(',', '.')
             try:
-                # Пробуем преобразовать в число
                 amount = float(amount)
                 if amount == int(amount):
                     amount = int(amount)
             except:
                 pass
             
-            # Очистка названия
-            # Удаляем начальные одиночные буквы (артефакты парсинга типа "r putera")
-            name = re.sub(r'^[a-zA-Z]\s+', '', name)
-            # Удаляем скобки и содержимое
-            name = re.sub(r'\([^)]*\)', '', name)
-            # Удаляем запятые в конце
-            name = re.sub(r',\s*$', '', name)
-            name = name.strip()
+            # Удаляем скобки из названия
+            name = re.sub(r'\([^)]*\)', '', name).strip()
+            
+            # Очистка названия:
+            # Для "„00" mekog pšeničnog brašna" → должно быть "brašno '00'"
+            # Для "brašna od durum pšenice" → должно быть "brašno od durum pšenice"
+            # Для "mlevenog mesa (govedina i svinjetina)" → должно быть "mleveno meso (govedina i svinjetina)"
+            # Для "srednja glavica crnog luka, sitno seckana" → должно быть "crni luk"
+            # Для "svežih ili suvih kora za lazanje" → должно быть "kore za lazanje"
+            
+            # Если название начинается с кавычек, перемещаем их в конец перед основным словом
+            quote_match = re.match(r'^[„"]+(.+?)[""]+\s+(.+)', name)
+            if quote_match:
+                quote_text = quote_match.group(1)
+                rest = quote_match.group(2)
+                # "00" mekog pšeničnog brašna → brašno '00'
+                # Берем последнее слово из rest как основное слово
+                words = rest.split()
+                if words:
+                    main_word = words[-1]  # brašna
+                    # Преобразуем в именительный падеж (упрощенно)
+                    if main_word.endswith('a'):
+                        main_word = main_word[:-1] + 'o'  # brašna → brašno
+                    name = f"{main_word} '{quote_text}'"
+            else:
+                # Удаляем описательные прилагательные в начале
+                name = re.sub(r'^(srednja|sitno\s+seckana|seckana|usitnjene|pečene|rendani|rendanog|sve[žz]i[h]?|suvo[g]?|crveno[g]?|belo[g]?|crno[g]?|mekog|pšeničnog|isečene|svežih|ili|suvih)\s+', '', name, flags=re.IGNORECASE)
+                
+                # Удаляем текст после запятой (обычно описание способа приготовления)
+                name = re.sub(r',.*$', '', name)
+                
+                # Преобразуем из родительного падежа в именительный (упрощенно)
+                # mesa → meso, luka → luk, pirea → pire, vina → vino, ulja → ulje
+                # parmezana → parmezan, mocarele → mocarela, putera → puter, mleka → mleko
+                name_words = name.split()
+                if name_words:
+                    last_word = name_words[-1]
+                    # Простая эвристика для сербского языка
+                    if last_word.endswith('a') and len(last_word) > 3:
+                        # Проверяем, не артикль ли это (za, od, etc.)
+                        if last_word not in ['za', 'od', 'na', 'sa', 'pa']:
+                            # Преобразуем: mesa → meso, luka → luk, etc.
+                            if last_word.endswith('oga'):
+                                last_word = last_word[:-3] + 'i'  # crnog → crni
+                            elif last_word.endswith('ega'):
+                                last_word = last_word[:-3] + 'o'
+                            elif last_word.endswith('ana'):
+                                last_word = last_word[:-2]  # parmezana → parmezan
+                            elif last_word.endswith('ela') or last_word.endswith('ela'):
+                                pass  # mocarela остается
+                            elif last_word.endswith('era'):
+                                last_word = last_word[:-1]  # putera → puter
+                            elif last_word.endswith('eka'):
+                                last_word = last_word[:-1]  # mleka → mleko
+                            elif last_word.endswith('sa'):
+                                last_word = last_word[:-1]  # mesa → meso
+                            elif last_word.endswith('ka') and len(last_word) > 4:
+                                last_word = last_word[:-1]  # luka → luk
+                            elif last_word.endswith('nja'):
+                                last_word = last_word[:-1]  # brašnja → brašno (rare)
+                            elif last_word.endswith('na'):
+                                last_word = last_word[:-1] + 'o'  # pšeničnog → pšenično (rare)
+                            elif last_word.endswith('ea'):
+                                last_word = last_word[:-1]  # pirea → pire
+                            elif last_word.endswith('ca'):
+                                last_word = last_word[:-1]  # oraščića → oraščić
+                            name_words[-1] = last_word
+                            name = ' '.join(name_words)
+                
+                name = name.strip()
+            
+            # Нормализация единиц
+            unit_map = {
+                'gr': 'g',
+                'kom': 'pieces',
+                'koma': 'pieces',
+                'pcs': 'pieces',
+                'pc': 'pieces',
+                'čen': 'cloves',
+                'čena': 'cloves',
+                'clove': 'cloves',
+                'glavica': 'pieces',
+                'kašika': 'tablespoons',
+                'kašike': 'tablespoons',
+                'tablespoon': 'tablespoons',
+                'piece': 'pieces'
+            }
+            
+            units = unit_map.get(unit.lower(), unit.lower())
             
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit if unit else None
+                "units": units
             }
-        else:
-            # Если паттерн не совпал, возвращаем только название
-            # Удаляем начальные одиночные буквы
-            text = re.sub(r'^[a-zA-Z]\s+', '', text)
-            # Удаляем запятые в конце
-            name = re.sub(r',\s*$', '', text)
+        
+        # Паттерн 2: просто число + название (для "4 jaja od najmanje 70 g")
+        pattern2 = r'^(\d+)\s+([a-zšđčćžа-я]+)'
+        match2 = re.match(pattern2, text, re.IGNORECASE)
+        if match2:
+            amount_str, name = match2.groups()
+            amount = int(amount_str)
+            
+            # Удаляем все после названия
+            name = re.sub(r'\s+(od|za|sa|i|po|na).*$', '', name, flags=re.IGNORECASE)
+            
             return {
-                "name": name.strip(),
+                "name": name,
+                "amount": amount,
+                "units": "pieces"
+            }
+        
+        # Паттерн 3: только название без количества (So i biber po ukusu)
+        # Убираем фразы типа "po ukusu", "za dekoraciju"
+        name = re.sub(r'\s+(po\s+ukusu|za\s+dekoraciju)$', '', text, flags=re.IGNORECASE)
+        name = re.sub(r'\s+(i)\s+', ' ', name)  # "So i biber" → "So biber"
+        name = name.strip()
+        
+        if name and len(name) > 1:
+            # Разбиваем на отдельные ингредиенты если есть "i"
+            if ' i ' in name.lower():
+                # Возвращаем только первый
+                name = name.split(' i ')[0].strip()
+            
+            return {
+                "name": name,
                 "amount": None,
                 "units": None
             }
+        
+        return None
     
     def extract_ingredients(self) -> Optional[str]:
         """Извлечение ингредиентов в формате JSON"""
@@ -153,15 +238,29 @@ class StilKurirExtractor(BaseRecipeExtractor):
         
         # Ищем все списки <ul> в документе
         for ul in self.soup.find_all('ul'):
-            # Проверяем, содержит ли список ингредиенты (по ключевым словам)
+            # Проверяем, содержит ли список ингредиенты
             ul_text = ul.get_text().lower()
-            if any(word in ul_text for word in ['g ', 'ml ', 'brašn', 'mes', 'jaj', 'luk', 'putera', 'mleka']):
+            if any(word in ul_text for word in ['g ', 'ml ', 'brašn', 'mes', 'jaj', 'luk', 'putera', 'mleka', 'kašik']):
                 for li in ul.find_all('li'):
-                    ingredient_text = self.clean_text(li.get_text())
-                    if ingredient_text and len(ingredient_text) > 2:
-                        parsed = self.parse_ingredient_line(ingredient_text)
-                        if parsed and parsed.get('name'):
-                            ingredients.append(parsed)
+                    ingredient_text = li.get_text()
+                    if ingredient_text and len(ingredient_text.strip()) > 2:
+                        # Проверяем, есть ли "i" в тексте (например, "So i biber")
+                        if ' i ' in ingredient_text.lower() and 'po ukusu' in ingredient_text.lower():
+                            # Разбиваем на отдельные ингредиенты
+                            parts = re.split(r'\s+i\s+', ingredient_text.lower())
+                            for part in parts:
+                                part = re.sub(r'\s*(po\s+ukusu|za\s+dekoraciju).*$', '', part).strip()
+                                part = re.sub(r',\s*$', '', part).strip()
+                                if part and len(part) > 1:
+                                    ingredients.append({
+                                        "name": part,
+                                        "amount": None,
+                                        "units": None
+                                    })
+                        else:
+                            parsed = self.parse_ingredient_line(ingredient_text)
+                            if parsed and parsed.get('name'):
+                                ingredients.append(parsed)
         
         if ingredients:
             return json.dumps(ingredients, ensure_ascii=False)
@@ -173,21 +272,16 @@ class StilKurirExtractor(BaseRecipeExtractor):
         instructions = []
         
         # Ищем параграфы с инструкциями
-        # Обычно начинаются с "Priprema:" или содержат нумерацию
         for p in self.soup.find_all('p'):
             text = self.clean_text(p.get_text())
             
             # Пропускаем пустые и короткие параграфы
-            if not text or len(text) < 10:
+            if not text or len(text) < 20:
                 continue
             
-            # Если это заголовок раздела (например, "Priprema:"), пропускаем
-            if text.endswith(':') and len(text) < 50:
-                continue
-            
-            # Ищем параграфы с описанием приготовления
-            if any(word in text.lower() for word in ['zagrejati', 'dodati', 'peći', 'mešati', 'kuvati', 'sipati', 'otopiti', 'naneti']):
-                # Удаляем префиксы типа "Priprema ragu sosa:"
+            # Ищем параграфы с описанием приготовления (содержат глаголы действия)
+            if any(word in text.lower() for word in ['zagrejati', 'dodati', 'peći', 'peci', 'mešati', 'kuvati', 'sipati', 'otopiti', 'naneti', 'umutiti', 'poređati', 'oblikovati']):
+                # Удаляем префиксы типа "Priprema ragu sosa:" или "Priprema:"
                 text = re.sub(r'^[^:]+:\s*', '', text)
                 if text and len(text) > 20:
                     instructions.append(text)
@@ -196,14 +290,14 @@ class StilKurirExtractor(BaseRecipeExtractor):
         if instructions:
             # Разбиваем на предложения и нумеруем
             all_text = ' '.join(instructions)
-            # Разбиваем по точкам с заглавной буквой
-            sentences = re.split(r'\.\s+(?=[A-ZА-Я])', all_text)
+            # Разбиваем по точкам с заглавной буквой (начало нового предложения)
+            sentences = re.split(r'\.\s+(?=[A-ZА-ЯŠĐČĆŽ])', all_text)
             numbered = []
             for idx, sentence in enumerate(sentences, 1):
                 sentence = sentence.strip()
-                if sentence and not sentence.endswith('.'):
-                    sentence += '.'
                 if sentence:
+                    if not sentence.endswith('.'):
+                        sentence += '.'
                     numbered.append(f"{idx}. {sentence}")
             
             return ' '.join(numbered)
@@ -212,7 +306,7 @@ class StilKurirExtractor(BaseRecipeExtractor):
     
     def extract_category(self) -> Optional[str]:
         """Извлечение категории рецепта"""
-        # Пытаемся определить категорию по ключевым словам в заголовке/описании
+        # Определяем категорию по ключевым словам в заголовке
         title_tag = self.soup.find('title')
         h1 = self.soup.find('h1')
         
@@ -223,7 +317,7 @@ class StilKurirExtractor(BaseRecipeExtractor):
             text_to_check += " " + self.clean_text(h1.get_text()).lower()
         
         # Ключевые слова для десертов
-        dessert_keywords = ['kolač', 'torta', 'desert', 'sladol', 'čokolad', 'krem', 'puding', 'gurabije', 'keks']
+        dessert_keywords = ['kolač', 'torta', 'desert', 'sladol', 'čokolad', 'krem', 'puding', 'gurabije', 'keks', 'kolačić']
         if any(keyword in text_to_check for keyword in dessert_keywords):
             return "Dessert"
         
@@ -238,13 +332,11 @@ class StilKurirExtractor(BaseRecipeExtractor):
     def extract_cook_time(self) -> Optional[str]:
         """Извлечение времени приготовления"""
         # Ищем упоминания времени в тексте
-        # Приоритет: более длинные периоды (30-40 минут важнее 10 минут)
         times_found = []
         
         for p in self.soup.find_all('p'):
             text = self.clean_text(p.get_text())
-            # Ищем паттерны типа "30-40 minuta", "20 min", "180°C" (температура не время)
-            # Ищем все упоминания времени
+            # Ищем паттерны времени, исключая температуру
             time_matches = re.finditer(r'(\d+(?:-\d+)?)\s*(min(?:ut[ea]?)?|h)(?!\s*°)', text, re.IGNORECASE)
             for time_match in time_matches:
                 time_val = time_match.group(1)
@@ -256,7 +348,6 @@ class StilKurirExtractor(BaseRecipeExtractor):
         
         # Выбираем самое длинное время (обычно это общее время готовки)
         if times_found:
-            # Сортируем по длительности (если есть диапазон, берем максимум)
             def get_max_time(time_str):
                 if '-' in time_str:
                     return int(time_str.split('-')[1])
@@ -270,39 +361,26 @@ class StilKurirExtractor(BaseRecipeExtractor):
     
     def extract_prep_time(self) -> Optional[str]:
         """Извлечение времени подготовки"""
-        # Обычно не указано явно
         return None
     
     def extract_total_time(self) -> Optional[str]:
         """Извлечение общего времени"""
-        # Обычно не указано явно
         return None
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
-        # Ищем параграфы с советами или примечаниями
-        for p in self.soup.find_all('p'):
-            text = self.clean_text(p.get_text())
-            # Ищем советы (обычно короткие фразы)
-            if text and 10 < len(text) < 100:
-                # Проверяем, не является ли это инструкцией
-                if not any(word in text.lower() for word in ['zagrejati', 'dodati', 'peći', 'mešati']):
-                    # Проверяем на характерные фразы заметок
-                    if any(word in text.lower() for word in ['savršen', 'ukusn', 'mogu', 'trebalo']):
-                        return text
-        
         return None
     
     def extract_tags(self) -> Optional[str]:
         """Извлечение тегов рецепта"""
         tags = []
         
-        # Ищем теги в ссылках
+        # Ищем теги в ссылках с href="/tag/"
         for a in self.soup.find_all('a'):
             href = a.get('href', '')
             if '/tag/' in href:
                 tag_text = self.clean_text(a.get_text())
-                if tag_text and tag_text not in tags:
+                if tag_text and tag_text.lower() not in tags:
                     tags.append(tag_text.lower())
         
         if tags:
@@ -314,34 +392,28 @@ class StilKurirExtractor(BaseRecipeExtractor):
         """Извлечение URL изображений"""
         urls = []
         
-        # Ищем в meta-тегах
+        # Ищем в meta-тегах og:image
         og_image = self.soup.find('meta', property='og:image')
         if og_image and og_image.get('content'):
             url = og_image['content']
             # Проверяем, что это не логотип
-            if 'logo' not in url.lower() and 'icon' not in url.lower():
+            if not any(skip in url.lower() for skip in ['logo', 'icon']):
                 urls.append(url)
         
-        twitter_image = self.soup.find('meta', attrs={'name': 'twitter:image'})
-        if twitter_image and twitter_image.get('content'):
-            url = twitter_image['content']
-            if 'logo' not in url.lower() and 'icon' not in url.lower():
-                urls.append(url)
-        
-        # Ищем изображения в <picture> и <img> тегах
+        # Дополнительно ищем в <img> тегах статьи
         for img in self.soup.find_all('img'):
-            src = img.get('src')
+            src = img.get('src', '')
             if src and 'static-stil.kurir.rs' in src:
                 # Пропускаем логотипы и иконки
-                if any(skip in src.lower() for skip in ['logo', 'icon', 'povrataknakuriritalic']):
+                if any(skip in src.lower() for skip in ['logo', 'icon', 'povratak']):
                     continue
                 if src not in urls:
                     urls.append(src)
                 if len(urls) >= 3:
                     break
         
-        # Убираем дубликаты
         if urls:
+            # Убираем дубликаты, сохраняя порядок
             seen = set()
             unique_urls = []
             for url in urls:
@@ -360,25 +432,17 @@ class StilKurirExtractor(BaseRecipeExtractor):
         Returns:
             Словарь с данными рецепта
         """
-        dish_name = self.extract_dish_name()
-        description = self.extract_description()
-        ingredients = self.extract_ingredients()
-        instructions = self.extract_steps()
-        category = self.extract_category()
-        notes = self.extract_notes()
-        tags = self.extract_tags()
-        
         return {
-            "dish_name": dish_name,
-            "description": description,
-            "ingredients": ingredients,
-            "instructions": instructions,
-            "category": category,
+            "dish_name": self.extract_dish_name(),
+            "description": self.extract_description(),
+            "ingredients": self.extract_ingredients(),
+            "instructions": self.extract_steps(),
+            "category": self.extract_category(),
             "prep_time": self.extract_prep_time(),
             "cook_time": self.extract_cook_time(),
             "total_time": self.extract_total_time(),
-            "notes": notes,
-            "tags": tags,
+            "notes": self.extract_notes(),
+            "tags": self.extract_tags(),
             "image_urls": self.extract_image_urls()
         }
 
