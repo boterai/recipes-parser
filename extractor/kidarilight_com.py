@@ -15,6 +15,21 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class KidarilightExtractor(BaseRecipeExtractor):
     """Экстрактор для kidarilight.com"""
     
+    # Константы
+    MAX_IMAGES = 5
+    
+    # Общие ингредиенты для поиска в тексте
+    COMMON_INGREDIENTS = [
+        '대파', '편마늘', '마늘', '양파', '감자', '당근', '파프리카', '애호박', 
+        '브로콜리', '토마토', '버섯', '양배추', '얼린두부', '두부', '물', 
+        '카레가루', '강황분말', '가람마살라', '전분가루', '전분', '쌀가루', '간장', 
+        '소금', '기름', '참기름', '깨', '고춧가루', '후추', '설탕', '식초',
+        '도라지', '미역줄기', '고춧잎', '청경채', '올리고당', '콩', '고기',
+        '해산물', '돼지고기', '닭고기', '소고기', '새우', '오징어', '조개',
+        '양송이버섯', '팽이버섯', '느타리버섯', '표고버섯', '들기름', '된장',
+        '고추장', '국간장', '진간장', '조청', '굴소스', '참깨', '통깨'
+    ]
+    
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
         # Ищем в og:title
@@ -69,21 +84,8 @@ class KidarilightExtractor(BaseRecipeExtractor):
         # Получаем весь текст контента
         full_text = content.get_text()
         
-        # Список всех возможных ингредиентов, которые мы ищем
-        # Будем искать их упоминания в тексте
-        common_ingredients = [
-            '대파', '편마늘', '마늘', '양파', '감자', '당근', '파프리카', '애호박', 
-            '브로콜리', '토마토', '버섯', '양배추', '얼린두부', '두부', '물', 
-            '카레가루', '강황분말', '가람마살라', '전분가루', '전분', '쌀가루', '간장', 
-            '소금', '기름', '참기름', '깨', '고춧가루', '후추', '설탕', '식초',
-            '도라지', '미역줄기', '고춧잎', '청경채', '올리고당', '콩', '고기',
-            '해산물', '돼지고기', '닭고기', '소고기', '새우', '오징어', '조개',
-            '양송이버섯', '팽이버섯', '느타리버섯', '표고버섯', '들기름', '된장',
-            '고추장', '국간장', '진간장', '조청', '굴소스', '참깨', '통깨'
-        ]
-        
         # Ищем ингредиенты в тексте
-        for ing in common_ingredients:
+        for ing in self.COMMON_INGREDIENTS:
             if ing in full_text:
                 # Проверяем, не добавили ли уже этот ингредиент
                 if ing not in found_ingredients:
@@ -112,41 +114,6 @@ class KidarilightExtractor(BaseRecipeExtractor):
                     found_ingredients.add(ing)
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
-    
-    def parse_ingredient_korean(self, ingredient_text: str) -> Optional[dict]:
-        """
-        Парсинг корейского ингредиента
-        
-        Args:
-            ingredient_text: Строка вида "토마토 2개" или "물"
-            
-        Returns:
-            dict: {"name": "토마토", "amount": "2", "units": "개"} или None
-        """
-        if not ingredient_text:
-            return None
-        
-        text = self.clean_text(ingredient_text)
-        
-        # Паттерн для извлечения количества и единицы измерения
-        # Примеры: "토마토 2개", "물 500ml", "소금 1스푼"
-        pattern = r'^(.+?)\s*(\d+(?:\.\d+)?)\s*([가-힣a-zA-Z]+)$'
-        match = re.match(pattern, text)
-        
-        if match:
-            name, amount, units = match.groups()
-            return {
-                "name": name.strip(),
-                "amount": amount,
-                "units": units
-            }
-        
-        # Если нет количества, возвращаем только название
-        return {
-            "name": text,
-            "amount": None,
-            "units": None
-        }
     
     def extract_instructions(self) -> Optional[str]:
         """Извлечение шагов приготовления"""
@@ -323,10 +290,15 @@ class KidarilightExtractor(BaseRecipeExtractor):
         
         # 3. Ищем изображения в контенте статьи
         content = self.soup.find('div', class_='tt_article_useless_p_margin')
+        if not content:
+            content = self.soup.find('div', class_='entry-content')
+        if not content:
+            content = self.soup.find('div', id='article-view')
+        
         if content:
             # Ищем все figure с изображениями
             figures = content.find_all('figure', class_='imageblock')
-            for fig in figures[:5]:  # Ограничиваем до 5 изображений
+            for fig in figures[:self.MAX_IMAGES]:  # Ограничиваем количество изображений
                 img = fig.find('img')
                 if img and img.get('src'):
                     url = img['src']
