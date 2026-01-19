@@ -1,5 +1,5 @@
 """
-Экстрактор данных рецептов для сайта mesrecettes.info
+Recipe data extractor for mesrecettes.info website
 """
 
 import sys
@@ -13,10 +13,10 @@ from extractor.base import BaseRecipeExtractor, process_directory
 
 
 class MesRecettesExtractor(BaseRecipeExtractor):
-    """Экстрактор для mesrecettes.info"""
+    """Extractor for mesrecettes.info website"""
     
     def extract_dish_name(self) -> Optional[str]:
-        """Извлечение названия блюда"""
+        """Extract recipe name"""
         # Ищем в мета-теге og:title
         og_title = self.soup.find('meta', property='og:title')
         if og_title and og_title.get('content'):
@@ -35,7 +35,7 @@ class MesRecettesExtractor(BaseRecipeExtractor):
         return None
     
     def extract_description(self) -> Optional[str]:
-        """Извлечение описания рецепта"""
+        """Extract recipe description"""
         # Ищем в meta description
         meta_desc = self.soup.find('meta', {'name': 'description'})
         if meta_desc and meta_desc.get('content'):
@@ -50,13 +50,13 @@ class MesRecettesExtractor(BaseRecipeExtractor):
     
     def parse_ingredient_line(self, line: str) -> Optional[dict]:
         """
-        Парсинг строки ингредиента в структурированный формат
+        Parse ingredient line into structured format
         
         Args:
-            line: Строка вида "1 kg de pommes de terre" или "Sel"
+            line: String like "1 kg de pommes de terre" or "Sel"
             
         Returns:
-            dict: {"name": "pommes de terre", "amount": "1", "units": "kg"} или None
+            dict: {"name": "pommes de terre", "amount": "1", "units": "kg"} or None
         """
         if not line:
             return None
@@ -98,33 +98,42 @@ class MesRecettesExtractor(BaseRecipeExtractor):
         
         amount_str, unit, name = match.groups()
         
-        # Обработка количества - сохраняем дроби как они есть
+        # Handle amount - preserve simple fractions as strings
         amount = None
         if amount_str:
             amount_str = amount_str.strip()
-            # Для дробей сохраняем исходный формат, но нормализуем смешанные дроби
+            # For fractions, preserve the original format, but normalize mixed fractions
             if '/' in amount_str:
-                # Если это смешанная дробь типа "1 1/2", преобразуем в десятичное
+                # If it's a mixed fraction like "1 1/2", convert to decimal
                 parts = amount_str.split()
                 if len(parts) > 1:
-                    # Смешанная дробь - преобразуем в десятичное
+                    # Mixed fraction - convert to decimal
                     total = 0
                     for part in parts:
                         if '/' in part:
                             num, denom = part.split('/')
-                            total += float(num) / float(denom)
+                            try:
+                                if int(denom) == 0:
+                                    # Skip invalid fraction
+                                    continue
+                                total += float(num) / float(denom)
+                            except (ValueError, ZeroDivisionError):
+                                continue
                         else:
-                            total += float(part.replace(',', '.'))
-                    # Форматируем с одной цифрой после запятой
+                            try:
+                                total += float(part.replace(',', '.'))
+                            except ValueError:
+                                continue
+                    # Format with one decimal place
                     if total == int(total):
                         amount = str(int(total))
                     else:
                         amount = str(round(total, 1))
                 else:
-                    # Простая дробь - сохраняем как есть
+                    # Simple fraction - keep as is
                     amount = amount_str
             else:
-                # Заменяем запятую на точку для десятичных чисел
+                # Replace comma with dot for decimal numbers
                 amount = amount_str.replace(',', '.')
         
         # Обработка единицы измерения
@@ -158,7 +167,7 @@ class MesRecettesExtractor(BaseRecipeExtractor):
         }
     
     def extract_ingredients(self) -> Optional[str]:
-        """Извлечение ингредиентов"""
+        """Extract ingredients list"""
         ingredients = []
         
         # Ищем заголовок "Ingrédients"
@@ -189,21 +198,21 @@ class MesRecettesExtractor(BaseRecipeExtractor):
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
     def extract_instructions(self) -> Optional[str]:
-        """Извлечение шагов приготовления"""
+        """Extract preparation instructions"""
         instructions = []
         
-        # Ищем заголовок "Préparation" или "Comment faire"
+        # Look for "Préparation" or "Comment faire" heading
         prep_heading = self.soup.find('h2', id='preparation')
         if not prep_heading:
             prep_heading = self.soup.find('h2', string=re.compile(r'Pr[ée]paration', re.I))
         
-        # Также ищем заголовок "Comment faire..."
+        # Also look for "Comment faire..." heading
         comment_heading = self.soup.find('h2', string=re.compile(r'Comment faire', re.I))
         
-        # Используем тот заголовок, который идет раньше
+        # Use whichever heading comes first in the document
         start_heading = None
         if prep_heading and comment_heading:
-            # Проверяем, какой идет раньше в документе
+            # Check which comes first in the document
             all_h2 = self.soup.find_all('h2')
             prep_idx = all_h2.index(prep_heading) if prep_heading in all_h2 else float('inf')
             comment_idx = all_h2.index(comment_heading) if comment_heading in all_h2 else float('inf')
@@ -214,24 +223,24 @@ class MesRecettesExtractor(BaseRecipeExtractor):
             start_heading = comment_heading
         
         if start_heading:
-            # Собираем все параграфы после заголовка
+            # Collect all paragraphs after the heading
             current = start_heading.find_next_sibling()
             while current:
-                # Останавливаемся на следующем крупном разделе
+                # Stop at the next major section (WordPress uses wp-block-group class for section wrappers)
                 if current.name in ['h1', 'div'] and 'wp-block-group' in current.get('class', []):
                     break
                 
-                # Пропускаем промежуточные заголовки h2
+                # Skip intermediate h2 headings
                 if current.name == 'h2':
                     current = current.find_next_sibling()
                     continue
                 
                 if current.name == 'p':
                     text = self.clean_text(current.get_text())
-                    if text and len(text) > 5:  # Пропускаем очень короткие параграфы
+                    if text and len(text) > 5:  # Skip very short paragraphs
                         instructions.append(text)
                 
-                # Проверяем наличие комментария "CONTENT END", который означает конец контента
+                # Check for content end marker (WordPress comment indicating content boundary)
                 if current.name == 'div' or (isinstance(current, str) and 'CONTENT END' in str(current)):
                     break
                 
@@ -240,7 +249,7 @@ class MesRecettesExtractor(BaseRecipeExtractor):
         return ' '.join(instructions) if instructions else None
     
     def extract_category(self) -> Optional[str]:
-        """Извлечение категории"""
+        """Extract recipe category"""
         # Ищем в JSON-LD breadcrumb
         scripts = self.soup.find_all('script', type='application/ld+json')
         for script in scripts:
@@ -273,7 +282,7 @@ class MesRecettesExtractor(BaseRecipeExtractor):
     
     def extract_time_info(self) -> tuple:
         """
-        Извлечение информации о времени
+        Extract time information
         
         Returns:
             Кортеж (prep_time, cook_time, total_time)
@@ -321,19 +330,23 @@ class MesRecettesExtractor(BaseRecipeExtractor):
                 if prep_time or cook_time or total_time:
                     break
         
-        # Если total_time не найден, но есть prep_time и cook_time, вычисляем
+        # If total_time not found but have prep_time and cook_time, calculate it
         if not total_time and prep_time and cook_time:
             try:
-                prep_mins = int(re.search(r'(\d+)', prep_time).group(1))
-                cook_mins = int(re.search(r'(\d+)', cook_time).group(1))
-                total_time = f"{prep_mins + cook_mins} minutes"
-            except:
+                prep_match = re.search(r'(\d+)', prep_time)
+                cook_match = re.search(r'(\d+)', cook_time)
+                if prep_match and cook_match:
+                    prep_mins = int(prep_match.group(1))
+                    cook_mins = int(cook_match.group(1))
+                    total_time = f"{prep_mins + cook_mins} minutes"
+            except (ValueError, AttributeError):
+                # If parsing fails, leave total_time as None
                 pass
         
         return prep_time, cook_time, total_time
     
     def extract_notes(self) -> Optional[str]:
-        """Извлечение заметок и советов"""
+        """Extract notes and tips"""
         # Для этого сайта заметки обычно отсутствуют
         # Можно искать секции типа "Conseil", "Astuce", "Note" и т.д.
         notes_keywords = ['conseil', 'astuce', 'note', 'remarque']
@@ -356,13 +369,13 @@ class MesRecettesExtractor(BaseRecipeExtractor):
         return None
     
     def extract_tags(self) -> Optional[str]:
-        """Извлечение тегов"""
+        """Extract recipe tags"""
         # На этом сайте теги обычно отсутствуют в HTML
         # Можно попробовать извлечь из категорий или ключевых слов
         return None
     
     def extract_image_urls(self) -> Optional[str]:
-        """Извлечение URL изображений"""
+        """Extract image URLs"""
         urls = []
         
         # 1. Ищем в мета-тегах
@@ -403,7 +416,7 @@ class MesRecettesExtractor(BaseRecipeExtractor):
     
     def extract_all(self) -> dict:
         """
-        Извлечение всех данных рецепта
+        Extract all recipe data
         
         Returns:
             Словарь с данными рецепта
@@ -435,7 +448,7 @@ class MesRecettesExtractor(BaseRecipeExtractor):
 
 def main():
     """
-    Точка входа для тестирования парсера
+    Entry point for testing the parser
     """
     import os
     
