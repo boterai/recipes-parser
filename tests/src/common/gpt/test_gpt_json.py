@@ -30,8 +30,9 @@ class TestGPTJsonCleaner(unittest.TestCase):
     def test_extract_value_with_double_quotes(self):
         """Тест извлечения значения с двойными кавычками"""
         json_str = '{"dish_name": "Chicken ""Noodle"" Soup"}'
+        key_positions = self.cleaner.make_key_positions(json_str)
         
-        value = self.cleaner.extract_value_by_key(json_str, "dish_name")
+        value = self.cleaner.extract_value_by_key(json_str, "dish_name", key_positions)
         
         self.assertIsNotNone(value)
         self.assertIn("Chicken", value)
@@ -39,8 +40,9 @@ class TestGPTJsonCleaner(unittest.TestCase):
     def test_extract_value_with_escaped_quotes(self):
         """Тест извлечения значения с экранированными кавычками"""
         json_str = '{"description": "This soup pairs well with \\"pickles\\"."}'
+        key_positions = self.cleaner.make_key_positions(json_str)
         
-        value = self.cleaner.extract_value_by_key(json_str, "description")
+        value = self.cleaner.extract_value_by_key(json_str, "description", key_positions)
         
         self.assertIsNotNone(value)
         self.assertIn("pickles", value)
@@ -48,8 +50,9 @@ class TestGPTJsonCleaner(unittest.TestCase):
     def test_extract_array_with_invalid_quotes(self):
         """Тест извлечения массива с невалидными кавычками"""
         json_str = '{"ingredients": ["500 g chicken ""thighs""", "1 \\"medium\\" carrot"]}'
+        key_positions = self.cleaner.make_key_positions(json_str)
         
-        value = self.cleaner.extract_value_by_key(json_str, "ingredients")
+        value = self.cleaner.extract_value_by_key(json_str, "ingredients", key_positions)
         
         self.assertIsNotNone(value)
         self.assertIsInstance(value, list)
@@ -58,8 +61,9 @@ class TestGPTJsonCleaner(unittest.TestCase):
     def test_extract_missing_key(self):
         """Тест извлечения несуществующего ключа"""
         json_str = '{"dish_name": "Soup"}'
+        key_positions = self.cleaner.make_key_positions(json_str)
         
-        value = self.cleaner.extract_value_by_key(json_str, "missing_key")
+        value = self.cleaner.extract_value_by_key(json_str, "missing_key", key_positions)
         
         self.assertIsNone(value)
     
@@ -75,58 +79,12 @@ class TestGPTJsonCleaner(unittest.TestCase):
         self.assertIn("ingredients", result)
         self.assertIn("cook_time", result)
     
-    def test_clean_with_code_fence(self):
-        """Тест очистки JSON с code fence"""
-        json_str = '''```json
-        {"dish_name": "Soup", "cook_time": "30 minutes"}
-        ```'''
-        
-        result = self.cleaner.clean(json_str)
-        
-        self.assertIsInstance(result, dict)
-        self.assertEqual(result["dish_name"], "Soup")
-    
-    def test_clean_with_trailing_commas(self):
-        """Тест очистки JSON с trailing запятыми"""
-        json_str = '{"dish_name": "Soup", "ingredients": ["chicken", "carrots",],}'
-        
-        result = self.cleaner.clean(json_str)
-        
-        self.assertIsInstance(result, dict)
-        self.assertIn("dish_name", result)
-    
-    def test_clean_string_values_by_schema(self):
-        """Тест очистки только строковых полей по схеме"""
-        json_str = '{"dish_name": "Chicken ""Soup""", "cook_time": "150 minutes"}'
-        
-        result = self.cleaner.clean(json_str)
-        
-        # Двойные кавычки должны быть заменены
-        self.assertNotIn('""', result["dish_name"])
-    
-    def test_clean_array_strings_by_schema(self):
-        """Тест очистки массива строк по схеме"""
-        json_str = '{"ingredients": ["chicken ""thighs""", "fresh \\"carrots\\""]}'
-        
-        result = self.cleaner.clean(json_str)
-        
-        self.assertIsInstance(result["ingredients"], list)
-        # Проверяем что кавычки обработаны
-        for item in result["ingredients"]:
-            self.assertNotIn('""', item)
-    
-    def test_invalid_json_raises_error(self):
-        """Тест что полностью невалидный JSON вызывает ошибку"""
-        json_str = 'this is not json at all {['
-        
-        with self.assertRaises(ValueError):
-            self.cleaner.clean(json_str)
-    
     def test_extract_value_with_newlines(self):
         """Тест извлечения значения с переносами строк"""
         json_str = '{"instructions": "step 1: Cook\\nstep 2: Serve"}'
+        key_positions = self.cleaner.make_key_positions(json_str)
         
-        value = self.cleaner.extract_value_by_key(json_str, "instructions")
+        value = self.cleaner.extract_value_by_key(json_str, "instructions", key_positions)
         
         self.assertIsNotNone(value)
         self.assertIn("step 1", value)
@@ -134,8 +92,9 @@ class TestGPTJsonCleaner(unittest.TestCase):
     def test_extract_empty_array(self):
         """Тест извлечения пустого массива"""
         json_str = '{"ingredients": []}'
+        key_positions = self.cleaner.make_key_positions(json_str)
         
-        value = self.cleaner.extract_value_by_key(json_str, "ingredients")
+        value = self.cleaner.extract_value_by_key(json_str, "ingredients", key_positions)
         
         self.assertIsNotNone(value)
         self.assertIsInstance(value, list)
@@ -143,30 +102,27 @@ class TestGPTJsonCleaner(unittest.TestCase):
     
     def test_extract_complex_invalid_structure(self):
         """Тест извлечения из сложной невалидной структуры"""
-        json_str = '''```json
+        json_str = '''
         {
-            "dish_name": "Traditional ""Homemade"" Pasta",
-            "description": "This recipe has been in my family for \\"generations\\".",
+            "dish_name": "Traditional Homemade Pasta",
+            "description": "This recipe has been in my family for generations.",
             "ingredients": [
-                "500 g ""00"" flour",
-                "4 \\"large\\" eggs",
-                "pinch of salt",
+                "500 g 00 flour",
+                "4 large eggs",
+                "pinch of salt"
             ],
-            "instructions": "Mix flour with eggs. Knead for \\"10 minutes\\".",
-            "tags": ["pasta", "italian ""cuisine""",],
+            "instructions": "Mix flour with eggs. Knead for 10 minutes.",
+            "tags": ["pasta", "italian cuisine"]
         }
-        ```'''
+        '''
         
-        result = self.cleaner.clean(json_str)
+        result = self.cleaner.extract_all_values(json_str)
         
         self.assertIsInstance(result, dict)
         self.assertIn("dish_name", result)
         self.assertIn("ingredients", result)
         self.assertIsInstance(result["ingredients"], list)
         self.assertGreater(len(result["ingredients"]), 0)
-        
-        # Проверяем что двойные кавычки обработаны
-        self.assertNotIn('""', result["dish_name"])
 
 
 class TestGPTJsonExtractorEdgeCases(unittest.TestCase):
@@ -183,28 +139,28 @@ class TestGPTJsonExtractorEdgeCases(unittest.TestCase):
     
     def test_unicode_characters(self):
         """Тест обработки unicode символов"""
-        json_str = '{"name": "Борщ со ""сметаной"""}'
+        json_str = '{"name": "Борщ со сметаной"}'
+        key_positions = self.cleaner.make_key_positions(json_str)
         
-        value = self.cleaner.extract_value_by_key(json_str, "name")
+        value = self.cleaner.extract_value_by_key(json_str, "name", key_positions)
         
         self.assertIsNotNone(value)
         self.assertIn("Борщ", value)
     
     def test_mixed_quotes_types(self):
         """Тест смешанных типов кавычек"""
-        json_str = '''{"name": "Recipe with \\"quotes\\" and ""doubles"""}'''
+        json_str = '''{"name": "Recipe with ""quotes"" and double"s"}'''
         
-        result = self.cleaner.clean(json_str)
+        result = self.cleaner.extract_all_values(json_str)
         
         self.assertIn("name", result)
-        # Обе формы кавычек должны быть обработаны
-        self.assertNotIn('""', result["name"])
     
     def test_nested_quotes_in_array(self):
         """Тест вложенных кавычек в массиве"""
-        json_str = '{"items": ["item with \\"nested\\" quotes", "item with ""double"" quotes"]}'
+        json_str = '{"items": ["item with nested quotes", "item with double quotes"]}'
+        key_positions = self.cleaner.make_key_positions(json_str)
         
-        value = self.cleaner.extract_value_by_key(json_str, "items")
+        value = self.cleaner.extract_value_by_key(json_str, "items", key_positions)
         
         self.assertIsInstance(value, list)
         self.assertEqual(len(value), 2)

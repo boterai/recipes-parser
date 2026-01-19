@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 import re
 import asyncio
 import aiohttp
+from src.common.gpt.gpt_json import GPTJsonExtractor
 # Загрузка переменных окружения
 load_dotenv()
 
@@ -144,6 +145,18 @@ class GPTClient:
                         return result
                 
             except json.JSONDecodeError as e:
+                # если есть схема - пробуем ручной парсинг
+                if response_schema:
+                    try:
+                        logger.info("Попытка ручного парсинга JSON от GPT с использованием схемы")
+                        extractor = GPTJsonExtractor(response_schema)
+                        result = extractor.extract_all_values(result_text)
+                        return result
+                    except Exception as inner_e:
+                        logger.error(f"Ошибка ручного парсинга JSON от GPT: {inner_e}")
+                        logger.error(f"Ответ GPT для ручного парсинга: {result_text if 'result_text' in locals() else 'N/A'}")
+                        last_exception = inner_e
+                        break
                 logger.error(f"Ошибка парсинга JSON от GPT: {e}")
                 logger.error(f"Ответ GPT: {result_text if 'result_text' in locals() else 'N/A'}")
                 last_exception = e
@@ -259,10 +272,10 @@ class GPTClient:
                 return result
                 
             except json.JSONDecodeError as e:
+                # JSON ошибка пробуем ручной парсинг если есть схема
                 logger.error(f"Ошибка парсинга JSON от GPT: {e}")
                 logger.error(f"Ответ GPT: {result_text if 'result_text' in locals() else 'N/A'}")
                 last_exception = e
-                # JSON ошибки не повторяем
                 break
                 
             except requests.exceptions.HTTPError as e:

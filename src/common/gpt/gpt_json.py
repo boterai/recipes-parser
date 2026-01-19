@@ -106,7 +106,8 @@ class GPTJsonExtractor:
                 break
             if k == key:
                 pos = end
-
+        if pos is None:
+            return None
         # Определяем тип значения
         i = pos
         while i < len(json_str) and json_str[i] in ' \t\n':
@@ -122,9 +123,7 @@ class GPTJsonExtractor:
         
         return None
     
-    def extract_all_values(self, json_str: str) -> dict:
-        """Извлечь все значения по схеме"""
-
+    def make_key_positions(self, json_str: str) -> dict:
         key_positions = {}
         for key in self.properties.keys():
             pos = self._find_key_position(json_str, key)
@@ -132,6 +131,11 @@ class GPTJsonExtractor:
                 key_positions[key] = (pos - len(key) - 3, pos)  # start and end of key match
         
         key_positions = dict(sorted(key_positions.items(), key=lambda item: item[1][0]))
+        return key_positions
+    
+    def extract_all_values(self, json_str: str) -> dict:
+        """Извлечь все значения по схеме"""        
+        key_positions = self.make_key_positions(json_str)
 
         result = {}
         

@@ -51,6 +51,9 @@ class Translator:
         # Инициализация GPT клиента
         self.gpt_client = GPTClient()
 
+        with open("src/models/schemas/translated_recipe.json", "r", encoding="utf-8") as f:
+            self.translation_schema = json.load(f)
+
         if self.olap_db.connect() is False:
             logger.error("Не удалось подключиться к ClickHouse")
             raise RuntimeError("ClickHouse connection failed")
@@ -237,7 +240,8 @@ IMPORTANT:
                 user_prompt=user_prompt,
                 model="gpt-3.5-turbo",
                 temperature=0.3,
-                max_tokens=3000
+                max_tokens=3000,
+                response_schema=self.translation_schema
             )
             
             # Парсим ответ от GPT
@@ -278,7 +282,5 @@ IMPORTANT:
                 return
         
         for i in site_ids:
-            #if i < 32:
-            #    continue  # пропускаем сайты с маленькими ID (тестовые и т.п.)
             await self.translate_and_save_batch(site_id=i, batch_size=batch_size)
             
