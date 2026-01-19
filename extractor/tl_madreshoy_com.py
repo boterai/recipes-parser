@@ -172,6 +172,7 @@ class TlMadreshoyComExtractor(BaseRecipeExtractor):
     def extract_instructions(self) -> Optional[str]:
         """Извлечение шагов приготовления в виде строки"""
         steps = []
+        step_num = 1
         
         # Сначала пробуем из JSON-LD articleBody
         json_ld = self._get_json_ld_data()
@@ -181,52 +182,108 @@ class TlMadreshoyComExtractor(BaseRecipeExtractor):
             lines = article_body.split('\n')
             in_instructions_section = False
             
-            for line in lines:
-                line = line.strip()
+            for i, original_line in enumerate(lines):
+                line = original_line.strip()
+                
                 # Проверяем начало секции инструкций
                 if any(keyword in line.lower() for keyword in ['paano', 'hakbang', 'step', 'instruction', 'preparation']):
                     in_instructions_section = True
                     continue
                 
-                # Извлекаем шаги
-                if in_instructions_section and line:
-                    # Проверяем, начинается ли с цифры или маркера шага
-                    if re.match(r'^\d+\.?\s', line) or re.match(r'^-\s', line):
-                        steps.append(line)
-                    # Или просто текст после секции инструкций
-                    elif len(steps) > 0:  # Уже начали собирать шаги
-                        # Останавливаемся на новой секции
-                        if any(keyword in line.lower() for keyword in ['sangkap', 'note', 'tip']):
-                            break
-                        steps.append(line)
+                # Извлекаем шаги 
+                if in_instructions_section:
+                    # Останавливаемся на новой секции
+                    if any(keyword in line.lower() for keyword in ['paano gamitin', 'note', 'tip']) and len(steps) > 0:
+                        break
+                    
+                    # Пропускаем список ингредиентов (начинается с чисел + единицы измерения)
+                    if re.match(r'^\d+\s*(?:gr|ml|g|kg|l|kutsara|kutsarita|tasa)\s', line.lower()):
+                        continue
+                    
+                    # Ищем строки с отступами (пробел или табуляция) - это шаги
+                    # Строка должна начинаться с пробела или табуляции и быть достаточно длинной
+                    # Также не должна быть очень короткой (менее 30 символов) - это скорее всего ингредиент
+                    if original_line and (original_line[0] == ' ' or original_line[0] == '\t') and len(line) > 30:
+                        steps.append(f"{step_num}. {line}")
+                        step_num += 1
         
         # Если не нашли в JSON-LD, ищем в HTML
         if not steps:
             content_area = self.soup.find(class_=re.compile(r'post-content|article-content|entry-content', re.I))
             
             if content_area:
-                # Ищем нумерованные списки (ol)
-                ordered_lists = content_area.find_all('ol')
-                for ol in ordered_lists:
-                    items = ol.find_all('li')
-                    for idx, item in enumerate(items, 1):
-                        step_text = self.clean_text(item.get_text())
-                        if step_text:
-                            if not re.match(r'^\d+\.', step_text):
-                                steps.append(f"{idx}. {step_text}")
-                            else:
-                                steps.append(step_text)
-                    
-                    if steps:
-                        break
+                # Флаг для отслеживания, когда начинаются инструкции
+                in_instructions = False
+                found_instructions_list = False
                 
-                # Если не нашли ol, ищем абзацы с шагами
-                if not steps:
-                    paragraphs = content_area.find_all('p')
-                    for p in paragraphs:
-                        text = self.clean_text(p.get_text())
-                        if text and re.match(r'^\d+\.', text):
-                            steps.append(text)
+                # Проходим по всем элементам контента
+                for element in content_area.children:
+                    if not hasattr(element, 'name'):
+                        continue
+                    
+                    # Проверяем заголовки на начало секции инструкций
+                    if element.name in ['h2', 'h3', 'h4']:
+                        heading_text = self.clean_text(element.get_text()).lower()
+                        
+                        # Проверяем, является ли это заголовком ингредиентов
+                        if any(keyword in heading_text for keyword in ['sangkap', 'ingredient', 'itong kailangan']):
+                            in_instructions = False
+                            found_instructions_list = False
+                            continue
+                        
+                        # Проверяем, является ли это заголовком инструкций
+                        if any(keyword in heading_text for keyword in ['paano', 'hakbang', 'step', 'instruction', 'preparation', 'sunud-sunod']):
+                            in_instructions = True
+                            found_instructions_list = False
+                            continue
+                        elif in_instructions and found_instructions_list:
+                            # Останавливаемся на следующем заголовке, только если уже нашли инструкции
+                            break
+                    
+                    # Обрабатываем списки (ol и ul) в секции инструкций
+                    if in_instructions and element.name in ['ol', 'ul']:
+                        items = element.find_all('li', recursive=False)
+                        if not items:
+                            continue
+                        
+                        # Проверяем первый элемент - если начинается с количества, это скорее всего ингредиенты
+                        first_item_text = self.clean_text(items[0].get_text()).lower()
+                        if re.match(r'^\d+\s*(?:gr|ml|g|kg|l|kutsara|kutsarita|tasa|tablespoon)', first_item_text):
+                            # Это список ингредиентов, пропускаем и продолжаем искать
+                            continue
+                        
+                        # Это список инструкций
+                        found_instructions_list = True
+                        
+                        for idx, item in enumerate(items, 1):
+                            step_text = self.clean_text(item.get_text())
+                            # Убираем жирное форматирование с начала
+                            step_text = re.sub(r'^[^:\.]+[:\.]\s*', '', step_text)
+                            
+                            if step_text and len(step_text) > 10:
+                                if not re.match(r'^\d+\.', step_text):
+                                    steps.append(f"{idx}. {step_text}")
+                                else:
+                                    steps.append(step_text)
+                        
+                        # Нашли инструкции, можем остановиться
+                        if steps:
+                            break
+                    
+                    # Обрабатываем параграфы с шагами в секции инструкций
+                    if in_instructions and element.name == 'p':
+                        text = self.clean_text(element.get_text())
+                        
+                        # Проверяем, что это не ингредиент
+                        if text and not re.match(r'^\d+\s*(?:gr|ml|g|kg|l|kutsara|kutsarita|tasa)\s', text.lower()):
+                            # Если текст начинается с номера, используем его как есть
+                            if re.match(r'^\d+\.', text):
+                                found_instructions_list = True
+                                steps.append(text)
+                            # Если текст достаточно длинный (вероятно шаг приготовления)
+                            elif len(text) > 40:
+                                found_instructions_list = True
+                                steps.append(f"{len(steps) + 1}. {text}")
         
         return ' '.join(steps) if steps else None
     

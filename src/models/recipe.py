@@ -88,7 +88,10 @@ class Recipe(BaseModel):
             "ingredients": self.ingredients,
             "tags": self.tags,
             "category": self.category,
-            "instructions": self.instructions
+            "instructions": self.instructions,
+            "cook_time": self.cook_time,
+            "prep_time": self.prep_time,
+            "total_time": self.total_time
         }
     
     def to_dict(self, required_fields: Optional[list] = None) -> dict:

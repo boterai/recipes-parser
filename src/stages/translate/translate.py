@@ -220,7 +220,7 @@ class Translator:
             system_prompt = f"""You are a professional recipe translator. Translate the following recipe JSON to {self.target_language} language.
 
 IMPORTANT:
-1. Translate completely and accurately these fields: "dish_name", "description", "ingredients", "tags", "category", "instructions"
+1. Translate completely and accurately these fields: "dish_name", "description", "ingredients", "tags", "category", "instructions", "cook_time", "prep_time", "total_time".
 2. Return the result in the same valid JSON format without changing the structure or adding any comments
 3. If a field is null or empty, leave it as is
 4. Preserve all measurements, numbers, and formatting
@@ -278,7 +278,7 @@ IMPORTANT:
                 return
         
         for i in site_ids:
-            if i < 32:
-                continue  # пропускаем сайты с маленькими ID (тестовые и т.п.)
+            #if i < 32:
+            #    continue  # пропускаем сайты с маленькими ID (тестовые и т.п.)
             await self.translate_and_save_batch(site_id=i, batch_size=batch_size)
             

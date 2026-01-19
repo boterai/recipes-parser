@@ -8,6 +8,7 @@ from sqlalchemy import or_, func
 
 from src.repositories.base import BaseRepository
 from src.models.site import SiteORM, Site
+from src.models.page import PageORM
 from src.common.db.connection import get_db_connection
 
 logger = logging.getLogger(__name__)
@@ -148,7 +149,6 @@ class SiteRepository(BaseRepository[SiteORM]):
             ).count()
             return count
         
-
     def get_unprocessed_sites(self, limit: int = 10, random_order: bool = False) -> List[SiteORM]:
         """
         Получить список сайтов без паттерна
@@ -174,7 +174,6 @@ class SiteRepository(BaseRepository[SiteORM]):
             sites = query.limit(limit).all()
             return sites
         
-
     def mark_site_as_searched(self, site_id: int) -> bool:
         """
         Пометить сайт как прошедший поиск рецептов
@@ -199,3 +198,35 @@ class SiteRepository(BaseRepository[SiteORM]):
             return False
         finally:
             session.close()
+
+    def get_extractors(self, max_recipes: Optional[int] = None, min_recipes: Optional[int] = None) -> List[str]:
+        """
+        получить доменные имена сайтов, для которых есть экстракторы и которые еще не набрали максимум рецептов
+        
+        Args:
+            max_recipes_per_module: Максимальное количество рецептов на модуль (опционально)
+        
+        Returns:
+            Список SiteORM объектов
+        """
+        with self.get_session() as session:
+            query = (
+                session.query(
+                    SiteORM,
+                )
+                .join(PageORM, PageORM.site_id == SiteORM.id)
+                .filter(PageORM.is_recipe == True)
+                .group_by(SiteORM.id, SiteORM.name)
+                .order_by(func.count(PageORM.id).desc())
+            )
+            
+            if max_recipes is not None:
+                query = query.having(func.count(PageORM.id) <= max_recipes)
+
+            if min_recipes is not None:
+                query = query.having(func.count(PageORM.id) >= min_recipes)
+
+            results = query.all()
+
+            extractors = [site.name for site in results]
+            return extractors

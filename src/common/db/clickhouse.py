@@ -212,7 +212,6 @@ class ClickHouseManager:
                     recipe.cook_time,
                     recipe.prep_time,
                     recipe.total_time,
-                    recipe.nutrition_info,
                     recipe.vectorised,
                     recipe.category
                 ])
@@ -228,7 +227,7 @@ class ClickHouseManager:
                 column_names=[
                     'page_id', 'site_id', 'dish_name', 'description', 'instructions',
                     'ingredients', 'tags', 'cook_time', 'prep_time', 
-                    'total_time', 'nutrition_info', 'vectorised', 'category'
+                    'total_time', 'vectorised', 'category'
                 ]
             )
             
@@ -281,7 +280,6 @@ class ClickHouseManager:
                     cook_time=str(row['cook_time']),
                     prep_time=str(row['prep_time']),
                     total_time=str(row['total_time']),
-                    nutrition_info=str(row['nutrition_info']),
                     category=str(row['category']),
                     vectorised=bool(row.get('vectorised', False))
                 )
@@ -326,7 +324,6 @@ class ClickHouseManager:
                     argMax(cook_time, last_updated) as cook_time,
                     argMax(prep_time, last_updated) as prep_time,
                     argMax(total_time, last_updated) as total_time,
-                    argMax(nutrition_info, last_updated) as nutrition_info,
                     argMax(category, last_updated) as category,
                     argMax(vectorised, last_updated) as vectorised
                 FROM {table_name}
@@ -387,7 +384,6 @@ class ClickHouseManager:
                     argMax(cook_time, last_updated) as cook_time,
                     argMax(prep_time, last_updated) as prep_time,
                     argMax(total_time, last_updated) as total_time,
-                    argMax(nutrition_info, last_updated) as nutrition_info,
                     argMax(category, last_updated) as category,
                     argMax(vectorised, last_updated) as vectorised
                 FROM {table_name}

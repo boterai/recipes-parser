@@ -283,6 +283,7 @@ class UnaricettaalGiornoExtractor(BaseRecipeExtractor):
                     # Останавливаемся, если достигли секции советов
                     break
             
+            # Обработка параграфов
             if in_instructions and element.name == 'p':
                 # Извлекаем текст шага
                 step_text = element.get_text(separator=' ', strip=True)
@@ -299,6 +300,25 @@ class UnaricettaalGiornoExtractor(BaseRecipeExtractor):
                     # Добавляем нумерацию
                     steps.append(f"{step_number}. {step_clean}")
                     step_number += 1
+            
+            # Обработка упорядоченных и неупорядоченных списков
+            if in_instructions and element.name in ['ol', 'ul']:
+                list_items = element.find_all('li', recursive=False)
+                for li in list_items:
+                    step_text = li.get_text(separator=' ', strip=True)
+                    step_text = self.clean_text(step_text)
+                    
+                    if step_text and len(step_text) > 10:
+                        # Убираем жирное оформление заголовков типа "Base dell'insalata. Текст"
+                        # Ищем паттерн: Заголовок. Текст (где заголовок может быть внутри <strong>)
+                        step_clean = re.sub(r'^[^.]+\.\s*', '', step_text)
+                        if not step_clean or len(step_clean) < 20:
+                            # Если после удаления заголовка мало текста, берем весь текст
+                            step_clean = step_text
+                        
+                        # Добавляем нумерацию
+                        steps.append(f"{step_number}. {step_clean}")
+                        step_number += 1
         
         if steps:
             return ' '.join(steps)

@@ -239,6 +239,46 @@ class RezepteomaComExtractor(BaseRecipeExtractor):
                 if step_text:
                     steps.append(step_text)
         
+        # Если не нашли упорядоченный список, ищем инструкции в формате "Schritt N" + текст
+        if not steps:
+            paragraphs = entry_content.find_all('p')
+            i = 0
+            while i < len(paragraphs):
+                p = paragraphs[i]
+                text = self.clean_text(p.get_text())
+                
+                # Проверяем, является ли это заголовком шага (например, "Schritt 1")
+                if text and re.match(r'^Schritt\s+\d+$', text, re.IGNORECASE):
+                    # Следующий параграф должен содержать инструкцию
+                    if i + 1 < len(paragraphs):
+                        next_p = paragraphs[i + 1]
+                        instruction_text = self.clean_text(next_p.get_text())
+                        if instruction_text and len(instruction_text) > 10:
+                            # Убираем цифру в конце (например, "текст1." -> "текст.")
+                            instruction_text = re.sub(r'\d+\.$', '.', instruction_text)
+                            instruction_text = re.sub(r'\d+$', '', instruction_text)
+                            steps.append(instruction_text)
+                        i += 2  # Пропускаем следующий параграф, т.к. уже обработали
+                        continue
+                i += 1
+        
+        # Если инструкции все еще не найдены, ищем нумерованные параграфы в формате "1. Название:", "2. Название:"
+        if not steps:
+            paragraphs = entry_content.find_all('p')
+            for p in paragraphs:
+                text = self.clean_text(p.get_text())
+                
+                # Проверяем, начинается ли текст с цифры и точки (например, "1. Den Teig vorbereiten:")
+                # или с жирного текста "**1. Den Teig:**"
+                match = re.match(r'^(\d+)\.\s*(.+)', text, re.IGNORECASE)
+                if match:
+                    instruction_num, instruction_text = match.groups()
+                    # Убираем жирные маркеры ** из текста
+                    instruction_text = re.sub(r'\*\*', '', instruction_text)
+                    instruction_text = self.clean_text(instruction_text)
+                    if instruction_text and len(instruction_text) > 10:
+                        steps.append(instruction_text)
+        
         # Объединяем все шаги в одну строку через пробел
         if steps:
             instructions = ' '.join(steps)

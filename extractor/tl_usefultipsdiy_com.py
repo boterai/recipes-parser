@@ -119,6 +119,10 @@ class TlUsefulTipsDiyExtractor(BaseRecipeExtractor):
             for li in direct_lis:
                 text = self.clean_text(li.get_text())
                 
+                # Пропускаем пустые элементы и слишком длинные (это не ингредиенты)
+                if not text or len(text) > 100:
+                    continue
+                
                 # Ищем паттерн: число + единица + название
                 # Примеры: "500 ML ng gatas", "50 g semolina", "1.5 tsp baking powder"
                 pattern = r'^(\d+(?:\.\d+)?(?:-\d+)?)\s*(g|ml|mL|ML|tsp|tbsp|tablespoon|tablespoons|teaspoon|teaspoons|cup|cups|piece|pieces|kg)\s+(.+?)(?:;|\.)?$'
@@ -128,21 +132,24 @@ class TlUsefulTipsDiyExtractor(BaseRecipeExtractor):
                     amount_str, unit, name = match.groups()
                     temp_ingredients.append((amount_str, unit, name))
                 else:
-                    # Специальный случай для "asin - halos isang-katlo ng isang kutsarita"
-                    # Ищем название без количества в начале, но с указанием на количество
-                    alt_pattern = r'^(\w+(?:\s+\w+)?)\s*-\s*.*(kutsarita|teaspoon|tablespoon|cup|gram)'
-                    alt_match = re.match(alt_pattern, text, re.I)
-                    if alt_match and len(temp_ingredients) > 0:
-                        # Это похоже на ингредиент (salt, etc.)
-                        name = alt_match.group(1)
-                        # Извлекаем количество из описания
-                        if 'katlo' in text or 'third' in text.lower():
-                            temp_ingredients.append(('0.33', 'teaspoon', name))
-                        elif 'kalahati' in text or 'half' in text.lower():
-                            temp_ingredients.append(('0.5', 'teaspoon', name))
+                    # Fallback 1: число (включая дроби) без единицы измерения (например, "1 abukado", "4 na itlog", "1/2 kamatis")
+                    simple_pattern = r'^(\d+(?:/\d+)?(?:\.\d+)?(?:-\d+)?)\s+(?:na\s+)?(.+?)(?:;|\.)?$'
+                    simple_match = re.match(simple_pattern, text, re.I)
+                    if simple_match:
+                        amount_str, name = simple_match.groups()
+                        temp_ingredients.append((amount_str, '', name))
+                    else:
+                        # Fallback 2: название без количества (например, "asin at paminta sa panlasa")
+                        # Только если это короткая строка (вероятно ингредиент) и уже есть другие ингредиенты
+                        if len(text) < 60 and len(temp_ingredients) > 0:
+                            # Проверяем, что это похоже на название ингредиента (не инструкция)
+                            # Инструкции обычно содержат глаголы
+                            instruction_words = ['ilagay', 'ihain', 'lutuin', 'gupitin', 'alisin', 'ihalo', 'timplahan']
+                            if not any(word in text.lower() for word in instruction_words):
+                                temp_ingredients.append(('', '', text))
             
             # Выбираем UL с наибольшим количеством ингредиентов (но не слишком много)
-            if 3 <= len(temp_ingredients) <= 15 and len(temp_ingredients) > max_ingredients:
+            if 3 <= len(temp_ingredients) <= 20 and len(temp_ingredients) > max_ingredients:
                 best_ul = ul
                 max_ingredients = len(temp_ingredients)
                 ingredients = temp_ingredients
@@ -151,35 +158,56 @@ class TlUsefulTipsDiyExtractor(BaseRecipeExtractor):
         result = []
         for amount_str, unit, name in ingredients:
             # Конвертируем amount в число (int или float)
-            try:
-                # Обработка диапазонов (20-25 -> берем среднее или первое)
-                if '-' in amount_str:
-                    parts = amount_str.split('-')
-                    amount = float(parts[0])  # Берем первое значение
-                else:
-                    amount = float(amount_str)
-                if amount == int(amount):
-                    amount = int(amount)
-            except:
-                amount = amount_str
+            if amount_str:
+                try:
+                    # Обработка дробей (1/2 -> 0.5)
+                    if '/' in amount_str:
+                        parts = amount_str.split('/')
+                        amount = float(parts[0]) / float(parts[1])
+                    # Обработка диапазонов (20-25 -> берем среднее или первое)
+                    elif '-' in amount_str:
+                        parts = amount_str.split('-')
+                        amount = float(parts[0])  # Берем первое значение
+                    else:
+                        amount = float(amount_str)
+                    if amount == int(amount):
+                        amount = int(amount)
+                except:
+                    amount = amount_str
+            else:
+                # Нет количества - оставляем пустым или "to taste"
+                amount = ""
+            
+            # Извлекаем единицу измерения из названия если есть (например "2 kutsara l. gatas")
+            # Ищем паттерн: kutsara/kutsarita в начале названия
+            if not unit:
+                unit_in_name = re.match(r'^(kutsara|kutsarita|tasa|cup)\s+(?:l\.|ng|na)?\s*(.+)', name, re.I)
+                if unit_in_name:
+                    unit = unit_in_name.group(1)
+                    name = unit_in_name.group(2)
             
             # Очищаем название от артиклей и предлогов
             name = re.sub(r'^(ng|na|sa|ang)\s+', '', name, flags=re.I)
             name = re.sub(r',.*$', '', name)  # Удаляем все после запятой
+            # Удаляем "sa panlasa" (to taste) в конце и лишние символы
+            name = re.sub(r'\s+(sa|at)\s+panlasa\.?$', '', name, flags=re.I)
+            name = re.sub(r';$', '', name)  # Удаляем точку с запятой в конце
+            name = re.sub(r'\.$', '', name)  # Удаляем точку в конце
             # Удаляем модификаторы типа "granulated", "fresh", etc.
             name = re.sub(r'^(granulated|fresh|dried|frozen|whole|ground)\s+', '', name, flags=re.I)
             name = name.strip()
             
             # Нормализуем единицы (ML -> mL)
-            if unit.upper() == 'ML':
+            if unit and unit.upper() == 'ML':
                 unit = 'mL'
             
             if name and len(name) > 1:
-                result.append({
-                    "name": name,
-                    "units": unit,
-                    "amount": amount
-                })
+                ingredient_dict = {"name": name}
+                if unit:
+                    ingredient_dict["unit"] = unit
+                if amount:
+                    ingredient_dict["amount"] = amount
+                result.append(ingredient_dict)
         
         return json.dumps(result, ensure_ascii=False) if result else None
     
