@@ -57,8 +57,12 @@ class KidarilightExtractor(BaseRecipeExtractor):
         ingredients = []
         found_ingredients = set()
         
-        # Ищем основной контент статьи
+        # Ищем основной контент статьи (разные классы для разных страниц)
         content = self.soup.find('div', class_='tt_article_useless_p_margin')
+        if not content:
+            content = self.soup.find('div', class_='entry-content')
+        if not content:
+            content = self.soup.find('div', id='article-view')
         if not content:
             return None
         
@@ -70,11 +74,12 @@ class KidarilightExtractor(BaseRecipeExtractor):
         common_ingredients = [
             '대파', '편마늘', '마늘', '양파', '감자', '당근', '파프리카', '애호박', 
             '브로콜리', '토마토', '버섯', '양배추', '얼린두부', '두부', '물', 
-            '카레가루', '강황분말', '가람마살라', '전분가루', '쌀가루', '간장', 
+            '카레가루', '강황분말', '가람마살라', '전분가루', '전분', '쌀가루', '간장', 
             '소금', '기름', '참기름', '깨', '고춧가루', '후추', '설탕', '식초',
             '도라지', '미역줄기', '고춧잎', '청경채', '올리고당', '콩', '고기',
             '해산물', '돼지고기', '닭고기', '소고기', '새우', '오징어', '조개',
-            '양송이버섯', '팽이버섯', '느타리버섯', '표고버섯'
+            '양송이버섯', '팽이버섯', '느타리버섯', '표고버섯', '들기름', '된장',
+            '고추장', '국간장', '진간장', '조청', '굴소스', '참깨', '통깨'
         ]
         
         # Ищем ингредиенты в тексте
@@ -147,8 +152,12 @@ class KidarilightExtractor(BaseRecipeExtractor):
         """Извлечение шагов приготовления"""
         instructions = []
         
-        # Ищем основной контент
+        # Ищем основной контент (разные классы для разных страниц)
         content = self.soup.find('div', class_='tt_article_useless_p_margin')
+        if not content:
+            content = self.soup.find('div', class_='entry-content')
+        if not content:
+            content = self.soup.find('div', id='article-view')
         if not content:
             return None
         
@@ -256,8 +265,12 @@ class KidarilightExtractor(BaseRecipeExtractor):
         """Извлечение заметок и советов"""
         notes = []
         
-        # Ищем основной контент
+        # Ищем основной контент (разные классы для разных страниц)
         content = self.soup.find('div', class_='tt_article_useless_p_margin')
+        if not content:
+            content = self.soup.find('div', class_='entry-content')
+        if not content:
+            content = self.soup.find('div', id='article-view')
         if not content:
             return None
         
