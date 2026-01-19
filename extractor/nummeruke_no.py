@@ -286,16 +286,16 @@ class NummerukeNoExtractor(BaseRecipeExtractor):
         return None
     
     def extract_tags(self) -> Optional[str]:
-        """Извлечение тегов в формате строки через запятую (без пробелов)"""
+        """Извлечение тегов в формате строки через запятую с пробелом"""
         json_ld = self._get_json_ld_data()
         
         if json_ld and 'keywords' in json_ld:
             keywords = json_ld['keywords']
             if isinstance(keywords, str):
-                # Убираем пробелы после запятых
-                return keywords.replace(', ', ',')
+                # Сохраняем оригинальный формат (с пробелами после запятых)
+                return keywords
             elif isinstance(keywords, list):
-                return ','.join(keywords)
+                return ', '.join(keywords)
         
         return None
     
