@@ -19,7 +19,7 @@ if __name__ == "__main__":
 from src.models.page import PageORM
 from src.repositories.page import PageRepository
 from src.repositories.site import SiteRepository
-from src.common.gpt.gpt_client import GPTClient
+from src.common.gpt.client import GPTClient
 from utils.html import extract_text_from_html
 
 # Загрузка переменных окружения

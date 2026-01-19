@@ -10,7 +10,7 @@ from sqlalchemy import text
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 from src.common.db.mysql import MySQlManager
-from src.common.gpt.gpt_client import GPTClient
+from src.common.gpt.client import GPTClient
 from utils.languages import LANGUAGE_NAME_TO_CODE
 from src.models.search_query import SearchQueryORM, SearchQuery
 from src.repositories.search_query import SearchQueryRepository

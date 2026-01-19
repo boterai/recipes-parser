@@ -12,7 +12,7 @@ if __name__ == "__main__":
     sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.common.db.clickhouse import ClickHouseManager
-from src.common.gpt.gpt_client import GPTClient
+from src.common.gpt.client import GPTClient
 from src.models.page import Page, PageORM
 from src.models.page import Recipe
 from utils.languages import LanguageCodes, validate_and_normalize_language

@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 import re
 import asyncio
 import aiohttp
-from src.common.gpt.gpt_json import GPTJsonExtractor
+from src.common.gpt.clean_response import GPTJsonExtractor
 # Загрузка переменных окружения
 load_dotenv()
 

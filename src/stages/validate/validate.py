@@ -12,7 +12,7 @@ if __name__ == "__main__":
     sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 
-from src.common.gpt.gpt_client import GPTClient
+from src.common.gpt.client import GPTClient
 from utils.html import extract_text_from_html
 
 

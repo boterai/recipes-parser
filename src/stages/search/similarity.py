@@ -14,7 +14,7 @@ if __name__ == "__main__":
     sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 from src.common.db.qdrant import QdrantRecipeManager
-from src.common.gpt.gpt_client import GPTClient
+from src.common.gpt.client import GPTClient
 from src.repositories.similarity import RecipeSimilarity
 from src.models.recipe import Recipe
 from src.common.db.clickhouse import ClickHouseManager

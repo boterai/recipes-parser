@@ -1,5 +1,5 @@
 import unittest
-from src.common.gpt.gpt_json import GPTJsonExtractor
+from src.common.gpt.clean_response import GPTJsonExtractor
 
 
 class TestGPTJsonCleaner(unittest.TestCase):
