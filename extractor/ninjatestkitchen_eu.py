@@ -81,17 +81,49 @@ class NinjaTestKitchenExtractor(BaseRecipeExtractor):
         meta_desc = self.soup.find('meta', attrs={'itemprop': 'description'})
         if meta_desc and meta_desc.get('content'):
             desc = meta_desc['content']
-            # Берем только первое предложение (до первой точки)
-            sentences = desc.split('.')
+            # Разбиваем на предложения (по . или !)
+            sentences = []
+            terminators = []  # Сохраняем, чем заканчивалось каждое предложение
+            current = ""
+            for char in desc:
+                if char in '.!':
+                    if current.strip():
+                        sentences.append(current.strip())
+                        terminators.append(char)
+                    current = ""
+                else:
+                    current += char
+            if current.strip():
+                sentences.append(current.strip())
+                terminators.append('.')  # По умолчанию
+            
+            if len(sentences) > 1:
+                # Если первое предложение содержит рекомендации сервировки
+                # или это короткая вступительная фраза, используем второе предложение
+                first_sent = sentences[0]
+                serving_keywords = ['delizioso servito', 'perfetto per', 'servito con', 'ottimo con', 'ideale con']
+                intro_keywords = ['semplice giro', 'twist', 'variante']
+                
+                has_serving = any(keyword in first_sent.lower() for keyword in serving_keywords)
+                has_intro = any(keyword in first_sent.lower() for keyword in intro_keywords)
+                is_short_exclamation = len(first_sent) < 60 and terminators[0] == '!'
+                
+                if has_serving or has_intro or is_short_exclamation:
+                    # Используем второе предложение
+                    terminator = terminators[1] if len(terminators) > 1 else '!'
+                    return self.clean_text(sentences[1] + terminator)
+            
+            # В остальных случаях используем первое предложение
             if sentences:
-                return self.clean_text(sentences[0] + '.')
+                terminator = terminators[0] if terminators else '.'
+                return self.clean_text(sentences[0] + terminator)
         
         # Альтернативно - из meta description
         meta_desc = self.soup.find('meta', {'name': 'description'})
         if meta_desc and meta_desc.get('content'):
             desc = meta_desc['content']
-            # Берем только первое предложение
-            sentences = desc.split('.')
+            sentences = re.split(r'[.!]', desc)
+            sentences = [s.strip() for s in sentences if s.strip()]
             if sentences:
                 return self.clean_text(sentences[0] + '.')
         
@@ -101,7 +133,8 @@ class NinjaTestKitchenExtractor(BaseRecipeExtractor):
             p = summary.find('p')
             if p:
                 text = p.get_text()
-                sentences = text.split('.')
+                sentences = re.split(r'[.!]', text)
+                sentences = [s.strip() for s in sentences if s.strip()]
                 if sentences:
                     return self.clean_text(sentences[0] + '.')
         
@@ -184,7 +217,7 @@ class NinjaTestKitchenExtractor(BaseRecipeExtractor):
         Парсинг количества и единицы измерения
         
         Args:
-            text: строка вида "1 cucchiaio" или "200 g" или "2" или "A piacere" или "1 grande"
+            text: строка вида "1 cucchiaio" или "200 g" или "2" или "A piacere" или "1 grande" или "Un pizzico"
             
         Returns:
             dict: {"amount": "1", "unit": "cucchiaio"} или {"amount": "2", "unit": None} или {"amount": "1 grande", "unit": None}
@@ -195,8 +228,12 @@ class NinjaTestKitchenExtractor(BaseRecipeExtractor):
         text = text.strip()
         
         # Проверяем специальные случаи
-        if text.lower() == "a piacere":
-            return {"amount": "A piacere", "unit": None}
+        special_amounts = ['a piacere', 'un pizzico', 'qb', 'q.b.', 'quanto basta']
+        text_lower = text.lower()
+        for special in special_amounts:
+            if special in text_lower:
+                # Это количество, а не единица
+                return {"amount": text, "unit": None}
         
         # Список прилагательных размера (не единицы измерения)
         size_adjectives = ['grande', 'piccolo', 'medio', 'piccola', 'media', 'grandi', 'piccoli', 'medi', 'medie']
@@ -223,9 +260,10 @@ class NinjaTestKitchenExtractor(BaseRecipeExtractor):
             
             return {"amount": amount, "unit": unit}
         
-        # Если паттерн не совпал, проверяем - может это только текст (единица без количества)
+        # Если паттерн не совпал, проверяем - может это только текст
         if not re.search(r'\d', text):
-            return {"amount": None, "unit": text}
+            # Это количество (например, "A piacere"), а не единица
+            return {"amount": text, "unit": None}
         
         return {"amount": text, "unit": None}
     
@@ -234,7 +272,7 @@ class NinjaTestKitchenExtractor(BaseRecipeExtractor):
         Извлекает единицу измерения из названия ингредиента, если она там есть
         
         Args:
-            name: строка вида "spicchi d'aglio" или "patata dolce" или "cumino"
+            name: строка вида "spicchi d'aglio" или "patata dolce" или "cumino" или "peperone rosso medio"
             
         Returns:
             dict: {"name": "aglio", "unit": "spicchi"} или {"name": "patata dolce", "unit": None}
@@ -244,10 +282,22 @@ class NinjaTestKitchenExtractor(BaseRecipeExtractor):
         
         name = name.strip()
         
+        # Удаляем инструкции по приготовлению (обычно после тире)
+        if ' - ' in name:
+            name = name.split(' - ')[0].strip()
+        
+        # Удаляем прилагательные размера в конце (medio, grande, piccolo и т.д.)
+        size_adjectives = ['grande', 'piccolo', 'medio', 'piccola', 'media', 'grandi', 'piccoli', 'medi', 'medie']
+        words = name.split()
+        if len(words) > 1 and words[-1].lower() in size_adjectives:
+            # Удаляем последнее слово, если оно прилагательное размера
+            name = ' '.join(words[:-1])
+        
         # Список единиц измерения, которые могут быть в начале названия
-        # На итальянском языке (НЕ включаем прилагательные вроде "grande", "piccolo" и т.д.)
+        # На итальянском языке
+        # НЕ включаем "spicchi" так как "spicchi d'aglio" должно оставаться как есть по примеру
         units = [
-            'spicchi', 'spicchio', 'fette', 'fetta', 'pezzi', 'pezzo',
+            'fette', 'fetta', 'pezzi', 'pezzo',
             'cucchiai', 'cucchiaio', 'cucchiaini', 'cucchiaino',
             'tazze', 'tazza', 'bicchieri', 'bicchiere',
             'barattoli', 'barattolo', 'lattine', 'lattina',
@@ -257,7 +307,7 @@ class NinjaTestKitchenExtractor(BaseRecipeExtractor):
         
         # Проверяем, начинается ли название с единицы измерения
         for unit in units:
-            # Паттерн: "spicchi d'aglio" или "spicchi di aglio"
+            # Паттерн: "fette di pomodoro"
             pattern = rf'^{unit}\s+(d\'|di\s+)?(.+)$'
             match = re.match(pattern, name, re.IGNORECASE)
             if match:
@@ -356,20 +406,24 @@ class NinjaTestKitchenExtractor(BaseRecipeExtractor):
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
-        # В ninjatestkitchen.eu заметки часто находятся в первом предложении описания
-        # если оно содержит рекомендации (Delizioso servito, Compatibile, etc.)
+        # В ninjatestkitchen.eu заметки находятся в первом предложении описания
+        # только если оно содержит рекомендации сервировки (не просто восклицания)
         
         meta_desc = self.soup.find('meta', attrs={'itemprop': 'description'})
         if meta_desc and meta_desc.get('content'):
             desc = meta_desc['content']
-            # Берем первое предложение
-            sentences = desc.split('.')
-            if len(sentences) > 0:
-                first_sentence = sentences[0].strip()
-                # Проверяем, содержит ли рекомендации/заметки
-                keywords = ['delizioso', 'compatibil', 'servito', 'perfetto', 'ideale', 'ottimo']
-                if any(keyword in first_sentence.lower() for keyword in keywords):
-                    return self.clean_text(first_sentence + '.')
+            # Разбиваем на предложения (по . или !)
+            sentences = re.split(r'[.!]', desc)
+            sentences = [s.strip() for s in sentences if s.strip()]
+            
+            if len(sentences) > 1:
+                first_sent = sentences[0]
+                # Проверяем, содержит ли первое предложение рекомендации сервировки
+                serving_keywords = ['delizioso servito', 'perfetto per', 'servito con', 'ottimo con', 'ideale con']
+                has_serving = any(keyword in first_sent.lower() for keyword in serving_keywords)
+                
+                if has_serving:
+                    return self.clean_text(first_sent + '.')
         
         # Ищем секцию с примечаниями
         notes_section = self.soup.find(class_=re.compile(r'recipe.*note', re.I))
