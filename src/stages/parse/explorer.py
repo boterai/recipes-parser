@@ -111,7 +111,6 @@ class SiteExplorer:
         self.load_visited_urls_from_db()
 
         # Инициализация экстрактора для проверки и извлечения рецептов
-        self.recipe_extractor = None
         self.recipe_extractor = RecipeExtractor()
         self.max_no_recipe_pages: Optional[int] = max_no_recipe_pages 
         self.no_recipe_page_count: int = 0  # Счетчик страниц без рецепта подряд
