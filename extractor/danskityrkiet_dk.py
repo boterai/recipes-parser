@@ -129,8 +129,8 @@ class DanskiTyrkietExtractor(BaseRecipeExtractor):
                     amount, unit, name = match
                     ingredients.append({
                         "name": name,
-                        "amount": amount.replace(',', '.'),
-                        "units": unit
+                        "units": unit,
+                        "amount": amount.replace(',', '.')
                     })
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
@@ -228,8 +228,8 @@ class DanskiTyrkietExtractor(BaseRecipeExtractor):
         
         return {
             "name": name,
-            "amount": amount,
-            "units": units
+            "units": units,
+            "amount": amount
         }
     
     def extract_instructions(self) -> Optional[str]:
