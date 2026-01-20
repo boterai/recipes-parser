@@ -1,13 +1,15 @@
 from pathlib import Path
 import subprocess
-import json
 import os
+import logging
 
 if __name__ == '__main__':
     import sys
     sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 from src.stages.workflow.validate_extractor import ValidateParser
+
+logger = logging.getLogger(__name__)
 
 def run_git_command(command: list[str]) -> str:
     """Выполняет git команду и возвращает её вывод."""
@@ -21,8 +23,8 @@ def run_git_command(command: list[str]) -> str:
         )
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
-        print(f"Ошибка при выполнении команды '{command}': {e.stderr.strip()}")
-        return ""
+        logger.error(f"Ошибка при выполнении команды '{command}': {e.stderr.strip()}")
+        raise e
 
 def get_added_files(base_branch: str, target_branch: str) -> list[str]:
     """Получает список файлов, добавленных в target_branch относительно base_branch."""
@@ -54,13 +56,19 @@ def check_one_branch(branch: str) -> list[dict]:
         Список ошибок валидации
     """
     current_branch = get_current_branch()
+    try:
+        run_git_command(['git', 'checkout', branch])
+    except Exception as e:
+        run_git_command(['git', 'fetch', 'origin'])
+        run_git_command(['git', 'checkout', branch])
+        logger.info(f"Переключились на ветку {branch} после fetch.")
 
     added_files = [f for f in get_added_files(current_branch, branch) if ('extractor' in f and f.endswith('.py'))]
+    
     if len(added_files) == 0:
-        print(f"Ветка {branch} не содержит изменений в парсере, пропускаем.")
+        logger.info(f"В ветке {branch} нет добавленных файлов парсеров.")
         return []  
 
-    run_git_command(['git', 'checkout', branch])
     vp = ValidateParser()
 
     branch_errors = []
@@ -81,8 +89,9 @@ def check_one_branch(branch: str) -> list[dict]:
         branch_errors.append({'error': str(e)})
     
     run_git_command(['git', 'checkout', current_branch])
+
     return branch_errors
 
 
 if __name__ == '__main__':
-    check_one_branch('copilot/add-evelynscooking-parser')
+    check_one_branch('copilot/create-parser-for-sallysbakingaddiction')
