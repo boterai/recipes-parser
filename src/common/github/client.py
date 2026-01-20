@@ -120,9 +120,50 @@ class GitHubClient:
             logger.error(f"Failed to fetch issues: {response.status_code} - {response.text}")
             return None
         
+    def list_branches(self) -> Optional[list[dict]]:
+        """
+        Получает список веток репозитория
+        
+        Returns:
+            Список веток
+        """
+        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/branches"
+
+        params = {
+            "per_page": 100
+        }
+        
+        response = requests.get(url, headers=self.headers, params=params)
+        
+        if response.status_code == 200:
+            return response.json()
+        else:
+            logger.error(f"Failed to fetch branches: {response.status_code} - {response.text}")
+            return None
+        
+    def list_pr(self) -> Optional[list[dict]]:
+        """
+        Получает список pull requests репозитория
+        
+        Returns:
+            Список pull requests
+        """
+        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/pulls"
+
+        params = {
+            "state": "open",
+            "per_page": 100
+        }
+        
+        response = requests.get(url, headers=self.headers, params=params)
+        
+        if response.status_code == 200:
+            return response.json()
+        else:
+            logger.error(f"Failed to fetch pull requests: {response.status_code} - {response.text}")
+            return None
+        
 if __name__ == "__main__":
     gh_client = GitHubClient()
-    issues = gh_client.list_repository_issues()
-    if issues is not None:
-        for issue in issues:
-            print(f"Issue #{issue['number']}: {issue['title']}")
+    pr = gh_client.list_pr()
+    print(pr)

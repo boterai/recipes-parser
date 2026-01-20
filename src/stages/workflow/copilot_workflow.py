@@ -48,7 +48,21 @@ class CopilotWorkflow:
                 logger.info(f"Создан issue: {issue['html_url']}")
             else:
                 logger.error(f"Не удалось создать issue для модуля: {module_name}")
-        
+
+    def check_pr(self):
+        """Проверяет PR на наличие необходимых изменений."""
+        pass
+
+    def check_review_requested_prs(self):
+        """Проверяет завершенные PR и обновляет статусы задач."""
+        prs = self.github_client.list_pr()
+        prs = [pr for pr in prs if len(pr.get('requested_reviewers')) > 0]
+        logger.info(f"Найдено {len(prs)} PR с запрошенным ревью.")
+        for pr in prs:
+            logger.info(f"Проверка PR #{pr['number']}: {pr['title']}")
+
+
+
 if __name__ == "__main__":
     workflow = CopilotWorkflow()
-    workflow.create_issues_for_parsers()
+    workflow.check_review_requested_prs()

@@ -24,27 +24,6 @@ def run_git_command(command: list[str]) -> str:
         print(f"Ошибка при выполнении команды '{command}': {e.stderr.strip()}")
         return ""
 
-def get_copilot_branches() -> list[str]:
-    """Получает список всех веток (локальных и удаленных)."""
-    # Получить все ветки
-    run_git_command(['git', 'fetch', '--all'])
-    
-    # Получить список веток
-    output = run_git_command(['git', 'branch', '-a'])
-    
-    # Парсим вывод (берем только copilot ветки)
-    branches = []
-    for line in output.split('\n'):
-        branch = line.strip().replace('* ', '')
-        if 'copilot' in branch:
-            # Убираем префикс remotes/origin/
-            #if branch.startswith('remotes/origin/'):
-            #    branch = branch.replace('remotes/origin/', '')
-            branches.append(branch)
-    
-    # Убираем дубликаты
-    return list(set(branches))
-
 def get_added_files(base_branch: str, target_branch: str) -> list[str]:
     """Получает список файлов, добавленных в target_branch относительно base_branch."""
     output = run_git_command([
@@ -64,72 +43,46 @@ def get_current_branch() -> str:
     output = run_git_command(['git', 'rev-parse', '--abbrev-ref', 'HEAD'])
     return output
 
-def check_all_branches():
+def check_one_branch(branch: str) -> list[dict]:
+    """Обрабатывает одну ветку: переключается на нее, получает добавленные файлы и запускает валидацию.
+    
+    Args:
+        branch: имя ветки для обработки
+        current_branch: имя текущей ветки (для возврата после обработки)
+    
+    Returns:
+        Список ошибок валидации
+    """
     current_branch = get_current_branch()
-    print(f"Текущая ветка: {current_branch}")
-    copilot_branches = get_copilot_branches()
-    # получаем список изменений для каждой ветки
-    parsers: dict[str, list[str]] = {}
-    for branch in copilot_branches:
-        added_files = [f for f in get_added_files('feature/parser', branch) if ('extractor' in f and f.endswith('.py'))]
-        if len(added_files) == 0:
-            print(f"Ветка {branch} не содержит изменений в парсере, пропускаем.")
-            continue  
 
-        parsers[branch] = added_files
+    added_files = [f for f in get_added_files(current_branch, branch) if ('extractor' in f and f.endswith('.py'))]
+    if len(added_files) == 0:
+        print(f"Ветка {branch} не содержит изменений в парсере, пропускаем.")
+        return []  
 
-    print("Ветки с изменениями в парсере:")
-    for branch, files in parsers.items():
-        print(f"Ветка: {branch}")
-        run_git_command(['git', 'checkout', branch])
-        vp = ValidateParser()
+    run_git_command(['git', 'checkout', branch])
+    vp = ValidateParser()
 
-        branch_errors = []
-        try:
-            for file in files:
-                print(f"Проверяем файл: {file}")
-                module_name = os.path.basename(file).replace('.py', '')
-                branch_errors.append(vp.validate(
-                    module_name=module_name,
-                    use_gpt=False,
-                    required_fields=['dish_name', 'ingredients', 'instructions'],
-                    use_gpt_on_errors_only=True
-                ))
-        except Exception as e:
-            print(f"Ошибка при валидации ветки {branch}: {e}")
-            branch_errors.append({'error': str(e)})
-            run_git_command(['git', 'checkout', current_branch])
-            continue
-        # запускаем валидацию
-        run_git_command(['git', 'checkout', current_branch])
-        if not branch_errors:
-            print(f"Ветка {branch} прошла валидацию без ошибок.")
-            # производим merge ветки в текущую и удаляем ее
-            run_git_command(['git', 'merge', branch])
-            run_git_command(['git', 'branch', '-d', branch])
-        else:
-            print(f"Ветка {branch} содержит ошибки валидации:")
-            print(json.dumps(branch_errors, ensure_ascii=False, indent=2))
-            os.makedirs(os.path.join("parsers_errors"), exist_ok=True)
-            with open(os.path.join("parsers_errors", f"errors_{branch.replace('/', '_')}.json"), 'w', encoding='utf-8') as f:
-                json.dump(branch_errors, f, ensure_ascii=False, indent=2)
-
-    # переключаемся на каждую ветку и запускаем валидацию с сохранением ошибку в папку, 
-    # при наличии ошибки результат возаращаем
-        
+    branch_errors = []
+    try:
+        for file in added_files:
+            print(f"Проверяем файл: {file}")
+            module_name = os.path.basename(file).replace('.py', '')
+            result = vp.validate(
+                module_name=module_name,
+                use_gpt=False,
+                required_fields=['dish_name', 'ingredients', 'instructions'],
+                use_gpt_on_errors_only=True
+            )
+            if result.get('failed', 0) > 0 or result.get('total_files', 0) == 0:
+                branch_errors.append(result)
+    except Exception as e:
+        print(f"Ошибка при валидации ветки {branch}: {e}")
+        branch_errors.append({'error': str(e)})
+    
+    run_git_command(['git', 'checkout', current_branch])
+    return branch_errors
 
 
 if __name__ == '__main__':
-    check_all_branches()
-    
-    vp = ValidateParser()
-    
-    # Пример: валидация с GPT
-    result = vp.validate(
-        module_name="xrysessyntages_com",
-        use_gpt=False,
-        required_fields=['dish_name', 'ingredients', 'instructions'],
-        use_gpt_on_errors_only=True
-    )
-    
-    print(json.dumps(result, ensure_ascii=False, indent=2))
+    check_one_branch('copilot/add-evelynscooking-parser')

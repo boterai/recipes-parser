@@ -180,7 +180,7 @@ Your task is to:
 3. Validate extraction quality
 4. If data is missing, try to extract it from HTML
 
-CRITICAL: If the HTML page is clearly NOT a recipe (e.g. homepage, category page, about page, no ingredients/instructions visible),
+CRITICAL: If the HTML page is clearly NOT a recipe (e.g. homepage, category page, about page, recipe listing page with multiple recipes, no ingredients/instructions visible),
 then empty extraction is CORRECT - mark is_valid: true, is_recipe: false.
 
 Return STRICT JSON format:
@@ -260,7 +260,6 @@ Is this a recipe page? If yes, is the extraction correct? If data is missing, ex
             return {
                 'module': module_name,
                 'total_files': 0,
-                'passed': 0,
                 'failed': 0,
                 'details': [],
                 'error': 'test_data_directory_not_found'
@@ -271,7 +270,6 @@ Is this a recipe page? If yes, is the extraction correct? If data is missing, ex
             return {
                 'module': module_name,
                 'total_files': 0,
-                'passed': 0,
                 'failed': 0,
                 'details': [],
                 'error': 'test_data_directory_empty'
@@ -366,21 +364,11 @@ Is this a recipe page? If yes, is the extraction correct? If data is missing, ex
 if __name__ == '__main__':    
     vp = ValidateParser()
 
-    folders = os.listdir("preprocessed")
-    results = {}
-    for folder in folders:
-        # Пример: валидация с GPT
-        if not os.path.exists(os.path.join(EXTRACTOR_FOLDER, folder + '.py')):
-            continue
-        result = vp.validate(
-            module_name=folder,
-            use_gpt=False,
-            required_fields=['dish_name', 'ingredients', 'instructions'],
-            use_gpt_on_errors_only=True
-        )
-        if result.get("total_files") == 0 or result.get("failed") != 0:
-            results[folder] = result
+    result = vp.validate(
+        module_name="xrysessyntages_com",
+        use_gpt=False,
+        required_fields=['dish_name', 'ingredients', 'instructions'],
+        use_gpt_on_errors_only=True
+    )
 
-    with open("fails.json", "w", encoding="utf-8") as f:
-        json.dump(results, f, ensure_ascii=False, indent=2)
     
