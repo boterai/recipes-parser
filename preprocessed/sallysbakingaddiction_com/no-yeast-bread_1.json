@@ -1,0 +1,12 @@
+{
+    "dish_name": "No Yeast Bread",
+    "description": "This dense, chewy, and satisfying no yeast bread rises with baking soda and buttermilk.",
+    "ingredients": "[{\"name\": \"all-purpose flour\", \"units\": \"cups\", \"amount\": 4.25}, {\"name\": \"salt\", \"units\": \"teaspoons\", \"amount\": 1.5}, {\"name\": \"baking soda\", \"units\": \"teaspoons\", \"amount\": 1.5}, {\"name\": \"unsalted butter\", \"units\": \"Tablespoons\", \"amount\": 4}, {\"name\": \"honey\", \"units\": \"Tablespoons\", \"amount\": 2}, {\"name\": \"buttermilk\", \"units\": \"cups\", \"amount\": 1.75}, {\"name\": \"whole oats\", \"units\": \"Tablespoon\", \"amount\": 1}, {\"name\": \"coarse sea salt\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Preheat oven to 400°F (204°C). Line a baking sheet with parchment paper or a silicone baking mat. 2. Whisk the flour, salt, and baking soda together in a large bowl. 3. Whisk the melted butter and honey together. Pour into the flour mixture and toss to combine. 4. In 2-3 additions, pour in the buttermilk mixing for 15-20 seconds after each addition. 5. Pour the shaggy dough onto a lightly floured work surface. Shape into a ball and flatten into a disc. 6. Transfer to the prepared skillet/pan. Brush with buttermilk and score the top with an X. 7. Bake until golden brown, about 45 minutes. 8. Allow to cool before slicing.",
+    "category": "Bread",
+    "prep_time": "15 minutes",
+    "cook_time": "45 minutes",
+    "total_time": "1 hour",
+    "notes": "Buttermilk is key to the bread’s flavor, texture, and rise. If you don’t have buttermilk, you can make a homemade substitute.",
+    "tags": "bread, no yeast, quick bread, soda bread"
+}

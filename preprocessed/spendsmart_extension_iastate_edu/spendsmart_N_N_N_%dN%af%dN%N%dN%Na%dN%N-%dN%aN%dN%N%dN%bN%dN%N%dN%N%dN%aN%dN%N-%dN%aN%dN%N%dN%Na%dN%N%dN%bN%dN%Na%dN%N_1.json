@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pumpkin Oatmeal",
+    "description": "A quick and easy breakfast recipe featuring pumpkin.",
+    "ingredients": "[{\"name\": \"pumpkin puree\", \"units\": \"cup\", \"amount\": \"0.5\"}]",
+    "instructions": "Combine the ingredients in a microwave-safe bowl, heat in the microwave until the oats are soft (about three minutes), and serve.",
+    "category": "Breakfast",
+    "prep_time": null,
+    "cook_time": "3 minutes",
+    "total_time": "5 minutes",
+    "notes": "Leftover pumpkin should be stored in an airtight container in the refrigerator and used within a week. It can also be stored in the freezer for up to three months.",
+    "tags": "pumpkin, oatmeal, breakfast"
+}

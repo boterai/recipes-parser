@@ -1,0 +1,12 @@
+{
+    "dish_name": "Cranberry Honey Butter",
+    "description": "This Cranberry Honey Butter is a deliciously creamy and sweet spread that combines the tartness of homemade cranberry sauce with the smooth richness of salted butter and a hint of natural honey.",
+    "ingredients": "[{\"name\": \"salted butter\", \"units\": \"cup\", \"amount\": \"1/2\"}, {\"name\": \"homemade cranberry sauce\", \"units\": \"tablespoons\", \"amount\": \"3\"}, {\"name\": \"honey\", \"units\": \"tablespoon\", \"amount\": \"1\"}]",
+    "instructions": "Step 1: Gather your ingredients—all at room temperature—and place the butter, cranberry sauce, and honey into a mixing bowl. Step 2: Using an electric mixer, beat the mixture on medium speed until it just comes together and becomes smooth. Step 3: Scrape down the sides of the bowl with a spatula to ensure no lumps, then continue beating on medium-high speed until the butter is light and fluffy. Step 4: Spoon the cranberry honey butter into a small ramekin or a 4-ounce glass jar for a pretty presentation.",
+    "category": null,
+    "prep_time": "5 minutes",
+    "cook_time": null,
+    "total_time": "5 minutes",
+    "notes": "For best results, ensure the butter is softened to room temperature to allow smooth mixing. You can substitute homemade cranberry sauce with store-bought if desired, though the homemade version offers fresher flavor.",
+    "tags": "spread, butter, cranberry, holiday"
+}

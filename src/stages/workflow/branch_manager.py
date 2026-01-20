@@ -1,13 +1,13 @@
-import subprocess
 from pathlib import Path
+import subprocess
+import json
 import os
 
 if __name__ == '__main__':
     import sys
     sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
-from src.stages.validate.validate_branch import ValidateParser
-import json
+from src.stages.workflow.validate_extractor import ValidateParser
 
 def run_git_command(command: list[str]) -> str:
     """Выполняет git команду и возвращает её вывод."""
@@ -82,7 +82,6 @@ def check_all_branches():
     for branch, files in parsers.items():
         print(f"Ветка: {branch}")
         run_git_command(['git', 'checkout', branch])
-        run_git_command(['git', 'cherry-pick', '3746ae4']) # временный фикс для импорта
         vp = ValidateParser()
 
         branch_errors = []

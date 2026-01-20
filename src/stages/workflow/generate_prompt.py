@@ -119,30 +119,30 @@ class PromptGenerator:
             logger.error(f"Ошибка сохранения промпта для {module_name}: {e}")
             return False
     
-    def generate_all_prompts(self) -> int:
+    def generate_all_prompts(self) -> list[str]:
         """
         Генерирует промпты для всех модулей из preprocessed
         
         Returns:
-            Количество успешно сгенерированных промптов
+            модули для которых успешно сгенерированы промпты
         """
         # Загружаем шаблон
         template = self.load_template()
         if not template:
             logger.error("Не удалось загрузить шаблон")
-            return 0
+            return []
         
         # Получаем список модулей
         module_names = self.scan_preprocessed_folders()
         if not module_names:
             logger.warning("Не найдено модулей для генерации")
-            return 0
+            return []
         
         logger.info(f"\n{'='*70}")
         logger.info(f"ГЕНЕРАЦИЯ ПРОМПТОВ ДЛЯ {len(module_names)} МОДУЛЕЙ")
         logger.info(f"{'='*70}\n")
         
-        success_count = 0
+        success_prompts = []
         
         for idx, module_name in enumerate(module_names, 1):
             logger.info(f"\n[{idx}/{len(module_names)}] Обработка модуля: {module_name}")
@@ -161,14 +161,14 @@ class PromptGenerator:
             
             # Сохраняем
             if self.save_prompt(module_name, prompt):
-                success_count += 1
+                success_prompts.append(module_name)
         
         logger.info(f"\n{'='*70}")
-        logger.info(f"ИТОГО: {success_count}/{len(module_names)} промптов создано")
+        logger.info(f"ИТОГО: {len(success_prompts)}/{len(module_names)} промптов создано")
         logger.info(f"Директория: {self.output_dir.absolute()}")
         logger.info(f"{'='*70}\n")
         
-        return success_count
+        return success_prompts
 
 
 def main():

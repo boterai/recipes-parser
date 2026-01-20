@@ -1,0 +1,12 @@
+{
+    "dish_name": "Traditional Irish Soda Bread",
+    "description": "This Traditional Irish Soda Bread recipe delivers a classic, dense yet tender loaf made with simple pantry ingredients like flour, baking soda, salt, and buttermilk.",
+    "ingredients": "[{\"name\": \"all-purpose flour\", \"units\": \"cups\", \"amount\": 4}, {\"name\": \"baking soda\", \"units\": \"teaspoons\", \"amount\": 1.5}, {\"name\": \"salt\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"cold buttermilk\", \"units\": \"cups\", \"amount\": 2}]",
+    "instructions": "1. Preheat your oven to 400℉. Prepare your baking surface by lining a baking sheet with parchment paper or greasing it well; alternatively, you can use an 8-inch cake pan or an ovenproof skillet for a more rustic shape. 2. In a large bowl, whisk together the flour, baking soda, and salt to make sure the leavening and seasoning are evenly distributed throughout the dough. 3. Slowly stir in the cold buttermilk just until everything is combined. The dough will quickly become too stiff to stir with a spoon, so when that happens, transfer it onto a lightly floured surface. 4. With floured hands, gently knead the dough 5 to 10 times – this is just enough to bring it together and evenly moisten all the flour without overworking it, which can toughen the bread. 5. Shape the dough into a roughly 8-inch round and place it on your prepared baking sheet or pan. Using a very sharp knife, cut a shallow X about ¼ to ½ inch deep into the top; this allows steam to escape and helps the bread bake evenly. 6. Bake the bread for 45 to 50 minutes, or until the crust is a beautiful golden brown and the loaf sounds hollow when tapped on the bottom.",
+    "category": null,
+    "prep_time": "15 minutes",
+    "cook_time": "50 minutes",
+    "total_time": "65 minutes",
+    "notes": "Cold buttermilk helps activate the baking soda and creates the traditional dense crumb texture. The X cut on top is essential for proper rising and gives soda bread its iconic look.",
+    "tags": "bread, Irish, soda bread"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Scones",
+    "description": "Use this basic scone dough for any sweet scone variety.",
+    "ingredients": "[{\"name\": \"all-purpose flour\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"granulated sugar\", \"units\": \"cups\", \"amount\": 0.5}, {\"name\": \"salt\", \"units\": \"teaspoons\", \"amount\": 0.5}, {\"name\": \"baking powder\", \"units\": \"teaspoons\", \"amount\": 2.5}, {\"name\": \"unsalted butter\", \"units\": \"cups\", \"amount\": 0.5}, {\"name\": \"heavy cream or buttermilk\", \"units\": \"cups\", \"amount\": 0.5}, {\"name\": \"large egg\", \"units\": null, \"amount\": 1}, {\"name\": \"pure vanilla extract\", \"units\": \"teaspoons\", \"amount\": 1.5}, {\"name\": \"add-ins (chocolate chips, berries, nuts, fruit, etc)\", \"units\": \"cups\", \"amount\": \"1-1.5\"}, {\"name\": \"coarse sugar for topping\", \"units\": null, \"amount\": null}]",
+    "instructions": "Whisk flour, sugar, salt, and baking powder together in a large bowl. Grate the frozen butter using a box grater. Add it to the flour mixture and combine with a pastry cutter, two forks, or your fingers until the mixture comes together in pea-sized crumbs. Whisk heavy cream, the egg, and vanilla extract together in a small bowl. Drizzle over the flour mixture, add the add-ins, then mix together until everything appears moistened. Pour onto the counter and, with floured hands, work dough into a ball. Press into an 8-inch disc and cut into 8 wedges. Brush scones with remaining heavy cream and sprinkle with coarse sugar. Refrigerate for at least 15 minutes. Preheat oven to 400°F (204°C). Bake for 18-26 minutes or until golden brown around the edges.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "20-25 minutes",
+    "total_time": "45 minutes",
+    "notes": "For savory scones, reduce sugar to 2 Tablespoons and omit vanilla. You can freeze scone dough before or after baking.",
+    "tags": "scones, baking, dessert"
+}

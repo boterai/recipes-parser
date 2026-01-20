@@ -413,8 +413,8 @@ Return ONLY JSON array of IDs representing similar recipes."""
         logger.info(f"Saved clusters to file {filepath}.")
 
 if __name__ == "__main__":
-    filepath = "recipe_clusters/ingredients_clusters94_batch.txt"
-    dsu_filepath = "recipe_clusters/ingredients_clusters94_dsu_state.json"
+    filepath = "recipe_clusters/ingredients_clusters95_batch.txt"
+    dsu_filepath = "recipe_clusters/ingredients_clusters95_dsu_state.json"
     ss = SimilaritySearcher()
     # при полном запуске иногда возникает таймаут, поэтому можно использваоть запуск частями, указывая max_recipes
     """clusters = ss.build_clusters_from_collection(
