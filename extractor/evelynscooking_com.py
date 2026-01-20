@@ -27,7 +27,10 @@ class EvelynsCookingExtractor(BaseRecipeExtractor):
                 # Ищем Recipe в данных
                 if isinstance(data, dict) and data.get('@type') == 'Recipe':
                     if 'name' in data:
-                        return self.clean_text(data['name'])
+                        name = self.clean_text(data['name'])
+                        # Убираем суффикс " Recipe"
+                        name = re.sub(r'\s+Recipe$', '', name, flags=re.IGNORECASE)
+                        return name
                         
             except (json.JSONDecodeError, KeyError):
                 continue
@@ -43,7 +46,9 @@ class EvelynsCookingExtractor(BaseRecipeExtractor):
         # Попытка из H1
         h1 = self.soup.find('h1')
         if h1:
-            return self.clean_text(h1.get_text())
+            name = self.clean_text(h1.get_text())
+            name = re.sub(r'\s+Recipe$', '', name, flags=re.IGNORECASE)
+            return name
         
         return None
     
@@ -59,7 +64,10 @@ class EvelynsCookingExtractor(BaseRecipeExtractor):
                 # Ищем Recipe в данных
                 if isinstance(data, dict) and data.get('@type') == 'Recipe':
                     if 'description' in data:
-                        return self.clean_text(data['description'])
+                        desc = self.clean_text(data['description'])
+                        # Берем только первое предложение
+                        first_sentence = desc.split('.')[0] + '.'
+                        return first_sentence
                         
             except (json.JSONDecodeError, KeyError):
                 continue
@@ -67,12 +75,16 @@ class EvelynsCookingExtractor(BaseRecipeExtractor):
         # Альтернативно - из meta description
         meta_desc = self.soup.find('meta', {'name': 'description'})
         if meta_desc and meta_desc.get('content'):
-            return self.clean_text(meta_desc['content'])
+            desc = self.clean_text(meta_desc['content'])
+            first_sentence = desc.split('.')[0] + '.'
+            return first_sentence
         
         # Альтернативно - из og:description
         og_desc = self.soup.find('meta', property='og:description')
         if og_desc and og_desc.get('content'):
-            return self.clean_text(og_desc['content'])
+            desc = self.clean_text(og_desc['content'])
+            first_sentence = desc.split('.')[0] + '.'
+            return first_sentence
         
         return None
     
@@ -159,8 +171,9 @@ class EvelynsCookingExtractor(BaseRecipeExtractor):
         for fraction, decimal in fraction_map.items():
             text = text.replace(fraction, decimal)
         
-        # Паттерн для извлечения количества, единицы и названия
-        pattern = r'^([\d\s/.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|tube|tubes?)?\s*(.+)'
+        # Паттерн для извлечения количества, единицы (с возможными скобками) и названия
+        # Примеры: "1 cup flour", "2 tablespoons butter", "1 tube (16.3 oz) dough"
+        pattern = r'^([\d\s/.,]+)?\s*((?:cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|tube|tubes?)(?:\s*\([^)]+\))?)\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -169,10 +182,10 @@ class EvelynsCookingExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "unit": None
+                "units": None
             }
         
-        amount_str, unit, name = match.groups()
+        amount_str, units, name = match.groups()
         
         # Обработка количества
         amount = None
@@ -188,20 +201,23 @@ class EvelynsCookingExtractor(BaseRecipeExtractor):
                         total += float(num) / float(denom)
                     else:
                         total += float(part)
-                amount = str(total)
+                amount = total
             else:
-                amount = amount_str.replace(',', '.')
+                try:
+                    amount = float(amount_str.replace(',', '.'))
+                except ValueError:
+                    amount = amount_str
         
-        # Обработка единицы измерения
-        unit = unit.strip() if unit else None
+        # Обработка единицы измерения (уже включает скобки если они есть)
+        units = units.strip() if units else None
         
         # Очистка названия
-        # Удаляем скобки с содержимым
-        name = re.sub(r'\([^)]*\)', '', name)
+        # Не удаляем скобки из названия, так как они должны быть в units
         # Удаляем фразы "to taste", "as needed", "optional"
         name = re.sub(r'\b(to taste|as needed|or more|if needed|optional|for garnish)\b', '', name, flags=re.IGNORECASE)
-        # Удаляем лишние пробелы и запятые
-        name = re.sub(r'[,;]+$', '', name)
+        # Удаляем запятые и следующий текст (например, ", crumbled")
+        name = re.sub(r',.*$', '', name)
+        # Удаляем лишние пробелы
         name = re.sub(r'\s+', ' ', name).strip()
         
         if not name or len(name) < 2:
@@ -210,7 +226,7 @@ class EvelynsCookingExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "unit": unit
+            "units": units
         }
     
     def extract_instructions(self) -> Optional[str]:
@@ -395,7 +411,16 @@ class EvelynsCookingExtractor(BaseRecipeExtractor):
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
-        # Пытаемся найти в HTML секцию с примечаниями
+        # Ищем секцию notes в tasty-recipes
+        notes_body = self.soup.find(class_='tasty-recipes-notes-body')
+        if notes_body:
+            # Извлекаем все элементы списка
+            items = notes_body.find_all('li')
+            if items:
+                notes_list = [self.clean_text(item.get_text()) for item in items]
+                return ' '.join(notes_list)
+        
+        # Альтернативно - ищем в HTML секцию с примечаниями
         notes_patterns = [
             re.compile(r'notes?', re.I),
             re.compile(r'tips?', re.I),
@@ -406,6 +431,10 @@ class EvelynsCookingExtractor(BaseRecipeExtractor):
             notes_section = self.soup.find(class_=pattern)
             
             if notes_section:
+                # Удаляем заголовок "Notes"
+                for h_tag in notes_section.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
+                    h_tag.decompose()
+                
                 text = notes_section.get_text(separator=' ', strip=True)
                 text = self.clean_text(text)
                 return text if text else None
