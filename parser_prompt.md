@@ -76,7 +76,6 @@
 - `description`
 - `ingredients`
 - `instructions`
-- `nutrition_info`
 - `category`
 - `prep_time`
 - `cook_time`
@@ -117,9 +116,6 @@
 
 - `instructions`:  
   - строка со всеми щагами из рецепта
-
-- `nutrition_info`:  
-  Словарь с данными о питательной ценности формат kkal Б/Ж/У, например 130kkal; 10/12/20:
 
 - `category`:  
   Строка или список строк — тип блюда / кухонная категория (например, `"Dessert"`, `"French"`, `"Main Course"`).

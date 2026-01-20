@@ -24,14 +24,12 @@ if __name__ == "__main__":
     sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 import config.config as config
-from src.common.db.mysql import MySQlManager
 from src.stages.extract.recipe_extractor import RecipeExtractor
 from src.stages.analyse.analyse import RecipeAnalyzer
 from src.repositories.site import SiteRepository
 from src.repositories.page import PageRepository
 from src.models.site import Site
-import sqlalchemy
-from src.models.page import Page, PageORM
+from src.models.page import Page
 # Настройка логирования
 logging.basicConfig(
     level=logging.INFO,
@@ -113,7 +111,6 @@ class SiteExplorer:
         self.load_visited_urls_from_db()
 
         # Инициализация экстрактора для проверки и извлечения рецептов
-        self.recipe_extractor = None
         self.recipe_extractor = RecipeExtractor()
         self.max_no_recipe_pages: Optional[int] = max_no_recipe_pages 
         self.no_recipe_page_count: int = 0  # Счетчик страниц без рецепта подряд
@@ -980,7 +977,7 @@ class SiteExplorer:
                         self.logger.error("Страница не загрузилась, пропускаем")
                         self.failed_urls.add(current_url)
                         continue
-                
+                     
                 # Проверка на Cloudflare/Captcha
                 try:
                     page_title = self.driver.title.lower()

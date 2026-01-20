@@ -319,6 +319,7 @@ class AutoScraper:
                 # здесь проводим обработку уже имеющихся сайтов
                 self.logger.info("Начинаем обработку необработанных сайтов...\n")
                 sites = self.site_repository.get_unprocessed_sites(limit=min_unprocessed_sites, random_order=True) # получаем случайные необработанные сайты
+                random.shuffle(sites)
                 for site in sites:
                     try:
                         self.logger.info(f"\n=== Обработка сайта ID={site.id}, URL={site.base_url} ===")

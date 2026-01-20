@@ -8,20 +8,19 @@ import logging
 import time
 from pathlib import Path
 from typing import Optional, Any
-from decimal import Decimal
 from urllib.parse import urlparse
-from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-import sqlalchemy
+
 
 if __name__ == "__main__":
     import sys
     sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
-from src.models.page import PageORM, Page
+from src.models.page import PageORM
 from src.repositories.page import PageRepository
 from src.repositories.site import SiteRepository
-from src.common.gpt_client import GPTClient
+from src.common.gpt.client import GPTClient
+from utils.html import extract_text_from_html
 
 # Загрузка переменных окружения
 load_dotenv()
@@ -112,40 +111,6 @@ class RecipeAnalyzer:
             logger.error(f"Ошибка анализа заголовков: {e}")
             return []
     
-    def extract_text_from_html(self, html_path: str) -> Optional[str]:
-        """
-        Извлечение текста из HTML файла
-        
-        Args:
-            html_path: Путь к HTML файлу
-            
-        Returns:
-            Извлеченный текст или None при ошибке
-        """
-        try:
-            with open(html_path, 'r', encoding='utf-8') as f:
-                html_content = f.read()
-            
-            soup = BeautifulSoup(html_content, 'lxml')
-            
-            # Удаление скриптов и стилей
-            for script in soup(['script', 'style', 'nav', 'footer', 'header']):
-                script.decompose()
-            
-            # Извлечение текста
-            text = soup.get_text(separator='\n', strip=True)
-            
-            # Ограничение размера для API
-            max_chars = 30000
-            if len(text) > max_chars:
-                text = text[:max_chars] + "\n... (текст обрезан)"
-            
-            return text
-            
-        except Exception as e:
-            logger.error(f"Ошибка извлечения текста из {html_path}: {e}")
-            return None
-    
     def analyze_with_gpt(self, page_text: str, url: str) -> dict[str, Any]:
         """
         Анализ страницы с использованием ChatGPT API
@@ -179,7 +144,6 @@ URL: {url}
     "cook_time": "время приготовления (например, '30 minutes') или null",
     "total_time": "общее время (например, '45 minutes') или null",
     "category": "категория/тип блюда (например, 'Dessert', 'Main Course') или null",
-    "nutrition_info": "информация о питательной ценности в текстовом формате или null",
     "notes": "дополнительные заметки, советы, замены ингредиентов или null",
     "tags": "теги через запятую или null"
 }}
@@ -239,7 +203,6 @@ URL: {url}
                 cook_time=analysis.get("cook_time"),
                 total_time=analysis.get("total_time"),
                 category=analysis.get("category"),
-                nutrition_info=analysis.get("nutrition_info"),
                 notes=analysis.get("notes"),
                 tags=analysis.get("tags"),
                 ingredients=ingredients,
@@ -270,7 +233,7 @@ URL: {url}
         logger.info(f"Анализ страницы ID {page_id}: {url}")
         
         # Извлечение текста
-        page_text = self.extract_text_from_html(html_path)
+        page_text = extract_text_from_html(html_path, max_chars=30000)
         if not page_text:
             logger.warning(f"Не удалось извлечь текст из {html_path}")
             return False

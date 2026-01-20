@@ -11,12 +11,11 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
 import queue
 from typing import Optional
-
+import random
 # Добавление корневой директории в PYTHONPATH
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.stages.parse.parse import RecipeParserRunner
-
 
 # Создаем директорию для логов
 LOGS_DIR = Path(__file__).parent.parent / "logs"
@@ -79,7 +78,7 @@ def setup_thread_logger(module_name: str, port: int) -> logging.Logger:
 
 
 def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_depth: int = 4, 
-                      max_no_recipe_pages: Optional[int] = 20):
+                      max_no_recipe_pages: Optional[int] = 30):
     """
     Запуск парсера в отдельном потоке с собственным логгером
     
@@ -142,13 +141,14 @@ def main(module_name: str = "24kitchen_nl", port: int = 9222):
 
 
 def run_parallel(ports: list[int], max_workers: int = None, modules: list[str] = None, 
-                 max_urls: int = 2500, max_depth: int = 4):
+                 max_urls: int = 4000, max_depth: int = 4, max_recipes_per_module: Optional[int] = 4000):
     """
     Запуск парсеров в нескольких потоках с отдельными логами
     
     Args:
         ports: Список портов для парсинга
         max_workers: Максимальное количество потоков (по умолчанию = len(ports))
+        max_recipes_per_module: Максимальное количество URL для каждого модуля (далее уже этотт модуль игнорируется)
     """
     logger.info(f"{'='*60}")
     logger.info(f"ПАРАЛЛЕЛЬНЫЙ ЗАПУСК {len(ports)} ПАРСЕРОВ")
@@ -156,11 +156,17 @@ def run_parallel(ports: list[int], max_workers: int = None, modules: list[str] =
     
     parser = RecipeParserRunner(extractor_dir="extractor")
 
+    processed_modules = []
+    if max_recipes_per_module is not None:
+        processed_modules = parser.site_repository.get_extractors(min_recipes=max_recipes_per_module)
+
     if not modules:
-        modules = parser.available_extractors.copy()
+        modules = [ex for ex in parser.available_extractors if ex not in processed_modules]
     else:
-        modules.extend(parser.available_extractors)
-        modules = list(set(modules))
+        extractors = parser.available_extractors.copy()
+        extractors = [ex for ex in extractors if not (ex in processed_modules and ex  in modules)]
+        random.shuffle(extractors)
+        modules.extend(extractors)
     
     logger.info(f"\nВсего модулей: {len(modules)}, Портов: {len(ports)}")
     
@@ -261,7 +267,7 @@ if __name__ == "__main__":
         '--ports',
         type=int,
         nargs='+',
-        default=[9222, 9223, 9224],
+        default=[9222, 9223, 9224, 9225, 9226],
         help='Список портов для параллельного запуска (по умолчанию: 9222 9223 9224)'
     )
     parser.add_argument(
@@ -274,13 +280,20 @@ if __name__ == "__main__":
     parser.add_argument(
         '--modules',
         type=str,
-        default=["cookeatworld_com", "desidakaar_com", "budapestcookingclass_com", "simplyrecipes_com", "speedinfo_com_ua"],
+        default=["unaricettaalgiorno_com", "xrysessyntages_com", "smachnoho_com_ua", "tl_usefultipsdiy_com"],
         help='Имя модуля экстрактора для одиночного запуска (по умолчанию: 24kitchen_nl)'
+    )
+
+    parser.add_argument(
+        '--max_recipes_per_module',
+        type=int,
+        default=4000,
+        help='Максимальное количество рецептов для каждого модуля при параллельном запуске'
     )
     
     args = parser.parse_args()
     
     if args.parallel:
-        run_parallel(ports=args.ports, max_workers=args.workers, modules=args.modules)
+        run_parallel(ports=args.ports, max_workers=args.workers, modules=args.modules, max_recipes_per_module=args.max_recipes_per_module)
     else:
         main(args.modules[0], args.ports[0])

@@ -155,8 +155,8 @@ def run_parallel_preparation(
     logger.info(f"Логи сохранены в: {LOGS_DIR}")
     logger.info(f"{'='*60}")
 
-
 if __name__ == "__main__":
+
     parser = argparse.ArgumentParser(description='Подготовка сайтов для парсинга рецептов')
     parser.add_argument(
         '--parallel',
@@ -168,7 +168,7 @@ if __name__ == "__main__":
         '--ports',
         type=int,
         nargs='+',
-        default=[9222, 9223],
+        default=[9222, 9223, 9224],
         help='Список портов Chrome (по умолчанию: 9222)'
     )
     parser.add_argument(

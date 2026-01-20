@@ -31,7 +31,6 @@ class PageORM(Base):
     ingredients = Column(Text)  # JSON список ингредиентов
     instructions = Column(Text)  # JSON или текст с шагами
     dish_name = Column(String(500))
-    nutrition_info = Column(Text)
     category = Column(String(255))
     prep_time = Column(String(100))
     cook_time = Column(String(100))
@@ -138,7 +137,6 @@ class Page(BaseModel):
     description: Optional[str] = None  # TEXT - описание рецепта
     instructions: Optional[str] = None  # TEXT - JSON или текст с шагами
     dish_name: Optional[str] = None  # VARCHAR(500) - название блюда
-    nutrition_info: Optional[str] = None  # TEXT - JSON с питательной ценностью
     category: Optional[str] = None  # VARCHAR(255)
     prep_time: Optional[str] = None  # VARCHAR(100) - "30 minutes"
     cook_time: Optional[str] = None  # VARCHAR(100) - "45 minutes"
@@ -148,7 +146,6 @@ class Page(BaseModel):
     images: Optional[list[Image]] = None  # Список объектов изображений (при наличии)
     tags: Optional[str] = None  # TEXT - теги через запятую
 
-    
     # Оценка достоверности
     confidence_score: Optional[float] = Field(default=float('0.00'))
     is_recipe: Optional[bool] = False
@@ -180,7 +177,7 @@ class Page(BaseModel):
     def page_to_json(self) -> dict:
         """Преобразование данных рецепта в JSON-совместимый словарь"""
         recipe_fields = [
-            'dish_name', 'description', 'ingredients', 'instructions', 'nutrition_info',
+            'dish_name', 'description', 'ingredients', 'instructions',
             'category', 'prep_time', 'cook_time','total_time', 
             'notes', 'tags'
         ]
@@ -245,8 +242,8 @@ class Page(BaseModel):
             cook_time=self.cook_time or "",
             prep_time=self.prep_time or "",
             total_time=self.total_time or "",
-            nutrition_info=self.nutrition_info or "",
-            category=self.category or ""
+            category=self.category or "",
+            notes=self.notes or ""
         )
     
     @classmethod

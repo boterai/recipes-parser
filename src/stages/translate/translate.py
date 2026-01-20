@@ -12,7 +12,7 @@ if __name__ == "__main__":
     sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.common.db.clickhouse import ClickHouseManager
-from src.common.gpt_client import GPTClient
+from src.common.gpt.client import GPTClient
 from src.models.page import Page, PageORM
 from src.models.page import Recipe
 from utils.languages import LanguageCodes, validate_and_normalize_language
@@ -50,6 +50,9 @@ class Translator:
         self.olap_table = f"recipe_{self.target_language}"
         # Инициализация GPT клиента
         self.gpt_client = GPTClient()
+
+        with open("src/models/schemas/translated_recipe.json", "r", encoding="utf-8") as f:
+            self.translation_schema = json.load(f)
 
         if self.olap_db.connect() is False:
             logger.error("Не удалось подключиться к ClickHouse")
@@ -220,7 +223,7 @@ class Translator:
             system_prompt = f"""You are a professional recipe translator. Translate the following recipe JSON to {self.target_language} language.
 
 IMPORTANT:
-1. Translate completely and accurately these fields: "dish_name", "description", "ingredients", "tags", "category", "instructions"
+1. Translate completely and accurately these fields: "dish_name", "description", "ingredients", "tags", "category", "instructions", "cook_time", "prep_time", "total_time".
 2. Return the result in the same valid JSON format without changing the structure or adding any comments
 3. If a field is null or empty, leave it as is
 4. Preserve all measurements, numbers, and formatting
@@ -237,7 +240,8 @@ IMPORTANT:
                 user_prompt=user_prompt,
                 model="gpt-3.5-turbo",
                 temperature=0.3,
-                max_tokens=3000
+                max_tokens=3000,
+                response_schema=self.translation_schema
             )
             
             # Парсим ответ от GPT
@@ -278,7 +282,5 @@ IMPORTANT:
                 return
         
         for i in site_ids:
-            if i < 32:
-                continue  # пропускаем сайты с маленькими ID (тестовые и т.п.)
             await self.translate_and_save_batch(site_id=i, batch_size=batch_size)
             

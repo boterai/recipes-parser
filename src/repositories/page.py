@@ -237,7 +237,10 @@ class PageRepository(BaseRepository[PageORM]):
         """
         session = self.get_session()
         try:
-            existing = session.query(PageORM).filter(PageORM.url == page_orm.url).first()
+            if page_orm.id: # ищем по ID если есть
+                existing = session.query(PageORM).filter(PageORM.id == page_orm.id).first()
+            else: # иначе по URL
+                existing = session.query(PageORM).filter(PageORM.url == page_orm.url).first()
 
             if existing:
                 # Обновляем существующую страницу
@@ -371,7 +374,6 @@ class PageRepository(BaseRepository[PageORM]):
                     'cook_time': page.cook_time,
                     'total_time': page.total_time,
                     'category': page.category,
-                    'nutrition_info': page.nutrition_info,
                     'notes': page.notes,
                     'tags': page.tags
                 }

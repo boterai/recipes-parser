@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 import re
 import asyncio
 import aiohttp
+from src.common.gpt.clean_response import GPTJsonExtractor
 # Загрузка переменных окружения
 load_dotenv()
 
@@ -70,7 +71,8 @@ class GPTClient:
         temperature: float = 0.1,
         max_tokens: Optional[int] = None,
         timeout: int = 30,
-        retry_attempts: int = 3
+        retry_attempts: int = 3,
+        response_schema: Optional[dict] = None
     ) -> dict[str, Any]:
         """
         Асинхронный запрос к ChatGPT API с повторными попытками
@@ -83,6 +85,7 @@ class GPTClient:
             max_tokens: Максимальное количество токенов в ответе
             timeout: Таймаут запроса в секундах
             retry_attempts: Количество попыток при ошибках
+            response_schema: Схема валидации ответа (опционально), помогает вычищать ответ от двойных кавычек и лишних символов 
             
         Returns:
             Распарсенный JSON ответ от GPT
@@ -142,6 +145,18 @@ class GPTClient:
                         return result
                 
             except json.JSONDecodeError as e:
+                # если есть схема - пробуем ручной парсинг
+                if response_schema:
+                    try:
+                        logger.info("Попытка ручного парсинга JSON от GPT с использованием схемы")
+                        extractor = GPTJsonExtractor(response_schema)
+                        result = extractor.extract_all_values(result_text)
+                        return result
+                    except Exception as inner_e:
+                        logger.error(f"Ошибка ручного парсинга JSON от GPT: {inner_e}")
+                        logger.error(f"Ответ GPT для ручного парсинга: {result_text if 'result_text' in locals() else 'N/A'}")
+                        last_exception = inner_e
+                        break
                 logger.error(f"Ошибка парсинга JSON от GPT: {e}")
                 logger.error(f"Ответ GPT: {result_text if 'result_text' in locals() else 'N/A'}")
                 last_exception = e
@@ -257,10 +272,10 @@ class GPTClient:
                 return result
                 
             except json.JSONDecodeError as e:
+                # JSON ошибка пробуем ручной парсинг если есть схема
                 logger.error(f"Ошибка парсинга JSON от GPT: {e}")
                 logger.error(f"Ответ GPT: {result_text if 'result_text' in locals() else 'N/A'}")
                 last_exception = e
-                # JSON ошибки не повторяем
                 break
                 
             except requests.exceptions.HTTPError as e:

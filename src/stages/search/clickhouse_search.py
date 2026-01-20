@@ -1,5 +1,5 @@
 from src.common.db.clickhouse import ClickHouseManager
-from src.common.gpt_client import GPTClient
+from src.common.gpt.client import GPTClient
 from src.models.recipe import Recipe
 from typing import Optional
 import logging
@@ -287,7 +287,6 @@ Query: "pasta with tomatoes without meat"
                 cook_time,
                 prep_time,
                 total_time,
-                nutrition_info,
                 arraySum(arrayMap(
                     pattern -> if(arrayExists(ing -> positionCaseInsensitive(ing, pattern) > 0, ingredients), 1, 0),
                     %(target_ingredients)s)
@@ -452,7 +451,6 @@ Query: "pasta with tomatoes without meat"
                 cook_time,
                 prep_time,
                 total_time,
-                nutrition_info,
                 ({score_calculation}) as relevance_score
             FROM {table_name}
             WHERE {where_clause}
@@ -589,7 +587,6 @@ Query: "pasta with tomatoes without meat"
                 cook_time,
                 prep_time,
                 total_time,
-                nutrition_info,
                 ({score_calculation}) as relevance_score
             FROM {table_name}
             WHERE {where_clause}
