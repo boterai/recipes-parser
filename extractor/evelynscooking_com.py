@@ -15,6 +15,12 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class EvelynsCookingExtractor(BaseRecipeExtractor):
     """Экстрактор для evelynscooking.com"""
     
+    # Compile regex pattern for ingredient parsing at class level for better performance
+    INGREDIENT_PATTERN = re.compile(
+        r'^([\d\s/.,]+)?\s*((?:cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|tube|tubes?)(?:\s*\([^)]+\))?)\s*(.+)',
+        re.IGNORECASE
+    )
+    
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
         # Сначала пытаемся извлечь из JSON-LD
@@ -171,11 +177,8 @@ class EvelynsCookingExtractor(BaseRecipeExtractor):
         for fraction, decimal in fraction_map.items():
             text = text.replace(fraction, decimal)
         
-        # Паттерн для извлечения количества, единицы (с возможными скобками) и названия
-        # Примеры: "1 cup flour", "2 tablespoons butter", "1 tube (16.3 oz) dough"
-        pattern = r'^([\d\s/.,]+)?\s*((?:cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|tube|tubes?)(?:\s*\([^)]+\))?)\s*(.+)'
-        
-        match = re.match(pattern, text, re.IGNORECASE)
+        # Use pre-compiled regex pattern
+        match = self.INGREDIENT_PATTERN.match(text)
         
         if not match:
             # Если паттерн не совпал, возвращаем только название
