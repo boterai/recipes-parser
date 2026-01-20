@@ -36,15 +36,64 @@ class CozinhaTradicionalExtractor(BaseRecipeExtractor):
     
     def extract_description(self) -> Optional[str]:
         """Извлечение описания рецепта"""
-        # Ищем в meta description
+        # Ищем в wprm-fallback-recipe-summary (приоритет)
+        summary_p = self.soup.find('p', class_='wprm-fallback-recipe-summary')
+        
+        if summary_p:
+            # Проверяем, есть ли текст в этом параграфе
+            text = self.clean_text(summary_p.get_text())
+            if not text or len(text) < 10:
+                # Если пустой, ищем следующий параграф-сиблинг
+                next_p = summary_p.find_next_sibling('p')
+                if next_p:
+                    summary_p = next_p
+            
+            text = self.clean_text(summary_p.get_text())
+            if text:
+                # Убираем вводные фразы типа "Experimente [название блюда], [описание]"
+                match = re.search(r'Experimente\s+[^,]+,\s*(.+)', text, flags=re.IGNORECASE)
+                if match:
+                    text = match.group(1)
+                
+                # Убираем восклицательный знак в конце и добавляем точку
+                text = text.rstrip('!').rstrip('.')
+                if text:
+                    return text + '.'
+        
+        # Альтернативно - в div с классом wprm-fallback-recipe-summary
+        summary_div = self.soup.find('div', class_='wprm-fallback-recipe-summary')
+        if summary_div:
+            p_tag = summary_div.find('p')
+            if p_tag:
+                text = self.clean_text(p_tag.get_text())
+                if text:
+                    match = re.search(r'Experimente\s+[^,]+,\s*(.+)', text, flags=re.IGNORECASE)
+                    if match:
+                        text = match.group(1)
+                    text = text.rstrip('!').rstrip('.')
+                    if text:
+                        return text + '.'
+        
+        # Ищем в основном тексте первый параграф с описанием
+        content_div = self.soup.find('div', class_='nv-content-wrap')
+        if content_div:
+            for p in content_div.find_all('p'):
+                text = self.clean_text(p.get_text())
+                # Фильтруем параграфы с заголовками или очень короткие
+                if text and len(text) > 50 and not text.endswith(':'):
+                    # Проверяем, что это не начало с инструкций
+                    if not any(text.lower().startswith(prefix) for prefix in ['use ', 'para ', 'em uma', 'em outra', 'você pode', 'mistura']):
+                        # Извлекаем основное описание
+                        match = re.search(r'é\s+(.+)', text, re.IGNORECASE)
+                        if match:
+                            desc = match.group(1).strip().rstrip('.').rstrip('!')
+                            return desc + '.'
+                        return text
+        
+        # В крайнем случае - из meta description
         meta_desc = self.soup.find('meta', {'name': 'description'})
         if meta_desc and meta_desc.get('content'):
             return self.clean_text(meta_desc['content'])
-        
-        # Альтернативно - из og:description
-        og_desc = self.soup.find('meta', property='og:description')
-        if og_desc and og_desc.get('content'):
-            return self.clean_text(og_desc['content'])
         
         return None
     
@@ -56,7 +105,7 @@ class CozinhaTradicionalExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1 pacote de massa para lasanha" или "500 ml de leite"
             
         Returns:
-            dict: {"name": "massa para lasanha", "amount": "1", "units": "pacote"} или None
+            dict: {"name": "massa para lasanha", "amount": 1, "units": "pacote"} или None
         """
         if not ingredient_text:
             return None
@@ -64,24 +113,28 @@ class CozinhaTradicionalExtractor(BaseRecipeExtractor):
         # Чистим текст
         text = self.clean_text(ingredient_text).lower()
         
-        # Убираем скобочные пояснения для упрощения парсинга
-        text_for_parsing = re.sub(r'\([^)]*\)', '', text)
+        # Убираем скобочные пояснения для упрощения парсинга, но сохраняем оригинал для имени
+        text_for_parsing = re.sub(r'\([^)]*\)', '', text).strip()
         
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "1 pacote de massa", "500 ml de leite", "2 colheres de sopa de azeite"
         # Базовые единицы измерения
-        units_pattern = r'(?:pacotes?|latas?|unidades?|dentes?|colheres?(?:\s+de\s+sopa)?(?:\s+de\s+chá)?|ml|g|kg|litros?|l|a gosto)'
+        units_pattern = r'(?:pacotes?|latas?|unidades?|unidade|dentes?|colheres?(?:\s+de\s+sopa)?(?:\s+de\s+chá)?|colher(?:\s+de\s+sopa)?(?:\s+de\s+chá)?|ml|g|kg|litros?|liter|l)'
         
         # Паттерн: число + единица + de + название
         pattern = rf'^(\d+(?:[.,]\d+)?)\s+({units_pattern})\s+(?:de\s+)?(.+)'
-        match = re.match(pattern, text_for_parsing.strip(), re.IGNORECASE)
+        match = re.match(pattern, text_for_parsing, re.IGNORECASE)
         
         if match:
             amount_str, unit, name = match.groups()
-            amount = amount_str.replace(',', '.')
+            # Конвертируем amount в число
+            try:
+                amount = int(amount_str) if '.' not in amount_str and ',' not in amount_str else float(amount_str.replace(',', '.'))
+            except ValueError:
+                amount = amount_str
             
-            # Очистка названия от "a gosto" и подобных фраз
-            name = re.sub(r'\s+(a gosto|quanto baste)$', '', name, flags=re.IGNORECASE).strip()
+            # Очистка названия от лишних слов
+            name = re.sub(r'\s+(a gosto|quanto baste|picad[oa]s?|ralad[oa]s?)$', '', name, flags=re.IGNORECASE).strip()
             
             return {
                 "name": name,
@@ -90,16 +143,31 @@ class CozinhaTradicionalExtractor(BaseRecipeExtractor):
             }
         
         # Паттерн без единицы измерения (только количество + название)
-        # Например: "2 cebolas", "3 ovos"
+        # Например: "2 cebolas", "3 ovos"  
         pattern2 = r'^(\d+(?:[.,]\d+)?)\s+(.+)'
-        match2 = re.match(pattern2, text_for_parsing.strip())
+        match2 = re.match(pattern2, text_for_parsing)
         
         if match2:
             amount_str, name = match2.groups()
-            amount = amount_str.replace(',', '.')
+            # Конвертируем amount в число
+            try:
+                amount = int(amount_str) if '.' not in amount_str and ',' not in amount_str else float(amount_str.replace(',', '.'))
+            except ValueError:
+                amount = amount_str
             
             # Очистка названия
-            name = re.sub(r'\s+(a gosto|quanto baste)$', '', name, flags=re.IGNORECASE).strip()
+            name = re.sub(r'\s+(a gosto|quanto baste|picad[oa]s?|ralad[oa]s?)$', '', name, flags=re.IGNORECASE).strip()
+            
+            # Если есть слово "de" в середине, возможно это единица измерения
+            # Например: "1 colher de sopa de salsinha" -> units="colher de sopa", name="salsinha"
+            unit_match = re.match(r'^(colher(?:es)?\s+de\s+(?:sopa|chá))\s+(?:de\s+)?(.+)', name, re.IGNORECASE)
+            if unit_match:
+                unit, name = unit_match.groups()
+                return {
+                    "name": name.strip(),
+                    "amount": amount,
+                    "units": unit.strip()
+                }
             
             return {
                 "name": name,
@@ -107,14 +175,13 @@ class CozinhaTradicionalExtractor(BaseRecipeExtractor):
                 "units": None
             }
         
-        # Если нет количества (например, "sal a gosto")
-        # Убираем "a gosto", "quanto baste" и т.п.
+        # Если нет количества (например, "sal a gosto", "sal e pimenta-do-reino a gosto")
         name = re.sub(r'\s+(a gosto|quanto baste)$', '', text_for_parsing, flags=re.IGNORECASE).strip()
         
         # Убираем артикли и предлоги в начале
         name = re.sub(r'^(?:o|a|os|as|de|do|da|dos|das)\s+', '', name).strip()
         
-        if name and len(name) > 2:
+        if name and len(name) > 1:
             return {
                 "name": name,
                 "amount": None,
@@ -157,21 +224,31 @@ class CozinhaTradicionalExtractor(BaseRecipeExtractor):
             # Извлекаем элементы списка (ol > li)
             step_items = instructions_container.find_all('li')
             
+            current_section = []
             for item in step_items:
                 step_text = item.get_text(separator=' ', strip=True)
                 step_text = self.clean_text(step_text)
                 
                 if step_text:
-                    # Пропускаем заголовки секций (обычно короткие и заканчиваются двоеточием)
-                    # но сохраняем их, если это единственный текст в шаге
-                    steps.append(step_text)
-        
-        # Объединяем все шаги, добавляя нумерацию если её нет
-        if steps:
-            # Проверяем, есть ли уже нумерация
-            if not re.match(r'^\d+\.', steps[0]):
-                steps = [f"{idx}. {step}" for idx, step in enumerate(steps, 1)]
+                    # Проверяем, является ли это заголовком секции (короткий текст, заканчивается двоеточием)
+                    is_section_header = step_text.endswith(':') and len(step_text) < 30
+                    
+                    if is_section_header:
+                        # Сохраняем накопленный текст предыдущей секции
+                        if current_section:
+                            steps.append(' '.join(current_section))
+                        # Начинаем новую секцию с заголовка
+                        current_section = [step_text]
+                    else:
+                        # Добавляем к текущей секции
+                        current_section.append(step_text)
             
+            # Добавляем последнюю секцию
+            if current_section:
+                steps.append(' '.join(current_section))
+        
+        # Объединяем все секции
+        if steps:
             return ' '.join(steps)
         
         return None
@@ -224,13 +301,14 @@ class CozinhaTradicionalExtractor(BaseRecipeExtractor):
         if cook_time_meta:
             return self.clean_text(cook_time_meta.get_text())
         
-        # Пытаемся извлечь из инструкций (ищем упоминания времени)
+        # Пытаемся извлечь из инструкций (ищем все упоминания времени и суммируем)
         instructions_text = self.extract_instructions()
         if instructions_text:
-            # Ищем паттерны типа "30 minutos", "40 minutes"
-            time_match = re.search(r'(\d+)\s*(?:minutos?|minutes?)', instructions_text, re.IGNORECASE)
-            if time_match:
-                return f"{time_match.group(1)} minutes"
+            # Ищем все паттерны типа "30 minutos", "10 minutes"
+            time_matches = re.findall(r'(\d+)\s*(?:minutos?|minutes?)', instructions_text, re.IGNORECASE)
+            if time_matches:
+                total_minutes = sum(int(m) for m in time_matches)
+                return f"{total_minutes} minutes"
         
         return None
     
@@ -257,25 +335,48 @@ class CozinhaTradicionalExtractor(BaseRecipeExtractor):
         notes = []
         
         # Ищем секции с заметками после основного контента рецепта
-        # Обычно это блоки с strong заголовками и списками
+        # Обычно это блоки с strong заголовками
         content_div = self.soup.find('div', class_='nv-content-wrap')
         
         if content_div:
-            # Ищем все параграфы со strong внутри и следующие за ними ul списки
-            for strong in content_div.find_all('strong'):
-                parent = strong.parent
-                if parent and parent.name == 'p':
-                    # Проверяем, что это похоже на заголовок совета
+            # Ищем все параграфы со strong внутри
+            for p in content_div.find_all('p'):
+                strong = p.find('strong')
+                if strong:
                     strong_text = self.clean_text(strong.get_text())
+                    # Проверяем, что это похоже на заголовок совета (заканчивается двоеточием)
                     if strong_text and ':' in strong_text:
-                        # Ищем следующий ul элемент
-                        next_sibling = parent.find_next_sibling()
-                        if next_sibling and next_sibling.name == 'ul':
-                            # Извлекаем текст из li
-                            for li in next_sibling.find_all('li'):
-                                note_text = self.clean_text(li.get_text())
-                                if note_text:
-                                    notes.append(note_text)
+                        # Извлекаем текст после strong (основной текст заметки)
+                        # Получаем весь текст параграфа
+                        full_text = self.clean_text(p.get_text())
+                        # Убираем заголовок из текста
+                        note_text = full_text.replace(strong_text, '').strip()
+                        
+                        if note_text:
+                            # Убираем лишние слова-связки
+                            note_text = re.sub(r'\bportanto\b,?\s*', '', note_text, flags=re.IGNORECASE)
+                            note_text = re.sub(r'\bem suma\b,?\s*', '', note_text, flags=re.IGNORECASE)
+                            note_text = re.sub(r'\bpor isso\b,?\s*', '', note_text, flags=re.IGNORECASE)
+                            note_text = re.sub(r'\bassim\b,?\s*', '', note_text, flags=re.IGNORECASE)
+                            # Очищаем от множественных пробелов
+                            note_text = re.sub(r'\s+', ' ', note_text).strip()
+                            notes.append(note_text)
+                
+                # Также проверяем следующий элемент - может быть ul список с заметками
+                next_elem = p.find_next_sibling()
+                if strong and next_elem and next_elem.name == 'ul' and 'wp-block-list' in next_elem.get('class', []):
+                    for li in next_elem.find_all('li'):
+                        note_text = self.clean_text(li.get_text())
+                        if note_text:
+                            # Убираем лишние слова-связки
+                            note_text = re.sub(r'\bportanto\b,?\s*', '', note_text, flags=re.IGNORECASE)
+                            note_text = re.sub(r'\bem suma\b,?\s*', '', note_text, flags=re.IGNORECASE)
+                            note_text = re.sub(r'\bpor isso\b,?\s*', '', note_text, flags=re.IGNORECASE)
+                            note_text = re.sub(r'\bassim\b,?\s*', '', note_text, flags=re.IGNORECASE)
+                            note_text = re.sub(r'^Opte\s+', '', note_text, flags=re.IGNORECASE)
+                            note_text = re.sub(r'\s+', ' ', note_text).strip()
+                            if note_text and not any(skip in note_text.lower() for skip in ['melhores panelas', 'melhores fornos', 'melhores fogões']):
+                                notes.append(note_text)
         
         return ' '.join(notes) if notes else None
     
