@@ -8,7 +8,7 @@ if __name__ == '__main__':
 
 from src.stages.workflow.generate_prompt import PromptGenerator
 from src.common.github.client import GitHubClient
-from src.stages.workflow.branch_manager import check_one_branch, get_current_branch
+from src.stages.workflow.branch_manager import check_one_branch, get_current_branch, delete_branch
 
 logger = logging.getLogger(__name__)
 
@@ -65,11 +65,13 @@ class CopilotWorkflow:
                 if self.github_client.merge_pr(pr['number'], auto_mark_ready=True):
                     issue_id = pr.get("_links", {}).get("issue", {}).get('href', "").split('/')[-1]
                     self.github_client.mark_issue_as_completed(issue_number=int(issue_id))
-            else:
+                # удаление ветки после мерджа pr
+                delete_branch(pr['head']['ref'])
+            else: 
                 # оставить комментарий с ошибками и потребовать исправления
                 pass
 
 
 if __name__ == "__main__":
     workflow = CopilotWorkflow()
-    workflow.create_issues_for_parsers()
+    workflow.check_review_requested_prs()

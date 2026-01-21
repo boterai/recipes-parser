@@ -30,8 +30,7 @@ class GitHubClient:
         title: str,
         body: str,
         assignees: list[str] = None,
-        labels: list[str] = None,
-        branch: Optional[str] = None
+        labels: list[str] = None
     ) -> Optional[dict]:
         """
         Создает issue из словаря
@@ -58,11 +57,7 @@ class GitHubClient:
         response = requests.post(url, headers=self.headers, json=payload)
         
         if response.status_code == 201:
-            data = response.json()
-            if branch:
-                logger.info(f"Issue '{title}' создана. Установка development branch: {branch}")
-                self.set_issue_development_branch(issue_number=data['number'], branch_name=branch)
-            return data
+            return response.json()
         else:
             logger.error(f"Failed to create issue '{title}': {response.status_code} - {response.text}")
             return None
@@ -72,8 +67,7 @@ class GitHubClient:
         title: str,
         filepath: str,
         assignees: list[str] = None,
-        labels: list[str] = None,
-        branch: Optional[str] = None
+        labels: list[str] = None
     ) -> Optional[dict]:
         """
         Создает issue из файла с описанием
@@ -98,9 +92,7 @@ class GitHubClient:
             title=title,
             body=body,
             assignees=assignees,
-            labels=labels,
-            branch=branch
-
+            labels=labels
         )
     
     def list_repository_issues(self, state: str = "open") -> Optional[list[dict]]:
@@ -113,20 +105,28 @@ class GitHubClient:
         Returns:
             Список issues
         """
-        # TODO добавить поддержку на больше чем 100 issues
         url = f"{self.base_url}/repos/{self.owner}/{self.repo}/issues"
-        params = {
-            "state": state,
-            "per_page": 100
-        }
-        
-        response = requests.get(url, headers=self.headers, params=params)
-        
-        if response.status_code == 200:
-            return response.json()
-        else:
-            logger.error(f"Failed to fetch issues: {response.status_code} - {response.text}")
-            return None
+
+        issues = []
+        page = 1
+        while True:
+            params = {
+                "page": page,
+                "state": state,
+                "per_page": 50
+            }
+            
+            response = requests.get(url, headers=self.headers, params=params)
+            
+            if response.status_code == 200:
+                issue_page = response.json()
+                if not issue_page:
+                    return issues
+                issues.extend(issue_page)
+                page += 1
+            else:
+                logger.error(f"Failed to fetch issues: {response.status_code} - {response.text}")
+                return None
         
     def list_branches(self) -> Optional[list[dict]]:
         """
@@ -333,100 +333,6 @@ class GitHubClient:
         
         logger.warning(f"Issue с заголовком '{issue_title}' не найдена")
         return False
-    
-    def assign_issue_to_copilot(self, issue_number: int) -> bool:
-        """
-        Назначает issue пользователю Copilot
-        
-        Args:
-            issue_number: номер issue
-        
-        Returns:
-            True если успешно
-        """
-        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/issues/{issue_number}/assignees"
-        
-        payload = {
-            "assignees": ["Copilot"]
-        }
-        
-        response = requests.post(url, headers=self.headers, json=payload)
-        
-        if response.status_code == 201:
-            logger.info(f"Issue #{issue_number} успешно назначена Copilot")
-            return True
-        else:
-            logger.error(f"Failed to assign issue #{issue_number} to Copilot: {response.status_code} - {response.text}")
-            return False
-        
-    def set_issue_development_branch(self, issue_number: int, branch_name: str) -> bool:
-        """
-        Устанавливает development branch для issue через GitHub Projects API.
-        
-        Args:
-            issue_number: номер issue
-            branch_name: имя ветки (например, 'main' или 'develop')
-        
-        Returns:
-            True если успешно
-        """
-        graphql_url = "https://api.github.com/graphql"
-        
-        # 1. Получаем node_id issue
-        issue = self.get_issue(issue_number)
-        if not issue:
-            logger.error(f"Cannot find issue #{issue_number} to set development branch")
-            return False
-        
-        issue_node_id = issue.get('node_id')
-        
-        # 2. Создаём development branch через GraphQL
-        mutation = """
-        mutation CreateLinkedBranch($issueId: ID!, $name: String!, $repositoryId: ID!) {
-          createLinkedBranch(input: {
-            issueId: $issueId
-            name: $name
-            repositoryId: $repositoryId
-          }) {
-            linkedBranch {
-              ref {
-                name
-              }
-            }
-          }
-        }
-        """
-        
-        # Получаем repository node_id
-        repo_url = f"{self.base_url}/repos/{self.owner}/{self.repo}"
-        repo_resp = requests.get(repo_url, headers=self.headers)
-        if repo_resp.status_code != 200:
-            logger.error(f"Failed to get repo info: {repo_resp.status_code}")
-            return False
-        
-        repo_node_id = repo_resp.json().get('node_id')
-        
-        payload = {
-            "query": mutation,
-            "variables": {
-                "issueId": issue_node_id,
-                "name": branch_name,
-                "repositoryId": repo_node_id
-            }
-        }
-        
-        response = requests.post(graphql_url, headers=self.headers, json=payload)
-        
-        if response.status_code == 200:
-            result = response.json()
-            if 'errors' in result:
-                logger.error(f"GraphQL errors: {result['errors']}")
-                return False
-            logger.info(f"Issue #{issue_number} linked to branch '{branch_name}'")
-            return True
-        else:
-            logger.error(f"Failed to link branch: {response.status_code} - {response.text}")
-            return False
         
     def get_issue(self, issue_number: int) -> Optional[dict]:
         """
@@ -450,5 +356,5 @@ class GitHubClient:
         
 if __name__ == "__main__":
     gh_client = GitHubClient()
-    pr = gh_client.get_issue(178)
+    pr = gh_client.list_repository_issues(state="all")
     print(pr)

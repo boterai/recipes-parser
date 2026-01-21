@@ -92,6 +92,23 @@ def check_one_branch(branch: str) -> list[dict]:
 
     return branch_errors
 
+def delete_branch(branch: str) -> bool:
+    """Удаляет локальную и удаленную ветку.
+    
+    Args:
+        branch: имя ветки для удаления
+    
+    Returns:
+        True если успешно удалена
+    """
+    try:
+        run_git_command(['git', 'branch', '-D', branch])
+        run_git_command(['git', 'push', 'origin', '--delete', branch])
+        logger.info(f"Ветка {branch} успешно удалена локально и на удаленном репозитории.")
+        return True
+    except Exception as e:
+        logger.error(f"Ошибка при удалении ветки {branch}: {e}")
+        return False
 
 if __name__ == '__main__':
-    check_one_branch('copilot/create-parser-for-sallysbakingaddiction')
+    delete_branch('copilot/create-parser-for-sallysbakingaddiction')
