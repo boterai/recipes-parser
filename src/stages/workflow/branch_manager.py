@@ -66,6 +66,7 @@ class BranchManager:
         branch_errors = []
         try:
             try:
+                self._run_git_command(['git', 'pull', 'origin', branch])
                 self._run_git_command(['git', 'checkout', branch])
             except Exception:
                 self._run_git_command(['git', 'fetch', 'origin'])
