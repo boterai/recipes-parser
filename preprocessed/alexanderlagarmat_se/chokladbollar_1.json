@@ -1,0 +1,13 @@
+{
+    "dish_name": "Chokladbollar",
+    "description": "Klassiska chokladbollar som är enkla att göra. Perfekt fika!",
+    "ingredients": "[{\"name\": \"smör\", \"amount\": \"100\", \"unit\": \"g\"}, {\"name\": \"socker\", \"amount\": \"1\", \"unit\": \"dl\"}, {\"name\": \"kakao\", \"amount\": \"2\", \"unit\": \"msk\"}, {\"name\": \"havregryn\", \"amount\": \"3\", \"unit\": \"dl\"}, {\"name\": \"kallt kaffe\", \"amount\": \"2\", \"unit\": \"msk\"}, {\"name\": \"vaniljsocker\", \"amount\": \"1\", \"unit\": \"tsk\"}, {\"name\": \"Kokos för rullning\", \"amount\": null, \"unit\": null}]",
+    "instructions": "1. Blanda samman smör och socker tills det blir krämigt. 2. Tillsätt kakao, havregryn, kaffe och vaniljsocker. Blanda väl. 3. Rulla till bollar och vänd i kokos. 4. Ställ i kylen i minst 30 minuter innan servering.",
+    "category": "Dessert",
+    "prep_time": "15 minuter",
+    "cook_time": null,
+    "total_time": "15 minuter",
+    "notes": "Du kan även rulla bollarna i pärlsocker eller hackade nötter istället för kokos. Förvaras i kylskåp.",
+    "tags": "choklad, fika, bakning, efterrätt",
+    "image_urls": "https://alexanderlagarmat.se/wp-content/uploads/2024/02/chokladbollar.jpg,https://alexanderlagarmat.se/wp-content/uploads/2024/02/chokladbollar-step.jpg"
+}

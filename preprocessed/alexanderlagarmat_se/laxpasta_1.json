@@ -1,0 +1,13 @@
+{
+    "dish_name": "Krämig Laxpasta med Citron",
+    "description": "En krämig och läcker laxpasta med en touch av citron. Snabb middag som är klar på 20 minuter!",
+    "ingredients": "[{\"name\": \"pasta\", \"amount\": \"400\", \"unit\": \"g\"}, {\"name\": \"lax\", \"amount\": \"300\", \"unit\": \"g\"}, {\"name\": \"grädde\", \"amount\": \"2\", \"unit\": \"dl\"}, {\"name\": \"citron\", \"amount\": \"1\", \"unit\": \"st\"}, {\"name\": \"vitlök\", \"amount\": \"2\", \"unit\": \"klyftor\"}, {\"name\": \"ärtor\", \"amount\": \"1\", \"unit\": \"dl\"}, {\"name\": \"smör\", \"amount\": \"1\", \"unit\": \"msk\"}, {\"name\": \"Salt och peppar\", \"amount\": null, \"unit\": null}]",
+    "instructions": "1. Koka pastan enligt anvisning på förpackningen. 2. Medan pastan kokar, skär laxen i bitar och hacka vitlöken fint. 3. Hetta upp smöret i en stor stekpanna och stek laxen tills den är genomstekt. 4. Tillsätt vitlöken och stek ytterligare en minut. 5. Häll i grädden, ärtorna och rivna citronskal. Låt koka upp. 6. Blanda i den kokta pastan och smaka av med salt, peppar och citronsaft.",
+    "category": "Main Course",
+    "prep_time": "10 minuter",
+    "cook_time": "10 minuter",
+    "total_time": "20 minuter",
+    "notes": "Du kan byta ut laxen mot kyckling eller räkor. Servera gärna med riven parmesan på toppen!",
+    "tags": "lax, pasta, middag, snabbt, citron",
+    "image_urls": "https://alexanderlagarmat.se/wp-content/uploads/2024/01/laxpasta-hero.jpg"
+}
