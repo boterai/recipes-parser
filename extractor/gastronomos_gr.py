@@ -172,7 +172,8 @@ class GastronomosExtractor(BaseRecipeExtractor):
         
         # Pattern: amount + unit + name
         # Examples: "500 γρ. мука", "2 αυγά", "1/2 ματσάκι άνηθος"
-        pattern = r'^([\d./,\s]+)\s*([α-ωά-ώa-z.]+)?\s+(.+)$'
+        # Using Unicode word characters and Greek letter ranges
+        pattern = r'^([\d./,\s]+)\s*([\u0370-\u03FFa-z.]+)?\s+(.+)$'
         match = re.match(pattern, line, re.IGNORECASE | re.UNICODE)
         
         if match:
