@@ -1,3 +1,4 @@
+import re
 import os
 import logging
 import requests
@@ -287,7 +288,7 @@ class GitHubClient:
             logger.error(f"Failed to add review to PR #{pr_number}: {response.status_code} - {response.text}")
             return False
         
-    def mark_issue_as_completed(self, issue_number: int) -> bool:
+    def close_issue(self, issue_number: int) -> bool:
         """
         Помечает issue как закрытую
         
@@ -312,28 +313,6 @@ class GitHubClient:
             logger.error(f"Failed to close issue #{issue_number}: {response.status_code} - {response.text}")
             return False
         
-    def mark_issue_as_completed_by_title(self, issue_title: str) -> bool:
-        """
-        Помечает issue как закрытую по заголовку
-        
-        Args:
-            issue_title: заголовок issue
-        
-        Returns:
-            True если успешно
-        """
-        issues = self.list_repository_issues(state="open")
-        if not issues:
-            logger.error("Не удалось получить список открытых issues")
-            return False
-        
-        for issue in issues:
-            if issue.get('title') == issue_title:
-                return self.mark_issue_as_completed(issue.get('number'))
-        
-        logger.warning(f"Issue с заголовком '{issue_title}' не найдена")
-        return False
-        
     def get_issue(self, issue_number: int) -> Optional[dict]:
         """
         Получает информацию об issue по номеру
@@ -353,6 +332,56 @@ class GitHubClient:
         else:
             logger.error(f"Failed to fetch issue #{issue_number}: {response.status_code} - {response.text}")
             return None
+        
+    def get_pr(self, pr_number: int) -> Optional[dict]:
+        """
+        Получает информацию о pull request по номеру
+        
+        Args:
+            pr_number: номер pull request
+        
+        Returns:
+            Данные pull request или None при ошибке
+        """
+        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/pulls/{pr_number}"
+        
+        response = requests.get(url, headers=self.headers)
+        
+        if response.status_code == 200:
+            return response.json()
+        else:
+            logger.error(f"Failed to fetch PR #{pr_number}: {response.status_code} - {response.text}")
+            return None
+        
+    def close_pr_linked_issue(self, pr_number: int, pr_data: Optional[dict]) -> list[int]:
+        """
+        Возвращает номера issue, которые PR закроет (closing issues) — через GraphQL.
+        Fallback: парсит body PR на Closes/Fixes/Resolves #N.
+        """
+        if not pr_data:
+            pr_data = self.get_pr(pr_number)
+            if not pr_data:
+                return []
+        
+        issue = pr_data.get('issue_url')
+        issue_data = requests.get(issue, headers=self.headers).json()
+        body = issue_data.get('body', '')
+        patterns = [
+            r'(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+#(\d+)',  # Closes #123
+            r'(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+[\w-]+/[\w-]+#(\d+)',  # Closes owner/repo#123
+            r'<!--.*?(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+[\w-]+/[\w-]+#(\d+).*?-->',  # <!-- Fixes owner/repo#173 -->
+        ]
+        
+        issue_numbers = set()
+        for pattern in patterns:
+            matches = re.findall(pattern, body, flags=re.IGNORECASE)
+            issue_numbers.update(int(m) for m in matches)
+        
+        if not issue_numbers:
+            logger.warning(f"PR #{pr_number} не содержит closing issues (нет Closes/Fixes/Resolves)")
+        
+        for isn in issue_numbers:
+            self.close_issue(isn)
         
 if __name__ == "__main__":
     gh_client = GitHubClient()

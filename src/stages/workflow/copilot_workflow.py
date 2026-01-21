@@ -63,8 +63,7 @@ class CopilotWorkflow:
             if not errors:
                 logger.info(f"PR #{pr['number']} прошел валидацию. Закрытие ревью, мердж pull request.")
                 if self.github_client.merge_pr(pr['number'], auto_mark_ready=True):
-                    issue_id = pr.get("_links", {}).get("issue", {}).get('href', "").split('/')[-1]
-                    self.github_client.mark_issue_as_completed(issue_number=int(issue_id)-1)
+                    self.github_client.close_pr_linked_issue(pr['number'], pr)
                 # удаление ветки после мерджа pr
                 delete_branch(pr['head']['ref'])
             else: 
@@ -74,4 +73,8 @@ class CopilotWorkflow:
 
 if __name__ == "__main__":
     workflow = CopilotWorkflow()
+    import requests
+
+    res = requests.get("https://api.github.com/repos/boterai/recipes-parser/issues/181")
+    data = res.json()
     workflow.check_review_requested_prs()
