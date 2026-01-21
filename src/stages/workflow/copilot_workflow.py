@@ -64,7 +64,7 @@ class CopilotWorkflow:
                 logger.info(f"PR #{pr['number']} прошел валидацию. Закрытие ревью, мердж pull request.")
                 if self.github_client.merge_pr(pr['number'], auto_mark_ready=True):
                     issue_id = pr.get("_links", {}).get("issue", {}).get('href', "").split('/')[-1]
-                    self.github_client.mark_issue_as_completed(issue_number=int(issue_id))
+                    self.github_client.mark_issue_as_completed(issue_number=int(issue_id)-1)
                 # удаление ветки после мерджа pr
                 delete_branch(pr['head']['ref'])
             else: 
