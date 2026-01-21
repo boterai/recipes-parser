@@ -15,6 +15,9 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class AlexanderLagarmatSeExtractor(BaseRecipeExtractor):
     """Экстрактор для alexanderlagarmat.se"""
     
+    # Единицы измерения для парсинга ингредиентов
+    MEASUREMENT_UNITS = r'dl|l|ml|gram|g|kg|tsk|msk|krm|stora?|st|stycken?|pinch'
+    
     @staticmethod
     def parse_iso_duration(duration: str) -> Optional[str]:
         """
@@ -146,14 +149,14 @@ class AlexanderLagarmatSeExtractor(BaseRecipeExtractor):
         
         # Паттерн для извлечения: число (включая дроби) + единица + название
         # Примеры: "4.5 dl vetemjöl", "120 gram smör", "2 ägg", "1/2 tsk salt"
-        pattern = r'^([\d./]+)\s+(dl|l|ml|gram|g|kg|tsk|msk|krm|stora?|st|stycken?|pinch)?\s*(.+)'
+        pattern = rf'^([\d./]+)\s+({self.MEASUREMENT_UNITS})?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
         if not match:
             # Если паттерн не совпал, возвращаем только название (без количества)
             # Убираем возможные начальные числа и единицы
-            cleaned_name = re.sub(r'^[\d./]+\s*(?:dl|l|ml|gram|g|kg|tsk|msk|krm|stora?|st|stycken?|pinch)?\s*', '', text)
+            cleaned_name = re.sub(rf'^[\d./]+\s*(?:{self.MEASUREMENT_UNITS})?\s*', '', text, flags=re.IGNORECASE)
             if not cleaned_name:
                 cleaned_name = text
             
