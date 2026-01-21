@@ -1,0 +1,12 @@
+{
+    "dish_name": "Painici cu ciuperci si verdeturi uscate",
+    "description": "Reteta de painici cu ciuperci si verdeturi uscate, usor de preparat.",
+    "ingredients": "[{\"name\": \"apa\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"faina neagra\", \"units\": \"gr\", \"amount\": 500}, {\"name\": \"sare grunjoasa\", \"units\": \"lingura\", \"amount\": 1}, {\"name\": \"zahar\", \"units\": \"linguri\", \"amount\": 2}, {\"name\": \"drojdie uscata\", \"units\": \"gr\", \"amount\": 7}, {\"name\": \"ulei de masline\", \"units\": \"linguri\", \"amount\": 4}, {\"name\": \"viorele\", \"units\": \"gr\", \"amount\": 50}, {\"name\": \"oregano uscat\", \"units\": \"gr\", \"amount\": 5}, {\"name\": \"busuioc uscat\", \"units\": \"gr\", \"amount\": 5}, {\"name\": \"cimbru uscat\", \"units\": \"gr\", \"amount\": 5}, {\"name\": \"rozmarin uscat\", \"units\": \"gr\", \"amount\": 5}]",
+    "instructions": "1. Maruntiti ciupercile si verdeturile uscate. 2. Puneti ingredientele in masina de paine in ordinea corecta. 3. Preparati aluatul manual sau cu masina de paine. 4. Dupa dospire, formati painicile si coaceti-le.",
+    "category": "Garnituri",
+    "prep_time": "10 minutes",
+    "cook_time": "1 hour 30 minutes",
+    "total_time": "1 hour 40 minutes",
+    "notes": "Pastrati ordinea ingredientelor pentru a asigura cresterea aluatului.",
+    "tags": "painici, ciuperci, verdeturi, reteta, italiana"
+}

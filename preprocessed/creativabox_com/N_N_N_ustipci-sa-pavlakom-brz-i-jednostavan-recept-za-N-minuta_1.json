@@ -1,0 +1,12 @@
+{
+    "dish_name": "Uštipci sa Pavlakom",
+    "description": "Mekani, ukusni i brzo gotovi, savršeni su za doručak, užinu ili večeru.",
+    "ingredients": "[{\"name\": \"jaja\", \"units\": null, \"amount\": 2}, {\"name\": \"pavlake\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"brašna\", \"units\": \"g\", \"amount\": 450}, {\"name\": \"praška za pecivo\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"soli\", \"units\": \"kašičica\", \"amount\": 1}]",
+    "instructions": "Uštipke izvadite na papirni ubrus kako biste uklonili višak ulja. Poslužite ih tople uz pavlaku, sir, džem ili namaz po izboru.",
+    "category": null,
+    "prep_time": "15 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Po želji, u testo možete dodati i malo rendanog sira za dodatnu aromu. Koristite neutralno ulje za prženje kako bi uštipci zadržali svoj blagi ukus.",
+    "tags": null
+}

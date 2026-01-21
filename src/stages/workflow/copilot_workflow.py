@@ -23,8 +23,6 @@ class CopilotWorkflow:
     
     def create_issues_for_parsers(self):
         """Создает GitHub issues с промптами для создания парсеров на основе preprocessed данных."""
-
-        current_branch = self.branch_manager.get_current_branch()
         prompts = self.prompt_generator.generate_all_prompts()
         if not prompts:
             logger.info("Нет промптов для создания issues.")
@@ -45,8 +43,7 @@ class CopilotWorkflow:
             title = ISSUE_PREFIX + module_name
             issue = self.github_client.create_issue_from_dict(
                 title=title,
-                body=prompts[module_name],
-                branch=current_branch
+                body=prompts[module_name]
             )
             if issue:
                 logger.info(f"Создан issue: {issue['html_url']}")
@@ -94,7 +91,11 @@ class CopilotWorkflow:
         return pr_comment
 
     def check_review_requested_prs(self):
-        """Проверяет завершенные PR и обновляет статусы задач."""
+        """Проверяет завершенные PR и обновляет статусы задач.
+        Для каждого PR с запрошенным ревью выполняет валидацию парсера.
+        TODO: проверить как работате при наличии ошибок в pr
+        
+        """
         prs = self.github_client.list_pr()
         prs = [pr for pr in prs if len(pr.get('requested_reviewers')) > 0]
         logger.info(f"Найдено {len(prs)} PR с запрошенным ревью.")
@@ -116,8 +117,6 @@ class CopilotWorkflow:
             self.branch_manager.delete_branch(pr['head']['ref'])
             self.branch_manager.update_current_branch()
             self.clear_preprocessed_data()
-
-
 
 if __name__ == "__main__":
     workflow = CopilotWorkflow()

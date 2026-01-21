@@ -1,0 +1,12 @@
+{
+    "dish_name": "Zvrk Rolnice sa Krompirom",
+    "description": "Recept za zvrk rolnice sa krompirom, kombinacija mekog testa, kremastog krompira i začina.",
+    "ingredients": "[{\"name\": \"brašno T-400\", \"units\": \"g\", \"amount\": \"800-850\"}, {\"name\": \"jogurt\", \"units\": \"ml\", \"amount\": \"200\"}, {\"name\": \"voda\", \"units\": \"ml\", \"amount\": \"200\"}, {\"name\": \"jaje\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"ulje\", \"units\": \"ml\", \"amount\": \"50\"}, {\"name\": \"šećer\", \"units\": \"kašičica\", \"amount\": \"1\"}, {\"name\": \"kvasac\", \"units\": \"g\", \"amount\": \"30\"}, {\"name\": \"so\", \"units\": \"kašičice\", \"amount\": \"1.5\"}, {\"name\": \"putera ili margarina\", \"units\": \"g\", \"amount\": \"200\"}, {\"name\": \"jaje za premazivanje\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"kuvan krompir\", \"units\": \"kg\", \"amount\": \"1\"}, {\"name\": \"putera ili margarina\", \"units\": \"g\", \"amount\": \"100\"}, {\"name\": \"peršun\", \"units\": \"vezica\", \"amount\": \"1\"}, {\"name\": \"mleko\", \"units\": \"ml\", \"amount\": \"50\"}, {\"name\": \"suhomesnati proizvod\", \"units\": \"g\", \"amount\": \"150\"}, {\"name\": \"tvrdog sira\", \"units\": \"g\", \"amount\": \"50-100\"}, {\"name\": \"so\", \"units\": null, \"amount\": null}, {\"name\": \"biber\", \"units\": null, \"amount\": null}, {\"name\": \"origano\", \"units\": null, \"amount\": null}]",
+    "instructions": "Premažite rolnice jajetom i stavite ih u prethodno zagrejanu rernu. Pecite na 200°C 10 minuta, a zatim smanjite temperaturu na 180°C i pecite još 25 minuta, dok ne dobiju lepu zlatnu boju.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "35 minutes",
+    "total_time": null,
+    "notes": "Ove zvrk rolnice sa krompirom su prava poslastica koju ćete voleti iz prve.",
+    "tags": null
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ravioli cu sos si ciuperci",
+    "description": "Rețetă savuroasă și simplă de ravioli cu sos de ciuperci.",
+    "ingredients": "[{\"name\": \"Ravioli\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"Ciuperci - tăiate felii\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"Usturoi întreg - decojit și tocat mărunt\", \"units\": \"g\", \"amount\": 15}, {\"name\": \"Unt\", \"units\": \"g\", \"amount\": 45}, {\"name\": \"Apă (sau supă de pui sau de legume)\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"Smântână de gătit\", \"units\": \"g\", \"amount\": 240}, {\"name\": \"Mix de condimente italiene - sau ierburi de provence\", \"units\": \"g\", \"amount\": 5}, {\"name\": \"Sare și piper\", \"units\": \"g\", \"amount\": 5}]",
+    "instructions": "1. Fierbeți ravioli conform instrucțiunilor de pe pachet. Asigurați-vă că apa este bine sărată. 2. Într-o tigaie mare, topiți untul și adăugați usturoiul tocat. 3. Adăugați ciupercile și gătiți până se înmoaie. 4. Adăugați apă sau supă și lăsați să fiarbă. 5. Adăugați smântâna și condimentele. 6. Amestecați ravioli cu sosul și serviți.",
+    "category": "fel principal",
+    "prep_time": "15 minute",
+    "cook_time": "25 minute",
+    "total_time": "40 minute",
+    "notes": "Puteți înlocui smântâna de gătit cu smântână vegetală pentru o variantă vegană.",
+    "tags": "vegetarian, ravioli, sos, ciuperci"
+}
