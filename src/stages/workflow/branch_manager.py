@@ -93,7 +93,7 @@ class BranchManager:
         
         except Exception as e:
             logger.error(f"Ошибка при проверке ветки {branch}: {e}")
-            return []
+            raise e
         finally:
             self._run_git_command(['git', 'checkout', current_branch])
 

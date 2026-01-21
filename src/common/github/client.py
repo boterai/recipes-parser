@@ -382,6 +382,8 @@ class GitHubClient:
         
         for isn in issue_numbers:
             self.close_issue(isn)
+
+    
         
 if __name__ == "__main__":
     gh_client = GitHubClient()

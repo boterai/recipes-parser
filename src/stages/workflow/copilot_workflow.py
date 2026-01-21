@@ -69,6 +69,30 @@ class CopilotWorkflow:
         else:
             logger.info(f"Директория не найдена или не является директорией: {preprocessed_dir}")
 
+    def make_pr_comment_from_errors(self, errors: list[dict]) -> str:
+        """Формирует комментарий к PR на основе ошибок валидации парсера.
+        
+        Args:
+            errors: Список ошибок валидации
+        
+        Returns:
+            Текст комментария
+        """
+        pr_comment = "Валидация парсера выявила следующие проблемы, исправь их:\n\n"
+        for error in errors:
+            pr_comment += f"- Модуль: {error['module']}, Всего файлов: {error['total_files']}, Ошибок: {error['failed']}\n"
+            for detail in error.get('details', []):
+                pr_comment += f"  - Файл: {detail['file']}, Статус: {detail['status']}\n"
+                gpt_val = detail.get('gpt_validation')
+                if gpt_val:
+                    pr_comment += f"    - GPT Валидация: {'Корректно' if gpt_val['is_valid'] else 'Некорректно'}\n"
+                    if not gpt_val['is_valid']:
+                        pr_comment += f"    - Отзыв: {gpt_val['feedback']}\n"
+                        for rec in gpt_val.get('fix_recommendations', []):
+                            pr_comment += f"      - Поле: {rec['field']}, Проблема: {rec['issue']}, Ожидаемое значение: {rec['expected_value']}, Фактическое значение: {rec['actual_value']}\n"
+                            pr_comment += f"        - Рекомендация по исправлению: {rec['fix_suggestion']}\n"
+        return pr_comment
+
     def check_review_requested_prs(self):
         """Проверяет завершенные PR и обновляет статусы задач."""
         prs = self.github_client.list_pr()
@@ -76,19 +100,24 @@ class CopilotWorkflow:
         logger.info(f"Найдено {len(prs)} PR с запрошенным ревью.")
         for pr in prs:
             logger.info(f"Проверка PR #{pr['number']}: {pr['title']}")
-            errors = self.branch_manager.check_branch(pr['head']['ref'])
-            print(errors)
-            if not errors:
-                logger.info(f"PR #{pr['number']} прошел валидацию. Закрытие ревью, мердж pull request.")
-                if self.github_client.merge_pr(pr['number'], auto_mark_ready=True):
-                    self.github_client.close_pr_linked_issue(pr['number'], pr)
-                # удаление ветки после мерджа pr и получение изменений в локальную ветку
-                self.branch_manager.delete_branch(pr['head']['ref'])
-                self.branch_manager.update_current_branch()
-                self.clear_preprocessed_data()
-            else: 
-                # оставить комментарий с ошибками и потребовать исправления
-                pass
+            #errors = self.branch_manager.check_branch(pr['head']['ref'])
+            errors = [{'module': 'ritzyrecipes_com', 'total_files': 3, 'failed': 1, 'details': [{'file': 'preprocessed/ritzyrecipes_com/irish-soda-bread_print_N_1_extracted.json', 'status': 'failed', 'gpt_validation': {'is_valid': False, 'is_recipe': True, 'missing_fields': [], 'incorrect_fields': ['tags'], 'feedback': 'The extraction is mostly correct, but the tags field does not match the reference data.', 'fix_recommendations': [{'field': 'tags', 'issue': 'Tags do not match reference data.', 'expected_value': 'Irish, Bread', 'actual_value': 'irish soda bread, no yeast bread, quick bread, st patricks day bread', 'fix_suggestion': 'Update the extraction logic to ensure that the tags field is extracted correctly from the source, matching the reference data format.'}]}}]}]
+            if errors:
+                logger.info(f"PR #{pr['number']} не прошел валидацию.")
+                pr_comment = self.make_pr_comment_from_errors(errors)
+                print(pr_comment)
+                if self.github_client.add_review_to_pr(pr['number'], pr_comment, "REQUEST_CHANGES"):
+                    logger.info(f"Добавлено требование изменений к PR #{pr['number']}.")
+                continue
+
+            logger.info(f"PR #{pr['number']} прошел валидацию. Закрытие ревью, мердж pull request.")
+            if self.github_client.merge_pr(pr['number'], auto_mark_ready=True):
+                self.github_client.close_pr_linked_issue(pr['number'], pr)
+            # удаление ветки после мерджа pr и получение изменений в локальную ветку
+            self.branch_manager.delete_branch(pr['head']['ref'])
+            self.branch_manager.update_current_branch()
+            self.clear_preprocessed_data()
+
 
 
 if __name__ == "__main__":
