@@ -73,8 +73,4 @@ class CopilotWorkflow:
 
 if __name__ == "__main__":
     workflow = CopilotWorkflow()
-    import requests
-
-    res = requests.get("https://api.github.com/repos/boterai/recipes-parser/issues/181")
-    data = res.json()
     workflow.check_review_requested_prs()
