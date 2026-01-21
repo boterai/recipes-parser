@@ -435,11 +435,11 @@ if __name__ == "__main__":
             params=ClusterParams(
                 max_recipes=5000,
                 limit=35,
-                score_threshold=0.94,
+                score_threshold=0.90,
                 scroll_batch=500,
                 query_batch=32
             ),
-            build_type="ingredients"
+            build_type="full"
         )
         ss.save_dsu_state(dsu_filepath)
         print(f"Total clusters found: {len(clusters)}")

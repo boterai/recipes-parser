@@ -89,6 +89,7 @@ Your task is to compare extracted recipe data with reference data and determine:
 1. Is this actually a recipe page? (check if dish_name, ingredients, instructions make sense)
 2. Are the extracted fields matching the reference data?
 3. Is the extraction quality acceptable?
+4. Provide ACTIONABLE feedback for fixing the extractor
 
 IMPORTANT: If the page is clearly NOT a recipe (e.g. no ingredients, no instructions, generic content), 
 then the extraction is VALID even if fields are empty - mark is_valid: true, is_recipe: false.
@@ -99,13 +100,22 @@ Return STRICT JSON format:
     "is_recipe": true/false,
     "missing_fields": ["field1", "field2"],
     "incorrect_fields": ["field3"],
-    "feedback": "Brief explanation"
+    "feedback": "Brief explanation",
+    "fix_recommendations": [
+        {{
+            "field": "field_name",
+            "issue": "what's wrong",
+            "expected_value": "what should be extracted (from reference)",
+            "actual_value": "what was extracted",
+            "fix_suggestion": "how to fix the extractor (e.g., check CSS selector, parsing logic)"
+        }}
+    ]
 }}
 
 Validation rules:
 - If page is NOT a recipe -> is_valid: true, is_recipe: false (empty extraction is correct)
 - If page IS a recipe and dish_name, ingredients, instructions are present and mostly match reference -> is_valid: true, is_recipe: true
-- If page IS a recipe but extraction is wrong/incomplete -> is_valid: false, is_recipe: true
+- If page IS a recipe but extraction is wrong/incomplete -> is_valid: false, is_recipe: true, provide detailed fix_recommendations
 - Minor differences are fully acceptable"""
 
         user_prompt = f"""Compare extracted data with reference data.
@@ -125,7 +135,20 @@ Validate the extraction quality and return JSON with validation results."""
                     "is_recipe": {"type": "boolean"},
                     "missing_fields": {"type": "array", "items": {"type": "string"}},
                     "incorrect_fields": {"type": "array", "items": {"type": "string"}},
-                    "feedback": {"type": "string"}
+                    "feedback": {"type": "string"},
+                    "fix_recommendations": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "field": {"type": "string"},
+                                "issue": {"type": "string"},
+                                "expected_value": {"type": "string"},
+                                "actual_value": {"type": "string"},
+                                "fix_suggestion": {"type": "string"}
+                            }
+                        }
+                    }
                 }
             }
             
@@ -149,7 +172,8 @@ Validate the extraction quality and return JSON with validation results."""
                 'is_recipe': True,
                 'missing_fields': [],
                 'incorrect_fields': [],
-                'feedback': f'GPT validation error: {str(e)}'
+                'feedback': f'GPT validation error: {str(e)}',
+                'fix_recommendations': []
             }
 
 
@@ -175,13 +199,16 @@ Validate the extraction quality and return JSON with validation results."""
         """
         system_prompt = f"""You are a recipe data validation expert for {site_name}.
 Your task is to:
-1. Analyze the HTML page and determine if it contains a recipe
-2. Compare extracted data with the HTML content
+1. Analyze the page TEXT content and determine if it contains a recipe
+2. Compare extracted data with the text content
 3. Validate extraction quality
-4. If data is missing, try to extract it from HTML
+4. If data is missing, try to extract it from the text
+5. Provide ACTIONABLE feedback based on what you see in the text
 
-CRITICAL: If the HTML page is clearly NOT a recipe (e.g. homepage, category page, about page, recipe listing page with multiple recipes, no ingredients/instructions visible),
+CRITICAL: If the page is clearly NOT a recipe (e.g. homepage, category page, about page, listing page with multiple recipes, no ingredients/instructions visible in text),
 then empty extraction is CORRECT - mark is_valid: true, is_recipe: false.
+
+You will receive PLAIN TEXT extracted from the page (no HTML tags). Analyze the text content only.
 
 Return STRICT JSON format:
 {{
@@ -190,25 +217,45 @@ Return STRICT JSON format:
     "missing_fields": ["field1", "field2"],
     "incorrect_fields": ["field3"],
     "feedback": "Brief explanation",
-    "extracted_missing_data": {{"field1": "value from HTML", "field2": "value from HTML"}}
+ы    "fix_recommendations": [
+        {{
+            "field": "field_name",
+            "issue": "what's wrong (e.g., 'not extracted', 'incomplete', 'incorrect')",
+            "correct_value_from_text": "actual correct value you found in the page text",
+            "actual_extracted_value": "what was extracted (or empty/null)",
+            "text_context": "surrounding text where this data appears (quote 1-2 sentences)",
+            "pattern_hint": "describe the pattern/location in text (e.g., 'appears after \"Ingredients:\"", \"listed as bullet points\", \"in the title section\"')",
+            "fix_suggestion": "how to improve extraction logic (e.g., 'look for text after \"Ingredients:\" heading', 'extract list items', 'parse cooking time from \"30 min\" pattern')"
+        }}
+    ]
 }}
 
 Validation rules:
-- If HTML is NOT a recipe page -> is_valid: true, is_recipe: false (empty/minimal extraction is correct)
-- If HTML IS a recipe and extracted data matches -> is_valid: true, is_recipe: true
-- If HTML IS a recipe but extraction is incomplete/wrong -> is_valid: false, is_recipe: true
-- Minor formatting differences are acceptable
-- For missing_fields, try to extract the data from HTML and put it in extracted_missing_data"""
+- If page text is NOT a recipe -> is_valid: true, is_recipe: false (empty/minimal extraction is correct)
+- If page text IS a recipe and extracted data matches -> is_valid: true, is_recipe: true
+- If page text IS a recipe but extraction is incomplete/wrong -> is_valid: false, is_recipe: true, provide detailed fix_recommendations
+- Base recommendations ONLY on text content, not HTML structure
+- For missing_fields, extract data from text and put in extracted_missing_data
+- In fix_recommendations, describe text patterns and context, NOT HTML selectors
+- Minor formatting differences are acceptable"""
 
-        user_prompt = f"""Analyze the HTML and validate the extracted data.
+        user_prompt = f"""Analyze the page TEXT content and validate the extracted data.
 
 Extracted data:
 {json.dumps(extracted_data, ensure_ascii=False, indent=2)}
 
-HTML content (first 3000 chars):
+Page text content (may be truncated):
 {html_content}
 
-Is this a recipe page? If yes, is the extraction correct? If data is missing, extract it from HTML. Return JSON validation results."""
+Task:
+1. Is this a recipe page? (look for recipe-specific content like dish name, ingredients list, cooking instructions)
+2. If YES and extraction is wrong/incomplete: provide fix_recommendations with text patterns and context
+3. If NO (not a recipe): mark is_valid=true, is_recipe=false
+4. Extract missing data from text into extracted_missing_data
+
+IMPORTANT: Base your analysis ONLY on the text content above. Do NOT suggest HTML selectors or CSS classes.
+
+Return JSON validation results."""
 
         try:
             schema = {
@@ -218,7 +265,22 @@ Is this a recipe page? If yes, is the extraction correct? If data is missing, ex
                     "missing_fields": {"type": "array", "items": {"type": "string"}},
                     "incorrect_fields": {"type": "array", "items": {"type": "string"}},
                     "feedback": {"type": "string"},
-                    "extracted_missing_data": {"type": "object"}
+                    "extracted_missing_data": {"type": "object"},
+                    "fix_recommendations": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "field": {"type": "string"},
+                                "issue": {"type": "string"},
+                                "correct_value_from_text": {"type": "string"},
+                                "actual_extracted_value": {"type": "string"},
+                                "text_context": {"type": "string"},
+                                "pattern_hint": {"type": "string"},
+                                "fix_suggestion": {"type": "string"}
+                            }
+                        }
+                    }
                 }
             }
             
@@ -240,10 +302,7 @@ Is this a recipe page? If yes, is the extraction correct? If data is missing, ex
             return {
                 'is_valid': False,
                 'is_recipe': True,
-                'missing_fields': [],
-                'incorrect_fields': [],
                 'feedback': f'GPT HTML validation error: {str(e)}',
-                'extracted_missing_data': {}
             }
 
 
@@ -259,9 +318,6 @@ Is this a recipe page? If yes, is the extraction correct? If data is missing, ex
             logger.error(f"Директория с тестовыми данными не найдена: {test_data_dir}")
             return {
                 'module': module_name,
-                'total_files': 0,
-                'failed': 0,
-                'details': [],
                 'error': 'test_data_directory_not_found'
             }
         
@@ -269,9 +325,6 @@ Is this a recipe page? If yes, is the extraction correct? If data is missing, ex
             logger.error(f"В директории с тестовыми данными нет файлов: {test_data_dir}")
             return {
                 'module': module_name,
-                'total_files': 0,
-                'failed': 0,
-                'details': [],
                 'error': 'test_data_directory_empty'
             }
 

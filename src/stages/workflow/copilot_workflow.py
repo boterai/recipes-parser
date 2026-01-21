@@ -8,6 +8,7 @@ if __name__ == '__main__':
 
 from src.stages.workflow.generate_prompt import PromptGenerator
 from src.common.github.client import GitHubClient
+from src.stages.workflow.branch_manager import check_one_branch
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +43,7 @@ class CopilotWorkflow:
             prompt_file = os.path.join(self.prompt_generator.output_dir, f"{module_name}_prompt.md")   
             issue = self.github_client.create_issue_from_file(
                 title=title,
+                assignees=["Copilot"],
                 filepath=str(prompt_file)
             )
             if issue:
