@@ -65,7 +65,7 @@ class CopilotWorkflow:
                         if subitem.is_file():
                             subitem.unlink()
                     item.rmdir()
-                logger.info(f"Очищена директория: {preprocessed_dir}")
+                    logger.info(f"Очищена директория: {str(item)}")
         else:
             logger.info(f"Директория не найдена или не является директорией: {preprocessed_dir}")
 
@@ -100,8 +100,7 @@ class CopilotWorkflow:
         logger.info(f"Найдено {len(prs)} PR с запрошенным ревью.")
         for pr in prs:
             logger.info(f"Проверка PR #{pr['number']}: {pr['title']}")
-            #errors = self.branch_manager.check_branch(pr['head']['ref'])
-            errors = [{'module': 'ritzyrecipes_com', 'total_files': 3, 'failed': 1, 'details': [{'file': 'preprocessed/ritzyrecipes_com/irish-soda-bread_print_N_1_extracted.json', 'status': 'failed', 'gpt_validation': {'is_valid': False, 'is_recipe': True, 'missing_fields': [], 'incorrect_fields': ['tags'], 'feedback': 'The extraction is mostly correct, but the tags field does not match the reference data.', 'fix_recommendations': [{'field': 'tags', 'issue': 'Tags do not match reference data.', 'expected_value': 'Irish, Bread', 'actual_value': 'irish soda bread, no yeast bread, quick bread, st patricks day bread', 'fix_suggestion': 'Update the extraction logic to ensure that the tags field is extracted correctly from the source, matching the reference data format.'}]}}]}]
+            errors = self.branch_manager.check_branch(pr['head']['ref'])
             if errors:
                 logger.info(f"PR #{pr['number']} не прошел валидацию.")
                 pr_comment = self.make_pr_comment_from_errors(errors)
@@ -122,4 +121,4 @@ class CopilotWorkflow:
 
 if __name__ == "__main__":
     workflow = CopilotWorkflow()
-    workflow.check_review_requested_prs()
+    workflow.create_issues_for_parsers()

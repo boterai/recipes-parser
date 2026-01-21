@@ -1,0 +1,12 @@
+{
+    "dish_name": "Čokoladni snežaki",
+    "description": "Čokoladni snežaki so slastne čokoladne kroglice, ki so odlične za praznične priložnosti.",
+    "ingredients": "[{\"name\": \"albert, piknik ali drugih navadnih piškotov\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"mleka v prahu\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"zmehčanega masla\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"stopljene čokolade\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"mleka ali soka\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"rum ali drug liker\", \"units\": null, \"amount\": null}, {\"name\": \"kokosova moka\", \"units\": \"g\", \"amount\": 60}, {\"name\": \"čokolade\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"čokoladne mrvice\", \"units\": null, \"amount\": null}, {\"name\": \"bele viki kreme ali bele linolade\", \"units\": \"žlica\", \"amount\": 1}, {\"name\": \"pomarančna ali mandarinina lupinica\", \"units\": null, \"amount\": null}, {\"name\": \"celi mandlji\", \"units\": null, \"amount\": null}, {\"name\": \"plošate okrogle čokoladice\", \"units\": null, \"amount\": null}, {\"name\": \"okrogle manjše čokoladice\", \"units\": null, \"amount\": null}, {\"name\": \"vroča voda\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. V blenderju zmeljemo piškote. 2. Mlete piškote stresemo v skledo in dodamo ostale sestavine za čokoladno maso. 3. Čokolado stopimo in dodamo v maso. 4. Dobro premešamo in pustimo počivati 20 minut. 5. Oblikujemo kroglice in jih povaljamo v kokosovi moki. 6. Pripravimo čokolado za dekoracijo in okrasimo snežake.",
+    "category": "Dessert",
+    "prep_time": "20 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Za hitrejše strjevanje čokolade jih lahko postavimo v hladilnik.",
+    "tags": "čokolada, sladica, prazniki"
+}
