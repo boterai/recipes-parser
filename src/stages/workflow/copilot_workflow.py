@@ -77,6 +77,7 @@ class CopilotWorkflow:
         for pr in prs:
             logger.info(f"Проверка PR #{pr['number']}: {pr['title']}")
             errors = self.branch_manager.check_branch(pr['head']['ref'])
+            print(errors)
             if not errors:
                 logger.info(f"PR #{pr['number']} прошел валидацию. Закрытие ревью, мердж pull request.")
                 if self.github_client.merge_pr(pr['number'], auto_mark_ready=True):
