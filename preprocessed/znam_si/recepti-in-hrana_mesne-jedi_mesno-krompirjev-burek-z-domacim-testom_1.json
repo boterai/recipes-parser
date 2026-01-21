@@ -1,0 +1,12 @@
+{
+    "dish_name": "Mesno-krompirjev burek z domačim testom",
+    "description": "Najboljši burek je domač! V tem receptu boste pripravili pravo bosansko poslastico – z ročno vlečenim testom, sočno mešanico mletega mesa in krompirja, ter hrustljavo zapečeno skorjico.",
+    "ingredients": "[{\"name\": \"mehka bela moka\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"sol\", \"units\": \"žlička\", \"amount\": 1}, {\"name\": \"mlačna voda\", \"units\": \"ml\", \"amount\": 300}, {\"name\": \"olje\", \"units\": \"žlici\", \"amount\": 2}, {\"name\": \"olje za premaz\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"mleta govedina\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"krompir\", \"units\": \"srednje velika\", \"amount\": 2}, {\"name\": \"čebula\", \"units\": \"večja\", \"amount\": 1}, {\"name\": \"sol\", \"units\": \"čajna žlička\", \"amount\": 1}, {\"name\": \"popra\", \"units\": \"čajna žlička\", \"amount\": 0.5}, {\"name\": \"rdeča paprika\", \"units\": \"čajna žlička\", \"amount\": 0.5}, {\"name\": \"malo olja\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. V večji posodi zmešajte moko in sol. Dodajte mlačno vodo in olje, nato zamesite gladko testo. Gnetite vsaj 10 minut, da postane elastično. Oblikujte kepo testa, jo premažite z malo olja in pokrijte z mokro kuhinjsko krpo. Pustite počivati 30–45 minut pri sobni temperaturi. 2. Krompir olupite in ga grobo naribajte, nato ga dobro ožemite. Zmešajte ga z mletim mesom, čebulo, soljo, poprom in po želji še s papriko. Po želji lahko čebulo predhodno rahlo popražite, za bolj mehak okus. 3. Delovno površino rahlo naoljite. Kepo testa razvaljajte v krog, nato pa začnite vleči testo z rokami – od sredine navzven – dokler ni skoraj prozorno. Če se kje strga, ni panike – burek bo vseeno odličen. 4. Enakomerno razporedite nadev po testu (lahko po vsej površini ali samo ob robu). Po želji malo pokapajte z oljem. Zavitke zvijte (v spiralo ali v več zavitkov) in jih položite na pekač, obložen s papirjem za peko. Pekač po vrhu premažite z malo olja. 5. Pečico segrejte na 200 °C (ventilatorsko). Pecite burek 35–40 minut, dokler ne dobi lepe zlato-rjave barve in hrustljave skorjice.",
+    "category": "Main Course",
+    "prep_time": "30-45 minutes",
+    "cook_time": "35-40 minutes",
+    "total_time": "1 hour 5-25 minutes",
+    "notes": null,
+    "tags": "mleto meso, burek, krompir"
+}
