@@ -373,13 +373,12 @@ class GitHubClient:
         graphql_url = "https://api.github.com/graphql"
         
         # 1. Получаем node_id issue
-        issue_url = f"{self.base_url}/repos/{self.owner}/{self.repo}/issues/{issue_number}"
-        resp = requests.get(issue_url, headers=self.headers)
-        if resp.status_code != 200:
-            logger.error(f"Failed to get issue #{issue_number}: {resp.status_code}")
+        issue = self.get_issue(issue_number)
+        if not issue:
+            logger.error(f"Cannot find issue #{issue_number} to set development branch")
             return False
         
-        issue_node_id = resp.json().get('node_id')
+        issue_node_id = issue.get('node_id')
         
         # 2. Создаём development branch через GraphQL
         mutation = """
@@ -429,7 +428,27 @@ class GitHubClient:
             logger.error(f"Failed to link branch: {response.status_code} - {response.text}")
             return False
         
+    def get_issue(self, issue_number: int) -> Optional[dict]:
+        """
+        Получает информацию об issue по номеру
+        
+        Args:
+            issue_number: номер issue
+        
+        Returns:
+            Данные issue или None при ошибке
+        """
+        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/issues/{issue_number}"
+        
+        response = requests.get(url, headers=self.headers)
+        
+        if response.status_code == 200:
+            return response.json()
+        else:
+            logger.error(f"Failed to fetch issue #{issue_number}: {response.status_code} - {response.text}")
+            return None
+        
 if __name__ == "__main__":
     gh_client = GitHubClient()
-    pr = gh_client.list_pr()
+    pr = gh_client.get_issue(178)
     print(pr)

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Blåbärsmuffins",
+    "description": "Enkelt och gott recept på blåbärsmuffins som går snabbt att göra.",
+    "ingredients": "[{\"name\": \"vetemjöl\", \"units\": \"dl\", \"amount\": 6}, {\"name\": \"blåbär\", \"units\": \"gram\", \"amount\": \"150-200\"}, {\"name\": \"smör\", \"units\": \"gram\", \"amount\": 100}, {\"name\": \"ägg\", \"units\": \"st\", \"amount\": 2}, {\"name\": \"socker\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"brunt socker\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"mjölk\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"bakpulver\", \"units\": \"tsk\", \"amount\": 3}, {\"name\": \"salt\", \"units\": \"tsk\", \"amount\": 0.5}, {\"name\": \"vaniljsocker\", \"units\": \"tsk\", \"amount\": 3}]",
+    "instructions": "Sätt ugnen på 200 grader och smöra en muffinsplåt eller lägg ut muffinsformar. Blanda mjöl, bakpulver, salt och vaniljsocker i en bunke. Ställ åt sidan. Knäck ägg i en annan bunke och häll i sockret. Vispa med elvisp tills det blir en pösig konsistens. Blanda i mjölk och smör och vispa runt. Tillsätt de torra ingredienserna och vispa runt. Häll i blåbär och rör runt. Fördela smeten i muffinsformar och toppa med blåbär. Baka i ugnen i cirka 25 minuter.",
+    "category": "Bakning",
+    "prep_time": "15 minutes",
+    "cook_time": "25 minutes",
+    "total_time": "40 minutes",
+    "notes": "Använd färska blåbär för bästa smak. Förvara muffins i rumstemperatur i 3-4 dagar.",
+    "tags": "bakning, muffins, blåbär"
+}

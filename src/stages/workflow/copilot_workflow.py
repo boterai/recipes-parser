@@ -29,7 +29,7 @@ class CopilotWorkflow:
             logger.info("Нет промптов для создания issues.")
             return
         
-        current_issues = self.github_client.list_repository_issues(state="open")
+        current_issues = self.github_client.list_repository_issues(state="all")
         existing_titles = {issue['title'] for issue in current_issues} if current_issues else set()
         # создаем только новые issues
         new_modules = [i for i in prompts if ISSUE_PREFIX + i not in existing_titles] 
@@ -51,10 +51,6 @@ class CopilotWorkflow:
                 logger.info(f"Создан issue: {issue['html_url']}")
             else:
                 logger.error(f"Не удалось создать issue для модуля: {module_name}")
-
-    def check_pr(self):
-        """Проверяет PR на наличие необходимых изменений."""
-        pass
 
     def check_review_requested_prs(self):
         """Проверяет завершенные PR и обновляет статусы задач."""
