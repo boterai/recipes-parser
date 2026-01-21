@@ -109,48 +109,95 @@ class GatescRoExtractor(BaseRecipeExtractor):
     def extract_ingredients(self) -> Optional[str]:
         """Извлечение ингредиентов"""
         ingredients = []
+        seen_names = set()  # Track ingredient names to avoid duplicates
         
         # Ищем контейнер с ингредиентами
         ing_container = self.soup.find(class_='recipe-ingredients')
         
         if ing_container:
-            # Извлекаем элементы списка
-            items = ing_container.find_all('li')
+            # Проверяем, есть ли секции ингредиентов (component-name)
+            component_names = self.soup.find_all(class_='component-name')
             
-            for item in items:
-                # Каждый элемент содержит 2 span:
-                # 1) количество + единица измерения
-                # 2) название ингредиента
-                spans = item.find_all('span')
-                
-                if len(spans) >= 2:
-                    # Первый span - количество и единица
-                    amount_unit_text = self.clean_text(spans[0].get_text())
-                    # Второй span - название
-                    name_text = self.clean_text(spans[1].get_text())
+            if component_names:
+                # Если есть секции, обрабатываем каждую отдельно
+                for idx, comp_name in enumerate(component_names):
+                    section_name = self.clean_text(comp_name.get_text())
                     
-                    if name_text and amount_unit_text:
-                        # Парсим количество и единицу
-                        amount, unit = self.parse_amount_unit(amount_unit_text)
+                    # Находим следующий ul с ингредиентами для этой секции
+                    next_ul = comp_name.find_next_sibling('ul')
+                    
+                    if next_ul:
+                        items = next_ul.find_all('li')
                         
-                        # Фильтруем плохие записи (только цифры без единиц)
-                        # Например "1 " (пустая единица) вместо "200 ml"
-                        # Принимаем только если есть единица измерения (unit не пустая и не только пробелы)
-                        if unit and unit.strip():
+                        # Только для ПЕРВОЙ секции добавляем название секции как ингредиент
+                        if idx == 0 and items:
+                            # Берем количество и единицу из первого элемента
+                            first_item = items[0]
+                            spans = first_item.find_all('span')
+                            if len(spans) >= 2:
+                                amount_unit_text = self.clean_text(spans[0].get_text())
+                                amount, unit = self.parse_amount_unit(amount_unit_text)
+                                
+                                # Добавляем название секции как первый ингредиент
+                                if unit and unit.strip():
+                                    ingredients.append({
+                                        "name": section_name,
+                                        "amount": amount,
+                                        "units": unit
+                                    })
+                                    seen_names.add(section_name.lower())
+                        
+                        # Добавляем остальные ингредиенты этой секции
+                        for item in items:
+                            spans = item.find_all('span')
+                            
+                            if len(spans) >= 2:
+                                amount_unit_text = self.clean_text(spans[0].get_text())
+                                name_text = self.clean_text(spans[1].get_text())
+                                
+                                if name_text and amount_unit_text:
+                                    amount, unit = self.parse_amount_unit(amount_unit_text)
+                                    
+                                    # Фильтруем плохие записи (только цифры без единиц)
+                                    if unit and unit.strip():
+                                        # Проверяем, не видели ли мы уже этот ингредиент
+                                        # Исключение: "sare" (соль) может повторяться с разными количествами
+                                        name_lower = name_text.lower()
+                                        if name_lower not in seen_names or name_lower == 'sare':
+                                            ingredients.append({
+                                                "name": name_text,
+                                                "amount": amount,
+                                                "units": unit
+                                            })
+                                            seen_names.add(name_lower)
+            else:
+                # Если секций нет, обрабатываем как обычно
+                items = ing_container.find_all('li')
+                
+                for item in items:
+                    spans = item.find_all('span')
+                    
+                    if len(spans) >= 2:
+                        amount_unit_text = self.clean_text(spans[0].get_text())
+                        name_text = self.clean_text(spans[1].get_text())
+                        
+                        if name_text and amount_unit_text:
+                            amount, unit = self.parse_amount_unit(amount_unit_text)
+                            
+                            if unit and unit.strip():
+                                ingredients.append({
+                                    "name": name_text,
+                                    "amount": amount,
+                                    "units": unit
+                                })
+                    elif len(spans) == 1:
+                        name_text = self.clean_text(spans[0].get_text())
+                        if name_text:
                             ingredients.append({
                                 "name": name_text,
-                                "amount": amount,
-                                "units": unit
+                                "amount": None,
+                                "units": None
                             })
-                elif len(spans) == 1:
-                    # Только название
-                    name_text = self.clean_text(spans[0].get_text())
-                    if name_text:
-                        ingredients.append({
-                            "name": name_text,
-                            "amount": None,
-                            "units": None
-                        })
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
@@ -248,6 +295,9 @@ class GatescRoExtractor(BaseRecipeExtractor):
         if not text:
             return text
         
+        # Убираем префиксы типа "Aluat Paste:" в начале
+        text = re.sub(r'^[^:]+:\s*', '', text, count=1)
+        
         # Разбиваем по точкам с запятой или переносам строк
         # Сначала нормализуем переносы
         text = re.sub(r'\r\n', '\n', text)
@@ -294,13 +344,31 @@ class GatescRoExtractor(BaseRecipeExtractor):
             if isinstance(category, str):
                 # Разбиваем на категории через запятую
                 categories = [c.strip() for c in category.split(',')]
-                # Фильтруем общие категории
-                filtered = [c for c in categories if c.lower() not in ['bucatarie internationala', 'europeana']]
-                # Берем вторую категорию после фильтрации (или первую если одна)
-                # Обычно порядок: "Bucatarie internationala, Garnituri, Europeana, Italiana"
-                # После фильтра: ["Garnituri", "Italiana"]
-                # Нужна первая отфильтрованная
-                return filtered[0] if filtered else categories[-1] if categories else None
+                
+                # Определяем типы категорий:
+                # - Dish types (приоритет): Garnituri, Deserturi, etc.
+                # - Cuisine types: Italiana, Frantuzeasca, etc.
+                # - Generic: Bucatarie internationala, Europeana
+                
+                dish_types = ['Garnituri', 'Deserturi', 'Aperitive', 'Feluri principale', 
+                             'Salate', 'Supe', 'Sosuri']
+                
+                # Сначала ищем dish type
+                for cat in categories:
+                    if cat in dish_types:
+                        return cat
+                
+                # Если нет dish type, берем "Bucatarie internationala" если есть
+                if 'Bucatarie internationala' in categories:
+                    return 'Bucatarie internationala'
+                
+                # Иначе берем первую не-Europeana категорию
+                for cat in categories:
+                    if cat != 'Europeana':
+                        return cat
+                
+                # В крайнем случае, любую первую
+                return categories[0] if categories else None
             elif isinstance(category, list):
                 return category[0] if category else None
         
@@ -332,8 +400,29 @@ class GatescRoExtractor(BaseRecipeExtractor):
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок"""
-        # Ищем секцию с примечаниями/советами
-        # Это могут быть элементы с классами "note", "tip", "hint" и т.д.
+        # Сначала проверяем r-description для полного текста описания
+        desc_div = self.soup.find(class_='r-description')
+        if desc_div:
+            full_text = self.clean_text(desc_div.get_text())
+            
+            # Ищем предложение, начинающееся с "Servite" - обычно это заметки
+            # Или берем последнее предложение, если оно содержит полезную информацию
+            sentences = re.split(r'\.\s+', full_text)
+            
+            for sentence in sentences:
+                if sentence.strip().startswith('Servite'):
+                    note = sentence.strip()
+                    # Добавляем точку только если её нет
+                    return note if note.endswith('.') else note + '.'
+            
+            # Если не нашли "Servite", проверяем последнее предложение
+            if sentences and len(sentences) > 1:
+                last_sentence = sentences[-1].strip()
+                # Если последнее предложение содержит ключевые слова о сервировке
+                if any(word in last_sentence.lower() for word in ['servit', 'pahar', 'vin', 'ideal', 'perfecta']):
+                    return last_sentence if last_sentence.endswith('.') else last_sentence + '.'
+        
+        # Альтернативно ищем секцию с примечаниями/советами
         notes_section = self.soup.find(class_=lambda x: x and ('note' in str(x).lower() or 'tip' in str(x).lower()))
         
         if notes_section:
