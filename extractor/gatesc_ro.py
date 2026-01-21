@@ -315,12 +315,25 @@ class GatescRoExtractor(BaseRecipeExtractor):
                 if part:
                     steps.append(part)
         else:
-            # Разбиваем по переносам строк и точкам с запятой
-            parts = re.split(r'[;\n]+', text)
-            for part in parts:
-                part = part.strip()
-                if part and len(part) > 10:  # Игнорируем слишком короткие фрагменты
-                    steps.append(part)
+            # Разбиваем по запятым с переносом строк или точкам с запятой
+            # Сначала проверяем, есть ли секции типа ", Duxelles:", ", Ravioli:"
+            # Разбиваем по таким секциям
+            section_pattern = r',\s*[A-Z][^:,]+:\s*'
+            if re.search(section_pattern, text):
+                parts = re.split(section_pattern, text)
+                for part in parts:
+                    part = part.strip()
+                    # Убираем точки в конце
+                    part = part.rstrip('.,')
+                    if part and len(part) > 10:
+                        steps.append(part)
+            else:
+                # Разбиваем по переносам строк и точкам с запятой
+                parts = re.split(r'[;\n]+', text)
+                for part in parts:
+                    part = part.strip()
+                    if part and len(part) > 10:  # Игнорируем слишком короткие фрагменты
+                        steps.append(part)
         
         if not steps:
             return text
