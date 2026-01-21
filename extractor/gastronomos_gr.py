@@ -1,5 +1,5 @@
 """
-Экстрактор данных рецептов для сайта gastronomos.gr
+Recipe data extractor for gastronomos.gr website
 """
 
 import sys
@@ -13,10 +13,10 @@ from extractor.base import BaseRecipeExtractor, process_directory
 
 
 class GastronomosExtractor(BaseRecipeExtractor):
-    """Экстрактор для gastronomos.gr"""
+    """Extractor for gastronomos.gr"""
     
     def _get_json_ld_data(self) -> Optional[dict]:
-        """Извлечение данных JSON-LD из страницы"""
+        """Extract JSON-LD data from the page"""
         json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
         
         for script in json_ld_scripts:
@@ -62,13 +62,13 @@ class GastronomosExtractor(BaseRecipeExtractor):
     @staticmethod
     def parse_iso_duration(duration: str) -> Optional[str]:
         """
-        Конвертирует ISO 8601 duration в читаемый формат
+        Convert ISO 8601 duration to readable format
         
         Args:
-            duration: строка вида "PT20M" или "PT1H30M"
+            duration: string like "PT20M" or "PT1H30M"
             
         Returns:
-            Время в формате "20 minutes" или "1 hour 30 minutes"
+            Time in format "20 minutes" or "1 hour 30 minutes"
         """
         if not duration or not duration.startswith('PT'):
             return None
@@ -98,7 +98,7 @@ class GastronomosExtractor(BaseRecipeExtractor):
         return ' '.join(parts) if parts else None
     
     def extract_dish_name(self) -> Optional[str]:
-        """Извлечение названия блюда"""
+        """Extract dish name"""
         # Сначала пробуем JSON-LD
         json_ld = self._get_json_ld_data()
         if json_ld and 'name' in json_ld:
@@ -120,7 +120,7 @@ class GastronomosExtractor(BaseRecipeExtractor):
         return None
     
     def extract_description(self) -> Optional[str]:
-        """Извлечение описания рецепта"""
+        """Extract recipe description"""
         # Сначала пробуем JSON-LD
         json_ld = self._get_json_ld_data()
         if json_ld and 'description' in json_ld:
@@ -140,9 +140,9 @@ class GastronomosExtractor(BaseRecipeExtractor):
     
     def _parse_ingredient_line(self, line: str) -> Optional[Dict]:
         """
-        Парсинг строки ингредиента в структурированный формат
+        Parse ingredient line into structured format
         
-        Примеры (греческий):
+        Examples (Greek):
         "500 γρ. αλεύρι" -> {"name": "αλεύρι", "unit": "g", "amount": "500"}
         "2 αυγά" -> {"name": "αυγά", "unit": null, "amount": "2"}
         "αλάτι" -> {"name": "αλάτι", "unit": null, "amount": null}
@@ -152,7 +152,7 @@ class GastronomosExtractor(BaseRecipeExtractor):
         
         line = self.clean_text(line)
         
-        # Словарь для преобразования греческих единиц измерения
+        # Greek unit mapping dictionary
         unit_mapping = {
             'γρ.': 'g',
             'γρ': 'g',
@@ -170,15 +170,15 @@ class GastronomosExtractor(BaseRecipeExtractor):
             'φλ.': 'cup',
         }
         
-        # Паттерн: количество + единица измерения + название
-        # Примеры: "500 γρ. мука", "2 αυγά", "1/2 ματσάκι άνηθος"
+        # Pattern: amount + unit + name
+        # Examples: "500 γρ. мука", "2 αυγά", "1/2 ματσάκι άνηθος"
         pattern = r'^([\d./,\s]+)\s*([α-ωά-ώa-z.]+)?\s+(.+)$'
         match = re.match(pattern, line, re.IGNORECASE | re.UNICODE)
         
         if match:
             amount_str, unit_str, name = match.groups()
             
-            # Обработка количества (может быть дробью типа "1/2")
+            # Process amount (can be fraction like "1/2")
             amount = None
             if amount_str:
                 amount_str = amount_str.strip()
@@ -192,32 +192,32 @@ class GastronomosExtractor(BaseRecipeExtractor):
                 else:
                     try:
                         amount = amount_str.replace(',', '.')
-                    except:
+                    except (ValueError, AttributeError):
                         amount = amount_str
             
-            # Обработка единицы измерения
+            # Process unit of measurement
             unit = None
             if unit_str:
                 unit_str = unit_str.strip()
-                # Проверяем, является ли это единицей измерения
+                # Check if this is a unit of measurement
                 if unit_str in unit_mapping:
                     unit = unit_mapping[unit_str]
                 else:
-                    # Проверяем известные паттерны
+                    # Check known patterns
                     for key, value in unit_mapping.items():
                         if unit_str.lower().startswith(key.lower().rstrip('.')):
                             unit = value
                             break
                     
-                    # Если не нашли единицу измерения, добавляем к названию
+                    # If unit not found, add to name
                     if not unit:
                         name = f"{unit_str} {name}"
             
-            # Очистка названия
+            # Clean name
             name = self.clean_text(name)
-            # Убираем описания в скобках
+            # Remove descriptions in parentheses
             name = re.sub(r'\([^)]*\)', '', name)
-            # Убираем дополнительные пояснения
+            # Remove additional explanations
             name = re.sub(r'\s+(τριμμένο|ψιλοκομμένο|κομμένο|κομμένη|λιωμένο).*$', '', name, flags=re.IGNORECASE | re.UNICODE)
             name = name.strip()
             
@@ -230,7 +230,7 @@ class GastronomosExtractor(BaseRecipeExtractor):
                 "unit": unit
             }
         else:
-            # Если паттерн не совпал, возвращаем только название
+            # If pattern didn't match, return name only
             return {
                 "name": line,
                 "amount": None,
@@ -238,10 +238,10 @@ class GastronomosExtractor(BaseRecipeExtractor):
             }
     
     def extract_ingredients(self) -> Optional[str]:
-        """Извлечение ингредиентов"""
+        """Extract ingredients"""
         ingredients = []
         
-        # Сначала пробуем JSON-LD
+        # Try JSON-LD first
         json_ld = self._get_json_ld_data()
         if json_ld and 'recipeIngredient' in json_ld:
             ingredient_list = json_ld['recipeIngredient']
@@ -255,8 +255,8 @@ class GastronomosExtractor(BaseRecipeExtractor):
                 if ingredients:
                     return json.dumps(ingredients, ensure_ascii=False)
         
-        # Если JSON-LD не помог, ищем в HTML
-        # Ищем список ингредиентов
+        # If JSON-LD didn't work, search in HTML
+        # Look for ingredient list
         ingredient_containers = [
             self.soup.find('ul', class_=re.compile(r'ingredient', re.I)),
             self.soup.find('div', class_=re.compile(r'ingredient', re.I)),
@@ -267,17 +267,17 @@ class GastronomosExtractor(BaseRecipeExtractor):
             if not container:
                 continue
                 
-            # Извлекаем элементы списка
+            # Extract list items
             items = container.find_all('li')
             if not items:
                 items = container.find_all('p')
             
             for item in items:
-                # Извлекаем текст ингредиента
+                # Extract ingredient text
                 ingredient_text = item.get_text(separator=' ', strip=True)
                 ingredient_text = self.clean_text(ingredient_text)
                 
-                # Пропускаем заголовки секций
+                # Skip section headers
                 if ingredient_text and not ingredient_text.endswith(':'):
                     parsed = self._parse_ingredient_line(ingredient_text)
                     if parsed:
@@ -289,10 +289,10 @@ class GastronomosExtractor(BaseRecipeExtractor):
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
     def extract_steps(self) -> Optional[str]:
-        """Извлечение шагов приготовления"""
+        """Extract cooking steps"""
         steps = []
         
-        # Сначала пробуем JSON-LD
+        # Try JSON-LD first
         json_ld = self._get_json_ld_data()
         
         if json_ld and 'recipeInstructions' in json_ld:
@@ -312,7 +312,7 @@ class GastronomosExtractor(BaseRecipeExtractor):
             if steps:
                 return ' '.join(steps)
         
-        # Если JSON-LD не помог, ищем в HTML
+        # If JSON-LD didn't work, search in HTML
         instructions_containers = [
             self.soup.find('ol', class_=re.compile(r'instruction', re.I)),
             self.soup.find('div', class_=re.compile(r'instruction', re.I)),
@@ -323,18 +323,18 @@ class GastronomosExtractor(BaseRecipeExtractor):
             if not container:
                 continue
             
-            # Извлекаем шаги
+            # Extract steps
             step_items = container.find_all('li')
             if not step_items:
                 step_items = container.find_all('p')
             
             for idx, item in enumerate(step_items, 1):
-                # Извлекаем текст инструкции
+                # Extract instruction text
                 step_text = item.get_text(separator=' ', strip=True)
                 step_text = self.clean_text(step_text)
                 
                 if step_text:
-                    # Если нумерация уже есть, используем как есть
+                    # If numbering already exists, use as is
                     if re.match(r'^\d+\.', step_text):
                         steps.append(step_text)
                     else:
@@ -346,41 +346,41 @@ class GastronomosExtractor(BaseRecipeExtractor):
         return ' '.join(steps) if steps else None
     
     def extract_category(self) -> Optional[str]:
-        """Извлечение категории"""
-        # Сначала пробуем JSON-LD
+        """Extract category"""
+        # Try JSON-LD first
         json_ld = self._get_json_ld_data()
         
         if json_ld:
-            # Пробуем recipeCategory
+            # Try recipeCategory
             if 'recipeCategory' in json_ld:
                 category = json_ld['recipeCategory']
                 if isinstance(category, list):
                     return ', '.join(category)
                 return str(category)
             
-            # Пробуем recipeCuisine
+            # Try recipeCuisine
             if 'recipeCuisine' in json_ld:
                 cuisine = json_ld['recipeCuisine']
                 if isinstance(cuisine, list):
                     return ', '.join(cuisine)
                 return str(cuisine)
         
-        # Альтернатива - из meta тегов
+        # Alternative - from meta tags
         meta_section = self.soup.find('meta', property='article:section')
         if meta_section and meta_section.get('content'):
             return self.clean_text(meta_section['content'])
         
-        # Ищем в хлебных крошках
+        # Look in breadcrumbs
         breadcrumbs = self.soup.find('nav', class_=re.compile(r'breadcrumb', re.I))
         if breadcrumbs:
             links = breadcrumbs.find_all('a')
-            if len(links) > 1:  # Берем последнюю категорию
+            if len(links) > 1:  # Get last category
                 return self.clean_text(links[-1].get_text())
         
         return None
     
     def extract_prep_time(self) -> Optional[str]:
-        """Извлечение времени подготовки"""
+        """Extract preparation time"""
         json_ld = self._get_json_ld_data()
         
         if json_ld and 'prepTime' in json_ld:
@@ -389,7 +389,7 @@ class GastronomosExtractor(BaseRecipeExtractor):
         return None
     
     def extract_cook_time(self) -> Optional[str]:
-        """Извлечение времени приготовления"""
+        """Extract cooking time"""
         json_ld = self._get_json_ld_data()
         
         if json_ld and 'cookTime' in json_ld:
@@ -398,7 +398,7 @@ class GastronomosExtractor(BaseRecipeExtractor):
         return None
     
     def extract_total_time(self) -> Optional[str]:
-        """Извлечение общего времени"""
+        """Extract total time"""
         json_ld = self._get_json_ld_data()
         
         if json_ld and 'totalTime' in json_ld:
@@ -407,18 +407,18 @@ class GastronomosExtractor(BaseRecipeExtractor):
         return None
     
     def extract_notes(self) -> Optional[str]:
-        """Извлечение заметок и советов"""
-        # Ищем секцию с примечаниями/советами
+        """Extract notes and tips"""
+        # Look for notes/tips section
         notes_section = self.soup.find(class_=re.compile(r'(note|tip|hint)', re.I))
         
         if notes_section:
-            # Сначала пробуем найти параграф внутри
+            # Try to find paragraph inside first
             p = notes_section.find('p')
             if p:
                 text = self.clean_text(p.get_text())
                 return text if text else None
             
-            # Если нет параграфа, берем весь текст
+            # If no paragraph, get all text
             text = notes_section.get_text(separator=' ', strip=True)
             text = self.clean_text(text)
             return text if text else None
@@ -426,10 +426,10 @@ class GastronomosExtractor(BaseRecipeExtractor):
         return None
     
     def extract_tags(self) -> Optional[str]:
-        """Извлечение тегов"""
+        """Extract tags"""
         tags_list = []
         
-        # Сначала пробуем JSON-LD
+        # Try JSON-LD first
         json_ld = self._get_json_ld_data()
         if json_ld and 'keywords' in json_ld:
             keywords = json_ld['keywords']
@@ -438,7 +438,7 @@ class GastronomosExtractor(BaseRecipeExtractor):
             elif isinstance(keywords, list):
                 tags_list = [str(tag).strip() for tag in keywords if tag]
         
-        # Если не нашли в JSON-LD, ищем в мета-тегах
+        # If not found in JSON-LD, search in meta tags
         if not tags_list:
             # parsely-tags
             parsely_meta = self.soup.find('meta', attrs={'name': 'parsely-tags'})
@@ -446,24 +446,24 @@ class GastronomosExtractor(BaseRecipeExtractor):
                 tags_string = parsely_meta['content']
                 tags_list = [tag.strip() for tag in tags_string.split(',') if tag.strip()]
         
-        # Ищем в meta keywords
+        # Look in meta keywords
         if not tags_list:
             keywords_meta = self.soup.find('meta', attrs={'name': 'keywords'})
             if keywords_meta and keywords_meta.get('content'):
                 tags_string = keywords_meta['content']
                 tags_list = [tag.strip() for tag in tags_string.split(',') if tag.strip()]
         
-        # Фильтрация - убираем очень короткие теги
+        # Filter - remove very short tags
         filtered_tags = [tag for tag in tags_list if len(tag) >= 3]
         
-        # Возвращаем как строку через запятую с пробелом
+        # Return as comma-separated string with space
         return ', '.join(filtered_tags) if filtered_tags else None
     
     def extract_image_urls(self) -> Optional[str]:
-        """Извлечение URL изображений"""
+        """Extract image URLs"""
         urls = []
         
-        # Сначала пробуем JSON-LD
+        # Try JSON-LD first
         json_ld = self._get_json_ld_data()
         if json_ld and 'image' in json_ld:
             img = json_ld['image']
@@ -477,7 +477,7 @@ class GastronomosExtractor(BaseRecipeExtractor):
                 elif 'contentUrl' in img:
                     urls.append(img['contentUrl'])
         
-        # Ищем в мета-тегах
+        # Look in meta tags
         if not urls:
             # og:image
             og_image = self.soup.find('meta', property='og:image')
@@ -489,7 +489,7 @@ class GastronomosExtractor(BaseRecipeExtractor):
             if twitter_image and twitter_image.get('content'):
                 urls.append(twitter_image['content'])
         
-        # Убираем дубликаты, сохраняя порядок
+        # Remove duplicates, keeping order
         if urls:
             seen = set()
             unique_urls = []
@@ -498,17 +498,17 @@ class GastronomosExtractor(BaseRecipeExtractor):
                     seen.add(url)
                     unique_urls.append(url)
             
-            # Возвращаем как строку через запятую без пробелов
+            # Return as comma-separated string without spaces
             return ','.join(unique_urls) if unique_urls else None
         
         return None
     
     def extract_all(self) -> dict:
         """
-        Извлечение всех данных рецепта
+        Extract all recipe data
         
         Returns:
-            Словарь с данными рецепта
+            Dictionary with recipe data
         """
         return {
             "dish_name": self.extract_dish_name(),
@@ -526,20 +526,20 @@ class GastronomosExtractor(BaseRecipeExtractor):
 
 
 def main():
-    """Точка входа для тестирования экстрактора"""
+    """Entry point for testing the extractor"""
     import os
     
-    # По умолчанию обрабатываем папку preprocessed/gastronomos_gr
+    # Process preprocessed/gastronomos_gr directory by default
     preprocessed_dir = os.path.join("preprocessed", "gastronomos_gr")
     
     if os.path.exists(preprocessed_dir) and os.path.isdir(preprocessed_dir):
-        print(f"Обработка директории: {preprocessed_dir}")
+        print(f"Processing directory: {preprocessed_dir}")
         process_directory(GastronomosExtractor, str(preprocessed_dir))
         return
     
-    print(f"Директория не найдена: {preprocessed_dir}")
-    print("Создайте директорию с HTML-файлами рецептов для тестирования.")
-    print("Использование: python gastronomos_gr.py")
+    print(f"Directory not found: {preprocessed_dir}")
+    print("Create a directory with recipe HTML files for testing.")
+    print("Usage: python gastronomos_gr.py")
 
 
 if __name__ == "__main__":
