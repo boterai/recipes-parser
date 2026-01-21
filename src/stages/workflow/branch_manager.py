@@ -84,9 +84,9 @@ class BranchManager:
                 module_name = os.path.basename(file).replace('.py', '')
                 result = self.validator.validate(
                     module_name=module_name,
-                    use_gpt=False,
+                    use_gpt=True,
                     required_fields=['dish_name', 'ingredients', 'instructions'],
-                    use_gpt_on_errors_only=True
+                    use_gpt_on_missing_fields=True
                 )
                 if result.get('failed', 0) > 0 or result.get('total_files', 0) == 0:
                     branch_errors.append(result)

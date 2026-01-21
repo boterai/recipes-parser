@@ -306,12 +306,13 @@ Return JSON validation results."""
             }
 
 
-    def validate(self, module_name: str, use_gpt: bool = False, required_fields: list[str] = None, use_gpt_on_errors_only: bool = True) -> dict:
+    def validate(self, module_name: str, use_gpt: bool = False, required_fields: list[str] = None, use_gpt_on_missing_fields: bool = True) -> dict:
         """
         Валидировать скрипт парсера рецептов
         :param module_name: имя модуля скрипта парсера
         :param use_gpt: использовать ли GPT для валидации 
         :param required_fields: список обязательных полей в результате парсинга (поля, которые не могут быть None)
+        :param use_gpt_on_missing_fields: использовать ли GPT для валидации при отсутствии обязательных полей
         """
         test_data_dir = os.path.join("preprocessed", module_name)
         if not os.path.exists(test_data_dir) or not os.path.isdir(test_data_dir):
@@ -343,7 +344,7 @@ Return JSON validation results."""
             # Проверка обязательных полей
             if required_fields:
                 if not self._validate_required_fields(parsed_data, required_fields):
-                    if use_gpt_on_errors_only and use_gpt is False:
+                    if use_gpt_on_missing_fields:
                         html_filepath = filepath.replace(self.extracted_json_extension, '.html')
                         html_content = extract_text_from_html(html_filepath, max_chars=30000)
                         if html_content:
@@ -421,7 +422,7 @@ if __name__ == '__main__':
         module_name="xrysessyntages_com",
         use_gpt=False,
         required_fields=['dish_name', 'ingredients', 'instructions'],
-        use_gpt_on_errors_only=True
+        use_gpt_on_missing_fields=True
     )
 
     
