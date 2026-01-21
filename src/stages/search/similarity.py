@@ -437,7 +437,7 @@ if __name__ == "__main__":
                     max_recipes=5000,
                     limit=35,
                     score_threshold=0.92,
-                    scroll_batch=500,
+                    scroll_batch=2000,
                     query_batch=32
                 ),
                 build_type="full"
