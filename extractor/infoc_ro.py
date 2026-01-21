@@ -164,25 +164,60 @@ class InfocRoExtractor(BaseRecipeExtractor):
         """Извлечение шагов приготовления"""
         instructions = []
         
-        # Инструкции находятся в параграфах после заголовка
-        # Ищем первый параграф с текстом "Măsurați" или похожим
-        found_start = False
-        for p in self.soup.find_all('p'):
-            text = p.get_text().strip()
-            
-            # Начинаем собирать с первого параграфа инструкций
-            if not found_start and ('Măsurați' in text or 'Preîncălziți' in text or 'Pregătirea' in text):
-                found_start = True
-            
-            if found_start:
-                # Проверяем, не является ли это заголовком секции (обычно короткий и заканчивается на цифру или двоеточие)
-                if text and len(text) > 20:
-                    # Пропускаем параграфы с "Variații" или "trucuri"
-                    if 'Variații' in text or 'trucuri' in text:
-                        break
+        # Ищем заголовок "Pași gătire" (h2 или h3)
+        header_found = False
+        for header in self.soup.find_all(['h2', 'h3']):
+            header_text = header.get_text().strip()
+            if 'pași' in header_text.lower() and 'gătire' in header_text.lower():
+                header_found = True
+                
+                # Извлекаем инструкции из div элементов после заголовка
+                current = header.find_next_sibling()
+                
+                while current and current.name != 'h2':
+                    if current.name == 'div':
+                        # Получаем текст из div
+                        div_text = current.get_text(separator=' ', strip=True)
+                        
+                        # Пропускаем короткие div (вероятно, не инструкции)
+                        if div_text and len(div_text) > 20:
+                            # Извлекаем параграфы из div
+                            paragraphs = current.find_all('p')
+                            if paragraphs:
+                                for p in paragraphs:
+                                    p_text = p.get_text(separator=' ', strip=True)
+                                    if p_text and len(p_text) > 20:
+                                        # Пропускаем заголовки секций (короткие строки с номерами)
+                                        if not (len(p_text) < 50 and re.match(r'^\d+\.', p_text)):
+                                            instructions.append(self.clean_text(p_text))
+                            else:
+                                # Если нет параграфов, берем весь текст div
+                                instructions.append(self.clean_text(div_text))
                     
-                    text = self.clean_text(text)
-                    instructions.append(text)
+                    current = current.find_next_sibling()
+                
+                break
+        
+        # Если не нашли через заголовок, пробуем старый метод (для обратной совместимости)
+        if not header_found or not instructions:
+            # Ищем первый параграф с инструкциями
+            found_start = False
+            for p in self.soup.find_all('p'):
+                text = p.get_text().strip()
+                
+                # Начинаем собирать с первого параграфа инструкций
+                if not found_start and ('Măsurați' in text or 'Preîncălziți' in text or 'Pregătirea' in text or 'Fierbeți' in text):
+                    found_start = True
+                
+                if found_start:
+                    # Проверяем, не является ли это заголовком секции
+                    if text and len(text) > 20:
+                        # Пропускаем параграфы с "Variații" или "trucuri"
+                        if 'Variații' in text or 'trucuri' in text:
+                            break
+                        
+                        text = self.clean_text(text)
+                        instructions.append(text)
         
         return ' '.join(instructions) if instructions else None
     
