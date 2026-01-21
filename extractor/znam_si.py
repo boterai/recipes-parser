@@ -169,7 +169,7 @@ class ZnamSiExtractor(BaseRecipeExtractor):
                 amount = amount_str.replace(',', '.')
                 try:
                     amount = float(amount)
-                except:
+                except ValueError:
                     amount = amount_str
         
         # Обработка единицы измерения
@@ -352,7 +352,7 @@ class ZnamSiExtractor(BaseRecipeExtractor):
                     for item in data['@graph']:
                         if item.get('@type') == 'ImageObject' and 'url' in item:
                             urls.append(item['url'])
-            except:
+            except (json.JSONDecodeError, KeyError, TypeError):
                 continue
         
         # Убираем дубликаты, сохраняя порядок
