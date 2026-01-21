@@ -8,7 +8,7 @@ if __name__ == '__main__':
 
 from src.stages.workflow.generate_prompt import PromptGenerator
 from src.common.github.client import GitHubClient
-from src.stages.workflow.branch_manager import check_one_branch, get_current_branch, delete_branch
+from src.stages.workflow.branch_manager import BranchManager
 
 logger = logging.getLogger(__name__)
 
@@ -19,11 +19,12 @@ class CopilotWorkflow:
     def __init__(self):
         self.prompt_generator = PromptGenerator()
         self.github_client = GitHubClient()
+        self.branch_manager = BranchManager()
     
     def create_issues_for_parsers(self):
         """Создает GitHub issues с промптами для создания парсеров на основе preprocessed данных."""
 
-        current_branch = get_current_branch()
+        current_branch = self.branch_manager.get_current_branch()
         prompts = self.prompt_generator.generate_all_prompts()
         if not prompts:
             logger.info("Нет промптов для создания issues.")
@@ -59,13 +60,14 @@ class CopilotWorkflow:
         logger.info(f"Найдено {len(prs)} PR с запрошенным ревью.")
         for pr in prs:
             logger.info(f"Проверка PR #{pr['number']}: {pr['title']}")
-            errors = check_one_branch(pr['head']['ref'])
+            errors = self.branch_manager.check_branch(pr['head']['ref'])
             if not errors:
                 logger.info(f"PR #{pr['number']} прошел валидацию. Закрытие ревью, мердж pull request.")
                 if self.github_client.merge_pr(pr['number'], auto_mark_ready=True):
                     self.github_client.close_pr_linked_issue(pr['number'], pr)
-                # удаление ветки после мерджа pr
-                delete_branch(pr['head']['ref'])
+                # удаление ветки после мерджа pr и получение изменений в локальную ветку
+                self.branch_manager.delete_branch(pr['head']['ref'])
+                self.branch_manager.update_current_branch()
             else: 
                 # оставить комментарий с ошибками и потребовать исправления
                 pass

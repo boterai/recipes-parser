@@ -11,104 +11,118 @@ from src.stages.workflow.validate_extractor import ValidateParser
 
 logger = logging.getLogger(__name__)
 
-def run_git_command(command: list[str]) -> str:
-    """Выполняет git команду и возвращает её вывод."""
-    try:
-        result = subprocess.run(
-            command,
-            capture_output=True,
-            text=True,
-            check=True,
-            cwd=Path(__file__).parent.parent.parent.parent
-        )
-        return result.stdout.strip()
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Ошибка при выполнении команды '{command}': {e.stderr.strip()}")
-        raise e
 
-def get_added_files(base_branch: str, target_branch: str) -> list[str]:
-    """Получает список файлов, добавленных в target_branch относительно base_branch."""
-    output = run_git_command([
-        'git', 'log', 
-        f'{base_branch}..{target_branch}',
-        '--diff-filter=A',
-        '--name-only',
-        '--pretty=format:'
-    ])
+class BranchManager:
+    """Класс для управления git ветками и валидации парсеров."""
     
-    # Фильтруем пустые строки и убираем дубликаты
-    files = [f.strip() for f in output.split('\n') if f.strip()]
-    return sorted(set(files))
-
-def get_current_branch() -> str:
-    """Получает имя текущей ветки."""
-    output = run_git_command(['git', 'rev-parse', '--abbrev-ref', 'HEAD'])
-    return output
-
-def check_one_branch(branch: str) -> list[dict]:
-    """Обрабатывает одну ветку: переключается на нее, получает добавленные файлы и запускает валидацию.
+    def __init__(self):
+        self.repo_root = Path(__file__).parent.parent.parent.parent
+        self.validator = ValidateParser()
     
-    Args:
-        branch: имя ветки для обработки
-        current_branch: имя текущей ветки (для возврата после обработки)
-    
-    Returns:
-        Список ошибок валидации
-    """
-    current_branch = get_current_branch()
-    try:
-        run_git_command(['git', 'checkout', branch])
-    except Exception as e:
-        run_git_command(['git', 'fetch', 'origin'])
-        run_git_command(['git', 'checkout', branch])
-        logger.info(f"Переключились на ветку {branch} после fetch.")
-
-    added_files = [f for f in get_added_files(current_branch, branch) if ('extractor' in f and f.endswith('.py'))]
-    
-    if len(added_files) == 0:
-        logger.info(f"В ветке {branch} нет добавленных файлов парсеров.")
-        return []  
-
-    vp = ValidateParser()
-
-    branch_errors = []
-    try:
-        for file in added_files:
-            print(f"Проверяем файл: {file}")
-            module_name = os.path.basename(file).replace('.py', '')
-            result = vp.validate(
-                module_name=module_name,
-                use_gpt=False,
-                required_fields=['dish_name', 'ingredients', 'instructions'],
-                use_gpt_on_errors_only=True
+    def _run_git_command(self, command: list[str]) -> str:
+        """Выполняет git команду и возвращает её вывод."""
+        try:
+            result = subprocess.run(
+                command,
+                capture_output=True,
+                text=True,
+                check=True,
+                cwd=self.repo_root
             )
-            if result.get('failed', 0) > 0 or result.get('total_files', 0) == 0:
-                branch_errors.append(result)
-    except Exception as e:
-        print(f"Ошибка при валидации ветки {branch}: {e}")
-        branch_errors.append({'error': str(e)})
+            return result.stdout.strip()
+        except subprocess.CalledProcessError as e:
+            logger.error(f"Ошибка при выполнении команды '{' '.join(command)}': {e.stderr.strip()}")
+            raise e
     
-    run_git_command(['git', 'checkout', current_branch])
+    def get_current_branch(self) -> str:
+        """Получает имя текущей ветки."""
+        output = self._run_git_command(['git', 'rev-parse', '--abbrev-ref', 'HEAD'])
+        return output
+    
+    def get_added_files(self, base_branch: str, target_branch: str) -> list[str]:
+        """Получает список файлов, добавленных в target_branch относительно base_branch."""
+        output = self._run_git_command([
+            'git', 'log', 
+            f'{base_branch}..{target_branch}',
+            '--diff-filter=A',
+            '--name-only',
+            '--pretty=format:'
+        ])
+        
+        # Фильтруем пустые строки и убираем дубликаты
+        files = [f.strip() for f in output.split('\n') if f.strip()]
+        return sorted(set(files))
+    
+    def check_branch(self, branch: str) -> list[dict]:
+        """Обрабатывает одну ветку: переключается на нее, получает добавленные файлы и запускает валидацию.
+        
+        Args:
+            branch: имя ветки для обработки
+        
+        Returns:
+            Список ошибок валидации
+        """
+        current_branch = self.get_current_branch()
+        branch_errors = []
+        try:
+            try:
+                self._run_git_command(['git', 'checkout', branch])
+            except Exception:
+                self._run_git_command(['git', 'fetch', 'origin'])
+                self._run_git_command(['git', 'checkout', branch])
+                logger.info(f"Переключились на ветку {branch} после fetch.")
 
-    return branch_errors
+            added_files = [f for f in self.get_added_files(current_branch, branch) 
+                        if 'extractor' in f and f.endswith('.py')]
+            
+            if not added_files:
+                logger.info(f"В ветке {branch} нет добавленных файлов парсеров.")
+                return []
 
-def delete_branch(branch: str) -> bool:
-    """Удаляет локальную и удаленную ветку.
+            for file in added_files:
+                logger.info(f"Проверяем файл: {file}")
+                module_name = os.path.basename(file).replace('.py', '')
+                result = self.validator.validate(
+                    module_name=module_name,
+                    use_gpt=False,
+                    required_fields=['dish_name', 'ingredients', 'instructions'],
+                    use_gpt_on_errors_only=True
+                )
+                if result.get('failed', 0) > 0 or result.get('total_files', 0) == 0:
+                    branch_errors.append(result)
+        
+        except Exception as e:
+            logger.error(f"Ошибка при проверке ветки {branch}: {e}")
+            return []
+        finally:
+            self._run_git_command(['git', 'checkout', current_branch])
+
+        return branch_errors
     
-    Args:
-        branch: имя ветки для удаления
+    def delete_branch(self, branch: str) -> bool:
+        """Удаляет локальную и удаленную ветку.
+        
+        Args:
+            branch: имя ветки для удаления
+        
+        Returns:
+            True если успешно удалена
+        """
+        try:
+            self._run_git_command(['git', 'branch', '-D', branch])
+            self._run_git_command(['git', 'push', 'origin', '--delete', branch])
+            logger.info(f"Ветка {branch} успешно удалена локально и на удаленном репозитории.")
+            return True
+        except Exception as e:
+            logger.error(f"Ошибка при удалении ветки {branch}: {e}")
+            return False
     
-    Returns:
-        True если успешно удалена
-    """
-    try:
-        run_git_command(['git', 'branch', '-D', branch])
-        run_git_command(['git', 'push', 'origin', '--delete', branch])
-        logger.info(f"Ветка {branch} успешно удалена локально и на удаленном репозитории.")
-        return True
-    except Exception as e:
-        logger.error(f"Ошибка при удалении ветки {branch}: {e}")
-        return False
+    def update_current_branch(self) -> None:
+        """Обновляет текущую ветку с удаленного репозитория."""
+        current_branch = self.get_current_branch()
+        self._run_git_command(['git', 'pull', 'origin', current_branch])
+        logger.info(f"Текущая ветка {current_branch} обновлена с удаленного репозитория.")
 
 if __name__ == '__main__':
-    delete_branch('copilot/create-parser-for-sallysbakingaddiction')
+    manager = BranchManager()
+    manager.delete_branch('copilot/create-parser-for-sallysbakingaddiction')
