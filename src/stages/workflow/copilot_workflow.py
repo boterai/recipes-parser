@@ -53,6 +53,22 @@ class CopilotWorkflow:
             else:
                 logger.error(f"Не удалось создать issue для модуля: {module_name}")
 
+    def clear_preprocessed_data(self):
+        """Очищает директорию с preprocessed данными."""
+
+        present_moules = [i.removesuffix('.py') for i in os.listdir("extractor") if not i.startswith("__") and i.endswith(".py")]
+        preprocessed_dir = self.prompt_generator.preprocessed_dir
+        if preprocessed_dir.exists() and preprocessed_dir.is_dir():
+            for item in preprocessed_dir.iterdir():
+                if item.is_dir() and item.name in present_moules:
+                    for subitem in item.iterdir():
+                        if subitem.is_file():
+                            subitem.unlink()
+                    item.rmdir()
+                logger.info(f"Очищена директория: {preprocessed_dir}")
+        else:
+            logger.info(f"Директория не найдена или не является директорией: {preprocessed_dir}")
+
     def check_review_requested_prs(self):
         """Проверяет завершенные PR и обновляет статусы задач."""
         prs = self.github_client.list_pr()
@@ -68,6 +84,7 @@ class CopilotWorkflow:
                 # удаление ветки после мерджа pr и получение изменений в локальную ветку
                 self.branch_manager.delete_branch(pr['head']['ref'])
                 self.branch_manager.update_current_branch()
+                self.clear_preprocessed_data()
             else: 
                 # оставить комментарий с ошибками и потребовать исправления
                 pass
