@@ -8,7 +8,7 @@ if __name__ == '__main__':
 
 from src.stages.workflow.generate_prompt import PromptGenerator
 from src.common.github.client import GitHubClient
-from src.stages.workflow.branch_manager import check_one_branch
+from src.stages.workflow.branch_manager import check_one_branch, get_current_branch
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +22,8 @@ class CopilotWorkflow:
     
     def create_issues_for_parsers(self):
         """Создает GitHub issues с промптами для создания парсеров на основе preprocessed данных."""
+
+        current_branch = get_current_branch()
         prompts = self.prompt_generator.generate_all_prompts()
         if not prompts:
             logger.info("Нет промптов для создания issues.")
@@ -40,11 +42,10 @@ class CopilotWorkflow:
 
         for module_name in new_modules:
             title = ISSUE_PREFIX + module_name
-            prompt_file = os.path.join(self.prompt_generator.output_dir, f"{module_name}_prompt.md")   
-            issue = self.github_client.create_issue_from_file(
+            issue = self.github_client.create_issue_from_dict(
                 title=title,
-                assignees=["Copilot"],
-                filepath=str(prompt_file)
+                body=prompts[module_name],
+                branch=current_branch
             )
             if issue:
                 logger.info(f"Создан issue: {issue['html_url']}")
@@ -62,9 +63,17 @@ class CopilotWorkflow:
         logger.info(f"Найдено {len(prs)} PR с запрошенным ревью.")
         for pr in prs:
             logger.info(f"Проверка PR #{pr['number']}: {pr['title']}")
-
+            errors = check_one_branch(pr['head']['ref'])
+            if not errors:
+                logger.info(f"PR #{pr['number']} прошел валидацию. Закрытие ревью, мердж pull request.")
+                if self.github_client.merge_pr(pr['number'], auto_mark_ready=True):
+                    issue_id = pr.get("_links", {}).get("issue", {}).get('href', "").split('/')[-1]
+                    self.github_client.mark_issue_as_completed(issue_number=int(issue_id))
+            else:
+                # оставить комментарий с ошибками и потребовать исправления
+                pass
 
 
 if __name__ == "__main__":
     workflow = CopilotWorkflow()
-    workflow.check_review_requested_prs()
+    workflow.create_issues_for_parsers()
