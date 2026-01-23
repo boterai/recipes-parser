@@ -24,7 +24,11 @@ class AniagotujeExtractor(BaseRecipeExtractor):
             duration: строка вида "PT20M" или "PT1H30M"
             
         Returns:
-            Время в формате "20 minutes", "90 minutes" и т.д.
+            Время в формате "X minutes" (например, "90 minutes")
+            
+        Note:
+            Этот формат отличается от allrecipes_com (который возвращает просто число),
+            но соответствует ожидаемому формату для aniagotuje.pl согласно эталонным JSON.
         """
         if not duration or not duration.startswith('PT'):
             return None
@@ -93,10 +97,19 @@ class AniagotujeExtractor(BaseRecipeExtractor):
         # Чистим текст
         text = self.clean_text(ingredient_text)
         
+        # Список единиц измерения для польского языка
+        units_list = [
+            'g', 'kg', 'mg', 'ml', 'l', 'litr', 'litra', 'litry',
+            'łyżka', 'łyżki', 'łyżek', 'łyżeczka', 'łyżeczki', 'łyżeczek',
+            'sztuka', 'sztuki', 'sztuk', 'szklanka', 'szklanki', 'szklanek',
+            'ząbek', 'ząbki', 'ząbków', 'garść', 'garści', 'szczypcie', 'szczypt',
+            'pieces?', 'tablespoons?', 'tbsp', 'teaspoons?', 'tsp', 'cups?', 'piece'
+        ]
+        units_pattern = '|'.join(units_list)
+        
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "600 g грибов", "1 litr bulionu", "2 średnie marchewki - 220 g"
-        # Сначала пробуем найти число + единица в начале
-        pattern = r'^([\d.,/\s-]+)?\s*(g|kg|mg|ml|l|litr|litra|litry|łyżka|łyżki|łyżek|łyżeczka|łyżeczki|łyżeczek|sztuka|sztuki|sztuk|szklanka|szklanki|szklanek|ząbek|ząbki|ząbków|garść|garści|szczypcie|szczypt|pieces?|tablespoons?|tbsp|teaspoons?|tsp|cups?|piece)?\s+(.+)'
+        pattern = rf'^([\d.,/\s-]+)?\s*({units_pattern})?\s+(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -157,8 +170,6 @@ class AniagotujeExtractor(BaseRecipeExtractor):
         name = re.sub(r'\([^)]*\)', '', name)
         # Удаляем фразы типа "lub też", "np.", "około"
         name = re.sub(r'\s+(lub też|np\.|około)\s+.*$', '', name, flags=re.IGNORECASE)
-        # Удаляем описания типа "duża", "średnie" если нужно
-        # name = re.sub(r'\b(duża|duży|średnia|średnie|mała|małe)\b\s+', '', name, flags=re.IGNORECASE)
         # Удаляем лишние пробелы
         name = re.sub(r'\s+', ' ', name).strip()
         
@@ -197,6 +208,9 @@ class AniagotujeExtractor(BaseRecipeExtractor):
     
     def extract_instructions(self) -> Optional[str]:
         """Извлечение шагов приготовления"""
+        # Минимальная длина текста для определения блока с инструкциями
+        MIN_INSTRUCTION_TEXT_LENGTH = 1000
+        
         # Ищем элемент с itemprop="recipeInstructions"
         instructions_elem = self.soup.find(attrs={'itemprop': 'recipeInstructions'})
         
@@ -207,7 +221,11 @@ class AniagotujeExtractor(BaseRecipeExtractor):
             for div in content_divs:
                 text = div.get_text(strip=True)
                 # Ищем div с инструкциями (обычно длинный и содержит ключевые слова)
-                if len(text) > 1000 and ('Zacznij' in text or 'nagrzewać' in text or 'dodaj' in text.lower()):
+                # Проверяем наличие типичных глаголов в инструкциях
+                instruction_keywords = ['zacznij', 'nagrzewać', 'dodaj', 'umieść', 'gotuj']
+                has_keywords = any(keyword in text.lower() for keyword in instruction_keywords)
+                
+                if len(text) > MIN_INSTRUCTION_TEXT_LENGTH and has_keywords:
                     # Извлекаем текст построчно
                     lines = []
                     for child in div.descendants:
