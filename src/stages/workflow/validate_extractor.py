@@ -102,11 +102,20 @@ FIELD PRIORITY:
 For CRITICAL fields:
 - Must be present and semantically similar to reference data
 - Exact match is NOT required - accept reasonable variations:
-  * dish_name: "Chicken Soup" vs "chicken soup" vs "CHICKEN SOUP" - all valid
-  * ingredients: order differences OK, minor formatting OK ("2 cups flour" vs "flour - 2 cups")
-  * instructions: step numbering/formatting differences OK, same meaning is enough
+  * dish_name: "Chicken Soup" vs "chicken soup" vs "CHICKEN SOUP" - all VALID
+  * ingredients: order differences OK, minor formatting OK ("2 cups flour" vs "flour - 2 cups"), missing quantities OK if item is there
+  * instructions: step numbering/formatting differences OK, same meaning is enough, paraphrasing is OK
 - Empty or missing CRITICAL field = validation fails (unless page is not a recipe)
-- Only fail if the meaning/content is completely different or nonsensical
+- Only fail if the meaning/content is SIGNIFICANTLY different (>50% of content wrong/missing)
+
+EXAMPLES of VALID extractions (should pass):
+- Reference ingredients: ["flour", "2 eggs", "sugar"] vs Extracted: ["2 eggs", "flour", "sugar"] -> VALID (order differs)
+- Reference instructions: "Mix flour and eggs. Bake 30 min." vs Extracted: "1. Mix eggs with flour 2. Bake for 30 minutes" -> VALID (formatting differs)
+- Reference tags: ["dessert", "quick"] vs Extracted: ["desserts", "fast"] -> VALID (semantic match, optional field)
+
+EXAMPLES of INVALID extractions (should fail):
+- Reference ingredients: ["flour", "eggs", "sugar", "butter", "milk"] vs Extracted: ["flour"] -> INVALID (most ingredients missing)
+- Reference instructions: "Mix ingredients. Bake 30 min. Cool and serve." vs Extracted: "Mix ingredients." -> INVALID (significant content missing)
 
 For OPTIONAL fields:
 - Missing values are TOTALLY OK - do NOT fail validation for missing optional fields!
@@ -137,9 +146,12 @@ Validation rules:
 - If page IS a recipe and dish_name, ingredients, instructions are present and SEMANTICALLY match reference -> is_valid: true, is_recipe: true
   * Semantic match = same meaning, even if formatting/order/case differs
   * Example: ingredients ["2 eggs", "flour"] matches ["flour", "eggs - 2"] - both valid!
-- If CRITICAL fields are wrong/incomplete -> is_valid: false, is_recipe: true, provide detailed fix_recommendations
-- Differences in OPTIONAL fields (tags, times, etc.) should NOT fail validation unless completely wrong
-- Minor differences, formatting variations, and reasonable paraphrasing are fully acceptable"""
+  * MINOR DISCREPANCIES in critical fields = STILL VALID! Only major content errors should fail.
+- If CRITICAL fields are SIGNIFICANTLY wrong/incomplete (e.g., missing half of ingredients, completely different instructions) -> is_valid: false
+- Differences/discrepancies in OPTIONAL fields (prep_time, cook_time, tags, etc.) MUST BE IGNORED - they should NEVER fail validation
+- Minor differences, formatting variations, reasonable paraphrasing, and small discrepancies are FULLY ACCEPTABLE and MUST pass validation
+
+IMPORTANT: Do NOT fail validation for "minor discrepancies" - if the meaning is captured, mark is_valid: true!"""
 
         user_prompt = f"""Compare extracted data with reference data.
 
@@ -241,10 +253,20 @@ For CRITICAL fields:
 - Must be extracted with semantically correct content from the text
 - Exact format match is NOT required - accept reasonable variations:
   * dish_name: case differences, punctuation OK ("Irish Soda Bread" vs "irish soda bread!")
-  * ingredients: order, formatting, minor wording differences acceptable
-  * instructions: step numbering, formatting variations fully acceptable, same meaning is enough
+  * ingredients: order, formatting, minor wording differences acceptable ("tomatoes" vs "tomato" OK)
+  * instructions: step numbering, formatting variations fully acceptable, same meaning is enough, paraphrasing OK
 - Empty or missing CRITICAL field = validation fails (unless page is not a recipe)
-- Only fail if the content/meaning is completely different, missing, or nonsensical
+- Only fail if the content/meaning is SIGNIFICANTLY different or >50% missing
+
+EXAMPLES of VALID extractions from text (should pass):
+- Text has "flour, eggs, sugar, butter" -> Extracted: ["flour", "eggs", "sugar", "butter"] -> VALID
+- Text has "flour, eggs, sugar, butter" -> Extracted: ["eggs", "flour", "butter", "sugar"] -> VALID (order differs)
+- Text: "Mix ingredients. Bake 30 min." -> Extracted: "1. Mix all ingredients 2. Bake for 30 minutes" -> VALID (paraphrased)
+- Text prep_time: "30 minutes" -> Extracted: "20 min" -> VALID (optional field, difference OK)
+
+EXAMPLES of INVALID extractions (should fail):
+- Text has "flour, eggs, sugar, butter, milk" -> Extracted: ["flour"] -> INVALID (80% missing)
+- Text: "Mix dry ingredients. Add wet ingredients. Bake 30 min. Cool and serve." -> Extracted: "Mix ingredients." -> INVALID (most steps missing)
 
 For OPTIONAL fields:
 - Missing values are TOTALLY OK - do NOT fail validation for missing optional fields!
@@ -277,11 +299,14 @@ Validation rules:
 - If page text IS a recipe and CRITICAL fields are extracted with SEMANTICALLY correct content -> is_valid: true, is_recipe: true
   * Semantic correctness = captures the same meaning/information from text, even if wording/format differs
   * Example: "Bake for 30 minutes" can be extracted as "30 min" or "Bake 30m" - both valid!
-- If page text IS a recipe but CRITICAL fields are incomplete/wrong -> is_valid: false, is_recipe: true, provide detailed fix_recommendations
-- Differences in OPTIONAL fields (tags, times, etc.) should NOT fail validation
+  * MINOR DISCREPANCIES in critical fields = STILL VALID! Only major content errors should fail.
+- If page text IS a recipe but CRITICAL fields are SIGNIFICANTLY incomplete/wrong (>80% missing/incorrect) -> is_valid: false
+- Differences/discrepancies in OPTIONAL fields (prep_time, cook_time, tags, etc.) MUST BE IGNORED - they should NEVER fail validation
 - Base recommendations ONLY on text content, not HTML structure
-- In fix_recommendations, focus ONLY on CRITICAL fields unless optional fields are completely wrong
-- Minor formatting differences, paraphrasing, and reasonable variations are acceptable"""
+- In fix_recommendations, focus ONLY on CRITICAL fields that have MAJOR errors (not minor discrepancies)
+- Minor formatting differences, paraphrasing, reasonable variations, and small discrepancies are FULLY ACCEPTABLE and MUST pass validation
+
+IMPORTANT: Do NOT fail validation for "minor discrepancies" - if the core information is captured, mark is_valid: true!"""
 
         user_prompt = f"""Analyze the page TEXT content and validate the extracted data.
 
