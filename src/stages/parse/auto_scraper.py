@@ -281,6 +281,33 @@ class AutoScraper:
         
         return processed_count, recipe_count
     
+    def process_sites(self, max_sites_to_process: Optional[int] = 100):
+        """обработка необработанных сайтов из БД"""
+        self.logger.info("Начинаем обработку необработанных сайтов...\n")
+        sites_processed = 0
+        while True:
+            site = self.site_repository.get_unprocessed_sites(limit=1, random_order=True) # получаем случайные необработанные сайты по 1 шт, чтобы уменьшить шанс обработки одинаковых сайтов в параллельных запусках
+            if not site:
+                self.logger.info("Все необработанные сайты обработаны.")
+                break
+            site = site[0]
+
+            try:
+                self.logger.info(f"\n=== Обработка сайта ID={site.id}, URL={site.base_url} ===")
+                if self.site_preparation_pipeline.prepare_site(site.search_url, max_pages=60, custom_logger=self.logger):
+                    self.logger.info(f"✓ Сайт ID={site.id} обработан и содержит рецепты")
+                else:
+                    self.logger.info(f"→ Сайт ID={site.id} обработан, но рецепты не найдены")
+            except Exception as e:
+                self.logger.error(f"Ошибка обработки сайта ID={site.id}, URL={site.base_url}: {e}")
+                continue
+            sites_processed += 1
+            if max_sites_to_process and sites_processed >= max_sites_to_process:
+                self.logger.info(f"Достигнуто максимальное количество обработанных сайтов: {max_sites_to_process}")
+                break
+
+
+
     def run_auto_scraping(
         self, 
         min_queries: int = 10,
@@ -289,7 +316,7 @@ class AutoScraper:
         min_unprocessed_sites: int = 100,
         generate_from_recipes: bool = True,
         generate_with_gpt: bool = False,
-        max_sites_to_process: int = 200
+        max_sites_to_process: Optional[int] = 200
     ):
         """
         Автоматический сбор рецептов
@@ -301,6 +328,7 @@ class AutoScraper:
             min_unprocessed_sites: Минимальное количество необработанных сайтов для запуска поиска новых
             generate_from_recipes: Генерировать запросы на основе существующих рецептов (для поиска используются рецепты из БД)
             generate_with_gpt: Генерировать запросы с помощью GPT
+            max_sites_to_process: Максимальное количество необработанных сайтов для обработки после поиска новых
         """
         try:
             # 0. Проверяем количество необработанных сайтов
@@ -318,27 +346,7 @@ class AutoScraper:
                 self.logger.info(f"{'='*70}\n")
                 
                 # здесь проводим обработку уже имеющихся сайтов
-                self.logger.info("Начинаем обработку необработанных сайтов...\n")
-                sites_processed = 0
-                while sites_processed < max_sites_to_process:
-                    site = self.site_repository.get_unprocessed_sites(limit=1, random_order=True) # получаем случайные необработанные сайты по 1 шт
-                    if not site:
-                        self.logger.info("Все необработанные сайты обработаны.")
-                        break
-                    site = site[0]
-
-                    try:
-                        self.logger.info(f"\n=== Обработка сайта ID={site.id}, URL={site.base_url} ===")
-                        if self.site_preparation_pipeline.prepare_site(site.search_url, max_pages=60, custom_logger=self.logger):
-                            self.logger.info(f"✓ Сайт ID={site.id} обработан и содержит рецепты")
-                        else:
-                            self.logger.info(f"→ Сайт ID={site.id} обработан, но рецепты не найдены")
-                    except Exception as e:
-                        self.logger.error(f"Ошибка обработки сайта ID={site.id}, URL={site.base_url}: {e}")
-                        continue
-                    sites_processed += 1
-                    
-                return
+                return self.process_sites(max_sites_to_process=max_sites_to_process)
             
             self.logger.info(f"→ Недостаточно необработанных сайтов ({unprocessed_count} < {min_unprocessed_sites})")
             self.logger.info("→ Начинаем поиск новых сайтов через DuckDuckGo...\n")
