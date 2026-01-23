@@ -15,6 +15,16 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class TheFoodieSiExtractor(BaseRecipeExtractor):
     """Экстрактор для thefoodie.si"""
     
+    # Константы для поддерживаемых единиц измерения
+    SUPPORTED_UNITS = ['g', 'kg', 'ml', 'dl', 'l', 'tbsp', 'tsp', 'cup', 'cups', 
+                       'žlica', 'žlice', 'skodelica', 'skodelice']
+    
+    # Максимальное количество параграфов инструкций
+    MAX_INSTRUCTION_PARAGRAPHS = 5
+    
+    # Максимальное количество изображений
+    MAX_IMAGES = 3
+    
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
         # Ищем в заголовке h3
@@ -72,7 +82,8 @@ class TheFoodieSiExtractor(BaseRecipeExtractor):
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "500 g testo", "2 veliki čebuli", "paprika, po okusu"
         # Поддерживаем как цифры, так и дроби
-        pattern = r'^([\d\s/.,]+)?\s*(g|kg|ml|dl|l|tbsp|tsp|cup|cups|žlica|žlice|skodelica|skodelice)?\s*(.+)'
+        units_pattern = '|'.join(self.SUPPORTED_UNITS)
+        pattern = rf'^([\d\s/.,]+)?\s*({units_pattern})?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -107,7 +118,7 @@ class TheFoodieSiExtractor(BaseRecipeExtractor):
                 try:
                     # Пробуем конвертировать в число
                     amount = float(amount) if '.' in amount else int(amount)
-                except:
+                except (ValueError, TypeError):
                     amount = amount_str
         
         # Нормализация единиц измерения
@@ -213,7 +224,8 @@ class TheFoodieSiExtractor(BaseRecipeExtractor):
             
             # Собираем все следующие параграфы до конца или до следующей секции
             current = parent.next_sibling
-            while current:
+            para_count = 0
+            while current and para_count < self.MAX_INSTRUCTION_PARAGRAPHS:
                 if hasattr(current, 'name'):
                     if current.name == 'p':
                         # Используем get_text() без strip, затем применяем clean_text
@@ -223,6 +235,7 @@ class TheFoodieSiExtractor(BaseRecipeExtractor):
                         # Останавливаемся на определенных маркерах
                         if text and not any(marker in text for marker in ['NAJ TUDI', 'PERSONALIZIRANI', 'Iščeš darilo']):
                             instructions.append(text)
+                            para_count += 1
                         else:
                             break
                     # Останавливаемся, если встретили новую секцию
@@ -359,7 +372,7 @@ class TheFoodieSiExtractor(BaseRecipeExtractor):
         if article:
             # Находим основное изображение в контенте
             images = article.find_all('img', src=True)
-            for img in images[:3]:  # Берем первые 3 изображения
+            for img in images[:self.MAX_IMAGES]:  # Берем первые MAX_IMAGES изображений
                 src = img.get('src')
                 # Пропускаем маленькие изображения (иконки, аватары)
                 if src and 'avatar' not in src and src not in urls:
