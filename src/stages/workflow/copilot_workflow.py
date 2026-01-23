@@ -20,8 +20,20 @@ class CopilotWorkflow:
         self.prompt_generator = PromptGenerator()
         self.github_client = GitHubClient()
         self.branch_manager = BranchManager()
-    
-    def create_issues_for_parsers(self):
+
+    def autocommit_preprocessed_data(self, commit_message: str = "Автокоммит тестовых данных на основе которых нужно делать парсеры", push: bool = True):
+        """Автокоммитит preprocessed данные в текущую ветку.
+        
+        Args:
+            commit_message: Сообщение коммита
+        """
+        self.branch_manager.commit_specific_directory(
+            directory=str(self.prompt_generator.preprocessed_dir),
+            commit_message=commit_message,
+            push=push
+        )
+        
+    def create_issues_for_parsers(self, issue_prefix: str = ISSUE_PREFIX):
         """Создает GitHub issues с промптами для создания парсеров на основе preprocessed данных."""
         prompts = self.prompt_generator.generate_all_prompts()
         if not prompts:
@@ -31,7 +43,7 @@ class CopilotWorkflow:
         current_issues = self.github_client.list_repository_issues(state="all")
         existing_titles = {issue['title'] for issue in current_issues} if current_issues else set()
         # создаем только новые issues
-        new_modules = [i for i in prompts if ISSUE_PREFIX + i not in existing_titles] 
+        new_modules = [i for i in prompts if issue_prefix + i not in existing_titles] 
 
         if not new_modules:
             logger.info("Нет новых модулей для создания issues.")
@@ -40,7 +52,7 @@ class CopilotWorkflow:
         logger.info(f"Создание {len(new_modules)} новых issues для парсеров...")
 
         for module_name in new_modules:
-            title = ISSUE_PREFIX + module_name
+            title = issue_prefix + module_name
             issue = self.github_client.create_issue_from_dict(
                 title=title,
                 body=prompts[module_name]
@@ -93,8 +105,7 @@ class CopilotWorkflow:
     def check_review_requested_prs(self):
         """Проверяет завершенные PR и обновляет статусы задач.
         Для каждого PR с запрошенным ревью выполняет валидацию парсера.
-        TODO: проверить как работате при наличии ошибок в pr
-        
+        Note: аккаунт назначающий copilot и reviewer должен быть одним и тем же, иначе не сработает.
         """
         prs = self.github_client.list_pr()
         prs = [pr for pr in prs if len(pr.get('requested_reviewers')) > 0]
@@ -115,7 +126,10 @@ class CopilotWorkflow:
                 self.github_client.close_pr_linked_issue(pr['number'], pr)
             # удаление ветки после мерджа pr и получение изменений в локальную ветку
             self.branch_manager.delete_branch(pr['head']['ref'])
-            self.branch_manager.update_current_branch()
+            try:
+                self.branch_manager.update_current_branch()
+            except Exception as e:
+                logger.error(f"Не удалось обновить текущую ветку автоматически: {e}")
             self.clear_preprocessed_data()
 
 if __name__ == "__main__":

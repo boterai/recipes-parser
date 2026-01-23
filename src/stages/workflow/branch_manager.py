@@ -33,6 +33,24 @@ class BranchManager:
         except subprocess.CalledProcessError as e:
             logger.error(f"Ошибка при выполнении команды '{' '.join(command)}': {e.stderr.strip()}")
             raise e
+        
+    def commit_specific_directory(self, directory: str, commit_message: str, push: bool = False) -> None:
+        """Коммитит изменения в указанной директории с заданным сообщением.
+        
+        Args:
+            directory: Путь к директории для коммита
+            commit_message: Сообщение коммита
+        """
+        try:
+            self._run_git_command(['git', 'add', directory])
+            self._run_git_command(['git', 'commit', '-m', commit_message])
+            logger.info(f"Изменения в директории {directory} успешно закоммичены.")
+            if push:
+                self._run_git_command(['git', 'push', 'origin', self.get_current_branch()])
+                logger.info(f"Изменения в директории {directory} успешно запушены.")
+        except Exception as e:
+            logger.error(f"Ошибка при коммите изменений в директории {directory}: {e}")
+            raise e
     
     def get_current_branch(self) -> str:
         """Получает имя текущей ветки."""

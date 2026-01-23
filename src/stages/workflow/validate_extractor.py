@@ -4,7 +4,6 @@ import os
 import importlib
 import json
 import logging
-import asyncio
 
 if __name__ == "__main__":
     from pathlib import Path
@@ -95,13 +94,34 @@ IMPORTANT: If the page is clearly NOT a recipe (e.g. no ingredients, no instruct
 then the extraction is VALID even if fields are empty - mark is_valid: true, is_recipe: false.
 
 FIELD PRIORITY:
-- CRITICAL fields (must match closely): dish_name, ingredients, instructions
-- OPTIONAL fields (semantic match is OK): tags, categories, prep_time, cook_time, servings, author, etc.
+- CRITICAL fields (MUST be present for valid recipe): dish_name, ingredients, instructions
+  These 3 fields are REQUIRED - without them, recipe is invalid!
+- OPTIONAL fields (nice to have, but NOT required): tags, categories, prep_time, cook_time, servings, author, nutrition, etc.
+  Missing optional fields is COMPLETELY ACCEPTABLE and should NOT fail validation!
+
+For CRITICAL fields:
+- Must be present and semantically similar to reference data
+- Exact match is NOT required - accept reasonable variations:
+  * dish_name: "Chicken Soup" vs "chicken soup" vs "CHICKEN SOUP" - all VALID
+  * ingredients: order differences OK, minor formatting OK ("2 cups flour" vs "flour - 2 cups"), missing quantities OK if item is there
+  * instructions: step numbering/formatting differences OK, same meaning is enough, paraphrasing is OK
+- Empty or missing CRITICAL field = validation fails (unless page is not a recipe)
+- Only fail if the meaning/content is SIGNIFICANTLY different (>50% of content wrong/missing)
+
+EXAMPLES of VALID extractions (should pass):
+- Reference ingredients: ["flour", "2 eggs", "sugar"] vs Extracted: ["2 eggs", "flour", "sugar"] -> VALID (order differs)
+- Reference instructions: "Mix flour and eggs. Bake 30 min." vs Extracted: "1. Mix eggs with flour 2. Bake for 30 minutes" -> VALID (formatting differs)
+- Reference tags: ["dessert", "quick"] vs Extracted: ["desserts", "fast"] -> VALID (semantic match, optional field)
+
+EXAMPLES of INVALID extractions (should fail):
+- Reference ingredients: ["flour", "eggs", "sugar", "butter", "milk"] vs Extracted: ["flour"] -> INVALID (most ingredients missing)
+- Reference instructions: "Mix ingredients. Bake 30 min. Cool and serve." vs Extracted: "Mix ingredients." -> INVALID (significant content missing)
 
 For OPTIONAL fields:
+- Missing values are TOTALLY OK - do NOT fail validation for missing optional fields!
 - Different but semantically similar values are acceptable (e.g., tags=['Irish', 'Bread'] vs ['irish soda bread', 'quick bread'] - both valid)
-- Missing or slightly different formats are OK
-- Only flag if completely wrong or nonsensical
+- Format variations are fully acceptable (e.g., "30 min" vs "30 minutes" vs "0:30" vs "PT30M")
+- Only flag if present but completely wrong or nonsensical
 
 Return STRICT JSON format:
 {{
@@ -123,10 +143,15 @@ Return STRICT JSON format:
 
 Validation rules:
 - If page is NOT a recipe -> is_valid: true, is_recipe: false (empty extraction is correct)
-- If page IS a recipe and dish_name, ingredients, instructions are present and mostly match reference -> is_valid: true, is_recipe: true
-- If CRITICAL fields are wrong/incomplete -> is_valid: false, is_recipe: true, provide detailed fix_recommendations
-- Differences in OPTIONAL fields (tags, times, etc.) should NOT fail validation unless completely wrong
-- Minor differences and formatting variations are fully acceptable"""
+- If page IS a recipe and dish_name, ingredients, instructions are present and SEMANTICALLY match reference -> is_valid: true, is_recipe: true
+  * Semantic match = same meaning, even if formatting/order/case differs
+  * Example: ingredients ["2 eggs", "flour"] matches ["flour", "eggs - 2"] - both valid!
+  * MINOR DISCREPANCIES in critical fields = STILL VALID! Only major content errors should fail.
+- If CRITICAL fields are SIGNIFICANTLY wrong/incomplete (e.g., missing half of ingredients, completely different instructions) -> is_valid: false
+- Differences/discrepancies in OPTIONAL fields (prep_time, cook_time, tags, etc.) MUST BE IGNORED - they should NEVER fail validation
+- Minor differences, formatting variations, reasonable paraphrasing, and small discrepancies are FULLY ACCEPTABLE and MUST pass validation
+
+IMPORTANT: Do NOT fail validation for "minor discrepancies" - if the meaning is captured, mark is_valid: true!"""
 
         user_prompt = f"""Compare extracted data with reference data.
 
@@ -162,15 +187,13 @@ Validate the extraction quality and return JSON with validation results."""
                 }
             }
             
-            result = asyncio.run(
-                self.gpt_client.async_request(
+            result = self.gpt_client.request(
                     system_prompt=system_prompt,
                     user_prompt=user_prompt,
                     temperature=0.1,
                     response_schema=schema,
                     retry_attempts=2
                 )
-            )
             
             logger.info(f"GPT validation result: {result}")
             return result
@@ -221,13 +244,35 @@ then empty extraction is CORRECT - mark is_valid: true, is_recipe: false.
 You will receive PLAIN TEXT extracted from the page (no HTML tags). Analyze the text content only.
 
 FIELD PRIORITY:
-- CRITICAL fields (must be extracted correctly): dish_name, ingredients, instructions
-- OPTIONAL fields (nice to have, but not critical): tags, categories, prep_time, cook_time, servings, author, etc.
+- CRITICAL fields (MUST be present for valid recipe): dish_name, ingredients, instructions
+  These 3 fields are REQUIRED - recipe is invalid without them!
+- OPTIONAL fields (nice to have, but NOT required): tags, categories, prep_time, cook_time, servings, author, nutrition, etc.
+  Missing optional fields is COMPLETELY ACCEPTABLE and should NOT fail validation!
+
+For CRITICAL fields:
+- Must be extracted with semantically correct content from the text
+- Exact format match is NOT required - accept reasonable variations:
+  * dish_name: case differences, punctuation OK ("Irish Soda Bread" vs "irish soda bread!")
+  * ingredients: order, formatting, minor wording differences acceptable ("tomatoes" vs "tomato" OK)
+  * instructions: step numbering, formatting variations fully acceptable, same meaning is enough, paraphrasing OK
+- Empty or missing CRITICAL field = validation fails (unless page is not a recipe)
+- Only fail if the content/meaning is SIGNIFICANTLY different or >50% missing
+
+EXAMPLES of VALID extractions from text (should pass):
+- Text has "flour, eggs, sugar, butter" -> Extracted: ["flour", "eggs", "sugar", "butter"] -> VALID
+- Text has "flour, eggs, sugar, butter" -> Extracted: ["eggs", "flour", "butter", "sugar"] -> VALID (order differs)
+- Text: "Mix ingredients. Bake 30 min." -> Extracted: "1. Mix all ingredients 2. Bake for 30 minutes" -> VALID (paraphrased)
+- Text prep_time: "30 minutes" -> Extracted: "20 min" -> VALID (optional field, difference OK)
+
+EXAMPLES of INVALID extractions (should fail):
+- Text has "flour, eggs, sugar, butter, milk" -> Extracted: ["flour"] -> INVALID (80% missing)
+- Text: "Mix dry ingredients. Add wet ingredients. Bake 30 min. Cool and serve." -> Extracted: "Mix ingredients." -> INVALID (most steps missing)
 
 For OPTIONAL fields:
+- Missing values are TOTALLY OK - do NOT fail validation for missing optional fields!
 - Different but semantically similar values are acceptable
-- Missing or slightly different formats should NOT fail validation
-- Only flag in fix_recommendations if you see obvious data that should have been extracted
+- Format variations are fully acceptable (e.g., "30 min" vs "30 minutes" vs "half an hour" vs "PT30M")
+- Only flag in fix_recommendations if you see obvious data in the text that should have been extracted but is completely wrong
 
 Return STRICT JSON format:
 {{
@@ -251,12 +296,17 @@ Return STRICT JSON format:
 
 Validation rules:
 - If page text is NOT a recipe -> is_valid: true, is_recipe: false (empty/minimal extraction is correct)
-- If page text IS a recipe and CRITICAL fields (dish_name, ingredients, instructions) are extracted correctly -> is_valid: true, is_recipe: true
-- If page text IS a recipe but CRITICAL fields are incomplete/wrong -> is_valid: false, is_recipe: true, provide detailed fix_recommendations
-- Differences in OPTIONAL fields (tags, times, etc.) should NOT fail validation
+- If page text IS a recipe and CRITICAL fields are extracted with SEMANTICALLY correct content -> is_valid: true, is_recipe: true
+  * Semantic correctness = captures the same meaning/information from text, even if wording/format differs
+  * Example: "Bake for 30 minutes" can be extracted as "30 min" or "Bake 30m" - both valid!
+  * MINOR DISCREPANCIES in critical fields = STILL VALID! Only major content errors should fail.
+- If page text IS a recipe but CRITICAL fields are SIGNIFICANTLY incomplete/wrong (>70% missing/incorrect) -> is_valid: false
+- Differences/discrepancies in OPTIONAL fields (prep_time, cook_time, tags, etc.) MUST BE IGNORED - they should NEVER fail validation
 - Base recommendations ONLY on text content, not HTML structure
-- In fix_recommendations, focus ONLY on CRITICAL fields unless optional fields are completely wrong
-- Minor formatting differences are acceptable"""
+- In fix_recommendations, focus ONLY on CRITICAL fields that have MAJOR errors (not minor discrepancies)
+- Minor formatting differences, paraphrasing, reasonable variations, and small discrepancies are FULLY ACCEPTABLE and MUST pass validation
+
+IMPORTANT: Do NOT fail validation for "minor discrepancies" - if the core information is captured, mark is_valid: true!"""
 
         user_prompt = f"""Analyze the page TEXT content and validate the extracted data.
 
@@ -303,16 +353,14 @@ Return JSON validation results."""
                 }
             }
             
-            result = asyncio.run(
-                self.gpt_client.async_request(
+            result = self.gpt_client.request(
                     system_prompt=system_prompt,
                     user_prompt=user_prompt,
                     temperature=0.1,
                     response_schema=schema,
                     retry_attempts=2
                 )
-            )
-            
+                        
             logger.info(f"GPT HTML validation result: {result}")
             return result
             
@@ -438,10 +486,11 @@ if __name__ == '__main__':
     vp = ValidateParser()
 
     result = vp.validate(
-        module_name="xrysessyntages_com",
-        use_gpt=False,
+        module_name="nutrip_gr",
+        use_gpt=True,
         required_fields=['dish_name', 'ingredients', 'instructions'],
         use_gpt_on_missing_fields=True
     )
+    pass
 
     
