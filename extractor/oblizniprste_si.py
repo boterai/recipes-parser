@@ -159,7 +159,9 @@ class OblizniprsteExtractor(BaseRecipeExtractor):
             # Проверяем, содержит ли заголовок ключевые слова ингредиентов
             is_ingredient_section = False
             for keyword in ingredient_keywords:
-                if keyword in heading_text and heading_text.endswith(':'):
+                # Проверяем наличие ключевого слова
+                # Предпочтительно с двоеточием в конце, но не обязательно
+                if keyword in heading_text:
                     is_ingredient_section = True
                     break
             
