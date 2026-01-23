@@ -88,18 +88,69 @@ class CopilotWorkflow:
             Текст комментария
         """
         pr_comment = "Валидация парсера выявила следующие проблемы, исправь их:\n\n"
+        pr_comment += "⚠️ **ВАЖНО**: Обязательны только 3 поля: dish_name, ingredients, instructions\n"
+        pr_comment += "Остальные поля (cook_time, prep_time, tags и т.д.) опциональны и их отсутствие допустимо.\n\n"
+        
         for error in errors:
-            pr_comment += f"- Модуль: {error['module']}, Всего файлов: {error['total_files']}, Ошибок: {error['failed']}\n"
+            pr_comment += f"### Модуль: `{error['module']}`\n"
+            pr_comment += f"- Всего файлов: {error['total_files']}\n"
+            pr_comment += f"- Ошибок: {error['failed']}\n\n"
+            
             for detail in error.get('details', []):
-                pr_comment += f"  - Файл: {detail['file']}, Статус: {detail['status']}\n"
+                pr_comment += f"#### 📄 Файл: `{detail.get('file', 'N/A')}`\n"
+                pr_comment += f"- Статус: **{detail.get('status', 'unknown')}**\n"
+                
                 gpt_val = detail.get('gpt_validation')
                 if gpt_val:
-                    pr_comment += f"    - GPT Валидация: {'Корректно' if gpt_val['is_valid'] else 'Некорректно'}\n"
-                    if not gpt_val['is_valid']:
-                        pr_comment += f"    - Отзыв: {gpt_val['feedback']}\n"
-                        for rec in gpt_val.get('fix_recommendations', []):
-                            pr_comment += f"      - Поле: {rec['field']}, Проблема: {rec['issue']}, Ожидаемое значение: {rec['expected_value']}, Фактическое значение: {rec['actual_value']}\n"
-                            pr_comment += f"        - Рекомендация по исправлению: {rec['fix_suggestion']}\n"
+                    is_valid = gpt_val.get('is_valid', False)
+                    is_recipe = gpt_val.get('is_recipe', True)
+                    
+                    pr_comment += f"- Валидация: {'✅ Корректно' if is_valid else '❌ Некорректно'}\n"
+                    pr_comment += f"- Это рецепт: {'Да' if is_recipe else 'Нет'}\n"
+                    
+                    if not is_valid:
+                        feedback = gpt_val.get('feedback', 'Нет описания')
+                        pr_comment += f"- **Отзыв**: {feedback}\n\n"
+                        
+                        missing_fields = gpt_val.get('missing_fields', [])
+                        if missing_fields:
+                            pr_comment += f"- **Отсутствующие поля**: {', '.join(missing_fields)}\n"
+                        
+                        incorrect_fields = gpt_val.get('incorrect_fields', [])
+                        if incorrect_fields:
+                            pr_comment += f"- **Некорректные поля**: {', '.join(incorrect_fields)}\n"
+                        
+                        fix_recs = gpt_val.get('fix_recommendations', [])
+                        if fix_recs:
+                            pr_comment += "\n**Рекомендации по исправлению:**\n\n"
+                            for idx, rec in enumerate(fix_recs, 1):
+                                field = rec.get('field', 'N/A')
+                                issue = rec.get('issue', 'N/A')
+                                fix_suggestion = rec.get('fix_suggestion', 'N/A')
+                                
+                                pr_comment += f"{idx}. **Поле**: `{field}`\n"
+                                pr_comment += f"   - Проблема: {issue}\n"
+                                
+                                # Разные поля в зависимости от типа валидации
+                                if 'expected_value' in rec:
+                                    # Валидация с reference JSON
+                                    pr_comment += f"   - Ожидаемое значение: `{rec.get('expected_value', 'N/A')}`\n"
+                                    pr_comment += f"   - Фактическое значение: `{rec.get('actual_value', 'N/A')}`\n"
+                                elif 'correct_value_from_text' in rec:
+                                    # Валидация с HTML текстом
+                                    pr_comment += f"   - Правильное значение из текста: `{rec.get('correct_value_from_text', 'N/A')}`\n"
+                                    pr_comment += f"   - Извлеченное значение: `{rec.get('actual_extracted_value', 'N/A')}`\n"
+                                    if 'text_context' in rec:
+                                        pr_comment += f"   - Контекст в тексте: _{rec.get('text_context', 'N/A')}_\n"
+                                    if 'pattern_hint' in rec:
+                                        pr_comment += f"   - Паттерн: {rec.get('pattern_hint', 'N/A')}\n"
+                                
+                                pr_comment += f"   - **Как исправить**: {fix_suggestion}\n\n"
+                    else:
+                        pr_comment += "\n"
+                
+                pr_comment += "---\n\n"
+        
         return pr_comment
 
     def check_review_requested_prs(self):
