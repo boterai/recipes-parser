@@ -276,8 +276,17 @@ class KokaiHopExtractor(BaseRecipeExtractor):
         for img in images:
             src = img.get('src', '')
             # Фильтруем только изображения рецептов (CloudFront)
-            if 'cloudfront.net' in src and src not in urls:
-                urls.append(src)
+            # Проверяем, что URL начинается с https:// и содержит cloudfront.net в домене
+            if src and src.startswith('https://') and '.cloudfront.net' in src and src not in urls:
+                # Дополнительная проверка: домен должен заканчиваться на .cloudfront.net
+                try:
+                    from urllib.parse import urlparse
+                    parsed = urlparse(src)
+                    if parsed.netloc.endswith('.cloudfront.net') or parsed.netloc == 'cloudfront.net':
+                        urls.append(src)
+                except Exception:
+                    # Если парсинг URL не удался, пропускаем
+                    pass
         
         # Убираем дубликаты, сохраняя порядок
         seen = set()
