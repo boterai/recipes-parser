@@ -65,18 +65,34 @@ class MrMExtractor(BaseRecipeExtractor):
         """Извлечение ингредиентов"""
         ingredients = []
         
-        # Ищем все элементы с классом jet-listing-dynamic-field__content
+        # Метод 1: Ищем элементы с классом jet-listing-dynamic-field__content
         ingredient_elements = self.soup.find_all('span', class_='jet-listing-dynamic-field__content')
         
-        for elem in ingredient_elements:
-            ingredient_text = elem.get_text(strip=True)
-            ingredient_text = self.clean_text(ingredient_text)
+        if ingredient_elements:
+            for elem in ingredient_elements:
+                ingredient_text = elem.get_text(strip=True)
+                ingredient_text = self.clean_text(ingredient_text)
+                
+                if ingredient_text:
+                    # Парсим ингредиент в структурированный формат
+                    parsed = self.parse_ingredient(ingredient_text)
+                    if parsed:
+                        ingredients.append(parsed)
+        
+        # Метод 2: Если не нашли через jet-listing, ищем через rc-text класс
+        if not ingredients:
+            ingredient_elements = self.soup.find_all('span', class_='rc-text')
             
-            if ingredient_text:
-                # Парсим ингредиент в структурированный формат
-                parsed = self.parse_ingredient(ingredient_text)
-                if parsed:
-                    ingredients.append(parsed)
+            for elem in ingredient_elements:
+                ingredient_text = elem.get_text(strip=True)
+                ingredient_text = self.clean_text(ingredient_text)
+                
+                # Пропускаем заголовки секций (обычно заканчиваются двоеточием)
+                if ingredient_text and not ingredient_text.endswith(':'):
+                    # Парсим ингредиент в структурированный формат
+                    parsed = self.parse_ingredient(ingredient_text)
+                    if parsed:
+                        ingredients.append(parsed)
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
@@ -85,7 +101,7 @@ class MrMExtractor(BaseRecipeExtractor):
         Парсинг строки ингредиента в структурированный формат
         
         Args:
-            ingredient_text: Строка вида "8 גזרים" или "כף גדושה מלח"
+            ingredient_text: Строка вида "8 גזרים" или "כף גדושה מלח" или "500 גרם אורז לסושי"
             
         Returns:
             dict: {"name": "...", "amount": "...", "units": "..."} или None
@@ -94,6 +110,10 @@ class MrMExtractor(BaseRecipeExtractor):
             return None
         
         text = self.clean_text(ingredient_text)
+        
+        # Пропускаем секции-заголовки (обычно заканчиваются двоеточием)
+        if text.endswith(':'):
+            return None
         
         # Сначала проверяем специальные случаи с единицами в начале (например "כף גדושה מלח")
         # Важно: проверяем ДО того, как будем искать числа, чтобы избежать ложных совпадений
@@ -126,6 +146,7 @@ class MrMExtractor(BaseRecipeExtractor):
                 }
         
         # Паттерн для извлечения количества в начале
+        # Формат: "NUMBER UNIT NAME" или "NUMBER NAME"
         pattern_with_number = r'^([\d\.\,\/\u00BC-\u00BE\u2150-\u215E]+)\s+(.+)$'
         match = re.match(pattern_with_number, text)
         
@@ -142,33 +163,37 @@ class MrMExtractor(BaseRecipeExtractor):
                     except:
                         pass
             
-            # Теперь ищем единицы измерения в остатке
+            # Теперь ищем единицы измерения в начале остатка
             # Используем более специфичные паттерны, чтобы избежать ложных совпадений
+            # Паттерны проверяем в определенном порядке - сначала более специфичные
             units_patterns = [
-                (r'\s+ק[״"]ג\b', 'kg'),  # ק"ג или ק״ג
-                (r'\s+קג\b', 'kg'),
-                (r'\s+כוסות\b', 'cups'),
-                (r'\s+כוס\b', 'cups'),
-                (r'\s+גביעים\b', 'cups'),
-                (r'\s+גביע\b', 'cups'),
-                (r'\s+גרם\b', 'grams'),
-                (r'\s+ליטר\b', 'liters'),
-                (r'\s+מ[״"]ל\b', 'ml'),
-                (r'\s+מל\b', 'ml'),
-                (r'\bcups?\b', 'cups'),
-                (r'\btablespoons?\b', 'tablespoon'),
-                (r'\bteaspoons?\b', 'teaspoon'),
-                (r'\bgrams?\b', 'grams'),
-                (r'\bkg\b', 'kg'),
+                # С разделителями вроде ״
+                (r'^ק[״"]ג\s+', 'kg'),  # ק"ג или ק״ג
+                (r'^מ[״"]ל\s+', 'ml'),  # מ"ל или מ״ל
+                (r'^גרם\/מ[״"]ל\s+', 'гרם/мл'),  # гרם/мл
+                # Полные слова
+                (r'^כוסות\s+', 'cups'),
+                (r'^כוס\s+', 'cups'),
+                (r'^גביעים\s+', 'cups'),
+                (r'^גביע\s+', 'cups'),
+                (r'^גרם\s+', 'grams'),
+                (r'^ליטר\s+', 'liters'),
+                # Английские
+                (r'^cups?\s+', 'cups'),
+                (r'^tablespoons?\s+', 'tablespoon'),
+                (r'^teaspoons?\s+', 'teaspoon'),
+                (r'^grams?\s+', 'grams'),
+                (r'^kg\s+', 'kg'),
             ]
             
             unit = None
             name = rest
             
             for pattern, unit_en in units_patterns:
-                if re.search(pattern, rest, re.IGNORECASE):
+                match_unit = re.match(pattern, rest, re.IGNORECASE)
+                if match_unit:
                     unit = unit_en
-                    name = re.sub(pattern, '', rest, flags=re.IGNORECASE).strip()
+                    name = rest[match_unit.end():].strip()
                     break
             
             # Очистка названия от дополнительной информации в скобках
@@ -181,10 +206,6 @@ class MrMExtractor(BaseRecipeExtractor):
             }
         
         # Если паттерн не совпал, возвращаем как есть
-        # Пропускаем секции-заголовки (обычно заканчиваются двоеточием)
-        if text.endswith(':'):
-            return None
-        
         return {
             "name": text,
             "amount": None,
