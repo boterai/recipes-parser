@@ -253,13 +253,18 @@ class BosanskikuharExtractor(BaseRecipeExtractor):
                 return json.dumps(ingredients, ensure_ascii=False)
         
         # Если JSON-LD не помог, ищем в HTML
-        # Вариант 1: Список ингредиентов в ul/ol
+        # Вариант 1: Список ингредиентов в ul/ol с классом
         ingredient_list = self.soup.find('ul', class_=re.compile(r'(ingredient|sastojci)', re.I))
         if not ingredient_list:
             ingredient_list = self.soup.find('ol', class_=re.compile(r'(ingredient|sastojci)', re.I))
         if not ingredient_list:
-            # Ищем div с классом, содержащим ingredient/sastojci
-            ingredient_list = self.soup.find('div', class_=re.compile(r'(ingredient|sastojci)', re.I))
+            # Ищем div/section с классом, содержащим ingredient/sastojci
+            container = self.soup.find(['div', 'section'], class_=re.compile(r'(ingredient|sastojci)', re.I))
+            if container:
+                # Ищем список внутри контейнера
+                ingredient_list = container.find('ul')
+                if not ingredient_list:
+                    ingredient_list = container.find('ol')
         
         if ingredient_list:
             # Извлекаем элементы списка
@@ -303,14 +308,17 @@ class BosanskikuharExtractor(BaseRecipeExtractor):
                 return ' '.join(steps)
         
         # Если JSON-LD не помог, ищем в HTML
-        # Вариант 1: Упорядоченный список
+        # Вариант 1: Список с классом
         instruction_list = self.soup.find('ol', class_=re.compile(r'(instruction|priprema|koraci|upute)', re.I))
         if not instruction_list:
-            # Вариант 2: Неупорядоченный список
             instruction_list = self.soup.find('ul', class_=re.compile(r'(instruction|priprema|koraci|upute)', re.I))
         if not instruction_list:
-            # Вариант 3: div с инструкциями
-            instruction_list = self.soup.find('div', class_=re.compile(r'(instruction|priprema|koraci|upute)', re.I))
+            # Вариант 2: Ищем section/div с инструкциями, затем список внутри
+            container = self.soup.find(['div', 'section'], class_=re.compile(r'(instruction|priprema|koraci|upute)', re.I))
+            if container:
+                instruction_list = container.find('ol')
+                if not instruction_list:
+                    instruction_list = container.find('ul')
         
         if instruction_list:
             # Извлекаем шаги
