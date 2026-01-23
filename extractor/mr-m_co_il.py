@@ -15,6 +15,17 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class MrMExtractor(BaseRecipeExtractor):
     """Экстрактор для mr-m.co.il"""
     
+    # Константы для парсинга
+    DEFAULT_AMOUNT_FOR_UNIT_ONLY = 1  # Количество по умолчанию для ингредиентов с только единицей измерения
+    MIN_NOTE_LENGTH = 30  # Минимальная длина текста для заметки
+    MIN_INSTRUCTION_LENGTH = 20  # Минимальная длина текста для инструкции
+    
+    # Глаголы, которые обычно начинают инструкции (на иврите)
+    INSTRUCTION_VERBS = [
+        'מחממים', 'חותכים', 'מפזרים', 'מערבבים', 'מניחים', 'מכניסים',
+        'מוציאים', 'מורידים', 'מחזירים', 'מגבירים', 'מסובבים', 'מכבים'
+    ]
+    
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
         # Ищем в мета-теге og:title
@@ -137,7 +148,7 @@ class MrMExtractor(BaseRecipeExtractor):
                     amount = num_in_name.group(1)
                     name = name[num_in_name.end():].strip()
                 else:
-                    amount = 1  # По умолчанию 1, если не указано
+                    amount = self.DEFAULT_AMOUNT_FOR_UNIT_ONLY  # По умолчанию 1, если не указано
                 
                 return {
                     "name": name,
@@ -160,7 +171,8 @@ class MrMExtractor(BaseRecipeExtractor):
                 if len(parts) == 2:
                     try:
                         amount = float(parts[0]) / float(parts[1])
-                    except:
+                    except (ValueError, ZeroDivisionError):
+                        # Оставляем как строку, если не можем преобразовать
                         pass
             
             # Теперь ищем единицы измерения в начале остатка
@@ -170,7 +182,7 @@ class MrMExtractor(BaseRecipeExtractor):
                 # С разделителями вроде ״
                 (r'^ק[״"]ג\s+', 'kg'),  # ק"ג или ק״ג
                 (r'^מ[״"]ל\s+', 'ml'),  # מ"ל или מ״ל
-                (r'^גרם\/מ[״"]ל\s+', 'гרם/мл'),  # гרם/мл
+                (r'^גרם\/מ[״"]ל\s+', 'grams/ml'),  # גרם/מל
                 # Полные слова
                 (r'^כוסות\s+', 'cups'),
                 (r'^כוס\s+', 'cups'),
@@ -256,7 +268,7 @@ class MrMExtractor(BaseRecipeExtractor):
                     text = p.get_text(separator=' ', strip=True)
                     text = self.clean_text(text)
                     # Фильтруем слишком короткие строки
-                    if text and len(text) > 20:
+                    if text and len(text) > self.MIN_INSTRUCTION_LENGTH:
                         instructions.append(text)
         
         return ' '.join(instructions) if instructions else None
@@ -337,15 +349,13 @@ class MrMExtractor(BaseRecipeExtractor):
             
             # Проверяем, похож ли текст на заметку
             # Заметки часто содержат упоминания о рецепте, советы и т.д.
-            if text and len(text) > 30:
+            if text and len(text) > self.MIN_NOTE_LENGTH:
                 # Заметки часто начинаются со слов типа "זוכרים" (помните), "טיפ" (совет) и т.д.
                 # или содержат вопросительные предложения
                 if any(keyword in text for keyword in ['זוכרים', 'טיפ', 'שימו לב', 'חשוב', 'המלצה', '?', 'אז קבלו']):
                     # Проверяем, что это не инструкция (инструкции обычно короче и более директивные)
-                    # и не начинаются с глаголов в повелительном наклонении типа "מחממים", "חותכים"
-                    instruction_verbs = ['מחממים', 'חותכים', 'מפזרים', 'מערבבים', 'מניחים', 'מכניסים', 
-                                       'מוציאים', 'מורידים', 'מחזירים', 'מגבירים', 'מסובבים', 'מכבים']
-                    if not any(text.startswith(verb) for verb in instruction_verbs):
+                    # и не начинаются с глаголов в повелительном наклонении
+                    if not any(text.startswith(verb) for verb in self.INSTRUCTION_VERBS):
                         notes.append(text)
         
         # Если нашли заметки, возвращаем первую (обычно самая релевантная)
