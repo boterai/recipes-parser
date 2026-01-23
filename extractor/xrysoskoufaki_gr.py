@@ -20,7 +20,11 @@ class XrysoskoufakiExtractor(BaseRecipeExtractor):
         # Ищем в заголовке рецепта
         recipe_header = self.soup.find('h1', class_='entry-title')
         if recipe_header:
-            return self.clean_text(recipe_header.get_text())
+            title = self.clean_text(recipe_header.get_text())
+            # Если есть двоеточие, берем только часть до двоеточия (основное название)
+            if ':' in title:
+                title = title.split(':')[0].strip()
+            return title
         
         # Альтернативно - из JSON-LD
         json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
@@ -32,7 +36,11 @@ class XrysoskoufakiExtractor(BaseRecipeExtractor):
                         if item.get('@type') in ['Article', 'BlogPosting'] or \
                            (isinstance(item.get('@type'), list) and 'Article' in item.get('@type', [])):
                             if 'headline' in item:
-                                return self.clean_text(item['headline'])
+                                headline = self.clean_text(item['headline'])
+                                # Если есть двоеточие, берем только часть до двоеточия
+                                if ':' in headline:
+                                    headline = headline.split(':')[0].strip()
+                                return headline
             except (json.JSONDecodeError, KeyError):
                 continue
         
@@ -69,11 +77,11 @@ class XrysoskoufakiExtractor(BaseRecipeExtractor):
             text: Строка вида "2 ποτήρια Ελαιόλαδο" или "500 γρ. Σιμιγδάλι ψιλό"
             
         Returns:
-            dict: {"name": "...", "amount": ..., "units": "..."}
+            dict: {"name": "...", "units": "...", "amount": ...}
         """
         text = self.clean_text(text)
         if not text:
-            return {"name": text, "amount": None, "units": None}
+            return {"name": text, "units": None, "amount": None}
         
         # Греческие единицы измерения (без внешних скобок, чтобы не создавать группу)
         units_pattern = r'(?:ποτήρι(?:α)?|φλιτζάνι(?:α)?|κούπ(?:α|ες)?|φλ\.|κ\.σ\.|κ\.γ\.|γρ\.|κιλό|λίτρ(?:α|ο)|ml|kg|g|τεμάχι(?:α)?|φέτ(?:α|ες)|κλωνάρι(?:α)?|δέσμη)'
@@ -95,7 +103,7 @@ class XrysoskoufakiExtractor(BaseRecipeExtractor):
                 amount_str = amount_str.strip().replace(',', '.')
                 # Обработка диапазонов типа "1-1,2" или "1–1,2"
                 if '–' in amount_str or '-' in amount_str:
-                    amount = amount_str  # Оставляем как есть
+                    amount = amount_str  # Оставляем как строку для диапазонов
                 elif '/' in amount_str:
                     # Обработка дробей
                     parts = amount_str.split()
@@ -106,11 +114,19 @@ class XrysoskoufakiExtractor(BaseRecipeExtractor):
                             total += float(num) / float(denom)
                         else:
                             total += float(part)
-                    amount = str(total) if total != int(total) else str(int(total))
+                    # Конвертируем в int если это целое число
+                    if total == int(total):
+                        amount = int(total)
+                    else:
+                        amount = total
                 else:
                     try:
                         val = float(amount_str)
-                        amount = str(val) if val != int(val) else str(int(val))
+                        # Конвертируем в int если это целое число
+                        if val == int(val):
+                            amount = int(val)
+                        else:
+                            amount = val
                     except ValueError:
                         amount = amount_str
             
@@ -122,12 +138,12 @@ class XrysoskoufakiExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name if name else text,
-                "amount": amount,
-                "units": unit.strip() if unit else None
+                "units": unit.strip() if unit else None,
+                "amount": amount
             }
         
         # Если паттерн не совпал, просто возвращаем название
-        return {"name": text, "amount": None, "units": None}
+        return {"name": text, "units": None, "amount": None}
     
     def extract_ingredients(self) -> Optional[str]:
         """Извлечение ингредиентов"""
@@ -275,6 +291,23 @@ class XrysoskoufakiExtractor(BaseRecipeExtractor):
         if not content_div:
             return None
         
+        # Сначала пробуем найти время в структурированных span элементах (новый формат)
+        # Ищем все span.mv-time-minutes
+        time_spans = content_div.find_all('span', class_='mv-time-minutes')
+        if time_spans and len(time_spans) >= 3:
+            # Обычно порядок: prep, cook, total
+            time_map = {
+                'prep': 0,
+                'cook': 1,
+                'total': 2
+            }
+            idx = time_map.get(time_type)
+            if idx is not None and idx < len(time_spans):
+                time_text = time_spans[idx].get_text(strip=True)
+                # Текст уже в формате "10 minutes"
+                return time_text
+        
+        # Если не нашли в span, ищем в тексте по греческим меткам
         # Греческие названия типов времени
         time_labels = {
             'prep': [r'Χρόνος\s+Προετοιμασίας', r'Preparation\s+Time'],
