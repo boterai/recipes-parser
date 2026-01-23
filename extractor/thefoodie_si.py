@@ -166,7 +166,7 @@ class TheFoodieSiExtractor(BaseRecipeExtractor):
         """Извлечение ингредиентов"""
         ingredients = []
         
-        # Ищем секцию SESTAVINE
+        # Метод 1: Ищем секцию SESTAVINE в <strong> теге (для полных рецептов)
         sestavine_strong = self.soup.find('strong', string=re.compile('SESTAVINE', re.I))
         if sestavine_strong:
             # Находим следующий список ul
@@ -210,13 +210,106 @@ class TheFoodieSiExtractor(BaseRecipeExtractor):
                         if parsed:
                             ingredients.append(parsed)
         
+        # Метод 2: Если не нашли через <strong>, ищем как plain text (для excerpt страниц)
+        if not ingredients:
+            # Ищем параграф с текстом "SESTAVINE:"
+            for p in self.soup.find_all('p'):
+                text = p.get_text()
+                if 'SESTAVINE:' in text:
+                    # Извлекаем секцию между SESTAVINE: и POSTOPEK:
+                    parts = text.split('SESTAVINE:')
+                    if len(parts) > 1:
+                        ingredients_text = parts[1].split('POSTOPEK:')[0] if 'POSTOPEK:' in parts[1] else parts[1]
+                        ingredients_text = self.clean_text(ingredients_text).strip()
+                        
+                        # Простой подход: разбиваем по числам (каждый ингредиент с количеством начинается с числа)
+                        # Используем negative lookbehind, чтобы не разбивать внутри чисел
+                        parts_by_number = re.split(r'(?<!\d)(?=\d+\s+[a-zčšžA-ZČŠŽ])', ingredients_text)
+                        
+                        for part in parts_by_number:
+                            part = part.strip()
+                            if len(part) < 3:
+                                continue
+                            
+                            # Каждая часть - это ингредиент с количеством + возможно еще ингредиенты без количества
+                            # Пример: "500 g listov..." или "2 stroka česna paprika v prahu, po okusu"
+                            
+                            # Извлекаем первый ингредиент (с количеством)
+                            # Паттерн: число [единица] название
+                            # Название заканчивается перед следующим словом, которое может быть новым ингредиентом
+                            
+                            # Ищем, где заканчивается первый ингредиент
+                            # Это либо перед словом после скобки ") слово", либо перед "слово слово" без запятых/скобок
+                            
+                            # Упрощенно: ищем паттерны нового ингредиента:
+                            # - после ") " идет слово (новый ингредиент)
+                            # - после ", " идет слово, не "po" и не "ali" (новый ингредиент)
+                            
+                            # Разбиваем по этим паттернам
+                            # сначала по ") слово"
+                            sub_parts = re.split(r'\)\s+(?=[a-zčšž])', part)
+                            
+                            final_parts = []
+                            for sp in sub_parts:
+                                # Добавляем закрывающую скобку обратно
+                                if sp and ')' not in sp and len(sub_parts) > 1 and sub_parts.index(sp) < len(sub_parts) - 1:
+                                    sp = sp + ')'
+                                
+                                # Теперь разбиваем по ", слово" (но не ", po" и не ", ali")
+                                comma_parts = []
+                                last_pos = 0
+                                for match in re.finditer(r',\s+(?=[a-zčšž]+)', sp):
+                                    # Проверяем, что после запятой не "po" и не "ali"
+                                    word_after = sp[match.end():match.end()+3]
+                                    if word_after not in ['po ', 'ali', 'in ']:
+                                        comma_parts.append(sp[last_pos:match.start()].strip())
+                                        last_pos = match.end()
+                                
+                                # Добавляем остаток
+                                if last_pos < len(sp):
+                                    comma_parts.append(sp[last_pos:].strip())
+                                
+                                final_parts.extend(comma_parts if comma_parts else [sp])
+                            
+                            # Парсим каждую финальную часть
+                            for fp in final_parts:
+                                fp = fp.strip()
+                                if len(fp) < 2:
+                                    continue
+                                
+                                # Проверяем на "X in Y"
+                                if ' in ' in fp:
+                                    in_parts = fp.split(' in ')
+                                    if len(in_parts) == 2:
+                                        # Извлекаем suffix из второй части
+                                        suffix = ''
+                                        second = in_parts[1]
+                                        if ',' in second:
+                                            second, suffix = second.split(',', 1)
+                                            suffix = ',' + suffix
+                                        
+                                        parsed1 = self.parse_ingredient(in_parts[0].strip() + suffix)
+                                        if parsed1:
+                                            ingredients.append(parsed1)
+                                        
+                                        parsed2 = self.parse_ingredient(second.strip() + suffix)
+                                        if parsed2:
+                                            ingredients.append(parsed2)
+                                        continue
+                                
+                                parsed = self.parse_ingredient(fp)
+                                if parsed:
+                                    ingredients.append(parsed)
+                    
+                    break
+        
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
     def extract_instructions(self) -> Optional[str]:
         """Извлечение шагов приготовления"""
         instructions = []
         
-        # Ищем секцию POSTOPEK
+        # Метод 1: Ищем секцию POSTOPEK в <strong> теге (для полных рецептов)
         postopek_strong = self.soup.find('strong', string=re.compile('POSTOPEK', re.I))
         if postopek_strong:
             # Получаем родительский параграф
@@ -243,6 +336,28 @@ class TheFoodieSiExtractor(BaseRecipeExtractor):
                         break
                 
                 current = current.next_sibling
+        
+        # Метод 2: Если не нашли через <strong>, ищем как plain text (для excerpt страниц)
+        if not instructions:
+            # Ищем параграф с текстом "POSTOPEK:"
+            for p in self.soup.find_all('p'):
+                text = p.get_text()
+                if 'POSTOPEK:' in text:
+                    # Извлекаем секцию после POSTOPEK:
+                    parts = text.split('POSTOPEK:')
+                    if len(parts) > 1:
+                        instructions_text = parts[1]
+                        # Очищаем текст, но останавливаемся на маркерах окончания
+                        # Например: "Read more", "Išči:", etc.
+                        end_markers = ['Read more', 'Išči:', 'Spremljajte nas:', '…']
+                        for marker in end_markers:
+                            if marker in instructions_text:
+                                instructions_text = instructions_text.split(marker)[0]
+                        
+                        instructions_text = self.clean_text(instructions_text)
+                        if instructions_text:
+                            instructions.append(instructions_text)
+                    break
         
         return ' '.join(instructions) if instructions else None
     
