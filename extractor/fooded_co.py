@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 import json
 import re
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Union
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
@@ -103,7 +103,7 @@ class FoodedCoExtractor(BaseRecipeExtractor):
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
-    def parse_ingredient(self, ingredient_text: str) -> Optional[Dict]:
+    def parse_ingredient(self, ingredient_text: str) -> Optional[Union[Dict, List[Dict]]]:
         """
         Парсинг строки ингредиента в структурированный формат
         
@@ -145,7 +145,7 @@ class FoodedCoExtractor(BaseRecipeExtractor):
                     amount = float(parts[0]) / float(parts[1])
                 else:
                     amount = float(amount_str) if '.' in amount_str else int(amount_str)
-            except:
+            except (ValueError, ZeroDivisionError):
                 amount = None
             
             return {
@@ -418,7 +418,7 @@ class FoodedCoExtractor(BaseRecipeExtractor):
                                 # Разделяем по запятым и добавляем в set
                                 for tag in keywords.split(','):
                                     tags_set.add(tag.strip())
-            except (json.JSONDecodeError, KeyError):
+            except json.JSONDecodeError:
                 continue
         
         # Если не нашли теги в JSON-LD, генерируем из контента
@@ -514,7 +514,7 @@ class FoodedCoExtractor(BaseRecipeExtractor):
                                     urls.append(item['url'])
                                 elif 'contentUrl' in item:
                                     urls.append(item['contentUrl'])
-            except (json.JSONDecodeError, KeyError):
+            except json.JSONDecodeError:
                 continue
         
         # Убираем дубликаты, сохраняя порядок
