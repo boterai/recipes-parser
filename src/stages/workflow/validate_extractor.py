@@ -300,7 +300,7 @@ Validation rules:
   * Semantic correctness = captures the same meaning/information from text, even if wording/format differs
   * Example: "Bake for 30 minutes" can be extracted as "30 min" or "Bake 30m" - both valid!
   * MINOR DISCREPANCIES in critical fields = STILL VALID! Only major content errors should fail.
-- If page text IS a recipe but CRITICAL fields are SIGNIFICANTLY incomplete/wrong (>80% missing/incorrect) -> is_valid: false
+- If page text IS a recipe but CRITICAL fields are SIGNIFICANTLY incomplete/wrong (>70% missing/incorrect) -> is_valid: false
 - Differences/discrepancies in OPTIONAL fields (prep_time, cook_time, tags, etc.) MUST BE IGNORED - they should NEVER fail validation
 - Base recommendations ONLY on text content, not HTML structure
 - In fix_recommendations, focus ONLY on CRITICAL fields that have MAJOR errors (not minor discrepancies)
