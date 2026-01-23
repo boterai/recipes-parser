@@ -171,6 +171,10 @@ class SiteRepository(BaseRepository[SiteORM]):
             if random_order:
                 query = query.order_by(func.random())
 
+            if limit == 1:
+                site = query.first()
+                return [site] if site else []
+            
             sites = query.limit(limit).all()
             return sites
         

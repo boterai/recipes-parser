@@ -289,6 +289,7 @@ class AutoScraper:
         min_unprocessed_sites: int = 100,
         generate_from_recipes: bool = True,
         generate_with_gpt: bool = False,
+        max_sites_to_process: int = 200
     ):
         """
         Автоматический сбор рецептов
@@ -318,9 +319,14 @@ class AutoScraper:
                 
                 # здесь проводим обработку уже имеющихся сайтов
                 self.logger.info("Начинаем обработку необработанных сайтов...\n")
-                sites = self.site_repository.get_unprocessed_sites(limit=min_unprocessed_sites, random_order=True) # получаем случайные необработанные сайты
-                random.shuffle(sites)
-                for site in sites:
+                sites_processed = 0
+                while sites_processed < max_sites_to_process:
+                    site = self.site_repository.get_unprocessed_sites(limit=1, random_order=True) # получаем случайные необработанные сайты по 1 шт
+                    if not site:
+                        self.logger.info("Все необработанные сайты обработаны.")
+                        break
+                    site = site[0]
+
                     try:
                         self.logger.info(f"\n=== Обработка сайта ID={site.id}, URL={site.base_url} ===")
                         if self.site_preparation_pipeline.prepare_site(site.search_url, max_pages=60, custom_logger=self.logger):
@@ -330,6 +336,8 @@ class AutoScraper:
                     except Exception as e:
                         self.logger.error(f"Ошибка обработки сайта ID={site.id}, URL={site.base_url}: {e}")
                         continue
+                    sites_processed += 1
+                    
                 return
             
             self.logger.info(f"→ Недостаточно необработанных сайтов ({unprocessed_count} < {min_unprocessed_sites})")
