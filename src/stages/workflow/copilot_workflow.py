@@ -93,8 +93,7 @@ class CopilotWorkflow:
     def check_review_requested_prs(self):
         """Проверяет завершенные PR и обновляет статусы задач.
         Для каждого PR с запрошенным ревью выполняет валидацию парсера.
-        TODO: проверить как работате при наличии ошибок в pr
-        
+        Note: аккаунт назначающий copilot и reviewer должен быть одним и тем же, иначе не сработает.
         """
         prs = self.github_client.list_pr()
         prs = [pr for pr in prs if len(pr.get('requested_reviewers')) > 0]
@@ -115,7 +114,10 @@ class CopilotWorkflow:
                 self.github_client.close_pr_linked_issue(pr['number'], pr)
             # удаление ветки после мерджа pr и получение изменений в локальную ветку
             self.branch_manager.delete_branch(pr['head']['ref'])
-            self.branch_manager.update_current_branch()
+            try:
+                self.branch_manager.update_current_branch()
+            except Exception as e:
+                logger.error(f"Не удалось обновить текущую ветку автоматически: {e}")
             self.clear_preprocessed_data()
 
 if __name__ == "__main__":
