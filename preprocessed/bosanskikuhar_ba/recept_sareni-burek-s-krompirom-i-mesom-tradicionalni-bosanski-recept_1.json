@@ -1,0 +1,12 @@
+{
+    "dish_name": "Šareni burek s krompirom i mesom",
+    "description": "Šareni burek je ukusna kombinacija hrskave jufke, sočnog mljevenog mesa i krompira.",
+    "ingredients": "[{\"name\": \"brašna\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"soli\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"mlake vode\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"ulja\", \"units\": \"kašike\", \"amount\": 2}, {\"name\": \"mljevenog mesa\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"srednja krompira\", \"units\": null, \"amount\": 2}, {\"name\": \"crvenog luka\", \"units\": \"glavica\", \"amount\": 1}, {\"name\": \"soli\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"bibera\", \"units\": \"kašičica\", \"amount\": 0.5}, {\"name\": \"crvene paprike\", \"units\": \"kašičica\", \"amount\": 0.5}, {\"name\": \"ulja\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"putera\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"ulja\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"jogurta\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"bijelog luka\", \"units\": \"čehno\", \"amount\": 1}]",
+    "instructions": "Priprema tijesta (ako pravite domaće jufke): Pomiješati brašno i so, dodati vodu i umijesiti glatko tijesto. Dodati ulje, premijesiti i ostaviti da odmori 30 minuta. Priprema nadjeva: Na ulju propržiti sitno sjeckani crveni luk. Dodati mljeveno meso, so, biber i crvenu papriku pa pržiti dok meso ne promijeni boju. Dodati sitno nasjeckan krompir i kratko prodinstati. Ostaviti da se ohladi. Slaganje bureka: Razvući jufke ili koristiti kupovne kore. Svaku jufku premazati mješavinom putera i ulja. Rasporediti fil uz rub jufke i zarolati. Složiti u pleh u obliku puža ili paralelno u redovima. Pečenje: Rernu zagrijati na 200°C. Premazati burek ostatkom putera i ulja. Peći 35–40 minuta do zlatno-smeđe boje. Završni korak: Po želji preliti mješavinom jogurta i bijelog luka. Ostaviti 5 minuta da odstoji prije rezanja.",
+    "category": "Glavno jelo, Pita",
+    "prep_time": "30 minutes",
+    "cook_time": "40 minutes",
+    "total_time": "1 hour 10 minutes",
+    "notes": "Krompir uvijek sijecite na sitne kockice da se u potpunosti ispeče. Ako koristite kupovne jufke, izbjegavajte previše ulja — pita može postati teška. Za hrskavu koru ne pokrivajte burek nakon pečenja. Za mekšu koru pokrijte ga krpom 5 minuta nakon vađenja iz rerne. Jogurt-preliv daje dodatnu sočnost i odličan je ako se burek jede topao.",
+    "tags": "burek s krompirom i mesom, domaći burek, domaći burek recept, šareni burek"
+}

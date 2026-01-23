@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tržaška omaka",
+    "description": "Tržaška omaka je pika na i zlasti pri morskih jedeh. Tudi na pici se prileže.",
+    "ingredients": "[{\"name\": \"šop peteršilja\", \"units\": \"g\", \"amount\": 10}, {\"name\": \"strok česna\", \"units\": null, \"amount\": 1}, {\"name\": \"jedilne žlice olivnega olja\", \"units\": null, \"amount\": 3}]",
+    "instructions": "Peteršilj operemo in osmukamo liste. Porabimo lahko tudi drobna stebelca. Česen olupimo. Peteršilj in česen čim bolj na drobno nasekljamo. Oboje prestavimo v manjšo posodo in dolijemo olivno olje ter premešamo. Omako pustimo stati vsaj pol ure, da česen do konca razvije svojo aromo. Zaradi intenzivnega okusa česna je najbolje, da omako postrežemo ločeno v posebni posodi, da si jo gostje lahko postrežejo po lastnem okusu. Omake ne pripravljamo na zalogo, ampak vedno pripravimo svežo.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Uživajte v okusih!",
+    "tags": null
+}

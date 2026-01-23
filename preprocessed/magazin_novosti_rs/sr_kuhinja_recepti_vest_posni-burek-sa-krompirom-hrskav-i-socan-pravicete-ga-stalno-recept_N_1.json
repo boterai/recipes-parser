@@ -1,0 +1,12 @@
+{
+    "dish_name": "Posni burek sa krompirom",
+    "description": "Hrskavi burek punjen sočnim krompirom, idealan za lagan i ukusan obrok.",
+    "ingredients": "[{\"name\": \"tanje gotove kore\", \"units\": null, \"amount\": null}, {\"name\": \"ulje\", \"units\": null, \"amount\": null}, {\"name\": \"krompir\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"so ili začin\", \"units\": null, \"amount\": null}, {\"name\": \"biber\", \"units\": null, \"amount\": null}, {\"name\": \"kisela voda\", \"units\": null, \"amount\": null}]",
+    "instructions": "Na ulju propržiti iseckan luk ili praziluk. Krompir oguliti i izrendati. U krompir ubaciti luk i izmešati. Dodati začin ili so, biber i izjednačiti. Manju tepsiju obložiti jednom korom pa je podmazati. Gužvati kore i ređati na dno jednu do druge, pa poprskati kiselom vodom i sa malo ulja. Poravnati drugi red, pa nastaviti opet sa gužvanim korama pa poređati trećinu izrendanog krompira. Pokriti korama zgužvanim pa krompir poređati i tako dok ne potrošite sav nadev. Pokriti celom korom ušuškati burek preliti uljem i poprskati kiselom vodom. Peći na 200 stepeni 30-40 minuta da lepo porumeni. Izvrnuti na tanjir i seći toplu i služiti.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "30-40 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "recept,pita,burek,Bakina kuhinja"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Polish Sourdough Rye Bread",
+    "description": "Learn traditional Polish baking with this rustic Sourdough Rye Bread. Start the process a day ahead to allow time for the sourdough to develop its characteristic flavor.",
+    "ingredients": "[{\"name\": \"Active rye sourdough starter\", \"units\": \"grams\", \"amount\": 200}, {\"name\": \"Lukewarm water\", \"units\": \"ml\", \"amount\": 380}, {\"name\": \"Bread flour\", \"units\": \"grams\", \"amount\": 600}, {\"name\": \"Salt\", \"units\": \"teaspoon\", \"amount\": 1}]",
+    "instructions": "Prepare the Sourdough Starter: Combine the active rye sourdough starter, lukewarm water, and bread flour in a bowl. Do not add salt yet. First Dough Mixture: Mix the ingredients until just combined to form a thick but not stiff dough. Cover with a cloth or plastic wrap and let rest for about 1 hour for autolysis. Kneading: After resting, add the salt to the dough and knead on a wet surface with wet hands, folding the dough over itself, for 15-20 minutes until the dough is less sticky and holds its shape. Fermentation: Transfer the dough back into the bowl, cover, and let it rise for 3-5 hours depending on the room temperature. Shaping the Loaf: After the dough has risen, shape it into a round or oval loaf and place it in a floured basket or bowl. Cover with a cloth or plastic wrap. Leave Overnight (optional): Optionally, place the shaped dough in the refrigerator overnight for 6-10 hours to develop flavors. Baking: Preheat the oven to 240°C (460°F). Heat a covered baking dish in the oven. Carefully place the dough into the hot baking dish, score the top, cover, and bake for 30 minutes. Then uncover and continue baking for another 20 minutes or until fully baked.",
+    "category": "Bread",
+    "prep_time": "24 hours",
+    "cook_time": "50 minutes",
+    "total_time": "1 day 50 minutes",
+    "notes": "The sourdough starter should be active and fed a few hours before using. For a crispier crust, place a tray with water at the bottom of the oven to create steam during the first part of baking. Allow the bread to cool completely before slicing.",
+    "tags": "Polish, Sourdough, Rye, Bread"
+}

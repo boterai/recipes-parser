@@ -1,0 +1,12 @@
+{
+    "dish_name": "Zupa serowa",
+    "description": "Szybka i smaczna zupa serowa, idealna na każdą porę roku.",
+    "ingredients": "[{\"name\": \"bulion warzywny lub drobiowy\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"ser topiony, cheddar, pleśniowy\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"cebule cukrowe\", \"units\": \"g\", \"amount\": 280}, {\"name\": \"ząbki czosnku\", \"units\": \"pieces\", \"amount\": 3}, {\"name\": \"masło klarowane lub oliwa\", \"units\": \"łyżka\", \"amount\": 1}, {\"name\": \"pieprz\", \"units\": null, \"amount\": \"po szczypcie\"}, {\"name\": \"tymianek\", \"units\": null, \"amount\": \"po szczypcie\"}, {\"name\": \"szczypiorek\", \"units\": null, \"amount\": \"garść\"}]",
+    "instructions": "1. W garnku roztop masło, dodaj pokrojoną cebulę i smaż na małym ogniu przez 10 minut. 2. Dodaj czosnek i smaż jeszcze 5 minut. 3. Wlej bulion i dodaj twardsze sery. 4. Doprowadź do wrzenia, mieszając, aż sery się rozpuszczą. 5. Dodaj serek topiony i mieszaj do uzyskania jednolitej konsystencji. 6. Dopraw pieprzem, tymiankiem i dodaj szczypiorek. 7. Podawaj z grzankami.",
+    "category": "Zupa",
+    "prep_time": "15 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "30 minutes",
+    "notes": "Można użyć różnych rodzajów serów według preferencji. Zupę można podać z grzankami lub świeżymi ziołami.",
+    "tags": "zupa, serowa, szybka, łatwa"
+}

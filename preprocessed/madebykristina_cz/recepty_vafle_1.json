@@ -1,0 +1,12 @@
+{
+    "dish_name": "Vafle",
+    "description": "Osvědčený recept na křehké a jemné vaflové těsto.",
+    "ingredients": "[{\"name\": \"hladká mouka\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"polohrubá mouka\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"moučkový cukr\", \"units\": \"g\", \"amount\": 75}, {\"name\": \"sůl\", \"units\": null, \"amount\": null}, {\"name\": \"prášek do pečiva\", \"units\": \"balení\", \"amount\": 1}, {\"name\": \"mléko\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"rozpuštěné máslo\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"vejce\", \"units\": null, \"amount\": 2}, {\"name\": \"smetana na šlehání\", \"units\": null, \"amount\": null}, {\"name\": \"tvaroh\", \"units\": null, \"amount\": null}, {\"name\": \"čerstvé ovoce\", \"units\": null, \"amount\": null}, {\"name\": \"vanilkový cukr\", \"units\": null, \"amount\": null}]",
+    "instructions": "V kastrůlku si nechám rozehřát máslo. Ve větší míse smíchám všechny sypké suroviny (mouku, cukr, sůl a kypřící prášek) a přiliju rozehřáté máslo, mléko a celá vejce. Když mám čas a chuť, můžu si vajíčka rozdělit a do těsta přidat nejdřív žloutky a pak vyšlehaný tuhý sníh z bílků. Vafle jsou pak ještě nadýchanější a jemnější. Na elektrickém šlehači zvolím mírný stupeň a vše vyšlehám do hladkého řídkého těsta. Zapojím si vaflovač a nechám ho dlouze rozehřát (déle než zasvítí kontrolka). Hned tedy začnu pomocí naběračky nalévat těsto tak, aby pokrylo celou pečící plochu. Vafle nechám péct dozlatova (doba pečení záleží na výkonu vaflovače) a vaflovač neotevírám dokud se z něj vychází pára.",
+    "category": "Sladké",
+    "prep_time": "20 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Doporučuji nechat ohřát vaflovač déle než tvrdí kontrolka. Vafle podávám třeba s pěnou z čerstvého ovoce.",
+    "tags": "vafle, sladké, snídaně"
+}
