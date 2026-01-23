@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pečenice s praženim kitajskim zeljem, čičeriko in krompirjem",
+    "description": "Jed, ki dokazuje, da preproste sestavine ustvarijo najboljše okuse. Ta krožnik združuje sočnost domačih pečenic z bogato, hranljivo prilogo.",
+    "ingredients": "[{\"name\": \"pečenice\", \"units\": \"para\", \"amount\": \"2\"}, {\"name\": \"krompir\", \"units\": \"srednje veliki\", \"amount\": \"4\"}, {\"name\": \"kitajsko zelje\", \"units\": \"glava\", \"amount\": \"1/2\"}, {\"name\": \"čičerika\", \"units\": \"g\", \"amount\": \"200\"}, {\"name\": \"čebula\", \"units\": \"velika\", \"amount\": \"1\"}, {\"name\": \"česen\", \"units\": \"stroka\", \"amount\": \"2\"}, {\"name\": \"oljčno olje ali svinjska mast\", \"units\": \"žlici\", \"amount\": \"2\"}, {\"name\": \"zelenjavna jušna osnova ali voda\", \"units\": \"dcl\", \"amount\": \"1\"}, {\"name\": \"sol\", \"units\": null, \"amount\": null}, {\"name\": \"sveže mlet črni poper\", \"units\": null, \"amount\": null}, {\"name\": \"kumina ali rdeča paprika\", \"units\": null, \"amount\": \"po želji\"}]",
+    "instructions": "1. Krompir olupite, narežite na enakomerne kocke in ga skuhajte v slani vodi do mehkega (približno 15 minut). Ko je kuhan, ga odcedite in prihranite za kasneje. 2. V večji ponvi segrejte žlico maščobe. Pečenice na več mestih prebodite z vilicami in jih pecite na zmernem ognju z vseh strani, dokler ne dobijo lepe rjave skorjice. 3. V isto ponev dodajte preostalo maščobo in nasekljano čebulo. Pražite jo nekaj minut, da postekleni. 4. Dodajte nasekljan česen in pražite le toliko, da zadiši. 5. Dodajte narezano kitajsko zelje in pražite 3–4 minute. 6. V ponev stresite kuhan krompir in odcejeno čičeriko. Prilijte malo jušne osnove in dobro premešajte. 7. Postrezite tako, da na krožnik najprej naložite bogato zelenjavno prilogo s krompirjem in čičeriko, na vrh pa položite toplo pečenico.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Za razliko od običajnega zelja ima kitajsko zelje bolj blag in sladek okus. Pečenice je najbolje pojesti sveže pečene.",
+    "tags": "krompir, čičerika, kitajsko zelje, pečenice"
+}

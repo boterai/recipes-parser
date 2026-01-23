@@ -1,0 +1,12 @@
+{
+    "dish_name": "Uštipnjača",
+    "description": "Brza pita za doručak, ručak ili večeru.",
+    "ingredients": "[{\"name\": \"jaja\", \"units\": \"pieces\", \"amount\": 5}, {\"name\": \"so\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"mleko\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"otopljeni maslac\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"brašno\", \"units\": \"g\", \"amount\": 190}]",
+    "instructions": "Umutite jaja sa solju. Dodajte mleko, otopljeni maslac i postepeno umešajte brašno dok ne dobijete glatku smesu. Smesu sipajte u podmazan pleh. Pecite u prethodno zagrejanoj rerni na 200°C oko 20-25 minuta, dok ne porumeni. Poslužite toplo uz sir, kajmak, jogurt ili namaz po želji.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "20-25 minutes",
+    "total_time": null,
+    "notes": "Ova brza pita je savršen izbor za svaki obrok – ukusna, hrskava i jednostavna za pripremu.",
+    "tags": null
+}

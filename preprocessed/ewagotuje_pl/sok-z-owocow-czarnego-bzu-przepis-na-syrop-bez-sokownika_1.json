@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sok z owoców czarnego bzu",
+    "description": "Syrop z owoców czarnego bzu, który pomaga przy różnych dolegliwościach.",
+    "ingredients": "[{\"name\": \"owoców czarnego bzu\", \"units\": \"kg\", \"amount\": 1}, {\"name\": \"wody\", \"units\": \"l\", \"amount\": 1}, {\"name\": \"cukru\", \"units\": \"kg\", \"amount\": 1}, {\"name\": \"cytryna\", \"units\": null, \"amount\": 1}]",
+    "instructions": "1. Zbierz owoce czarnego bzu, gdy są w pełni dojrzałe. 2. Oddziel owoce od gałązek. 3. Umyj owoce pod bieżącą wodą. 4. W dużym garnku umieść umyte owoce czarnego bzu i zalej je 1 litrem wody. 5. Dodaj skórkę z cytryny. 6. Gotuj na średnim ogniu do wrzenia, następnie zmniejsz ogień i gotuj przez 15-20 minut. 7. Przecedź przez sito z gazą. 8. Wlej sok z powrotem do garnka, dodaj cukier i sok z cytryny. 9. Podgrzewaj, aż cukier się rozpuści. 10. Przelej do słoików i pasteryzuj.",
+    "category": "Domowe przetwory",
+    "prep_time": "45 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "2 hours 45 minutes",
+    "notes": "Sok z czarnego bzu ma wiele właściwości zdrowotnych.",
+    "tags": "syrop, czarny bez, domowe przetwory"
+}

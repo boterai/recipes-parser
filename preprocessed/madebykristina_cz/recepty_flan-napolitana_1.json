@@ -1,0 +1,12 @@
+{
+    "dish_name": "Flan Napolitana",
+    "description": "Flan Napolitano je tradiční mexický dezert, který bych česky označila jako „pečený karamelový pudink“. Vyniká svou jemnou, hladkou konzistencí a bohatou chutí, která vzniká kombinací kondenzovaného mléka, vajec, smetany a sýru.",
+    "ingredients": "[{\"name\": \"cukr krystal\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"slazené Salko\", \"units\": \"g\", \"amount\": 397}, {\"name\": \"smetana na vaření\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"krémový sýr Philadelphia\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"vejce\", \"units\": \"pcs\", \"amount\": 4}, {\"name\": \"vanilková esence\", \"units\": \"lžíce\", \"amount\": 1}]",
+    "instructions": "Nejprve si připravím karamel. Do nepřilnavé pánve nasypu cukr a na středním plameni ho pomalu zahřívám, dokud se zcela nerozpustí a nezíská zlatavě jantarovou barvu a tekutou konzistenci. Jakmile je hotový, rovnoměrně ho rozleju na dno dortové formy o průměru 20-22 cm a nechám ztuhnout. Mezitím do mixéru přidám Salko, smetanu, vejce, krémový sýr a vanilku. Vše společně rozmixuji do hladkého krému. Směs naliji do dortové formy na ztuhlý karamel a formu zakryji ideálně pokličkou, talířem nebo pevně utaženým alobalem. Troubu předehřeji na 200 °C. Formu vložím do větší nádoby nebo hlubokého pekáče s horkou vodou, čímž vytvořím vodní lázeň, a peču přibližně 45 minut. Po upečení nechám formu s krémem zcela vychladnout v lednici, minimálně 2 hodiny, ideálně však přes noc. Jakmile je flan dokonale vychlazený, opatrně ho uvolním od okraje formy pomocí zahnuté cukrářské špachtle. Formu přikryji talířem a flan na něj opatrně překlopím. Karamel se krásně rozlije po povrchu a vytvoří lesklou polevu.",
+    "category": "Dessert",
+    "prep_time": "1 hour",
+    "cook_time": "45 minutes",
+    "total_time": "1 hour",
+    "notes": "Flan můžu ozdobit čerstvým ovocem, jahodovým nebo malinovým přelivem a lístky máty. Skvěle chutná i s kapkou smetany nebo zakysané smetany.",
+    "tags": "dessert, flan, mexican"
+}

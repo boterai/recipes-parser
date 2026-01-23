@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pitice sa sirom",
+    "description": "Brzo rešenje za večeru.",
+    "ingredients": "[{\"name\": \"jaja\", \"units\": null, \"amount\": 2}, {\"name\": \"jogurt\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"sir\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"ulje\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"prašak za pecivo\", \"units\": \"pakovanje\", \"amount\": 0.5}, {\"name\": \"so\", \"units\": null, \"amount\": null}, {\"name\": \"gotove kore\", \"units\": null, \"amount\": null}]",
+    "instructions": "Umutiti jaja, dodati jogurt, prašak za pecivo, ulje i sir, pa sve izmešati. Koru raširiti, pa prvu premazati uljem, drugu treću i četvrtu nadevom i u dnu dodati još malo sira i uviti. Seći makazama rolatiće dva prsta širine i ređati u podmazan pleh. Napraviti dva rolata. Ostatak nadeva sipati u svaku piticu i posuti susamom. Peći na 200 stepeni C 30-40 minuta.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "30-40 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "pitice, sir, brza večera"
+}

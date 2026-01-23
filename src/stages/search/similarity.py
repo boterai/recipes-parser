@@ -413,8 +413,8 @@ Return ONLY JSON array of IDs representing similar recipes."""
         logger.info(f"Saved clusters to file {filepath}.")
 
 if __name__ == "__main__":
-    filepath = "recipe_clusters/ingredients_clusters94_batch.txt"
-    dsu_filepath = "recipe_clusters/ingredients_clusters94_dsu_state.json"
+    filepath = "recipe_clusters/full_clusters92_batch.txt"
+    dsu_filepath = "recipe_clusters/full_clusters92_dsu_state.json"
     ss = SimilaritySearcher()
     # при полном запуске иногда возникает таймаут, поэтому можно использваоть запуск частями, указывая max_recipes
     """clusters = ss.build_clusters_from_collection(
@@ -431,23 +431,30 @@ if __name__ == "__main__":
 
     ss.load_dsu_state(dsu_filepath)
     while True:
-        clusters = ss.build_clusters_from_collection(
-            params=ClusterParams(
-                max_recipes=5000,
-                limit=35,
-                score_threshold=0.94,
-                scroll_batch=500,
-                query_batch=32
-            ),
-            build_type="ingredients"
-        )
-        ss.save_dsu_state(dsu_filepath)
-        print(f"Total clusters found: {len(clusters)}")
-        print("Last processed ID:", ss.last_id)
-        ss.save_clusters_to_file(filepath, clusters)
-        if ss.last_id is None:
-            logger.info("Processing complete.")
-            break
+        try:
+            clusters = ss.build_clusters_from_collection(
+                params=ClusterParams(
+                    max_recipes=5000,
+                    limit=35,
+                    score_threshold=0.92,
+                    scroll_batch=2000,
+                    query_batch=32
+                ),
+                build_type="full"
+            )
+            ss.save_dsu_state(dsu_filepath)
+            print(f"Total clusters found: {len(clusters)}")
+            print("Last processed ID:", ss.last_id)
+            ss.save_clusters_to_file(filepath, clusters)
+            if ss.last_id is None:
+                logger.info("Processing complete.")
+                break
+        except Exception as e:
+            logger.error(f"Error during cluster building: {e}")
+            ss.save_dsu_state(dsu_filepath)
+            ss = SimilaritySearcher()
+            ss.load_dsu_state(dsu_filepath)
+            continue
 
     final_clusters = _build_clusters_from_dsu(ss.dsu, min_cluster_size=2)
     ss.save_clusters_to_file(filepath, final_clusters)

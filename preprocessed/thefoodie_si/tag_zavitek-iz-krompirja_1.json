@@ -1,0 +1,12 @@
+{
+    "dish_name": "zavitek iz krompirja",
+    "description": "Hrustljav zavitek iz krompirja in čebule je slastna ideja za hitro in enostavno kosilo, večerjo ali malico za na pot.",
+    "ingredients": "[{\"name\": \"listov vlečenega testa\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"krompirja\", \"units\": \"g\", \"amount\": 1000}, {\"name\": \"velikih čebuli\", \"units\": null, \"amount\": 2}, {\"name\": \"stroka česna\", \"units\": null, \"amount\": 2}, {\"name\": \"paprika v prahu\", \"units\": null, \"amount\": null}, {\"name\": \"kisle smetane (ali mleka)\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"maslo ali olje\", \"units\": null, \"amount\": null}, {\"name\": \"sol\", \"units\": null, \"amount\": null}, {\"name\": \"poper\", \"units\": null, \"amount\": null}]",
+    "instructions": "Krompir olupimo, operemo in zrežemo na majhne...",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}
