@@ -101,13 +101,18 @@ FIELD PRIORITY:
   Missing optional fields is COMPLETELY ACCEPTABLE and should NOT fail validation!
 
 For CRITICAL fields:
-- Must be present and match the reference data closely
+- Must be present and semantically similar to reference data
+- Exact match is NOT required - accept reasonable variations:
+  * dish_name: "Chicken Soup" vs "chicken soup" vs "CHICKEN SOUP" - all valid
+  * ingredients: order differences OK, minor formatting OK ("2 cups flour" vs "flour - 2 cups")
+  * instructions: step numbering/formatting differences OK, same meaning is enough
 - Empty or missing CRITICAL field = validation fails (unless page is not a recipe)
+- Only fail if the meaning/content is completely different or nonsensical
 
 For OPTIONAL fields:
 - Missing values are TOTALLY OK - do NOT fail validation for missing optional fields!
 - Different but semantically similar values are acceptable (e.g., tags=['Irish', 'Bread'] vs ['irish soda bread', 'quick bread'] - both valid)
-- Slightly different formats are OK (e.g., "30 min" vs "30 minutes")
+- Format variations are fully acceptable (e.g., "30 min" vs "30 minutes" vs "0:30" vs "PT30M")
 - Only flag if present but completely wrong or nonsensical
 
 Return STRICT JSON format:
@@ -130,10 +135,12 @@ Return STRICT JSON format:
 
 Validation rules:
 - If page is NOT a recipe -> is_valid: true, is_recipe: false (empty extraction is correct)
-- If page IS a recipe and dish_name, ingredients, instructions are present and mostly match reference -> is_valid: true, is_recipe: true
+- If page IS a recipe and dish_name, ingredients, instructions are present and SEMANTICALLY match reference -> is_valid: true, is_recipe: true
+  * Semantic match = same meaning, even if formatting/order/case differs
+  * Example: ingredients ["2 eggs", "flour"] matches ["flour", "eggs - 2"] - both valid!
 - If CRITICAL fields are wrong/incomplete -> is_valid: false, is_recipe: true, provide detailed fix_recommendations
 - Differences in OPTIONAL fields (tags, times, etc.) should NOT fail validation unless completely wrong
-- Minor differences and formatting variations are fully acceptable"""
+- Minor differences, formatting variations, and reasonable paraphrasing are fully acceptable"""
 
         user_prompt = f"""Compare extracted data with reference data.
 
@@ -234,13 +241,18 @@ FIELD PRIORITY:
   Missing optional fields is COMPLETELY ACCEPTABLE and should NOT fail validation!
 
 For CRITICAL fields:
-- Must be extracted correctly from the text
+- Must be extracted with semantically correct content from the text
+- Exact format match is NOT required - accept reasonable variations:
+  * dish_name: case differences, punctuation OK ("Irish Soda Bread" vs "irish soda bread!")
+  * ingredients: order, formatting, minor wording differences acceptable
+  * instructions: step numbering, formatting variations fully acceptable, same meaning is enough
 - Empty or missing CRITICAL field = validation fails (unless page is not a recipe)
+- Only fail if the content/meaning is completely different, missing, or nonsensical
 
 For OPTIONAL fields:
 - Missing values are TOTALLY OK - do NOT fail validation for missing optional fields!
 - Different but semantically similar values are acceptable
-- Slightly different formats should NOT fail validation
+- Format variations are fully acceptable (e.g., "30 min" vs "30 minutes" vs "half an hour" vs "PT30M")
 - Only flag in fix_recommendations if you see obvious data in the text that should have been extracted but is completely wrong
 
 Return STRICT JSON format:
@@ -265,12 +277,14 @@ Return STRICT JSON format:
 
 Validation rules:
 - If page text is NOT a recipe -> is_valid: true, is_recipe: false (empty/minimal extraction is correct)
-- If page text IS a recipe and CRITICAL fields (dish_name, ingredients, instructions) are extracted correctly -> is_valid: true, is_recipe: true
+- If page text IS a recipe and CRITICAL fields are extracted with SEMANTICALLY correct content -> is_valid: true, is_recipe: true
+  * Semantic correctness = captures the same meaning/information from text, even if wording/format differs
+  * Example: "Bake for 30 minutes" can be extracted as "30 min" or "Bake 30m" - both valid!
 - If page text IS a recipe but CRITICAL fields are incomplete/wrong -> is_valid: false, is_recipe: true, provide detailed fix_recommendations
 - Differences in OPTIONAL fields (tags, times, etc.) should NOT fail validation
 - Base recommendations ONLY on text content, not HTML structure
 - In fix_recommendations, focus ONLY on CRITICAL fields unless optional fields are completely wrong
-- Minor formatting differences are acceptable"""
+- Minor formatting differences, paraphrasing, and reasonable variations are acceptable"""
 
         user_prompt = f"""Analyze the page TEXT content and validate the extracted data.
 
