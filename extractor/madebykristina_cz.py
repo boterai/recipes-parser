@@ -80,7 +80,19 @@ class MadeByKristinaExtractor(BaseRecipeExtractor):
         # Примеры: "200 g cukru", "1 lžíce vanilky", "4 vejce"
         # Поддерживаем дроби: "1-2 mrkve", "½ kg"
         # ВАЖНО: Длинные единицы (lžíce) должны идти перед короткими (l), чтобы избежать частичного совпадения
-        pattern = r'^([\d\s/.,\-½¼¾⅓⅔]+)?\s*(lžíce|lžíci|lžící|lžička|lžičku|lžiček|lžic|stroužky?|stroužek|snítky?|snítek|kg|ml|g|l|ks|kus|kusy|láhev|hrst|svazek|pcs)?\s*(.+)$'
+        
+        # Список единиц измерения, отсортированных от длинных к коротким
+        units = [
+            'lžíce', 'lžíci', 'lžící', 'lžička', 'lžičku', 'lžiček', 'lžic',
+            'stroužky', 'stroužek', 'snítky', 'snítek',
+            'láhev', 'svazek', 'hrst',
+            'kg', 'ml', 'ks', 'kus', 'kusy', 'pcs',
+            'g', 'l'
+        ]
+        
+        # Создаем паттерн с упорядоченными единицами
+        units_pattern = '|'.join(re.escape(u) for u in units)
+        pattern = rf'^([\d\s/.,\-½¼¾⅓⅔]+)?\s*({units_pattern})?\s*(.+)$'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -110,7 +122,7 @@ class MadeByKristinaExtractor(BaseRecipeExtractor):
                 try:
                     num, denom = amount_str.split('/')
                     amount = float(num.strip()) / float(denom.strip())
-                except:
+                except (ValueError, ZeroDivisionError):
                     amount = amount_str
             else:
                 try:
@@ -118,7 +130,7 @@ class MadeByKristinaExtractor(BaseRecipeExtractor):
                     # Если целое число, преобразуем в int
                     if amount == int(amount):
                         amount = int(amount)
-                except:
+                except ValueError:
                     amount = amount_str
         
         # Обработка единицы измерения - нормализация к базовой форме
@@ -130,6 +142,8 @@ class MadeByKristinaExtractor(BaseRecipeExtractor):
                 'lžící': 'lžíce',
                 'lžička': 'lžíce',
                 'lžičku': 'lžíce',
+                'lžiček': 'lžíce',
+                'lžic': 'lžíce',
                 'stroužek': 'stroužky',
                 'snítek': 'snítky',
                 'kus': 'ks',
@@ -356,13 +370,6 @@ class MadeByKristinaExtractor(BaseRecipeExtractor):
         if meta_keywords and meta_keywords.get('content'):
             keywords = meta_keywords['content']
             tags.extend([k.strip() for k in keywords.split(',') if k.strip()])
-        
-        # Также проверяем JavaScript dataLayer на наличие тегов
-        scripts = self.soup.find_all('script')
-        for script in scripts:
-            if script.string and 'dataLayer' in script.string:
-                # Ищем возможные теги в структуре данных
-                pass  # В текущих примерах тегов в dataLayer нет
         
         # Если теги не найдены, возвращаем None
         # (в примерах теги определены вручную или из других источников)
