@@ -161,7 +161,10 @@ class NutripGrExtractor(BaseRecipeExtractor):
     def parse_ingredient_nutrip(self, ingredient_text: str) -> Optional[dict]:
         """
         Парсинг строки ингредиента в структурированный формат для nutrip.gr
-        Формат: "1  τμχ. σπιτικό bagel" или "60  γρ.  τυρί κρέμα χαμηλό σε λιπαρά"
+        Форматы:
+        - "1  τμχ. σπιτικό bagel" - количество + единица с точкой + название
+        - "6   φύλλα ρυζιού" - количество + пробелы + название (без единицы)
+        - "λίγο άνηθο" - только название
         
         Args:
             ingredient_text: Строка с ингредиентом
@@ -172,14 +175,13 @@ class NutripGrExtractor(BaseRecipeExtractor):
         if not ingredient_text:
             return None
         
-        # Чистим текст
-        text = self.clean_text(ingredient_text)
+        # НЕ чистим текст сразу, так как нам нужны множественные пробелы для паттерна 2
+        text = ingredient_text.strip()
         
-        # Паттерн для греческих единиц измерения
-        # Формат в nutrip.gr: "количество  единица. название" (например "1  τμχ. σπιτικό bagel")
-        pattern = r'^(\d+(?:[.,]\d+)?)\s+([α-ωά-ώ]+\.)\s+(.+)$'
-        
-        match = re.match(pattern, text, re.IGNORECASE)
+        # Паттерн 1: "количество  единица. название" (например "60  γρ.  μανιτάρια φρέσκα")
+        # Единица измерения с точкой
+        pattern1 = r'^(\d+(?:[.,]\d+)?)\s+([α-ωά-ώ]+\.)\s+(.+)$'
+        match = re.match(pattern1, text, re.IGNORECASE)
         
         if match:
             amount_str, units, name = match.groups()
@@ -193,9 +195,8 @@ class NutripGrExtractor(BaseRecipeExtractor):
                 pass
             
             # units сохраняем с точкой
-            
             # Очистка названия
-            name = re.sub(r'\s+', ' ', name).strip()
+            name = self.clean_text(name)
             
             return {
                 "name": name,
@@ -203,11 +204,63 @@ class NutripGrExtractor(BaseRecipeExtractor):
                 "amount": amount
             }
         
-        # Если паттерн не совпал, пробуем другой формат (без количества)
-        # Формат: "λίγο άνηθο" или "Σταγόνες λάιμ ή λεμόνι" или "φρέσκο πιπέρι"
-        # В этом случае возвращаем весь текст как name
+        # Паттерн 2: "количество единица название" (например "1 κ.γλ. σησαμέλαιο")
+        # Единица измерения - это сокращение с точкой внутри (например κ.γλ., κ.σ.)
+        pattern2 = r'^(\d+(?:[.,]\d+)?)\s+([α-ωά-ώ]+\.[α-ωά-ώ\.]*)\s+(.+)$'
+        match = re.match(pattern2, text, re.IGNORECASE)
+        
+        if match:
+            amount_str, units, name = match.groups()
+            
+            # Обработка количества
+            amount = amount_str.replace(',', '.')
+            try:
+                val = float(amount)
+                amount = int(val) if val.is_integer() else val
+            except:
+                pass
+            
+            # Добавляем точку в конец если её нет
+            if not units.endswith('.'):
+                units += '.'
+            
+            # Очистка названия
+            name = self.clean_text(name)
+            
+            return {
+                "name": name,
+                "units": units,
+                "amount": amount
+            }
+        
+        # Паттерн 3: "количество   название" (например "6   φύλλα ρυζιού" или "1   καρότο")
+        # Минимум 2 пробела между количеством и названием (без единицы измерения)
+        pattern3 = r'^(\d+(?:[.,]\d+)?)\s{2,}(.+)$'
+        match = re.match(pattern3, text, re.IGNORECASE)
+        
+        if match:
+            amount_str, name = match.groups()
+            
+            # Обработка количества
+            amount = amount_str.replace(',', '.')
+            try:
+                val = float(amount)
+                amount = int(val) if val.is_integer() else val
+            except:
+                pass
+            
+            # Очистка названия
+            name = self.clean_text(name)
+            
+            return {
+                "name": name,
+                "units": None,
+                "amount": amount
+            }
+        
+        # Если ничего не совпало, возвращаем весь текст как name (с очисткой)
         return {
-            "name": text,
+            "name": self.clean_text(text),
             "units": None,
             "amount": None
         }
@@ -235,13 +288,15 @@ class NutripGrExtractor(BaseRecipeExtractor):
             steps = []
             
             if isinstance(instructions, list):
-                for step in instructions:
+                for idx, step in enumerate(instructions, 1):
                     if isinstance(step, dict) and 'text' in step:
                         step_text = self.clean_text(step['text'])
-                        steps.append(step_text)
+                        # Добавляем номер шага
+                        steps.append(f"{idx}. {step_text}")
                     elif isinstance(step, str):
                         step_text = self.clean_text(step)
-                        steps.append(step_text)
+                        # Добавляем номер шага
+                        steps.append(f"{idx}. {step_text}")
             elif isinstance(instructions, str):
                 steps.append(self.clean_text(instructions))
             
