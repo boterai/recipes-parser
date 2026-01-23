@@ -206,12 +206,12 @@ class BosanskikuharExtractor(BaseRecipeExtractor):
                         total += float(num) / float(denom)
                     else:
                         total += float(part)
-                amount = str(total) if not total.is_integer() else str(int(total))
+                amount = str(int(total)) if total % 1 == 0 else str(total)
             else:
                 try:
                     val = float(amount_str.replace(',', '.'))
-                    amount = str(int(val)) if val.is_integer() else str(val)
-                except:
+                    amount = str(int(val)) if val % 1 == 0 else str(val)
+                except (ValueError, TypeError):
                     amount = amount_str
         
         # Обработка единицы измерения
