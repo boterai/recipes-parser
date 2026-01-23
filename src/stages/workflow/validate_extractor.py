@@ -95,13 +95,20 @@ IMPORTANT: If the page is clearly NOT a recipe (e.g. no ingredients, no instruct
 then the extraction is VALID even if fields are empty - mark is_valid: true, is_recipe: false.
 
 FIELD PRIORITY:
-- CRITICAL fields (must match closely): dish_name, ingredients, instructions
-- OPTIONAL fields (semantic match is OK): tags, categories, prep_time, cook_time, servings, author, etc.
+- CRITICAL fields (MUST be present for valid recipe): dish_name, ingredients, instructions
+  These 3 fields are REQUIRED - without them, recipe is invalid!
+- OPTIONAL fields (nice to have, but NOT required): tags, categories, prep_time, cook_time, servings, author, nutrition, etc.
+  Missing optional fields is COMPLETELY ACCEPTABLE and should NOT fail validation!
+
+For CRITICAL fields:
+- Must be present and match the reference data closely
+- Empty or missing CRITICAL field = validation fails (unless page is not a recipe)
 
 For OPTIONAL fields:
+- Missing values are TOTALLY OK - do NOT fail validation for missing optional fields!
 - Different but semantically similar values are acceptable (e.g., tags=['Irish', 'Bread'] vs ['irish soda bread', 'quick bread'] - both valid)
-- Missing or slightly different formats are OK
-- Only flag if completely wrong or nonsensical
+- Slightly different formats are OK (e.g., "30 min" vs "30 minutes")
+- Only flag if present but completely wrong or nonsensical
 
 Return STRICT JSON format:
 {{
@@ -221,13 +228,20 @@ then empty extraction is CORRECT - mark is_valid: true, is_recipe: false.
 You will receive PLAIN TEXT extracted from the page (no HTML tags). Analyze the text content only.
 
 FIELD PRIORITY:
-- CRITICAL fields (must be extracted correctly): dish_name, ingredients, instructions
-- OPTIONAL fields (nice to have, but not critical): tags, categories, prep_time, cook_time, servings, author, etc.
+- CRITICAL fields (MUST be present for valid recipe): dish_name, ingredients, instructions
+  These 3 fields are REQUIRED - recipe is invalid without them!
+- OPTIONAL fields (nice to have, but NOT required): tags, categories, prep_time, cook_time, servings, author, nutrition, etc.
+  Missing optional fields is COMPLETELY ACCEPTABLE and should NOT fail validation!
+
+For CRITICAL fields:
+- Must be extracted correctly from the text
+- Empty or missing CRITICAL field = validation fails (unless page is not a recipe)
 
 For OPTIONAL fields:
+- Missing values are TOTALLY OK - do NOT fail validation for missing optional fields!
 - Different but semantically similar values are acceptable
-- Missing or slightly different formats should NOT fail validation
-- Only flag in fix_recommendations if you see obvious data that should have been extracted
+- Slightly different formats should NOT fail validation
+- Only flag in fix_recommendations if you see obvious data in the text that should have been extracted but is completely wrong
 
 Return STRICT JSON format:
 {{
