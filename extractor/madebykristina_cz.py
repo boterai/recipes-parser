@@ -79,8 +79,8 @@ class MadeByKristinaExtractor(BaseRecipeExtractor):
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "200 g cukru", "1 lžíce vanilky", "4 vejce"
         # Поддерживаем дроби: "1-2 mrkve", "½ kg"
-        # Обновленный паттерн для лучшего извлечения количества
-        pattern = r'^([\d\s/.,\-½¼¾⅓⅔]+)?\s*(g|kg|ml|l|lžíce|lžíci|lžící|lžička|lžičku|lžiček|lžic|ks|kus|kusy|stroužky?|stroužek|snítky?|snítek|láhev|hrst|svazek|pcs)?\s*(.+)$'
+        # ВАЖНО: Длинные единицы (lžíce) должны идти перед короткими (l), чтобы избежать частичного совпадения
+        pattern = r'^([\d\s/.,\-½¼¾⅓⅔]+)?\s*(lžíce|lžíci|lžící|lžička|lžičku|lžiček|lžic|stroužky?|stroužek|snítky?|snítek|kg|ml|g|l|ks|kus|kusy|láhev|hrst|svazek|pcs)?\s*(.+)$'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -193,12 +193,12 @@ class MadeByKristinaExtractor(BaseRecipeExtractor):
             h2_postup = postup_div.find('h2', string=lambda s: s and 'Postup' in s)
             
             if h2_postup:
-                # Извлекаем следующий div после h2
+                # Вариант 1: Инструкции в div после h2
                 next_div = h2_postup.find_next_sibling('div')
                 if next_div:
-                    # Проверяем, не является ли это div с советами
                     div_text = next_div.get_text(strip=True)
-                    if 'Můj tip' not in div_text and 'Buďte první' not in div_text:
+                    # Проверяем, не является ли это div с советами или другим контентом
+                    if div_text and 'Můj tip' not in div_text and 'Buďte první' not in div_text and 'plus-gallery' not in str(next_div.get('class')):
                         # Это div с инструкциями - извлекаем все параграфы
                         paragraphs = next_div.find_all('p')
                         for p in paragraphs:
@@ -207,6 +207,35 @@ class MadeByKristinaExtractor(BaseRecipeExtractor):
                             
                             if step_text and not step_text.startswith('Buďte první') and not step_text.startswith('Dobrou chuť'):
                                 steps.append(step_text)
+                
+                # Вариант 2: Инструкции в параграфах/списках напрямую после h2
+                if not steps:
+                    # Собираем все p, ul элементы после h2 до первого div с классом или h3
+                    current = h2_postup
+                    while current:
+                        current = current.find_next_sibling()
+                        if not current:
+                            break
+                        
+                        # Останавливаемся если встретили div с советами или секцией галереи
+                        if current.name == 'div':
+                            div_class = current.get('class', [])
+                            if any(cls in ['banner-tip', 'plus-gallery-wrap', 'rec-bye', 'tab-pane'] for cls in div_class):
+                                break
+                        
+                        if current.name == 'p':
+                            step_text = current.get_text(separator=' ', strip=True)
+                            step_text = self.clean_text(step_text)
+                            if step_text:
+                                steps.append(step_text)
+                        elif current.name == 'ul':
+                            # Иногда инструкции в списке
+                            items = current.find_all('li')
+                            for item in items:
+                                step_text = item.get_text(separator=' ', strip=True)
+                                step_text = self.clean_text(step_text)
+                                if step_text:
+                                    steps.append(step_text)
         
         # Объединяем все шаги в одну строку
         return ' '.join(steps) if steps else None
@@ -286,7 +315,20 @@ class MadeByKristinaExtractor(BaseRecipeExtractor):
         postup_div = self.soup.find('div', class_='recept-postup')
         
         if postup_div:
-            # Ищем div, который содержит "Můj tip"
+            # Ищем div с классом 'banner-tip' или 'tip-kika'
+            tip_div = postup_div.find('div', class_=['banner-tip', 'tip-kika', 'tip-text'])
+            if tip_div:
+                # Извлекаем текст из этого div
+                text = tip_div.get_text(strip=True)
+                # Убираем заголовок "Můj tip"
+                text = re.sub(r'^Můj tip\s*', '', text, flags=re.IGNORECASE)
+                # Убираем служебные фразы
+                text = re.sub(r'Dobrou chuť.*$', '', text, flags=re.IGNORECASE)
+                text = self.clean_text(text)
+                if text:
+                    return text
+            
+            # Альтернативный вариант: ищем div, который содержит "Můj tip"
             for div in postup_div.find_all('div'):
                 div_text = div.get_text(strip=True)
                 if 'Můj tip' in div_text:
