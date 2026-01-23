@@ -20,6 +20,19 @@ class CopilotWorkflow:
         self.prompt_generator = PromptGenerator()
         self.github_client = GitHubClient()
         self.branch_manager = BranchManager()
+
+    def autocommit_preprocessed_data(self, commit_message: str = "Автокоммит тестовых данных на основе которых нужно делать парсеры", push: bool = True):
+        """Автокоммитит preprocessed данные в текущую ветку.
+        
+        Args:
+            commit_message: Сообщение коммита
+        """
+        self.branch_manager.commit_specific_directory(
+            directory=str(self.prompt_generator.preprocessed_dir),
+            commit_message=commit_message,
+            push=push
+        )
+        
     
     def create_issues_for_parsers(self):
         """Создает GitHub issues с промптами для создания парсеров на основе preprocessed данных."""
