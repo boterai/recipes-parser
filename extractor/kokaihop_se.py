@@ -272,21 +272,23 @@ class KokaiHopExtractor(BaseRecipeExtractor):
             urls.append(twitter_image['content'])
         
         # 3. Ищем изображения в теле документа (CloudFront URLs)
+        from urllib.parse import urlparse
+        
         images = self.soup.find_all('img')
         for img in images:
             src = img.get('src', '')
-            # Фильтруем только изображения рецептов (CloudFront)
-            # Проверяем, что URL начинается с https:// и содержит cloudfront.net в домене
-            if src and src.startswith('https://') and '.cloudfront.net' in src and src not in urls:
-                # Дополнительная проверка: домен должен заканчиваться на .cloudfront.net
-                try:
-                    from urllib.parse import urlparse
-                    parsed = urlparse(src)
-                    if parsed.netloc.endswith('.cloudfront.net') or parsed.netloc == 'cloudfront.net':
-                        urls.append(src)
-                except Exception:
-                    # Если парсинг URL не удался, пропускаем
-                    pass
+            if not src or not src.startswith('https://'):
+                continue
+                
+            # Безопасная проверка домена через парсинг URL
+            try:
+                parsed = urlparse(src)
+                # Проверяем, что домен заканчивается на .cloudfront.net
+                if parsed.netloc.endswith('.cloudfront.net') and src not in urls:
+                    urls.append(src)
+            except Exception:
+                # Если парсинг URL не удался, пропускаем
+                pass
         
         # Убираем дубликаты, сохраняя порядок
         seen = set()
