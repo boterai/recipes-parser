@@ -129,19 +129,43 @@ class KokaiHopExtractor(BaseRecipeExtractor):
         """Извлечение ингредиентов"""
         ingredients = []
         
-        # Ищем список ингредиентов
-        ingredients_list = self.soup.find('ul', class_='ingredientsList')
-        
-        if ingredients_list:
-            items = ingredients_list.find_all('li')
+        # Ищем список ингредиентов - может быть в div.ingredients_section > ul
+        ingredients_div = self.soup.find('div', class_='ingredients_section')
+        if ingredients_div:
+            # Ищем все <ul> внутри div.ingredients_section
+            all_uls = ingredients_div.find_all('ul')
             
-            for item in items:
-                ingredient_text = item.get_text(strip=True)
+            # Ищем <ul> который НЕ является dropdown меню (ищем тот, в котором есть "gram" или другие единицы)
+            for ul_candidate in all_uls:
+                items = ul_candidate.find_all('li', recursive=False)
+                if items:
+                    # Проверяем первый элемент - если содержит единицы измерения (gram, msk, tsk и т.д.), это наш список
+                    first_item_text = items[0].get_text(strip=True)
+                    if any(unit in first_item_text for unit in ['gram', 'msk', 'tsk', 'dl', 'krm', 'st']):
+                        # Это список ингредиентов!
+                        for item in items:
+                            ingredient_text = item.get_text(strip=True)
+                            
+                            # Парсим ингредиент
+                            parsed = self.parse_ingredient_line(ingredient_text)
+                            if parsed:
+                                ingredients.append(parsed)
+                        break  # Нашли нужный список, выходим
+        
+        # Fallback: ищем по классу ingredientsList (старая структура)
+        if not ingredients:
+            ingredients_list = self.soup.find('ul', class_=lambda x: x and 'ingredientsList' in x)
+            
+            if ingredients_list:
+                items = ingredients_list.find_all('li')
                 
-                # Парсим ингредиент
-                parsed = self.parse_ingredient_line(ingredient_text)
-                if parsed:
-                    ingredients.append(parsed)
+                for item in items:
+                    ingredient_text = item.get_text(strip=True)
+                    
+                    # Парсим ингредиент
+                    parsed = self.parse_ingredient_line(ingredient_text)
+                    if parsed:
+                        ingredients.append(parsed)
         
         # Возвращаем как JSON-строку
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
@@ -150,22 +174,42 @@ class KokaiHopExtractor(BaseRecipeExtractor):
         """Извлечение шагов приготовления"""
         steps = []
         
-        # Ищем div с классом recipeInstructions
-        instructions_div = self.soup.find('div', class_='recipeInstructions')
+        # Ищем div с классом instructions_section (новая структура)
+        instructions_div = self.soup.find('div', class_='instructions_section')
         
         if instructions_div:
-            # Извлекаем шаги (элементы списка)
-            step_items = instructions_div.find_all('li')
-            
-            for item in step_items:
-                # Извлекаем текст, удаляя номер шага если он есть в <strong>
-                step_text = item.get_text(separator=' ', strip=True)
-                # Удаляем нумерацию вида "1.", "2." в начале
-                step_text = re.sub(r'^\d+\.\s*', '', step_text)
-                step_text = self.clean_text(step_text)
+            # Извлекаем шаги из <ol> списка
+            ol = instructions_div.find('ol')
+            if ol:
+                step_items = ol.find_all('li')
                 
-                if step_text:
-                    steps.append(step_text)
+                for item in step_items:
+                    # Извлекаем текст из <p> внутри <li>
+                    p = item.find('p')
+                    if p:
+                        step_text = p.get_text(separator=' ', strip=True)
+                        step_text = self.clean_text(step_text)
+                        
+                        if step_text:
+                            steps.append(step_text)
+        
+        # Если не нашли, пробуем старую структуру
+        if not steps:
+            instructions_div = self.soup.find('div', class_='recipeInstructions')
+            
+            if instructions_div:
+                # Извлекаем шаги (элементы списка)
+                step_items = instructions_div.find_all('li')
+                
+                for item in step_items:
+                    # Извлекаем текст, удаляя номер шага если он есть в <strong>
+                    step_text = item.get_text(separator=' ', strip=True)
+                    # Удаляем нумерацию вида "1.", "2." в начале
+                    step_text = re.sub(r'^\d+\.\s*', '', step_text)
+                    step_text = self.clean_text(step_text)
+                    
+                    if step_text:
+                        steps.append(step_text)
         
         # Объединяем шаги с нумерацией
         if steps:

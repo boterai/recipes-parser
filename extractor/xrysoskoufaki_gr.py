@@ -149,24 +149,80 @@ class XrysoskoufakiExtractor(BaseRecipeExtractor):
         """Извлечение ингредиентов"""
         ingredients = []
         
-        # Ищем все элементы списка <li> в контенте
         content_div = self.soup.find('div', class_='td-post-content')
-        if content_div:
-            # Находим все <li> элементы
-            li_elements = content_div.find_all('li', style=re.compile(r'font-size:\s*16px', re.I))
+        if not content_div:
+            return None
+        
+        # Ищем заголовок "Υλικά" или "Ingredients"
+        ingredient_headings = content_div.find_all(['h2', 'h3', 'h4'], 
+                                                   string=lambda s: s and ('Υλικά' in s or 'Ingredients' in s))
+        
+        if not ingredient_headings:
+            return None
+        
+        heading = ingredient_headings[0]
+        
+        # Извлекаем ингредиенты из следующих элементов до следующего основного заголовка
+        current = heading.find_next_sibling()
+        
+        while current:
+            # Останавливаемся на следующем основном заголовке (Εκτέλεση, Instructions и т.д.)
+            if current.name in ['h2', 'h3']:
+                text = current.get_text(strip=True)
+                if any(word in text for word in ['Εκτέλεση', 'Instructions', 'Προετοιμασία']):
+                    break
             
-            for li in li_elements:
-                # Извлекаем текст
-                ingredient_text = li.get_text(separator=' ', strip=True)
+            # Извлекаем ингредиенты из <p> с <br> разделителями
+            if current.name == 'p':
+                # Проверяем, не является ли это подзаголовком (ζύμης:, γέμισης: и т.д.)
+                p_text = current.get_text(strip=True)
                 
-                # Пропускаем заголовки секций (обычно заканчиваются на ":")
-                if ingredient_text.endswith(':') or len(ingredient_text) < 3:
+                # Пропускаем короткие параграфы-заголовки
+                if len(p_text) < 50 and p_text.endswith(':'):
+                    current = current.find_next_sibling()
                     continue
                 
-                # Парсим ингредиент
-                parsed = self.parse_ingredient_text(ingredient_text)
-                if parsed and parsed.get('name'):
-                    ingredients.append(parsed)
+                # Разбиваем по <br> тегам
+                for br in current.find_all('br'):
+                    br.replace_with('\n')
+                
+                # Извлекаем текст и разбиваем на строки
+                lines = current.get_text().split('\n')
+                
+                for line in lines:
+                    line = line.strip()
+                    
+                    # Пропускаем пустые строки и подзаголовки
+                    if not line or len(line) < 3:
+                        continue
+                    if line.endswith(':') and len(line) < 30:
+                        continue
+                    
+                    # Парсим ингредиент
+                    parsed = self.parse_ingredient_text(line)
+                    if parsed and parsed.get('name'):
+                        ingredients.append(parsed)
+            
+            # Извлекаем ингредиенты из <ul> списков (для файлов с подзаголовками типа "Για τον ζωμό:")
+            elif current.name == 'ul':
+                li_elements = current.find_all('li')
+                for li in li_elements:
+                    ingredient_text = li.get_text(separator=' ', strip=True)
+                    
+                    # Пропускаем слишком короткие или заголовки
+                    if len(ingredient_text) < 3 or ingredient_text.endswith(':'):
+                        continue
+                    
+                    # Парсим ингредиент
+                    parsed = self.parse_ingredient_text(ingredient_text)
+                    if parsed and parsed.get('name'):
+                        ingredients.append(parsed)
+            
+            # Пропускаем подзаголовки <h4> (Για τον ζωμό:, Για τη σούπα: и т.д.)
+            elif current.name == 'h4':
+                pass
+            
+            current = current.find_next_sibling()
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
@@ -176,30 +232,64 @@ class XrysoskoufakiExtractor(BaseRecipeExtractor):
         
         # Ищем секцию "Εκτέλεση" (Execution/Instructions)
         content_div = self.soup.find('div', class_='td-post-content')
-        if content_div:
-            # Находим заголовок "Εκτέλεση"
-            headings = content_div.find_all(['h2', 'h3'], string=re.compile(r'Εκτέλεση', re.I))
+        if not content_div:
+            return None
+        
+        # Находим заголовок "Εκτέλεση" или "Instructions" (может быть h2, h3 или h4)
+        headings = content_div.find_all(['h2', 'h3', 'h4'], 
+                                       string=lambda s: s and ('Εκτέλεση' in s or 'Instructions' in s))
+        
+        if not headings:
+            return None
+        
+        # Берем первый найденный заголовок
+        heading = headings[0]
+        
+        # Извлекаем все последующие элементы до следующего основного заголовка
+        current = heading.find_next_sibling()
+        step_number = 1
+        
+        while current:
+            # Останавливаемся на следующем основном заголовке h2 или h3
+            if current.name in ['h2', 'h3']:
+                break
             
-            if headings:
-                # Берем первый найденный заголовок
-                heading = headings[0]
+            # Обрабатываем нумерованные подзаголовки h4 (формат: "1.Название шага")
+            if current.name == 'h4':
+                h4_text = current.get_text(strip=True)
                 
-                # Извлекаем все последующие параграфы до следующего заголовка
-                current = heading.find_next_sibling()
-                while current:
-                    if current.name in ['h2', 'h3', 'h4']:
-                        # Следующий заголовок - останавливаемся
-                        break
-                    
-                    if current.name == 'p':
-                        # Извлекаем текст шага
-                        step_text = current.get_text(separator=' ', strip=True)
+                # Проверяем, начинается ли с номера
+                if re.match(r'^\d+\.', h4_text):
+                    # Извлекаем следующий параграф как текст шага
+                    next_p = current.find_next_sibling('p')
+                    if next_p:
+                        step_text = next_p.get_text(separator=' ', strip=True)
                         step_text = self.clean_text(step_text)
                         
                         if step_text and len(step_text) > 10:
+                            # Добавляем шаг с номером из h4 (опционально можно добавить название из h4)
                             steps.append(step_text)
-                    
+                            step_number += 1
+            
+            # Обрабатываем обычные параграфы с инструкциями
+            elif current.name == 'p':
+                # Пропускаем параграфы, которые уже были обработаны как часть h4
+                # Проверяем, есть ли предыдущий h4 брат
+                prev_sibling = current.find_previous_sibling()
+                if prev_sibling and prev_sibling.name == 'h4' and re.match(r'^\d+\.', prev_sibling.get_text(strip=True)):
+                    # Этот параграф уже был обработан как часть h4
                     current = current.find_next_sibling()
+                    continue
+                
+                # Извлекаем текст шага
+                step_text = current.get_text(separator=' ', strip=True)
+                step_text = self.clean_text(step_text)
+                
+                # Пропускаем короткие параграфы и изображения
+                if step_text and len(step_text) > 10:
+                    steps.append(step_text)
+            
+            current = current.find_next_sibling()
         
         if not steps:
             return None

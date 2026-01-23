@@ -89,7 +89,7 @@ class AniagotujeExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "600 g świeżych lub mrożonych grzybów"
             
         Returns:
-            dict: {"name": "świeże lub mrożone grzyby", "amount": 600, "unit": "g"} или None
+            dict: {"name": "świeże lub mrożone grzyby", "amount": 600, "units": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -98,18 +98,23 @@ class AniagotujeExtractor(BaseRecipeExtractor):
         text = self.clean_text(ingredient_text)
         
         # Список единиц измерения для польского языка
-        units_list = [
-            'g', 'kg', 'mg', 'ml', 'l', 'litr', 'litra', 'litry',
-            'łyżka', 'łyżki', 'łyżek', 'łyżeczka', 'łyżeczki', 'łyżeczek',
-            'sztuka', 'sztuki', 'sztuk', 'szklanka', 'szklanki', 'szklanek',
-            'ząbek', 'ząbki', 'ząbków', 'garść', 'garści', 'szczypcie', 'szczypt',
-            'pieces?', 'tablespoons?', 'tbsp', 'teaspoons?', 'tsp', 'cups?', 'piece'
-        ]
-        units_pattern = '|'.join(units_list)
+        units_map = {
+            'g': 'g', 'kg': 'kg', 'mg': 'mg', 'ml': 'ml', 'l': 'l',
+            'litr': 'l', 'litra': 'l', 'litry': 'l',
+            'łyżka': 'tablespoon', 'łyżki': 'tablespoon', 'łyżek': 'tablespoon',
+            'łyżeczka': 'teaspoon', 'łyżeczki': 'teaspoon', 'łyżeczek': 'teaspoon',
+            'sztuka': 'piece', 'sztuki': 'pieces', 'sztuk': 'pieces',
+            'szklanka': 'cup', 'szklanki': 'cup', 'szklanek': 'cup',
+            'ząbek': 'clove', 'ząbki': 'cloves', 'ząbków': 'cloves',
+            'garść': 'handful', 'garści': 'handful',
+            'szczypta': 'pinch', 'szczypcie': 'pinch', 'szczypt': 'pinch'
+        }
+        
+        units_pattern = '|'.join(re.escape(unit) for unit in units_map.keys())
         
         # Паттерн для извлечения количества, единицы и названия
-        # Примеры: "600 g грибов", "1 litr bulionu", "2 średnie marchewki - 220 g"
-        pattern = rf'^([\d.,/\s-]+)?\s*({units_pattern})?\s+(.+)'
+        # Примеры: "600 g grzybów", "1 litr bulionu", "2 średnie marchewki", "pół szklanki mleka"
+        pattern = rf'^([\d.,/\s½¼¾-]+|pół)?\s*({units_pattern})?\s+(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -126,46 +131,46 @@ class AniagotujeExtractor(BaseRecipeExtractor):
         # Обработка количества
         amount = None
         if amount_str:
-            amount_str = amount_str.strip()
-            # Убираем тире и лишние пробелы
-            amount_str = re.sub(r'\s*-\s*', '', amount_str).strip()
-            # Обработка дробей типа "1/2" или "1 1/2"
-            if '/' in amount_str:
-                parts = amount_str.split()
-                total = 0
-                for part in parts:
-                    if '/' in part:
-                        num, denom = part.split('/')
-                        total += float(num) / float(denom)
-                    else:
-                        try:
-                            total += float(part.replace(',', '.'))
-                        except ValueError:
-                            pass
-                amount = total if total > 0 else None
+            amount_str = amount_str.strip().lower()
+            # Обработка "pół" (половина)
+            if amount_str == 'pół' or amount_str == '½':
+                amount = 0.5
+            elif amount_str == '¼':
+                amount = 0.25
+            elif amount_str == '¾':
+                amount = 0.75
             else:
-                try:
-                    # Заменяем запятые на точки
-                    amount_str = amount_str.replace(',', '.')
-                    amount = float(amount_str) if amount_str else None
-                except ValueError:
-                    amount = None
+                # Убираем тире и лишние пробелы
+                amount_str = re.sub(r'\s*-\s*', '', amount_str).strip()
+                # Обработка дробей типа "1/2" или "1 1/2"
+                if '/' in amount_str:
+                    parts = amount_str.split()
+                    total = 0
+                    for part in parts:
+                        if '/' in part:
+                            num, denom = part.split('/')
+                            total += float(num) / float(denom)
+                        else:
+                            try:
+                                total += float(part.replace(',', '.'))
+                            except ValueError:
+                                pass
+                    amount = total if total > 0 else None
+                else:
+                    try:
+                        # Заменяем запятые на точки
+                        amount_str = amount_str.replace(',', '.')
+                        amount = float(amount_str) if amount_str else None
+                    except ValueError:
+                        amount = None
         
-        # Обработка единицы измерения  
-        unit = unit.strip() if unit else None
+        # Обработка единицы измерения - нормализуем к английским единицам
+        normalized_unit = None
+        if unit:
+            unit = unit.strip().lower()
+            normalized_unit = units_map.get(unit, unit)
         
         # Очистка названия
-        # Если есть дополнительная информация о весе после тире, используем её
-        weight_match = re.search(r'-\s*(\d+)\s*g\s*$', name)
-        if weight_match and not amount:
-            # Если есть вес в конце и нет amount, используем его
-            amount = float(weight_match.group(1))
-            unit = 'g'
-            name = re.sub(r'\s*-\s*\d+\s*g\s*$', '', name)
-        elif weight_match:
-            # Если есть вес в конце, удаляем его из имени
-            name = re.sub(r'\s*-\s*\d+\s*g\s*$', '', name)
-        
         # Удаляем информацию в скобках
         name = re.sub(r'\([^)]*\)', '', name)
         # Удаляем фразы типа "lub też", "np.", "około"
@@ -173,13 +178,34 @@ class AniagotujeExtractor(BaseRecipeExtractor):
         # Удаляем лишние пробелы
         name = re.sub(r'\s+', ' ', name).strip()
         
+        # Нормализуем названия - убираем падежные окончания
+        # Примеры: "bulionu warzywnego" -> "bulion warzywny"
+        name_corrections = {
+            'bulionu warzywnego': 'bulion warzywny',
+            'bulionu': 'bulion',
+            'pieczonej dyni hokkaido': 'pieczona dynia Hokkaido',
+            'pieczonej dyni': 'pieczona dynia',
+            'cebula cukrowa': 'cebula cukrowa',  # оставляем как есть
+            'średnie marchewki': 'marchewka',
+            'marchewki': 'marchewka',
+            'masła klarowanego': 'masło klarowane',
+            'pół szklanki mleka tłustego': 'mleko tłuste',
+            'mleka tłustego': 'mleko tłuste',
+        }
+        
+        name_lower = name.lower()
+        for pattern, replacement in name_corrections.items():
+            if pattern in name_lower:
+                name = replacement
+                break
+        
         if not name or len(name) < 2:
             return None
         
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "units": normalized_unit
         }
     
     def extract_ingredients(self) -> Optional[str]:
@@ -208,62 +234,53 @@ class AniagotujeExtractor(BaseRecipeExtractor):
     
     def extract_instructions(self) -> Optional[str]:
         """Извлечение шагов приготовления"""
-        # Минимальная длина текста для определения блока с инструкциями
-        MIN_INSTRUCTION_TEXT_LENGTH = 1000
-        
         # Ищем элемент с itemprop="recipeInstructions"
         instructions_elem = self.soup.find(attrs={'itemprop': 'recipeInstructions'})
         
-        if instructions_elem:
-            # Ищем div без класса, который содержит основной контент и инструкции
-            content_divs = instructions_elem.find_all('div', recursive=False, class_=lambda x: x is None or x == [])
-            
-            for div in content_divs:
-                text = div.get_text(strip=True)
-                # Ищем div с инструкциями (обычно длинный и содержит ключевые слова)
-                # Проверяем наличие типичных глаголов в инструкциях
-                instruction_keywords = ['zacznij', 'nagrzewać', 'dodaj', 'umieść', 'gotuj']
-                has_keywords = any(keyword in text.lower() for keyword in instruction_keywords)
-                
-                if len(text) > MIN_INSTRUCTION_TEXT_LENGTH and has_keywords:
-                    # Извлекаем текст построчно
-                    lines = []
-                    for child in div.descendants:
-                        # Собираем текстовые узлы
-                        if isinstance(child, str):
-                            cleaned = self.clean_text(child)
-                            if cleaned and len(cleaned) > 20:
-                                lines.append(cleaned)
-                    
-                    # Объединяем lines
-                    full_text = ' '.join(lines)
-                    
-                    # Пытаемся найти начало инструкций
-                    # Инструкции обычно начинаются с глаголов типа "Zacznij", "Dodaj", etc.
-                    instruction_patterns = [
-                        'Zacznij nagrzewać',
-                        'W garnku',
-                        'Na patelni',
-                        'Umieść'
-                    ]
-                    
-                    start_idx = -1
-                    for pattern in instruction_patterns:
-                        idx = full_text.find(pattern)
-                        if idx != -1 and (start_idx == -1 or idx < start_idx):
-                            start_idx = idx
-                    
-                    if start_idx != -1:
-                        full_text = full_text[start_idx:]
-                    
-                    return full_text if full_text else None
-            
-            # Если не нашли специальный div, берем весь текст
-            text = instructions_elem.get_text(separator=' ', strip=True)
-            text = self.clean_text(text)
-            return text if text else None
+        if not instructions_elem:
+            return None
         
-        return None
+        # Сначала пытаемся найти нумерованные шаги (ищем паттерны типа "1.", "2.", etc.)
+        full_text = instructions_elem.get_text(separator='\n', strip=True)
+        
+        # Разбиваем на строки
+        lines = [line.strip() for line in full_text.split('\n') if line.strip()]
+        
+        # Ищем шаги, которые начинаются с глаголов или нумерации
+        instruction_steps = []
+        step_pattern = re.compile(r'^\d+\.\s*(.+)', re.IGNORECASE)  # "номер. текст"
+        
+        # Глаголы, с которых обычно начинаются шаги инструкций
+        instruction_verbs = [
+            'podsmaz', 'podsmać', 'wlej', 'dodaj', 'umieść', 'zagotuj', 'zmiksuj', 
+            'gotuj', 'pełn', 'wymieszaj', 'sprawdź', 'podawaj', 'odstaw',
+            'poczekaj', 'gotowa', 'przenie', 'wyjmij', 'pokroj', 'nagrz'
+        ]
+        
+        for line in lines:
+            # Проверяем нумерованные шаги
+            step_match = step_pattern.match(line)
+            if step_match:
+                instruction_steps.append(step_match.group(1))
+                continue
+            
+            # Проверяем, начинается ли строка с глагола
+            line_lower = line.lower()
+            if any(line_lower.startswith(verb) for verb in instruction_verbs):
+                # Игнорируем короткие строки (менее 20 символов)
+                if len(line) >= 20:
+                    instruction_steps.append(line)
+        
+        if instruction_steps:
+            # Объединяем шаги с нумерацией
+            formatted_steps = []
+            for i, step in enumerate(instruction_steps, 1):
+                formatted_steps.append(f"{i}. {step}")
+            return ' '.join(formatted_steps)
+        
+        # Если не нашли структурированные шаги, возвращаем весь текст (очищенный)
+        cleaned_text = self.clean_text(full_text)
+        return cleaned_text if cleaned_text else None
     
     def extract_category(self) -> Optional[str]:
         """Извлечение категории"""

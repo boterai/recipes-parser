@@ -8,6 +8,7 @@ if __name__ == '__main__':
     sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 from src.stages.workflow.validate_extractor import ValidateParser
+from src.stages.workflow.validation_models import ValidationReport
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +72,7 @@ class BranchManager:
         files = [f.strip() for f in output.split('\n') if f.strip()]
         return sorted(set(files))
     
-    def check_branch(self, branch: str) -> list[dict]:
+    def check_branch(self, branch: str, chck_all_with_gpt: bool = False) -> list[ValidationReport]:
         """Обрабатывает одну ветку: переключается на нее, получает добавленные файлы и запускает валидацию.
         
         Args:
@@ -84,7 +85,7 @@ class BranchManager:
         branch_errors = []
         try:
             try:
-                self._run_git_command(['git', 'pull', 'origin', branch])
+                self._run_git_command(['git', 'pull', 'origin', branch]) # обновляем ветку перед переключением (необходимо если ветка еще не создавалась)
                 self._run_git_command(['git', 'checkout', branch])
             except Exception:
                 self._run_git_command(['git', 'fetch', 'origin'])
@@ -103,11 +104,11 @@ class BranchManager:
                 module_name = os.path.basename(file).replace('.py', '')
                 result = self.validator.validate(
                     module_name=module_name,
-                    use_gpt=True,
+                    use_gpt=chck_all_with_gpt,
                     required_fields=['dish_name', 'ingredients', 'instructions'],
                     use_gpt_on_missing_fields=True
                 )
-                if result.get('failed', 0) > 0 or result.get('total_files', 0) == 0:
+                if result.failed > 0 or result.passed == 0:
                     branch_errors.append(result)
         
         except Exception as e:

@@ -70,10 +70,50 @@ class FoodedCoExtractor(BaseRecipeExtractor):
         """Извлечение ингредиентов"""
         ingredients = []
         
-        # Ищем все параграфы
+        # Сначала ищем заголовки h2/h3 с упоминанием ингредиентов
+        # Паттерны: ส่วนผสม, ส่วนผสมของไส้, ส่วนผสมสำหรับ, ส่วนประกอบ
+        all_headings = self.soup.find_all(['h2', 'h3'])
+        
+        for heading in all_headings:
+            heading_text = heading.get_text().strip()
+            
+            # Проверяем, содержит ли заголовок слово "ส่วนผสม" (ingredients)
+            if re.search(r'ส่วนผสม', heading_text, re.IGNORECASE):
+                # Ищем следующий ul или ol после заголовка
+                next_elem = heading.find_next_sibling()
+                
+                # Перебираем следующие элементы пока не найдем список
+                while next_elem:
+                    if next_elem.name in ['ul', 'ol']:
+                        # Извлекаем элементы списка
+                        items = next_elem.find_all('li')
+                        for item in items:
+                            ingredient_text = item.get_text(strip=True)
+                            ingredient_text = self.clean_text(ingredient_text)
+                            
+                            if ingredient_text:
+                                # Парсим ингредиент
+                                parsed = self.parse_ingredient(ingredient_text)
+                                if parsed:
+                                    if isinstance(parsed, list):
+                                        ingredients.extend(parsed)
+                                    else:
+                                        ingredients.append(parsed)
+                        
+                        if ingredients:
+                            # Нашли ингредиенты, выходим
+                            return json.dumps(ingredients, ensure_ascii=False)
+                    
+                    # Переходим к следующему элементу
+                    # Если это заголовок, прекращаем поиск (начался новый раздел)
+                    if next_elem.name in ['h1', 'h2', 'h3', 'h4']:
+                        break
+                    
+                    next_elem = next_elem.find_next_sibling()
+        
+        # Если не нашли в заголовках, ищем в параграфах
         all_paragraphs = self.soup.find_all('p')
         
-        # Ищем параграф, который упоминает ингредиенты (ส่วนผสม, ส่วนประกอบ, เตรียมส่วนผสม)
         for p in all_paragraphs:
             p_text = p.get_text().strip()
             # Проверяем, упоминает ли параграф ингредиенты
@@ -91,8 +131,6 @@ class FoodedCoExtractor(BaseRecipeExtractor):
                             # Парсим ингредиент
                             parsed = self.parse_ingredient(ingredient_text)
                             if parsed:
-                                # Если это список ингредиентов без количества (разделенных пробелами)
-                                # И у нас есть несколько слов, можем разделить их
                                 if isinstance(parsed, list):
                                     ingredients.extend(parsed)
                                 else:

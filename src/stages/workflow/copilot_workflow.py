@@ -9,6 +9,7 @@ if __name__ == '__main__':
 from src.stages.workflow.generate_prompt import PromptGenerator
 from src.common.github.client import GitHubClient
 from src.stages.workflow.branch_manager import BranchManager
+from src.stages.workflow.validation_models import ValidationReport
 
 logger = logging.getLogger(__name__)
 
@@ -78,7 +79,7 @@ class CopilotWorkflow:
         else:
             logger.info(f"Директория не найдена или не является директорией: {preprocessed_dir}")
 
-    def make_pr_comment_from_errors(self, errors: list[dict]) -> str:
+    def make_pr_comment_from_errors(self, errors: list[ValidationReport]) -> str:
         """Формирует комментарий к PR на основе ошибок валидации парсера.
         
         Args:
@@ -92,62 +93,50 @@ class CopilotWorkflow:
         pr_comment += "Остальные поля (cook_time, prep_time, tags и т.д.) опциональны и их отсутствие допустимо.\n\n"
         
         for error in errors:
-            pr_comment += f"### Модуль: `{error['module']}`\n"
-            pr_comment += f"- Всего файлов: {error['total_files']}\n"
-            pr_comment += f"- Ошибок: {error['failed']}\n\n"
+            pr_comment += f"### Модуль: `{error.module}`\n"
+            pr_comment += f"- Всего файлов: {error.total_files}\n"
+            pr_comment += f"- Ошибок: {error.failed}\n\n"
             
-            for detail in error.get('details', []):
-                pr_comment += f"#### 📄 Файл: `{detail.get('file', 'N/A')}`\n"
-                pr_comment += f"- Статус: **{detail.get('status', 'unknown')}**\n"
+            for detail in error.details:
+                pr_comment += f"#### 📄 Файл: `{detail.file}`\n"
+                pr_comment += f"- Статус: **{detail.status}**\n"
                 
-                gpt_val = detail.get('gpt_validation')
-                if gpt_val:
-                    is_valid = gpt_val.get('is_valid', False)
-                    is_recipe = gpt_val.get('is_recipe', True)
+                pr_comment += f"- Валидация: {'✅ Корректно' if detail.is_valid else '❌ Некорректно'}\n"
+                pr_comment += f"- Это рецепт: {'Да' if detail.is_recipe else 'Нет'}\n"
+                
+                if not detail.is_valid:
+                    if detail.feedback:
+                        pr_comment += f"- **Отзыв**: {detail.feedback}\n\n"
                     
-                    pr_comment += f"- Валидация: {'✅ Корректно' if is_valid else '❌ Некорректно'}\n"
-                    pr_comment += f"- Это рецепт: {'Да' if is_recipe else 'Нет'}\n"
+                    if detail.missing_fields:
+                        pr_comment += f"- **Отсутствующие поля**: {', '.join(detail.missing_fields)}\n"
                     
-                    if not is_valid:
-                        feedback = gpt_val.get('feedback', 'Нет описания')
-                        pr_comment += f"- **Отзыв**: {feedback}\n\n"
-                        
-                        missing_fields = gpt_val.get('missing_fields', [])
-                        if missing_fields:
-                            pr_comment += f"- **Отсутствующие поля**: {', '.join(missing_fields)}\n"
-                        
-                        incorrect_fields = gpt_val.get('incorrect_fields', [])
-                        if incorrect_fields:
-                            pr_comment += f"- **Некорректные поля**: {', '.join(incorrect_fields)}\n"
-                        
-                        fix_recs = gpt_val.get('fix_recommendations', [])
-                        if fix_recs:
-                            pr_comment += "\n**Рекомендации по исправлению:**\n\n"
-                            for idx, rec in enumerate(fix_recs, 1):
-                                field = rec.get('field', 'N/A')
-                                issue = rec.get('issue', 'N/A')
-                                fix_suggestion = rec.get('fix_suggestion', 'N/A')
-                                
-                                pr_comment += f"{idx}. **Поле**: `{field}`\n"
-                                pr_comment += f"   - Проблема: {issue}\n"
-                                
-                                # Разные поля в зависимости от типа валидации
-                                if 'expected_value' in rec:
-                                    # Валидация с reference JSON
-                                    pr_comment += f"   - Ожидаемое значение: `{rec.get('expected_value', 'N/A')}`\n"
-                                    pr_comment += f"   - Фактическое значение: `{rec.get('actual_value', 'N/A')}`\n"
-                                elif 'correct_value_from_text' in rec:
-                                    # Валидация с HTML текстом
-                                    pr_comment += f"   - Правильное значение из текста: `{rec.get('correct_value_from_text', 'N/A')}`\n"
-                                    pr_comment += f"   - Извлеченное значение: `{rec.get('actual_extracted_value', 'N/A')}`\n"
-                                    if 'text_context' in rec:
-                                        pr_comment += f"   - Контекст в тексте: _{rec.get('text_context', 'N/A')}_\n"
-                                    if 'pattern_hint' in rec:
-                                        pr_comment += f"   - Паттерн: {rec.get('pattern_hint', 'N/A')}\n"
-                                
-                                pr_comment += f"   - **Как исправить**: {fix_suggestion}\n\n"
-                    else:
-                        pr_comment += "\n"
+                    if detail.incorrect_fields:
+                        pr_comment += f"- **Некорректные поля**: {', '.join(detail.incorrect_fields)}\n"
+                    
+                    if detail.fix_recommendations:
+                        pr_comment += "\n**Рекомендации по исправлению:**\n\n"
+                        for idx, rec in enumerate(detail.fix_recommendations, 1):
+                            pr_comment += f"{idx}. **Поле**: `{rec.field}`\n"
+                            pr_comment += f"   - Проблема: {rec.issue}\n"
+                            
+                            # Отображаем доступные поля из FieldValidation
+                            if rec.correct_value_from_text:
+                                pr_comment += f"   - Правильное значение из текста: `{rec.correct_value_from_text}`\n"
+                            
+                            if rec.actual_extracted_value:
+                                pr_comment += f"   - Извлеченное значение: `{rec.actual_extracted_value}`\n"
+                            
+                            if rec.text_context:
+                                pr_comment += f"   - Контекст в тексте: _{rec.text_context}_\n"
+                            
+                            if rec.pattern_hint:
+                                pr_comment += f"   - Паттерн: {rec.pattern_hint}\n"
+                            
+                            if rec.fix_suggestion:
+                                pr_comment += f"   - **Как исправить**: {rec.fix_suggestion}\n\n"
+                else:
+                    pr_comment += "\n"
                 
                 pr_comment += "---\n\n"
         
@@ -163,7 +152,15 @@ class CopilotWorkflow:
         logger.info(f"Найдено {len(prs)} PR с запрошенным ревью.")
         for pr in prs:
             logger.info(f"Проверка PR #{pr['number']}: {pr['title']}")
-            errors = self.branch_manager.check_branch(pr['head']['ref'])
+            errors: list[ValidationReport] = self.branch_manager.check_branch(pr['head']['ref'], chck_all_with_gpt=False) # проверяем гпт только если нет каких-то нужных полей
+            # проверка, чтобы в результате не было системной ошибки иначе пропускаем обновление статуса pr
+            if any(err.system_errors for err in errors):
+                logger.error(f"PR #{pr['number']} не прошел валидацию из-за системной ошибки. Пропуск обновления статуса, попробуем позже.")
+                continue
+            if any(err.skipped for err in errors):
+                logger.error(f"PR #{pr['number']} не прошел валидацию из-за пропущенных файлов. Пропуск обновления статуса, проверьте наличие файлов.")
+                continue
+
             if errors:
                 logger.info(f"PR #{pr['number']} не прошел валидацию.")
                 pr_comment = self.make_pr_comment_from_errors(errors)
@@ -186,3 +183,4 @@ class CopilotWorkflow:
 if __name__ == "__main__":
     workflow = CopilotWorkflow()
     workflow.check_review_requested_prs()
+    titles = [['Add recipe parser for xrysoskoufaki.gr', 'Add parser for mr-m.co.il Hebrew recipe site', 'Add fooded.co recipe parser', 'Add kokaihop.se recipe parser', 'Add parser for oblizniprste.si recipe website', 'Add foodlife.gr recipe parser with Greek language support', 'Add polishfeast.com recipe parser', 'Add aniagotuje.pl recipe parser', 'Add bosanskikuhar_ba recipe extractor', 'Add madebykristina.cz recipe parser', 'Implement recipe parser for znam.si', 'Add parser for toprecepty.cz recipe extraction']]

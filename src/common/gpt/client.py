@@ -307,7 +307,7 @@ class GPTClient:
                 else:
                     logger.error(f"Ошибка HTTP запроса к GPT после {retry_attempts} попыток: {e}")
                     
-            except requests.exceptions.RequestException as e:
+            except (requests.exceptions.RequestException, requests.exceptions.Timeout) as e:
                 last_exception = e
                 if attempt < retry_attempts - 1:
                     delay = 2 ** attempt

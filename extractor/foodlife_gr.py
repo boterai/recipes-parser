@@ -167,7 +167,7 @@ class FoodlifeGrExtractor(BaseRecipeExtractor):
         # Ищем div с классом thecontent
         content_div = self.soup.find('div', class_='thecontent')
         if content_div:
-            # Ищем ul список внутри
+            # Вариант 1: Ищем ul список внутри
             ul_list = content_div.find('ul')
             if ul_list:
                 items = ul_list.find_all('li')
@@ -182,6 +182,63 @@ class FoodlifeGrExtractor(BaseRecipeExtractor):
                         parsed = self.parse_ingredient(ingredient_text)
                         if parsed:
                             ingredients.append(parsed)
+            
+            # Вариант 2: Если нет ul списка, ищем параграф с "Υλικά" и следующие параграфы с br-разделенными ингредиентами
+            if not ingredients:
+                paragraphs = content_div.find_all('p')
+                in_ingredients_section = False
+                
+                for p in paragraphs:
+                    p_text = p.get_text(strip=True)
+                    
+                    # Проверяем, начинается ли секция ингредиентов
+                    if re.match(r'^\s*Υλικά\s*$', p_text, re.IGNORECASE):
+                        in_ingredients_section = True
+                        continue
+                    
+                    # Извлекаем ингредиенты из текущего параграфа (разделенные br)
+                    if in_ingredients_section:
+                        # Разбиваем по <br> тегам
+                        html_content = str(p)
+                        
+                        # Проверяем, есть ли в этом параграфе "Εκτέλεση"
+                        # Если есть, разбиваем и берем только часть до "Εκτέλεση"
+                        if re.search(r'<strong>\s*Εκτέλεση\s*</strong>', html_content, re.IGNORECASE):
+                            # Разделяем по "Εκτέλεση" и берем только первую часть
+                            parts = re.split(r'<strong>\s*Εκτέλεση\s*</strong>', html_content, maxsplit=1)
+                            html_content = parts[0]
+                            # После обработки этого параграфа прекращаем
+                            should_stop = True
+                        else:
+                            should_stop = False
+                        
+                        # Разделяем по <br>, <br/>, <br />
+                        ingredient_lines = re.split(r'<br\s*/?>', html_content)
+                        
+                        for line in ingredient_lines:
+                            # Удаляем HTML теги
+                            from bs4 import BeautifulSoup
+                            clean_line = BeautifulSoup(line, 'html.parser').get_text(strip=True)
+                            clean_line = self.clean_text(clean_line)
+                            
+                            # Пропускаем пустые строки
+                            if not clean_line:
+                                continue
+                            
+                            # Пропускаем подзаголовки (например, "για τον χυλό", "για το σερβίρισμα")
+                            # но НЕ пропускаем, если это часть ингредиента
+                            # Подзаголовок обычно короткий и не содержит количества
+                            if re.match(r'^\s*(για|Για)\s+(το|τον|την)\s+\w+\s*$', clean_line, re.IGNORECASE):
+                                continue  # Это подзаголовок, пропускаем
+                            
+                            # Парсим ингредиент
+                            parsed = self.parse_ingredient(clean_line)
+                            if parsed:
+                                ingredients.append(parsed)
+                        
+                        # Если нашли "Εκτέλεση", прекращаем обработку
+                        if should_stop:
+                            break
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
