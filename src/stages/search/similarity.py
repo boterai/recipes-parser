@@ -149,6 +149,9 @@ class ClusterParams:
     sample_per_scroll_batch: int | None = None  # случайно взять N ids из каждого scroll батча
     sample_seed: int = 42                       # seed для воспроизводимой выборки
 
+    union_top_k: int = 10        # сколько соседей юнифицировать в DSU
+    log_every: int = 5000        # логировать прогресс каждые N обработанных рецептов
+
 
 class SimilaritySearcher:
     def __init__(self):
@@ -189,10 +192,7 @@ class SimilaritySearcher:
         logger.info(f"Loaded DSU state from {filepath} (last_id={self.last_id}, nodes={len(self.dsu.parent)})")
 
 
-    def build_clusters(
-        self,
-        params: ClusterParams, 
-        reuse_dsu: bool = True,
+    def build_clusters(self,params: ClusterParams, reuse_dsu: bool = True,
     ) -> list[list[int]]:
         """
         Кластеры по коллекциям из Qdrant.
@@ -218,14 +218,14 @@ class SimilaritySearcher:
         if params.last_point_id is not None:
             self.last_id = params.last_point_id
 
-        for ids in q.iter_point_ids(batch_size=params.scroll_batch, collection_name=params.collection_name, last_point_id=self.last_id):
-            ids = _apply_sampling_and_limits(
-                ids,
-                rng=rng,
-                processed=processed,
-                max_recipes=params.max_recipes,
-                sample_per_scroll_batch=params.sample_per_scroll_batch,
-            )
+        for vec_map in q.iter_points_with_vectors(
+            collection_name=params.collection_name,
+            batch_size=params.scroll_batch,
+            using=params.using,
+            last_point_id=self.last_id
+        ):
+            ids = list(vec_map)
+
             if not ids or ids == [self.last_id]:
                 self.last_id = None
                 logger.info("No more ids to process, stopping.")
@@ -233,14 +233,10 @@ class SimilaritySearcher:
             
             for i in range(0, len(ids), params.query_batch):
                 sub_ids = ids[i:i + params.query_batch]
-                vec_map = q.retrieve_vectors(sub_ids, collection_name=params.collection_name, using=params.using)
-                if not vec_map:
-                    continue
+                vectors = [vec_map[rid] for rid in sub_ids]
 
-                src_ids = list(vec_map.keys())
-                vectors = [vec_map[rid] for rid in src_ids]
-
-                for attempt in range(3):  # retry up to 3 times
+                batch_hits = None
+                for attempt in range(3):
                     try:
                         batch_hits = q.query_batch(
                             collection_name=params.collection_name,
@@ -249,27 +245,39 @@ class SimilaritySearcher:
                             limit=params.limit,
                             score_threshold=params.score_threshold,
                         )
-                        break  # success, exit retry loop
+                        break
                     except TimeoutError:
                         if attempt == 2:
-                            logger.error("Max retries reached for Qdrant query_batch, aborting.")
                             raise
-                        logger.error(f"Timeout during Qdrant query_batch, retry attempt {attempt + 1}")
-                        continue
+                        # простой backoff + jitter
+                        delay = (2 ** attempt) + rng.random()
+                        logger.warning("Timeout in query_batch; retry %d; sleep %.2fs", attempt + 1, delay)
+                        import time
+                        time.sleep(delay)
 
-                for src_id, hits in zip(src_ids, batch_hits):
-                    for h in hits:
+                if not batch_hits:
+                    continue
+
+                # union только top-K
+                for src_id, hits in zip(sub_ids, batch_hits):
+                    if not hits:
+                        continue
+                    # hits already sorted by score in Qdrant, но на всякий
+                    top_hits = sorted(hits, key=lambda h: float(h["score"]), reverse=True)[:params.union_top_k]
+                    for h in top_hits:
                         dst_id = int(h["recipe_id"])
                         if dst_id != src_id:
-                            self.dsu.union(src_id, dst_id)
+                            self.dsu.union(int(src_id), dst_id)
 
-                processed += len(src_ids)
+                processed += len(sub_ids)
                 if params.max_recipes is not None and processed >= params.max_recipes:
                     break
-            
-            self.last_id = max(ids) # сохраняем последний обработанный id
 
-            logger.info("Processed %d recipes...", processed)
+            self.last_id = max(ids)
+
+            if params.log_every and processed % params.log_every < params.query_batch:
+                logger.info("Processed %d recipes... (last_id=%s)", processed, self.last_id)
+
             if params.max_recipes is not None and processed >= params.max_recipes:
                 break
 
@@ -413,34 +421,21 @@ Return ONLY JSON array of IDs representing similar recipes."""
         logger.info(f"Saved clusters to file {filepath}.")
 
 if __name__ == "__main__":
-    filepath = "recipe_clusters/full_clusters92_batch.txt"
-    dsu_filepath = "recipe_clusters/full_clusters92_dsu_state.json"
+    filepath = "recipe_clusters/ingredients_clusters94_batch.txt"
+    dsu_filepath = "recipe_clusters/ingredients_clusters94_dsu_state.json"
     ss = SimilaritySearcher()
-    # при полном запуске иногда возникает таймаут, поэтому можно использваоть запуск частями, указывая max_recipes
-    """clusters = ss.build_clusters_from_collection(
-            params=ClusterParams(
-                max_recipes=None,
-                limit=30,
-                score_threshold=0.95,
-                scroll_batch=500,
-                query_batch=32,
-            ),
-            build_type="ingredients"
-        )
-    ss.save_clusters_to_file(filepath, clusters)"""
 
     ss.load_dsu_state(dsu_filepath)
     while True:
         try:
             clusters = ss.build_clusters_from_collection(
                 params=ClusterParams(
-                    max_recipes=5000,
-                    limit=35,
-                    score_threshold=0.92,
+                    limit=30,
+                    score_threshold=0.94,
                     scroll_batch=2000,
-                    query_batch=32
+                    query_batch=128
                 ),
-                build_type="full"
+                build_type="ingredients"
             )
             ss.save_dsu_state(dsu_filepath)
             print(f"Total clusters found: {len(clusters)}")

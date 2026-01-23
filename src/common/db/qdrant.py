@@ -674,9 +674,14 @@ class QdrantRecipeManager:
             traceback.print_exc()
             return []
         
-    def iter_point_ids(self, collection_name: str = "full", batch_size: int = 1000, last_point_id: int = None) -> Iterator[list[int]]:
+    def iter_points_with_vectors(
+            self, 
+            collection_name: str = "full", 
+            batch_size: int = 1000, 
+            using: str = "dense",
+            last_point_id: int = None) -> Iterator[list[int]]:
         """
-        Итератор по ids в коллекции (без payload/векторов).
+        Итератор по всем точкам в коллекции, возвращающий батчи векторов.
         Args:
             collection_name: Имя коллекции
             batch_size: Размер батча для скрола
@@ -694,13 +699,29 @@ class QdrantRecipeManager:
                 limit=batch_size,
                 offset=offset,
                 with_payload=False,
-                with_vectors=False,
+                with_vectors=True,
+                timeout=60
             )
-            ids = [int(p.id) for p in points]
-            if ids:
-                yield ids
+            if not points:
+                return
+            
+            vec_map: dict[int, list[float]] = {}
+            for p in points:
+                pid = int(p.id)
+                if last_point_id is not None and pid <= last_point_id:
+                    continue
+
+                v = p.vector.get(using) if isinstance(p.vector, dict) else p.vector
+                if v is None:
+                    continue
+
+                vec_map[pid] = v
+
+            if vec_map:
+                yield vec_map
+
             if offset is None:
-                break
+                return
 
     def retrieve_vectors(self, ids: list[int], collection_name: str, using: str) -> dict[int, list[float]]:
         """
@@ -738,59 +759,6 @@ class QdrantRecipeManager:
                 continue
 
             out[int(p.id)] = list(vec)
-        return out
-
-    def retrieve_vectors_multi(
-        self,
-        ids: list[int],
-        collection_name: str = "mv",
-        using_list: list[str] | None = None,
-    ) -> dict[int, dict[str, list[float]]]:
-        """Получить несколько named-векторов для каждого id одним retrieve.
-
-        Полезно для мультивекторной коллекции: достаем сразу ingredients/description/...
-
-        Returns:
-            {point_id: {using_name: vector}}
-        """
-        if not self.client:
-            raise QdrantNotConnectedError()
-
-        collection = self.collections.get(collection_name)
-        if not collection:
-            raise QdrantCollectionNotFoundError(collection_name)
-
-        points = self.client.retrieve(
-            collection_name=collection,
-            ids=ids,
-            with_vectors=True,
-            with_payload=False,
-        )
-
-        out: dict[int, dict[str, list[float]]] = {}
-        for p in points:
-            if p.vector is None:
-                continue
-            if not isinstance(p.vector, dict):
-                continue
-
-            vecs: dict[str, list[float]] = {}
-
-            if using_list is None:
-                for k, v in p.vector.items():
-                    if v is None:
-                        continue
-                    vecs[str(k)] = list(v)
-            else:
-                for using in using_list:
-                    v = p.vector.get(using)
-                    if v is None:
-                        continue
-                    vecs[using] = list(v)
-
-            if vecs:
-                out[int(p.id)] = vecs
-
         return out
 
     def query_batch(
