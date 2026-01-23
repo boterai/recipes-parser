@@ -33,8 +33,7 @@ class CopilotWorkflow:
             push=push
         )
         
-    
-    def create_issues_for_parsers(self):
+    def create_issues_for_parsers(self, issue_prefix: str = ISSUE_PREFIX):
         """Создает GitHub issues с промптами для создания парсеров на основе preprocessed данных."""
         prompts = self.prompt_generator.generate_all_prompts()
         if not prompts:
@@ -44,7 +43,7 @@ class CopilotWorkflow:
         current_issues = self.github_client.list_repository_issues(state="all")
         existing_titles = {issue['title'] for issue in current_issues} if current_issues else set()
         # создаем только новые issues
-        new_modules = [i for i in prompts if ISSUE_PREFIX + i not in existing_titles] 
+        new_modules = [i for i in prompts if issue_prefix + i not in existing_titles] 
 
         if not new_modules:
             logger.info("Нет новых модулей для создания issues.")
@@ -53,7 +52,7 @@ class CopilotWorkflow:
         logger.info(f"Создание {len(new_modules)} новых issues для парсеров...")
 
         for module_name in new_modules:
-            title = ISSUE_PREFIX + module_name
+            title = issue_prefix + module_name
             issue = self.github_client.create_issue_from_dict(
                 title=title,
                 body=prompts[module_name]
