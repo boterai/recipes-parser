@@ -110,6 +110,21 @@ class TheFoodieSiExtractor(BaseRecipeExtractor):
                 except:
                     amount = amount_str
         
+        # Нормализация единиц измерения
+        # Конвертируем kg -> g и dl -> ml для стандартизации
+        if unit:
+            unit_lower = unit.lower()
+            if unit_lower == 'kg' and amount:
+                # Конвертируем kg в g
+                amount = amount * 1000
+                unit = 'g'
+            elif unit_lower == 'dl' and amount:
+                # Конвертируем dl в ml
+                amount = amount * 100
+                unit = 'ml'
+            else:
+                unit = unit.strip()
+        
         # Обработка единицы измерения
         # Если "po okusu" или "po potrebi" в тексте, это считается единицей измерения
         if not unit and ('po okusu' in name.lower() or 'po potrebi' in name.lower()):
@@ -119,8 +134,6 @@ class TheFoodieSiExtractor(BaseRecipeExtractor):
             elif 'po potrebi' in name.lower():
                 unit = 'po potrebi'
                 name = re.sub(r',?\s*po potrebi\s*$', '', name, flags=re.IGNORECASE)
-        else:
-            unit = unit.strip() if unit else None
         
         # Очистка названия - НЕ удаляем части до запятой или "in"
         # Только удаляем скобки в конце если нужно
@@ -203,7 +216,8 @@ class TheFoodieSiExtractor(BaseRecipeExtractor):
             while current:
                 if hasattr(current, 'name'):
                     if current.name == 'p':
-                        text = current.get_text(strip=True)
+                        # Используем get_text() без strip, затем применяем clean_text
+                        text = current.get_text()
                         text = self.clean_text(text)
                         
                         # Останавливаемся на определенных маркерах
