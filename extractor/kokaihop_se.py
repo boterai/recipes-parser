@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 import json
 import re
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Any
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
@@ -14,6 +14,15 @@ from extractor.base import BaseRecipeExtractor, process_directory
 
 class KokaiHopExtractor(BaseRecipeExtractor):
     """Экстрактор для kokaihop.se"""
+    
+    # Единицы измерения, используемые на сайте kokaihop.se
+    UNITS_PATTERN = r'(gram|st|msk|tsk|krm|dl|ml|l|kg)'
+    
+    # Паттерны для извлечения времени приготовления
+    TIME_PATTERNS = [
+        r'(\d+(?:-\d+)?)\s*min(?:uter?|s?)',
+        r'(\d+)\s*tim(?:me|mar)?'
+    ]
     
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
@@ -63,7 +72,7 @@ class KokaiHopExtractor(BaseRecipeExtractor):
         
         return None
     
-    def parse_ingredient_line(self, ingredient_text: str) -> Optional[Dict[str, any]]:
+    def parse_ingredient_line(self, ingredient_text: str) -> Optional[Dict[str, Any]]:
         """
         Парсинг строки ингредиента в структурированный формат
         Формат в HTML: "amount unit name" (например: "125 gram rumstempererat smör")
@@ -81,7 +90,7 @@ class KokaiHopExtractor(BaseRecipeExtractor):
         
         # Паттерн: number (int/float) + unit + name
         # Примеры: "125 gram smör", "3 st ägg", "2 msk vaniljsocker"
-        pattern = r'^(\d+(?:[.,]\d+)?)\s+(gram|st|msk|tsk|krm|dl|ml|l|kg)?(.+)'
+        pattern = fr'^(\d+(?:[.,]\d+)?)\s+{self.UNITS_PATTERN}?(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -192,12 +201,7 @@ class KokaiHopExtractor(BaseRecipeExtractor):
             
             # Паттерн для времени: "число-число minuter" или "число minuter"
             # Примеры: "25-30 minuter", "30 minuter", "1 timme"
-            patterns = [
-                r'(\d+(?:-\d+)?)\s*min(?:uter?|s?)',
-                r'(\d+)\s*tim(?:me|mar)?'
-            ]
-            
-            for pattern in patterns:
+            for pattern in self.TIME_PATTERNS:
                 match = re.search(pattern, text, re.IGNORECASE)
                 if match:
                     time_str = match.group(1)
@@ -310,8 +314,6 @@ class KokaiHopExtractor(BaseRecipeExtractor):
 
 def main():
     """Обработка HTML файлов из директории preprocessed/kokaihop_se"""
-    import os
-    
     # Путь к директории с HTML-файлами
     repo_root = Path(__file__).parent.parent
     preprocessed_dir = repo_root / "preprocessed" / "kokaihop_se"
