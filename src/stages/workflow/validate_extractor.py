@@ -4,7 +4,6 @@ import os
 import importlib
 import json
 import logging
-import asyncio
 
 if __name__ == "__main__":
     from pathlib import Path
@@ -176,15 +175,13 @@ Validate the extraction quality and return JSON with validation results."""
                 }
             }
             
-            result = asyncio.run(
-                self.gpt_client.async_request(
+            result = self.gpt_client.request(
                     system_prompt=system_prompt,
                     user_prompt=user_prompt,
                     temperature=0.1,
                     response_schema=schema,
                     retry_attempts=2
                 )
-            )
             
             logger.info(f"GPT validation result: {result}")
             return result
@@ -331,16 +328,14 @@ Return JSON validation results."""
                 }
             }
             
-            result = asyncio.run(
-                self.gpt_client.async_request(
+            result = self.gpt_client.request(
                     system_prompt=system_prompt,
                     user_prompt=user_prompt,
                     temperature=0.1,
                     response_schema=schema,
                     retry_attempts=2
                 )
-            )
-            
+                        
             logger.info(f"GPT HTML validation result: {result}")
             return result
             
@@ -466,10 +461,11 @@ if __name__ == '__main__':
     vp = ValidateParser()
 
     result = vp.validate(
-        module_name="xrysessyntages_com",
-        use_gpt=False,
+        module_name="nutrip_gr",
+        use_gpt=True,
         required_fields=['dish_name', 'ingredients', 'instructions'],
         use_gpt_on_missing_fields=True
     )
+    pass
 
     
