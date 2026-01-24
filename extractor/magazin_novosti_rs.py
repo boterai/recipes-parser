@@ -225,15 +225,16 @@ class MagazinNovostiRsExtractor(BaseRecipeExtractor):
         """Извлечение ингредиентов"""
         ingredients = []
         
-        # Ищем "Sastojci:" в story-content
+        # Ищем "Sastojci:" или "Састојци:" в story-content
         story = self.soup.find('div', class_='story-content')
         if not story:
             return None
         
-        # Находим параграф с "Sastojci:"
+        # Находим параграф с "Sastojci:" (Latin) или "Састојци:" (Cyrillic)
         found_sastojci_header = False
         for p in story.find_all('p'):
-            if 'Sastojci' in p.get_text():
+            text = p.get_text()
+            if 'Sastojci' in text or 'Састојци' in text:
                 found_sastojci_header = True
                 # Ищем следующий ul элемент
                 next_elem = p.find_next_sibling()
@@ -271,24 +272,25 @@ class MagazinNovostiRsExtractor(BaseRecipeExtractor):
         """Извлечение инструкций по приготовлению"""
         instructions = []
         
-        # Ищем "Priprema:" в story-content
+        # Ищем "Priprema:" (Latin) или "Припрема:" (Cyrillic) в story-content
         story = self.soup.find('div', class_='story-content')
         if not story:
             return None
         
-        # Находим параграф с "Priprema:"
+        # Находим параграф с "Priprema:" или "Припрема:"
         found_priprema = False
         for p in story.find_all('p'):
-            if 'Priprema' in p.get_text():
+            text = p.get_text()
+            if 'Priprema' in text or 'Припрема' in text:
                 found_priprema = True
                 continue
             
             if found_priprema:
                 text = p.get_text(strip=True)
-                # Останавливаемся на "Prijatno!" или пустых параграфах
-                if not text or 'Prijatno' in text:
+                # Останавливаемся на "Prijatno!" или "Пријатно!" или пустых параграфах
+                if not text or 'Prijatno' in text or 'Пријатно' in text:
                     break
-                # Пропускаем источник в скобках типа "(Bakina kuhinja)"
+                # Пропускаем источник в скобках типа "(Bakina kuhinja)" или "(Бакина кухиња)"
                 if re.match(r'^\([^)]+\)$', text):
                     break
                 if text:
