@@ -250,7 +250,7 @@ class AutoScraper:
         self.logger.info(f"✓ Обработано {processed_count} URL, найдено {recipe_count} рецептов")
         return processed_count, recipe_count
     
-    def process_urls(self, urls: list[str], query_language: str, query_id: int) -> tuple[int, int]:
+    def process_urls(self, urls: list[str], query_language: str, query_id: int):
         """
         Обработка найденных URL (создание сайтов и проверка страниц)
         
@@ -273,14 +273,38 @@ class AutoScraper:
         # Шаг 2: Обновляем статистику в search_query
         self.search_query_repository.update_query_statistics(query_id, len(saved_urls), 0)
         
-        # Шаг 3: Проверяем страницы на рецепты
-        processed_count, recipe_count = self._check_pages_for_recipes(saved_urls)
-
-        # Шаг 4: Обновляем статистику в search_query с учётом найденных рецептов
-        self.search_query_repository.update_query_statistics(query_id, processed_count, recipe_count)
-        
-        return processed_count, recipe_count
     
+    def process_sites(self, max_sites_to_process: Optional[int] = 100):
+        """обработка необработанных сайтов из БД"""
+        self.logger.info(f"\n{'='*70}")
+        self.logger.info("✓ ДОСТАТОЧНО НЕОБРАБОТАННЫХ САЙТОВ")
+        self.logger.info("  Поиск новых сайтов не требуется")
+        self.logger.info(f"{'='*70}\n")
+        self.logger.info("Начинаем обработку необработанных сайтов...\n")
+        sites_processed = 0
+        while True:
+            site = self.site_repository.get_unprocessed_sites(limit=1, random_order=True) # получаем случайные необработанные сайты по 1 шт, чтобы уменьшить шанс обработки одинаковых сайтов в параллельных запусках
+            if not site:
+                self.logger.info("Все необработанные сайты обработаны.")
+                break
+            site = site[0]
+
+            try:
+                self.logger.info(f"\n=== Обработка сайта ID={site.id}, URL={site.base_url} ===")
+                if self.site_preparation_pipeline.prepare_site(site.search_url, max_pages=60, custom_logger=self.logger):
+                    self.logger.info(f"✓ Сайт ID={site.id} обработан и содержит рецепты")
+                else:
+                    self.logger.info(f"→ Сайт ID={site.id} обработан, но рецепты не найдены")
+            except Exception as e:
+                self.logger.error(f"Ошибка обработки сайта ID={site.id}, URL={site.base_url}: {e}")
+                continue
+            sites_processed += 1
+            if max_sites_to_process and sites_processed >= max_sites_to_process:
+                self.logger.info(f"Достигнуто максимальное количество обработанных сайтов: {max_sites_to_process}")
+                break
+
+
+
     def run_auto_scraping(
         self, 
         min_queries: int = 10,
@@ -289,6 +313,7 @@ class AutoScraper:
         min_unprocessed_sites: int = 100,
         generate_from_recipes: bool = True,
         generate_with_gpt: bool = False,
+        max_sites_to_process: Optional[int] = 200
     ):
         """
         Автоматический сбор рецептов
@@ -300,6 +325,7 @@ class AutoScraper:
             min_unprocessed_sites: Минимальное количество необработанных сайтов для запуска поиска новых
             generate_from_recipes: Генерировать запросы на основе существующих рецептов (для поиска используются рецепты из БД)
             generate_with_gpt: Генерировать запросы с помощью GPT
+            max_sites_to_process: Максимальное количество необработанных сайтов для обработки после поиска новых
         """
         try:
             # 0. Проверяем количество необработанных сайтов
@@ -310,27 +336,7 @@ class AutoScraper:
             self.logger.info(f"  Минимум требуется: {min_unprocessed_sites}")
             
             if unprocessed_count >= min_unprocessed_sites:
-                self.logger.info(f"\n{'='*70}")
-                self.logger.info("✓ ДОСТАТОЧНО НЕОБРАБОТАННЫХ САЙТОВ")
-                self.logger.info(f"  Необработанных сайтов: {unprocessed_count} >= {min_unprocessed_sites}")
-                self.logger.info("  Поиск новых сайтов не требуется")
-                self.logger.info(f"{'='*70}\n")
-                
-                # здесь проводим обработку уже имеющихся сайтов
-                self.logger.info("Начинаем обработку необработанных сайтов...\n")
-                sites = self.site_repository.get_unprocessed_sites(limit=min_unprocessed_sites, random_order=True) # получаем случайные необработанные сайты
-                random.shuffle(sites)
-                for site in sites:
-                    try:
-                        self.logger.info(f"\n=== Обработка сайта ID={site.id}, URL={site.base_url} ===")
-                        if self.site_preparation_pipeline.prepare_site(site.search_url, max_pages=60, custom_logger=self.logger):
-                            self.logger.info(f"✓ Сайт ID={site.id} обработан и содержит рецепты")
-                        else:
-                            self.logger.info(f"→ Сайт ID={site.id} обработан, но рецепты не найдены")
-                    except Exception as e:
-                        self.logger.error(f"Ошибка обработки сайта ID={site.id}, URL={site.base_url}: {e}")
-                        continue
-                return
+                return self.process_sites(max_sites_to_process=max_sites_to_process)
             
             self.logger.info(f"→ Недостаточно необработанных сайтов ({unprocessed_count} < {min_unprocessed_sites})")
             self.logger.info("→ Начинаем поиск новых сайтов через DuckDuckGo...\n")
@@ -374,9 +380,6 @@ class AutoScraper:
             # 3. Обрабатываем каждый запрос
             self.logger.info("\n[3/4] Поиск в DuckDuckGo...")
             
-            total_urls = 0
-            total_recipes = 0
-            
             for idx, query in enumerate(queries, 1):
                 self.logger.info(f"\n--- Запрос {idx}/{len(queries)} ---")
                 self.logger.info(f"ID: {query.id}, Язык: {query.language}")
@@ -385,30 +388,14 @@ class AutoScraper:
                 # Ищем в DuckDuckGo
                 urls = self.search_duckduckgo(query.query, max_results=results_per_query)
                 
-                # Обрабатываем найденные URL (включая обновление url_count в search_query)
-                processed, recipes = self.process_urls(urls, query_language=query.language, query_id=query.id)
-
-                total_urls += processed
-                total_recipes += recipes
-                self.logger.info(f"✓ Запрос обработан: {processed} URL, {recipes} рецептов")
+                # Обрабатываем найденные URL, создаем сайты и проверяем страницы
+                self.process_urls(urls, query_language=query.language, query_id=query.id)
                 
                 # Задержка между запросами
                 time.sleep(3)
             
-            # 4. Проверяем итоговое количество необработанных сайтов
-            self.logger.info("\n[4/4] Проверка итогов...")
-            final_unprocessed_count = self.site_repository.count_sites_without_pattern()
-            
-            # Итоги
-            self.logger.info("\n" + "="*70)
-            self.logger.info("ИТОГИ ПОИСКА:")
-            self.logger.info(f"  Обработано запросов: {len(queries)}")
-            self.logger.info(f"  Найдено URL: {total_urls}")
-            self.logger.info(f"  Найдено рецептов: {total_recipes}")
-            self.logger.info(f"  Необработанных сайтов до: {unprocessed_count}")
-            self.logger.info(f"  Необработанных сайтов после: {final_unprocessed_count}")
-            self.logger.info(f"  Добавлено новых: {final_unprocessed_count - unprocessed_count}")
-            self.logger.info("="*70)
+            # 4. обрабатываем необработанные сайты
+            self.process_sites(max_sites_to_process=max_sites_to_process)
             
         except Exception as e:
             self.logger.error(f"Ошибка при автоматическом сборе: {e}")
