@@ -9,12 +9,11 @@ from itertools import batched
 from src.common.embedding import EmbeddingFunction, ImageEmbeddingFunction
 from config.db_config import QdrantConfig
 from src.models.recipe import Recipe
-from src.models.search_config import ComponentWeights, SearchProfiles
-from qdrant_client import QdrantClient
+from qdrant_client import QdrantClient, AsyncQdrantClient
 from src.models.image import ImageORM, Image, download_image, download_image_async
 import asyncio
-from qdrant_client.models import QueryRequest
-from collections.abc import Iterator
+from qdrant_client.models import QueryRequest, QueryResponse
+from collections.abc import Iterator, AsyncIterator
 from qdrant_client.models import (
     Distance, VectorParams, PointStruct)
 
@@ -45,6 +44,7 @@ class QdrantRecipeManager:
     _instance = None
     _client = None
     _initialized = False
+    _async_client = None
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
@@ -87,6 +87,67 @@ class QdrantRecipeManager:
     def client(self, value: Optional[QdrantClient]):
         """Установка клиента ClickHouse"""
         self._client = value
+
+    @property
+    def async_client(self) -> Optional[QdrantClient]:
+        """Получение клиента ClickHouse"""
+        return self._async_client
+    
+    @async_client.setter
+    def async_client(self, value: Optional[QdrantClient]):
+        """Установка клиента ClickHouse"""
+        self._async_client = value
+
+    async def async_connect(self, retry_attempts: int = 3, retry_delay: float = 2.0, connect_timeout: float = 30.0):
+        if self.async_client is not None:
+            try:
+                await self.async_client.get_collections()
+                logger.info("✓ Уже подключено к Qdrant")
+                return True
+            except Exception:
+                logger.warning("⚠ Существующее подключение к Qdrant недействительно, повторное подключение...")
+
+        params = QdrantConfig.get_connection_params()
+        
+        for attempt in range(retry_attempts):
+            try:
+                logger.info(f"Попытка подключения к Qdrant {attempt + 1}/{retry_attempts}...")
+                
+                # Базовые параметры подключения
+                client_kwargs = {
+                    'host': params.get('host', 'localhost'),
+                    'port': params.get('port', '6333'),
+                    'api_key': params.get('api_key'),
+                    'https': params.get('https', False),
+                    'timeout': connect_timeout
+                }
+                
+                # Добавляем прокси если указан в конфигурации
+                if params.get('proxy'):
+                    logger.info(f"Использование прокси: {params['proxy']}")
+                    client_kwargs['proxy'] = params['proxy']
+                
+                # Создаем клиент
+                self.async_client = AsyncQdrantClient(**client_kwargs)
+                
+                # Проверка подключения
+                await self.async_client.get_collections()
+                
+                logger.info("✓ Успешное подключение к Qdrant")
+                return True
+                
+            except Exception as e:
+                if attempt < retry_attempts - 1:
+                    # Экспоненциальная задержка: delay * 2^attempt
+                    delay = retry_delay * (2 ** attempt)
+                    logger.warning(f"✗ Ошибка подключения к Qdrant (попытка {attempt + 1}/{retry_attempts}): {e}")
+                    logger.info(f"Повторная попытка через {delay:.1f}с...")
+                    await asyncio.sleep(delay)
+                else:
+                    logger.error(f"✗ Не удалось подключиться к Qdrant после {retry_attempts} попыток: {e}")
+        
+        # Если дошли сюда - все попытки исчерпаны
+        return False
         
     def connect(self, retry_attempts: int = 3, retry_delay: float = 2.0, timeout: float = 30.0) -> bool:
         """Установка подключения к Qdrant с повторными попытками
@@ -105,7 +166,6 @@ class QdrantRecipeManager:
                 return True
             except Exception:
                 logger.warning("⚠ Существующее подключение к Qdrant недействительно, повторное подключение...")
-                self.close()
 
         params = QdrantConfig.get_connection_params()
         
@@ -674,9 +734,14 @@ class QdrantRecipeManager:
             traceback.print_exc()
             return []
         
-    def iter_point_ids(self, collection_name: str = "full", batch_size: int = 1000, last_point_id: int = None) -> Iterator[list[int]]:
+    def iter_points_with_vectors(
+            self, 
+            collection_name: str = "full", 
+            batch_size: int = 1000, 
+            using: str = "dense",
+            last_point_id: int = None) -> Iterator[list[int]]:
         """
-        Итератор по ids в коллекции (без payload/векторов).
+        Итератор по всем точкам в коллекции, возвращающий батчи векторов.
         Args:
             collection_name: Имя коллекции
             batch_size: Размер батча для скрола
@@ -694,13 +759,79 @@ class QdrantRecipeManager:
                 limit=batch_size,
                 offset=offset,
                 with_payload=False,
-                with_vectors=False,
+                with_vectors=True,
+                timeout=60
             )
-            ids = [int(p.id) for p in points]
-            if ids:
-                yield ids
+            if not points:
+                return
+            
+            vec_map: dict[int, list[float]] = {}
+            for p in points:
+                pid = int(p.id)
+                if last_point_id is not None and pid <= last_point_id:
+                    continue
+
+                v = p.vector.get(using) if isinstance(p.vector, dict) else p.vector
+                if v is None:
+                    continue
+
+                vec_map[pid] = v
+
+            if vec_map:
+                yield vec_map
+
             if offset is None:
-                break
+                return
+            
+    async def async_iter_points_with_vectors(
+            self, 
+            collection_name: str = "full", 
+            batch_size: int = 1000, 
+            using: str = "dense",
+            last_point_id: int = None) -> AsyncIterator[list[int]]:
+        """
+        Асинхронный итератор по всем точкам в коллекции, возвращающий батчи векторов.
+        Args:
+            collection_name: Имя коллекции
+            batch_size: Размер батча для скрола
+            last_point_id: Начальный point_id для скрола (если нужно продолжить с определенного места)
+        """
+        if not self.async_client:
+            raise QdrantNotConnectedError()
+
+        collection = self.collections.get(collection_name)
+        offset = last_point_id
+
+        while True:
+            points, offset = await self.async_client.scroll(
+                collection_name=collection,
+                limit=batch_size,
+                offset=offset,
+                with_payload=False,
+                with_vectors=True,
+                timeout=60
+            )
+            if not points:
+                return
+            
+            vec_map: dict[int, list[float]] = {}
+            for p in points:
+                pid = int(p.id)
+                if last_point_id is not None and pid <= last_point_id:
+                    continue
+
+                v = p.vector.get(using) if isinstance(p.vector, dict) else p.vector
+                if v is None:
+                    continue
+
+                vec_map[pid] = v
+
+            if vec_map:
+                yield vec_map
+
+            if offset is None:
+                return
+
 
     def retrieve_vectors(self, ids: list[int], collection_name: str, using: str) -> dict[int, list[float]]:
         """
@@ -740,59 +871,6 @@ class QdrantRecipeManager:
             out[int(p.id)] = list(vec)
         return out
 
-    def retrieve_vectors_multi(
-        self,
-        ids: list[int],
-        collection_name: str = "mv",
-        using_list: list[str] | None = None,
-    ) -> dict[int, dict[str, list[float]]]:
-        """Получить несколько named-векторов для каждого id одним retrieve.
-
-        Полезно для мультивекторной коллекции: достаем сразу ingredients/description/...
-
-        Returns:
-            {point_id: {using_name: vector}}
-        """
-        if not self.client:
-            raise QdrantNotConnectedError()
-
-        collection = self.collections.get(collection_name)
-        if not collection:
-            raise QdrantCollectionNotFoundError(collection_name)
-
-        points = self.client.retrieve(
-            collection_name=collection,
-            ids=ids,
-            with_vectors=True,
-            with_payload=False,
-        )
-
-        out: dict[int, dict[str, list[float]]] = {}
-        for p in points:
-            if p.vector is None:
-                continue
-            if not isinstance(p.vector, dict):
-                continue
-
-            vecs: dict[str, list[float]] = {}
-
-            if using_list is None:
-                for k, v in p.vector.items():
-                    if v is None:
-                        continue
-                    vecs[str(k)] = list(v)
-            else:
-                for using in using_list:
-                    v = p.vector.get(using)
-                    if v is None:
-                        continue
-                    vecs[using] = list(v)
-
-            if vecs:
-                out[int(p.id)] = vecs
-
-        return out
-
     def query_batch(
         self,
         vectors: list[list[float]],
@@ -800,10 +878,10 @@ class QdrantRecipeManager:
         using: str,
         limit: int = 30,
         score_threshold: float = 0.0,
-    ) -> list[list[dict[str, Any]]]:
+    ) -> list[QueryResponse]:
         """
         Batch kNN по коллекции.
-        Возвращает на каждый query-вектор список: [{"recipe_id": int, "score": float}, ...]
+        Возвращает на каждый query-вектор список: [QueryResponse, ...]
         """
         if not self.client:
             raise QdrantNotConnectedError()
@@ -821,9 +899,36 @@ class QdrantRecipeManager:
             for v in vectors
         ]
         resp = self.client.query_batch_points(collection_name=collection, requests=requests)
-        out: list[list[dict[str, Any]]] = []
-        for r in resp:
-            out.append([{"recipe_id": int(p.id), "score": float(p.score)} for p in r.points])
-        return out
+        return resp
+    
+    async def async_query_batch(
+        self,
+        vectors: list[list[float]],
+        collection_name: str,
+        using: str,
+        limit: int = 30,
+        score_threshold: float = 0.0,
+    ) -> list[QueryResponse]:
+        """
+        Асинхронный Batch kNN по коллекции.
+        Возвращает на каждый query-вектор список: [QueryResponse, ...]
+        """
+        if not self.async_client:
+            raise QdrantNotConnectedError()
+
+        collection = self.collections.get(collection_name)
+
+        requests = [
+            QueryRequest(
+                query=v,
+                using=using,
+                limit=limit,
+                score_threshold=score_threshold,
+                with_payload=False,
+            )
+            for v in vectors
+        ]
+        resp = await self.async_client.query_batch_points(collection_name=collection, requests=requests)
+        return resp
 
 
