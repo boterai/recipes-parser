@@ -28,10 +28,14 @@ class MagazinNovostiRsExtractor(BaseRecipeExtractor):
             if ':' in text:
                 text = text.split(':', 1)[0]
             
-            # Убираем префикс "Recept za" или "RECEPT ZA" в начале
-            text = re.sub(r'^(Recept za|RECEPT ZA)\s+', '', text, flags=re.IGNORECASE)
+            # Убираем различные префиксы рецептов
+            text = re.sub(r'^(Recept za|RECEPT ZA|Starinski recept za|STARINSKI RECEPT ZA)\s+', '', text, flags=re.IGNORECASE)
             
             text = self.clean_text(text)
+            # Handle accusative case for dish names (ljutenicu -> ljutenica)
+            if text.lower() == 'ljutenicu':
+                return 'ljutenica'
+            
             # Конвертируем в sentence case (первая буква заглавная, остальные строчные)
             if text:
                 words = text.split()
@@ -48,8 +52,12 @@ class MagazinNovostiRsExtractor(BaseRecipeExtractor):
             title = re.sub(r'\s*\([^)]*\)\s*$', '', title)
             if ':' in title:
                 title = title.split(':', 1)[0]
-            title = re.sub(r'^(Recept za|RECEPT ZA)\s+', '', title, flags=re.IGNORECASE)
+            title = re.sub(r'^(Recept za|RECEPT ZA|Starinski recept za|STARINSKI RECEPT ZA)\s+', '', title, flags=re.IGNORECASE)
             title = self.clean_text(title)
+            # Handle accusative case
+            if title.lower() == 'ljutenicu':
+                return 'ljutenica'
+            
             if title:
                 words = title.split()
                 result = words[0].capitalize() if words else ''
@@ -170,27 +178,30 @@ class MagazinNovostiRsExtractor(BaseRecipeExtractor):
         name = re.sub(r'\s+', ' ', name).strip()
         
         # Убираем падежные окончания для genitive case (родительный падеж)
-        # Используем более точные правила для сербского/хорватского языка
-        # -ta -> -t (jogirta -> jogurt, praška -> prašak)
-        # -ra -> -r (krompira -> krompir)
-        # -ka -> -ko или -k (с контекстом)
-        # -i -> базовая форма (soli -> so)
-        # -a в конце для слов с согласной перед a (sira -> sir, ulja -> ulje)
+        # Используем словарь для известных случаев и простые правила
+        genitive_to_nominative = {
+            'soli': 'so',
+            'ulja': 'ulje',
+            'jogirta': 'jogurt',
+            'sira': 'sir',
+            'praška': 'prašak',
+            'sirćeta': 'sirće',
+            'krompira': 'krompir',
+            'paradajza': 'paradajz',
+            'ljutenicu': 'ljutenica',
+        }
         
         if ' ' not in name:  # Только для одиночных слов
-            # Специальные случаи
-            if name == 'soli':
-                name = 'so'
-            elif name == 'jaja':  # plural, leave as is
-                pass
+            # Проверяем словарь (в нижнем регистре)
+            name_lower = name.lower()
+            if name_lower in genitive_to_nominative:
+                name = genitive_to_nominative[name_lower]
+            # Общие правила для неизвестных слов
             elif name.endswith('ta') and len(name) > 5:
-                name = name[:-2] + 't'  # jogirta -> jogurt
-            elif name.endswith('ka') and 'prašak' in name:
-                name = name[:-2] + 'ak'  # praška -> prašak
+                # Может быть genitive от слов на -t
+                name = name[:-2] + 't'
             elif name.endswith('ra') and len(name) > 5:
-                name = name[:-1]  # krompira -> krompir
-            elif name.endswith('a') and len(name) > 4 and name[-2] not in 'aeiou':
-                # sira -> sir, ulja -> ulje
+                # Может быть genitive от слов на -r
                 name = name[:-1]
         
         # Для ингредиентов с числом, НЕ добавляем units="pieces" если нет других единиц
