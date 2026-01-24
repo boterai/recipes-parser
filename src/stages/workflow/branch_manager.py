@@ -86,7 +86,7 @@ class BranchManager:
         try:
             try:
                 self._run_git_command(['git', 'checkout', branch])
-                self._run_git_command(['git', 'pull', 'origin', branch]) # обновляем ветку после переключения на случай изменений копилотом
+                self._run_git_command(['git', 'pull', '--rebase', 'origin', branch]) # обновляем ветку после переключения на случай изменений копилотом
             except Exception:
                 self._run_git_command(['git', 'fetch', 'origin'])
                 self._run_git_command(['git', 'checkout', branch])
