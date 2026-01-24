@@ -283,6 +283,7 @@ class CreativaboxComExtractor(BaseRecipeExtractor):
         # Флаг для определения, находимся ли в секции приготовления
         in_instructions_section = False
         found_sastojci = False
+        found_priprema = False
         
         for p in p_tags:
             text = p.get_text(strip=True)
@@ -292,9 +293,10 @@ class CreativaboxComExtractor(BaseRecipeExtractor):
                 found_sastojci = True
                 continue
             
-            # Начало секции приготовления
+            # Начало секции приготовления - ЯВНО ищем "Priprema:"
             if text.lower() in ['priprema:', 'priprema']:
                 in_instructions_section = True
+                found_priprema = True
                 continue
             
             # Конец секции инструкций (начало советов)
@@ -305,19 +307,36 @@ class CreativaboxComExtractor(BaseRecipeExtractor):
             if 'creativabox' in text.lower() or 'izvor:' in text.lower() or len(text) > 500:
                 break
             
-            # Если нашли SASTOJCI, но нет явного "Priprema:", 
-            # то следующий параграф после ингредиентов - это инструкции
-            if found_sastojci and not in_instructions_section:
-                # Пропускаем короткие параграфы и заголовки
-                if len(text) > 20 and not re.match(r'^\d+\s*(g|ml|kg)', text):
-                    in_instructions_section = True
-            
-            # Если мы в секции приготовления, добавляем инструкцию
-            if in_instructions_section and text and len(text) > 5:
+            # Если нашли SASTOJCI и есть явный заголовок Priprema, 
+            # то только после него добавляем инструкции
+            if found_priprema and in_instructions_section:
+                # Пропускаем короткие параграфы
+                if len(text) < 10:
+                    continue
                 # Пропускаем параграфы, похожие на ингредиенты
-                if re.match(r'^\d+\s*(g|ml|kg|kašik)', text, re.I):
+                # Улучшенный паттерн: цифра + единица измерения
+                if re.match(r'^\d+\s*(g|ml|kg|l|kašik[ea]?|kašičic[ea]?|kesic[ea]?)\s', text, re.I):
+                    continue
+                # Также пропускаем ингредиенты с (za ...)
+                if re.search(r'\(za\s+\w+\)', text, re.I) and len(text) < 50:
                     continue
                 instructions.append(self.clean_text(text))
+            # Если нашли SASTOJCI, но нет явного "Priprema:", 
+            # то следующий значимый параграф - это инструкции
+            elif found_sastojci and not found_priprema and not in_instructions_section:
+                # Пропускаем короткие параграфы и ингредиенты
+                # Пропускаем все, что похоже на ингредиент:
+                # - начинается с числа
+                # - содержит (za ...)
+                is_ingredient = (
+                    re.match(r'^\d+\s*(g|ml|kg|kašik|kesic)', text, re.I) or
+                    (re.search(r'\(za\s+\w+\)', text, re.I) and len(text) < 50) or
+                    (re.search(r'\(.*\)', text) and len(text) < 50)
+                )
+                
+                if len(text) > 20 and not is_ingredient:
+                    in_instructions_section = True
+                    instructions.append(self.clean_text(text))
         
         return ' '.join(instructions) if instructions else None
     
@@ -430,12 +449,17 @@ class CreativaboxComExtractor(BaseRecipeExtractor):
             
             text = p.get_text(strip=True)
             
-            # Начало секции советов
+            # Начало секции советов - ПРОВЕРЯЕМ ПЕРВЫМ делом
             if re.match(r'^saveti|napomene|tips|savet', text, re.I):
                 in_notes_section = True
-                # Если это заголовок с двоеточием или короткий, пропускаем
-                if len(text) < 50 or text.endswith(':'):
+                # Если это заголовок (заканчивается двоеточием ИЛИ содержит слово "saveti" в начале),
+                # пропускаем его и ждем следующий параграф
+                if text.endswith(':') or re.match(r'^saveti\s+za\s+', text, re.I):
                     continue
+            
+            # Если мы еще не в секции советов, пропускаем дальнейшую обработку
+            if not in_notes_section:
+                continue
             
             # Пропускаем параграфы с информацией о сайте
             if 'creativabox' in text.lower() or 'consent' in text.lower():
@@ -446,7 +470,7 @@ class CreativaboxComExtractor(BaseRecipeExtractor):
                 break
             
             # Если мы в секции советов, добавляем заметку
-            if in_notes_section and text and len(text) > 10:
+            if text and len(text) > 10:
                 # Убираем фразы типа "Uživajte!", которые часто в конце
                 if re.match(r'^(uživajte|prijatno)', text, re.I):
                     continue
@@ -471,12 +495,13 @@ class CreativaboxComExtractor(BaseRecipeExtractor):
                         if sent and len(sent) > 10:
                             notes.append(sent)
                 
-                # Берем только первые 2 релевантных предложения
-                if len(notes) >= 2:
+                # Берем только первые 3 релевантных заметки (обычно это все советы)
+                if len(notes) >= 3:
                     break
         
         if notes:
-            result = ' '.join(notes[:2])
+            # Берем максимум 3 заметки
+            result = ' '.join(notes[:3])
             # Добавляем точку в конец, если её нет
             if not result.endswith('.'):
                 result += '.'
