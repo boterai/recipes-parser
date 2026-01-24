@@ -183,4 +183,3 @@ class CopilotWorkflow:
 if __name__ == "__main__":
     workflow = CopilotWorkflow()
     workflow.check_review_requested_prs()
-    titles = [['Add recipe parser for xrysoskoufaki.gr', 'Add parser for mr-m.co.il Hebrew recipe site', 'Add fooded.co recipe parser', 'Add kokaihop.se recipe parser', 'Add parser for oblizniprste.si recipe website', 'Add foodlife.gr recipe parser with Greek language support', 'Add polishfeast.com recipe parser', 'Add aniagotuje.pl recipe parser', 'Add bosanskikuhar_ba recipe extractor', 'Add madebykristina.cz recipe parser', 'Implement recipe parser for znam.si', 'Add parser for toprecepty.cz recipe extraction']]
