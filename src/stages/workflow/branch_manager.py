@@ -85,8 +85,8 @@ class BranchManager:
         branch_errors = []
         try:
             try:
-                self._run_git_command(['git', 'pull', 'origin', branch]) # обновляем ветку перед переключением (необходимо если ветка еще не создавалась)
                 self._run_git_command(['git', 'checkout', branch])
+                self._run_git_command(['git', 'pull', 'origin', branch]) # обновляем ветку после переключения на случай изменений копилотом
             except Exception:
                 self._run_git_command(['git', 'fetch', 'origin'])
                 self._run_git_command(['git', 'checkout', branch])
