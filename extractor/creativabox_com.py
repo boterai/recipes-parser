@@ -110,42 +110,51 @@ class CreativaboxComExtractor(BaseRecipeExtractor):
         # Находим все параграфы
         p_tags = self.soup.find_all('p')
         
-        # Проверяем, есть ли параграф с "SASTOJCI:" в одну строку
+        # Проверяем, есть ли параграф с "SASTOJCI:" в одну строку (с ингредиентами)
         for p in p_tags:
-            text = p.get_text(strip=True)
-            if re.match(r'^sastojci:', text, re.I):
-                # Извлекаем ингредиенты из одного параграфа с <br/> тегами
-                # Заменяем <br/> на новые строки для правильного разделения
-                for br in p.find_all('br'):
-                    br.replace_with('\n')
-                
-                # Теперь получаем текст с новыми строками
-                text = p.get_text()
+            # Используем separator='\n' для get_text чтобы сохранить разделение по br
+            text_with_lines = p.get_text(separator='\n', strip=True)
+            
+            # Проверяем, начинается ли с "Sastojci" и содержит ли что-то после
+            if re.match(r'^sastojci', text_with_lines, re.I):
                 # Убираем заголовок "SASTOJCI:"
-                text = re.sub(r'^sastojci:\s*', '', text, flags=re.I)
-                # Разделяем по новым строкам
-                ingredient_lines = text.split('\n')
+                text_cleaned = re.sub(r'^sastojci:?\s*', '', text_with_lines, flags=re.I).strip()
                 
-                for line in ingredient_lines:
-                    line = line.strip()
-                    if line:
-                        parsed = self.parse_ingredient(line)
-                        if parsed:
-                            ingredients.append(parsed)
+                # Проверяем, остались ли реальные ингредиенты (не просто подзаголовок)
+                # Ингредиенты обычно начинаются с цифры или содержат несколько строк
+                lines_after = [l.strip() for l in text_cleaned.split('\n') if l.strip()]
                 
-                return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
+                # Если есть хотя бы одна строка с цифрой, это ингредиенты
+                has_ingredient = any(any(c.isdigit() for c in line) for line in lines_after)
+                
+                if text_cleaned and has_ingredient:
+                    # Разделяем по новым строкам
+                    ingredient_lines = text_cleaned.split('\n')
+                    
+                    for line in ingredient_lines:
+                        line = line.strip()
+                        if line and any(c.isdigit() for c in line):  # Только строки с цифрами
+                            parsed = self.parse_ingredient(line)
+                            if parsed:
+                                ingredients.append(parsed)
+                    
+                    return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
+                # Если текст пустой или это просто подзаголовок, продолжаем к отдельным параграфам
+                break
         
-        # Если не нашли в одном параграфе, ищем отдельные параграфы
+        # Ищем отдельные параграфы с ингредиентами
         # Флаг для определения, находимся ли в секции ингредиентов
         in_ingredients_section = False
         
         for p in p_tags:
             text = p.get_text(strip=True)
             
-            # Начало секции ингредиентов
-            if text.lower() == 'sastojci':
+            # Начало секции ингредиентов - используем startswith для захвата случаев с подзаголовками
+            if text.lower().startswith('sastojci'):
                 in_ingredients_section = True
-                continue
+                # Если это просто заголовок (одна строка "Sastojci"), пропускаем
+                if text.lower() == 'sastojci' or '\n' in text:
+                    continue
             
             # Конец секции ингредиентов (начало приготовления)
             if text.lower() in ['priprema:', 'priprema']:
@@ -153,6 +162,10 @@ class CreativaboxComExtractor(BaseRecipeExtractor):
             
             # Если мы в секции ингредиентов, парсим ингредиент
             if in_ingredients_section and text:
+                # Пропускаем подзаголовки (короткие фразы без цифр)
+                if len(text) < 40 and not any(c.isdigit() for c in text):
+                    continue
+                
                 parsed = self.parse_ingredient(text)
                 if parsed:
                     ingredients.append(parsed)
@@ -443,11 +456,8 @@ class CreativaboxComExtractor(BaseRecipeExtractor):
         in_notes_section = False
         
         for p in p_tags:
-            # Заменяем <br/> на новые строки для правильного разделения
-            for br in p.find_all('br'):
-                br.replace_with('\n')
-            
-            text = p.get_text(strip=True)
+            # Используем separator='\n' для get_text чтобы сохранить разделение по br
+            text = p.get_text(separator='\n', strip=True)
             
             # Начало секции советов - ПРОВЕРЯЕМ ПЕРВЫМ делом
             if re.match(r'^saveti|napomene|tips|savet', text, re.I):
