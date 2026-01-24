@@ -110,7 +110,7 @@ class NdtvInExtractor(BaseRecipeExtractor):
         if og_desc and og_desc.get('content'):
             desc = og_desc['content']
             desc = re.sub(r'^[^:]+:\s*', '', desc)
-            return self.clean_text(og_desc['content'])
+            return self.clean_text(desc)
         
         return None
     
