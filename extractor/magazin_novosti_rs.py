@@ -140,22 +140,26 @@ class MagazinNovostiRsExtractor(BaseRecipeExtractor):
         
         amount_str, unit, name = match.groups()
         
-        # Обработка количества
+        # Process amount
         amount = None
         if amount_str:
             amount_str = amount_str.strip()
-            # Обработка дробей типа "1/2" или "0.5"
+            # Process fractions like "1/2" or "0.5"
             if '/' in amount_str:
-                parts = amount_str.split()
-                total = 0
-                for part in parts:
-                    if '/' in part:
-                        num, denom = part.split('/')
-                        total += float(num) / float(denom)
-                    else:
-                        total += float(part)
-                # Keep as float if it's fractional, otherwise convert to int
-                amount = int(total) if total == int(total) else total
+                try:
+                    parts = amount_str.split()
+                    total = 0
+                    for part in parts:
+                        if '/' in part:
+                            num, denom = part.split('/')
+                            total += float(num) / float(denom)
+                        else:
+                            total += float(part)
+                    # Keep as float if fractional, otherwise convert to int
+                    amount = int(total) if total == int(total) else total
+                except (ValueError, ZeroDivisionError):
+                    # If parsing fails, leave amount as None
+                    amount = None
             else:
                 amount_str = amount_str.replace(',', '.')
                 try:
@@ -177,8 +181,8 @@ class MagazinNovostiRsExtractor(BaseRecipeExtractor):
         name = re.sub(r'\b(po ukusu|po potrebi|opciono)\b', '', name, flags=re.IGNORECASE)
         name = re.sub(r'\s+', ' ', name).strip()
         
-        # Убираем падежные окончания для genitive case (родительный падеж)
-        # Используем словарь для известных случаев и простые правила
+        # Handle genitive case (genitive/родительный падеж) transformations
+        # Use dictionary for known cases and simple rules for unknown words
         genitive_to_nominative = {
             'soli': 'so',
             'ulja': 'ulje',
@@ -191,17 +195,18 @@ class MagazinNovostiRsExtractor(BaseRecipeExtractor):
             'ljutenicu': 'ljutenica',
         }
         
-        if ' ' not in name:  # Только для одиночных слов
-            # Проверяем словарь (в нижнем регистре)
+        # Only for single words (not phrases)
+        if ' ' not in name:
+            # Check dictionary (case-insensitive)
             name_lower = name.lower()
             if name_lower in genitive_to_nominative:
                 name = genitive_to_nominative[name_lower]
-            # Общие правила для неизвестных слов
+            # General rules for unknown words
             elif name.endswith('ta') and len(name) > 5:
-                # Может быть genitive от слов на -t
+                # Might be genitive of words ending in -t
                 name = name[:-2] + 't'
             elif name.endswith('ra') and len(name) > 5:
-                # Может быть genitive от слов на -r
+                # Might be genitive of words ending in -r
                 name = name[:-1]
         
         # Для ингредиентов с числом, НЕ добавляем units="pieces" если нет других единиц
@@ -350,7 +355,7 @@ class MagazinNovostiRsExtractor(BaseRecipeExtractor):
                     if tag_text:
                         tags_list.append(self.clean_text(tag_text))
         
-        # Возвращаем как строку через запятую (БЕЗ пробела после запятой)
+        # Return as comma-separated string (WITHOUT space after comma, per reference format)
         return ','.join(tags_list) if tags_list else None
     
     def extract_image_urls(self) -> Optional[str]:
