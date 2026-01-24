@@ -56,8 +56,12 @@ class FileValidationResult:
         for rec in gpt_result.get('fix_recommendations', []):
             fix_recs.append(FieldValidation(**rec))
         
-        status = 'system_error' if gpt_result.get('system_error') else \
-                 ('passed' if gpt_result.get('is_valid') else 'failed')
+        if gpt_result.get('system_error'):
+            status = 'system_error' 
+        elif gpt_result.get('is_valid'):
+            status = 'passed'
+        else:
+            status = 'failed'
         
         return cls(
             file=filepath,

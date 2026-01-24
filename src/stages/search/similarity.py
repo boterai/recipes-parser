@@ -374,15 +374,17 @@ Return ONLY JSON array of IDs representing similar recipes."""
         logger.info(f"Saved clusters to file {filepath}.")
 
 if __name__ == "__main__":
+
+    build_type = "ingredients"  # "image", "full", "ingredients"
     ss = SimilaritySearcher(params=ClusterParams(
                     limit=30,
                     score_threshold=0.94,
                     scroll_batch=2000,
                     query_batch=128
-                ), build_type="ingredients")
+                ), build_type=build_type)
     
-    filepath = f"recipe_clusters/{ss.params.collection_name}_clusters{ss.params.score_threshold}.txt"
-    dsu_filepath = f"recipe_clusters/{ss.params.collection_name}_clusters{ss.params.score_threshold}_dsu_state.json"
+    filepath = f"recipe_clusters/{build_type}_clusters{ss.params.score_threshold}.txt"
+    dsu_filepath = f"recipe_clusters/{build_type}_clusters{ss.params.score_threshold}_dsu_state.json"
 
     ss.load_dsu_state(dsu_filepath)
     while True:
