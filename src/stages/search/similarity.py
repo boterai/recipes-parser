@@ -5,8 +5,9 @@ import json
 import logging
 import random
 from dataclasses import dataclass
-from typing import Optional, Literal
+from typing import Optional, Literal, Any
 import os
+import asyncio
 
 if __name__ == "__main__":
     import sys
@@ -62,75 +63,6 @@ def _build_clusters_from_dsu(dsu: _DSU, min_cluster_size: int) -> list[list[int]
     clusters.sort(key=lambda c: (-len(c), c[0]))
     return clusters
 
-
-def _apply_sampling_and_limits(
-    ids: list[int],
-    *,
-    rng: random.Random,
-    processed: int,
-    max_recipes: int | None,
-    sample_per_scroll_batch: int | None,
-) -> list[int]:
-    if sample_per_scroll_batch is not None and len(ids) > sample_per_scroll_batch:
-        ids = rng.sample(ids, sample_per_scroll_batch)
-
-    if max_recipes is None:
-        return ids
-
-    remaining = max_recipes - processed
-    if remaining <= 0:
-        return []
-    if len(ids) > remaining:
-        ids = ids[:remaining]
-    return ids
-
-
-def _normalize_mv_weights(
-    components: list[str],
-    component_weights: dict[str, float],
-) -> tuple[list[str], dict[str, float]]:
-    components = [c for c in components if c]
-    if not components:
-        raise ValueError("components is empty")
-
-    if not component_weights:
-        w = 1.0 / float(len(components))
-        return components, dict.fromkeys(components, w)
-
-    weights = {c: float(component_weights.get(c, 0.0)) for c in components}
-    weights = {c: w for c, w in weights.items() if w > 0.0}
-    if not weights:
-        raise ValueError("component_weights resulted in all-zero weights")
-    return list(weights.keys()), weights
-
-
-def _merge_component_hits(
-    *,
-    aggregated: dict[int, dict[int, float]],
-    src_ids: list[int],
-    hits_per_src: list[list[dict[str, float]]],
-    weight: float,
-) -> None:
-    for sid, hits in zip(src_ids, hits_per_src):
-        score_map = aggregated.get(sid)
-        if score_map is None:
-            continue
-        for h in hits:
-            dst_id = int(h["recipe_id"])
-            if dst_id == sid:
-                continue
-            score_map[dst_id] = score_map.get(dst_id, 0.0) + float(h["score"]) * weight
-
-
-def _union_top_neighbors(dsu: _DSU, aggregated: dict[int, dict[int, float]], limit: int) -> None:
-    for sid, score_map in aggregated.items():
-        if not score_map:
-            continue
-        top = sorted(score_map.items(), key=lambda x: x[1], reverse=True)[:limit]
-        for dst_id, _ in top:
-            dsu.union(int(sid), int(dst_id))
-
-
 @dataclass()
 class ClusterParams:
     limit: int = 25               # top-K соседей на рецепт
@@ -150,20 +82,31 @@ class ClusterParams:
     sample_seed: int = 42                       # seed для воспроизводимой выборки
 
     union_top_k: int = 10        # сколько соседей юнифицировать в DSU
+    max_async_tasks: int = 10    # максимальное число одновременных асинхронных задач
     log_every: int = 5000        # логировать прогресс каждые N обработанных рецептов
 
 
 class SimilaritySearcher:
-    def __init__(self):
+    def __init__(self, params: ClusterParams = None, build_type: Literal["image", "full", "ingredients"] = "full"):
         self.qd_collection_prefix = "recipes"
         self.gpt_client: GPTClient = GPTClient()
         self.similarity_repository = RecipeSimilarity()
-        self.clickhouse_manager = ClickHouseManager()
-        if not self.clickhouse_manager.connect(): # перенести куда-нибудь не сюда или не использвоать тут clickhuouse
-            raise RuntimeError("Failed to connect to ClickHouse")
+        self._clickhouse_manager = None
 
         self.last_id: int | None = None
         self.dsu: _DSU = _DSU()
+        self.params: ClusterParams = params
+        self.rng = random.Random(params.sample_seed)
+        self.set_params(build_type=build_type)
+
+    @property
+    def clickhouse_manager(self) -> ClickHouseManager: # layz initialization
+        if not self._clickhouse_manager:
+            self._clickhouse_manager = ClickHouseManager()
+            if not self._clickhouse_manager.connect():
+                self._clickhouse_manager = None
+                raise RuntimeError("Failed to connect to ClickHouse")
+        return self._clickhouse_manager
 
     def save_dsu_state(self, filepath: str) -> None:
         """Сохраняет состояние DSU в файл."""
@@ -191,37 +134,59 @@ class SimilaritySearcher:
         self.last_id = state.get("last_id")
         logger.info(f"Loaded DSU state from {filepath} (last_id={self.last_id}, nodes={len(self.dsu.parent)})")
 
+    async def query_batch_async(self, q:QdrantRecipeManager, vectors: list[float]) -> Optional[list[int]]:
+        for attempt in range(3):
+            try:
+                response = await q.async_query_batch(
+                    collection_name=self.params.collection_name,
+                    using=self.params.using,
+                    vectors=vectors,
+                    limit=self.params.limit,
+                    score_threshold=self.params.score_threshold,
+                )
+                batch_hits: list[list[int]] = []
+                for r in response:
+                    batch_hits.append([int(p.id) for p in r.points])
+                return batch_hits
+            except TimeoutError:
+                if attempt == 2:
+                    raise
+                # простой backoff + jitter
+                delay = (2 ** attempt) + self.rng.random()
+                logger.warning("Timeout in query_batch; retry %d; sleep %.2fs", attempt + 1, delay)
+                await asyncio.sleep(delay)
+        return None
 
-    def build_clusters(self,params: ClusterParams, reuse_dsu: bool = True,
-    ) -> list[list[int]]:
+    async def build_clusters_async(self, reuse_dsu: bool = True) -> list[list[int]]:
         """
         Кластеры по коллекциям из Qdrant.
         Предпосылка: point_id в Qdrant == pages.id, и named vector = params.using
         """
         q = QdrantRecipeManager(collection_prefix=self.qd_collection_prefix)
-        q.connect(timeout=210.0) # увеличенный таймаут для долгих операций
+        await q.async_connect(connect_timeout=210) # увеличенный таймаут для долгих операций
         
         if not reuse_dsu or self.dsu is None:
             self.dsu = _DSU()
 
         processed = 0
-        rng = random.Random(params.sample_seed)
 
-        if params.collection_name is None:
+        if self.params.collection_name is None:
             logger.error("params.collection_name is None")
             return []
         
-        if params.using is None:
+        if self.params.using is None:
             logger.error("params.using is None")
             return []
         
-        if params.last_point_id is not None:
-            self.last_id = params.last_point_id
+        if self.params.last_point_id is not None:
+            self.last_id = self.params.last_point_id
 
-        for vec_map in q.iter_points_with_vectors(
-            collection_name=params.collection_name,
-            batch_size=params.scroll_batch,
-            using=params.using,
+        sem = asyncio.Semaphore(self.params.max_async_tasks)
+
+        async for vec_map in q.async_iter_points_with_vectors(
+            collection_name=self.params.collection_name,
+            batch_size=self.params.scroll_batch,
+            using=self.params.using,
             last_point_id=self.last_id
         ):
             ids = list(vec_map)
@@ -230,31 +195,20 @@ class SimilaritySearcher:
                 self.last_id = None
                 logger.info("No more ids to process, stopping.")
                 break
-            
-            for i in range(0, len(ids), params.query_batch):
-                sub_ids = ids[i:i + params.query_batch]
+
+            async def run_one(sub_ids: list[int], semaphore) -> tuple[list[int], list[list[int]]]:
                 vectors = [vec_map[rid] for rid in sub_ids]
+                async with semaphore:
+                    batch_hits = await self.query_batch_async(q, vectors)
+                return sub_ids, batch_hits
 
-                batch_hits = None
-                for attempt in range(3):
-                    try:
-                        batch_hits = q.query_batch(
-                            collection_name=params.collection_name,
-                            using=params.using,
-                            vectors=vectors,
-                            limit=params.limit,
-                            score_threshold=params.score_threshold,
-                        )
-                        break
-                    except TimeoutError:
-                        if attempt == 2:
-                            raise
-                        # простой backoff + jitter
-                        delay = (2 ** attempt) + rng.random()
-                        logger.warning("Timeout in query_batch; retry %d; sleep %.2fs", attempt + 1, delay)
-                        import time
-                        time.sleep(delay)
+            tasks: list[asyncio.Task[tuple[list[int], list[list[int]]]]] = []
+            for i in range(0, len(ids), self.params.query_batch):
+                sub_ids = ids[i:i + self.params.query_batch]
+                tasks.append(asyncio.create_task(run_one(sub_ids, sem)))
 
+            for done in asyncio.as_completed(tasks):
+                sub_ids, batch_hits = await done
                 if not batch_hits:
                     continue
 
@@ -262,43 +216,42 @@ class SimilaritySearcher:
                 for src_id, hits in zip(sub_ids, batch_hits):
                     if not hits:
                         continue
-                    # hits already sorted by score in Qdrant, но на всякий
-                    top_hits = hits[:params.union_top_k] if params.union_top_k else hits
-                    for h in top_hits:
-                        dst_id = int(h["recipe_id"])
+                    
+                    top_hits = hits[:self.params.union_top_k] if self.params.union_top_k else hits
+                    for dst_id in top_hits:
                         if dst_id != src_id:
                             self.dsu.union(int(src_id), dst_id)
 
                 processed += len(sub_ids)
-                if params.max_recipes is not None and processed >= params.max_recipes:
+                if self.params.max_recipes is not None and processed >= self.params.max_recipes:
+                    for task in tasks:
+                        task.cancel()
                     break
 
             self.last_id = max(ids)
 
-            if params.log_every and processed % params.log_every < params.query_batch:
+            if self.params.log_every and processed % self.params.log_every < self.params.query_batch:
                 logger.info("Processed %d recipes... (last_id=%s)", processed, self.last_id)
 
-            if params.max_recipes is not None and processed >= params.max_recipes:
+            if self.params.max_recipes is not None and processed >= self.params.max_recipes:
                 break
 
-        return _build_clusters_from_dsu(self.dsu, params.min_cluster_size)
+        return _build_clusters_from_dsu(self.dsu, self.params.min_cluster_size)
     
-    def build_clusters_from_collection(self, 
-                                        params: ClusterParams = None, 
-                                        build_type: Literal["image", "full", "ingredients"] = "full") -> list[list[int]]:
+    def set_params(self, build_type: Literal["image", "full", "ingredients"] = "full"):
         """Кластеры по ингредиентам из Qdrant ingredients-коллекции."""
-        if params is None:
-            params = ClusterParams()
+        if self.params is None:
+            self.params = ClusterParams()
         if build_type == "image":
-            params.collection_name = "images"
-            params.using = "image"
+            self.params.collection_name = "images"
+            self.params.using = "image"
         elif build_type == "ingredients":
-            params.collection_name = "mv"
-            params.using = "ingredients"
+            self.params.collection_name = "mv"
+            self.params.using = "ingredients"
         else:  # full
-            params.collection_name = "full"
-            params.using = "dense"
-        return self.build_clusters(params=params)
+            self.params.collection_name = "full"
+            self.params.using = "dense"
+        
     
     def load_clusters_from_file(self, filepath: str) -> list[list[int]]:
         """Загружает кластеры из файла в формате JSON."""
@@ -421,22 +374,20 @@ Return ONLY JSON array of IDs representing similar recipes."""
         logger.info(f"Saved clusters to file {filepath}.")
 
 if __name__ == "__main__":
-    filepath = "recipe_clusters/ingredients_clusters94_batch.txt"
-    dsu_filepath = "recipe_clusters/ingredients_clusters94_dsu_state.json"
-    ss = SimilaritySearcher()
-
-    ss.load_dsu_state(dsu_filepath)
-    while True:
-        try:
-            clusters = ss.build_clusters_from_collection(
-                params=ClusterParams(
+    ss = SimilaritySearcher(params=ClusterParams(
                     limit=30,
                     score_threshold=0.94,
                     scroll_batch=2000,
                     query_batch=128
-                ),
-                build_type="ingredients"
-            )
+                ), build_type="ingredients")
+    
+    filepath = f"recipe_clusters/{ss.params.collection_name}_clusters{ss.params.score_threshold}.txt"
+    dsu_filepath = f"recipe_clusters/{ss.params.collection_name}_clusters{ss.params.score_threshold}_dsu_state.json"
+
+    ss.load_dsu_state(dsu_filepath)
+    while True:
+        try:
+            clusters = asyncio.run(ss.build_clusters_async())
             ss.save_dsu_state(dsu_filepath)
             print(f"Total clusters found: {len(clusters)}")
             print("Last processed ID:", ss.last_id)
