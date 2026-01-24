@@ -54,37 +54,32 @@ class NdtvInExtractor(BaseRecipeExtractor):
     
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
-        # Ищем в заголовке h1 и извлекаем только название блюда
+        # Сначала пробуем извлечь из H1 (предпочитаем Hindi название)
         h1 = self.soup.find('h1', class_='sp-ttl')
         if h1:
             title = h1.get_text()
-            # Пытаемся извлечь название блюда из длинного заголовка
-            # Паттерн: "... बनाएं स्वादिष्ट <НАЗВАНИЕ> ..."
-            match = re.search(r'बनाएं\s+(?:स्वादिष्ट\s+)?(.+?)\s*(?:,|$)', title)
-            if match:
-                dish = match.group(1).strip()
-                # Очищаем от лишних слов
-                dish = re.sub(r'\s*,.*$', '', dish)
-                dish = re.sub(r'\s+नोट.*$', '', dish, flags=re.IGNORECASE)
-                return self.clean_text(dish)
             
-            # Паттерн 2: просто ищем название блюда в тексте
-            match = re.search(r'([\u0900-\u097F\s]+(?:हलवा|उपमा|दाल|रेसिपी))', title)
+            # Пробуем найти название блюда в Hindi (заканчивается на ключевые слова)
+            match = re.search(r'([\u0900-\u097F\s]+(?:उपमा|हलवा|दाल|करी))', title)
             if match:
                 dish = match.group(1).strip()
-                return self.clean_text(dish)
+                # Очищаем от лишних слов в начале
+                dish = re.sub(r'^.*?(?:बनाएं|करें)\s+(?:स्वादिष्ट\s+)?', '', dish)
+                dish = self.clean_text(dish)
+                if dish and len(dish) < 50:
+                    return dish
         
-        # Альтернативно - из meta тега og:title
-        og_title = self.soup.find('meta', property='og:title')
-        if og_title and og_title.get('content'):
-            title = og_title['content']
-            # Пытаемся извлечь название
-            match = re.search(r'बनाएं\s+(?:स्वादिष्ट\s+)?(.+?)\s*(?:,|$)', title)
-            if match:
-                dish = match.group(1).strip()
-                dish = re.sub(r'\s*,.*$', '', dish)
-                dish = re.sub(r'\s+नोट.*$', '', dish, flags=re.IGNORECASE)
-                return self.clean_text(dish)
+        # Если не нашли в H1, пробуем из meta keywords
+        meta_keywords = self.soup.find('meta', {'name': 'keywords'})
+        if meta_keywords and meta_keywords.get('content'):
+            keywords = meta_keywords['content']
+            first_keyword = keywords.split(',')[0].strip()
+            if first_keyword:
+                # Убираем слова "Recipe", "kaise banaye" и т.д.
+                name = re.sub(r'\s+(Recipe|recipe|kaise banaye)$', '', first_keyword, flags=re.IGNORECASE)
+                name = self.clean_text(name)
+                if name:
+                    return name
         
         return None
     
@@ -234,24 +229,34 @@ class NdtvInExtractor(BaseRecipeExtractor):
     
     def extract_steps(self) -> Optional[str]:
         """Извлечение шагов приготовления"""
-        # Ищем параграф с основными инструкциями
+        # Ищем параграфы с основными инструкциями
         article = self.soup.find('div', class_='sp-cn')
         if not article:
             return None
         
         paragraphs = article.find_all('p')
+        instructions = []
         
         for p in paragraphs:
             text = p.get_text(separator=' ', strip=True)
             text = self.clean_text(text)
             
-            # Ищем параграф начинающийся с инструкций
-            # Обычно начинается с названия блюда + "बनाने के लिए"
+            # Ищем параграфы с инструкциями
+            # Вариант 1: начинается с "... बनाने के लिए सबसे पहले"
             if 'बनाने के लिए सबसे पहले' in text:
-                # Это основной параграф с инструкциями
-                # Убираем disclaimer и лишнее
+                # Это основной параграф с полными инструкциями
                 text = re.sub(r'\([^\)]*अस्वीकरण[^\)]*\)', '', text)
                 return text
+            
+            # Вариант 2: параграфы начинающиеся с "... बनाने के लिए"
+            # Это могут быть отдельные советы, собираем их
+            if text.startswith(('बनाने के लिए', 'उपमा बनाने', 'हलवा बनाने', 'दाल बनाने')):
+                if len(text) > 30:
+                    instructions.append(text)
+        
+        # Если собрали несколько параграфов с советами, объединяем
+        if instructions:
+            return ' '.join(instructions)
         
         return None
     
@@ -292,28 +297,36 @@ class NdtvInExtractor(BaseRecipeExtractor):
     
     def extract_category(self) -> Optional[str]:
         """Извлечение категории"""
-        # Определяем категорию по контексту рецепта
+        # Определяем категорию по контексту рецепта и названию
+        dish_name = self.extract_dish_name()
+        if dish_name:
+            dish_lower = dish_name.lower()
+            # Проверяем название блюда
+            if 'upma' in dish_lower or 'उपमा' in dish_lower:
+                return 'Main Course'
+            elif 'halwa' in dish_lower or 'हलवा' in dish_lower:
+                return 'Dessert'
+        
+        # Если не определили по названию, проверяем контекст
         article = self.soup.find('div', class_='sp-cn')
         if article:
+            # Ищем в заголовках h2, h3
+            headers = article.find_all(['h2', 'h3'])
+            for h in headers:
+                h_text = h.get_text().lower()
+                if 'उपमा' in h_text and 'बनाएं' in h_text:
+                    return 'Main Course'
+                elif 'हलवा' in h_text and 'बनाएं' in h_text:
+                    return 'Dessert'
+            
             text = article.get_text().lower()
             
             # Проверяем ключевые слова для определения категории
-            if 'हलवा' in text or 'मीठा' in text or 'sweet' in text:
+            # Сначала проверяем более специфичные условия
+            if 'उपमा' in text[:500]:  # Upma упоминается в начале
+                return 'Main Course'
+            elif 'हलवा' in text[:500] and ('मीठा' in text[:500] or 'sweet' in text[:500]):
                 return 'Dessert'
-            elif 'उपमा' in text or 'नाश्ता' in text or 'breakfast' in text:
-                return 'Main Course'
-            elif 'करी' in text or 'curry' in text:
-                return 'Main Course'
-            elif 'सलाद' in text or 'salad' in text:
-                return 'Salad'
-        
-        # Если не смогли определить по контексту, проверяем meta
-        meta_section = self.soup.find('meta', {'name': 'section'})
-        if meta_section and meta_section.get('content'):
-            section = meta_section['content']
-            # Не возвращаем "Food" - слишком общее
-            if section and section != 'Food':
-                return self.clean_text(section)
         
         return None
     
@@ -378,7 +391,7 @@ class NdtvInExtractor(BaseRecipeExtractor):
     def extract_tags(self) -> Optional[str]:
         """Извлечение тегов"""
         # Для tags нужно использовать более простую логику
-        # Берем название блюда + категорию + тип кухни
+        # Берем название блюда + тип блюда
         
         dish_name = self.extract_dish_name()
         category = self.extract_category()
@@ -388,22 +401,22 @@ class NdtvInExtractor(BaseRecipeExtractor):
         if dish_name:
             tags.append(dish_name)
         
-        # Определяем тип блюда из контекста
-        article = self.soup.find('div', class_='sp-cn')
-        if article:
-            text = article.get_text().lower()
-            
-            # Определяем категорию по ключевым словам
-            if 'हलवा' in text or 'मीठा' in text or 'sweet' in text.lower():
-                if 'Dessert' not in tags:
-                    tags.append('Dessert')
-            elif 'उपमा' in text or 'नाश्ता' in text:
-                if 'Main Course' not in tags:
-                    tags.append('Main Course')
-        
-        # Добавляем тип кухни
-        if 'indian' not in [t.lower() for t in tags]:
-            tags.append('Indian Sweet')
+        # Определяем тип блюда по категории и контексту
+        if category == 'Dessert':
+            if 'Dessert' not in tags:
+                tags.append('Dessert')
+            if 'Indian Sweet' not in tags:
+                tags.append('Indian Sweet')
+        elif category == 'Main Course':
+            # Для Main Course проверяем, это upma или что-то другое
+            article = self.soup.find('div', class_='sp-cn')
+            if article:
+                text = article.get_text().lower()
+                if 'उपमा' in text[:500]:
+                    # Upma tags
+                    if 'साउथ इंडियन' in text:
+                        tags.append('साउथ इंडियन')
+                    tags.append('नाश्ता')
         
         return ', '.join(tags) if tags else None
     
