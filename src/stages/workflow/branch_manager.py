@@ -141,7 +141,7 @@ class BranchManager:
         """Обновляет текущую ветку с удаленного репозитория."""
         current_branch = self.get_current_branch()
         self._run_git_command(['git', 'pull', '--rebase', 'origin', current_branch])
-        logger.info(f"Текущая ветка {current_branch} обновлена с удаленного репозитория.")
+        logger.info(f"Текущая ветка {current_branch} обновлена из удаленного репозитория.")
 
 if __name__ == '__main__':
     manager = BranchManager()

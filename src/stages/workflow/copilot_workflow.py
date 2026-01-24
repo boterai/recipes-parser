@@ -177,7 +177,7 @@ class CopilotWorkflow:
             try:
                 self.branch_manager.update_current_branch()
             except Exception as e:
-                logger.error(f"Не удалось обновить текущую ветку автоматически: {e}")
+                logger.error(f"Не удалось обновить текущую ветку автоматически: {e}, пожалуйста, выполните git pull вручную.")
             self.clear_preprocessed_data()
 
 if __name__ == "__main__":

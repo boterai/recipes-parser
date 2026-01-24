@@ -263,7 +263,7 @@ class SimilaritySearcher:
                     if not hits:
                         continue
                     # hits already sorted by score in Qdrant, но на всякий
-                    top_hits = sorted(hits, key=lambda h: float(h["score"]), reverse=True)[:params.union_top_k]
+                    top_hits = hits[:params.union_top_k] if params.union_top_k else hits
                     for h in top_hits:
                         dst_id = int(h["recipe_id"])
                         if dst_id != src_id:

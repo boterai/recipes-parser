@@ -45,6 +45,7 @@ class QdrantRecipeManager:
     _instance = None
     _client = None
     _initialized = False
+    _async_client = None
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
@@ -87,6 +88,9 @@ class QdrantRecipeManager:
     def client(self, value: Optional[QdrantClient]):
         """Установка клиента ClickHouse"""
         self._client = value
+
+    async def async_connect(self, retry_attempts: int = 3, retry_delay: float = 2.0, timeout: float = 30.0):
+        pass
         
     def connect(self, retry_attempts: int = 3, retry_delay: float = 2.0, timeout: float = 30.0) -> bool:
         """Установка подключения к Qdrant с повторными попытками
