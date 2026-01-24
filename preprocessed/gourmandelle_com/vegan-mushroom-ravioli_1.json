@@ -1,0 +1,12 @@
+{
+    "dish_name": "Vegan Mushroom Ravioli",
+    "description": "A homemade vegan mushroom ravioli recipe served with a creamy white garlic sauce.",
+    "ingredients": "[{\"name\": \"flour\", \"units\": \"cups\", \"amount\": \"1 ½\"}, {\"name\": \"water\", \"units\": \"cup\", \"amount\": \"½\"}, {\"name\": \"olive oil\", \"units\": \"Tbsps\", \"amount\": \"2\"}, {\"name\": \"sea salt\", \"units\": \"tsp\", \"amount\": \"½\"}, {\"name\": \"button mushrooms\", \"units\": \"cups\", \"amount\": \"4\"}, {\"name\": \"onion\", \"units\": \"unit\", \"amount\": \"1\"}, {\"name\": \"oil\", \"units\": \"Tbsp\", \"amount\": \"1\"}, {\"name\": \"garlic\", \"units\": \"cloves\", \"amount\": \"3\"}, {\"name\": \"fresh thyme\", \"units\": \"sprigs\", \"amount\": \"4\"}, {\"name\": \"nutmeg\", \"units\": \"tsp\", \"amount\": \"½\"}, {\"name\": \"salt and pepper\", \"units\": \"to taste\", \"amount\": null}, {\"name\": \"flour\", \"units\": \"Tbsps\", \"amount\": \"3\"}, {\"name\": \"vegan milk of choice\", \"units\": \"cup\", \"amount\": \"1\"}, {\"name\": \"garlic\", \"units\": \"cloves\", \"amount\": \"5\"}, {\"name\": \"nutritional yeast\", \"units\": \"Tbsps\", \"amount\": \"4\"}, {\"name\": \"sea salt\", \"units\": \"to taste\", \"amount\": null}]",
+    "instructions": "1. Heat the oil in a large pan. Add all the mushroom filling ingredients and saute for 10-15 minutes. 2. Add the flour, water, olive oil and salt into a bowl. Mix well and knead by hand, until it has an elastic texture. 3. Prepare your work surface by cleaning it and dusting it with some flour. 4. Divide the dough into three or four equal portions. Place one portion onto the floured work surface and roll into a large rectangle that’s about 1/8 inch thick. 5. Take one piece of round-shaped dough and add 1-2 tsp of filling on it. Take another piece of dough and put it on top of the first one. Lightly press the margins together. 6. Place each ravioli on a sheet of parchment. 7. Bring a large pot of water to a boil and add ravioli. Cook them until they start floating, about 2-3 minutes. 8. Add all the sauce ingredients into a blender and blend until smooth. 9. Pour the sauce into a pan and cook until it starts to thicken. Serve this over the vegan mushroom ravioli.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "40 minutes",
+    "notes": "You can also make a baked pasta casserole with this! The ravioli freeze well before cooking.",
+    "tags": "vegan, pasta, ravioli, comfort food"
+}

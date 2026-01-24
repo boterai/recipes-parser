@@ -1,0 +1,12 @@
+{
+    "dish_name": "burek",
+    "description": "Tradicionalni bosanski specijalitet sa hrskavim tijestom i sočnim mesnim filom.",
+    "ingredients": "[{\"name\": \"brašna\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"mlake vode\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"soli\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"ulja\", \"units\": \"kašike\", \"amount\": 3}, {\"name\": \"mljevenog mesa\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"veći crveni luk\", \"units\": null, \"amount\": 1}, {\"name\": \"soli\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"bibera\", \"units\": \"kašičice\", \"amount\": 0.5}, {\"name\": \"ulja\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"malo vode\", \"units\": null, \"amount\": null}, {\"name\": \"otopljenog putera\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"ulja\", \"units\": \"ml\", \"amount\": 50}]",
+    "instructions": "Zamijesi tijesto, pripremi fil, razvuci tijesto, nafiluj burek, formiraj i složi, premaži i peci, poslužiti.",
+    "category": "Glavno jelo",
+    "prep_time": "45 minutes",
+    "cook_time": "40 minutes",
+    "total_time": "1 hour 25 minutes",
+    "notes": "Tijesto treba dobro odmoriti. Previše putera i ulja čini burek teškim i masnim.",
+    "tags": "bosanski burek, burek sa mesom, domaći burek recept, tradicionalni recept za burek"
+}
