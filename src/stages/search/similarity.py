@@ -83,7 +83,7 @@ class ClusterParams:
 
     union_top_k: int = 10        # сколько соседей юнифицировать в DSU
     max_async_tasks: int = 10    # максимальное число одновременных асинхронных задач
-    log_every: int = 5000        # логировать прогресс каждые N обработанных рецептов
+    log_every: int = 2000        # логировать и сохранять прогресс каждые N обработанных рецептов
 
 
 class SimilaritySearcher:
@@ -98,6 +98,8 @@ class SimilaritySearcher:
         self.params: ClusterParams = params
         self.rng = random.Random(params.sample_seed)
         self.set_params(build_type=build_type)
+        self.dsu_filename = os.path.join("recipe_clusters", f"dsu_state_{build_type}_{self.params.score_threshold}.json")
+        self.clusters_filename = os.path.join("recipe_clusters", f"{build_type}_clusters_{self.params.score_threshold}.json")
 
     @property
     def clickhouse_manager(self) -> ClickHouseManager: # layz initialization
@@ -108,31 +110,31 @@ class SimilaritySearcher:
                 raise RuntimeError("Failed to connect to ClickHouse")
         return self._clickhouse_manager
 
-    def save_dsu_state(self, filepath: str) -> None:
+    def save_dsu_state(self) -> None:
         """Сохраняет состояние DSU в файл."""
         state = {
             "parent": self.dsu.parent,
             "rank": self.dsu.rank,
             "last_id": self.last_id
         }
-        with open(filepath, 'w') as f:
+        with open(self.dsu_filename, 'w') as f:
             json.dump(state, f, indent=2)
-        logger.info(f"Saved DSU state to {filepath}")
+        logger.info(f"Saved DSU state to {self.dsu_filename} (last_id={self.last_id})")
 
-    def load_dsu_state(self, filepath: str) -> None:
+    def load_dsu_state(self) -> None:
         """Загружает состояние DSU из файла."""
-        if not os.path.exists(filepath):
-            logger.warning(f"DSU state file {filepath} not found, starting fresh")
+        if not os.path.exists(self.dsu_filename):
+            logger.warning(f"DSU state file {self.dsu_filename} not found, starting fresh")
             return
         
-        with open(filepath, 'r') as f:
-            state = json.load(f)
+        with open(self.dsu_filename, 'r') as f:
+            state:dict = json.load(f)
         
         # Восстанавливаем DSU
-        self.dsu.parent = {int(k): int(v) for k, v in state["parent"].items()}
-        self.dsu.rank = {int(k): int(v) for k, v in state["rank"].items()}
+        self.dsu.parent = {int(k): int(v) for k, v in state.get("parent", {}).items()}
+        self.dsu.rank = {int(k): int(v) for k, v in state.get("rank", {}).items()}
         self.last_id = state.get("last_id")
-        logger.info(f"Loaded DSU state from {filepath} (last_id={self.last_id}, nodes={len(self.dsu.parent)})")
+        logger.info(f"Loaded DSU state from {self.dsu_filename} (last_id={self.last_id}, nodes={len(self.dsu.parent)})")
 
     async def query_batch_async(self, q:QdrantRecipeManager, vectors: list[float]) -> Optional[list[int]]:
         for attempt in range(3):
@@ -187,7 +189,7 @@ class SimilaritySearcher:
             collection_name=self.params.collection_name,
             batch_size=self.params.scroll_batch,
             using=self.params.using,
-            last_point_id=self.last_id
+            last_point_id=self.last_id, scroll_timeout=210
         ):
             ids = list(vec_map)
 
@@ -230,7 +232,8 @@ class SimilaritySearcher:
 
             self.last_id = max(ids)
 
-            if self.params.log_every and processed % self.params.log_every < self.params.query_batch:
+            if reuse_dsu:
+                self.save_dsu_state()
                 logger.info("Processed %d recipes... (last_id=%s)", processed, self.last_id)
 
             if self.params.max_recipes is not None and processed >= self.params.max_recipes:
@@ -253,9 +256,9 @@ class SimilaritySearcher:
             self.params.using = "dense"
         
     
-    def load_clusters_from_file(self, filepath: str) -> list[list[int]]:
+    def load_clusters_from_file(self) -> list[list[int]]:
         """Загружает кластеры из файла в формате JSON."""
-        with open(filepath, 'r') as f:
+        with open(self.clusters_filename, 'r') as f:
             clusters = json.load(f)
         return clusters
 
@@ -340,7 +343,7 @@ Return ONLY JSON array of IDs representing similar recipes."""
             logger.error(f"Error calling GPT for cluster analysis: {e}")
             return []
         
-    def process_and_save_clusters(self, clusters: list[list[int]], filepath: Optional[str] = None) -> None:
+    def process_and_save_clusters(self, clusters: list[list[int]]) -> None:
         """
         processes loaded clusters, asks GPT to filter them, and saves to DB, skips already saved clusters.
         """
@@ -354,11 +357,11 @@ Return ONLY JSON array of IDs representing similar recipes."""
             similar_clusters = self.ask_chatgpt_about_cluster(cluster)
             if set(similar_clusters) != set(cluster):
                 clusters[num] = similar_clusters
-                if filepath:
+                if self.clusters_filename:
                     # Обновляем файл кластеров после любого обновления, чтобы не терять прогресс
-                    with open(filepath, 'w') as f:
+                    with open(self.clusters_filename, 'w') as f:
                         f.write(json.dumps(clusters, indent=2))
-                    logger.info(f"Updated cluster file {filepath} after GPT filtering.")
+                    logger.info(f"Updated cluster file {self.clusters_filename} after GPT filtering.")
             
             if not similar_clusters:
                 logger.info("Skipping empty cluster after GPT filtering.")
@@ -367,42 +370,37 @@ Return ONLY JSON array of IDs representing similar recipes."""
             self.similarity_repository.save_cluster_with_members(similar_clusters)
             logger.info(f"Saved cluster {num + 1}/{len(clusters)} with {len(similar_clusters)} members.")
         
-    def save_clusters_to_file(self, filepath: str, clusters: list[list[int]]) -> None:
+    def save_clusters_to_file(self, clusters: list[list[int]]) -> None:
         """Сохраняет текущие кластеры в файл в формате JSON."""
-        with open(filepath, 'w') as f:
+        with open(self.clusters_filename, 'w') as f:
             f.write(json.dumps(clusters, indent=2))
-        logger.info(f"Saved clusters to file {filepath}.")
+        logger.info(f"Saved clusters to file {self.clusters_filename}.")
 
 if __name__ == "__main__":
-
-    build_type = "ingredients"  # "image", "full", "ingredients"
     ss = SimilaritySearcher(params=ClusterParams(
                     limit=30,
                     score_threshold=0.94,
-                    scroll_batch=2000,
+                    scroll_batch=1000,
                     query_batch=128
-                ), build_type=build_type)
-    
-    filepath = f"recipe_clusters/{build_type}_clusters{ss.params.score_threshold}.txt"
-    dsu_filepath = f"recipe_clusters/{build_type}_clusters{ss.params.score_threshold}_dsu_state.json"
+                ), build_type="ingredients") # "image", "full", "ingredients"
 
-    ss.load_dsu_state(dsu_filepath)
+    ss.load_dsu_state()
     while True:
         try:
             clusters = asyncio.run(ss.build_clusters_async())
-            ss.save_dsu_state(dsu_filepath)
+            ss.save_dsu_state()
             print(f"Total clusters found: {len(clusters)}")
             print("Last processed ID:", ss.last_id)
-            ss.save_clusters_to_file(filepath, clusters)
+            ss.save_clusters_to_file(clusters)
             if ss.last_id is None:
                 logger.info("Processing complete.")
                 break
         except Exception as e:
             logger.error(f"Error during cluster building: {e}")
-            ss.save_dsu_state(dsu_filepath)
+            ss.save_dsu_state()
             ss = SimilaritySearcher()
-            ss.load_dsu_state(dsu_filepath)
+            ss.load_dsu_state()
             continue
 
     final_clusters = _build_clusters_from_dsu(ss.dsu, min_cluster_size=2)
-    ss.save_clusters_to_file(filepath, final_clusters)
+    ss.save_clusters_to_file(final_clusters)

@@ -788,7 +788,8 @@ class QdrantRecipeManager:
             collection_name: str = "full", 
             batch_size: int = 1000, 
             using: str = "dense",
-            last_point_id: int = None) -> AsyncIterator[list[int]]:
+            last_point_id: int = None,
+            scroll_timeout: int = 120) -> AsyncIterator[list[int]]:
         """
         Асинхронный итератор по всем точкам в коллекции, возвращающий батчи векторов.
         Args:
@@ -809,7 +810,7 @@ class QdrantRecipeManager:
                 offset=offset,
                 with_payload=False,
                 with_vectors=True,
-                timeout=60
+                timeout=scroll_timeout
             )
             if not points:
                 return
