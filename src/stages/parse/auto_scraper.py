@@ -208,7 +208,7 @@ class AutoScraper:
                 )
                 
                 site_orm = self.site_repository.create_or_get(site)
-                if site_orm.pattern is not None or site_orm.is_recipe_site:
+                if site_orm.pattern is not None:
                     self.logger.info(f"✓ Сайт уже существует и является сайтом с рецептом: {base_url} (ID={site_orm.id})")
                     continue  # Сайт уже существует
                 saved_urls.add(url)
@@ -272,48 +272,38 @@ class AutoScraper:
         
         # Шаг 2: Обновляем статистику в search_query
         self.search_query_repository.update_query_statistics(query_id, len(saved_urls), 0)
-        
     
-    def process_sites(self, max_sites_to_process: Optional[int] = 100):
-        """обработка необработанных сайтов из БД"""
-        self.logger.info(f"\n{'='*70}")
-        self.logger.info("✓ ДОСТАТОЧНО НЕОБРАБОТАННЫХ САЙТОВ")
-        self.logger.info("  Поиск новых сайтов не требуется")
-        self.logger.info(f"{'='*70}\n")
-        self.logger.info("Начинаем обработку необработанных сайтов...\n")
-        sites_processed = 0
-        while True:
-            site = self.site_repository.get_unprocessed_sites(limit=1, random_order=True) # получаем случайные необработанные сайты по 1 шт, чтобы уменьшить шанс обработки одинаковых сайтов в параллельных запусках
-            if not site:
-                self.logger.info("Все необработанные сайты обработаны.")
-                break
-            site = site[0]
+    def process_one_site(self, site: Site, max_pages: int = 60) -> bool:
+        """
+        
+        обработка необработанных сайтов
+        Args:
+            site: Сайт для обработки
+            max_pages: Максимальное количество страниц для проверки (если при парсинге 60 страниц рецепт не найден, то сайт считается не содержащим рецепты)
+        
+        """
+        try:
+            self.logger.info(f"\n=== Обработка сайта ID={site.id}, URL={site.base_url} ===")
+            if self.site_preparation_pipeline.prepare_site(site.search_url, max_pages=max_pages, custom_logger=self.logger):
+                self.logger.info(f"✓ Сайт ID={site.id} обработан и содержит рецепты")
+                self.site_repository.mark_site_as_searched(site.id)
+                return True
+            else:
+                self.logger.info(f"→ Сайт ID={site.id} обработан, но рецепты не найдены")
+                self.site_repository.mark_site_as_searched(site.id)
+                return False
+        except Exception as e:
+            self.logger.error(f"Ошибка обработки сайта ID={site.id}, URL={site.base_url}: {e}")
+            return False
 
-            try:
-                self.logger.info(f"\n=== Обработка сайта ID={site.id}, URL={site.base_url} ===")
-                if self.site_preparation_pipeline.prepare_site(site.search_url, max_pages=60, custom_logger=self.logger):
-                    self.logger.info(f"✓ Сайт ID={site.id} обработан и содержит рецепты")
-                else:
-                    self.logger.info(f"→ Сайт ID={site.id} обработан, но рецепты не найдены")
-            except Exception as e:
-                self.logger.error(f"Ошибка обработки сайта ID={site.id}, URL={site.base_url}: {e}")
-                continue
-            sites_processed += 1
-            if max_sites_to_process and sites_processed >= max_sites_to_process:
-                self.logger.info(f"Достигнуто максимальное количество обработанных сайтов: {max_sites_to_process}")
-                break
-
-
-
-    def run_auto_scraping(
+    def find_new_sites(
         self, 
         min_queries: int = 10,
         queries_to_process: int = 5,
         results_per_query: int = 10,
         min_unprocessed_sites: int = 100,
         generate_from_recipes: bool = True,
-        generate_with_gpt: bool = False,
-        max_sites_to_process: Optional[int] = 200
+        generate_with_gpt: bool = False
     ):
         """
         Автоматический сбор рецептов
@@ -329,74 +319,75 @@ class AutoScraper:
         """
         try:
             # 0. Проверяем количество необработанных сайтов
-            self.logger.info("\n[0/4] Проверка количества необработанных сайтов...")
             unprocessed_count = self.site_repository.count_sites_without_pattern()
             
             self.logger.info(f"  Найдено необработанных сайтов (без паттерна): {unprocessed_count}")
             self.logger.info(f"  Минимум требуется: {min_unprocessed_sites}")
             
-            if unprocessed_count >= min_unprocessed_sites:
-                return self.process_sites(max_sites_to_process=max_sites_to_process)
+            while unprocessed_count < min_unprocessed_sites:
             
-            self.logger.info(f"→ Недостаточно необработанных сайтов ({unprocessed_count} < {min_unprocessed_sites})")
-            self.logger.info("→ Начинаем поиск новых сайтов через DuckDuckGo...\n")
-            
-            generator = SearchQueryGenerator(max_non_searched=10, query_repository=self.search_query_repository)
-            # 1. Проверяем и генерируем запросы если нужно
-            self.logger.info("\n[1/4] Проверка и генерация поисковых запросов...")
-            if self.search_query_repository.get_unsearched_count() < min_queries:
-                # генерируем новые запросы, елси остлоьс меньше минимального
+                self.logger.info(f"→ Недостаточно необработанных сайтов ({unprocessed_count} < {min_unprocessed_sites})")
+                self.logger.info("→ Начинаем поиск новых сайтов через DuckDuckGo...\n")
                 
-                if generate_with_gpt:
-                    new_queries = generator.generate_search_queries(count=10) # запросы генерирует chatGPT
-                elif generate_from_recipes:
-                    new_queries = generator.get_queries_from_existing_recipes(count=10)
-                    if not new_queries:
-                        self.logger.warning("Не удалось сгенерировать запросы на основе существующих рецептов, пробуем GPT...")
-                        new_queries = generator.generate_search_queries(count=10)
-                else:
-                    self.logger.warning("Нет способа сгенерировать новые запросы (generate_from_recipes и generate_with_gpt отключены)")
-                    new_queries = []
+                generator = SearchQueryGenerator(max_non_searched=10, query_repository=self.search_query_repository)
+                # 1. Проверяем и генерируем запросы если нужно
+                self.logger.info("\n[1/3] Проверка и генерация поисковых запросов...")
+                if self.search_query_repository.get_unsearched_count() < min_queries:
+                    # генерируем новые запросы, елси остлоьс меньше минимального
+                    
+                    if generate_with_gpt:
+                        new_queries = generator.generate_search_queries(count=10) # запросы генерирует chatGPT
+                    elif generate_from_recipes:
+                        new_queries = generator.get_queries_from_existing_recipes(count=10)
+                        if not new_queries:
+                            self.logger.warning("Не удалось сгенерировать запросы на основе существующих рецептов, пробуем GPT...")
+                            new_queries = generator.generate_search_queries(count=10)
+                    else:
+                        self.logger.warning("Нет способа сгенерировать новые запросы (generate_from_recipes и generate_with_gpt отключены)")
+                        new_queries = []
 
-                query_results = {}
-                for query in new_queries:
-                    translated = generator.translate_query(query=query, target_languages=random.sample(POPULAR_LANGUAGES, k=5))
-                    query_results[query] = translated
+                    query_results = {}
+                    for query in new_queries:
+                        translated = generator.translate_query(query=query, target_languages=random.sample(POPULAR_LANGUAGES, k=5))
+                        query_results[query] = translated
+                    
+                    generator.save_queries_to_db(query_results)
+                    self.logger.info(f"Сгенерировано {len(new_queries)} новых поисковых запросов:")
                 
-                generator.save_queries_to_db(query_results)
-                self.logger.info(f"Сгенерировано {len(new_queries)} новых поисковых запросов:")
-            
-            # 2. Получаем неиспользованные запросы
-            self.logger.info("\n[2/4] Получение неиспользованных запросов...")
-            search_queries = self.search_query_repository.get_unsearched_queries(limit=queries_to_process, random_order=True, unique_languages=True)
-            queries = [q.to_pydantic() for q in search_queries]
-            
-            if not queries:
-                self.logger.warning("Нет неиспользованных запросов")
-                return
-            
-            self.logger.info(f"✓ Будет обработано {len(queries)} запросов")
-            
-            # 3. Обрабатываем каждый запрос
-            self.logger.info("\n[3/4] Поиск в DuckDuckGo...")
-            
-            for idx, query in enumerate(queries, 1):
-                self.logger.info(f"\n--- Запрос {idx}/{len(queries)} ---")
-                self.logger.info(f"ID: {query.id}, Язык: {query.language}")
-                self.logger.info(f"Запрос: '{query.query}'")
+                # 2. Получаем неиспользованные запросы
+                self.logger.info("\n[2/3] Получение неиспользованных запросов...")
+                search_queries = self.search_query_repository.get_unsearched_queries(limit=queries_to_process, random_order=True, unique_languages=True)
+                queries = [q.to_pydantic() for q in search_queries]
                 
-                # Ищем в DuckDuckGo
-                urls = self.search_duckduckgo(query.query, max_results=results_per_query)
+                if not queries:
+                    self.logger.warning("Нет неиспользованных запросов")
+                    return
                 
-                # Обрабатываем найденные URL, создаем сайты и проверяем страницы
-                self.process_urls(urls, query_language=query.language, query_id=query.id)
+                self.logger.info(f"✓ Будет обработано {len(queries)} запросов")
                 
-                # Задержка между запросами
-                time.sleep(3)
-            
-            # 4. обрабатываем необработанные сайты
-            self.process_sites(max_sites_to_process=max_sites_to_process)
-            
+                # 3. Обрабатываем каждый запрос
+                self.logger.info("\n[3/3] Поиск в DuckDuckGo...")
+                
+                for idx, query in enumerate(queries, 1):
+                    self.logger.info(f"\n--- Запрос {idx}/{len(queries)} ---")
+                    self.logger.info(f"ID: {query.id}, Язык: {query.language}")
+                    self.logger.info(f"Запрос: '{query.query}'")
+                    
+                    # Ищем в DuckDuckGo
+                    urls = self.search_duckduckgo(query.query, max_results=results_per_query)
+                    
+                    # Обрабатываем найденные URL, создаем сайты и проверяем страницы
+                    self.process_urls(urls, query_language=query.language, query_id=query.id)
+                    
+                    # Задержка между запросами
+                    time.sleep(random.uniform(3, 6))
+
+                # Обновляем количество необработанных сайтов, проверяем достаточно ли теперь необработанных сайтов
+                unprocessed_count = self.site_repository.count_sites_without_pattern()
+            self.logger.info(f"\n{'='*70}")
+            self.logger.info(f"✓ ДОСТАТОЧНО НЕОБРАБОТАННЫХ САЙТОВ, САЙТОВ: {unprocessed_count}")
+            self.logger.info("  Поиск новых сайтов не требуется")
+            self.logger.info(f"{'='*70}\n")
         except Exception as e:
             self.logger.error(f"Ошибка при автоматическом сборе: {e}")
             import traceback

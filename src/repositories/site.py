@@ -43,26 +43,6 @@ class SiteRepository(BaseRepository[SiteORM]):
                 SiteORM.name == name
             ).first()
     
-    def get_recipe_sites(self, language: Optional[str] = None) -> List[SiteORM]:
-        """
-        Получить все сайты с рецептами
-        
-        Args:
-            language: Фильтр по языку (опционально)
-        
-        Returns:
-            Список сайтов с рецептами
-        """
-        with self.get_session() as session:
-            query = session.query(SiteORM).filter(
-                SiteORM.is_recipe_site == True
-            )
-            
-            if language:
-                query = query.filter(SiteORM.language == language)
-            
-            return query.all()
-    
     def create_or_get(self, site_data: Site) -> SiteORM:
         """
         Создать новый сайт или получить существующий
@@ -86,32 +66,6 @@ class SiteRepository(BaseRepository[SiteORM]):
         
         logger.info(f"✓ Создан новый сайт: {site_data.name} (ID: {created.id})")
         return created
-    
-    def update_recipe_status(self, site_id: int, is_recipe_site: bool) -> bool:
-        """
-        Обновить статус сайта (является ли рецептным)
-        
-        Args:
-            site_id: ID сайта
-            is_recipe_site: Флаг рецептного сайта
-        
-        Returns:
-            True если обновлено успешно
-        """
-        session = self.get_session()
-        try:
-            site = session.query(SiteORM).filter(SiteORM.id == site_id).first()
-            if site:
-                site.is_recipe_site = is_recipe_site
-                session.commit()
-                return True
-            return False
-        except Exception as e:
-            session.rollback()
-            logger.error(f"Ошибка обновления статуса сайта {site_id}: {e}")
-            return False
-        finally:
-            session.close()
     
     def search_by_domain(self, domain_pattern: str) -> List[SiteORM]:
         """
@@ -144,14 +98,13 @@ class SiteRepository(BaseRepository[SiteORM]):
                 or_(
                     SiteORM.pattern.is_(None),
                     SiteORM.pattern == ''
-                ), SiteORM.is_recipe_site == False,
-                SiteORM.search_url.isnot(None), SiteORM.searched == False
+                ), SiteORM.search_url.isnot(None), SiteORM.searched == False
             ).count()
             return count
         
-    def get_unprocessed_sites(self, limit: int = 10, random_order: bool = False) -> List[SiteORM]:
+    def get_unprocessed_sites(self, limit: Optional[int] = None, random_order: bool = False) -> List[SiteORM]:
         """
-        Получить список сайтов без паттерна
+        Получить список сайтов без паттерна и не прошедших поиск рецептов
         
         Args:
             limit: Максимальное количество сайтов для получения
@@ -164,8 +117,7 @@ class SiteRepository(BaseRepository[SiteORM]):
                 or_(
                     SiteORM.pattern.is_(None),
                     SiteORM.pattern == ''
-                ), SiteORM.is_recipe_site == False,
-                SiteORM.search_url.isnot(None), SiteORM.searched == False
+                ), SiteORM.search_url.isnot(None), SiteORM.searched == False
             )
 
             if random_order:
@@ -175,8 +127,10 @@ class SiteRepository(BaseRepository[SiteORM]):
                 site = query.first()
                 return [site] if site else []
             
-            sites = query.limit(limit).all()
-            return sites
+            if limit:
+                query = query.limit(limit)
+            
+            return query.all()
         
     def mark_site_as_searched(self, site_id: int) -> bool:
         """

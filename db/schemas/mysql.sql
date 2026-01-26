@@ -7,7 +7,6 @@ CREATE TABLE IF NOT EXISTS sites (
     search_url TEXT, -- URL для поиска рецептов на сайте
     searched BOOLEAN DEFAULT FALSE, -- был ли выполнен поиск рецептов на сайте
     language VARCHAR(10),
-    is_recipe_site BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

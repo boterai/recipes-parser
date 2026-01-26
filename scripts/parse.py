@@ -164,7 +164,7 @@ def run_parallel(ports: list[int], max_workers: int = None, modules: list[str] =
         modules = [ex for ex in parser.available_extractors if ex not in processed_modules]
     else:
         extractors = parser.available_extractors.copy()
-        extractors = [ex for ex in extractors if not (ex in processed_modules and ex  in modules)]
+        extractors = [ex for ex in extractors if not (ex in processed_modules or ex in modules)]
         random.shuffle(extractors)
         modules.extend(extractors)
     

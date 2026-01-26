@@ -5,7 +5,7 @@ import json
 import logging
 import random
 from dataclasses import dataclass
-from typing import Optional, Literal, Any
+from typing import Optional, Literal
 import os
 import asyncio
 
@@ -18,7 +18,6 @@ from src.common.db.qdrant import QdrantRecipeManager
 from src.common.gpt.client import GPTClient
 from src.repositories.similarity import RecipeSimilarity
 from src.models.recipe import Recipe
-from src.common.db.clickhouse import ClickHouseManager
 
 logging.basicConfig(
     level=logging.INFO,
@@ -102,8 +101,9 @@ class SimilaritySearcher:
         self.clusters_filename = os.path.join("recipe_clusters", f"{build_type}_clusters_{self.params.score_threshold}.json")
 
     @property
-    def clickhouse_manager(self) -> ClickHouseManager: # layz initialization
+    def clickhouse_manager(self): # layz initialization + lazy import
         if not self._clickhouse_manager:
+            from src.common.db.clickhouse import ClickHouseManager
             self._clickhouse_manager = ClickHouseManager()
             if not self._clickhouse_manager.connect():
                 self._clickhouse_manager = None
@@ -238,7 +238,7 @@ class SimilaritySearcher:
 
             if self.params.max_recipes is not None and processed >= self.params.max_recipes:
                 break
-
+        self.last_id = None  # обработка завершена
         return _build_clusters_from_dsu(self.dsu, self.params.min_cluster_size)
     
     def set_params(self, build_type: Literal["image", "full", "ingredients"] = "full"):
@@ -382,11 +382,11 @@ if __name__ == "__main__":
                     score_threshold=0.94,
                     scroll_batch=1000,
                     query_batch=128
-                ), build_type="ingredients") # "image", "full", "ingredients"
+                ), build_type="full") # "image", "full", "ingredients"
 
-    ss.load_dsu_state()
     while True:
         try:
+            ss.load_dsu_state()
             clusters = asyncio.run(ss.build_clusters_async())
             ss.save_dsu_state()
             print(f"Total clusters found: {len(clusters)}")

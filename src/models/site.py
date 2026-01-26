@@ -38,7 +38,6 @@ class SiteORM(Base):
     search_url = Column(String(1000))
     searched = Column(Boolean, default=False)
     language = Column(String(10))
-    is_recipe_site = Column(Boolean, default=False)
     created_at = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'))
     updated_at = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
 
@@ -53,7 +52,6 @@ class Site(BaseModel):
     name: str
     base_url: str
     search_url: Optional[str] = None
-    is_recipe_site: bool = False
     searched: Optional[bool] = None
     pattern: Optional[str] = None  # строка с паттернами для страниц
     language: Optional[str] = None
