@@ -52,7 +52,7 @@ class _DSU:
             self.rank[ra] += 1
 
 
-def _build_clusters_from_dsu(dsu: _DSU, min_cluster_size: int) -> list[list[int]]:
+def build_clusters_from_dsu(dsu: _DSU, min_cluster_size: int) -> list[list[int]]:
     groups: dict[int, list[int]] = {}
     for node in dsu.parent.keys():
         root = dsu.find(node)
@@ -239,7 +239,7 @@ class SimilaritySearcher:
             if self.params.max_recipes is not None and processed >= self.params.max_recipes:
                 break
         self.last_id = None  # обработка завершена
-        return _build_clusters_from_dsu(self.dsu, self.params.min_cluster_size)
+        return build_clusters_from_dsu(self.dsu, self.params.min_cluster_size)
     
     def set_params(self, build_type: Literal["image", "full", "ingredients"] = "full"):
         """Кластеры по ингредиентам из Qdrant ingredients-коллекции."""
@@ -377,14 +377,14 @@ Return ONLY JSON array of IDs representing similar recipes."""
         logger.info(f"Saved clusters to file {self.clusters_filename}.")
 
 if __name__ == "__main__":
-    ss = SimilaritySearcher(params=ClusterParams(
-                    limit=30,
-                    score_threshold=0.94,
-                    scroll_batch=1000,
-                    query_batch=128
-                ), build_type="full") # "image", "full", "ingredients"
 
     while True:
+        ss = SimilaritySearcher(params=ClusterParams(
+                    limit=30,
+                    score_threshold=0.98,
+                    scroll_batch=1000,
+                    query_batch=128
+                ), build_type="ingredients") # "image", "full", "ingredients"
         try:
             ss.load_dsu_state()
             clusters = asyncio.run(ss.build_clusters_async())
@@ -398,9 +398,7 @@ if __name__ == "__main__":
         except Exception as e:
             logger.error(f"Error during cluster building: {e}")
             ss.save_dsu_state()
-            ss = SimilaritySearcher()
-            ss.load_dsu_state()
             continue
 
-    final_clusters = _build_clusters_from_dsu(ss.dsu, min_cluster_size=2)
+    final_clusters = build_clusters_from_dsu(ss.dsu, min_cluster_size=2)
     ss.save_clusters_to_file(final_clusters)

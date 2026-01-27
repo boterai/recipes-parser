@@ -109,6 +109,10 @@ CREATE TABLE IF NOT EXISTS merged_recipes (
     prep_time VARCHAR(100),
     cook_time VARCHAR(100),
     merge_comments TEXT,
+    language VARCHAR(10) DEFAULT 'en',
+    cluster_type VARCHAR(50), -- "image", "full", "ingredients"
+    gpt_validated BOOLEAN DEFAULT TRUE,
+    score_threshold DECIMAL(5,2) DEFAULT 0.00,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uq_pages_hash (pages_hash_sha256)
 ) ENGINE=InnoDB;

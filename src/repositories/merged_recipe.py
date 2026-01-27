@@ -7,7 +7,6 @@ from typing import Optional
 
 from src.repositories.base import BaseRepository
 from src.models.merged_recipe import MergedRecipeORM, MergedRecipe
-from src.models.page import PageORM
 from src.models.merged_recipe import MergedRecipe
 from src.common.db.connection import get_db_connection
 import hashlib
@@ -68,7 +67,11 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
                 description=merged_recipe.description,
                 prep_time=merged_recipe.prep_time,
                 cook_time=merged_recipe.cook_time,
-                merge_comments=merged_recipe.merge_comments
+                merge_comments=merged_recipe.merge_comments,
+                language=merged_recipe.language,
+                cluster_type=merged_recipe.cluster_type,
+                gpt_validated=merged_recipe.gpt_validated,
+                score_threshold=merged_recipe.score_threshold
             )
             
             session.add(merged_recipe_orm)
@@ -150,7 +153,11 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
                     description=merged_recipe.description,
                     prep_time=merged_recipe.prep_time,
                     cook_time=merged_recipe.cook_time,
-                    merge_comments=merged_recipe.merge_comments
+                    merge_comments=merged_recipe.merge_comments,
+                    language=merged_recipe.language,
+                    cluster_type=merged_recipe.cluster_type,
+                    gpt_validated=merged_recipe.gpt_validated,
+                    score_threshold=merged_recipe.score_threshold
                 )
                 new_recipes.append(merged_recipe_orm)
             

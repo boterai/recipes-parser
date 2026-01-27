@@ -147,14 +147,12 @@ def validate_and_normalize_language(language: str) -> Optional[str]:
     
     # Шаг 1: Проверяем в ключах (основные коды: en, ru, de, etc.)
     if lang_lower in LanguageCodes.keys():
-        logger.info(f"Язык '{language}' найден в основных кодах: {lang_lower}")
         return lang_lower
     
     # Шаг 2: Проверяем в значениях вариаций каждого языка
     for main_code, variations in LanguageCodes.items():
         variations_lower = [v.lower() for v in variations]
         if lang_lower in variations_lower:
-            logger.info(f"Язык '{language}' найден в вариациях '{main_code}': {variations}")
             return main_code
     
     # Язык не найден

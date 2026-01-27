@@ -31,6 +31,8 @@ class Recipe(BaseModel):
     # системные поля
     vectorised: Optional[bool] = False  # было ли произведено векторное представление рецепта   
 
+    language: Optional[str] = None  # язык рецепта (код ISO 639-1)
+
     def get_multivector_data(self, max_instruction_length: int = 400) -> dict:
         """Подготавливает данные для мульти-векторного эмбеддинга"""
         return {

@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.common.embedding import get_embedding_function, get_image_embedding_function
 from src.stages.search.vectorise import RecipeVectorizer
 from src.models.recipe import Recipe
-from src.stages.search.similarity import SimilaritySearcher, ClusterParams, _build_clusters_from_dsu
+from src.stages.search.similarity import SimilaritySearcher, ClusterParams, build_clusters_from_dsu
 from src.common.embedding import get_image_embedding_function
 from src.stages.search.vectorise import RecipeVectorizer
 from src.models.image import ImageORM, download_image_async
@@ -155,7 +155,7 @@ def create_similarity_clusters(filepath: str, dsu_filepath: str):
             logger.info("Processing complete.")
             break
 
-    final_clusters = _build_clusters_from_dsu(ss.dsu, min_cluster_size=2)
+    final_clusters = build_clusters_from_dsu(ss.dsu, min_cluster_size=2)
     ss.save_clusters_to_file(filepath, final_clusters)
 
 def check_and_save_similarity_clusters(filepath: str):

@@ -30,6 +30,12 @@ class MergedRecipeORM(Base):
 
     # Комментарии об объединении
     merge_comments = Column(Text)
+
+    # язык объедененных рецептов, чтобы можно было фильтровать по языку (основной режим - объединение на английском)
+    language = Column(String(10), default='en')  # язык рецепта (код ISO 639-1)
+    cluster_type = Column(String(50))  # "image", "full", "ingredients"
+    gpt_validated = Column(String(5), default='TRUE')  # было ли
+    score_threshold = Column(String(10), default='0.00')  # порог схожести для объединения
     
     # Метаданные
     created_at = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'))
@@ -59,7 +65,11 @@ class MergedRecipeORM(Base):
             cook_time=self.cook_time,
             merge_comments=self.merge_comments,
             created_at=self.created_at,
-            page_ids=page_ids
+            page_ids=page_ids,
+            language=self.language,
+            cluster_type=self.cluster_type,
+            gpt_validated=self.gpt_validated,
+            score_threshold=self.score_threshold
         )
 
 
@@ -82,6 +92,11 @@ class MergedRecipe(BaseModel):
     
     # Комментарии
     merge_comments: Optional[str] = None
+
+    language: Optional[str] = 'en'  # язык рецепта (код ISO 639-1)
+    cluster_type: Optional[str] = None  # "image", "full", "ingredients"
+    gpt_validated: Optional[bool] = True
+    score_threshold: Optional[float] = 0.00
     
     # Метаданные
     created_at: Optional[datetime] = None
@@ -133,5 +148,9 @@ class MergedRecipe(BaseModel):
             cook_time=orm_obj.cook_time,
             merge_comments=orm_obj.merge_comments,
             created_at=orm_obj.created_at,
-            page_ids=page_ids
+            page_ids=page_ids,
+            language=orm_obj.language,
+            cluster_type=orm_obj.cluster_type,
+            gpt_validated=orm_obj.gpt_validated,
+            score_threshold=orm_obj.score_threshold
         )

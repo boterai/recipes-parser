@@ -13,6 +13,7 @@ from sqlalchemy.inspection import inspect
 from src.models.base import Base
 from src.models.recipe import Recipe
 from src.models.image import ImageORM, Image
+from utils.languages import validate_and_normalize_language
 
 class PageORM(Base):
     """SQLAlchemy модель для таблицы pages"""
@@ -243,7 +244,8 @@ class Page(BaseModel):
             prep_time=self.prep_time or "",
             total_time=self.total_time or "",
             category=self.category or "",
-            notes=self.notes or ""
+            notes=self.notes or "",
+            language=validate_and_normalize_language(self.language) or self.language
         )
     
     @classmethod
