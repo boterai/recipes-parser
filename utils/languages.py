@@ -158,3 +158,147 @@ def validate_and_normalize_language(language: str) -> Optional[str]:
     # Язык не найден
     logger.error(f"Язык '{language}' не поддерживается")
     return None
+
+COOKIE_KEYWORDS = [
+        # English
+        'accept', 'allow', 'agree', 'consent', 'ok', 'got it', 'i understand',
+        'accept all', 'allow all', 'agree and close', 'accept cookies', 'continue',
+        # Italian
+        'accetta', 'accetto', 'consenti', 'consento', 'accetta tutti',
+        'accettare', 'consenso', 'va bene', 'ok', 'capito',
+        # German  
+        'akzeptieren', 'zustimmen', 'einverstanden', 'alle akzeptieren', 'verstanden',
+        # French
+        'accepter', 'autoriser', "j'accepte", 'tout accepter', "d'accord", 'continuer',
+        # Spanish
+        'aceptar', 'permitir', 'de acuerdo', 'aceptar todo', 'aceptar todas',
+        # Polish
+        'akceptuj', 'zgadzam', 'zezwól', 'akceptuję wszystkie', 'rozumiem',
+        # Dutch
+        'accepteren', 'toestaan', 'akkoord', 'alle accepteren', 'begrepen',
+        # Swedish
+        'tillåt', 'godkänn', 'acceptera', 'samtycke', 'tillåt alla', 'godkänn alla',
+        # Russian
+        'принять', 'согласен', 'разрешить', 'принять все', 'понятно',
+        # Portuguese
+        'aceitar', 'permitir', 'concordo', 'aceitar todos', 'aceitar tudo', 'está bem',
+        # Japanese
+        '同意', '承諾', '許可', 'すべて許可', 'すべて同意', 'わかりました', 'OK',
+        # Korean
+        '동의', '수락', '허용', '모두 수락', '모두 허용', '확인', '알겠습니다',
+        # Chinese (Simplified)
+        '接受', '同意', '允许', '全部接受', '全部同意', '我知道了', '确定',
+        # Arabic
+        'موافق', 'قبول', 'أوافق', 'قبول الكل', 'السماح', 'فهمت',
+        # Hindi
+        'स्वीकार', 'अनुमति', 'सहमत', 'सभी स्वीकार करें', 'ठीक है',
+        # Turkish
+        'kabul et', 'izin ver', 'kabul ediyorum', 'tümünü kabul et', 'anladım', 'tamam',
+        # Norwegian
+        'godta', 'tillat', 'godkjenn', 'godta alle', 'aksepter', 'jeg forstår',
+        # Finnish
+        'hyväksy', 'salli', 'ymmärrän', 'hyväksy kaikki', 'ok', 'selvä',
+        # Greek
+        'αποδοχή', 'συναίνεση', 'αποδέχομαι', 'αποδοχή όλων', 'κατάλαβα',
+        # Hebrew
+        'אישור', 'אני מסכים', 'הבנתי', 'אשר הכל', 'אישור הכל',
+        # Thai
+        'ยอมรับ', 'อนุญาต', 'ตกลง', 'ยอมรับทั้งหมด', 'เข้าใจแล้ว',
+        # Vietnamese
+        'chấp nhận', 'đồng ý', 'cho phép', 'chấp nhận tất cả', 'tôi hiểu',
+        # Indonesian
+        'terima', 'setuju', 'izinkan', 'terima semua', 'saya mengerti', 'oke',
+        # Filipino (Tagalog)
+        'tanggapin', 'payagan', 'sumasang-ayon', 'tanggapin lahat', 'naiintindihan ko',
+        # Czech
+        'přijmout', 'povolit', 'souhlasím', 'přijmout vše', 'rozumím',
+        # Hungarian
+        'elfogad', 'engedélyez', 'egyetértek', 'mindet elfogad', 'értem',
+        # Romanian
+        'accept', 'permite', 'sunt de acord', 'acceptă toate', 'înțeleg',
+        # Ukrainian
+        'прийняти', 'дозволити', 'згоден', 'прийняти все', 'зрозуміло',
+        # Serbian
+        'prihvati', 'dozvoli', 'slažem se', 'prihvati sve', 'razumem',
+        # Croatian
+        'prihvati', 'dopusti', 'slažem se', 'prihvati sve', 'razumijem',
+        # Bulgarian
+        'приемам', 'разрешавам', 'съгласен', 'приеми всички', 'разбирам',
+        # Slovak
+        'prijať', 'povoliť', 'súhlasím', 'prijať všetko', 'rozumiem',
+        # Slovenian
+        'sprejmi', 'dovoli', 'strinjam se', 'sprejmi vse', 'razumem',
+        # Lithuanian
+        'priimti', 'leisti', 'sutinku', 'priimti viską', 'suprantu',
+        # Estonian
+        'nõustu', 'luba', 'olen nõus', 'nõustu kõigiga', 'sain aru',
+        # Danish
+        'accepter', 'tillad', 'godkend', 'accepter alle', 'forstået'
+    ]
+        
+# Находим все возможные элементы-кнопки
+COOKIE_SELECTORS = [
+    'button',
+    'a[role="button"]',
+    'div[role="button"]', 
+    'span[role="button"]',
+    'input[type="button"]',
+    'input[type="submit"]',
+    'a.button',
+    'div.button',
+    '[class*="button"]',
+    '[class*="btn"]',
+    '[id*="accept"]',
+    '[id*="Accept"]',
+    '[id*="consent"]',
+    '[id*="Consent"]',
+    '[id*="cookie"]',
+    '[id*="Cookie"]',
+    '[id*="allow"]',
+    '[id*="Allow"]',
+    '[id*="agree"]',
+    '[id*="Agree"]',
+    '[class*="accept"]',
+    '[class*="Accept"]',
+    '[class*="consent"]',
+    '[class*="Consent"]',
+    '[class*="cookie"]',
+    '[class*="Cookie"]',
+    '[class*="allow"]',
+    '[class*="Allow"]',
+    '[class*="agree"]',
+    '[class*="Agree"]',
+    # Специфичные для популярных cookie-баннеров
+    '[id*="CybotCookiebot"]',
+    '[id*="OptinAllow"]',
+    '[id*="AllowAll"]',
+    '[id*="onetrust"]',
+    '[id*="OneTrust"]',
+    '[class*="onetrust"]',
+    '[class*="OneTrust"]',
+    '[id*="cookieConsent"]',
+    '[class*="cookieConsent"]',
+    '[id*="gdpr"]',
+    '[id*="GDPR"]',
+    '[class*="gdpr"]',
+    '[class*="GDPR"]',
+    # ARIA роли и data-атрибуты
+    '[aria-label*="accept"]',
+    '[aria-label*="cookie"]',
+    '[aria-label*="consent"]',
+    '[data-testid*="cookie"]',
+    '[data-testid*="consent"]',
+    '[data-testid*="accept"]',
+    '[data-action*="accept"]',
+    '[data-action*="consent"]',
+    # Дополнительные общие паттерны
+    '.cookie-accept',
+    '.cookie-consent',
+    '.cookie-allow',
+    '.consent-accept',
+    '.consent-button',
+    '#cookie-accept',
+    '#cookie-consent',
+    '#accept-cookies',
+    '#accept-all'
+]
