@@ -6,12 +6,12 @@ import logging
 from pathlib import Path
 import argparse
 import queue
-from threading import Lock
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Добавление корневой директории в PYTHONPATH
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.stages.parse.auto_scraper import AutoScraper
+from src.stages.workflow.copilot_workflow import CopilotWorkflow
 
 # Создаем директорию для логов
 LOGS_DIR = Path(__file__).parent.parent / "logs"
@@ -24,6 +24,20 @@ logging.basicConfig(
     handlers=[logging.StreamHandler()]
 )
 logger = logging.getLogger(__name__)
+
+def create_issues(issue_prefix: str = "Создать парсер "):
+    """
+    создание issues для новых парсеров
+    """
+    workflow = CopilotWorkflow()
+    workflow.check_review_requested_prs(issue_prefix=issue_prefix)
+
+def merge_completed_prs():
+    """
+    проверка и слияние завершенных PRs
+    """
+    workflow = CopilotWorkflow()
+    workflow.check_review_requested_prs()
 
 
 def setup_thread_logger(port: int) -> logging.Logger:
@@ -119,7 +133,7 @@ def prepare(port: int = 9222, min_unprocessed_sites: int = 150, generate_from_re
     auto_scraper = AutoScraper(debug_port=port)
     auto_scraper.find_new_sites(
         generate_from_recipes=generate_from_recipes,
-        min_unprocessed_sites=min_unprocessed_sites,
+        target_sites_count=min_unprocessed_sites,
         generate_with_gpt=generate_with_gpt
     )
     sites = auto_scraper.site_repository.get_unprocessed_sites()
@@ -129,7 +143,7 @@ def prepare(port: int = 9222, min_unprocessed_sites: int = 150, generate_from_re
 
 def run_parallel_preparation(
     ports: list[int],
-    min_unprocessed_sites: int = 150, 
+    target_sites_count: int = 150, 
     generate_from_recipes: bool = False,
     generate_with_gpt: bool = True,
     max_pages: int = 60
@@ -140,7 +154,7 @@ def run_parallel_preparation(
     Args:
         ports: Список портов Chrome
         max_workers: Максимальное количество потоков
-        min_unprocessed_sites: Минимальное количество необработанных сайтов
+        target_sites_count: Кол-во сайтов, которое нужно проверить (при необходимости сгенерировать новые из рецептов или с помощью GPT)
         generate_from_recipes: Генерировать ли из рецептов
         generate_with_gpt: Генерировать ли с помощью GPT
         max_pages: Максимальное количество страниц для проверки сайта на наличие рецептов
@@ -157,11 +171,11 @@ def run_parallel_preparation(
     # сначала проверим, нужно ли вообще искать новые сайты
     auto_scraper.find_new_sites(
         generate_from_recipes=generate_from_recipes,
-        min_unprocessed_sites=min_unprocessed_sites,
+        target_sites_count=target_sites_count,
         generate_with_gpt=generate_with_gpt
     )
-    # получаем все необработанные сайты
-    sites = auto_scraper.site_repository.get_unprocessed_sites()
+    # получаем необходимое количество сайтов для подготовки
+    sites = auto_scraper.site_repository.get_unprocessed_sites(random_order=True, limit=target_sites_count)
     sites = [s.to_pydantic() for s in sites]
 
     logger.info(f"Всего необработанных сайтов для подготовки: {len(sites)}")
@@ -211,7 +225,7 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        '--min-sites',
+        '--target-sites-count',
         type=int,
         default=200,
         help='Минимальное количество необработанных, те уже собранных сайтов (по умолчанию: 150)'
@@ -236,14 +250,14 @@ if __name__ == "__main__":
     if args.parallel:
         run_parallel_preparation(
             ports=args.ports,
-            min_unprocessed_sites=args.min_sites,
+            target_sites_count=args.target_sites_count,
             generate_from_recipes=args.generate_from_recipes,
             generate_with_gpt=args.generate_with_gpt
         )
     else:
         prepare(
             port=args.ports[0],
-            min_unprocessed_sites=args.min_sites,
+            min_unprocessed_sites=args.target_sites_count,
             generate_from_recipes=args.generate_from_recipes,
             generate_with_gpt=args.generate_with_gpt   
             )

@@ -301,7 +301,7 @@ class AutoScraper:
         min_queries: int = 10,
         queries_to_process: int = 5,
         results_per_query: int = 10,
-        min_unprocessed_sites: int = 100,
+        target_sites_count: int = 100,
         generate_from_recipes: bool = True,
         generate_with_gpt: bool = False
     ):
@@ -322,11 +322,11 @@ class AutoScraper:
             unprocessed_count = self.site_repository.count_sites_without_pattern()
             
             self.logger.info(f"  Найдено необработанных сайтов (без паттерна): {unprocessed_count}")
-            self.logger.info(f"  Минимум требуется: {min_unprocessed_sites}")
+            self.logger.info(f"  Минимум требуется: {target_sites_count}")
             
-            while unprocessed_count < min_unprocessed_sites:
+            while unprocessed_count < target_sites_count:
             
-                self.logger.info(f"→ Недостаточно необработанных сайтов ({unprocessed_count} < {min_unprocessed_sites})")
+                self.logger.info(f"→ Недостаточно необработанных сайтов ({unprocessed_count} < {target_sites_count})")
                 self.logger.info("→ Начинаем поиск новых сайтов через DuckDuckGo...\n")
                 
                 generator = SearchQueryGenerator(max_non_searched=10, query_repository=self.search_query_repository)
@@ -385,8 +385,7 @@ class AutoScraper:
                 # Обновляем количество необработанных сайтов, проверяем достаточно ли теперь необработанных сайтов
                 unprocessed_count = self.site_repository.count_sites_without_pattern()
             self.logger.info(f"\n{'='*70}")
-            self.logger.info(f"✓ ДОСТАТОЧНО НЕОБРАБОТАННЫХ САЙТОВ, САЙТОВ: {unprocessed_count}")
-            self.logger.info("  Поиск новых сайтов не требуется")
+            self.logger.info(f"✓ Достаточно необработанных сайтов. Сайтов: {unprocessed_count}")
             self.logger.info(f"{'='*70}\n")
         except Exception as e:
             self.logger.error(f"Ошибка при автоматическом сборе: {e}")

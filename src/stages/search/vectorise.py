@@ -199,40 +199,13 @@ class RecipeVectorizer:
         
         return self.vectors_to_recipes(recipe.page_id, results)
     
-    def vectorise_images(
-            self, 
-            embed_function: ImageEmbeddingFunction, 
-            limit: int  = 10, 
-            batch_size: int = 8
-            ) -> list[list[float]]:
-        """
-        Векторизация изображений рецептов
-        
-        Args:
-            image_paths: Список путей к изображениям
-            embed_function: Функция для получения эмбеддингов
-            
-        Returns:
-            Список векторов для каждого изображения
-        """
-        images = self.image_repository.get_not_vectorised(limit=limit)
-        if not images:
-            logger.info("Нет невекторизованных изображений для обработки")
-            return []
-        
-        return self.vector_db.vectorise_images(
-            images=images,
-            embedding_function=embed_function,
-            batch_size=batch_size,
-            mark_vectorised_callback=self.image_repository.mark_as_vectorised
-        )
-    
     async def vectorise_images_async(
             self, 
             embed_function: ImageEmbeddingFunction, 
-            limit: int  = 10, 
+            limit: Optional[int]  = None, 
+            image_retrieve_limit: int = 1000,
             batch_size: int = 8
-            ) -> list[list[float]]:
+            ):
         """
         Векторизация изображений рецептов
         
@@ -243,18 +216,27 @@ class RecipeVectorizer:
         Returns:
             Список векторов для каждого изображения
         """
-        images = self.image_repository.get_not_vectorised(limit=limit)
-        if not images:
-            logger.info("Нет невекторизованных изображений для обработки")
-            return []
-        
-        return await self.vector_db.vectorise_images_async(
-            images=images,
-            embedding_function=embed_function,
-            batch_size=batch_size,
-            mark_vectorised_callback=self.image_repository.mark_as_vectorised
-        )
-    
+        total = limit
+        if limit is None:
+            total = self.image_repository.get_not_vectorised_count()
+        processed = 0
+        last_page_id = None
+        while processed < total:
+            images = self.image_repository.get_not_vectorised(limit=image_retrieve_limit, last_page_id=last_page_id)
+            if not images:
+                logger.info("Нет невекторизованных изображений для обработки")
+                return
+            
+            processed += await self.vector_db.vectorise_images_async(
+                images=images,
+                embedding_function=embed_function,
+                batch_size=batch_size,
+                mark_vectorised_callback=self.image_repository.mark_as_vectorised
+            )
+            logger.info(f"Всего векторизовано изображений: {processed}/{total}")
+            last_page_id = images[-1].page_id #чтобы не повторяться
+            
+
     def get_similar_images(
             self,
             embed_function: EmbeddingFunction,

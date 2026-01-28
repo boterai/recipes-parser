@@ -140,8 +140,8 @@ def main(module_name: str = "24kitchen_nl", port: int = 9222):
     )
 
 
-def run_parallel(ports: list[int], max_workers: int = None, modules: list[str] = None, 
-                 max_urls: int = 4000, max_depth: int = 4, max_recipes_per_module: Optional[int] = 4000):
+def run_parallel(ports: list[int], modules: list[str] = None, max_urls: int = 4000, 
+                 max_depth: int = 4, max_recipes_per_module: Optional[int] = 4000):
     """
     Запуск парсеров в нескольких потоках с отдельными логами
     
@@ -186,10 +186,8 @@ def run_parallel(ports: list[int], max_workers: int = None, modules: list[str] =
         "failed": 0,
         "lock": threading.Lock()
     }
-    
-    max_workers = max_workers or len(ports)
-    
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        
+    with ThreadPoolExecutor(max_workers=(len(ports))) as executor:
 
         futures = {}
         # Создаем futures
@@ -270,12 +268,6 @@ if __name__ == "__main__":
         default=[9222, 9223, 9224, 9225, 9226],
         help='Список портов для параллельного запуска (по умолчанию: 9222 9223 9224)'
     )
-    parser.add_argument(
-        '--workers',
-        type=int,
-        default=None,
-        help='Максимальное количество параллельных потоков'
-    )
 
     parser.add_argument(
         '--modules',
@@ -290,10 +282,17 @@ if __name__ == "__main__":
         default=4000,
         help='Максимальное количество рецептов для каждого модуля при параллельном запуске'
     )
+
+    parser.add_argument(
+        '--max_urls',
+        type=int,
+        default=10_000,
+        help='Максимальное количество просмотренных URL для каждого модуля'
+    )
     
     args = parser.parse_args()
     
     if args.parallel:
-        run_parallel(ports=args.ports, max_workers=args.workers, modules=args.modules, max_recipes_per_module=args.max_recipes_per_module)
+        run_parallel(ports=args.ports,  modules=args.modules, max_recipes_per_module=args.max_recipes_per_module, max_urls=args.max_urls)
     else:
         main(args.modules[0], args.ports[0])

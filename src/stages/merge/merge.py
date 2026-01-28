@@ -8,11 +8,9 @@
 """
 
 import logging
-from typing import Optional, List, Tuple
-from dataclasses import dataclass
+from typing import Optional
 import asyncio
-import os
-import json
+import math
 import random
 
 if __name__ == "__main__":
@@ -21,7 +19,7 @@ if __name__ == "__main__":
     sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 from src.models.page import Recipe
-from src.models.merged_recipe import MergedRecipe, MergedRecipeORM
+from src.models.merged_recipe import MergedRecipe
 from src.common.gpt.client import GPTClient
 from src.common.db.clickhouse import ClickHouseManager
 from src.repositories.page import PageRepository
@@ -58,7 +56,7 @@ class ConservativeRecipeMerger:
         
         return unique_recipes
     
-    def _ingredient_overlap(self, ings1: List[str], ings2: List[str]) -> float:
+    def _ingredient_overlap(self, ings1: list[str], ings2: list[str]) -> float:
         """Вычисление доли общих ингредиентов между двумя списками"""
         set1 = set(ings1)
         set2 = set(ings2)
@@ -109,7 +107,7 @@ class ConservativeRecipeMerger:
     
     async def merge_with_best_base_gpt(
         self,
-        recipes: List[Recipe],
+        recipes: list[Recipe],
         auto_select_base: bool = True,
         base_recipe: Optional[Recipe] = None
     ) -> Recipe:
@@ -151,7 +149,7 @@ class ConservativeRecipeMerger:
         logger.info(f"✓ Best-base GPT merge: {base.page_id} + {len(recipes)-1} others -> {result.dish_name}")
         return result
     
-    def _select_best_base(self, recipes: List[Recipe], top_k: int = 3) -> Recipe:
+    def _select_best_base(self, recipes: list[Recipe], top_k: int = 3) -> Recipe:
         """
         Эвристический выбор лучшего базового рецепта
         
@@ -196,7 +194,7 @@ class ConservativeRecipeMerger:
     
     async def merge_multiple_with_gpt(
         self,
-        recipes: List[Recipe],
+        recipes: list[Recipe],
         strategy: str = "consensus"
     ) -> MergedRecipe:
         """
@@ -449,7 +447,7 @@ Create the best possible merged version."""
         self,
         original: Recipe,
         enhanced: MergedRecipe
-    ) -> Tuple[bool, str]:
+    ) -> tuple[bool, str]:
         """
         Валидация через GPT: не изменилась ли суть рецепта
         
@@ -557,12 +555,12 @@ class ClusterVariationGenerator:
 
     async def create_variations_with_same_lang(
             self,
-            cluster: List[int],
+            cluster: list[int],
             validate_gpt: bool = True,
             save_to_db: bool = False,
             max_variations: int = 3,
             max_merged_recipes: int = 3
-    ) -> List[MergedRecipe]:
+    ) -> list[MergedRecipe]:
         merged_recipes = []
         # Загружаем рецепты
         recipes = self.page_repository.get_recipes(page_ids=cluster)
@@ -582,12 +580,21 @@ class ClusterVariationGenerator:
 
         # Создаём вариации для каждой языковой группы
         for lang, lang_recipes in lang_groups.items():
+            n = len(lang_recipes)
+            k = min(max_merged_recipes, n)
+            
+            if n < 2:
+                logger.warning(f"Недостаточно рецептов для языка '{lang}'")
+                continue
+            max_possible_combinations = math.comb(n, k) if k <= n else 0
+            max_variations_per_lang = min(max_variations, max_possible_combinations)
             logger.info(f"Создание вариаций для языка '{lang}' с {len(lang_recipes)} рецептами")
+
             variations = await self.create_variations_from_cluster(
                 recipes=lang_recipes,
                 validate_gpt=validate_gpt,
                 save_to_db=save_to_db,
-                max_variations=max_variations,
+                max_variations=max_variations_per_lang,
                 max_merged_recipes=max_merged_recipes
             )
             merged_recipes.extend(variations)
@@ -595,12 +602,12 @@ class ClusterVariationGenerator:
     
     async def create_variations_from_cluster(
         self,
-        recipes: List[Recipe],
+        recipes: list[Recipe],
         validate_gpt: bool = True,
         save_to_db: bool = False,
         max_variations: int = 3,
         max_merged_recipes: int = 3
-    ) -> List[MergedRecipe]:
+    ) -> list[MergedRecipe]:
         """
         Создаёт 1-N различных вариаций рецепта на основе кластера.
         
@@ -696,7 +703,7 @@ class ClusterVariationGenerator:
     async def _generate_single_variation_gpt(
         self,
         base: Recipe,
-        cluster_recipes: List[Recipe],
+        cluster_recipes: list[Recipe],
         variation_index: int = 1
     ) -> Optional[MergedRecipe]:
         """Генерирует ОДНУ вариацию рецепта через GPT из данных кластера"""
@@ -808,7 +815,7 @@ Requirements:
     
     async def create_variation_best_base_gpt(
         self,
-        cluster: List[int],
+        cluster: list[int],
         validate_gpt: bool = True,
         save_to_db: bool = False
     ) -> Optional[Recipe]:
@@ -880,7 +887,7 @@ Requirements:
             logger.error(f"Ошибка best-base GPT объединения: {e}")
             return None
 
-    def _select_best_base(self, recipes: List[Recipe]) -> Recipe:
+    def _select_best_base(self, recipes: list[Recipe]) -> Recipe:
         """Выбор лучшего базового рецепта (самый полный и детальный)"""
         def score(r: Recipe) -> tuple:
             ing_count = len(r.ingredients) if r.ingredients else 0
@@ -900,10 +907,9 @@ Requirements:
 # Пример использования в main
 if __name__ == "__main__":
     import random
-    from itertools import batched
     import asyncio
     logging.basicConfig(level=logging.INFO)
-    cl = [4978,7772,34395]
+
     async def example():
         generator = ClusterVariationGenerator()
         
@@ -913,52 +919,12 @@ if __name__ == "__main__":
     8862,
     8874,
     8875,
-    8877,
-    8880,
-    8884,
-    10127,
-    10161,
-    11406,
-    11409,
-    11422,
-    11431,
-    11433,
     11439,
     11582,
     11816,
     11853,
     11875,
-    12643,
-    12858,
-    21195,
-    24862,
-    28950,
-    28961,
-    28974,
-    28975,
-    28989,
-    29032,
-    29117,
-    29299,
-    29322,
-    29390,
-    29393,
-    33885,
-    40141,
-    41347,
-    41432,
-    41437,
-    41460,
-    41528,
-    42077,
-    42153,
-    43165,
-    43268,
-    44083,
-    44794,
-    45733,
-    45739,
-    82070]
+    12643]
         random.shuffle(cluster)
         
         max_variations = min(1, max(3, len(cluster) / 4))

@@ -82,8 +82,6 @@ class ClusterParams:
 
     union_top_k: int = 10        # сколько соседей юнифицировать в DSU
     max_async_tasks: int = 10    # максимальное число одновременных асинхронных задач
-    log_every: int = 2000        # логировать и сохранять прогресс каждые N обработанных рецептов
-
 
 class SimilaritySearcher:
     def __init__(self, params: ClusterParams = None, build_type: Literal["image", "full", "ingredients"] = "full"):

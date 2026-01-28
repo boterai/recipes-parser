@@ -12,7 +12,6 @@ from pathlib import Path
 from urllib.parse import urlparse, urljoin
 from typing import Set, Dict, List, Optional
 import logging
-import heapq
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
@@ -114,6 +113,8 @@ class SiteExplorer:
         self.recipe_extractor = RecipeExtractor()
         self.max_no_recipe_pages: Optional[int] = max_no_recipe_pages 
         self.no_recipe_page_count: int = 0  # Счетчик страниц без рецепта подряд
+
+        self.cookie_accepted: bool = False  # Флаг принятия кукис
 
     def set_pattern(self, pattern: str):
         self.site.pattern = pattern

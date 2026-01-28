@@ -64,7 +64,7 @@ def load_clusters_from_history(filename: str) -> list[list[int]]:
     with open(filename, "r") as f:
         return json.load(f)
 
-async def run_merge(score_thresold: float, 
+async def run_merge_with_same_lang(score_thresold: float, 
                     build_type: Literal["image", "full", "ingredients"],
                     max_variations: int = 3, 
                     validate_gpt: bool = True, 
@@ -113,9 +113,9 @@ if __name__ == "__main__":
         "--build_type",
         type=str,
         choices=["image", "full", "ingredients"],
-        default="ingredients",
+        default="full",
         help="Type of build for clustering (default: full)"
     )
     args = parser.parse_args()
 
-    asyncio.run(run_merge(args.score_threshold, args.build_type))
+    asyncio.run(run_merge_with_same_lang(args.score_threshold, args.build_type))
