@@ -48,7 +48,8 @@ class ImageRepository(BaseRepository[ImageORM]):
     def get_not_vectorised(
         self,
         limit: Optional[int] = None,
-        page_id: Optional[int] = None
+        page_id: Optional[int] = None,
+        last_page_id: Optional[int] = None
     ) -> List[ImageORM]:
         """
         Получить невекторизованные изображения
@@ -66,11 +67,30 @@ class ImageRepository(BaseRepository[ImageORM]):
             
             if page_id:
                 query = query.filter(ImageORM.page_id == page_id)
+
+            if last_page_id:
+                query = query.filter(ImageORM.page_id > last_page_id)
             
+            query = query.order_by(ImageORM.page_id.asc())
+
             if limit:
                 query = query.limit(limit)
             
             return query.all()
+        finally:
+            session.close()
+
+    def get_not_vectorised_count(self) -> int:
+        """
+        Получить количество невекторизованных изображений
+        
+        Returns:
+            Количество невекторизованных изображений
+        """
+        session = self.get_session()
+        try:
+            count = session.query(func.count(ImageORM.id)).filter(ImageORM.vectorised == False).scalar()
+            return count
         finally:
             session.close()
     
