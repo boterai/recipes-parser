@@ -34,16 +34,8 @@ class TujaHuExtractor(BaseRecipeExtractor):
     
     def extract_description(self) -> Optional[str]:
         """Извлечение описания рецепта"""
-        # Ищем в meta description
-        meta_desc = self.soup.find('meta', {'name': 'description'})
-        if meta_desc and meta_desc.get('content'):
-            return self.clean_text(meta_desc['content'])
-        
-        # Альтернативно - из og:description
-        og_desc = self.soup.find('meta', property='og:description')
-        if og_desc and og_desc.get('content'):
-            return self.clean_text(og_desc['content'])
-        
+        # На tuja.hu нет полезных описаний рецептов
+        # Meta description содержит только перечисление ингредиентов
         return None
     
     def parse_ingredient_line(self, line: str) -> Optional[dict]:
@@ -59,12 +51,15 @@ class TujaHuExtractor(BaseRecipeExtractor):
         if not line:
             return None
         
-        line = line.strip().rstrip(',')
+        line = line.strip().rstrip(',').rstrip(';')
+        
+        # НЕ удаляем секционные маркеры здесь - они уже были обработаны при разделении
+        # на уровне extract_ingredients (заменены на запятые)
         
         # Паттерн: количество + единица + название
         # Примеры: "25 dkg kenőmájas", "1 kg burgonya", "3 tojássárga"
         # Также: "1 csomó metélőhagyma (snidling)"
-        pattern = r'^([\d.,/]+)\s*(kg|dkg|g|ml|dl|l|evőkanál|teáskanál|csomag|csomó|fej|db)?(.+)$'
+        pattern = r'^([\d.,/]+)\s*(kg|dkg|g|ml|dl|l|evőkanál|teáskanál|csomag|csomó|fej|db|pieces)?(.+)$'
         match = re.match(pattern, line, re.IGNORECASE)
         
         if match:
@@ -155,6 +150,11 @@ class TujaHuExtractor(BaseRecipeExtractor):
                 if earliest_match:
                     # Обрезаем до начала инструкций
                     ingredients_text = ingredients_text[:earliest_pos]
+                
+                # Обрабатываем секционные маркеры типа "bundázáshoz:" (для обваливания)
+                # Заменяем их на запятые, чтобы разделить ингредиенты
+                # Например: "szerecsendió ;bundázáshoz:30 dkg zsemlemorzsa" -> "szerecsendió ,30 dkg zsemlemorzsa"
+                ingredients_text = re.sub(r'\s*;?\s*(bundázáshoz|sütéshez|tálaláshoz|díszítéshez)\s*:', ',', ingredients_text, flags=re.IGNORECASE)
                 
                 # Разделяем по запятым
                 ingredient_lines = [line.strip() for line in ingredients_text.split(',')]
