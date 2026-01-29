@@ -145,8 +145,8 @@ class TaffelExtractor(BaseRecipeExtractor):
         # Очистка названия
         # Удаляем скобки с содержимым
         name = re.sub(r'\([^)]*\)', '', name)
-        # Удаляем фразы "eller", "alternativt" в конце
-        name = re.sub(r'\s+(eller|alternativt)\s+.*$', '', name, flags=re.IGNORECASE)
+        # Удаляем дополнительные пояснения после запятой (например ", helst nystött", ", gärna smaksatt")
+        name = re.sub(r',\s+.*$', '', name)
         # Удаляем лишние пробелы
         name = re.sub(r'\s+', ' ', name).strip()
         
