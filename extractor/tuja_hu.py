@@ -59,7 +59,7 @@ class TujaHuExtractor(BaseRecipeExtractor):
         # Паттерн: количество + единица + название
         # Примеры: "25 dkg kenőmájas", "1 kg burgonya", "3 tojássárga"
         # Также: "1 csomó metélőhagyma (snidling)"
-        pattern = r'^([\d.,/]+)\s*(kg|dkg|g|ml|dl|l|evőkanál|teáskanál|csomag|csomó|fej|db|pieces)?(.+)$'
+        pattern = r'^([\d.,/]+)\s*(kg|dkg|g|ml|dl|l|evőkanál|teáskanál|csomag|csomó|fej|db)?(.+)$'
         match = re.match(pattern, line, re.IGNORECASE)
         
         if match:
@@ -203,10 +203,12 @@ class TujaHuExtractor(BaseRecipeExtractor):
                 # parts будет: [текст_до, ключевое_слово, текст_после, ...]
                 # Ищем текст после ключевого слова
                 for j in range(len(parts)):
-                    if j > 0 and re.match(r'(elkészítés|készítése|készítés)', parts[j], re.IGNORECASE):
+                    if j > 0 and re.match(r'(elkészítés[ée]?|készítése|készítés[ée]?)', parts[j], re.IGNORECASE):
                         # Следующая часть - это инструкции
                         if j + 1 < len(parts):
                             inst_text = parts[j + 1].strip()
+                            # Удаляем ведущее двоеточие, если есть
+                            inst_text = inst_text.lstrip(':').strip()
                             if inst_text:
                                 instructions_parts.append(inst_text)
                 
@@ -228,7 +230,10 @@ class TujaHuExtractor(BaseRecipeExtractor):
         
         # Объединяем все части инструкций
         if instructions_parts:
-            return ' '.join(instructions_parts)
+            # Нормализуем пробелы
+            result = ' '.join(instructions_parts)
+            result = re.sub(r'\s+', ' ', result)
+            return result.strip()
         
         return None
     
@@ -328,8 +333,6 @@ def main():
     """
     Основная функция для обработки директории с HTML-файлами tuja.hu
     """
-    import os
-    
     # Определяем путь к директории с preprocessed файлами
     base_dir = Path(__file__).parent.parent
     preprocessed_dir = base_dir / "preprocessed" / "tuja_hu"
