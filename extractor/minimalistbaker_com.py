@@ -21,10 +21,10 @@ class MinimalistBakerExtractor(BaseRecipeExtractor):
         Конвертирует ISO 8601 duration в читаемый формат
         
         Args:
-            duration: строка вида "PT20M" или "PT1H30M" или "PT6H15M"
+            duration: строка вида "PT20M" или "PT1H30M" или "PT6H15M" или "PT375M"
             
         Returns:
-            Время в формате "20 minutes" или "1 hour 30 minutes" или "6 hours 30 minutes"
+            Время в формате "20 minutes" или "1 hour 30 minutes" или "6 hours 15 minutes"
         """
         if not duration or not duration.startswith('PT'):
             return None
@@ -43,6 +43,11 @@ class MinimalistBakerExtractor(BaseRecipeExtractor):
         min_match = re.search(r'(\d+)M', duration)
         if min_match:
             minutes = int(min_match.group(1))
+        
+        # Если минут >= 60, конвертируем в часы и минуты
+        if minutes >= 60:
+            hours += minutes // 60
+            minutes = minutes % 60
         
         # Формируем строку
         parts = []
