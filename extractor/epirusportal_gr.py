@@ -21,15 +21,18 @@ class EpirusportalExtractor(BaseRecipeExtractor):
         title_tag = self.soup.find('title')
         if title_tag:
             title = title_tag.get_text()
-            # Убираем суффиксы типа " | Απλές και νόστιμες συνταγές - Ειδήσεις Ηπείρου"
-            title = re.split(r'\s*[|–-]\s*', title)[0]
+            # Убираем суффиксы типа " | Απλές και νόστιμες συνταγές" или " - Ειδήσεις Ηπείρου"
+            # Берем только первую часть до | или -
+            title = re.split(r'\s*[|–]\s*', title)[0]
+            title = re.split(r'\s*-\s*Ειδήσεις Ηπείρου', title)[0]
             return self.clean_text(title)
         
         # Альтернативно - из meta тега og:title
         og_title = self.soup.find('meta', property='og:title')
         if og_title and og_title.get('content'):
             title = og_title['content']
-            title = re.split(r'\s*[|–-]\s*', title)[0]
+            title = re.split(r'\s*[|–]\s*', title)[0]
+            title = re.split(r'\s*-\s*Ειδήσεις Ηπείρου', title)[0]
             return self.clean_text(title)
         
         # Последняя попытка - h1
@@ -41,7 +44,21 @@ class EpirusportalExtractor(BaseRecipeExtractor):
     
     def extract_description(self) -> Optional[str]:
         """Извлечение описания рецепта"""
-        # Сначала пробуем найти в начале контента (до секции ингредиентов)
+        # Сначала пробуем извлечь из title tag - берем подзаголовок после |
+        title_tag = self.soup.find('title')
+        if title_tag:
+            title = title_tag.get_text()
+            # Разделяем по | и берем вторую часть (если есть)
+            parts = re.split(r'\s*\|\s*', title)
+            if len(parts) > 1:
+                # Берем подзаголовок и удаляем " - Ειδήσεις Ηπείρου" и подобное
+                subtitle = parts[1]
+                subtitle = re.split(r'\s*-\s*Ειδήσεις Ηπείρου', subtitle, flags=re.IGNORECASE)[0]
+                cleaned = self.clean_text(subtitle)
+                if cleaned and len(cleaned) > 5:
+                    return cleaned
+        
+        # Альтернатива - ищем в начале контента (до секции ингредиентов)
         content_div = self.soup.find('div', class_='tdb_single_content')
         if not content_div:
             content_div = self.soup.find('div', class_='tdb-block-inner')
@@ -52,20 +69,10 @@ class EpirusportalExtractor(BaseRecipeExtractor):
             for p in paragraphs:
                 text = p.get_text(strip=True)
                 # Пропускаем заголовки секций и пустые строки
-                if text and 'Υλικά' not in text and 'ΕΚΤΕΛΕΣΗ' not in text and not text.startswith('•'):
+                if text and 'Υλικά' not in text.upper() and 'ΥΛΙΚΑ' not in text.upper() and 'ΕΚΤΕΛΕΣΗ' not in text.upper() and not text.startswith('•'):
                     # Проверяем, что это не слишком длинный текст (вероятно, это описание)
                     if len(text) < 500:
                         return self.clean_text(text)
-                    break
-        
-        # Запасной вариант - ищем в meta description, но только начало
-        meta_desc = self.soup.find('meta', {'name': 'description'})
-        if meta_desc and meta_desc.get('content'):
-            desc_text = meta_desc['content']
-            # Обрезаем до "Υλικά" если есть
-            if 'Υλικά' in desc_text:
-                desc_text = desc_text.split('Υλικά')[0].strip()
-            return self.clean_text(desc_text)
         
         return None
     
@@ -89,7 +96,7 @@ class EpirusportalExtractor(BaseRecipeExtractor):
         if not text:
             return None
         
-        # Заменяем Unicode дроби на числа/строки
+        # Заменяем Unicode дроби на строки с дробями
         fraction_map = {
             '½': '1/2', '¼': '1/4', '¾': '3/4',
             '⅓': '1/3', '⅔': '2/3', '⅛': '1/8',
@@ -100,71 +107,88 @@ class EpirusportalExtractor(BaseRecipeExtractor):
         for fraction, replacement in fraction_map.items():
             text = text.replace(fraction, replacement)
         
-        # Паттерн для извлечения количества и единицы измерения
-        # Примеры: "1 κιλό ...", "50 γρ. ...", "2 κ.σ. ..."
-        # Важно: используем non-greedy match для единиц
-        pattern = r'^([\d\s/.,]+)?\s*(κιλό|κιλά|γραμμάρια|γραμμάριο|γρ\.?|g|kg|ml|l|λίτρο|λίτρα|κουταλι[έά].*?|κουταλάκι.*?|κ\.γ\.|κ\.σ\.|φλιτζάνι|φλυτζάνι|pieces?|medium|tablespoons?|teaspoons?|grams?|piece|τεμάχιο|μεσαίου μεγέθους|πρέζα)\s+(.+)$'
+        # Паттерн 1: Количество + единица + название
+        # "50 γρ. βούτυρο" -> amount=50, units="g", name="βούτυρο"
+        # "1 κιλό φρέσκο πράσινο λουβί" -> amount=1, units="κιλό", name="φρέσκο πράσινο λουβί"
+        pattern1 = r'^([\d\s/.,]+)\s+(κιλό|κιλά|γραμμάρια|γραμμάριο|γρ\.?|g|kg|ml|l|λίτρο|λίτρα|κ\.γ\.|κ\.σ\.|φλιτζάνι|φλυτζάνι|pieces?|medium|tablespoons?|teaspoons?|grams?|piece|τεμάχιο)\s+(.+)$'
         
-        match = re.match(pattern, text, re.IGNORECASE)
-        
-        if not match:
-            # Паттерн для случаев без единиц: "1 κρεμμύδι", "2 φιλέτα Λαβράκι"
-            pattern2 = r'^(\d+(?:[/.]\d+)?)\s+(.+)$'
-            match2 = re.match(pattern2, text)
-            if match2:
-                amount_str, name = match2.groups()
-                amount = amount_str  # Оставляем как строку
-                units = None
-            else:
-                # Если паттерн не совпал, возвращаем только название
-                return {
-                    "name": text,
-                    "amount": None,
-                    "units": None
-                }
-        else:
-            amount_str, units, name = match.groups()
+        match1 = re.match(pattern1, text, re.IGNORECASE)
+        if match1:
+            amount_str, units, name = match1.groups()
+            amount_str = amount_str.strip()
+            # Нормализуем units
+            if units.lower() in ['γρ.', 'γρ', 'γραμμάρια', 'γραμμάριο']:
+                units = 'g'
+            elif units.lower() in ['λίτρο', 'λίτρα']:
+                units = 'l'
+            elif units.lower() in ['κ.γ.']:
+                units = 'teaspoon'
+            elif units.lower() in ['κ.σ.']:
+                units = 'tablespoons'
             
-            # Обработка количества
-            amount = None
-            if amount_str:
-                amount_str = amount_str.strip()
-                # Оставляем как строку для дробей, преобразуем в число для целых
-                if '/' in amount_str:
-                    # Оставляем дробь как строку
-                    amount = amount_str
-                else:
-                    try:
-                        # Преобразуем в число
-                        if '.' in amount_str or ',' in amount_str:
-                            amount_str = amount_str.replace(',', '.')
-                            amount = int(float(amount_str)) if float(amount_str).is_integer() else float(amount_str)
-                        else:
-                            amount = int(amount_str)
-                    except ValueError:
-                        amount = amount_str
+            return {
+                "name": name.strip(),
+                "amount": amount_str,  # Оставляем как строку
+                "units": units
+            }
+        
+        # Паттерн 2: Количество + составная единица + название
+        # "3 κουταλιές σούπας ελαιόλαδο" -> amount=3, units="κουταλιές σούπας", name="ελαιόλαδο"
+        # "1 κουταλάκι του γλυκού αλάτι" -> amount=1, units="κουταλάκι του γλυκού", name="αλάτι"
+        pattern2 = r'^([\d\s/.,]+)\s+(κουταλι[έά].*?(?:σούπας|του γλυκού)|μεσαίου μεγέθους|πρέζα)\s+(.+)$'
+        
+        match2 = re.match(pattern2, text, re.IGNORECASE)
+        if match2:
+            amount_str, units, name = match2.groups()
+            amount_str = amount_str.strip()
+            units = units.strip()
+            name = name.strip()
             
-            # Обработка единицы измерения
-            units = units.strip() if units else None
+            return {
+                "name": name,
+                "amount": amount_str,
+                "units": units
+            }
         
-        # Очистка названия
-        # Удаляем скобки с содержимым
-        name = re.sub(r'\([^)]*\)', '', name)
-        # Удаляем фразы "to taste", "as needed" и греческие эквиваленты
-        name = re.sub(r'\b(to taste|as needed|or more|if needed|optional|for garnish)\b', '', name, flags=re.IGNORECASE)
-        # Удаляем "από τις...", "ψιλοκομμένο" и подобные описания в конце
-        name = re.sub(r'\s+(από τις|ψιλοκομμένο|τριμμένο).*$', '', name, flags=re.IGNORECASE)
-        # Удаляем лишние пробелы и запятые
-        name = re.sub(r'[,;]+$', '', name)
-        name = re.sub(r'\s+', ' ', name).strip()
+        # Паттерн 3: Количество + описательная единица + название
+        # "1 µεγάλο κρεµµύδι" -> amount="1", units="μεγάλο", name="κρεµµύδι"
+        pattern3 = r'^([\d\s/.,]+)\s+(µεγάλο|μεγάλο|μικρό|μικρό|μεσαίο|μεσαίου)\s+(.+)$'
         
-        if not name or len(name) < 2:
-            return None
+        match3 = re.match(pattern3, text, re.IGNORECASE)
+        if match3:
+            amount_str, units, name = match3.groups()
+            amount_str = amount_str.strip()
+            
+            # Нормализуем описательные units
+            if units.lower() in ['µεγάλο', 'μεγάλο']:
+                units = 'μεγάλο'
+            elif units.lower() in ['μεσαίο', 'μεσαίου']:
+                units = 'medium'
+            
+            return {
+                "name": name.strip(),
+                "amount": amount_str,
+                "units": units
+            }
         
+        # Паттерн 4: Количество + название (без единиц)
+        # "2 φιλέτα Λαβράκι" -> amount="2", name="φιλέτα Λαβράκι"
+        pattern4 = r'^(\d+(?:[/.]\d+)?)\s+(.+)$'
+        match4 = re.match(pattern4, text)
+        if match4:
+            amount_str, name = match4.groups()
+            return {
+                "name": name.strip(),
+                "amount": amount_str,
+                "units": None
+            }
+        
+        # Паттерн 5: Название без количества (может содержать "και" для разделения)
+        # Если нет паттернов выше, просто возвращаем название
         return {
-            "name": name,
-            "amount": amount,
-            "units": units
+            "name": text,
+            "amount": None,
+            "units": None
         }
     
     def extract_ingredients(self) -> Optional[str]:
@@ -197,9 +221,19 @@ class EpirusportalExtractor(BaseRecipeExtractor):
             
             # Если мы в секции ингредиентов и строка начинается с bullet point
             if found_bullets and text.startswith('•'):
-                parsed = self.parse_ingredient(text)
-                if parsed:
-                    ingredients.append(parsed)
+                # Проверяем, содержит ли ингредиент "και" (and) для разделения
+                # Например: "Αλάτι και πιπέρι" -> ["Αλάτι", "πιπέρι"]
+                if ' και ' in text and not any(word in text.lower() for word in ['κουταλι', 'σούπας', 'γλυκού']):
+                    # Разделяем на части
+                    parts = text.split(' και ')
+                    for part in parts:
+                        parsed = self.parse_ingredient(part)
+                        if parsed:
+                            ingredients.append(parsed)
+                else:
+                    parsed = self.parse_ingredient(text)
+                    if parsed:
+                        ingredients.append(parsed)
         
         # Если нашли ингредиенты с bullets, возвращаем
         if ingredients:
@@ -287,7 +321,18 @@ class EpirusportalExtractor(BaseRecipeExtractor):
     
     def extract_category(self) -> Optional[str]:
         """Извлечение категории"""
-        # Проверяем в JSON-LD, если есть breadcrumbs или category
+        # Based on the expected output, category should be None for most recipes
+        # Only return a category if explicitly stated in the content or metadata
+        
+        # Try to find in article:section but not "Συνταγές" (recipes) as it's too generic
+        meta_section = self.soup.find('meta', property='article:section')
+        if meta_section and meta_section.get('content'):
+            section = self.clean_text(meta_section['content'])
+            # Игнорируем общие категории типа "Συνταγές"
+            if section and section.lower() not in ['συνταγές', 'συνταγες', 'recipes']:
+                return section
+        
+        # Check JSON-LD for specific categories
         json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
         
         for script in json_ld_scripts:
@@ -298,22 +343,22 @@ class EpirusportalExtractor(BaseRecipeExtractor):
                 if isinstance(data, dict):
                     # Ищем articleSection
                     if 'articleSection' in data:
-                        return self.clean_text(data['articleSection'])
+                        section = self.clean_text(data['articleSection'])
+                        if section and section.lower() not in ['συνταγές', 'συνταγες', 'recipes']:
+                            return section
                     
                     # Ищем в @graph
                     if '@graph' in data:
                         for item in data['@graph']:
                             if isinstance(item, dict) and 'articleSection' in item:
-                                return self.clean_text(item['articleSection'])
+                                section = self.clean_text(item['articleSection'])
+                                if section and section.lower() not in ['συνταγές', 'συνταγες', 'recipes']:
+                                    return section
                             
             except (json.JSONDecodeError, KeyError):
                 continue
         
-        # Ищем в метаданных
-        meta_section = self.soup.find('meta', property='article:section')
-        if meta_section and meta_section.get('content'):
-            return self.clean_text(meta_section['content'])
-        
+        # If no specific category found, return None
         return None
     
     def extract_prep_time(self) -> Optional[str]:
