@@ -15,6 +15,10 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class KokenenhogehakkenExtractor(BaseRecipeExtractor):
     """Экстрактор для kokenenhogehakken.blogspot.com"""
     
+    # Константы для валидации
+    MIN_DESCRIPTION_LENGTH = 30  # Минимальная длина предложения для описания
+    MIN_INGREDIENT_NAME_LENGTH = 2  # Минимальная длина названия ингредиента
+    
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
         # Ищем в заголовке поста
@@ -47,12 +51,12 @@ class KokenenhogehakkenExtractor(BaseRecipeExtractor):
         full_text = post_body.get_text(separator=' ', strip=True)
         
         # Находим позицию начала секции ингредиентов
-        ing_marker = 'Wat hebben we nodig'
-        ing_pos = full_text.find(ing_marker)
+        ingredients_section_marker = 'Wat hebben we nodig'
+        ingredients_position = full_text.find(ingredients_section_marker)
         
-        if ing_pos > 0:
+        if ingredients_position > 0:
             # Берем текст до ингредиентов
-            intro_text = full_text[:ing_pos].strip()
+            intro_text = full_text[:ingredients_position].strip()
         else:
             intro_text = full_text
         
@@ -70,7 +74,7 @@ class KokenenhogehakkenExtractor(BaseRecipeExtractor):
                sentence.lower().startswith('deze ') or \
                'introductie' in sentence.lower():
                 # Находим первое подходящее предложение
-                if len(sentence) > 30:  # Достаточно длинное для описания
+                if len(sentence) > self.MIN_DESCRIPTION_LENGTH:
                     description = sentence
                     break
         
@@ -151,7 +155,7 @@ class KokenenhogehakkenExtractor(BaseRecipeExtractor):
         # Удаляем лишние пробелы
         name = re.sub(r'\s+', ' ', name).strip()
         
-        if not name or len(name) < 2:
+        if not name or len(name) < self.MIN_INGREDIENT_NAME_LENGTH:
             return None
         
         return {
@@ -368,13 +372,11 @@ def main():
     # Обрабатываем папку preprocessed/kokenenhogehakken_blogspot_com
     preprocessed_dir = os.path.join("preprocessed", "kokenenhogehakken_blogspot_com")
     
-    # Также проверяем абсолютный путь
+    # Проверяем относительный путь от текущей директории
     if not os.path.exists(preprocessed_dir):
-        preprocessed_dir = os.path.join(
-            "/home/runner/work/recipes-parser/recipes-parser",
-            "preprocessed",
-            "kokenenhogehakken_blogspot_com"
-        )
+        # Пробуем найти от корня репозитория
+        repo_root = Path(__file__).parent.parent
+        preprocessed_dir = repo_root / "preprocessed" / "kokenenhogehakken_blogspot_com"
     
     if os.path.exists(preprocessed_dir) and os.path.isdir(preprocessed_dir):
         process_directory(KokenenhogehakkenExtractor, str(preprocessed_dir))
