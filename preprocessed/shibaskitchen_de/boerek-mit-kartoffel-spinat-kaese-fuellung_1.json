@@ -1,0 +1,12 @@
+{
+    "dish_name": "Börek mit Kartoffel-Spinat-Käse-Füllung",
+    "description": "Dieser vegetarische Börek ist einfach gemacht, wunderbar würzig und perfekt zum Vorbereiten für Gäste oder als Familiengericht.",
+    "ingredients": "[{\"name\": \"Filo- oder Yufkateig\", \"units\": \"Packung\", \"amount\": 1}, {\"name\": \"Kartoffeln\", \"units\": \"kg\", \"amount\": 1}, {\"name\": \"Zwiebel\", \"units\": null, \"amount\": 1}, {\"name\": \"Knoblauch\", \"units\": \"Zehen\", \"amount\": 2}, {\"name\": \"Olivenöl\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"geriebener Käse\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"TK-Blattspinat\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"Ras-el-Hanout\", \"units\": \"TL\", \"amount\": 1}, {\"name\": \"Chiliflocken\", \"units\": null, \"amount\": null}, {\"name\": \"Salz\", \"units\": null, \"amount\": null}, {\"name\": \"Pfeffer\", \"units\": null, \"amount\": null}, {\"name\": \"Joghurt\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"Milch\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"Sonnenblumenöl\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"Ei\", \"units\": null, \"amount\": 1}, {\"name\": \"Paprikapulver\", \"units\": null, \"amount\": null}, {\"name\": \"Sesam\", \"units\": \"EL\", \"amount\": 2}, {\"name\": \"Schwarzkümmel\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Kartoffeln weich kochen, abkühlen lassen, schälen und grob würfeln. Zwiebeln und Knoblauch fein hacken. TK-Spinat gut ausdrücken. Den Ofen auf 180 °C vorheizen. 2. In einer Pfanne Öl erhitzen, Zwiebeln und Knoblauch anschwitzen. Kartoffelwürfel hinzufügen, würzen und alles gut anbraten. Die Masse grob zerstampfen, Käse und Spinat untermengen. Kurz abkühlen lassen. 3. Joghurt, Milch, Öl und Ei verrühren. Mit Salz, Pfeffer und Paprikapulver abschmecken. 4. Je zwei Yufka-Blätter übereinanderlegen, mit der Soße bestreichen, Füllung daraufgeben und längs aufrollen. 5. Mit Sesam und Schwarzkümmel bestreuen. Im vorgeheizten Ofen ca. 40 Minuten backen.",
+    "category": "Abendessen",
+    "prep_time": "30 minutes",
+    "cook_time": "40 minutes",
+    "total_time": "1 hour 20 minutes",
+    "notes": "Die Füllung lässt sich beliebig variieren. Wichtig ist, dass sie nicht zu flüssig ist.",
+    "tags": "Börek, vegetarisch, türkisch"
+}

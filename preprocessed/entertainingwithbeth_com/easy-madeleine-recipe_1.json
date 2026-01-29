@@ -1,0 +1,12 @@
+{
+    "dish_name": "Madeleines",
+    "description": "This Easy Madeleine Recipe will have you whipping up Madeleines like a pro in no time!",
+    "ingredients": "[{\"name\": \"Eggs\", \"units\": \"jumbo\", \"amount\": 3}, {\"name\": \"Sugar\", \"units\": \"cup\", \"amount\": \"2/3\"}, {\"name\": \"Orange Zest\", \"units\": \"tsp\", \"amount\": \"1 1/2\"}, {\"name\": \"Flour\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"Baking Powder\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"Salt\", \"units\": \"tsp\", \"amount\": \"¼\"}, {\"name\": \"Melted Butter\", \"units\": \"tbsp\", \"amount\": 6}, {\"name\": \"Powdered Sugar\", \"units\": \"tbsp\", \"amount\": 1}]",
+    "instructions": "Beat eggs with sugar until pale yellow. Add the orange zest. Whisk together dry ingredients add to the egg mixture gently, until just combined. Then add melted butter. Refrigerate the batter for at least 1 hour! Or overnight. Preheat oven to 350F/(176C). Lightly coat a non-stick, Madeleine pan with baking spray. Spoon 1 tbsp of batter into the center of the well and don’t touch it. Bake 7-8 mins until slightly golden around edges and centers look set and a slight hump has appeared. Allow to cool slightly and remove from the tin and allow to cool. Dust with powdered sugar and serve!",
+    "category": "Dessert",
+    "prep_time": "1 hour",
+    "cook_time": "8 minutes",
+    "total_time": "1 hour 8 minutes",
+    "notes": "Batter can be made 2 days ahead. Batter MUST rest for at least 1 hour in the fridge in order to get that 'traditional madeleine hump'.",
+    "tags": "French, Dessert, Cookies"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ruska Shuba salata ili Haringa ispod kaputa",
+    "description": null,
+    "ingredients": "[{\"name\": \"fileta haringe iz konzerve\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"kuvanog krompira\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"kuvane šargarepe\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"srednjih kiselih krastavčića\", \"units\": null, \"amount\": 5}, {\"name\": \"kuvane cvekle\", \"units\": \"srednje\", \"amount\": 3}, {\"name\": \"kuvana jaja\", \"units\": null, \"amount\": 2}, {\"name\": \"majoneza\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"belog vinskog sirćeta\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"crvenog luka\", \"units\": \"manje glavice\", \"amount\": 0.5}, {\"name\": \"so\", \"units\": null, \"amount\": null}, {\"name\": \"mleveni biber\", \"units\": null, \"amount\": null}, {\"name\": \"zelenog dela praziluka\", \"units\": null, \"amount\": null}, {\"name\": \"peršun\", \"units\": null, \"amount\": null}]",
+    "instructions": "Krompir, šargarepu, krastavčiće, cveklu, crveni luk i jaja narendati, svako u zasebnoj posudi. Haringe ocediti od tečnosti i sitno naseckati. Na dno pleha kome se skida stranica dimenzija 24cm rasporediti narendani krompir i blago ga pritisnuti odozgo i poravnati. Posoliti malo i poprskati vinskim sirćetom. Preko krompira zatim rasporediti rendani crveni luk. Preko luka rasporediti naseckane haringe i lepo utapkati i poravnati. Staviti preko otprilike 5 kašike majoneza i prekriti ribu. Preko majoneza zatim staviti izrendanu šargarepu, premazati preko majonezom i staviti rendane kisele krastavčiće. Preko krastavčića ponovo premazati majonez i na kraju dodati i rasporediti rendanu cveklu. Po ukusu posoliti i pobiberiti. Ostatak majoneza staviti preko i sve lepo poravnati. Na kraju, preko majoneza rasporediti i rendana jaja. Ja sam izrendala posebno belanca i žumanca, jer sam zbog dekoracije htela da tako bude, a vi možete po želji. Praziluk sitno naseckati, kao i peršun i ukrasiti tortu. Pre služenja je ostaviti da odstoji u frižideru, najbolje preko noći.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Ako koristite posni majonez i izbacite jaja, salatu možete poslužiti i u danima posta.",
+    "tags": "belo vinsko sirće, crveni luk, cvekla, haringa, jaja, kiseli krastavčići, krompir, majonez, šargarepa"
+}

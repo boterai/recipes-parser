@@ -1,0 +1,12 @@
+{
+    "dish_name": "Rode bietjes risotto",
+    "description": "Deze rode bietenrisotto is een goeie introductie voor wie de smaak van rode biet nog niet kent.",
+    "ingredients": "[{\"name\": \"water\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"kippenbouillon\", \"units\": \"ml\", \"amount\": 600}, {\"name\": \"boerenboter\", \"units\": \"gr\", \"amount\": 20}, {\"name\": \"olie\", \"units\": \"ml\", \"amount\": 15}, {\"name\": \"sjalo\", \"units\": \"stuk\", \"amount\": 1}, {\"name\": \"risotto\", \"units\": \"gr\", \"amount\": 150}, {\"name\": \"witte wijn\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"peper\", \"units\": null, \"amount\": null}, {\"name\": \"zout\", \"units\": null, \"amount\": null}, {\"name\": \"rode biet\", \"units\": \"gr\", \"amount\": 100}, {\"name\": \"Parmezaanse kaas\", \"units\": \"gr\", \"amount\": 30}, {\"name\": \"boter\", \"units\": null, \"amount\": null}, {\"name\": \"zure room\", \"units\": null, \"amount\": null}, {\"name\": \"verse bieslook\", \"units\": null, \"amount\": null}]",
+    "instructions": "Zet het water op met de bouillon. Hou de bouillon goed warm. Laat de boter met de olie smelten in een zware pan, type Le Creuset. Fruit het sjalotje glazig. Doe de risotto bij het sjalotje en roer goed om, zodat elke rijstkorrel een laagje vetstof krijgt. Blus met de witte wijn en laat die nagenoeg uitkoken. Schep een pollepel bouillon op de rijst en roer om. Voeg pas een nieuwe lepel bouillon toe als de vorige volledig is opgenomen. Kruid met peper en zout. Pureer ondertussen de rode biet met de staafmixer en zet de puree nog even aan de kant. Er mogen nog wat stukjes inzitten, zodat je wat structuur hebt in je risotto. Blijf bouillon toevoegen aan de risotto en roer goed na elke toevoeging. Het kan zijn dat je niet al het vocht nodig hebt. Proef af en toe tot je risotto mooi zacht en gaar is. Roer de rode bietenpuree door de risotto. Werk af met Parmezaanse kaas en boter. Schep een lepeltje zure room op de risotto en werk af met bieslooksnippertjes.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Serveer bij de risotto een kommetje gesauteerde groentjes. Recept komt morgen op mijn blog. Je kan rode bietjes zelf koken, maar ik heb ze gekocht als gestoomd sous-vide. Vervang de kippenbouillon door groentebouillon voor een vegetarische versie.",
+    "tags": null
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kiflice",
+    "description": null,
+    "ingredients": "[{\"name\": \"pšeničnog brašna T-400 meko\", \"units\": \"g\", \"amount\": 600}, {\"name\": \"mlakog mleka\", \"units\": \"ml\", \"amount\": 300}, {\"name\": \"ulja\", \"units\": \"ml\", \"amount\": 120}, {\"name\": \"suvog kvasca\", \"units\": \"g\", \"amount\": 10}, {\"name\": \"šećera\", \"units\": \"kašike\", \"amount\": 2}, {\"name\": \"soli\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"jaje\", \"units\": null, \"amount\": 1}, {\"name\": \"jaje\", \"units\": null, \"amount\": 1}, {\"name\": \"mleka\", \"units\": \"kašika\", \"amount\": 1}, {\"name\": \"susam\", \"units\": \"za posip\", \"amount\": null}]",
+    "instructions": "Sjediniti šećer, kvasac i mleko, pa ostaviti da se kvasac aktivira. Prosejati brašno u posudu za mešanje i dodati so. Dodati zatim sve ostale sastojke, kao i kvasac, pa zamesiti glatko testo. Ostaviti ga da odstoji 15 minuta, zatim ga opet premesiti i ostaviti da odstoji još 15 minuta. Odstajalo testo zatim na radnom stolu posutom brašnom podeliti na dva dela. Svaki deo rastanjiti oklagijom tanko i podeliti na 16 delova (trouglova). Kiflice se mogu puniti sirom ili već po želji, a mogu ostati i prazne. Kiflice uvijati uobičajeno, pa ih ređati na pleh obložen papirom za pečenje. Formirane kiflice ostaviti da odstoje pre pečenja 20 – 30 minuta. Pre pečenja premazati umućenim jajetom sa mlekom i posuti susamom. Peći u predhodno zagrejanoj rerni na 200C oko 20 minuta, dok lepo ne porumene.",
+    "category": null,
+    "prep_time": "15 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "35 minutes",
+    "notes": null,
+    "tags": "brašno t-400 meko, mleko, susam, suvi kvasac"
+}

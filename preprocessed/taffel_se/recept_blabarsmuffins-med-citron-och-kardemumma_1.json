@@ -1,0 +1,12 @@
+{
+    "dish_name": "Blåbärsmuffins med citron och kardemumma",
+    "description": "Citron, kardemumma och blåbär är en höjdartrio i muffins.",
+    "ingredients": "[{\"name\": \"smör\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"ägg\", \"units\": null, \"amount\": 3}, {\"name\": \"socker\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"mjölk\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"finrivet citronskal\", \"units\": \"tsk\", \"amount\": 1}, {\"name\": \"stött kardemumma\", \"units\": \"tsk\", \"amount\": 0.5}, {\"name\": \"mjöl\", \"units\": \"dl\", \"amount\": 3}, {\"name\": \"skrädmjöl eller grahamsmjöl\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"bakpulver\", \"units\": \"tsk\", \"amount\": 1}, {\"name\": \"färska blåbär eller frysta\", \"units\": \"dl\", \"amount\": 4}]",
+    "instructions": "Värm ugnen till 225°. Smörj en muffinsplåt eller ställ ut pappersformar på en plåt. Smält smöret och låt svalna något. Vispa ägg och socker pösigt. Rör mjölk, smör, citronskal och kardemumma. Blanda mjöl och bakpulver och sikta ner blandningen i smeten. Siktningen gör dina muffins mörare och luftigare. Vänd ner blåbären. Klicka ut smeten i formarna. Grädda mitt i ugnen knappt 20 min för stora och ca 12 min för normalstora. Låt svalna något, ta ut ur formarna om du använt teflonform så får de godare yta.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "20 minutes",
+    "total_time": "30 minutes",
+    "notes": "Nektarin eller aprikos i bitar kan ersätta blåbär. Skrädmjöl är rostat havremjöl som ger en fin rostad, lite nötig smak.",
+    "tags": null
+}

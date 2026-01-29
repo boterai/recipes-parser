@@ -1,0 +1,12 @@
+{
+    "dish_name": "Apple Pie with Pumpkin Caramel Sauce",
+    "description": "Apple Pie with Pumpkin Caramel Sauce is easy to make using a store bought pie and a simple, two ingredient topping.",
+    "ingredients": "[{\"name\": \"Marie Callendar's Dutch Apple Pie\", \"units\": null, \"amount\": 1}, {\"name\": \"store bought hot caramel sauce\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"pumpkin puree\", \"units\": \"cup\", \"amount\": 0.25}, {\"name\": \"pumpkin pie spice\", \"units\": \"teaspoon\", \"amount\": 0.5}]",
+    "instructions": "Bake pie according to package instructions. Let cool slightly. For the pumpkin caramel sauce, place all 3 ingredients in a small, heavy saucepan over low heat. Stir until completely combined and smooth, about 1-2 minutes. Serve warm, drizzled over pie slices.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "1 hour",
+    "total_time": "1 hour 15 minutes",
+    "notes": null,
+    "tags": "apple pie, pumpkin caramel, dessert"
+}

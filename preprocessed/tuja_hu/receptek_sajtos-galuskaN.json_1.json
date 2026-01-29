@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sajtos galuska",
+    "description": "Recept a sajtos galuska készítéséhez.",
+    "ingredients": "[{\"name\": \"liszt\", \"units\": \"dkg\", \"amount\": 15}, {\"name\": \"tojás\", \"units\": \"db\", \"amount\": 4}, {\"name\": \"zsír\", \"units\": \"dkg\", \"amount\": 5}, {\"name\": \"hagyma\", \"units\": null, \"amount\": null}, {\"name\": \"metélőhagyma\", \"units\": \"csomó\", \"amount\": 1}, {\"name\": \"só\", \"units\": null, \"amount\": null}, {\"name\": \"reszelhető sajt\", \"units\": \"dkg\", \"amount\": 20}]",
+    "instructions": "Levesestálban galuskatésztát keverünk a lisztből, a tojásból és 2,5 dl langyos vízből. Megsózzuk, majd 15 percig pihentetjük. Közben a hagymát apróra vágjuk, és zsírban aranysárgára pirítjuk. A tésztából csíkokat szaggatunk a forrásban levő sós vízbe. Kifőzzük. Szűrőkanállal kiszedjük, lecsurgatjuk, majd kizsírozott edénybe tesszük. Közben soronként megszórjuk reszelt sajttal. Tetejére szórjuk a hagymát és a még megmaradt sajtot. Fogyasztás előtt forró sütőben átmelegítjük. Metélőhagymával meghintve tálaljuk.",
+    "category": null,
+    "prep_time": "15 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

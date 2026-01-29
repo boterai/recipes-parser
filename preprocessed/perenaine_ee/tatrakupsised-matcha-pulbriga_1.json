@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tatraküpsised matcha pulbriga",
+    "description": "Muredad ja vähemagusad küpsised mandlilaastude ja valge šokolaadi tükkidega, mis valmivad ilma nisujahuta.",
+    "ingredients": "[{\"name\": \"või\", \"units\": \"g\", \"amount\": 125}, {\"name\": \"roo suhkur\", \"units\": \"g\", \"amount\": 85}, {\"name\": \"muna\", \"units\": \"pcs\", \"amount\": 1}, {\"name\": \"tatrajahu\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"kulinaaria matcha pulber\", \"units\": \"g\", \"amount\": 12}, {\"name\": \"küpsetuspulber\", \"units\": \"g\", \"amount\": 4}, {\"name\": \"mandlilaastud\", \"units\": \"g\", \"amount\": 75}, {\"name\": \"valge šokolaad\", \"units\": \"g\", \"amount\": 50}]",
+    "instructions": "Klopi või suhkruga vahule, lisa muna, vahusta edasi. Sega tatrajahu, matcha pulber ja küpsetuspulber ning lisa muna-või segule. Sega sisse ka mandlilaastud ja hakitud valge šokolaad. Vormi tainast väikesed pallikesed, aseta küpsetuspaberiga kaetud ahjuplaadile ning vajuta kahvliga lamedamaks. Küpseta 180-kraadises ahjus u. 15-20 minutit.",
+    "category": "küpsised",
+    "prep_time": null,
+    "cook_time": "15-20 minutes",
+    "total_time": null,
+    "notes": "Tuntava matcha maitse ja värvuse saad, kui kasutad hea kvaliteediga kulinaaria matchat.",
+    "tags": "küpsised, Matcha, nisujahuta küpsetised"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kõrvitsaküpsised šokolaaditükkidega",
+    "description": "Õrnalt kaneelised munavabad küpsised, kus peidus rohkelt šokolaaditükke.",
+    "ingredients": "[{\"name\": \"või\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"suhkur\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"kõrvitsapüree\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"vanilliekstrakt\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"riisijahu\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"sool\", \"units\": null, \"amount\": null}, {\"name\": \"küpsetuspulbrit\", \"units\": \"tl\", \"amount\": 0.5}, {\"name\": \"kaneel\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"riivitud muskaatpähklit\", \"units\": \"tl\", \"amount\": 0.25}, {\"name\": \"tumeda šokolaadi\", \"units\": \"g\", \"amount\": 50}]",
+    "instructions": "Sulata või, lisa juurde suhkur, vanilliekstrakt ja kõrvitsapüree. Teises kausis sega omavahel kõik kuivained, lisa juurde või-kõrvitsapüree segu. Sega ühtlaseks tainaks, viimasena lisa juurde hakitud šokolaad. Tõsta tainas külmikusse vähemalt 30 minutiks. Vormi tainast väikesed pallikesed, aseta need küpsetuspaberiga kaetud ahjuplaadile ja vajuta lamedaks. Küpseta 180-kraadises ahjus u. 8-10 minutit. Võta ahjust ja lase jahtuda.",
+    "category": "Dessert",
+    "prep_time": "30 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "40 minutes",
+    "notes": "Sellest kogusest tuleb u. 35 küpsist.",
+    "tags": "küpsised, kõrvits, šokolaad"
+}

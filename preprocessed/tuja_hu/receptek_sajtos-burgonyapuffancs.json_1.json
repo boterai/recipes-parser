@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sajtos burgonyapuffancs",
+    "description": null,
+    "ingredients": "[{\"name\": \"főtt, áttört burgonya\", \"units\": \"kg\", \"amount\": \"1\"}, {\"name\": \"reszelt sajt\", \"units\": \"dkg\", \"amount\": \"20\"}, {\"name\": \"tojássárga\", \"units\": null, \"amount\": \"3\"}, {\"name\": \"vaj\", \"units\": \"dkg\", \"amount\": \"3\"}, {\"name\": \"tejföl\", \"units\": \"dl\", \"amount\": \"1\"}, {\"name\": \"só\", \"units\": null, \"amount\": null}, {\"name\": \"törött bors\", \"units\": null, \"amount\": null}, {\"name\": \"szerecsendió\", \"units\": null, \"amount\": null}, {\"name\": \"liszt\", \"units\": null, \"amount\": null}, {\"name\": \"zsír\", \"units\": null, \"amount\": null}, {\"name\": \"paprika\", \"units\": null, \"amount\": null}]",
+    "instructions": "A vajat kikeverjük a tojássárgákkal, hozzátesszük a tejfölt, megsózzuk, borsozzuk, egy kevés reszelt szerecsendióval fűszerezzük, és nagyon jól kikeverjük. Beletesszük előbb a reszelt sajtot, majd a kihűlt, áttört burgonyát, és nagyon jól összegyúrjuk. Kisebb pogácsákat formálunk belőle, paprikával kevert lisztbe mártjuk, és serpenyőben, egy kevés forró zsírban mindkét oldalukat piros-ropogósra sütjük. Megszórjuk reszelt sajttal, és tejfölös-sajtos mártást tálalunk hozzá. Süthetjük tükörtojássütőben is, mint a cseh fánkot, ekkor nem mártjuk be sütés előtt a paprikás lisztbe. Ha megsültek, 2-2 darabot egy kevés sajtkrémmel összefogva tálaljuk.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

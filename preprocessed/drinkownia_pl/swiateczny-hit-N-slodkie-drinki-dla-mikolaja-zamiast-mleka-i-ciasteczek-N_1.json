@@ -1,0 +1,12 @@
+{
+    "dish_name": "Martini Mleczko & Ciasteczko",
+    "description": "Kremowe, słodkie i pachnące świętami drinki, idealne dla Mikołaja.",
+    "ingredients": "[{\"name\": \"wódka waniliowa\", \"units\": \"ml\", \"amount\": 40}, {\"name\": \"likier z białej czekolady\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"likier ciasteczkowy\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"mleko lub śmietanka 18%\", \"units\": \"ml\", \"amount\": 40}, {\"name\": \"herbatniki\", \"units\": null, \"amount\": \"kilka\"}, {\"name\": \"kostki lodu\", \"units\": null, \"amount\": null}]",
+    "instructions": "Do shakera wlewamy wódkę waniliową, likier z białej czekolady, likier ciasteczkowy oraz mleko lub śmietankę. Dodajemy kostki lodu i energicznie wstrząsamy przez 10–12 sekund. Brzeg kieliszka zwilżamy i obtaczamy w pokruszonych herbatnikach. Przelewamy koktajl do kieliszka i dekorujemy małym ciastkiem.",
+    "category": "Drink",
+    "prep_time": "3 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Bardziej kremowy efekt uzyskamy, używając śmietanki 30%. Jeśli drink wychodzi zbyt słodki, można dodać 10 ml wódki waniliowej.",
+    "tags": "słodkie, kremowe, deserowe, drinki, świąteczne"
+}

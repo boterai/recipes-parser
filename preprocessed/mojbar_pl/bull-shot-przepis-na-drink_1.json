@@ -1,0 +1,12 @@
+{
+    "dish_name": "Bull Shot",
+    "description": "Bull Shot to z pewnością drink, który się albo kocha albo nienawidzi. Stanowi on jednak ciekawą alternatywę dla soku pomidorowego w koktajlu Bloody Mary.",
+    "ingredients": "[{\"name\": \"wódka\", \"units\": \"ml\", \"amount\": 40}, {\"name\": \"wystudzony bulion\", \"units\": \"ml\", \"amount\": 80}, {\"name\": \"sok z cytryny\", \"units\": \"ml\", \"amount\": 10}, {\"name\": \"sos Worcestershire\", \"units\": \"krople\", \"amount\": 3}, {\"name\": \"TABASCO® Chipotle Sauce\", \"units\": \"krople\", \"amount\": 5}, {\"name\": \"sól\", \"units\": \"szczypta\", \"amount\": 1}, {\"name\": \"pieprz\", \"units\": \"szczypta\", \"amount\": 1}, {\"name\": \"sól selerowa\", \"units\": \"do dekoracji\", \"amount\": null}]",
+    "instructions": "Na wstępie udekoruj wysoką szklankę. W tym celu przetrzyj rant kawałkiem cytryny i obtocz solą selerową. Wstrząśnij wszystkie składniki z lodem i przelej do udekorowanej szklanki wypełnionej lodem. W miejsce bulionu możesz użyć bulionetki.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

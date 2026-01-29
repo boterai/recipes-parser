@@ -1,0 +1,12 @@
+{
+    "dish_name": "Torta od peciva",
+    "description": "Delikatna, lagana, mrvičasta i mekana torta, brza i laka za pripremu.",
+    "ingredients": "[{\"name\": \"putera\", \"units\": \"g\", \"amount\": \"200-250\"}, {\"name\": \"šećera\", \"units\": \"g\", \"amount\": \"150-200\"}, {\"name\": \"brašno\", \"units\": \"tbsp\", \"amount\": \"1.5\"}, {\"name\": \"jaja\", \"units\": null, \"amount\": \"3\"}, {\"name\": \"pavlaka ili vrhnje\", \"units\": \"tbsp\", \"amount\": \"2\"}, {\"name\": \"vanilin šećera\", \"units\": \"g\", \"amount\": \"10\"}, {\"name\": \"praška za pecivo\", \"units\": \"vrećica\", \"amount\": \"1\"}, {\"name\": \"soda\", \"units\": \"kašičica\", \"amount\": \"1\"}, {\"name\": \"ocat\", \"units\": null, \"amount\": null}, {\"name\": \"grožđice\", \"units\": null, \"amount\": null}]",
+    "instructions": "Pripremite grožđice, uradite osnovno testo, dodajte sve sastojke, oblikujte i pecite u rerni.",
+    "category": "Dessert",
+    "prep_time": "15-30 minutes",
+    "cook_time": "10-15 minutes",
+    "total_time": "25-45 minutes",
+    "notes": "Možete koristiti margarin umesto putera. Dodajte suve kajsije ili orahe umesto grožđica ako želite.",
+    "tags": "torta, desert, kolači, pecivo"
+}

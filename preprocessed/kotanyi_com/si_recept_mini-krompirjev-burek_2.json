@@ -1,0 +1,12 @@
+{
+    "dish_name": "Mini krompirjev burek",
+    "description": "Plasti hrustljavega testa, ovite okoli slanega krompirjevega nadeva - ti grižljajni bureki so krhki, zlato zapečeni in popolni za deljenje!",
+    "ingredients": "[{\"name\": \"krompir\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"čebula\", \"units\": null, \"amount\": 1}, {\"name\": \"Krompir Original, začimbna mešanica\", \"units\": \"žlica\", \"amount\": 1}, {\"name\": \"vlečeno testo\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"olja\", \"units\": \"ml\", \"amount\": 70}, {\"name\": \"vode\", \"units\": \"ml\", \"amount\": 70}]",
+    "instructions": "1. Krompir olupite in narežite na majhne kocke. Čebulo drobno sesekljajte. Na malo olja popražite čebulo, dodajte krompir in začimbe. Pražite 7–10 minut, da krompir nekoliko zmehča in se obarva. 2. Pečico segrejte na 200 °C. V skodelici zmešajte olje in vodo. Vzemite en list vlečenega testa, premažite z mešanico in prepognite na polovico. Na rob položite 2 žlici nadeva in zvijte. Zvitek oblikujte v polžka. Ponovite z ostalim testom in nadevom. 3. Polžke razporedite po pekaču, obloženem s papirjem za peko, premažite s preostalo mešanico olja in vode ter pecite približno 20 minut, da postanejo zlati in hrustljavi. Postrezite nekoliko ohlajene, skupaj z jogurtom.",
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "30 minutes",
+    "notes": null,
+    "tags": "vegetarijansko, krompir, družinske jedi, prigrizek"
+}

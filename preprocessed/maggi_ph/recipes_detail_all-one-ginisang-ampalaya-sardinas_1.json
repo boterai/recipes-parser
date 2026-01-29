@@ -1,0 +1,12 @@
+{
+    "dish_name": "All-in-One Ginisang Ampalaya at Sardinas",
+    "description": "A delicious Filipino dish that combines the bitterness of ampalaya (bitter gourd) with the savory goodness of sardines in tomato sauce.",
+    "ingredients": "[{\"name\": \"Vegetable Oil\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"Garlic\", \"units\": \"cloves\", \"amount\": 4}, {\"name\": \"Onion\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"Tomato\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"Sardines in Tomato Sauce\", \"units\": \"can\", \"amount\": 1}, {\"name\": \"Ampalaya\", \"units\": \"kilograms\", \"amount\": 0.25}, {\"name\": \"Egg\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"MAGGI® Magic Sarap®\", \"units\": \"sachet\", \"amount\": 1}, {\"name\": \"Water\", \"units\": \"cups\", \"amount\": 0.5}]",
+    "instructions": "1. Sauté garlic, onion, tomato and sardines in oil. 2. Add ampalaya and sauté for 5mins. Stir in beaten egg and cook until barely set. 3. Season with 8g MAGGI® Magic Sarap® and pour water. Transfer on a serving plate and serve.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Adding egg to ampalaya dishes balances the bitterness because of fat from yolk.",
+    "tags": "Filipino, Main Course, Sardines, Ampalaya"
+}

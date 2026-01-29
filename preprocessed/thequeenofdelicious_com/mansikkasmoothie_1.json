@@ -1,0 +1,12 @@
+{
+    "dish_name": "Mansikkasmoothie",
+    "description": "Helppo ja terveellinen mansikkasmoothie saa lisämakua ja -vitamiineja pinaatista ja basilikasta.",
+    "ingredients": "[{\"name\": \"mansikoita\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"banaani\", \"units\": null, \"amount\": 1}, {\"name\": \"jogurttia\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"pakastepinaattia\", \"units\": \"pala\", \"amount\": 1}, {\"name\": \"basilikaa\", \"units\": \"oksa\", \"amount\": 1}]",
+    "instructions": "Kuori banaani ja laita kaikki ainekset tehosekoittimen kulhoon. Käytä tehosekoitinta kunnes smoothie on tasaista.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": "3 minutes",
+    "notes": "Ravintoarvot ovat vain arvio yhdelle smoothieannokselle. Reseptistä tulee kaksi annosta. Pinaatin ja basilikan voi myös jättää pois smoothiesta.",
+    "tags": "smoothie, terveellinen, mansikka"
+}

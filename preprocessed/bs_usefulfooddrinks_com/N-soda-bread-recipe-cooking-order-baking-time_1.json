@@ -1,0 +1,12 @@
+{
+    "dish_name": "Soda hleb",
+    "description": "Domaći soda hljeb je prilično neobično, ukusno i što je najvažnije, zdravo jelo.",
+    "ingredients": "[{\"name\": \"pšenično brašno\", \"units\": \"kilograms\", \"amount\": \"0.5\"}, {\"name\": \"parmezan\", \"units\": \"grams\", \"amount\": \"100\"}, {\"name\": \"sir Gruyere\", \"units\": \"grams\", \"amount\": \"50\"}, {\"name\": \"sjemenke bundeve\", \"units\": \"handful\", \"amount\": \"1\"}, {\"name\": \"kefir\", \"units\": \"milliliters\", \"amount\": \"300\"}, {\"name\": \"mlijeko\", \"units\": \"milliliters\", \"amount\": \"60\"}, {\"name\": \"soda bikarbona\", \"units\": \"teaspoons\", \"amount\": \"2\"}, {\"name\": \"morska so\", \"units\": \"teaspoons\", \"amount\": \"0.5\"}]",
+    "instructions": "Postavite rernu na 180 stepeni. U ovom trenutku obje vrste sira propasirati kroz krupno ribanje. Dalje, u jednoj šoljici ili u kombinatu pomešati naznačenu količinu sode, pola kilograma brašna i sve preliti kefirom. Sada lagano umutite sadržaj, postepeno ulijte mlijeko i sir. Nastavite miješati sastojke dok ne dobijete glatku konzistenciju. Odmah nakon toga pobrašnite tepsiju u kojoj će se peći irski soda hleb da se kolač ne zalepi. Kada dobijete testo, oblikujte ga u grudvicu i pažljivo stavite u pripremljenu posudu. Kao u prethodnom receptu, napravite rez u obliku krsta na gornjoj strani. Nakon toga premažite ga preostalim mlijekom i pospite sjemenkama bundeve; Sada stavite kalup u rernu i pecite hleb četrdeset minuta. Nakon kuvanja ostavite gotov proizvod da odstoji deset minuta. Nakon hlađenja može se rezati i poslužiti.",
+    "category": "Bread",
+    "prep_time": null,
+    "cook_time": "40 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "soda bread, irish bread, baking"
+}

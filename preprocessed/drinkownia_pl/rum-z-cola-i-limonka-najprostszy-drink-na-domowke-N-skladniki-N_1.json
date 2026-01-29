@@ -1,0 +1,12 @@
+{
+    "dish_name": "Rum z colą i limonką",
+    "description": "Prosty, szybki drink, który sprawdza się zawsze, gdy trzeba ogarnąć coś do picia bez zastanawiania się, czy „podejdzie”.",
+    "ingredients": "[{\"name\": \"rum\", \"units\": \"ml\", \"amount\": \"40-50\"}, {\"name\": \"cola\", \"units\": \"do dopełnienia\", \"amount\": null}, {\"name\": \"limonka\", \"units\": \"ćwiartki\", \"amount\": \"1-2\"}, {\"name\": \"kostki lodu\", \"units\": null, \"amount\": null}]",
+    "instructions": "Do wysokiej szklanki wrzucamy kilka kostek lodu. Wlewamy rum. Wyciskamy do środka limonkę i wrzucamy ją do szklanki. Dopełniamy colą i delikatnie mieszamy. Podajemy od razu, dobrze schłodzone.",
+    "category": "Drink",
+    "prep_time": "1-2 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Najprostsza i najbezpieczniejsza zasada to: rum jako baza, cola jako dopełnienie, limonka do przełamania słodyczy.",
+    "tags": "drink, rum, cola, limonka, prosty drink, szybkie drinki"
+}

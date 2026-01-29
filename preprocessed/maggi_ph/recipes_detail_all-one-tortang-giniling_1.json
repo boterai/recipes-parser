@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tortang Giniling",
+    "description": "A versatile Filipino omelet combining ground meat with a medley of vegetables, perfect for breakfast or lunch.",
+    "ingredients": "[{\"name\": \"Vegetable Oil\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"garlic\", \"units\": \"cloves\", \"amount\": 4}, {\"name\": \"onion\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"tomato\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"freshly ground pork\", \"units\": \"kilograms\", \"amount\": 0.25}, {\"name\": \"potato\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"small carrot\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"MAGGI® Magic Sarap®\", \"units\": \"grams\", \"amount\": 8}, {\"name\": \"fresh medium eggs\", \"units\": \"pieces\", \"amount\": 6}]",
+    "instructions": "1. Sauté garlic, onion, tomato, pork, potato and carrot in oil. Season with ½ sachet of MAGGI® Magic Sarap®. 2. Beat eggs and season with remaining ½ sachet of MAGGI® Magic Sarap®. 3. Pour beaten egg, gently stir and cook until barely set. Cover with plate, flip and return to the pan to cook the other side. Transfer on a serving plate and serve with preferred dipping sauce.",
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "30 minutes",
+    "notes": "Tortang Giniling best served with Sinangag and simple vegetables dish.",
+    "tags": "Filipino, omelet, breakfast, lunch"
+}

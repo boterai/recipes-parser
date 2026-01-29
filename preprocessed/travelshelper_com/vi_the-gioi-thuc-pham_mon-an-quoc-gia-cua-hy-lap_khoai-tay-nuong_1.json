@@ -1,0 +1,12 @@
+{
+    "dish_name": "Khoai tây nướng chanh-Oregano của Hy Lạp",
+    "description": "Khoai tây nướng lò kinh điển của Hy Lạp, thường được nấu cùng thịt quay hoặc ăn riêng như một món ăn kèm hấp dẫn.",
+    "ingredients": "[{\"name\": \"Khoai tây\", \"units\": \"pound\", \"amount\": 2}, {\"name\": \"Dầu ô liu\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"Lá oregano khô\", \"units\": \"tablespoon\", \"amount\": 2}, {\"name\": \"Nước chanh\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"Tỏi\", \"units\": \"cloves\", \"amount\": 3}, {\"name\": \"Muối\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"Nước\", \"units\": \"cup\", \"amount\": 0.5}]",
+    "instructions": "1. Ngâm khoai tây đã cắt vào nước lạnh trong 30 phút. 2. Làm nóng lò nướng đến 200°C (400°F). 3. Trộn khoai tây với dầu ô liu, oregano, tỏi, nước chanh và muối. 4. Xếp khoai tây vào khay nướng và thêm nước. 5. Nướng trong 10-15 phút, sau đó giảm nhiệt độ và tiếp tục nướng thêm 45-55 phút. 6. Tăng nhiệt độ và nướng thêm 5-10 phút nếu cần. 7. Phục vụ nóng.",
+    "category": "Side",
+    "prep_time": "10 minutes",
+    "cook_time": "70 minutes",
+    "total_time": "80 minutes",
+    "notes": "Có thể dùng kèm với các món thịt nướng hoặc salad.",
+    "tags": "Hy Lạp, khoai tây, nướng, món ăn kèm"
+}

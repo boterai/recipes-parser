@@ -1,0 +1,12 @@
+{
+    "dish_name": "Classic Pumpkin Roll",
+    "description": "Cinnamon and cloves add the spice to this pumpkin sheet cake, topped with cream cheese frosting and rolled into a festive log.",
+    "ingredients": "[{\"name\": \"powdered sugar\", \"units\": \"tablespoons\", \"amount\": 4}, {\"name\": \"all-purpose flour\", \"units\": \"cup\", \"amount\": 0.75}, {\"name\": \"baking powder\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"baking soda\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"ground cinnamon\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"ground cloves\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"salt\", \"units\": \"teaspoon\", \"amount\": 0.25}, {\"name\": \"large eggs\", \"units\": \"pieces\", \"amount\": 3}, {\"name\": \"granulated sugar\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"canned pumpkin\", \"units\": \"cup\", \"amount\": 0.67}, {\"name\": \"cream cheese\", \"units\": \"ounces\", \"amount\": 8}, {\"name\": \"powdered sugar\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"butter\", \"units\": \"tablespoons\", \"amount\": 6}, {\"name\": \"vanilla extract\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"powdered sugar\", \"units\": \"tablespoons\", \"amount\": 2}]",
+    "instructions": "Preheat oven to 375° F. Grease a 13x18-inch half sheet pan; line with parchment paper. Grease and flour paper. Sprinkle a thin, cotton kitchen towel with the 3-4 tablespoons of powdered sugar. Combine flour, baking powder, baking soda, spices and salt in small bowl. Beat eggs and sugar in larger mixer bowl until thick and pale yellow in color. Beat in pumpkin. Stir in flour mixture. Spread evenly into prepared pan. Bake for 13-15 minutes or until top of cake springs back when touched. Immediately loosen and turn cake onto prepared towel. Carefully peel off paper. Roll up cake and towel together, starting with narrow end. Cool on wire rack. Beat cream cheese, powdered sugar, butter and vanilla in small mixer bowl until smooth. Carefully unroll cake; remove towel. Spread cream cheese mixture over cake. Reroll cake. Wrap in plastic wrap and refrigerate at least one hour. Sprinkle with powdered sugar before serving, if desired.",
+    "category": "Dessert",
+    "prep_time": "20 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "35 minutes",
+    "notes": "This recipe is adapted from Libby's brand pumpkin.",
+    "tags": "pumpkin, dessert, roll cake, fall"
+}

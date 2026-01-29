@@ -1,0 +1,12 @@
+{
+    "dish_name": "Krispig citronpotatis",
+    "description": "En variant av Pommes Anna, där tunna potatisskivor bakas i form. Helt magiskt till en bit fisk och en fänkålssallad, eller som tillbehör till höstgryan.",
+    "ingredients": "[{\"name\": \"fast potatis\", \"units\": \"kg\", \"amount\": \"1\"}, {\"name\": \"smör\", \"units\": \"g\", \"amount\": \"50\"}, {\"name\": \"olivolja\", \"units\": \"matskedar\", \"amount\": \"2\"}, {\"name\": \"vitlöksklyfta\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"citron\", \"units\": \"styck\", \"amount\": \"1/2\"}, {\"name\": \"färsk rosmarin\", \"units\": \"matsked\", \"amount\": \"1\"}, {\"name\": \"salt\", \"units\": \"tsk\", \"amount\": \"1\"}, {\"name\": \"svartpeppar\", \"units\": null, \"amount\": null}]",
+    "instructions": "Sätt ugnen på 225°. Smält smöret i en rymlig kastrull. Tillsätt olivolja och pressa ner vitlök. Tillsätt citronskal och rosmarin. Salta och peppra. Skala (eller skrubba väl) och skär potatisen så tunt som möjligt, helst på mandolin. Blanda ner den väl i det smälta smöret. Ställ potatisskivorna i rader i fyra portionsformar (eller i en stor form). Grädda mitt i ugnen i 40-50 minuter tills den är mjuk och skivorna blivit gyllene och krispiga.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "40-50 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

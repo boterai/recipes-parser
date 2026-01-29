@@ -1,0 +1,12 @@
+{
+    "dish_name": "Schiacciata di Carote Vegana",
+    "description": "Schiacciata di carote senza glutine e croccantissima!",
+    "ingredients": "[{\"name\": \"farina di riso\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"farina di ceci\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"farina di mais\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"acqua\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"carote\", \"units\": null, \"amount\": 5}, {\"name\": \"cipolle rosse già cotte\", \"units\": \"o 2\", \"amount\": 1}, {\"name\": \"sale\", \"units\": \"c-2c\", \"amount\": 1}, {\"name\": \"Pepe\", \"units\": null, \"amount\": null}, {\"name\": \"curcuma\", \"units\": \"c\", \"amount\": 2}, {\"name\": \"cardamomo\", \"units\": \"c\", \"amount\": 1}, {\"name\": \"Prezzemolo\", \"units\": null, \"amount\": null}, {\"name\": \"Olio evo\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Semi di sesamo\", \"units\": null, \"amount\": null}, {\"name\": \"Lievito alimentare\", \"units\": \"(facoltativo)\", \"amount\": null}]",
+    "instructions": "In una ciotola setacciare le farine. Aggiungere l’acqua e mescolare con una frusta per evitare i grumi. Aggiungere il sale e il pepe. Aggiungere le spezie. Grattugiare le carote. Aggiungere le cipolle cotte e fredde. Amalgamare le carote alla pastella. In una pirofila aggiungere abbondante olio e inserire il composto. Uniformare con una spatola. Cospargere con olio, semi di sesamo e pepe. Riporre in forno preriscaldato a 250 gradi sul fondo del forno per circa 10-12 minuti. Terminare la cottura nel centro del forno per 15 minuti, finché si sarà formata una crosticina croccante. Servire calda o fredda con una crema.",
+    "category": "Ricette salati",
+    "prep_time": null,
+    "cook_time": "25 minutes",
+    "total_time": null,
+    "notes": "Potrebbe essere servita con una crema di sedano rapa e cumino.",
+    "tags": "vegan, gluten-free"
+}

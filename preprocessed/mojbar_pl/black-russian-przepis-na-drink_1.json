@@ -1,0 +1,12 @@
+{
+    "dish_name": "Black Russian",
+    "description": "Prosty drink składający się tylko z dwóch składników: czysta wódka i meksykański likier kawowy Kahlua.",
+    "ingredients": "[{\"name\": \"czysta wódka\", \"units\": \"ml\", \"amount\": 40}, {\"name\": \"likier kawowy\", \"units\": \"ml\", \"amount\": 20}]",
+    "instructions": "Wymieszać czystą wódkę i likier kawowy z lodem i podać w niskim szkle.",
+    "category": "Drink",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Dla mrożonej wersji dodać dwie kulki lodów czekoladowych i kilka kostek lodu, zmiksować do uzyskania jednolitej konsystencji.",
+    "tags": "cocktail, drink, Black Russian"
+}

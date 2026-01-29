@@ -1,0 +1,12 @@
+{
+    "dish_name": "Cua Đồng Rang Muối",
+    "description": "Món cua đồng rang muối thơm ngon, đậm đà, dễ làm tại nhà.",
+    "ingredients": "[{\"name\": \"Cua đồng\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"Tỏi\", \"units\": \"củ lớn\", \"amount\": 1}, {\"name\": \"Ớt tươi\", \"units\": \"quả\", \"amount\": \"1-2\"}, {\"name\": \"Dầu ăn\", \"units\": \"lượng đủ\", \"amount\": null}, {\"name\": \"Đường\", \"units\": \"thìa canh\", \"amount\": 1}, {\"name\": \"Bột ngọt\", \"units\": \"thìa cà phê\", \"amount\": 1}, {\"name\": \"Tiêu xay\", \"units\": \"thìa cà phê\", \"amount\": 0.5}, {\"name\": \"Bột ớt\", \"units\": \"thìa cà phê\", \"amount\": 0.5}, {\"name\": \"Muối tinh\", \"units\": \"thìa cà phê\", \"amount\": 0.5}, {\"name\": \"Dầu hào\", \"units\": \"thìa canh\", \"amount\": 0.5}, {\"name\": \"Nước mắm\", \"units\": \"thìa cà phê\", \"amount\": 1}, {\"name\": \"Bột bắp\", \"units\": \"thìa cà phê\", \"amount\": 1}, {\"name\": \"Hành lá\", \"units\": \"một ít\", \"amount\": null}]",
+    "instructions": "1. Ngâm cua trong nước sạch khoảng 15-30 phút. 2. Rửa sạch cua và loại bỏ phần không ăn được. 3. Ướp cua với gia vị cơ bản. 4. Chiên sơ cua đồng để đảm bảo độ giòn. 5. Pha chế sốt rang muối. 6. Rang cua với muối đến khi thấm vị.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Món cua đồng rang muối ngon nhất khi thưởng thức nóng. Có thể điều chỉnh gia vị theo khẩu vị cá nhân.",
+    "tags": "cua đồng, rang muối, món ăn Việt Nam"
+}

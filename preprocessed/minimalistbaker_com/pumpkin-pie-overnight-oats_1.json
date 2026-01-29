@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pumpkin Pie Overnight Oats",
+    "description": "The creamy, delicious flavors of pumpkin pie infused into wholesome overnight oats. Naturally sweet, subtly spiced, fiber-rich, and SO delicious!",
+    "ingredients": "[{\"name\": \"unsweetened plain almond milk\", \"units\": \"cup\", \"amount\": \"1/2\"}, {\"name\": \"pumpkin purée\", \"units\": \"cup\", \"amount\": \"1/2\"}, {\"name\": \"creamy unsalted almond butter\", \"units\": \"Tbsp\", \"amount\": \"1\"}, {\"name\": \"chia seeds\", \"units\": \"Tbsp\", \"amount\": \"1\"}, {\"name\": \"maple syrup\", \"units\": \"Tbsp\", \"amount\": \"1 ½\"}, {\"name\": \"pumpkin pie spice\", \"units\": \"tsp\", \"amount\": \"3/4 – 1 ¼\"}, {\"name\": \"vanilla extract\", \"units\": \"tsp\", \"amount\": \"1\"}, {\"name\": \"rolled oats\", \"units\": \"cup\", \"amount\": \"1/2\"}, {\"name\": \"raw pecans\", \"units\": \"cup\", \"amount\": \"1/2\"}, {\"name\": \"maple syrup\", \"units\": \"Tbsp\", \"amount\": \"1\"}, {\"name\": \"pumpkin pie spice\", \"units\": \"tsp\", \"amount\": \"1\"}, {\"name\": \"plain or vanilla coconut yogurt\", \"units\": \"cup\", \"amount\": \"1/4\"}]",
+    "instructions": "To a small bowl add almond milk, pumpkin purée, almond butter, chia seeds, maple syrup, pumpkin pie spice, and vanilla and stir with a spoon to combine. Add oats and stir a few more times. Get two small mason jars or small bowls with lids, and divide the oats equally between them. Then press the oats down with a spoon to ensure all oats have been moistened and are immersed in liquid. Cover securely with lids or seal and set in the refrigerator overnight (or for at least 6 hours) to set/soak. Add roughly chopped pecans to a nonstick skillet over medium-low heat and toast them, stirring occasionally, for about 3 minutes. Turn the heat down to low, add the maple syrup, and mix quickly to evenly coat the pecans. Spread them out so they are not in any large clumps, then add the pumpkin pie spice and mix once more. Remove from heat and let cool completely. Store in an airtight container. The next day, open your oats and top with the candied pecans and coconut yogurt. Enjoy!",
+    "category": "Breakfast, Snack",
+    "prep_time": "15 minutes",
+    "cook_time": "5 minutes",
+    "total_time": "6 hours 20 minutes",
+    "notes": "Overnight oats will keep in the refrigerator for 2-3 days, though best within the first 12-24 hours in our experience.",
+    "tags": "Vegan, Gluten-Free"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tortellini",
+    "description": "Tortellini sunt niște paste italiene în formă de inel, umplute cu brânză sau carne.",
+    "ingredients": "[{\"name\": \"făină tip 00\", \"units\": \"grams\", \"amount\": 400}, {\"name\": \"ouă\", \"units\": \"pieces\", \"amount\": 4}, {\"name\": \"pulpă de porc\", \"units\": \"grams\", \"amount\": 150}, {\"name\": \"prosciutto\", \"units\": \"grams\", \"amount\": 80}, {\"name\": \"Mortadella\", \"units\": \"grams\", \"amount\": 80}, {\"name\": \"unt\", \"units\": \"grams\", \"amount\": 20}, {\"name\": \"ou\", \"units\": \"pieces\", \"amount\": 1}, {\"name\": \"Parmigiano\", \"units\": \"grams\", \"amount\": 150}, {\"name\": \"nucșoară\", \"units\": null, \"amount\": null}, {\"name\": \"sare\", \"units\": null, \"amount\": null}, {\"name\": \"piper\", \"units\": null, \"amount\": null}, {\"name\": \"ricotta\", \"units\": \"grams\", \"amount\": 50}, {\"name\": \"fontina\", \"units\": \"grams\", \"amount\": 25}, {\"name\": \"salvie\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Pregătiți pastele: adunați făina, formați o gaură, adăugați ouăle și frământați. Lăsați aluatul să se odihnească. 2. Pregătiți umplutura: tăiați carnea, prăjiți-o, amestecați cu celelalte ingrediente. 3. Întindeți pastele în foi. 4. Formați tortellini. 5. Gătiți tortellini în apă sărată.",
+    "category": "Main Course",
+    "prep_time": "60 minutes",
+    "cook_time": "5 minutes",
+    "total_time": "65 minutes",
+    "notes": "Tortellini pot fi congelați și gătiți direct din congelator.",
+    "tags": "pasta, italian, tortellini"
+}

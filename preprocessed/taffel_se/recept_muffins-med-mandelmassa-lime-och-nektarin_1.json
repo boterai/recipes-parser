@@ -1,0 +1,12 @@
+{
+    "dish_name": "Muffins med mandelmassa, lime och nektarin",
+    "description": "Saftiga och kompakta muffins med mandelmassa, lime och nektarin.",
+    "ingredients": "[{\"name\": \"anis\", \"units\": \"tsk\", \"amount\": \"1\"}, {\"name\": \"mald kanel\", \"units\": \"tsk\", \"amount\": \"1\"}, {\"name\": \"strösocker\", \"units\": \"dl\", \"amount\": \"1.5\"}, {\"name\": \"smör eller margarin\", \"units\": \"g\", \"amount\": \"125\"}, {\"name\": \"rivet limeskal\", \"units\": \"tsk\", \"amount\": \"1\"}, {\"name\": \"ägg\", \"units\": null, \"amount\": \"3\"}, {\"name\": \"vetemjöl\", \"units\": \"dl\", \"amount\": \"3\"}, {\"name\": \"bakpulver\", \"units\": \"tsk\", \"amount\": \"2/3\"}, {\"name\": \"grovriven mandelmassa\", \"units\": \"g\", \"amount\": \"100\"}, {\"name\": \"mjölk\", \"units\": \"dl\", \"amount\": \"0.5\"}, {\"name\": \"mogna nektariner\", \"units\": null, \"amount\": \"2\"}, {\"name\": \"smör och ströbröd till formen\", \"units\": null, \"amount\": null}]",
+    "instructions": "Värm ugnen till 225°C. Stöt kryddorna fint med saltet. Vispa socker, smör, citronskal och de stötta kryddorna med elvisp tills det är riktigt vitt och pösigt. Vispa ner äggen ett i taget. Rör ner mjölken med lätt hand. Blanda mjöl och bakpulver. Sikta ner i smeten med hjälp av en finmaskig sil. Vänd till sist ner frukten som blivit kvar i silen. Klicka upp smeten i en smord och bröad teflonmuffinspanna eller 12 stora muffinsformar. Grädda i ca 12 minuter tills muffinsarna är torra i mitten när du testar med en provsticka. Låt svalna något, stjälp försiktigt upp ur teflonformen och låt sedan svalna på galler.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "12 minutes",
+    "total_time": "30 minutes",
+    "notes": "Ersätt gärna med annan frukt som är i säsong. Eller konserverade aprikoser om vintern.",
+    "tags": null
+}

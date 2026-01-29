@@ -1,0 +1,12 @@
+{
+    "dish_name": "Dolmádhes",
+    "description": "Dolmádhes (Lá nho nhồi) là một món meze được yêu thích của Hy Lạp, gồm những chiếc lá nho mềm cuộn quanh hỗn hợp cơm và rau thơm đậm đà.",
+    "ingredients": "[{\"name\": \"lá nho\", \"units\": \"pieces\", \"amount\": 60}, {\"name\": \"gạo hạt dài\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"hành tây\", \"units\": \"small\", \"amount\": 1}, {\"name\": \"dầu ô liu\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"nước cốt chanh\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"thì là tươi\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"bạc hà tươi\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"hạt thông\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"nho khô\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"muối\", \"units\": null, \"amount\": null}, {\"name\": \"hạt tiêu\", \"units\": null, \"amount\": null}, {\"name\": \"nước hoặc nước luộc rau\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Trong một chiếc chảo nhỏ, đun nóng 1 thìa canh dầu ô liu trên lửa vừa. Xào hành tây băm nhỏ cho đến khi mềm. 2. Cho gạo vào và đảo đều cho ngấm dầu. Thêm nước và một nhúm muối, đun nhỏ lửa. Nấu trong 5 phút, cho đến khi gạo chín một nửa. 3. Cho thì là băm nhỏ, bạc hà, nho khô và 1 thìa canh dầu ô liu vào, khuấy đều. Để hỗn hợp nguội bớt. 4. Cuộn lá nho với phần nhân. 5. Lót đáy nồi bằng vài lá nho thừa. Xếp những miếng bánh dolmádhes đã cuộn chặt thành nhiều lớp. 6. Trộn nước cốt chanh với nước, rồi rưới lên bánh dolmádhes. 7. Đậy nắp nồi và ninh nhỏ lửa trong 40 phút cho đến khi cơm chín mềm. 8. Nhấc khỏi bếp và để dolmádhes nguội bớt trong nồi. 9. Dùng nóng hoặc ở nhiệt độ phòng.",
+    "category": "Món khai vị, Meze",
+    "prep_time": "20 minutes",
+    "cook_time": "40 minutes",
+    "total_time": "60 minutes",
+    "notes": "Dolmádhes hoàn toàn chay và không chứa gluten.",
+    "tags": "Hy Lạp, món khai vị, chay"
+}

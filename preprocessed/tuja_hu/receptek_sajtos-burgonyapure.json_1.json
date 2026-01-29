@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sajtos burgonyapüré",
+    "description": null,
+    "ingredients": "[{\"name\": \"burgonya\", \"units\": \"kg\", \"amount\": \"1\"}, {\"name\": \"tej\", \"units\": \"dl\", \"amount\": \"5\"}, {\"name\": \"só\", \"units\": null, \"amount\": null}, {\"name\": \"bors\", \"units\": null, \"amount\": null}, {\"name\": \"szerecsendió\", \"units\": null, \"amount\": null}, {\"name\": \"vaj (vagy Rama)\", \"units\": \"dkg\", \"amount\": \"3\"}, {\"name\": \"paradicsom\", \"units\": \"dkg\", \"amount\": \"50\"}, {\"name\": \"szalonna\", \"units\": \"dkg\", \"amount\": \"15\"}, {\"name\": \"hagyma\", \"units\": \"fej\", \"amount\": \"1\"}, {\"name\": \"petrezselyem\", \"units\": null, \"amount\": null}, {\"name\": \"ementáli sajt\", \"units\": \"dkg\", \"amount\": \"10\"}]",
+    "instructions": "A hámozott burgonyát sós vízben megfőzzük, hozzáadjuk a tejet és a fűszereket, jól elkeverjük. A kiolvasztott szalonnát, a paradicsom és a reszelt sajt felét a pürébe keverjük. Egy formát kivajazunk, kirakjuk paradicsomszeletekkel, és beletöltjük a pürét. 20 percig sütjük. Tálaláskor kifordítjuk, és meghintjük a maradék sajttal.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "20 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

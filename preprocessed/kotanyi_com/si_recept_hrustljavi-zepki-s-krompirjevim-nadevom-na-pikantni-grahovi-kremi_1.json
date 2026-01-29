@@ -1,0 +1,12 @@
+{
+    "dish_name": "Hrustljavi žepki s krompirjevim nadevom na pikantni grahovi kremi",
+    "description": "Neverjetno hrustljava jed z nadevom, ki bo navdušila gurmane.",
+    "ingredients": "[{\"name\": \"Vlečeno testo za štrudlje\", \"units\": \"kosa\", \"amount\": 2}, {\"name\": \"Srednje velik krompir\", \"units\": \"kos\", \"amount\": 1}, {\"name\": \"Skuta (20 % maščobe)\", \"units\": \"žlica\", \"amount\": 1}, {\"name\": \"Peteršilj zdrobljeni\", \"units\": \"žličke\", \"amount\": 0.5}, {\"name\": \"Timijan zdrobljeni\", \"units\": \"žličke\", \"amount\": 0.5}, {\"name\": \"Drobnjak\", \"units\": \"žličke\", \"amount\": 0.5}, {\"name\": \"Muškatni orešček mleti\", \"units\": \"ščepec\", \"amount\": 1}, {\"name\": \"Morska sol jodirana\", \"units\": \"ščepec\", \"amount\": 1}, {\"name\": \"Poper črni celi\", \"units\": \"ščepec\", \"amount\": 1}, {\"name\": \"Voda\", \"units\": null, \"amount\": null}, {\"name\": \"Rastlinsko olje\", \"units\": null, \"amount\": null}, {\"name\": \"Zamrznjenega graha\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"Smetane za stepanje\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"Masla\", \"units\": \"žlica\", \"amount\": 1}, {\"name\": \"Kajenski poper mleti\", \"units\": \"ščepec\", \"amount\": 1}, {\"name\": \"Morska sol jodirana\", \"units\": \"ščepec\", \"amount\": 1}, {\"name\": \"Meta, sveža\", \"units\": \"šopek\", \"amount\": 1}]",
+    "instructions": "1. Grah, smetano, sol, maslo in meto kuhajte do mehkega in nato spremenite v fin pire. Na koncu začinite po okusu s soljo ter običajnim in kajenskim poprom. 2. Krompir olupite in skuhajte v soljeni vodi, da postane mehek. Počakajte, da se ohladi, in ga pretlačite z vilicami. 3. Pretlačen krompir zmešajte s skuto, zelišči in muškatnim oreščkom. Po okusu začinite s soljo in poprom. 4. Odvijte testo za štrudelj in ga z modelčkom za piškote razrežite na 10 cm velike kroge. Na sredino položite žlico krompirjeve zmesi in navlažite robove testa z vodo. Robove prepognite in stisnite skupaj. 5. V kozici segrejte rastlinsko olje in pecite žepke dve minuti, da postanejo hrustljavi. Odcedite na papirnatih brisačkah. 6. Končane žepke razporedite po krožniku s toplo grahovo in metino kremo.",
+    "category": "Main Course",
+    "prep_time": "60 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "75 minutes",
+    "notes": "Če je grahova krema pregosta, vanjo vmešajte malo toplega mleka.",
+    "tags": "Vegetarijansko, Krompir, Mlečni Izdelki, Božični meni, Družinske jedi, Priprava jedi, Rojstni dan, Zmenek"
+}

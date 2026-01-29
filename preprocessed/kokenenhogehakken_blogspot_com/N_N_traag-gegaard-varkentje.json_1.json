@@ -1,0 +1,12 @@
+{
+    "dish_name": "Traag gegaard varkentje",
+    "description": "Slow-cooked pork shoulder with a soft sauce made from tomatoes and spices.",
+    "ingredients": "[{\"name\": \"vetstof\", \"units\": null, \"amount\": null}, {\"name\": \"tomatenblokjes\", \"units\": \"blikken\", \"amount\": 2}, {\"name\": \"ui\", \"units\": null, \"amount\": 1}, {\"name\": \"Spaanse peper\", \"units\": \"stukje\", \"amount\": 1}, {\"name\": \"look\", \"units\": \"tenen\", \"amount\": 2}, {\"name\": \"gerookt paprikapoeder\", \"units\": \"koffielepels\", \"amount\": 2}, {\"name\": \"oregano\", \"units\": \"koffielepel\", \"amount\": 1}, {\"name\": \"komijn\", \"units\": \"koffielepel\", \"amount\": 1}, {\"name\": \"peper\", \"units\": \"snufje\", \"amount\": null}, {\"name\": \"zout\", \"units\": \"snufje\", \"amount\": null}, {\"name\": \"suiker\", \"units\": \"koffielepel\", \"amount\": 0.5}, {\"name\": \"zout\", \"units\": \"koffielepel\", \"amount\": 1}, {\"name\": \"peper\", \"units\": \"koffielepel\", \"amount\": 0.5}, {\"name\": \"varkensschouder\", \"units\": \"gr\", \"amount\": 700}, {\"name\": \"bouillon\", \"units\": \"ml\", \"amount\": 600}]",
+    "instructions": "Verwarm de oven voor op 160°C. Vet een ovenschaal lichtjes in. Meng de tomatenblokjes met de ui, het pepertje, look, paprika, oregano, komijn, peper en zout en doe deze saus in de schaal. Wrijf de varkensschouder in met een mengeling van suiker, zout en peper. Leg het vlees op de saus, giet de bouillon erbij en zet de schaal onafgedekt in de oven. Laat het vlees 3u30 tot 4u30 garen. Haal het vlees uit de schaal en trek het uit elkaar met 2 vorken. Meng het vlees met de saus.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "3 hours 30 minutes to 4 hours 30 minutes",
+    "total_time": null,
+    "notes": "Eens het vlees in de oven zit, heb je er geen omkijken naar. Voeg extra (hete) bouillon toe als de saus te droog wordt. Wil je graag het vlees in de oven laten terwijl jij op je werk bent? Zet de temperatuur na een half uur op 100°C en laat het vlees 6 - 8u in de oven staan.",
+    "tags": "slow cooking, pork, main course"
+}

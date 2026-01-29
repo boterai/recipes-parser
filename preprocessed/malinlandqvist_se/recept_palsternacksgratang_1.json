@@ -1,0 +1,12 @@
+{
+    "dish_name": "Palsternacks-gratäng",
+    "description": "Gratäng med palsternacka och sötpotatis som grillas i ugnen.",
+    "ingredients": "[{\"name\": \"schalottenlökar\", \"units\": null, \"amount\": 2}, {\"name\": \"palsternacka\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"sötpotatis\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"riven västerbottenost\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"finrivet skal av citron\", \"units\": \"small\", \"amount\": 1}, {\"name\": \"salt\", \"units\": \"tsk\", \"amount\": 1}, {\"name\": \"vispgrädde\", \"units\": \"dl\", \"amount\": 3}, {\"name\": \"nymald svartpeppar\", \"units\": null, \"amount\": null}]",
+    "instructions": "Sätt ugnen på 175°. Skala och finhacka löken. Fräs den mjuk i olivolja eller smör i en panna. Skala och skär palsternacka och sötpotatis i 1-2 cm tjocka stickor. Blanda rotfrukterna väl med löken och hälften av osten i en smord ugnssäker form. Strö över ost och citronskal. Salta och peppra. Ringla över grädden. Grädda mitt i ugnen i 50-60 minuter tills den är mjuk och har fått fin färg.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "50-60 minutes",
+    "total_time": null,
+    "notes": "Lite kryddpeppar i gratängen är gott, och flirtar lite med Janssons frestelse för dem som är vegetarianer.",
+    "tags": null
+}

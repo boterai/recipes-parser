@@ -1,0 +1,12 @@
+{
+    "dish_name": "Farinata Cipolle Pomodori Vegana",
+    "description": "Farinata con cipolle e pomodori croccante, vegana e senza glutine!",
+    "ingredients": "[{\"name\": \"farina di ceci\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"acqua\", \"units\": \"g\", \"amount\": 600}, {\"name\": \"Olio di oliva\", \"units\": \"C\", \"amount\": 2}, {\"name\": \"Sale\", \"units\": \"c\", \"amount\": 1}, {\"name\": \"Pepe\", \"units\": null, \"amount\": null}, {\"name\": \"Pomodorini\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"cipolle\", \"units\": null, \"amount\": 2}, {\"name\": \"Olio evo\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Basilico\", \"units\": null, \"amount\": null}]",
+    "instructions": "Mescolare con una frusta la farina con l’acqua, evitando i grumi. Fare riposare il composto (almeno un’ oretta a temperatura ambiente). Nel frattempo tagliare a fettine le cipolle e cuocerle in padella con un po’ di olio e sale, finché saranno tenere. Tagliare i pomodorini in due. Togliere la schiuma superficiale alla pastella con una schiumarola. Preriscaldare il forno in modalità statica a 250 gradi. Aggiungere alla pastella sale e pepe e due giri abbondanti di olio. Ungere abbondantemente una teglia antiaderente con olio evo. Deve essere bella unta e non bisogna lesinare sull’olio..per evitare che attacchi, ma soprattutto per ottenere una crosticina super croccante. Dopodiché inserire circa 4-5 mestoli di pastella. Lo spessore deve essere sufficiente a ricoprire la teglia, ma non troppo alto (da 0.5 a 1 cm). Inserire la teglia sul fondo del forno per circa 3-4 minuti, in modo che il fondo inizi ad ispessirsi. Poi togliere la farinata e condirla con cipolle e pomodori a piacere. Continuare la cottura per altri 10-12 minuti sul fondo del forno. Successivamente posizionare la teglia nel centro del forno per ancora 10-15 minuti, finché sarà dorata e croccante. Prelevare dal forno e gustare calda e con qualche foglia di basilico. Buona anche il giorno dopo.",
+    "category": "Ricette salati",
+    "prep_time": "1 hour",
+    "cook_time": "30 minutes",
+    "total_time": "1 hour 30 minutes",
+    "notes": null,
+    "tags": "vegan, gluten-free, farinata, recipe"
+}

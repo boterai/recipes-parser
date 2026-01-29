@@ -1,0 +1,12 @@
+{
+    "dish_name": "Varkensblokjes zoetzuur",
+    "description": "Varkensblokjes in zoetzure saus, zelfgemaakt.",
+    "ingredients": "[{\"name\": \"varkens in blokjes gesneden\", \"units\": \"gr\", \"amount\": 500}, {\"name\": \"zout\", \"units\": \"snuifje\", \"amount\": null}, {\"name\": \"suiker\", \"units\": \"snuifje\", \"amount\": null}, {\"name\": \"sojasaus\", \"units\": \"koffielepel\", \"amount\": 1}, {\"name\": \"eiwit\", \"units\": null, \"amount\": 1}, {\"name\": \"pijpajuintjes\", \"units\": null, \"amount\": 2}, {\"name\": \"maïzena\", \"units\": \"gr\", \"amount\": 60}, {\"name\": \"olie\", \"units\": \"eetlepel\", \"amount\": 1}, {\"name\": \"selder\", \"units\": \"stelen\", \"amount\": 2}, {\"name\": \"rode paprika\", \"units\": null, \"amount\": 1}, {\"name\": \"ui\", \"units\": null, \"amount\": 1}, {\"name\": \"water\", \"units\": \"ml\", \"amount\": 240}, {\"name\": \"suiker\", \"units\": \"gr\", \"amount\": 150}, {\"name\": \"rode wijnazijn\", \"units\": \"ml\", \"amount\": 80}, {\"name\": \"ketchup\", \"units\": \"gr\", \"amount\": 80}, {\"name\": \"sojasaus\", \"units\": \"koffielepel\", \"amount\": 0.5}, {\"name\": \"verse ananas\", \"units\": \"plakken\", \"amount\": 2}, {\"name\": \"fruitsap\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"maïzena\", \"units\": \"gr\", \"amount\": 30}, {\"name\": \"water\", \"units\": \"m\", \"amount\": 30}]",
+    "instructions": "Meng de varkensblokjes met zout, suiker, sojasuas, eiwit en pijpajuintjes in een kom. Sluit af met het deksel en laat het vlees een uurtje marineren in de koelkast. Verhit de frituurpan op 185°C. Bestuif het vlees met de maïzena en bak het dan in deeltjes bruin en krokant. Laat het vlees uitdruppen op huishoudrol. Verhit 1 eetlepel olie in de wok, op een medium vuur. Roerbak de selder met de paprika en ui tot ze zacht zijn. Kruid met zout en suiker en zet de pan van het vuur. Meng het water met zout en suiker, wijnazijn, ketchup en sojasaus. Breng de saus aan de kook. Voeg het vlees toe aan de saus, met de geroerbakte groentjes en de ananas met het sap. Breng de saus terug aan de kook. Los de maïzena op in het water en dik hiermee de saus in. Serveer met rijst.",
+    "category": "Main Course",
+    "prep_time": "60 minutes",
+    "cook_time": "null",
+    "total_time": "null",
+    "notes": "Je kan ook ananas op siroop nemen. Voeg dan alle ananas met de siroop toe en laat het fruitsap weg.",
+    "tags": "varkensvlees, zoetzuur, hoofdgerecht"
+}

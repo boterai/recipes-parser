@@ -1,0 +1,12 @@
+{
+    "dish_name": "Börek Schnecken mit Spinat und Feta",
+    "description": "Ein einfaches Rezept für köstliche Börek Schnecken mit Spinat und Feta.",
+    "ingredients": "[{\"name\": \"Filoteig\", \"units\": \"pck\", \"amount\": 1}, {\"name\": \"Blattspinat\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"Öl\", \"units\": \"zum anbraten\", \"amount\": null}, {\"name\": \"Zwiebel\", \"units\": \"große\", \"amount\": 1}, {\"name\": \"Tomatenmark\", \"units\": \"EL\", \"amount\": 3}, {\"name\": \"Feta\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"Ei\", \"units\": null, \"amount\": 1}, {\"name\": \"Joghurt\", \"units\": \"EL\", \"amount\": 2}, {\"name\": \"Milch\", \"units\": \"EL\", \"amount\": 2}, {\"name\": \"Sprudelwasser\", \"units\": \"EL\", \"amount\": 2}, {\"name\": \"Sonnenblumenöl\", \"units\": \"EL\", \"amount\": 3}, {\"name\": \"Eigelb\", \"units\": null, \"amount\": 1}, {\"name\": \"Milch\", \"units\": \"EL\", \"amount\": 1}, {\"name\": \"Schwarzkümmel\", \"units\": null, \"amount\": null}, {\"name\": \"Sesam\", \"units\": null, \"amount\": null}]",
+    "instructions": "Backofen auf 180 Grad vorheizen. Blattspinat gründlich waschen und in grobe Stücke schneiden. Das Öl in einer Pfanne erhitzen und die Zwiebeln darin auf mittlere Stufe anschwitzen. Tomatenmark dazugeben und kurz mit anbraten. Den gewaschenen Blattspinat unterheben und weitere 1-2 Minuten rundherum anbraten. Feta unterrühren. Alle Zutaten für die Soße in eine Schüssel geben und miteinander vermischen. Auf jeweils einem Filoblatt zuerst überall mit der Soße gleichmäßig bestreichen. Am Rand entlang länglich 1-2 EL von der Füllung verteilen und aufrollen. Während dem Aufrollen zwischendurch immer wieder das Filoblatt mit der Soße bestreichen. Vorsichtig zu einer Schnecke formen. Dies mit den restlichen Filoblätter und der Füllung wiederholen, bis alles verbraucht ist. Die Schnecken auf einem Backblech mit Backpapier legen und mit Eigelb bestreichen. Schwarzkümmel und Sesam darüber verteilen und bei 180 Grad für ca. 25 Minuten backen.",
+    "category": "Brot",
+    "prep_time": "15 Minuten",
+    "cook_time": "20 Minuten",
+    "total_time": "40 Minuten",
+    "notes": "Achtet darauf, dass ihr wirklich die Filoblätter rundherum mit der Soße bestreicht. Statt Spinat-Feta könnt ihr auch eine Kartoffel oder Gemüsefüllung machen.",
+    "tags": "Börek, Schnecken, Rezept, türkische Küche"
+}

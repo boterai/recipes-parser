@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kohupiimaküpsised (roosikujulised)",
+    "description": "Mahlased ja suhkrused küpsised, kaunid tänu oma roosikujulisele välimusele.",
+    "ingredients": "[{\"name\": \"toasoe või\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"suhkur\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"kohupiim\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"munakollane\", \"units\": null, \"amount\": 2}, {\"name\": \"nisujahu\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"küpsetuspulber\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"suhkur\", \"units\": \"dl\", \"amount\": null}, {\"name\": \"tuhksuhkur\", \"units\": \"tl\", \"amount\": 1}]",
+    "instructions": "Hõõru toasoe või suhkruga heledaks. Lisa munakollased, klopi ühtlaseks, seejärel kohupiim. Kõige lõpus lisa küpsetuspulbriga segatud jahu, mätsi ühtlaseks tainaks, pane kilesse ja jäta pooleks tunniks (või tunniks) külmkappi. Taigen tuleb üsna pehme. Rulli taigen suhkrusel pinnal (kata ka tainas pealt suhkruga) õhukeseks lahti (ca 2 mm). Lõika ca 7 cm läbimõõduga kolm ketast, tõsta need teineteise peale kohakuti ja rulli kokku. Lõika saadud rull pooleks ning aseta küpsetuspaberiga kaetud ahjuplaadile, peites ka lahtised otsad põhja alla. Küpseta 180-kraadises ahjus ca 20-22 minutit. Küpsised vajuvad mõnevõrra laiali, ent säilitavad siiski roosiõie välimuse. Raputa valmis küpsistele tuhksuhkurt.",
+    "category": "Dessert",
+    "prep_time": "30 minutes",
+    "cook_time": "22 minutes",
+    "total_time": "52 minutes",
+    "notes": "Algne retsept: Cookook.me; muudatustega versioon ja foto: Eva Pärtel (Perenaine.ee)",
+    "tags": "küpsised, dessert, kohupiim"
+}

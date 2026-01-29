@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ravioli cu sos și ciuperci",
+    "description": "Ravioli cu sos cremos și ciuperci este o masă savuroasă, fină, cu aromă irezistibilă.",
+    "ingredients": "[{\"name\": \"ravioli\", \"units\": \"grams\", \"amount\": 500}, {\"name\": \"ciuperci\", \"units\": \"grams\", \"amount\": 200}, {\"name\": \"usturoi\", \"units\": \"căței\", \"amount\": 3}, {\"name\": \"unt\", \"units\": \"linguri\", \"amount\": 3}, {\"name\": \"apă\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"smântână de gătit\", \"units\": \"grams\", \"amount\": 240}, {\"name\": \"mix de condimente italiene\", \"units\": \"linguriță\", \"amount\": 1}, {\"name\": \"sare\", \"units\": null, \"amount\": null}, {\"name\": \"piper\", \"units\": null, \"amount\": null}]",
+    "instructions": "Umpleți o oală mare cu apă, dați în fiert. Adăugați ravioli și fierbeți timp de 3 minute, apoi scurgeți apa și treceți pastele pe sub un jet de apă rece. Opțional: puneți o linguriță de ulei de măsline peste ravioli pentru a nu se lipi între ei. Într-o tigaie mare, combinați untul, usturoiul și ciupercile și sotați-le la foc mediu timp de 3-4 minute până când ciupercile sunt moi. Se adaugă apa/supa, se dă în fiert, apoi se adaugă smântâna. Se fierbe până când sosul se reduce la jumătate și devine cremos (aproximativ 5-7 minute). Se adaugă ierburile uscate, sarea și piperul. Gustați, adăugați mai multă sare și piper dacă este necesar. Se adaugă ravioli și se amestecă bine. Dacă se dorește, se ornează cu parmezan proaspăt ras, pătrunjel sau cimbru și piper negru înainte de servire.",
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "30 minutes",
+    "notes": "Adăugați puține frunze proaspete de salvie sau rozmarin pentru a varia gustul. Încercați să adăugați puțină brânză de capră, sau cremă de brânză pentru o notă catifelată.",
+    "tags": "pasta, ravioli, sos, ciuperci"
+}

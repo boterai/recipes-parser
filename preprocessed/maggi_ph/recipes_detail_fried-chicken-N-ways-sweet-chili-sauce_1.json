@@ -1,0 +1,12 @@
+{
+    "dish_name": "Fried Chicken 2-ways (Sweet Chili Sauce)",
+    "description": null,
+    "ingredients": "[{\"name\": \"Chicken Leg\", \"units\": \"kilogram\", \"amount\": \"1/2\"}, {\"name\": \"MAGGI® Magic Sarap®\", \"units\": \"sachet\", \"amount\": \"1\"}, {\"name\": \"Freshly ground pepper\", \"units\": \"teaspoon\", \"amount\": \"1/4\"}, {\"name\": \"all-purpose flour\", \"units\": \"cup\", \"amount\": \"1/2\"}, {\"name\": \"vegetable oil for frying\", \"units\": \"cup\", \"amount\": \"1\"}, {\"name\": \"garlic\", \"units\": \"cloves\", \"amount\": \"2\"}, {\"name\": \"Sweet Chili Sauce\", \"units\": \"tablespoons\", \"amount\": \"4\"}, {\"name\": \"Water\", \"units\": \"cup\", \"amount\": \"1/4\"}]",
+    "instructions": "1. Season chicken with MAGGI® Magic Sarap® and pepper. Coat well with flour. Pan fry in preheated oil until golden brown. Set aside to drain excess oil. 2. Remove oil from the pan leaving 2tbsp. Sauté garlic and pour sweet chili sauce and water. Simmer until thick. 3. Toss in fried chicken pieces. Transfer on a serving plate and serve immediately.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "25 minutes",
+    "total_time": "40 minutes",
+    "notes": "Coating chicken with flour prevents oil absorption of chicken while frying. Best served with stir fried vegetables.",
+    "tags": "chicken, fried, sweet chili, main course"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Torta od ptičjeg mlijeka",
+    "description": "Ukusan i prozračan sufle, poznat kao desert 'Ptičje mlijeko'.",
+    "ingredients": "[{\"name\": \"gotov keks\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"smeđi šećer\", \"units\": \"grams\", \"amount\": 200}, {\"name\": \"bijeli šećer\", \"units\": \"grams\", \"amount\": 200}, {\"name\": \"agar-agar\", \"units\": \"tablespoons\", \"amount\": 4}, {\"name\": \"bjelanjci\", \"units\": \"pieces\", \"amount\": 6}, {\"name\": \"puter\", \"units\": \"grams\", \"amount\": 150}, {\"name\": \"voda\", \"units\": \"ml\", \"amount\": 150}, {\"name\": \"limunov sok\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"kondenzovano mleko\", \"units\": \"grams\", \"amount\": 70}, {\"name\": \"krema\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"želatina\", \"units\": \"grams\", \"amount\": 15}, {\"name\": \"tamna čokolada\", \"units\": \"grams\", \"amount\": 100}]",
+    "instructions": "1. Izrežite gotov keks na okrugle praznine. 2. Agar-agar prelijte vodom i ostavite da odstoji. 3. Umutite puter i dodajte kondenzovano mleko. 4. Agar-agar zagrijte dok se ne otopi, dodajte šećer. 5. Umutite bjelanjke. 6. U bjelanjke dodajte smjesu agar-agara. 7. Dodajte kremu od putera i kondenzovanog mleka. 8. Sipajte smjesu u kalupe i stavite u frižider. 9. Pripremite glazuru od čokolade i prelijte preko torte.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Možete koristiti različite oblike za tortu, a glazuru možete prilagoditi po želji.",
+    "tags": "dessert, cake, ptičje mlijeko"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Aubergine- och tomatgratäng",
+    "description": "En smakrik, matig och vegetarisk gratäng. Uteslut smetana till servering så blir rätten helt vegansk.",
+    "ingredients": "[{\"name\": \"auberginer\", \"units\": \"stora eller 2 mindre\", \"amount\": \"1\"}, {\"name\": \"gula lökar\", \"units\": \"st\", \"amount\": \"2\"}, {\"name\": \"vitlöksklyftor\", \"units\": \"st\", \"amount\": \"6\"}, {\"name\": \"hackad, färsk timjan\", \"units\": \"msk\", \"amount\": \"2\"}, {\"name\": \"olivolja\", \"units\": \"dl\", \"amount\": \"1\"}, {\"name\": \"körsbärstomater\", \"units\": \"burkar\", \"amount\": \"2\"}, {\"name\": \"konc grönsaksfond\", \"units\": \"msk\", \"amount\": \"1\"}, {\"name\": \"rökt paprikapulver\", \"units\": \"tsk\", \"amount\": \"1\"}, {\"name\": \"råsocker\", \"units\": \"msk\", \"amount\": \"1\"}, {\"name\": \"kokta kikärter\", \"units\": \"burk\", \"amount\": \"1\"}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"svartpeppar\", \"units\": null, \"amount\": null}]",
+    "instructions": "Skär auberginen i ca 2 cm breda skivor. Strö över salt och låt dra ur vätska i ca 30 minuter. Klappa aubergineskivorna med hushållspapper. Sätt ugnen på 200°. Skala och skiva lök och vitlök. Fräs med timjan i olivoljan tills den börjar mjukna och få lite färg. Salta och peppra. Ta upp och ställ åt sidan så länge. Bryn auberginerna på båda sidor i samma panna i ett par minuter. Häll tomaterna i en rymlig ugnssäker form. Rör ner fond, paprikapulver, socker, salt och peppar. Skölj kikärterna. Vänd ner lök och kikärter i tomatblandningen. Fördela auberginerna på. Baka i mitten av ugnen i ca 20 min. Servera gratängen med tillbehören.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "50 minutes",
+    "notes": "Det är viktigt att salta ur auberginerna, annars får de en lite hård konsistens som inte alls är angenäm. Klappa skivorna väl för att avlägsna det mesta av saltet, men även vätskan.",
+    "tags": "vegetarisk, gratäng, aubergine, tomat"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Irski soda hleb",
+    "description": null,
+    "ingredients": "[{\"name\": \"meko brašno T-400\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"integralno brašno\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"sol\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"soda bikarbona\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"maslac\", \"units\": \"g\", \"amount\": 25}, {\"name\": \"mlaćenica ili jogurt\", \"units\": \"ml\", \"amount\": 250}]",
+    "instructions": "Pomešati posebno suve sastojke pa dodati zatim otopljeni maslac i mlaćenicu (jogurt). Ja sam stavila jogurt. Lagano zamesiti testo, tek toliko da se sastojci sjedine. Formirati krug pa na vrhu zaseći oštrim nožem u krst i blago posuti brašnom. Staviti u pleh obložen papirom za pečenje i peći u predhodno zagrejanoj rerni na 200C nekih 45 minuta.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "45 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "integralno brašno,jogurt,maslac,meko brašno T-400,mlaćenica,soda bikarbona"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ravioli cu sos cremos de spanac",
+    "description": "Ravioli cu sos cremos de spanac sunt ușor de gătit, sățioase și apreciate de toată familia.",
+    "ingredients": "[{\"name\": \"paste Ravioli\", \"units\": \"pachet\", \"amount\": 1}, {\"name\": \"spanac proaspăt\", \"units\": \"grame\", \"amount\": 100}, {\"name\": \"busuioc proaspăt\", \"units\": \"grame\", \"amount\": 10}, {\"name\": \"lapte de cocos\", \"units\": \"ml\", \"amount\": 240}, {\"name\": \"amidon de porumb\", \"units\": \"lingură\", \"amount\": 1}, {\"name\": \"usturoi\", \"units\": \"căței\", \"amount\": 3}, {\"name\": \"praful de ceapă\", \"units\": \"linguriță\", \"amount\": 1}, {\"name\": \"suc de lămâie\", \"units\": \"lingură\", \"amount\": 1}, {\"name\": \"sare\", \"units\": \"linguriță\", \"amount\": 0.5}, {\"name\": \"piper\", \"units\": \"linguriță\", \"amount\": 0.5}, {\"name\": \"nucșoară proaspăt măcinată\", \"units\": \"linguriță\", \"amount\": 0.25}]",
+    "instructions": "Puneți toate ingredientele, în afară de paste, într-un blender. Amestecați până când se obține o compoziție cât mai omogenă. Turnați într-o cratiță medie. Puneți cratița la foc mediu și dați-o în fiert. Gătiți 5 - 10 minute sau până când începe să se îngroașe puțin. Gătiți ravioli în conformitate cu instrucțiunile de pe ambalaj. Scurgeți și clătiți ravioli și așezați-i pe farfurie. Acoperiți cu sosul de spanac, plus parmezan și busuioc proaspăt, dacă doriți.",
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "25 minutes",
+    "notes": "Ajustați cantitatea de usturoi după gust. Nucșoara și sucul proaspăt de lămâie vor scoate în evidență aroma spanacului proaspăt și a busuiocului.",
+    "tags": "pasta, ravioli, vegetarian, sos cremos"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sajtos burgonyakrokett",
+    "description": null,
+    "ingredients": "[{\"name\": \"főtt burgonya\", \"units\": \"kg\", \"amount\": \"1\"}, {\"name\": \"vaj\", \"units\": \"dkg\", \"amount\": \"5\"}, {\"name\": \"reszelt sajt\", \"units\": \"dkg\", \"amount\": \"10\"}, {\"name\": \"tojássárgája\", \"units\": \"pieces\", \"amount\": \"4\"}, {\"name\": \"só\", \"units\": null, \"amount\": null}, {\"name\": \"törött bors\", \"units\": null, \"amount\": null}, {\"name\": \"szerecsendió\", \"units\": null, \"amount\": null}, {\"name\": \"zsemlemorzsa\", \"units\": \"dkg\", \"amount\": \"30\"}, {\"name\": \"liszt\", \"units\": null, \"amount\": null}, {\"name\": \"tojásfehérje\", \"units\": null, \"amount\": null}, {\"name\": \"zsír\", \"units\": null, \"amount\": null}]",
+    "instructions": "A főtt burgonyát forrón áttörjük, s ha egy kissé kihűlt, beletesszük a tojássárgákat, a vajat és 7 dkg reszelt sajtot. Megsózzuk, enyhén borsozzuk, és egy kevés reszelt szerecsendióval fűszerezve nagyon jól összedolgozzuk. Ha kihűlt, a szokásos módon kroketteket formálunk belőle, majd lisztbe, a tojásfehérjébe és a meghagyott reszelt sajttal összekevert zsemlemorzsába bundázva, felhevített zsírban piros-ropogósra sütjük.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

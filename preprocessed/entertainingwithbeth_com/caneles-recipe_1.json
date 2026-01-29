@@ -1,0 +1,12 @@
+{
+    "dish_name": "Canelés",
+    "description": "This recipe for canelés is a great weekend baking project. Canelés are a delectable French recipe that you won’t find in many American bakeries.",
+    "ingredients": "[{\"name\": \"milk\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"vanilla bean\", \"units\": \"bean\", \"amount\": 1}, {\"name\": \"butter\", \"units\": \"tbsp\", \"amount\": 3}, {\"name\": \"sugar\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"egg yolks\", \"units\": \"units\", \"amount\": 3}, {\"name\": \"salt\", \"units\": \"tsp\", \"amount\": 0.5}, {\"name\": \"rum extract\", \"units\": \"tsp\", \"amount\": 1.5}, {\"name\": \"all-purpose flour\", \"units\": \"cup\", \"amount\": 1}]",
+    "instructions": "In a large sauce pot combine the milk, the vanilla bean paste and pod, butter and sugar. Heat until butter is melted and vanilla seeds rise to the top. Remove vanilla pod and set aside. In a large mixing bowl whisk together the egg yolks, salt and rum extract. Slowly temper the eggs by pouring a small amount of the warm mixture into the eggs whisking all the while, combining more milk gradually until all milk has been combined. Slowly whisk in the flour just a little at a time, until all the flour has been incorporated. Strain mixture through a fine mesh sieve into a 4-cup Pyrex Pitcher. Add back in the vanilla pod for a deeper vanilla flavor. Cover and refrigerate for a minimum of 24 hours, but 48 hours is even better! Pre-heat oven to 450F(232C). Spray the canelé pan with baking spray, distributing it well with a pastry brush. Pour batter into canelé ¾ of the way full. Bake at 450F (225C) for 10 minutes. Then reduce heat to 375F(190C) and bake for 30-35 minutes more until tops are a rich golden brown. Remove from the oven, allow to cool and then remove the canelés from your pan and flip upside down. Allow to cool completely before serving, this will set the centers.",
+    "category": "Dessert",
+    "prep_time": "24 hours",
+    "cook_time": "40 minutes",
+    "total_time": "24 hours 40 minutes",
+    "notes": "These are best eaten the day they are made. Allow the batter to rest! This allows the gluten in the batter to develop.",
+    "tags": "French, dessert, baking"
+}

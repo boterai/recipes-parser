@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pohane tikvice",
+    "description": "Recept za fine pohane tikvice koje bismo jeli cijelo ljeto.",
+    "ingredients": "[{\"name\": \"tikvice\", \"units\": \"srednje velike\", \"amount\": 2}, {\"name\": \"jaja\", \"units\": null, \"amount\": 3}, {\"name\": \"brašno\", \"units\": \"grama\", \"amount\": 75}, {\"name\": \"krušne mrvice\", \"units\": \"grama\", \"amount\": 200}, {\"name\": \"sol\", \"units\": null, \"amount\": null}, {\"name\": \"biljno ulje\", \"units\": null, \"amount\": null}]",
+    "instructions": "Dobro operite tikvice s korom, osušite i narežite na kolutiće. U tri različite zdjele rasporedite jaja koja ste dobro izmutili, brašno kojem ste dodali nešto soli i krušne mrvice. Kolutić tikvice umočite u brašno, jaje pa krušne mrvice. Ponavljajte isti postupak dok ne potrošite sve sastojke. Ako želite ekstrahrskav kolutić tikvica, možete dvaput umočiti povrće u jaja i krušne mrvice. Pecite u vrućem ulju nekoliko minuta, odnosno dok tikvica ne dobije zlatnosmeđu boju s obje strane. Ispečene tikvice stavite na papir za upijanje masnoće. Pohane tikvice poslužite uz umak po želji i sa salatom.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "several minutes",
+    "total_time": null,
+    "notes": "Tako panirane tikvice možete ispeći i u fritezi na vrući zrak te bez imalo masnoće.",
+    "tags": "tikvice, pohane, glavno jelo"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Chocolate Turtle Apple Slices",
+    "description": "Thick apple slices with a popsicle stick, dipped in chocolate then drizzled with caramel and topped with pecans.",
+    "ingredients": "[{\"name\": \"Fuji apples\", \"units\": \"very large\", \"amount\": 2}, {\"name\": \"semi-sweet chocolate chips\", \"units\": \"cups\", \"amount\": 3.5}, {\"name\": \"coconut oil\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"caramels\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"Chopped pecans\", \"units\": \"cup\", \"amount\": 0.5}]",
+    "instructions": "Slice apples into ½\" pieces. Make a little slit in the bottom of each apple slice to insert a popsicle stick. Melt chocolate chips in the microwave for about 2 minutes, stirring in coconut oil until smooth. Dip apple slices in chocolate and place on a parchment lined cookie sheet. Melt caramels in the microwave and drizzle over chocolate, then sprinkle with nuts. Refrigerate for about 1 hour. Serve and enjoy immediately.",
+    "category": "Snack",
+    "prep_time": "20 minutes",
+    "cook_time": null,
+    "total_time": "1 hour 20 minutes",
+    "notes": "Apples are best the first day. Store in refrigerator.",
+    "tags": "chocolate, apple, dessert, fall"
+}

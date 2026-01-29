@@ -1,0 +1,12 @@
+{
+    "dish_name": "Uštipci s tikvicama",
+    "description": "Uštipci s tikvicama su ukusna grickalica koja se priprema od tikvica, jaja i sira.",
+    "ingredients": "[{\"name\": \"tikvice\", \"units\": \"srednje\", \"amount\": 2}, {\"name\": \"jaja\", \"units\": null, \"amount\": 2}, {\"name\": \"kremasti sir\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"glatko brašno\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"prašak za pecivo\", \"units\": null, \"amount\": null}, {\"name\": \"sol\", \"units\": null, \"amount\": null}]",
+    "instructions": "Tikvice operite, ogulite pa naribajte. Posolite ih i ostavite sa strane kako bi pustile višak vode, a zatim ih dobro procijedite. Tikvicama dodajte dva razmućena jaja i sir. Po želji dodatno posolite. U drugoj zdjeli pomiješajte brašno i prašak za pecivo pa dodajte smjesi s tikvicama. Zagrijte ulje pa pomoću dvije žlice pravite uštipke. Pržite ih sve do zlatne boje na umjerenoj vatri. Poslužite uz svježu salatu i omiljeni umak.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

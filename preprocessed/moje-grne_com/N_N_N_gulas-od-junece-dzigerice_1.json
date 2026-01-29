@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gulaš od juneće džigerice",
+    "description": null,
+    "ingredients": "[{\"name\": \"juneće džigerice\", \"units\": \"g\", \"amount\": 700}, {\"name\": \"crni luk\", \"units\": \"главице\", \"amount\": 2}, {\"name\": \"paprika\", \"units\": \"шт.\", \"amount\": 1}, {\"name\": \"šargarepe\", \"units\": \"средње\", \"amount\": 2}, {\"name\": \"šampinjona\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"aleva paprika\", \"units\": \"kašika\", \"amount\": 1}, {\"name\": \"juneće supe\", \"units\": \"l\", \"amount\": 1}, {\"name\": \"ulja\", \"units\": \"kašike\", \"amount\": 4}, {\"name\": \"mešavina začina\", \"units\": null, \"amount\": null}, {\"name\": \"so\", \"units\": null, \"amount\": null}, {\"name\": \"mleveni biber\", \"units\": null, \"amount\": null}, {\"name\": \"gustina\", \"units\": \"pune kašike\", \"amount\": 2}, {\"name\": \"vode\", \"units\": \"kašike\", \"amount\": 3}]",
+    "instructions": "Crni luk i papriku iseckati na sitne kockice. Šampinjone na listiće, džigericu na manje kockice, a šargarepu na kolutove. U Kaseroli Titanium zagrejati ulje, dodati luk i šargarepu i propržiti. Posoliti. Dodati šampinjone i papriku, nastaviti sa dinstanjem, dodati džigericu i naliti pripremljenom supom. Kuvati uz povremeno mešanje dok džigerica i povrće ne omekšaju. Pred kraj začiniti po ukusu biberom i mešavinom začina, dodati alevu papriku i gustin pomešan sa vodom. Jelo treba da bude relativno gusto, po potrebi, dodati još gustina. Poslužiti toplo uz testeninu po želji.",
+    "category": "Glavna jela",
+    "prep_time": null,
+    "cook_time": "30 minuta",
+    "total_time": null,
+    "notes": null,
+    "tags": "aleva paprika, crni luk, gustin, juneća džigerica, juneća supa, mešavina začina, mleveni biber, paprika, šampinjoni, šargarepa"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ír szódás kenyér",
+    "description": "Nagyon gyorsan elkészül, élesztőmentes, dagasztást nem igényel, tetszőleges fűszerezéssel megszámlálhatatlan verzióban készíthető és nagyon finom.",
+    "ingredients": "[{\"name\": \"finomliszt\", \"units\": \"g\", \"amount\": 125}, {\"name\": \"teljes kiőrlésű tönkölyliszt\", \"units\": \"g\", \"amount\": 125}, {\"name\": \"só\", \"units\": \"g\", \"amount\": 7}, {\"name\": \"szódabikarbóna\", \"units\": \"teáskanál\", \"amount\": 1}, {\"name\": \"sütőpor\", \"units\": \"g\", \"amount\": 10}, {\"name\": \"víz\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"friss, facsart citromlé\", \"units\": \"teáskanál\", \"amount\": 1}]",
+    "instructions": "1. gyújtsuk be a sütőt 200 fokra 2. mérjük ki és keverjük össze egy keverőtálban...",
+    "category": "Kenyér",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "élesztő nélkül, gyors, ír kenyér, laktózmentes, vegán"
+}

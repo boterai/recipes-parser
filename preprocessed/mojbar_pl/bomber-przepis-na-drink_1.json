@@ -1,0 +1,12 @@
+{
+    "dish_name": "Bomber",
+    "description": "Ten koktajl to zwariowana mieszanka niczym Long Island. Bomber jest jak przyczajony tygrys lub ukryty smok.",
+    "ingredients": "[{\"name\": \"wódka czysta\", \"units\": \"ml\", \"amount\": 40}, {\"name\": \"gin\", \"units\": \"ml\", \"amount\": 40}, {\"name\": \"rum biały\", \"units\": \"ml\", \"amount\": 40}, {\"name\": \"tequila srebrna\", \"units\": \"ml\", \"amount\": 40}, {\"name\": \"likier wiśniowy\", \"units\": \"ml\", \"amount\": 20}, {\"name\": \"tonik\", \"units\": \"ml\", \"amount\": 20}, {\"name\": \"limonka sok\", \"units\": \"ml\", \"amount\": 10}, {\"name\": \"cytryna sok\", \"units\": \"ml\", \"amount\": 10}, {\"name\": \"syrop cukrowy\", \"units\": \"ml\", \"amount\": 20}, {\"name\": \"angostura bitter\", \"units\": \"dash\", \"amount\": 3}]",
+    "instructions": "Przygotuj wysoki kieliszek, w którym podasz koktajl – w celu schłodzenia wypełnij lodem i pozostaw na czas przygotowania drinka lub umieść w zamrażarce na kilka minut. Do przygotowanego szejkera z lodem wlej wszystkie składniki i wstrząśnij. W dokładnym odmierzeniu ilości składników koktajlu pomoże Ci jigger lub miarka kuchenna. Tak przygotowanego drinka za pomocą sitka barmańskiego odcedź do kieliszka wypełnionego świeżym lodem. Jako ozdoby użyć możesz cząstki cytryny. Smacznego!",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

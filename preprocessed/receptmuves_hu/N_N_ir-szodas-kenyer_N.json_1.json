@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ír szódás kenyér",
+    "description": "Nagyon gyorsan elkészül, élesztőmentes, dagasztást nem igényel, tetszőleges fűszerezéssel megszámlálhatatlan verzióban készíthető és nagyon finom.",
+    "ingredients": "[{\"name\": \"finomliszt\", \"units\": \"g\", \"amount\": 125}, {\"name\": \"teljes kiőrlésű tönkölyliszt\", \"units\": \"g\", \"amount\": 125}, {\"name\": \"só\", \"units\": \"g\", \"amount\": 7}, {\"name\": \"szódabikarbóna\", \"units\": \"csapott teáskanál\", \"amount\": 1}, {\"name\": \"sütőpor\", \"units\": \"g\", \"amount\": 10}, {\"name\": \"víz\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"friss, facsart citromlé\", \"units\": \"teáskanál\", \"amount\": 1}]",
+    "instructions": "1. gyújtsuk be a sütőt 200 fokra. 2. mérjük ki és keverjük össze egy keverőtálban a száraz összetevőket (lisztek, só, szódabikarbóna, sütőpor). 3. mérjük ki a vizet és adjuk hozzá a citromlevet, majd 2/3-át öntsük a szárazanyagokhoz és kanállal keverjük össze, miközben a maradék vízből fokozatosan adjunk hozzá annyit, amennyit a tészta felvesz (ragacsos, lágy, de nem folyékony massza a cél). 4. borítsuk a keveréket alaposan lisztezett felületre, szórjuk meg liszttel a tésztát is és határozott, de óvatos, enyhe nyomással alakítsunk cipó formát. 5. béleljük ki sütőpapírral a tepsit és óvatosan emeljük át a kenyeret. 6. tegyük a 200 fokra előmelegített sütőbe és süssük a kenyeret ropogós aranybarnára 20-25 perc alatt.",
+    "category": "Kenyér(féle)",
+    "prep_time": null,
+    "cook_time": "20-25 minutes",
+    "total_time": null,
+    "notes": "A képen látható változat sima és édeskömény maggal készült, de bátran kísérletezhetünk magvakkal, szárított fűszerekkel.",
+    "tags": "élesztő nélkül, gyors, ír kenyér, irish soda bread, kelesztés nélkül, laktózmentes, mentes, recept, receptműves, szódás, tejmentes, teljes kiőrlésű, tönköly, vegán, vekni"
+}

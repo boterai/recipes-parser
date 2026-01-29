@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kauravohvelit",
+    "description": "Gluteeniton resepti kauravohveleille, jotka ovat helppo aamiainen tai välipala.",
+    "ingredients": "[{\"name\": \"kananmunaa\", \"units\": \"kpl\", \"amount\": 3}, {\"name\": \"kookossokeria tai erytritolia\", \"units\": \"dl\", \"amount\": 0.5}, {\"name\": \"jogurttia\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"maitoa\", \"units\": \"dl\", \"amount\": 3}, {\"name\": \"gluteenittomia kaurahiutaleita\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"gluteenitonta kaurajauhoja\", \"units\": \"dl\", \"amount\": 3}]",
+    "instructions": "Riko kananmunat kulhoon ja vatkaa niiden rakenne tasaiseksi. Lisää mahdollisen makeutus sekä jogurtti ja maito. Mittaa kaurahiutaleet ja kaurajauhot taikinaan ja sekoita tasaiseksi. Anna taikinan turvota noin puoli tuntia. Kun taikinan koostumus on paksun puurin kaltainen, aloita paistaminen. Lusikoi taikinaa isolla lusikalla hieman yli puoli desiä kerrallaan vohvelirautaan.",
+    "category": "Aamiainen ja välipala",
+    "prep_time": "10 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "1 hour 10 minutes",
+    "notes": "Vohveliraudat eivät aina vaadi rasvaa paistamiseen. Testaa paistolämpötila koevohvelilla.",
+    "tags": "gluteeniton, aamiainen, välipala, vohvelit"
+}

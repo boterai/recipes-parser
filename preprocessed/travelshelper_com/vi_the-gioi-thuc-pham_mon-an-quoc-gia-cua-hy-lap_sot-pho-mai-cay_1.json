@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tirokafteri",
+    "description": "Sốt phô mai Feta đánh bông cay với ớt, nổi tiếng với kết cấu kem béo ngậy và vị cay nồng.",
+    "ingredients": "[{\"name\": \"phô mai feta Hy Lạp\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"ớt đỏ nhỏ\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"tỏi\", \"units\": \"clove\", \"amount\": 1}, {\"name\": \"dầu ô liu nguyên chất\", \"units\": \"tablespoons\", \"amount\": 3}, {\"name\": \"giấm rượu vang đỏ\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"sữa chua Hy Lạp\", \"units\": \"tablespoons\", \"amount\": 2}]",
+    "instructions": "1. Chuẩn bị ớt: Thái lát hoặc băm nhỏ ớt, bóc vỏ và băm nhỏ tỏi. Nếu dùng ớt tươi, hãy nướng nhanh trên vỉ nướng hoặc lò nướng cho đến khi cháy xém, sau đó bóc vỏ và bỏ hạt. Chắt bỏ phần nước thừa trong ớt đã nướng.\n2. Trộn phô mai feta và hạt tiêu: Trong máy xay thực phẩm hoặc bát trộn, trộn phô mai feta vụn, ớt đã chuẩn bị, tỏi băm, 3 thìa canh dầu ô liu và giấm. Nếu dùng sữa chua Hy Lạp, hãy thêm vào ngay. Xay hoặc nghiền nhuyễn cho đến khi tạo thành hỗn hợp mịn, sánh mịn.\n3. Nêm gia vị và điều chỉnh: Nếm thử nước chấm và điều chỉnh gia vị. Thêm một nhúm tiêu đen và một chút giấm hoặc nước cốt chanh nếu thấy quá đậm.\n4. Dùng hoặc để lạnh: Đổ sốt chấm ra bát. Rưới thêm dầu ô liu và rắc thêm chút bột oregano hoặc bột ớt paprika lên trên. Để có hương vị ngon nhất, hãy đậy nắp và để lạnh trong tủ lạnh khoảng 30 phút trước khi dùng.",
+    "category": "Món khai vị, Meze",
+    "prep_time": "10 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "30 minutes",
+    "notes": "Có thể dùng làm món ăn kèm với thịt nướng hoặc làm món khai vị trong các bữa tiệc.",
+    "tags": "Hy Lạp, sốt, món khai vị"
+}

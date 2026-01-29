@@ -1,0 +1,12 @@
+{
+    "dish_name": "Cháo Thịt Bò",
+    "description": "Cách nấu cháo thịt bò ngon nhất cho gia đình Việt.",
+    "ingredients": "[{\"name\": \"Xương bò\", \"units\": \"kg\", \"amount\": 1}, {\"name\": \"Gạo\", \"units\": \"g\", \"amount\": \"150-200\"}, {\"name\": \"Thịt bò\", \"units\": \"g\", \"amount\": \"200-300\"}, {\"name\": \"Hành khô\", \"units\": \"củ\", \"amount\": \"1-2\"}, {\"name\": \"Gia vị\", \"units\": null, \"amount\": null}, {\"name\": \"Rau củ ăn kèm\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Ninh xương lấy nước dùng ngọt thanh. 2. Chuẩn bị gạo và nấu cháo. 3. Sơ chế và chế biến thịt bò. 4. Hoàn thành món cháo. 5. Trình bày và thưởng thức.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "30-40 minutes",
+    "total_time": "45-55 minutes",
+    "notes": "Cháo thịt bò có thể điều chỉnh để phù hợp với nhiều đối tượng.",
+    "tags": "cháo, thịt bò, món ăn, gia đình"
+}

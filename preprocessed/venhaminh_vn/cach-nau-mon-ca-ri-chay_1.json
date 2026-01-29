@@ -1,0 +1,12 @@
+{
+    "dish_name": "Cà Ri Chay",
+    "description": "Món cà ri chay thơm ngon, dinh dưỡng với nước cốt dừa béo ngậy.",
+    "ingredients": "[{\"name\": \"Khoai lang\", \"units\": \"grams\", \"amount\": 200}, {\"name\": \"Khoai môn (hoặc khoai tây)\", \"units\": \"grams\", \"amount\": 200}, {\"name\": \"Cà rốt\", \"units\": \"củ lớn\", \"amount\": 1}, {\"name\": \"Đậu hũ chiên sẵn\", \"units\": \"grams\", \"amount\": 300}, {\"name\": \"Tàu hũ ky lá\", \"units\": \"grams\", \"amount\": 50}, {\"name\": \"Nấm đông cô tươi hoặc khô\", \"units\": \"grams\", \"amount\": 100}, {\"name\": \"Nước cốt dừa\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"Nước lọc\", \"units\": \"ml\", \"amount\": \"500 – 700\"}, {\"name\": \"Hành tây\", \"units\": \"củ nhỏ\", \"amount\": 1}, {\"name\": \"Sả bằm nhuyễn\", \"units\": \"grams\", \"amount\": 30}, {\"name\": \"Ớt bằm\", \"units\": \"muỗng cà phê\", \"amount\": 1}, {\"name\": \"Bột cà ri\", \"units\": \"grams\", \"amount\": 20}, {\"name\": \"Dầu ăn\", \"units\": \"muỗng canh\", \"amount\": 2}, {\"name\": \"Hạt nêm chay\", \"units\": \"muỗng cà phê\", \"amount\": 2}, {\"name\": \"Muối\", \"units\": null, \"amount\": null}, {\"name\": \"Đường\", \"units\": null, \"amount\": null}, {\"name\": \"Nước mắm chay\", \"units\": null, \"amount\": null}]",
+    "instructions": "Bước 1: Khởi Hương Với Sả và Bột Cà Ri. Bước 2: Xào Thấm Gia Vị Cho Rau Củ. Bước 3: Hoàn Thiện Phần Nước Cốt Thơm Béo.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "30-35 minutes",
+    "total_time": "60 minutes",
+    "notes": "Cà ri chay có thể ăn kèm với bánh mì hoặc bún tươi.",
+    "tags": "cà ri, chay, món ăn Việt, dinh dưỡng"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "White Russian",
+    "description": "White Russian to klasyk wśród koktajli, który zachwyca swoim bogatym smakiem i prostotą przygotowania.",
+    "ingredients": "[{\"name\": \"wódka\", \"units\": \"ml\", \"amount\": 60}, {\"name\": \"Kahluy lub innego likieru kawowego\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"śmietanka 36%\", \"units\": \"ml\", \"amount\": 30}]",
+    "instructions": "W niskiej szklance typu old fashioned umieszczamy kostki lodu. Następnie wlewamy wódkę i likier kawowy. Delikatnie dolewamy śmietankę, aby stworzyć warstwy. Mieszamy drinka delikatnie, aby uzyskać efekt marmurkowania.",
+    "category": "Drinki",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Idealny White Russian podajemy w szklance typu old fashioned, z dużą ilością lodu. Możesz udekorować go wiórkami czekoladowymi lub posypać lekko kakao.",
+    "tags": "koktajl, drink, wódka, Kahlua"
+}

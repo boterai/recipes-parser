@@ -1,0 +1,12 @@
+{
+    "dish_name": "Financier",
+    "description": "Le Financier is a dainty French almond cookie that resembles a tiny cake, slightly chewy on the outside and moist on the inside.",
+    "ingredients": "[{\"name\": \"powdered sugar\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"almond flour\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"all-purpose flour\", \"units\": \"Tablespoons\", \"amount\": 2}, {\"name\": \"salt\", \"units\": null, \"amount\": \"pinch\"}, {\"name\": \"unsalted butter\", \"units\": \"cup\", \"amount\": 0.33}, {\"name\": \"pure almond extract\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"egg whites\", \"units\": null, \"amount\": 3}, {\"name\": \"sliced almonds\", \"units\": \"Tablespoons\", \"amount\": 2}]",
+    "instructions": "1. Preheat the oven to 350F (175C). 2. Melt the butter in a skillet until it turns amber. 3. Transfer the butter to a bowl, add almond extract, and let cool. 4. Sift together powdered sugar, almond flour, all-purpose flour, and salt. 5. Combine the cooled butter with dry ingredients to form a paste. 6. Add egg whites in two batches, whisking until smooth. 7. Pipe the batter into a financier mold, top with sliced almonds. 8. Bake for 25-30 minutes until golden brown. 9. Allow to cool before removing from the mold.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Using convection setting at 325F (170C) yields better results. Ensure butter does not burn when browning.",
+    "tags": "French, cookies, dessert, almond"
+}

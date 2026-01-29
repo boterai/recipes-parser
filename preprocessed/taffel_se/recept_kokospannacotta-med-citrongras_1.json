@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kokospannacotta med citrongräs",
+    "description": "Kokospannacotta med citrongräs är en dessert med kokosmjölk och citrongräs.",
+    "ingredients": "[{\"name\": \"citrongräs\", \"units\": \"stång\", \"amount\": 1}, {\"name\": \"kokosmjölk\", \"units\": \"dl\", \"amount\": 4}, {\"name\": \"socker\", \"units\": \"dl\", \"amount\": 0.5}, {\"name\": \"gelatinblad\", \"units\": null, \"amount\": 3}, {\"name\": \"salt\", \"units\": \"nypa\", \"amount\": 1}]",
+    "instructions": "Krossa citrongräset med en mortel eller baksidan av en kniv. Slå en knut på det och koka upp tillsammans med kokosmjölk och socker. Blötlägg under tiden gelatinbladen i kallt vatten. Låt kokosblandningen stå och dra i minst fem minuter och svalna något. Smaka av med en gnutta salt. Rör ut gelatinbladen i kokosgrädden och lös upp dem noga. Häll upp blandningen i små glas. Låt stelna i kyl ca 3 timmar. Det går snabbare om du låter dem stå i frysen de första 20 minuterna. Bäst blir den om den får stå väl inplastad över natten i kyl. Låt stå i rumstemperatur en kvart före servering, den ska vara sval men inte iskall. Servera med färska bär eller frukt.",
+    "category": "Dessert",
+    "prep_time": "15 minuter",
+    "cook_time": null,
+    "total_time": "3 timmar 15 minuter",
+    "notes": "Alla pannacottor blir godast om de lagas dagen före de ska ätas. Plasta in dem ordentligt så att de inte tar smak i kylen.",
+    "tags": "dessert, kokos, citrongräs"
+}

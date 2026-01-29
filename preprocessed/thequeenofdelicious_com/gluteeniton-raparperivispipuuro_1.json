@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gluteeniton raparperivispipuuro",
+    "description": "Ihana, samettinen vispipuuro raparperista.",
+    "ingredients": "[{\"name\": \"raparperia\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"vettä\", \"units\": \"l\", \"amount\": 1}, {\"name\": \"sokeria\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"kardemummaa\", \"units\": \"tl\", \"amount\": 0.5}, {\"name\": \"karkeaa riisijauhoa\", \"units\": \"dl\", \"amount\": 2}]",
+    "instructions": "Pilko raparperi, kuoriminen on tarpeetonta. Mittaa kattilaan vesi, sokeria ja lisää sitten raparperit. Keitä n. 10 minuuttia kunnes raparperit ovat pehmenneet. Lisää riisijauho koko ajan voimakkaasti vatkaten. Hauduta 10 minuuttia välillä sekoittaen. Jäähdytä puuro kokonaan ennen vatkaamista. Vatkaa jäähtynyt puuro kuohkeaksi yleiskoneella tai sähkövatkaimella, n. 10 minuuttia.",
+    "category": "Dessert",
+    "prep_time": "5 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "8 hours 25 minutes",
+    "notes": "Vispipuuro säilyy hyvänä jääkaapissa 3-5 päivää. Lisää riisijauho mieluummin pienissä erissä kuin kerralla, jotta puuro ei paakkunnu.",
+    "tags": "gluteeniton, raparperi, jälkiruoka"
+}

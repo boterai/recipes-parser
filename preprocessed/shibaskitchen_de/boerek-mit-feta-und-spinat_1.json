@@ -1,0 +1,12 @@
+{
+    "dish_name": "Börek mit Feta und Spinat",
+    "description": "Ein einfaches Rezept für Börek mit Spinat und Feta, perfekt für Mittagessen, Brunch oder als Fingerfood.",
+    "ingredients": "[{\"name\": \"Zwiebel\", \"units\": null, \"amount\": 1}, {\"name\": \"Knoblauchzehen\", \"units\": null, \"amount\": 2}, {\"name\": \"Blattspinat\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"Frühlingszwiebeln\", \"units\": null, \"amount\": 4}, {\"name\": \"Petersilie\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"Koriander\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"Feta\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"Milch\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"Sonnenblumenöl\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"Ei\", \"units\": null, \"amount\": 1}, {\"name\": \"Salz\", \"units\": null, \"amount\": null}, {\"name\": \"Pfeffer\", \"units\": null, \"amount\": null}, {\"name\": \"Filoteig\", \"units\": \"Pck.\", \"amount\": 1}]",
+    "instructions": "1. Die Soße vorbereiten: Milch, Sonnenblumenöl, Ei sowie Salz und Pfeffer in einer Schüssel gut vermischen. 2. Füllung vorbereiten: Zwiebel und Knoblauch fein hacken und in etwas Olivenöl anschwitzen. Den klein geschnittenen Blattspinat hinzufügen und kurz mitbraten, bis er zusammenfällt. Die Mischung abkühlen lassen, überschüssige Flüssigkeit ausdrücken und den zerbröselten Feta untermischen. 3. Börek schichten: Die Backform mit etwas Soße bestreichen. 3 Blätter Filoteig hineinlegen, mit der Soße bestreichen und eine Schicht der Spinat-Feta-Füllung darauf verteilen. Diesen Vorgang wiederholen (3 Blätter, Füllung, 4 Blätter obenauf). Jede Schicht mit Soße bestreichen. 4. Börek backen: Im vorgeheizten Backofen bei 180 Grad für ca. 30–35 Minuten backen, bis das Börek goldbraun ist. 5. Nach dem Backen mit einem feuchten Geschirrtuch abdecken und 3–5 Minuten ruhen lassen.",
+    "category": "Abendessen, Mittagessen",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "55 minutes",
+    "notes": "Börek lässt sich wunderbar einfrieren. Achte darauf, die Filoteigblätter immer gut mit der Soße zu bestreichen, damit sie nicht austrocknen.",
+    "tags": "Börek, türkische Küche, Rezept"
+}

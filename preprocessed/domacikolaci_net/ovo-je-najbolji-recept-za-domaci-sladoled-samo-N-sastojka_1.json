@@ -1,0 +1,12 @@
+{
+    "dish_name": "domaći sladoled",
+    "description": "Najbolji recept za domaći sladoled sa samo 3 sastojka.",
+    "ingredients": "[{\"name\": \"šlag\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"kondenzovano mleko\", \"units\": \"grams\", \"amount\": 150}, {\"name\": \"jagode\", \"units\": \"grams\", \"amount\": 100}]",
+    "instructions": "Iseći jagode na male kockice i ostaviti u frižideru 2 sata.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": "2 hours",
+    "notes": "Detalje pripreme pogledajte u videu.",
+    "tags": "sladoled, desert, brzi recept"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Bajor burgonyakrém leves",
+    "description": null,
+    "ingredients": "[{\"name\": \"kenőmájas\", \"units\": \"dkg\", \"amount\": 25}, {\"name\": \"olaj\", \"units\": \"evőkanál\", \"amount\": 2}, {\"name\": \"vöröshagyma\", \"units\": \"fej\", \"amount\": 1}, {\"name\": \"zöldborsó\", \"units\": \"dkg\", \"amount\": 30}, {\"name\": \"só\", \"units\": null, \"amount\": null}, {\"name\": \"bors\", \"units\": null, \"amount\": null}, {\"name\": \"majoránna\", \"units\": null, \"amount\": null}, {\"name\": \"bazsalikom\", \"units\": null, \"amount\": null}, {\"name\": \"petrezselyem\", \"units\": null, \"amount\": null}, {\"name\": \"burgonyapehely\", \"units\": \"csomag\", \"amount\": 1}, {\"name\": \"húsleves\", \"units\": \"liter\", \"amount\": 1}]",
+    "instructions": "Az olajban megpirítjuk a hagymát, hozzáadjuk a kenőmájast. Húslevessel fölengedjük, és belekeverjük a burgonyaport vagy pelyhet és az előre megfőzött zöldborsót. Felforraljuk, beletesszük a fűszereket, majd fogyasztás előtt 15 percig állni hagyjuk.",
+    "category": "Levesek",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

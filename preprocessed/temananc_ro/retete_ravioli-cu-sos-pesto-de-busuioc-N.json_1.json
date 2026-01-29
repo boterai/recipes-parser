@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ravioli cu sos pesto de busuioc",
+    "description": "Cu doar 5 ingrediente simple și 10 minute petrecute în bucătărie, această rețetă de ravioli cu sos pesto este o cină specială de care vă puteți bucura în orice seară a săptămânii!",
+    "ingredients": "[{\"name\": \"Ravioli\", \"units\": \"grams\", \"amount\": 500}, {\"name\": \"Mazăre congelată\", \"units\": \"grams\", \"amount\": 200}, {\"name\": \"Pesto de busuioc\", \"units\": \"grams\", \"amount\": 120}, {\"name\": \"Smântână de gătit\", \"units\": \"ml\", \"amount\": \"60-80\"}, {\"name\": \"Ulei de măsline extravirgin\", \"units\": \"drop\", \"amount\": \"1\"}, {\"name\": \"Fulgi de ardei roșu\", \"units\": null, \"amount\": \"to taste\"}, {\"name\": \"sare\", \"units\": null, \"amount\": \"to taste\"}]",
+    "instructions": "Adăugați apă într-o oală. Dați apa în fiert și adăugați sare kosher. Adăugați ravioli și mazărea în oală. Gătiți pastele conform instrucțiunilor de pe ambalaj. În timp ce ravioli și mazărea fierb, amestecați pesto de busuioc și aproximativ 60 ml de smântână într-un bol mare. Odată ce ravioli sunt fierți, păstrați aproximativ 240 ml din apa de gătit înainte de a scurge pastele și mazărea. Apoi adăugați-le în amestecul de pesto și smântână și amestecați ușor. Pentru a îngroșa și emulsiona sosul, adăugați un strop bun de ulei de măsline extravirgin și o parte din apa de gătit a pastelor - doar 60 ml de apă pentru început. După ce ați amestecat, puteți adăuga câte puțină apă de la paste, la nevoie, până când ajungeți la consistența dorită. Gustați și asezonați după gust. De asemenea, puteți adăuga mai mult pesto. Presărați deasupra niște fulgi de ardei roșu sau piper și serviți imediat.",
+    "category": "Main Course",
+    "prep_time": "5 minutes",
+    "cook_time": "5 minutes",
+    "total_time": "10 minutes",
+    "notes": "Păstrați resturile într-un recipient ermetic în frigider până la 3 zile. Pentru a reîncălzi, adăugați ravioli de brânză cu sos pesto într-o cratiță și reîncălziți ușor la foc mic.",
+    "tags": "pasta, ravioli, pesto, quick meal"
+}
