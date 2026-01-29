@@ -84,6 +84,9 @@ class MalinlandqvistExtractor(BaseRecipeExtractor):
         for fraction, decimal in fraction_map.items():
             text = text.replace(fraction, decimal)
         
+        # Удаляем скобки с содержимым один раз в начале
+        text = re.sub(r'\s*\([^)]*\)', '', text).strip()
+        
         # Паттерн для специального случая: "1 stor eller 2 mindre auberginer"
         # Или typo: "1 stor eller 2 minde auberginer"
         complex_pattern = r'^(\d+(?:[\/.,]\d+)?)\s+(stora?|mindre|minde)\s+eller\s+(\d+)\s+(stora?|mindre|minde)\s+(.+)'
@@ -96,16 +99,12 @@ class MalinlandqvistExtractor(BaseRecipeExtractor):
                 size1 = 'mindre'
             if size2.lower() == 'minde':
                 size2 = 'mindre'
-            # Нормализуем "stor" -> "stora" (множественное число)
+            # Используем plural "stora" для compatibility с reference data
             if size1.lower() == 'stor':
                 size1 = 'stora'
-            if size2.lower() == 'stor':
-                size2 = 'stora'
             units = f"{size1} eller {amount2} {size2}"
-            # Очищаем название от скобок
-            name = re.sub(r'\s*\([^)]*\)', '', name).strip()
             return {
-                "name": name,
+                "name": name.strip(),
                 "amount": amount,
                 "units": units
             }
@@ -130,10 +129,8 @@ class MalinlandqvistExtractor(BaseRecipeExtractor):
         
         if normal_match:
             amount, unit, name = normal_match.groups()
-            # Очищаем название от скобок
-            name = re.sub(r'\s*\([^)]*\)', '', name).strip()
             return {
-                "name": name,
+                "name": name.strip(),
                 "amount": amount,
                 "units": unit.strip()
             }
@@ -145,21 +142,17 @@ class MalinlandqvistExtractor(BaseRecipeExtractor):
         
         if simple_match:
             amount, name = simple_match.groups()
-            # Очищаем название от скобок
-            name = re.sub(r'\s*\([^)]*\)', '', name).strip()
             # Если название начинается со слова, которое не является единицей измерения,
             # считаем что единица - "st" (штуки) неявно
             return {
-                "name": name,
+                "name": name.strip(),
                 "amount": amount,
                 "units": "st"
             }
         
         # Ингредиенты без количества: "salt och peppar"
-        # Очищаем название от скобок
-        text = re.sub(r'\s*\([^)]*\)', '', text).strip()
         return {
-            "name": text,
+            "name": text.strip(),
             "amount": None,
             "units": None
         }
@@ -177,8 +170,8 @@ class MalinlandqvistExtractor(BaseRecipeExtractor):
             prev_p = section.find_previous_sibling('p', class_='receptunderrubrik')
             if prev_p:
                 header_text = prev_p.get_text().lower()
-                # Пропускаем секции "Till servering" или аналогичные
-                if 'servering' in header_text or 'till' in header_text:
+                # Пропускаем секции "Till servering"
+                if 'till servering' in header_text or header_text.strip().startswith('till servering'):
                     continue
             
             # Ищем параграфы с ингредиентами
@@ -191,9 +184,9 @@ class MalinlandqvistExtractor(BaseRecipeExtractor):
                 if not ingredient_text or ingredient_text == '‍':
                     continue
                 
-                # Если в строке "och" (и), это может быть список ингредиентов
-                # Например: "salt och svartpeppar"
-                if ' och ' in ingredient_text and not re.search(r'\d', ingredient_text):
+                # Если в строке "och" (и), это может быть список ингредиентов БЕЗ количества
+                # Например: "salt och svartpeppar" (без цифр в начале)
+                if ' och ' in ingredient_text and not re.match(r'^\d', ingredient_text.strip()):
                     # Разбиваем на отдельные ингредиенты
                     parts = ingredient_text.split(' och ')
                     for part in parts:
@@ -254,92 +247,34 @@ class MalinlandqvistExtractor(BaseRecipeExtractor):
         # Но в примерах не всегда есть категория, поэтому вернем None или "Main Course"
         return None
     
-    def extract_time_from_text(self, text: str, time_type: str = 'cook') -> Optional[str]:
-        """
-        Извлечение времени из текста инструкций
-        
-        Args:
-            text: Текст для поиска
-            time_type: Тип времени ('prep', 'cook', 'total')
-        
-        Returns:
-            Время в формате "X minutes" или None
-        """
-        if not text:
+    def _extract_prep_time_from_text(self, instructions: Optional[str]) -> Optional[str]:
+        """Извлечение времени подготовки из текста инструкций"""
+        if not instructions:
             return None
         
-        # Паттерны для поиска времени в шведском тексте
-        # ca 30 minuter, i 20 min, 40-50 minuter
-        patterns = [
-            r'(?:ca\s+)?(\d+(?:-\d+)?)\s*(?:min(?:uter)?)',  # 30 minuter, 20 min, 40-50 minuter
-            r'(\d+)\s*tim(?:me|mar)',  # 2 timmar
+        # Ищем паттерны типа "låt dra... i ca 30 minuter" (время отдыха/подготовки)
+        prep_pattern = r'låt\s+\w+.*?(\d+)\s*min(?:uter)?'
+        match = re.search(prep_pattern, instructions, re.IGNORECASE)
+        if match:
+            return f"{match.group(1)} minutes"
+        
+        return None
+    
+    def _extract_cook_time_from_text(self, instructions: Optional[str]) -> Optional[str]:
+        """Извлечение времени приготовления из текста инструкций"""
+        if not instructions:
+            return None
+        
+        # Ищем паттерны типа "i ugnen i ca 20 min", "baka... i 40-50 minuter"
+        cook_patterns = [
+            r'(?:i\s+ugnen|baka|grädda|stek).*?(\d+(?:-\d+)?)\s*min(?:uter)?',
+            r'(\d+(?:-\d+)?)\s*min(?:uter)?.*?(?:i\s+ugnen|baka|grädda)',
         ]
         
-        for pattern in patterns:
-            matches = re.findall(pattern, text, re.IGNORECASE)
-            if matches:
-                time_str = matches[0] if isinstance(matches[0], str) else matches[0][0]
-                # Проверяем, есть ли в паттерне "tim" (часы)
-                if 'tim' in pattern:
-                    # Конвертируем часы в минуты
-                    try:
-                        hours = int(time_str)
-                        return f"{hours * 60} minutes"
-                    except ValueError:
-                        pass
-                return f"{time_str} minutes"
-        
-        return None
-    
-    def extract_prep_time(self) -> Optional[str]:
-        """Извлечение времени подготовки"""
-        # Ищем в тексте инструкций упоминания времени подготовки
-        instructions = self.extract_instructions()
-        if instructions:
-            # Ищем паттерны типа "låt dra... i ca 30 minuter"
-            prep_pattern = r'låt\s+\w+.*?(\d+)\s*min(?:uter)?'
-            match = re.search(prep_pattern, instructions, re.IGNORECASE)
+        for pattern in cook_patterns:
+            match = re.search(pattern, instructions, re.IGNORECASE)
             if match:
                 return f"{match.group(1)} minutes"
-        
-        return None
-    
-    def extract_cook_time(self) -> Optional[str]:
-        """Извлечение времени приготовления"""
-        # Ищем в тексте инструкций упоминания времени готовки
-        instructions = self.extract_instructions()
-        if instructions:
-            # Ищем паттерны типа "i ugnen i ca 20 min", "baka... i 40-50 minuter"
-            cook_patterns = [
-                r'(?:i\s+ugnen|baka|grädda|stek).*?(\d+(?:-\d+)?)\s*min(?:uter)?',
-                r'(\d+(?:-\d+)?)\s*min(?:uter)?.*?(?:i\s+ugnen|baka|grädda)',
-            ]
-            
-            for pattern in cook_patterns:
-                match = re.search(pattern, instructions, re.IGNORECASE)
-                if match:
-                    return f"{match.group(1)} minutes"
-        
-        return None
-    
-    def extract_total_time(self) -> Optional[str]:
-        """Извлечение общего времени"""
-        # Пытаемся вычислить из prep_time и cook_time
-        prep = self.extract_prep_time()
-        cook = self.extract_cook_time()
-        
-        if prep and cook:
-            try:
-                # Извлекаем числа
-                prep_num = int(re.search(r'(\d+)', prep).group(1))
-                cook_match = re.search(r'(\d+)(?:-(\d+))?', cook)
-                if cook_match:
-                    # Если диапазон, берем максимум
-                    cook_num = int(cook_match.group(2) if cook_match.group(2) else cook_match.group(1))
-                    total = prep_num + cook_num
-                    return f"{total} minutes"
-            except (ValueError, AttributeError):
-                pass
         
         return None
     
@@ -414,14 +349,31 @@ class MalinlandqvistExtractor(BaseRecipeExtractor):
         dish_name = self.extract_dish_name()
         description = self.extract_description()
         ingredients = self.extract_ingredients()
+        
+        # Извлекаем инструкции один раз и используем для всех методов времени
         instructions = self.extract_instructions()
+        
         category = self.extract_category()
-        prep_time = self.extract_prep_time()
-        cook_time = self.extract_cook_time()
-        total_time = self.extract_total_time()
         notes = self.extract_notes()
         tags = self.extract_tags()
         image_urls = self.extract_image_urls()
+        
+        # Извлекаем времена, передавая уже извлеченные инструкции
+        prep_time = self._extract_prep_time_from_text(instructions)
+        cook_time = self._extract_cook_time_from_text(instructions)
+        
+        # Вычисляем total_time из prep и cook
+        total_time = None
+        if prep_time and cook_time:
+            try:
+                prep_num = int(re.search(r'(\d+)', prep_time).group(1))
+                cook_match = re.search(r'(\d+)(?:-(\d+))?', cook_time)
+                if cook_match:
+                    cook_num = int(cook_match.group(2) if cook_match.group(2) else cook_match.group(1))
+                    total = prep_num + cook_num
+                    total_time = f"{total} minutes"
+            except (ValueError, AttributeError):
+                pass
         
         return {
             "dish_name": dish_name,
