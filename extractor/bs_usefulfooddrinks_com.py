@@ -119,6 +119,7 @@ class BsUsefulfooddrinksComExtractor(BaseRecipeExtractor):
         name_normalization = {
             'smeđeg šećera': 'smeđi šećer',
             'bijelog': 'bijeli šećer',
+            'koliko bijelog': 'bijeli šećer',  # "same amount of white"
             'agar-agara': 'agar-agar',
             'putera': 'puter',
             'vode': 'voda',
@@ -130,6 +131,22 @@ class BsUsefulfooddrinksComExtractor(BaseRecipeExtractor):
             'šećera': 'šećer',
             'brašna': 'brašno',
             'mlijeka': 'mlijeko',
+            'gotov keks': 'gotov keks',
+            'bjelanjci': 'bjelanjci',
+            'bjelanjaka': 'bjelanjci',
+        }
+        
+        # Словарь для определения единиц по названию продукта
+        product_to_unit = {
+            'keks': 'piece',
+            'jaje': 'pieces',
+            'jaja': 'pieces',
+            'bjelanjak': 'pieces',
+            'bjelanjci': 'pieces',
+            'žumanjak': 'pieces',
+            'žumanjci': 'pieces',
+            'vjeverica': 'pieces',
+            'vjeverice': 'pieces',
         }
         
         # Паттерн для извлечения количества, единицы и названия
@@ -180,14 +197,30 @@ class BsUsefulfooddrinksComExtractor(BaseRecipeExtractor):
                         break
             
             # Ищем единицу измерения
+            # Сначала проверяем, не начинается ли строка с единицы (например "kašičica limunovog soka")
+            unit_found_first = False
             for unit_text, unit_name in unit_mapping.items():
-                # Проверяем, есть ли единица в начале оставшегося текста
-                pattern = r'^' + re.escape(unit_text) + r'\b'
+                pattern = r'^' + re.escape(unit_text) + r'\s+'
                 if re.match(pattern, text_lower):
                     unit = unit_name
-                    # Удаляем единицу из названия
+                    # Удаляем единицу из начала и устанавливаем amount = 1 если не было
                     name = re.sub(r'^' + re.escape(unit_text) + r'\s*', '', name, flags=re.IGNORECASE).strip()
+                    text_lower = re.sub(pattern, '', text_lower)
+                    if not amount:
+                        amount = '1'
+                    unit_found_first = True
                     break
+            
+            # Если единицу нашли в начале, не ищем ее после
+            if not unit_found_first:
+                for unit_text, unit_name in unit_mapping.items():
+                    # Проверяем, есть ли единица в начале оставшегося текста (после числа)
+                    pattern = r'^' + re.escape(unit_text) + r'\b'
+                    if re.match(pattern, text_lower):
+                        unit = unit_name
+                        # Удаляем единицу из названия
+                        name = re.sub(r'^' + re.escape(unit_text) + r'\s*', '', name, flags=re.IGNORECASE).strip()
+                        break
         
         # Нормализуем имя из родительного падежа
         name_lower = name.lower().strip()
@@ -200,6 +233,13 @@ class BsUsefulfooddrinksComExtractor(BaseRecipeExtractor):
             # Удаляем общие родительные окончания
             name = re.sub(r'(eg|og|ih|nih|enog|nog)\s+', ' ', name, flags=re.IGNORECASE)
             name = self.clean_text(name)
+        
+        # Если единица не определена, проверяем по названию продукта
+        if not unit:
+            for product_key, product_unit in product_to_unit.items():
+                if product_key in name_lower:
+                    unit = product_unit
+                    break
         
         if not name or len(name) < 2:
             return None
@@ -234,6 +274,7 @@ class BsUsefulfooddrinksComExtractor(BaseRecipeExtractor):
         # Обычно первый рецепт - основной
         first_recipe_h2_found = False
         stop_collecting = False
+        pending_ref = None  # Для обработки "koliko bijelog" и подобных
         
         for elem in article_body.find_all(['h2', 'ul']):
             if elem.name == 'h2':
@@ -275,9 +316,24 @@ class BsUsefulfooddrinksComExtractor(BaseRecipeExtractor):
                     if not ingredient_text:
                         continue
                     
-                    parsed = self.parse_ingredient_text(ingredient_text)
+                    # Специальная обработка для "koliko bijelog" и подобных
+                    # Это означает "такое же количество белого (сахара)" - берем из предыдущего
+                    if 'koliko' in ingredient_text.lower() and pending_ref:
+                        # Используем количество и единицу из предыдущего ингредиента
+                        parsed = {
+                            "name": "bijeli šećer",
+                            "amount": pending_ref.get('amount'),
+                            "units": pending_ref.get('units')
+                        }
+                        pending_ref = None
+                    else:
+                        parsed = self.parse_ingredient_text(ingredient_text)
+                    
                     if parsed and parsed['name']:
                         ingredients.append(parsed)
+                        # Сохраняем как потенциальную ссылку для следующего
+                        if parsed.get('amount') and 'šećer' in parsed['name'].lower():
+                            pending_ref = parsed
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
