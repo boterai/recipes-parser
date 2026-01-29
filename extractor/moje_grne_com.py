@@ -5,6 +5,7 @@
 import sys
 from pathlib import Path
 import json
+import html
 import re
 from typing import Optional, List, Dict
 
@@ -27,6 +28,10 @@ class MojeGrneExtractor(BaseRecipeExtractor):
                     if item.get('@type') == 'Article':
                         headline = item.get('headline')
                         if headline:
+                            # Сначала декодируем HTML entities
+                            headline = html.unescape(headline)
+                            # Убираем все виды кавычек (различные Unicode кавычки)
+                            headline = re.sub(r'[„""\u201C\u201D\u201E\u201F«»''\u2018\u2019]', '', headline)
                             return self.clean_text(headline)
             except (json.JSONDecodeError, KeyError):
                 pass
@@ -34,7 +39,10 @@ class MojeGrneExtractor(BaseRecipeExtractor):
         # Альтернативно - из h1
         h1 = self.soup.find('h1')
         if h1:
-            return self.clean_text(h1.get_text())
+            text = h1.get_text()
+            # Убираем все виды кавычек
+            text = re.sub(r'[„""\u201C\u201D\u201E\u201F«»''\u2018\u2019]', '', text)
+            return self.clean_text(text)
         
         return None
     
@@ -93,26 +101,57 @@ class MojeGrneExtractor(BaseRecipeExtractor):
             text = p.get_text(strip=True).lower()
             
             if 'potreban materijal' in text or 'sastojci' in text:
-                # Следующий параграф должен содержать ингредиенты
-                if i + 1 < len(paragraphs):
-                    ing_para = paragraphs[i + 1]
+                # Собираем все ингредиенты из последующих параграфов до "Priprema:"
+                j = i + 1
+                while j < len(paragraphs):
+                    para_text = paragraphs[j].get_text(strip=True).lower()
                     
-                    # Ингредиенты разделены <br> тегами
-                    # Получаем текст с разделителями
-                    ing_text = ing_para.decode_contents()
+                    # Прерываем, если встретили "Priprema:" или "Postupak:"
+                    if 'priprema' in para_text or 'postupak' in para_text:
+                        break
                     
-                    # Разбиваем по <br> тегам
-                    lines = re.split(r'<br\s*/?>', ing_text, flags=re.IGNORECASE)
+                    # Проверяем, содержит ли параграф ингредиенты (с <br> тегами)
+                    ing_para = paragraphs[j]
+                    ing_html = ing_para.decode_contents()
                     
-                    for line in lines:
-                        # Убираем HTML теги из строки
-                        clean_line = re.sub(r'<[^>]+>', '', line).strip()
-                        if clean_line:
-                            ingredient = self.parse_ingredient_line(clean_line)
-                            if ingredient:
-                                ingredients.append(ingredient)
+                    # Если есть <br> теги, это ингредиенты
+                    if re.search(r'<br\s*/?>', ing_html, re.IGNORECASE):
+                        # Разбиваем по <br> тегам
+                        lines = re.split(r'<br\s*/?>', ing_html, flags=re.IGNORECASE)
+                        
+                        for line in lines:
+                            # Убираем HTML теги из строки
+                            clean_line = re.sub(r'<[^>]+>', '', line).strip()
+                            if clean_line:
+                                ingredient = self.parse_ingredient_line(clean_line)
+                                if ingredient:
+                                    ingredients.append(ingredient)
+                    else:
+                        # Это может быть заголовок подсекции (например, "premaz" или "susam za posip")
+                        # Проверяем, является ли это коротким текстом без чисел
+                        para_text = paragraphs[j].get_text(strip=True)
+                        if para_text and len(para_text) < 30 and not re.search(r'\d', para_text):
+                            # Это заголовок подсекции, пропускаем его
+                            # Но если это единственное слово/фраза, оно может быть ингредиентом без количества
+                            # Например, "susam za posip"
+                            if j + 1 < len(paragraphs):
+                                next_para = paragraphs[j + 1]
+                                next_html = next_para.decode_contents()
+                                # Если следующий параграф не содержит <br>, это ингредиент без количества
+                                if not re.search(r'<br\s*/?>', next_html, re.IGNORECASE):
+                                    next_text = next_para.get_text(strip=True).lower()
+                                    if not ('priprema' in next_text or 'postupak' in next_text):
+                                        # Добавляем как ингредиент без количества
+                                        ingredient = {
+                                            "name": para_text,
+                                            "units": None,
+                                            "amount": None
+                                        }
+                                        ingredients.append(ingredient)
                     
-                    break
+                    j += 1
+                
+                break
         
         if ingredients:
             return json.dumps(ingredients, ensure_ascii=False)
@@ -190,9 +229,19 @@ class MojeGrneExtractor(BaseRecipeExtractor):
         """
         Извлечение времени из текста инструкций
         Ищет паттерны типа "45 minuta", "30 minuta", "1 sat", "20 minuta"
+        Для cook_time приоритет отдается времени около слова "peći" (печь)
         """
         if not instructions:
             return None
+        
+        # Для времени приготовления ищем упоминания около "peći" (печь)
+        if time_type == 'cook':
+            # Ищем паттерн "peći ... X minuta" или "X minuta ... peći"
+            cook_pattern = r'peći[^.]*?(\d+)\s*(?:–\s*\d+\s*)?minut[ae]?|(\d+)\s*(?:–\s*\d+\s*)?minut[ae]?[^.]*?peći'
+            match = re.search(cook_pattern, instructions, re.IGNORECASE)
+            if match:
+                minutes = match.group(1) or match.group(2)
+                return f"{minutes} minuta"
         
         # Паттерны для времени
         # "45 minuta", "nekih 45 minuta", "oko 30 minuta", "20 minuta", "20 – 30 minuta"
@@ -229,6 +278,26 @@ class MojeGrneExtractor(BaseRecipeExtractor):
     
     def extract_cook_time(self) -> Optional[str]:
         """Извлечение времени приготовления"""
+        # Сначала пробуем из категории (articleSection в JSON-LD)
+        # Иногда время указано там, например "30 minuta - Lupo Marshall"
+        json_ld = self.soup.find('script', {'type': 'application/ld+json'})
+        if json_ld:
+            try:
+                data = json.loads(json_ld.string)
+                for item in data.get('@graph', []):
+                    if item.get('@type') == 'Article':
+                        sections = item.get('articleSection', [])
+                        if sections and isinstance(sections, list):
+                            for section in sections:
+                                # Ищем паттерн типа "30 minuta - ..."
+                                match = re.match(r'(\d+)\s*minut[ae]?\s*-', section, re.IGNORECASE)
+                                if match:
+                                    minutes = match.group(1)
+                                    return f"{minutes} minuta"
+            except (json.JSONDecodeError, KeyError):
+                pass
+        
+        # Если не нашли в категории, ищем в инструкциях
         instructions = self.extract_instructions()
         if instructions:
             return self.extract_time_from_instructions(instructions, 'cook')
@@ -271,8 +340,8 @@ class MojeGrneExtractor(BaseRecipeExtractor):
                         keywords = item.get('keywords')
                         if keywords:
                             if isinstance(keywords, list):
-                                # Объединяем без пробелов после запятых
-                                return ','.join(keywords)
+                                # Объединяем с пробелами после запятых согласно требованиям
+                                return ', '.join(keywords)
                             elif isinstance(keywords, str):
                                 return keywords
             except (json.JSONDecodeError, KeyError):
