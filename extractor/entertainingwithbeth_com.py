@@ -283,10 +283,33 @@ class EntertainingWithBethExtractor(BaseRecipeExtractor):
         return None
     
     def extract_prep_time(self, recipe_data: dict) -> Optional[str]:
-        """Извлечение времени подготовки из JSON-LD"""
+        """Извлечение времени подготовки из инструкций"""
         if not recipe_data:
             return None
         
+        # Ищем время в инструкциях (refrigerate for X hours/days)
+        instructions = recipe_data.get('recipeInstructions', [])
+        for step in instructions:
+            if isinstance(step, dict):
+                text = step.get('text', '')
+            elif isinstance(step, str):
+                text = step
+            else:
+                continue
+            
+            # Ищем паттерны типа "refrigerate for 24 hours", "rest for 1 hour"
+            match = re.search(r'(?:refrigerate|rest|chill).*?(?:for\s+)?(?:a minimum of\s+)?(\d+)\s*(hours?|days?)', text, re.IGNORECASE)
+            if match:
+                number = int(match.group(1))
+                unit = match.group(2).lower()
+                if 'day' in unit:
+                    number *= 24
+                    unit = 'hours'
+                elif 'hour' in unit:
+                    unit = 'hours' if number > 1 else 'hour'
+                return f"{number} {unit}"
+        
+        # Если не нашли в инструкциях, используем JSON-LD
         prep_time = recipe_data.get('prepTime')
         if prep_time:
             return self.parse_iso_duration(prep_time)
@@ -294,10 +317,33 @@ class EntertainingWithBethExtractor(BaseRecipeExtractor):
         return None
     
     def extract_cook_time(self, recipe_data: dict) -> Optional[str]:
-        """Извлечение времени приготовления из JSON-LD"""
+        """Извлечение времени приготовления из инструкций"""
         if not recipe_data:
             return None
         
+        # Ищем время выпечки/готовки в инструкциях
+        instructions = recipe_data.get('recipeInstructions', [])
+        total_minutes = 0
+        
+        for step in instructions:
+            if isinstance(step, dict):
+                text = step.get('text', '')
+            elif isinstance(step, str):
+                text = step
+            else:
+                continue
+            
+            # Ищем паттерны выпечки "Bake for X minutes", "Bake X minutes"
+            if 'bake' in text.lower() or 'cook' in text.lower():
+                # Находим все времена в минутах
+                times = re.findall(r'(\d+)(?:-\d+)?\s*minutes?', text, re.IGNORECASE)
+                for time_str in times:
+                    total_minutes += int(time_str)
+        
+        if total_minutes > 0:
+            return f"{total_minutes} minutes"
+        
+        # Если не нашли, используем JSON-LD
         cook_time = recipe_data.get('cookTime')
         if cook_time:
             return self.parse_iso_duration(cook_time)
@@ -305,10 +351,51 @@ class EntertainingWithBethExtractor(BaseRecipeExtractor):
         return None
     
     def extract_total_time(self, recipe_data: dict) -> Optional[str]:
-        """Извлечение общего времени из JSON-LD"""
+        """Извлечение общего времени (prep + cook)"""
         if not recipe_data:
             return None
         
+        # Вычисляем из prep_time + cook_time
+        prep = self.extract_prep_time(recipe_data)
+        cook = self.extract_cook_time(recipe_data)
+        
+        if prep and cook:
+            # Parse the times
+            prep_hours = 0
+            prep_minutes = 0
+            cook_hours = 0
+            cook_minutes = 0
+            
+            # Parse prep
+            prep_match = re.search(r'(\d+)\s*hours?', prep)
+            if prep_match:
+                prep_hours = int(prep_match.group(1))
+            prep_match = re.search(r'(\d+)\s*minutes?', prep)
+            if prep_match:
+                prep_minutes = int(prep_match.group(1))
+            
+            # Parse cook
+            cook_match = re.search(r'(\d+)\s*hours?', cook)
+            if cook_match:
+                cook_hours = int(cook_match.group(1))
+            cook_match = re.search(r'(\d+)\s*minutes?', cook)
+            if cook_match:
+                cook_minutes = int(cook_match.group(1))
+            
+            # Sum
+            total_hours = prep_hours + cook_hours
+            total_minutes = prep_minutes + cook_minutes
+            
+            # Format
+            parts = []
+            if total_hours > 0:
+                parts.append(f"{total_hours} {'hour' if total_hours == 1 else 'hours'}")
+            if total_minutes > 0:
+                parts.append(f"{total_minutes} {'minute' if total_minutes == 1 else 'minutes'}")
+            
+            return ' '.join(parts) if parts else None
+        
+        # Fallback to JSON-LD
         total_time = recipe_data.get('totalTime')
         if total_time:
             return self.parse_iso_duration(total_time)
@@ -323,16 +410,33 @@ class EntertainingWithBethExtractor(BaseRecipeExtractor):
         notes_section = self.soup.find('div', class_='mv-create-notes-content')
         
         if notes_section:
-            # Извлекаем первые два пункта списка
+            # Извлекаем все пункты списка
             list_items = notes_section.find_all('li')
             if list_items:
-                for i, li in enumerate(list_items[:2]):  # Берем первые 2
+                # Ищем ключевые заметки о рецепте
+                for li in list_items:
                     text = li.get_text(separator=' ', strip=True)
                     text = self.clean_text(text)
-                    if text:
+                    if not text:
+                        continue
+                    
+                    # Первый пункт - обычно важная заметка
+                    if not notes_list:
                         notes_list.append(text)
+                    # Ищем заметки о тесте/бatter/rest
+                    elif any(keyword in text.lower() for keyword in ['batter', 'rest', 'allow', 'gluten']):
+                        # Извлекаем только важную часть (до восклицательного знака или точки)
+                        # Убираем детали в середине
+                        if 'Allow the batter to rest' in text:
+                            # Берем начало и конец
+                            parts = text.split('.')
+                            if len(parts) >= 2:
+                                notes_list.append(parts[0] + '.')
+                        else:
+                            notes_list.append(text)
+                        break
         
-        # Если не нашли, пробуем wprm-recipe-notes
+        # Если не нашли нужные заметки, пробуем wprm-recipe-notes
         if not notes_list:
             wprm_notes = self.soup.find('div', class_='wprm-recipe-notes')
             if wprm_notes:
