@@ -94,13 +94,22 @@ class ReceptmuvesHuExtractor(BaseRecipeExtractor):
                 if '/' in amount_str:
                     # Обработка дробей типа "1/2"
                     parts = amount_str.split('/')
-                    amount = float(parts[0]) / float(parts[1])
+                    if len(parts) == 2:
+                        numerator = float(parts[0])
+                        denominator = float(parts[1])
+                        if denominator != 0:
+                            amount = numerator / denominator
+                        else:
+                            # Некорректная дробь, используем как строку
+                            amount = amount_str
+                    else:
+                        amount = amount_str
                 else:
                     amount = float(amount_str)
                 # Преобразуем обратно в int если это целое число
-                if amount == int(amount):
+                if isinstance(amount, float) and amount == int(amount):
                     amount = int(amount)
-            except ValueError:
+            except (ValueError, ZeroDivisionError):
                 amount = amount_str
             
             # Очистка названия от скобок и дополнительных примечаний
@@ -245,14 +254,22 @@ class ReceptmuvesHuExtractor(BaseRecipeExtractor):
         """Извлечение времени приготовления"""
         # Ищем в инструкциях упоминания времени
         # Например: "20-25 perc alatt"
-        instructions = self.extract_instructions()
-        if instructions:
-            # Ищем паттерн времени в минутах
-            time_pattern = r'(\d+-\d+|\d+)\s*perc'
-            match = re.search(time_pattern, instructions, re.IGNORECASE)
-            if match:
-                time_str = match.group(1)
-                return f"{time_str} minutes"
+        post_body = self.soup.find('div', attrs={'class': lambda x: x and 'post-body' in x and 'entry-content' in x})
+        if not post_body:
+            return None
+        
+        # Ищем в параграфах с номерованными шагами
+        paragraphs = post_body.find_all('p')
+        for p in paragraphs:
+            text = p.get_text(strip=True)
+            # Проверяем что это шаг инструкции
+            if re.match(r'^\d+\.', text):
+                # Ищем паттерн времени в минутах
+                time_pattern = r'(\d+-\d+|\d+)\s*perc'
+                match = re.search(time_pattern, text, re.IGNORECASE)
+                if match:
+                    time_str = match.group(1)
+                    return f"{time_str} minutes"
         
         return None
     
@@ -303,7 +320,7 @@ class ReceptmuvesHuExtractor(BaseRecipeExtractor):
                         note_text = note_text + '.'
                     # Делаем первую букву заглавной
                     if note_text:
-                        note_text = note_text[0].upper() + note_text[1:]
+                        note_text = note_text[0].upper() + note_text[1:] if len(note_text) > 1 else note_text.upper()
                     notes.append(note_text)
                 elif not text.startswith('-') and len(notes) > 0:
                     # Если встретили параграф без "-" после того как начали собирать заметки,
@@ -331,12 +348,7 @@ class ReceptmuvesHuExtractor(BaseRecipeExtractor):
             for link in tag_links:
                 tag_text = self.clean_text(link.get_text())
                 if tag_text and len(tag_text) > 1:
-                    # Фильтруем общие метки без смысловой нагрузки
-                    if tag_text.lower() not in ['recept', 'receptműves']:
-                        tags.append(tag_text)
-                    else:
-                        # Все же добавим их, так как они в примере есть
-                        tags.append(tag_text)
+                    tags.append(tag_text)
             
             if tags:
                 return ', '.join(tags)
