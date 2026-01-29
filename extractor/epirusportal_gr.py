@@ -107,6 +107,19 @@ class EpirusportalExtractor(BaseRecipeExtractor):
         for fraction, replacement in fraction_map.items():
             text = text.replace(fraction, replacement)
         
+        def clean_ingredient_name(name):
+            """Очистка названия ингредиента"""
+            # Удаляем скобки с содержимым
+            name = re.sub(r'\([^)]*\)', '', name)
+            # Удаляем фразы "to taste", "as needed" и греческие эквиваленты
+            name = re.sub(r'\b(to taste|as needed|or more|if needed|optional|for garnish)\b', '', name, flags=re.IGNORECASE)
+            # Удаляем "από τις...", "ψιλοκομμένο", "τριμμένο" и подобные описания
+            name = re.sub(r'\s+(από τις|από τη|ψιλοκομμένο|τριμμένο|φρεσκοτριμμένο).*$', '', name, flags=re.IGNORECASE)
+            # Удаляем лишние пробелы и запятые
+            name = re.sub(r'[,;]+$', '', name)
+            name = re.sub(r'\s+', ' ', name).strip()
+            return name
+        
         # Паттерн 1: Количество + единица + название
         # "50 γρ. βούτυρο" -> amount=50, units="g", name="βούτυρο"
         # "1 κιλό φρέσκο πράσινο λουβί" -> amount=1, units="κιλό", name="φρέσκο πράσινο λουβί"
@@ -116,19 +129,25 @@ class EpirusportalExtractor(BaseRecipeExtractor):
         if match1:
             amount_str, units, name = match1.groups()
             amount_str = amount_str.strip()
+            name = clean_ingredient_name(name.strip())
+            
             # Нормализуем units
-            if units.lower() in ['γρ.', 'γρ', 'γραμμάρια', 'γραμμάριο']:
+            if units.lower() in ['γρ.', 'γρ', 'γραμμάρια', 'γραμμάριο', 'grams']:
                 units = 'g'
             elif units.lower() in ['λίτρο', 'λίτρα']:
                 units = 'l'
-            elif units.lower() in ['κ.γ.']:
+            elif units.lower() in ['κ.γ.', 'teaspoon']:
                 units = 'teaspoon'
-            elif units.lower() in ['κ.σ.']:
+            elif units.lower() in ['κ.σ.', 'tablespoons']:
                 units = 'tablespoons'
+            elif units.lower() == 'pieces':
+                units = 'pieces'
+            elif units.lower() == 'piece':
+                units = 'piece'
             
             return {
-                "name": name.strip(),
-                "amount": amount_str,  # Оставляем как строку
+                "name": name,
+                "amount": amount_str,
                 "units": units
             }
         
@@ -142,7 +161,7 @@ class EpirusportalExtractor(BaseRecipeExtractor):
             amount_str, units, name = match2.groups()
             amount_str = amount_str.strip()
             units = units.strip()
-            name = name.strip()
+            name = clean_ingredient_name(name.strip())
             
             return {
                 "name": name,
@@ -158,6 +177,7 @@ class EpirusportalExtractor(BaseRecipeExtractor):
         if match3:
             amount_str, units, name = match3.groups()
             amount_str = amount_str.strip()
+            name = clean_ingredient_name(name.strip())
             
             # Нормализуем описательные units
             if units.lower() in ['µεγάλο', 'μεγάλο']:
@@ -166,7 +186,7 @@ class EpirusportalExtractor(BaseRecipeExtractor):
                 units = 'medium'
             
             return {
-                "name": name.strip(),
+                "name": name,
                 "amount": amount_str,
                 "units": units
             }
@@ -177,16 +197,20 @@ class EpirusportalExtractor(BaseRecipeExtractor):
         match4 = re.match(pattern4, text)
         if match4:
             amount_str, name = match4.groups()
+            name = clean_ingredient_name(name.strip())
+            
             return {
-                "name": name.strip(),
+                "name": name,
                 "amount": amount_str,
                 "units": None
             }
         
         # Паттерн 5: Название без количества (может содержать "και" для разделения)
         # Если нет паттернов выше, просто возвращаем название
+        name = clean_ingredient_name(text)
+        
         return {
-            "name": text,
+            "name": name,
             "amount": None,
             "units": None
         }
@@ -205,15 +229,17 @@ class EpirusportalExtractor(BaseRecipeExtractor):
         
         paragraphs = content_div.find_all('p')
         
-        # Вариант 1: Ингредиенты с bullet points
+        # Вариант 1: Ингредиенты с bullet points (• в тексте)
         found_bullets = False
         for p in paragraphs:
             text = p.get_text(strip=True)
             
             # Проверяем, является ли это заголовком секции ингредиентов
-            if text.upper() == 'ΥΛΙΚΑ' or text.upper() == 'ΥΛΙΚΆ' or 'Υλικά' in text:
+            if 'ΥΛΙΚΑ' in text.upper() or 'ΥΛΙΚΆ' in text.upper():
                 found_bullets = True
-                continue
+                # Если в том же параграфе нет bullet points, это просто заголовок
+                if not text.startswith('•'):
+                    continue
             
             # Проверяем, не начинается ли следующая секция (инструкции)
             if found_bullets and ('ΕΚΤΕΛΕ' in text.upper()):
@@ -240,42 +266,69 @@ class EpirusportalExtractor(BaseRecipeExtractor):
             return json.dumps(ingredients, ensure_ascii=False)
         
         # Вариант 2: Ингредиенты разделены <br/> тегами
-        for p in paragraphs:
-            # Проверяем, содержит ли параграф "Υλικά"
-            if 'Υλικά' in p.get_text():
-                # Получаем содержимое параграфа, разделенное по <br/>
-                # Заменяем <br/> на специальный маркер и разбиваем
-                html_content = str(p)
-                
-                # Разбираем структуру с <br/>
-                for content in p.stripped_strings:
-                    # Пропускаем заголовки и пустые строки
-                    if not content or 'Υλικά' in content or content.startswith('Для'):
-                        continue
-                    if 'Για τη' in content and ':' in content:  # Подзаголовок секции
-                        continue
-                    
-                    # Пробуем распарсить как ингредиент
-                    parsed = self.parse_ingredient(content)
-                    if parsed and parsed.get('name'):
-                        ingredients.append(parsed)
-                
-                # Также проверяем следующий параграф (может быть продолжение)
-                idx = paragraphs.index(p)
-                if idx + 1 < len(paragraphs):
-                    next_p = paragraphs[idx + 1]
-                    next_text = next_p.get_text(strip=True)
-                    # Проверяем, не является ли это началом инструкций
-                    if 'ΕΚΤΕΛΕ' not in next_text.upper():
-                        for content in next_p.stripped_strings:
+        # Ищем параграф с заголовком "ΥΛΙΚΑ" и следующий параграф с ингредиентами
+        for i, p in enumerate(paragraphs):
+            text = p.get_text(strip=True)
+            
+            # Проверяем, является ли это заголовком секции ингредиентов
+            if 'ΥΛΙΚΑ' in text.upper() or 'ΥΛΙΚΆ' in text.upper():
+                # Если это просто заголовок (нет ингредиентов в этом параграфе)
+                if text.upper() in ['ΥΛΙΚΑ', 'ΥΛΙΚΆ'] or (len(text) < 50 and not any(c.isdigit() for c in text)):
+                    # Ингредиенты должны быть в следующем параграфе
+                    if i + 1 < len(paragraphs):
+                        ing_p = paragraphs[i + 1]
+                        for content in ing_p.stripped_strings:
                             if not content or content.startswith('Для'):
-                                continue
-                            if 'Για τη' in content and ':' in content:
                                 continue
                             
                             parsed = self.parse_ingredient(content)
                             if parsed and parsed.get('name'):
                                 ingredients.append(parsed)
+                        
+                        # Также проверяем следующий параграф (может быть еще ингредиенты)
+                        if i + 2 < len(paragraphs):
+                            next_p = paragraphs[i + 2]
+                            next_text = next_p.get_text(strip=True)
+                            # Проверяем, не является ли это началом инструкций
+                            if 'ΕΚΤΕΛΕ' not in next_text.upper() and 'ΥΛΙΚΑ' not in next_text.upper():
+                                for content in next_p.stripped_strings:
+                                    if not content or content.startswith('Για'):
+                                        continue
+                                    if ':' in content and 'Για' in content:  # Подзаголовок
+                                        continue
+                                    
+                                    parsed = self.parse_ingredient(content)
+                                    if parsed and parsed.get('name'):
+                                        ingredients.append(parsed)
+                else:
+                    # Ингредиенты в том же параграфе (с <br/>)
+                    for content in p.stripped_strings:
+                        # Пропускаем заголовки и пустые строки
+                        if not content or 'Υλικά' in content or 'ΥΛΙΚΑ' in content.upper():
+                            continue
+                        if 'Για τη' in content and ':' in content:  # Подзаголовок секции
+                            continue
+                        
+                        # Пробуем распарсить как ингредиент
+                        parsed = self.parse_ingredient(content)
+                        if parsed and parsed.get('name'):
+                            ingredients.append(parsed)
+                    
+                    # Также проверяем следующий параграф (может быть продолжение)
+                    if i + 1 < len(paragraphs):
+                        next_p = paragraphs[i + 1]
+                        next_text = next_p.get_text(strip=True)
+                        # Проверяем, не является ли это началом инструкций
+                        if 'ΕΚΤΕΛΕ' not in next_text.upper():
+                            for content in next_p.stripped_strings:
+                                if not content or content.startswith('Для'):
+                                    continue
+                                if 'Για τη' in content and ':' in content:
+                                    continue
+                                
+                                parsed = self.parse_ingredient(content)
+                                if parsed and parsed.get('name'):
+                                    ingredients.append(parsed)
                 
                 break
         
