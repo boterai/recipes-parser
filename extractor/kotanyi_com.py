@@ -161,10 +161,15 @@ class KotanyiExtractor(BaseRecipeExtractor):
         
         if recipe_data and 'description' in recipe_data:
             desc = recipe_data['description']
-            # Берем только первое предложение для краткости
-            sentences = desc.split('.')
-            if sentences:
-                return self.clean_text(sentences[0] + '.')
+            if desc:
+                # Берем только первое предложение для краткости
+                # Ищем первую точку, восклицательный или вопросительный знак
+                import re
+                match = re.search(r'^[^.!?]+[.!?]', desc)
+                if match:
+                    return self.clean_text(match.group(0))
+                # Если не нашли знак препинания, возвращаем весь текст
+                return self.clean_text(desc)
         
         # Fallback: из мета-тега description
         meta_desc = self.soup.find('meta', {'name': 'description'})
@@ -221,7 +226,7 @@ class KotanyiExtractor(BaseRecipeExtractor):
         
         if recipe_data and 'recipeCategory' in recipe_data:
             category = recipe_data['recipeCategory']
-            # Маппинг на английский (для совместимости с ожидаемым форматом)
+            # Маппинг на английский только для основных категорий
             category_mapping = {
                 'Glavna jed': 'Main Course',
                 'Predjed': 'Appetizer',
@@ -229,7 +234,7 @@ class KotanyiExtractor(BaseRecipeExtractor):
                 'Juha': 'Soup',
                 'Solata': 'Salad',
                 'Sladica': 'Dessert',
-                'Prigrizek': 'Snack'
+                # Prigrizek оставляем как есть - в референсе он есть
             }
             return category_mapping.get(category, category)
         
