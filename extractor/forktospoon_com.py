@@ -177,8 +177,8 @@ class ForkToSpoonExtractor(BaseRecipeExtractor):
         
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "3 tablespoons butter", "2 cups flour", "1/2 teaspoon salt"
-        # Important: Match whole words only to avoid "large" matching as "l" (liters)
-        pattern = r'^([\d\s/.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|ounce|grams?|kilograms?|kg|milliliters?|liters?|ml|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|inch|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|piece|head|heads|small|medium|large|crust)\s+(.+)'
+        # Important: Match whole words only, "large" is treated as a unit per reference format
+        pattern = r'^([\d\s/.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|kg|milliliters?|liters?|ml|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|piece|head|heads|small|medium|large|crust)\s+(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
