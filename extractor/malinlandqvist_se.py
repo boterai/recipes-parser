@@ -241,6 +241,8 @@ class MalinlandqvistExtractor(BaseRecipeExtractor):
         # Убираем trailing специальные символы
         if result:
             result = result.rstrip(' ‍')
+            # Исправляем случаи когда после точки нет пробела перед заглавной буквой
+            result = re.sub(r'\.([A-ZÅÄÖÆØ])', r'. \1', result)
         return result
     
     def extract_category(self) -> Optional[str]:
