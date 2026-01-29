@@ -15,6 +15,15 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class MinimalistBakerExtractor(BaseRecipeExtractor):
     """Экстрактор для minimalistbaker.com"""
     
+    # Единицы измерения для парсинга ингредиентов
+    INGREDIENT_UNITS = (
+        r'cups?|tablespoons?|teaspoons?|tbsp|tsp|pounds?|ounces?|lbs?|oz|'
+        r'grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|'
+        r'pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|'
+        r'inch(?:es)?|slices?|cloves?|bunches?|sprigs?|'
+        r'whole|halves?|quarters?|pieces?|heads?|package|can|jar|bottle'
+    )
+    
     @staticmethod
     def parse_iso_duration(duration: str) -> Optional[str]:
         """
@@ -63,6 +72,9 @@ class MinimalistBakerExtractor(BaseRecipeExtractor):
         scripts = self.soup.find_all('script', type='application/ld+json')
         
         for script in scripts:
+            if not script.string:
+                continue
+                
             try:
                 data = json.loads(script.string)
                 
@@ -110,8 +122,8 @@ class MinimalistBakerExtractor(BaseRecipeExtractor):
         
         if recipe_data and 'description' in recipe_data:
             desc = recipe_data['description']
-            # Берем только до первой точки или восклицательного знака (первое предложение)
-            match = re.search(r'^([^.!]+[.!])', desc)
+            # Берем только до первой точки, восклицательного или вопросительного знака (первое предложение)
+            match = re.search(r'^([^.!?]+[.!?])', desc)
             if match:
                 desc = match.group(1)
             return self.clean_text(desc)
@@ -155,7 +167,7 @@ class MinimalistBakerExtractor(BaseRecipeExtractor):
         
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "1 cup flour", "2 tablespoons butter", "1/2 teaspoon salt"
-        pattern = r'^([\d\s/.,–-]+)?\s*(cups?|tablespoons?|teaspoons?|tbsp|tsp|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|heads?|package|can|jar|bottle)?\s*(.+)'
+        pattern = rf'^([\d\s/.,\u2013\-]+)?\s*({self.INGREDIENT_UNITS})?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -173,8 +185,8 @@ class MinimalistBakerExtractor(BaseRecipeExtractor):
         amount = None
         if amount_str:
             amount_str = amount_str.strip()
-            # Очищаем от дефисов (диапазоны) - берем первое значение
-            amount_str = re.split(r'[–-]', amount_str)[0].strip()
+            # Очищаем от дефисов и en-dash (диапазоны) - берем первое значение
+            amount_str = re.split(r'[\u2013\-]', amount_str)[0].strip()
             amount = amount_str
         
         # Обработка единицы измерения
@@ -232,12 +244,12 @@ class MinimalistBakerExtractor(BaseRecipeExtractor):
                 for step in instructions:
                     if isinstance(step, dict) and 'text' in step:
                         text = self.clean_text(step['text'])
-                        # Удаляем префиксы типа "CAKE: " или "TOPPING: "
-                        text = re.sub(r'^[A-Z\s]+:\s*', '', text)
+                        # Удаляем префиксы типа "CAKE: " или "TOPPING: " или "For the cake:"
+                        text = re.sub(r'^[A-Za-z\s]+:\s*', '', text)
                         steps.append(text)
                     elif isinstance(step, str):
                         text = self.clean_text(step)
-                        text = re.sub(r'^[A-Z\s]+:\s*', '', text)
+                        text = re.sub(r'^[A-Za-z\s]+:\s*', '', text)
                         steps.append(text)
             elif isinstance(instructions, str):
                 steps.append(self.clean_text(instructions))
@@ -309,9 +321,6 @@ class MinimalistBakerExtractor(BaseRecipeExtractor):
             if notes_items:
                 text = notes_items[0]
                 text = self.clean_text(text)
-                # Удаляем trailing точку если она одна в конце
-                if text.endswith('.'):
-                    text = text
                 if text and len(text) > 10:
                     return text
         
@@ -427,7 +436,12 @@ class MinimalistBakerExtractor(BaseRecipeExtractor):
 
 
 def main():
-    """Точка входа для обработки HTML файлов minimalistbaker.com"""
+    """
+    Точка входа для обработки HTML файлов minimalistbaker.com
+    
+    Ищет директорию preprocessed/minimalistbaker_com и обрабатывает все HTML файлы в ней,
+    извлекая данные рецептов и сохраняя их в JSON формате.
+    """
     import os
     
     # Обрабатываем папку preprocessed/minimalistbaker_com
