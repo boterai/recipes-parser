@@ -10,8 +10,10 @@
 import logging
 from typing import Optional
 import asyncio
+import json
 import math
 import random
+import os
 
 if __name__ == "__main__":
     import sys
@@ -27,7 +29,7 @@ from src.repositories.merged_recipe import MergedRecipeRepository
 
 logger = logging.getLogger(__name__)
 
-GPT_MODEL_MERGE = "gpt-4.1"
+GPT_MODEL_MERGE = os.getenv('GPT_MODEL_MERGE', 'gpt-4o-mini')
 
 class ConservativeRecipeMerger:
     """Консервативное объединение рецептов без изменения сути"""
@@ -69,6 +71,12 @@ class ConservativeRecipeMerger:
         
         return intersection / union
     
+    def calculate_max_combinations(self, n: int, k: int, max_variations: int) -> int:
+        if n < 2:
+            return 0
+        max_possible_combinations = math.comb(n, k) if k <= n else 0
+        return min(max_variations, max_possible_combinations)
+    
     def _instruction_difference(self, s1: str, s2: str) -> float:
         """
         Оценка различия инструкций (0.0 = идентичны, 1.0 = полностью разные)
@@ -104,50 +112,6 @@ class ConservativeRecipeMerger:
         
         overlap = len(n1 & n2) / len(n1 | n2)
         return 1 - overlap
-    
-    async def merge_with_best_base_gpt(
-        self,
-        recipes: list[Recipe],
-        auto_select_base: bool = True,
-        base_recipe: Optional[Recipe] = None
-    ) -> Recipe:
-        """
-        Стратегия: выбрать лучший рецепт как базу + улучшить через GPT
-        
-        Комбинирует эвристический выбор базового рецепта с GPT объединением.
-        
-        Args:
-            recipes: Список рецептов (2+)
-            auto_select_base: Автоматически выбрать лучший базовый эвристически
-            base_recipe: Явно указанный базовый рецепт (если auto_select_base=False)
-            
-        Returns:
-            Улучшенный рецепт через GPT с гарантированной базой
-        """
-        if len(recipes) < 2:
-            raise ValueError("Нужно минимум 2 рецепта для объединения")
-        
-        # Выбираем базовый рецепт
-        if auto_select_base:
-            base = self._select_best_base(recipes)
-            logger.info(f"Эвристически выбран базовый рецепт: {base.dish_name} (page_id={base.page_id})")
-        elif base_recipe:
-            base = base_recipe
-            logger.info(f"Использован указанный базовый рецепт: {base.dish_name}")
-        else:
-            raise ValueError("Нужно указать auto_select_base=True или передать base_recipe")
-        
-        # Убеждаемся что базовый рецепт первый в списке
-        recipes_ordered = [base] + [r for r in recipes if r.page_id != base.page_id]
-        
-        # Объединяем через GPT со стратегией "best_base"
-        result = await self.merge_multiple_with_gpt(
-            recipes=recipes_ordered,
-            strategy="best_base"
-        )
-        
-        logger.info(f"✓ Best-base GPT merge: {base.page_id} + {len(recipes)-1} others -> {result.dish_name}")
-        return result
     
     def _select_best_base(self, recipes: list[Recipe], top_k: int = 3) -> Recipe:
         """
@@ -191,257 +155,6 @@ class ConservativeRecipeMerger:
         
         # Выбираем случайный из топ-K
         return random.choice(top_candidates)
-    
-    async def merge_multiple_with_gpt(
-        self,
-        recipes: list[Recipe],
-        strategy: str = "consensus"
-    ) -> MergedRecipe:
-        """
-        Умное объединение нескольких рецептов (3+) через ChatGPT за один проход
-        
-        GPT анализирует ВСЕ рецепты одновременно и создаёт единый консенсус,
-        избегая накопления ошибок от последовательных merge'ей.
-        
-        Args:
-            recipes: Список рецептов (3+ для эффективности)
-            strategy: Стратегия объединения:
-                - "consensus": создать консенсус из всех рецептов
-                - "best_base": выбрать лучший как базу, дополнить остальными (можно эврестически выбрать лучший и потом объединить через гпт)
-            
-        Returns:
-            Объединённый рецепт через GPT
-        """
-        if len(recipes) < 2:
-            raise ValueError("Нужно минимум 2 рецепта для объединения")
-        
-        if len(recipes) == 2:
-            # Для двух рецептов используем стандартный метод
-            return await self.merge_with_gpt(recipes[0], recipes[1])
-        
-        system_prompt = f"""You are a professional chef and recipe editor.
-
-Your task: analyze {len(recipes)} similar recipes and create ONE optimal merged version.
-
-CRITICAL RULES:
-1. Preserve dish identity - all recipes are variations of the same dish
-2. Strategy: {"Create a consensus combining best elements from all recipes" if strategy == "consensus" else "Select the best recipe as base, enhance with details from others"}
-3. Ingredients: 
-   - Include ingredients present in majority (50%+) of recipes
-   - Use most common amounts/units as baseline
-   - Keep ingredients that improve the dish (even if in minority)
-4. Instructions:
-   - Merge steps logically, preserving technique consistency
-   - Use most detailed/clear instructions as foundation
-   - Ensure executable order: prep → cook → serve
-5. Resolve conflicts intelligently:
-   - Different temps/times: choose most common or middle ground
-   - Different techniques: pick most reliable/detailed
-6. CONSISTENCY CHECK: Numbers/amounts in instructions MUST match ingredients_with_amounts exactly
-   - If ingredient list says "100g sugar", instructions must also say "100g sugar"
-   - All quantities referenced in instructions must appear in ingredients list
-7. INGREDIENT USAGE: Every ingredient MUST be used in instructions
-   - If an ingredient is not mentioned/used in cooking steps, DO NOT include it
-   - Only list ingredients that are actually needed for the recipe
-8. The result MUST be executable and consistent
-
-Return ONLY valid JSON (no markdown, no comments):
-{{
-  "dish_name": "best name (shortest, clearest)",
-  "description": "combined description highlighting what makes this version optimal",
-  "ingredients_with_amounts": [
-    {{"name": "ingredient", "amount": 100, "unit": "g"}},
-    ...
-  ],
-  "instructions": "combined step-by-step instructions as single string",
-  "cook_time": time or null, example: "45 minutes" or null,
-  "prep_time": minutes_or_null, example: "15 minutes" or null,
-  "merge_notes": "what was improved/combined from which recipes"
-}}"""
-
-        # Форматируем все рецепты
-        def format_recipe_summary(r: Recipe, idx: int) -> str:
-            ings = r.ingredients_with_amounts or []
-            inst = r.instructions if isinstance(r.instructions, str) else str(r.instructions or "")
-            
-            # Ограничиваем для токенов
-            ing_list = "\n".join([
-                f"  - {ing.get('name', '')}: {ing.get('amount', '')} {ing.get('unit', '')}"
-                for ing in ings[:20]
-            ])
-            
-            inst_preview = inst[:1500] + ("..." if len(inst) > 800 else "")
-            
-            return f"""RECIPE {idx + 1}:
-Name: {r.dish_name}
-Prep: {getattr(r, 'prep_time', 'N/A')}, Cook: {getattr(r, 'cooking_time', 'N/A')}
-Ingredients ({len(ings)}): {ing_list}
-Instructions: {inst_preview}
----"""
-
-        recipes_text = "\n\n".join([
-            format_recipe_summary(r, i) for i, r in enumerate(recipes[:10])  # лимит 10 рецептов
-        ])
-        
-        user_prompt = f"""Analyze and merge these {len(recipes)} recipes into ONE optimal version:
-
-{recipes_text}
-
-Strategy: {strategy}
-Create the best executable recipe combining elements from all sources."""
-
-        try:
-            result = await self.gpt_client.async_request(
-                system_prompt=system_prompt,
-                user_prompt=user_prompt,
-                temperature=0.3,
-                max_tokens=2500,
-                timeout=90
-            )
-            
-            base = recipes[0]
-            
-            return self._create_merged_from_gpt_result(
-                base=base,
-                page_ids=[r.page_id for r in recipes],
-                result=result
-            )
-            
-        except Exception as e:
-            logger.error(f"GPT multi-merge failed: {e}")
-        
-    def _create_merged_from_gpt_result(
-        self,
-        base: Recipe,
-        page_ids: list[int],
-        result: dict
-    ) -> MergedRecipe:
-        merged = MergedRecipe(
-                page_ids=page_ids,
-                dish_name=result.get('dish_name', base.dish_name),
-                description=result.get('description', base.description or ''),
-                ingredients=result.get('ingredients_with_amounts', base.ingredients_with_amounts or []),
-                instructions=result.get('instructions', base.instructions),
-                cooking_time=str(result.get('cook_time') or base.cook_time or ""),
-                prep_time=str(result.get('prep_time') or base.prep_time or ""),
-                merge_comments=result.get('merge_notes', '')
-            )
-            
-        # Обновляем также список ingredients на основе ingredients_with_amounts
-        if merged.merge_comments:
-            logger.info(f"GPT merge notes: {merged.merge_comments}")
-        
-        logger.info(f"✓ GPT merge: {page_ids} -> {merged.dish_name}")
-        return merged
-    
-    async def merge_with_gpt(
-        self,
-        recipe1: Recipe,
-        recipe2: Recipe,
-        preserve_all_details: bool = True
-    ) -> MergedRecipe:
-        """
-        Умное объединение двух рецептов через ChatGPT
-        
-        GPT анализирует оба рецепта и создаёт улучшенную версию,
-        сохраняя все важные детали из обоих источников.
-        
-        Args:
-            recipe1: Первый рецепт (обычно базовый)
-            recipe2: Второй рецепт (дополнительный)
-            preserve_all_details: Сохранять все детали или оптимизировать
-            
-        Returns:
-            Объединённый рецепт через GPT
-        """
-        system_prompt = """You are a professional chef and recipe editor.
-
-Your task: intelligently merge two similar recipes into one enhanced version.
-
-CRITICAL RULES:
-1. Preserve dish identity - it must remain the same dish type
-2. Select best ingredients from both recipes - include those that improve the dish (with amounts/units)
-   - Keep core ingredients that define the dish
-   - Add ingredients that enhance flavor, texture, or presentation
-   - Omit redundant or conflicting ingredients that don't add value
-3. Merge instructions: combine steps, keep important details from both
-4. If recipes differ in technique, choose the better/more detailed one
-5. Fill missing metadata (cooking time, preparation time) from either recipe
-6. Resolve conflicts intelligently (e.g., different amounts -> average or range)
-7. CONSISTENCY CHECK: Numbers/amounts in instructions MUST match ingredients_with_amounts exactly
-   - If ingredient list says "200g flour", instructions must also say "200g flour"
-   - Ensure all quantities referenced in instructions appear in ingredients list
-8. INGREDIENT USAGE: Every ingredient MUST be used in instructions
-   - If an ingredient is not mentioned/used in cooking steps, DO NOT include it
-   - Only list ingredients that are actually needed for the recipe
-9. The result must be a complete, executable recipe
-
-Return ONLY valid JSON (no markdown, no comments):
-{
-  "dish_name": "best name (shortest, clearest)",
-  "description": "combined description highlighting improvements",
-  "ingredients_with_amounts": [
-    {"name": "ingredient", "amount": 100, "unit": "g"},
-    ...
-  ],
-  "instructions": "combined step-by-step instructions as single string",
-  "cook_time": time or nul example 20 minutes,
-  "prep_time": time or nul example 20 minutes,
-  "merge_notes": "what was improved/combined"
-}"""
-
-        # Форматируем рецепты для GPT
-        def format_recipe(r: Recipe, label: str) -> str:
-            ings = r.ingredients_with_amounts or []
-            inst = r.instructions if isinstance(r.instructions, str) else str(r.instructions or "")
-            
-            ing_list = "\n".join([
-                f"  - {ing.get('name', '')}: {ing.get('amount', '')} {ing.get('unit', '')}"
-                for ing in ings[:30]  # лимит для токенов
-            ])
-            
-            # Обрезаем инструкции если слишком длинные
-            inst_preview = inst[:1500] + ("..." if len(inst) > 1500 else "")
-            
-            return f"""{label}:
-Name: {r.dish_name}
-Prep time: {getattr(r, 'prep_time', 'N/A')}
-Cooking time: {getattr(r, 'cooking_time', 'N/A')}
-
-Ingredients ({len(ings)} total):
-{ing_list}
-
-Instructions:
-{inst_preview}"""
-
-        user_prompt = f"""Merge these two recipes into one enhanced version:
-
-{format_recipe(recipe1, "RECIPE 1")}
-
-{format_recipe(recipe2, "RECIPE 2")}
-
-Mode: {"preserve all details" if preserve_all_details else "optimize for clarity"}
-
-Create the best possible merged version."""
-
-        try:
-            result = await self.gpt_client.async_request(
-                system_prompt=system_prompt,
-                user_prompt=user_prompt,
-                temperature=0.3,  # низкая для консистентности
-                max_tokens=2000,
-                timeout=60,
-                model=GPT_MODEL_MERGE
-            )
-
-            return self._create_merged_from_gpt_result(
-                base=recipe1,
-                page_ids=[recipe1.page_id, recipe2.page_id],
-                result=result
-            )
-            
-        except Exception as e:
-            logger.error(f"GPT merge failed: {e}")
     
     async def validate_with_gpt(
         self,
@@ -520,6 +233,7 @@ class ClusterVariationGenerator:
         self.merge_repository = MergedRecipeRepository()
         self.score_threshold = score_threshold
         self.clusters_build_type = clusters_build_type
+        self.merged_recipe_schema = json.load(open("src/models/schemas/merged_recipe.json", "r", encoding="utf-8"))
 
     @property
     def olap_db(self) -> ClickHouseManager:
@@ -551,7 +265,6 @@ class ClusterVariationGenerator:
                 return None
             variation.gpt_validated = True
         return variation
-    
 
     async def create_variations_with_same_lang(
             self,
@@ -559,8 +272,12 @@ class ClusterVariationGenerator:
             validate_gpt: bool = True,
             save_to_db: bool = False,
             max_variations: int = 3,
-            max_merged_recipes: int = 3
+            max_merged_recipes: int = 3,
+            image_ids: Optional[list[int]] = None
     ) -> list[MergedRecipe]:
+        """
+        Создает вариации рецептов используя данных из mysql pages по языковым группам
+        """
         merged_recipes = []
         # Загружаем рецепты
         recipes = self.page_repository.get_recipes(page_ids=cluster)
@@ -580,33 +297,84 @@ class ClusterVariationGenerator:
 
         # Создаём вариации для каждой языковой группы
         for lang, lang_recipes in lang_groups.items():
-            n = len(lang_recipes)
-            k = min(max_merged_recipes, n)
-            
-            if n < 2:
-                logger.warning(f"Недостаточно рецептов для языка '{lang}'")
+            max_combinations = self.merger.calculate_max_combinations( 
+                n=len(lang_recipes),
+                k=min(max_merged_recipes, len(lang_recipes)),
+                max_variations=max_variations
+            )
+            if max_combinations == 0:
+                logger.info(f"Недостаточно рецептов для создания вариаций на языке '{lang}'")
                 continue
-            max_possible_combinations = math.comb(n, k) if k <= n else 0
-            max_variations_per_lang = min(max_variations, max_possible_combinations)
-            logger.info(f"Создание вариаций для языка '{lang}' с {len(lang_recipes)} рецептами")
 
             variations = await self.create_variations_from_cluster(
                 recipes=lang_recipes,
                 validate_gpt=validate_gpt,
                 save_to_db=save_to_db,
-                max_variations=max_variations_per_lang,
-                max_merged_recipes=max_merged_recipes
+                max_variations=max_combinations,
+                max_merged_recipes=max_merged_recipes,
+                image_ids=image_ids
             )
             merged_recipes.extend(variations)
         return merged_recipes
     
-    async def create_variations_from_cluster(
+    async def create_variations_from_olap(
         self,
-        recipes: list[Recipe],
+        cluster: list[int],
         validate_gpt: bool = True,
         save_to_db: bool = False,
         max_variations: int = 3,
-        max_merged_recipes: int = 3
+        max_merged_recipes: int = 3,
+        recipe_language: str = "en",
+        image_ids: Optional[list[int]] = None
+        ) -> Optional[list[MergedRecipe]]:
+        """
+        создает вариации рецептов используя данных из clickhouse olap
+        """
+        if len(cluster) < 2:
+            logger.warning("Кластер слишком маленький")
+            return None
+        
+        # проверка на то, что вариация уже создана и возвращение из бд
+        merged = self.merge_repository.get_by_page_ids(cluster)
+        if merged:
+            logger.info(f"Использован кэшированный GPT merge для {cluster}")
+            return merged.to_pydantic()
+        
+        # Загружаем рецепты
+        recipes = self.olap_db.get_recipes_by_ids(cluster)
+        if not recipes:
+            logger.error(f"Не найдены рецепты для кластера {cluster}")
+            return None
+        
+        for recipe in recipes:
+            recipe.fill_ingredients_with_amounts(self.page_repository)
+            recipe.language  = recipe_language  # OLAP только с английскими рецептами
+
+        max_combinations = self.merger.calculate_max_combinations( 
+            n=len(recipes),
+            k=min(max_merged_recipes, len(recipes)),
+            max_variations=max_variations
+        )
+        if max_combinations == 0:
+            return None
+
+        return await self.create_variations_from_cluster(
+            recipes=recipes,
+            validate_gpt=validate_gpt,
+            save_to_db=save_to_db,
+            max_variations=max_combinations,
+            max_merged_recipes=max_merged_recipes,
+            image_ids=image_ids
+            )
+    
+    async def create_variations_from_cluster(
+        self,
+        recipes: list[Recipe],
+        validate_gpt: bool,
+        save_to_db: bool,
+        max_variations: int,
+        max_merged_recipes: int,
+        image_ids: Optional[list[int]] = None
     ) -> list[MergedRecipe]:
         """
         Создаёт 1-N различных вариаций рецепта на основе кластера.
@@ -689,10 +457,15 @@ class ClusterVariationGenerator:
             i+=1
 
         for task in asyncio.as_completed(tasks):
-            variation = await task
-            if variation:
-                variations.append(variation)
-                logger.info(f"Создана вариация: {variation.dish_name} (page_ids={variation.page_ids})")
+            try:
+                variation = await task
+                if variation:
+                    variations.append(variation)
+                    if image_ids:
+                        variation.image_ids = image_ids
+                    logger.info(f"Создана вариация: {variation.dish_name} (page_ids={variation.page_ids})")
+            except Exception as e:
+                logger.error(f"Ошибка при создании вариации: {e}")
 
         # Сохранение
         if save_to_db and variations:
@@ -722,12 +495,20 @@ STRICT RULES - DO NOT VIOLATE:
    - Steps must be in logical order
 5. CONSISTENCY: amounts in instructions MUST match ingredients_with_amounts exactly
 6. Preserve the core dish identity - the result must be the same dish type
+7. INSTRUCTIONS FORMAT - ALWAYS use this exact format:
+   "Step 1. First instruction text. Step 2. Second instruction text. Step 3. ..."
+   - Each step starts with "Step N." (with period after number)
+   - Number of steps can vary (from 2 to 20+) - use as many as needed
+   - All steps in a single string, separated by spaces
+   - No line breaks, no bullet points, no dashes
+   - Keep steps clear and concise
 
 FORBIDDEN:
 - Adding ingredients not present in ANY source recipe
 - Inventing new cooking techniques not mentioned in sources
 - Changing the fundamental nature of the dish
 - Using placeholder or vague instructions
+- Using numbered lists, bullet points, or line breaks in instructions
 
 Return ONLY valid JSON (no markdown):
 {
@@ -737,9 +518,9 @@ Return ONLY valid JSON (no markdown):
     {"name": "ingredient name", "amount": 100, "unit": "g"},
     ...
   ],
-  "instructions": "complete step-by-step instructions",
-  "cook_time": "X minutes" or null,
-  "prep_time": "X minutes" or null,
+  "instructions": "Step 1. Do this. Step 2. Then do that. Step 3. Continue with... (as many steps as needed)",
+  "cook_time": "X minutes or X hours X minutes" or null,
+  "prep_time": "X minutes or X hours X minutes" or null,
   "source_notes": "which recipes contributed what (English, for logging)"
 }"""
 
@@ -759,7 +540,7 @@ Ingredients:
 Instructions: {inst}"""
 
         # Базовый рецепт первый
-        recipes_text = format_recipe(base, "BASE RECIPE (primary, use its language)")
+        recipes_text = format_recipe(base, "BASE RECIPE")
         
         # Остальные рецепты
         other_recipes = [r for r in cluster_recipes if r.page_id != base.page_id]
@@ -783,7 +564,8 @@ Requirements:
                 temperature=0.4,  # немного выше для разнообразия между вариациями
                 max_tokens=2500,
                 timeout=90,
-                model=GPT_MODEL_MERGE
+                model=GPT_MODEL_MERGE,
+                response_schema=self.merged_recipe_schema
             )
             
             if not result or not isinstance(result, dict):
@@ -797,8 +579,8 @@ Requirements:
                 description=result.get('description', ''),
                 ingredients=result.get('ingredients_with_amounts', []),
                 instructions=result.get('instructions', ''),
-                cooking_time=str(result.get('cook_time') or ''),
-                prep_time=str(result.get('prep_time') or ''),
+                cooking_time=str(result.get('cook_time') or base.cook_time or ''),
+                prep_time=str(result.get('prep_time') or base.prep_time or ''),
                 merge_comments=f"variation #{variation_index}; {result.get('source_notes', '')}",
                 language=base.language or "unknown",
                 cluster_type=self.clusters_build_type,
@@ -812,97 +594,6 @@ Requirements:
         except Exception as e:
             logger.error(f"GPT single variation generation failed: {e}")
             return None
-    
-    async def create_variation_best_base_gpt(
-        self,
-        cluster: list[int],
-        validate_gpt: bool = True,
-        save_to_db: bool = False
-    ) -> Optional[Recipe]:
-        """
-        Стратегия: лучший базовый + GPT объединение
-        
-        Комбинирует эвристический выбор базы с GPT merge для надёжности.
-        
-        Args:
-            cluster: список page_id рецептов
-            validate_gpt: валидировать через GPT
-            save_to_db: сохранять в БД
-            
-        Returns:
-            улучшенная вариация с надёжной базой
-        """
-        if len(cluster) < 2:
-            logger.warning("Кластер слишком маленький")
-            return None
-        
-        # проверка на то, что вариация уже создана и возвращение из бд
-        merged = self.merge_repository.get_by_page_ids(cluster)
-        if merged:
-            logger.info(f"Использован кэшированный GPT merge для {cluster}")
-            return merged.to_pydantic()
-        
-        # Загружаем рецепты
-        recipes = self.olap_db.get_recipes_by_ids(cluster)
-        if not recipes:
-            logger.error(f"Не найдены рецепты для кластера {cluster}")
-            return None
-        
-        for recipe in recipes:
-            recipe.fill_ingredients_with_amounts(self.page_repository)
-
-        recipes = self.merger.remove_equal_recipes(recipes)
-        if len(recipes) < 2:
-            logger.warning("После удаления похожих рецептов в кластере осталось меньше 2 уникальных")
-            return []
-        
-        logger.info(f"Best-base GPT объединение: {len(recipes)} рецептов")
-        
-        try:
-            # Объединяем через гибридный метод
-            variation = await self.merger.merge_with_best_base_gpt(recipes)
-            if not variation:
-                logger.warning("Best-base GPT merge вернул пустой результат")
-                return None
-            variation.gpt_validated = False
-            variation.cluster_type = self.clusters_build_type
-            variation.score_threshold = self.score_threshold
-            # Валидация
-            if validate_gpt: # предполагается, что базовый рецепт - recipes[0]
-                is_valid, reason = await self.merger.validate_with_gpt(recipes[0], variation)
-                if not is_valid:
-                    logger.warning(f"Best-base GPT вариация не прошла валидацию: {reason}")
-                    return None
-                variation.gpt_validated = True
-            
-            logger.info(f"✓ Best-base GPT вариация: {variation.dish_name}")
-            
-            # Сохранение
-            if save_to_db:
-                self.merge_repository.create_merged_recipe(variation)
-            
-            return variation
-            
-        except Exception as e:
-            logger.error(f"Ошибка best-base GPT объединения: {e}")
-            return None
-
-    def _select_best_base(self, recipes: list[Recipe]) -> Recipe:
-        """Выбор лучшего базового рецепта (самый полный и детальный)"""
-        def score(r: Recipe) -> tuple:
-            ing_count = len(r.ingredients) if r.ingredients else 0
-            inst_len = len(r.instructions) if isinstance(r.instructions, str) else len(str(r.instructions or ""))
-            
-            return (
-                ing_count,
-                inst_len,
-                bool(getattr(r, 'cooking_time', None)),
-                bool(getattr(r, 'description', None)),
-                -len(r.dish_name)  # короткое название лучше
-            )
-        
-        return max(recipes, key=score)
-
 
 # Пример использования в main
 if __name__ == "__main__":
@@ -928,7 +619,7 @@ if __name__ == "__main__":
         random.shuffle(cluster)
         
         max_variations = min(1, max(3, len(cluster) / 4))
-        variations = await generator.create_variations_with_same_lang(
+        variations = await generator.create_variations_from_olap(
             cluster=cluster,
             validate_gpt=True,
             save_to_db=True,

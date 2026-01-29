@@ -68,7 +68,7 @@ class RecipeVectorizer:
         if self._olap_database is not None:
             self._olap_database.close()
 
-    def add_all_recipes(
+    def vectorise_all_recipes(
             self, 
             embedding_function: EmbeddingFunction, 
             batch_size: int = 8,
@@ -117,87 +117,6 @@ class RecipeVectorizer:
 
         logger.info(f"Всего векторизовано рецептов: {total_vectorised}/{total}")
         return total_vectorised
-
-    def vectors_to_recipes(
-            self, 
-            initial_recipe_id: int,
-            vector_results: list[dict[str, Any]]
-        ) -> list[float, Recipe]:
-        """
-            Преобразование результатов поиска в векторной БД в объекты Page с оценкой схожести
-        Args:
-            vector_results: Результаты поиска в векторной БД
-        Returns:
-            Список кортежей (score, Recipe)"""
-
-        # Создаем маппинг recipe_id -> score
-        score_map = {res['recipe_id']: res['score'] for res in vector_results}
-        
-        recipe_with_scores: list[float, Page] = []
-        recipes = self.olap_database.get_recipes_by_ids(list(score_map.keys()))
-            
-        # Возвращаем tuple (score, Page) для каждого рецепта
-        for recipe in recipes:
-            if recipe.page_id == initial_recipe_id:
-                continue  # пропускаем исходный рецепт
-            score = score_map.get(recipe.page_id, 0.0)
-            recipe_with_scores.append((score, recipe))
-        
-        recipe_with_scores.sort(key=lambda x: x[0], reverse=True)
-        
-        return recipe_with_scores
-    
-    def get_similar_recipes_full(
-            self, 
-            recipe: Recipe, 
-            embed_function: EmbeddingFunction, 
-            limit: int = 6,
-            score_threshold: float = 0.0,
-        ) -> list[float, Recipe]:
-        """
-        get_similar_recipes_full  - Поиск похожих рецептов в векторной БД и возврат их как объекты Page + score схожести c изначальным вариантом
-        Args:
-            recipe: Рецепт для поиска похожих
-            embed_function: Функция для получения эмбеддингов
-            limit: Максимальное количество возвращаемых похожих рецептов
-            score_threshold: Порог схожести для фильтрации результатов
-        """
-        query = recipe.get_full_recipe_str()
-        query_recipe = embed_function(texts=[query], is_query=True)[0]
-        
-        results = self.vector_db.search_full(
-            query_vector=query_recipe,
-            limit=limit+1,  # +1 чтобы исключить сам рецепт из результатов
-            score_threshold=score_threshold
-        )
-        
-        if len(results) == 0:
-            return []
-        
-        return self.vectors_to_recipes(recipe.page_id, results)
-        
-    def get_similar_recipes_weighted(
-            self, 
-            recipe: Recipe,
-            embed_function: EmbeddingFunction, 
-            limit: int = 6,
-            score_threshold: float = 0.0,
-            component_weights: Optional[ComponentWeights] = None
-        ) -> list[float, Page]:
-        """Поиск похожих рецептов в векторной БД с учетом типа контента и возврат их как объекты Page + score схожести c изначальным вариантом"""
-
-        results = self.vector_db.search_multivector_weighted(
-            recipe=recipe,
-            embed_function=embed_function,
-            limit=limit + 1,  # +1 чтобы исключить сам рецепт из результатов
-            score_threshold=score_threshold,
-            component_weights=component_weights
-        )
-        
-        if len(results) == 0:
-            return []
-        
-        return self.vectors_to_recipes(recipe.page_id, results)
     
     async def vectorise_images_async(
             self, 
@@ -235,38 +154,3 @@ class RecipeVectorizer:
             )
             logger.info(f"Всего векторизовано изображений: {processed}/{total}")
             last_page_id = images[-1].page_id #чтобы не повторяться
-            
-
-    def get_similar_images(
-            self,
-            embed_function: EmbeddingFunction,
-            image_id: int,
-            limit: int = 6,
-            score_threshold: float = 0.0
-        ) -> list[tuple[float, Image]]:
-        """
-        Поиск похожих рецептов по изображениям
-        
-        Args:
-            embed_function: Функция для получения эмбеддингов
-            image_id: Идентификатор изображения для поиска похожих
-            limit: Максимальное количество возвращаемых похожих рецептов
-            score_threshold: Порог схожести для фильтрации результатов
-            
-        Returns:
-            Список кортежей (score, Image)
-        """
-
-        image_orm = self.image_repository.get_by_id(image_id)
-        if not image_orm:
-            logger.error(f"Image with id {image_id} not found")
-            return []
-
-        vectorised_query = embed_function(images=[image_orm.local_path])[0]
-        results = self.vector_db.search_images(
-            query_vector=vectorised_query,
-            limit=limit,
-            score_threshold=score_threshold
-        )
-
-        return results

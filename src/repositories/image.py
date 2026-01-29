@@ -22,29 +22,6 @@ class ImageRepository(BaseRepository[ImageORM]):
             mysql_manager = get_db_connection()
         super().__init__(ImageORM, mysql_manager)
     
-    def get_by_page_id(self, page_id: int, limit: Optional[int] = None) -> List[ImageORM]:
-        """
-        Получить все изображения для конкретной страницы
-        
-        Args:
-            page_id: ID страницы
-            limit: Максимальное количество изображений
-        
-        Returns:
-            Список изображений
-        """
-        session = self.get_session()
-        try:
-            query = session.query(ImageORM).filter(ImageORM.page_id == page_id)
-            
-            if limit:
-                query = query.limit(limit)
-            
-            return query.all()
-        finally:
-            session.close()
-    
-    
     def get_not_vectorised(
         self,
         limit: Optional[int] = None,
@@ -236,27 +213,21 @@ class ImageRepository(BaseRepository[ImageORM]):
         finally:
             session.close()
     
-    def delete_by_page_id(self, page_id: int) -> int:
+    def get_page_ids_by_image_ids(self, image_ids: List[int]) -> List[int]:
         """
-        Удалить все изображения для страницы
+        Получить уникальные ID страниц по списку ID изображений
         
         Args:
-            page_id: ID страницы
+            image_ids: Список ID изображений
         
         Returns:
-            Количество удаленных записей
+            Список уникальных ID страниц
         """
         session = self.get_session()
         try:
-            count = session.query(ImageORM).filter(
-                ImageORM.page_id == page_id
-            ).delete(synchronize_session=False)
-            session.commit()
-            logger.info(f"Удалено {count} изображений для страницы {page_id}")
-            return count
-        except Exception as e:
-            session.rollback()
-            logger.error(f"Ошибка при удалении изображений: {e}")
-            raise
+            page_ids = session.query(ImageORM.page_id).filter(
+                ImageORM.id.in_(image_ids)
+            ).distinct().all()
+            return [pid[0] for pid in page_ids]
         finally:
             session.close()

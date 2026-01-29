@@ -34,7 +34,7 @@ def vectorise_all_recipes(translate: bool = True, target_language: str = "en", t
     rv = RecipeVectorizer()
 
     embed_func, dims = get_embedding_function(batch_size=batch_size)
-    rv.add_all_recipes(
+    rv.vectorise_all_recipes(
         embedding_function=embed_func,
         batch_size=batch_size,
         dims=dims)

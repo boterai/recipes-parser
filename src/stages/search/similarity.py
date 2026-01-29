@@ -17,6 +17,7 @@ if __name__ == "__main__":
 from src.common.db.qdrant import QdrantRecipeManager
 from src.common.gpt.client import GPTClient
 from src.repositories.similarity import RecipeSimilarity
+from src.repositories.image import ImageRepository
 from src.models.recipe import Recipe
 
 logging.basicConfig(
@@ -88,6 +89,7 @@ class SimilaritySearcher:
         self.qd_collection_prefix = "recipes"
         self.gpt_client: GPTClient = GPTClient()
         self.similarity_repository = RecipeSimilarity()
+        self.image_repository = ImageRepository()
         self._clickhouse_manager = None
 
         self.last_id: int | None = None
@@ -97,6 +99,8 @@ class SimilaritySearcher:
         self.set_params(build_type=build_type)
         self.dsu_filename = os.path.join("recipe_clusters", f"dsu_state_{build_type}_{self.params.score_threshold}.json")
         self.clusters_filename = os.path.join("recipe_clusters", f"{build_type}_clusters_{self.params.score_threshold}.json")
+        self.cluter_image_mapping = os.path.join("recipe_clusters", f"clusters_to_image_ids_{self.params.score_threshold}.json")
+        self.build_type = build_type
 
     @property
     def clickhouse_manager(self): # layz initialization + lazy import
@@ -213,7 +217,7 @@ class SimilaritySearcher:
                 except Exception as e:
                     logger.error(f"Error in async task: {e}")
                     continue
-                
+
                 if not batch_hits:
                     continue
 
@@ -243,6 +247,7 @@ class SimilaritySearcher:
                 break
         self.last_id = None  # обработка завершена
         return build_clusters_from_dsu(self.dsu, self.params.min_cluster_size)
+            
     
     def set_params(self, build_type: Literal["image", "full", "ingredients"] = "full"):
         """Кластеры по ингредиентам из Qdrant ingredients-коллекции."""
@@ -372,9 +377,50 @@ Return ONLY JSON array of IDs representing similar recipes."""
             
             self.similarity_repository.save_cluster_with_members(similar_clusters)
             logger.info(f"Saved cluster {num + 1}/{len(clusters)} with {len(similar_clusters)} members.")
+
+    def get_image_clusters_mapping(self) -> dict[str, dict[str, list[int]]]:
+        """Загружает маппинг кластеров рецептов к изображениям из файла."""
+        if not os.path.exists(self.cluter_image_mapping):
+            logger.warning(f"Cluster to image mapping file {self.cluter_image_mapping} not found.")
+            return {}
+        
+        with open(self.cluter_image_mapping, 'r') as f:
+            page_ids_to_image_ids = json.load(f)
+        
+        return page_ids_to_image_ids
         
     def save_clusters_to_file(self, clusters: list[list[int]]) -> None:
         """Сохраняет текущие кластеры в файл в формате JSON."""
+        # конвертируем кластеры из изображений в кластеры по ID рецептов
+        if self.build_type == "image":
+            if not os.path.exists(self.cluter_image_mapping):
+                page_ids_to_image_ids = {"image_to_page": {}, "page_to_image": {}}
+                recipe_clisters = []
+                for image_ids in clusters:
+                    image_ids = sorted(image_ids)
+                    page_ids = sorted(self.image_repository.get_page_ids_by_image_ids(image_ids))
+                    if len(page_ids) < 2: # пропускаем одиночки
+                        continue
+                    recipe_clisters.append(page_ids)
+                    page_ids_to_image_ids['page_to_image'][','.join(map(str, page_ids))] = image_ids
+                    page_ids_to_image_ids['image_to_page'][','.join(map(str, image_ids))] = page_ids
+
+                # сохраняем маппинг кластеров рецептов к изображениям
+                with open(self.cluter_image_mapping, 'w') as f:
+                    f.write(json.dumps(page_ids_to_image_ids, indent=2))
+                logger.info(f"Saved clusters to image IDs mapping to file {self.cluter_image_mapping}.")
+            else:
+                with open(self.cluter_image_mapping, 'r') as f:
+                    page_ids_to_image_ids = json.load(f)
+                recipe_clisters = []
+                for image_ids in clusters:
+                    image_ids = sorted(image_ids)
+                    page_ids = page_ids_to_image_ids['image_to_page'].get(','.join(map(str, image_ids)), [])
+                    page_ids = list(map(int, page_ids))
+                    recipe_clisters.append(page_ids)
+                
+            clusters = recipe_clisters
+            # поуллчаем 
         with open(self.clusters_filename, 'w') as f:
             f.write(json.dumps(clusters, indent=2))
         logger.info(f"Saved clusters to file {self.clusters_filename}.")

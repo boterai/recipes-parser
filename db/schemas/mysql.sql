@@ -72,28 +72,18 @@ CREATE TABLE IF NOT EXISTS images (
     UNIQUE KEY unique_image_url_hash (image_url_hash)
 ) ENGINE=InnoDB;
 
-
--- Таблица кластеров рецептов (для векторных представлений)
-CREATE TABLE IF NOT EXISTS recipe_clusters (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    pages_hash_sha256 CHAR(64) NOT NULL,     -- SHA2("1,15,23", 256)
-    pages_csv LONGTEXT NOT NULL,              -- "1,15,23" - CSV ID страниц рецептов в кластере
+-- Промежуточная таблица для связи многие-ко-многим между изображением рецепта и объединённым рецептом
+CREATE TABLE IF NOT EXISTS merged_recipe_images (
+    merged_recipe_id BIGINT NOT NULL,
+    image_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE KEY uq_pages_hash (pages_hash_sha256)
-) ENGINE=InnoDB;
-
--- Таблица похожести рецептов (для векторных представлений)
-CREATE TABLE IF NOT EXISTS recipe_similarities (
-    page_id INT NOT NULL,               -- ID страницы рецепта
-    cluster_id BIGINT NOT NULL,             -- ID кластера похожих рецептов (просто порядковый номер пока что)
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (cluster_id, page_id),
-
-    FOREIGN KEY (page_id) REFERENCES pages(id) ON DELETE CASCADE,
-    FOREIGN KEY (cluster_id) REFERENCES recipe_clusters(id) ON DELETE CASCADE,
-    UNIQUE KEY uq_pair_model_metric (page_id, cluster_id),
-
-    INDEX idx_cluster_id (cluster_id)
+    
+    PRIMARY KEY (merged_recipe_id, image_id),
+    FOREIGN KEY (merged_recipe_id) REFERENCES merged_recipes(id) ON DELETE CASCADE,
+    FOREIGN KEY (image_id) REFERENCES images(id) ON DELETE CASCADE,
+    
+    INDEX idx_merged_recipe (merged_recipe_id),
+    INDEX idx_image (image_id)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS merged_recipes (

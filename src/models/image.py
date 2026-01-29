@@ -3,7 +3,7 @@
 """
 
 from datetime import datetime
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 import hashlib
 from pydantic import BaseModel
 from sqlalchemy import Column, Integer, String, Boolean, TIMESTAMP, ForeignKey, text, Index
@@ -17,6 +17,9 @@ from io import BytesIO
 import os
 import aiohttp
 import asyncio
+
+if TYPE_CHECKING:
+    from src.models.merged_recipe import merged_recipe_images
 
 PROXY = os.getenv('PROXY', None)
 logger = logging.getLogger(__name__)
@@ -37,6 +40,14 @@ class ImageORM(Base):
     
     # Relationships
     page = relationship("PageORM", back_populates="images")
+    
+    # Relationship многие-ко-многим через промежуточную таблицу
+    merged_recipes = relationship(
+        "MergedRecipeORM",
+        secondary="merged_recipe_images",  # Используем строку для отложенной инициализации
+        back_populates="images",
+        lazy="select"
+    )
     
     # Индексы (image_url_hash индекс создан в MySQL, не нужен здесь)
     __table_args__ = (

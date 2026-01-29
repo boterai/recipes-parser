@@ -5,10 +5,19 @@
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, model_validator
-from sqlalchemy import Column, String, TIMESTAMP, Text, text, BIGINT, JSON, CHAR
+from sqlalchemy import Column, String, TIMESTAMP, Text, text, BIGINT, JSON, CHAR, Integer, ForeignKey, Table
+from sqlalchemy.orm import relationship
 from src.models.base import Base
 import hashlib
 
+# Промежуточная таблица для связи многие-ко-многим
+merged_recipe_images = Table(
+    'merged_recipe_images',
+    Base.metadata,
+    Column('merged_recipe_id', BIGINT, ForeignKey('merged_recipes.id', ondelete='CASCADE'), primary_key=True),
+    Column('image_id', Integer, ForeignKey('images.id', ondelete='CASCADE'), primary_key=True),
+    Column('created_at', TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'))
+)
 
 class MergedRecipeORM(Base):
     """SQLAlchemy модель для таблицы merged_recipes"""
@@ -39,6 +48,14 @@ class MergedRecipeORM(Base):
     
     # Метаданные
     created_at = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'))
+
+    # Relationship многие-ко-многим через промежуточную таблицу
+    images = relationship(
+        "ImageORM",
+        secondary=merged_recipe_images,
+        back_populates="merged_recipes",
+        lazy="select"
+    )
         
     def __repr__(self):
         return f"<MergedRecipeORM(id={self.id}, dish='{self.dish_name}'>"
@@ -53,6 +70,9 @@ class MergedRecipeORM(Base):
             except (ValueError, AttributeError):
                 page_ids = []
         
+        # Извлекаем image_ids из relationship
+        image_ids = [img.id for img in self.images] if self.images else []
+        
         return MergedRecipe(
             id=self.id,
             pages_hash_sha256=self.pages_hash_sha256,
@@ -66,6 +86,7 @@ class MergedRecipeORM(Base):
             merge_comments=self.merge_comments,
             created_at=self.created_at,
             page_ids=page_ids,
+            image_ids=image_ids,
             language=self.language,
             cluster_type=self.cluster_type,
             gpt_validated=self.gpt_validated,
@@ -104,6 +125,9 @@ class MergedRecipe(BaseModel):
     # Связанные страницы (из pages_csv)
     page_ids: Optional[list[int]] = Field(default_factory=list)
     
+    # Связанные изображения (из relationship)
+    image_ids: Optional[list[int]] = Field(default_factory=list)
+    
     @model_validator(mode='after')
     def generate_hash_and_csv(self):
         """Автоматически генерирует pages_hash_sha256 и pages_csv из page_ids"""
@@ -136,6 +160,9 @@ class MergedRecipe(BaseModel):
             except (ValueError, AttributeError):
                 page_ids = []
         
+        # Извлекаем image_ids из relationship
+        image_ids = [img.id for img in orm_obj.images] if orm_obj.images else []
+        
         return cls(
             id=orm_obj.id,
             pages_hash_sha256=orm_obj.pages_hash_sha256,
@@ -149,6 +176,7 @@ class MergedRecipe(BaseModel):
             merge_comments=orm_obj.merge_comments,
             created_at=orm_obj.created_at,
             page_ids=page_ids,
+            image_ids=image_ids,
             language=orm_obj.language,
             cluster_type=orm_obj.cluster_type,
             gpt_validated=orm_obj.gpt_validated,

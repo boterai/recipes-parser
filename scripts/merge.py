@@ -5,6 +5,7 @@ import argparse
 import asyncio
 import os
 import json
+import random
 # Добавление корневой директории в PYTHONPATH
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -22,7 +23,9 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-async def create_clusters(score_thresold: float, build_type: Literal["image", "full", "ingredients"]) -> list[list[int]]:
+async def create_clusters(score_thresold: float, build_type: Literal["image", "full", "ingredients"]) -> tuple[list[list[int]], dict[int, list[int]]]:
+    last_id = None
+    consecutive_same_count = 0
     while True:
         ss = SimilaritySearcher(params=ClusterParams(
                     limit=30,
@@ -33,7 +36,7 @@ async def create_clusters(score_thresold: float, build_type: Literal["image", "f
         
         if os.path.exists(ss.clusters_filename):
             logger.info("Загружаем кластеры из файла...")
-            return ss.load_clusters_from_file()
+            return ss.load_clusters_from_file(), ss.get_image_clusters_mapping()
         try:
             ss.load_dsu_state()
             clusters = await ss.build_clusters_async()
@@ -44,14 +47,24 @@ async def create_clusters(score_thresold: float, build_type: Literal["image", "f
             if ss.last_id is None:
                 logger.info("Processing complete.")
                 break
+
         except Exception as e:
+            if last_id == ss.last_id:
+                consecutive_same_count += 1
+            else:
+                consecutive_same_count = 0
+                last_id = ss.last_id
+
             logger.error(f"Error during cluster building: {e}")
             ss.save_dsu_state()
+            random_sleep_time = min(random.uniform(5, 15) * (consecutive_same_count + 1))
+            logger.info(f"Sleeping for {random_sleep_time:.2f} seconds before retrying...")
+            await asyncio.sleep(random_sleep_time)
             continue
 
     final_clusters = build_clusters_from_dsu(ss.dsu, min_cluster_size=2)
     ss.save_clusters_to_file(final_clusters)
-    return final_clusters
+    return ss.load_clusters_from_file(), ss.get_image_clusters_mapping() # загружаем из файла, чтобы отдать уже правильные кластеры и создать маппинг, если это изображения
 
 def save_clusters_to_history(clusters: list[list[int]], filename: str):
     os.makedirs("history", exist_ok=True)
@@ -69,13 +82,16 @@ async def run_merge_with_same_lang(score_thresold: float,
                     max_variations: int = 3, 
                     validate_gpt: bool = True, 
                     save_to_db: bool = True, 
-                    max_merged_recipes: int = 4):
+                    max_merged_recipes: int = 4, 
+                    merge_from_olap: bool = True):
     
     cluster_processing_history = os.path.join("history", f"unprocessed_clusters_{build_type}_{score_thresold}.json")
     existing_clusters = load_clusters_from_history(cluster_processing_history)
 
     merger = ClusterVariationGenerator(score_threshold=score_thresold, clusters_build_type=build_type)
-    clusters = await create_clusters(score_thresold, build_type)
+    clusters, cluster_mapping = await create_clusters(score_thresold, build_type)
+    if build_type == "image":
+        cluster_mapping = cluster_mapping.get("page_to_image", {})
 
     if existing_clusters:
         logger.info(f"Загружено {len(existing_clusters)} кластеров из истории, пропускаем уже обработанные...")
@@ -83,14 +99,23 @@ async def run_merge_with_same_lang(score_thresold: float,
         clusters = [cluster for cluster in clusters if tuple(sorted(cluster)) not in processed_set]
         logger.info(f"Осталось {len(clusters)} кластеров для обработки после фильтрации истории.")
 
+    merge_function = merger.create_variations_from_olap if merge_from_olap else merger.create_variations_with_same_lang
+
     for cluster in clusters:
+        if len(cluster) < 2:
+            continue  # пропускаем одиночки
+        image_ids = None
+        if build_type == "image":
+            cluster_key = ','.join(map(str, sorted(cluster)))
+            image_ids = cluster_mapping.get(cluster_key)
         try:
-            merged_recipe = await merger.create_variations_with_same_lang(
+            merged_recipe = await merge_function(
                 cluster, 
                 validate_gpt=validate_gpt, 
                 save_to_db=save_to_db, 
                 max_variations=max_variations,
-                max_merged_recipes=max_merged_recipes
+                max_merged_recipes=max_merged_recipes,
+                image_ids=image_ids
                 )
             if merged_recipe:
                 logger.info(f"Created {len(merged_recipe)} variations.")
@@ -102,18 +127,19 @@ async def run_merge_with_same_lang(score_thresold: float,
             logger.error(f"Error merging cluster with pages {cluster}: {e}")
 
 if __name__ == "__main__":
+
     parser = argparse.ArgumentParser(description="Cluster recipes based on similarity.")
     parser.add_argument(
         "--score_threshold",
         type=float,
-        default=0.94,
+        default=0.95,
         help="Score threshold for clustering (default: 0.94)"
     )
     parser.add_argument(
         "--build_type",
         type=str,
         choices=["image", "full", "ingredients"],
-        default="full",
+        default="image",
         help="Type of build for clustering (default: full)"
     )
     args = parser.parse_args()

@@ -3,13 +3,15 @@
 """
 
 import logging
-from typing import Optional
+from typing import Optional, List
 
 from src.repositories.base import BaseRepository
-from src.models.merged_recipe import MergedRecipeORM, MergedRecipe
+from src.models.merged_recipe import MergedRecipeORM, MergedRecipe, merged_recipe_images
 from src.models.merged_recipe import MergedRecipe
+from src.models.image import ImageORM
 from src.common.db.connection import get_db_connection
 import hashlib
+from sqlalchemy import insert, delete
 
 logger = logging.getLogger(__name__)
 
@@ -110,7 +112,7 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
             
             # Собираем хэши для проверки существования
             hashes_to_check = []
-            recipe_by_hash = {}
+            recipe_by_hash: dict[str, MergedRecipe] = {}
             
             for merged_recipe in merged_recipes:
                 page_ids = merged_recipe.page_ids or []
@@ -135,6 +137,8 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
             
             # Создаем только новые
             new_recipes = []
+            recipe_image_mapping = {}
+            
             for pages_hash, merged_recipe in recipe_by_hash.items():
                 if pages_hash in existing_hashes:
                     logger.debug(f"Пропущен существующий рецепт: {merged_recipe.dish_name}")
@@ -160,16 +164,37 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
                     score_threshold=merged_recipe.score_threshold
                 )
                 new_recipes.append(merged_recipe_orm)
+                
+                # Сохраняем image_ids для последующей связки
+                if merged_recipe.image_ids:
+                    recipe_image_mapping[merged_recipe_orm] = merged_recipe.image_ids
             
             if new_recipes:
                 # Bulk insert с добавлением в сессию
                 session.add_all(new_recipes)
                 session.commit()
                 
-                # Обновляем ID для возврата
+                # Обновляем ID для возврата и собираем связи для промежуточной таблицы
+                image_links = []
                 for orm_obj in new_recipes:
                     session.refresh(orm_obj)
                     created.append(orm_obj)
+                    
+                    # Если есть image_ids, добавляем их в список для batch insert
+                    if orm_obj in recipe_image_mapping:
+                        image_ids = recipe_image_mapping[orm_obj]
+                        for img_id in image_ids:
+                            image_links.append({
+                                'merged_recipe_id': orm_obj.id,
+                                'image_id': img_id
+                            })
+                
+                # Batch insert связей в merged_recipe_images
+                if image_links:
+                    stmt = insert(merged_recipe_images).values(image_links)
+                    session.execute(stmt)
+                    session.commit()
+                    logger.info(f"✓ Добавлено {len(image_links)} связей с изображениями")
                 
                 logger.info(f"✓ Создано {len(created)} новых объединенных рецептов")
             else:
@@ -220,3 +245,89 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
     
     def get_all(self, limit = None, offset = 0):
         return super().get_all(limit, offset)
+    
+    # Методы для работы с промежуточной таблицей merged_recipe_images
+    
+    def add_images_to_recipe(
+        self,
+        merged_recipe_id: int,
+        image_ids: List[int]
+    ) -> int:
+        """
+        Привязать изображения к объединенному рецепту
+        
+        Args:
+            merged_recipe_id: ID объединенного рецепта
+            image_ids: Список ID изображений
+        
+        Returns:
+            Количество добавленных связей
+        """
+        if not image_ids:
+            return 0
+        
+        session = self.get_session()
+        try:
+            # Проверяем существование рецепта
+            recipe = session.query(MergedRecipeORM).filter(
+                MergedRecipeORM.id == merged_recipe_id
+            ).first()
+            
+            if not recipe:
+                raise ValueError(f"Merged recipe с id={merged_recipe_id} не найден")
+            
+            # Проверяем существующие связи
+            existing_image_ids = {img.id for img in recipe.images}
+            new_image_ids = [img_id for img_id in image_ids if img_id not in existing_image_ids]
+            
+            if not new_image_ids:
+                logger.info(f"Все изображения уже привязаны к merged_recipe {merged_recipe_id}")
+                return 0
+            
+            # Добавляем новые связи через промежуточную таблицу
+            values = [
+                {'merged_recipe_id': merged_recipe_id, 'image_id': img_id}
+                for img_id in new_image_ids
+            ]
+            
+            stmt = insert(merged_recipe_images).values(values)
+            result = session.execute(stmt)
+            session.commit()
+            
+            added_count = result.rowcount
+            logger.info(f"✓ Добавлено {added_count} изображений к merged_recipe {merged_recipe_id}")
+            return added_count
+            
+        except Exception as e:
+            session.rollback()
+            logger.error(f"Ошибка привязки изображений к merged_recipe: {e}")
+            raise
+        finally:
+            session.close()
+    
+    def get_images_for_recipe(
+        self,
+        merged_recipe_id: int
+    ) -> List[ImageORM]:
+        """
+        Получить все изображения для объединенного рецепта
+        
+        Args:
+            merged_recipe_id: ID объединенного рецепта
+        
+        Returns:
+            Список ImageORM объектов
+        """
+        session = self.get_session()
+        try:
+            recipe = session.query(MergedRecipeORM).filter(
+                MergedRecipeORM.id == merged_recipe_id
+            ).first()
+            
+            if not recipe:
+                return []
+            
+            return recipe.images
+            
+        finally:
+            session.close()
