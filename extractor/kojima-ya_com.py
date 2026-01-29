@@ -80,22 +80,27 @@ class KojimaYaExtractor(BaseRecipeExtractor):
         """Извлечение описания рецепта"""
         # Сначала пробуем из p.recipe_sg__subtit на странице
         subtitle = self.soup.find('p', class_='recipe_sg__subtit')
+        h1_title = self.soup.find('h1', class_='recipe_sg__tit')
+        
         if subtitle:
             text = self.clean_text(subtitle.get_text())
-            # Убираем восклицательные знаки в конце и добавляем то, что из h1
+            # Убираем восклицательные знаки в конце
             text = re.sub(r'[！!]+$', '', text)
             
-            # Добавляем уточнение из названия блюда если есть
-            h1_title = self.soup.find('h1', class_='recipe_sg__tit')
+            # Если есть заголовок, формируем описание
             if h1_title:
                 dish_name = self.clean_text(h1_title.get_text())
-                # Формируем описание с упоминанием блюда
-                text = f"{text}の簡単な{dish_name}。"
+                # Проверяем, уже ли есть упоминание блюда
+                if dish_name not in text:
+                    text = f"{text}の簡単な{dish_name}。"
+                else:
+                    text = f"{text}。"
             else:
                 text = f"{text}。"
             
             return text
         
+        # Если нет subtitle, проверяем другие варианты
         # Альтернативно из JSON-LD
         json_ld = self.extract_json_ld()
         if json_ld and 'description' in json_ld:
@@ -183,8 +188,17 @@ class KojimaYaExtractor(BaseRecipeExtractor):
         # Убираем лишние пробелы
         name = re.sub(r'\s+', ' ', name).strip()
         
-        # Убираем символы разделители в начале/конце
-        name = name.strip('　、，,')
+        # Убираем "…" и символы разделители в начале/конце
+        name = name.strip('　、，,…')
+        
+        # Убираем дополнительные инструкции в скобках (кроме "又は...")
+        # Например: "レモン （薄切り/いちょう切りにする）" -> "レモン"
+        # Но сохраняем: "バター(又はマーガリン)" -> "バター(又はマーガリン)"
+        if '又は' not in name:
+            # Убираем скобки с инструкциями
+            name = re.sub(r'[（(][^)）]*[)）]', '', name)
+        
+        name = re.sub(r'\s+', ' ', name).strip()
         
         if not name:
             return None
@@ -377,31 +391,43 @@ class KojimaYaExtractor(BaseRecipeExtractor):
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
-        # Ищем секцию с примечаниями
-        notes_section = self.soup.find('div', class_='recipe_sg__point')
-        if notes_section:
-            # Ищем текст примечаний
-            note_text = notes_section.find('p', class_='recipe_sg__point_txt')
-            if note_text:
-                text = self.clean_text(note_text.get_text())
-                return text if text else None
+        # Ищем в тексте инструкций примечания с префиксом ＊
+        json_ld = self.extract_json_ld()
+        if json_ld and 'recipeingredient' in json_ld:
+            ingredients_data = json_ld['recipeingredient']
+            if isinstance(ingredients_data, list):
+                notes = []
+                for item in ingredients_data:
+                    if isinstance(item, str):
+                        # Ищем строки с префиксом ＊
+                        lines = item.split('<br')
+                        for line in lines:
+                            # Убираем HTML теги
+                            line = re.sub(r'<[^>]+>', '', line)
+                            line = self.clean_text(line)
+                            if '＊' in line:
+                                # Извлекаем текст после ＊
+                                note = re.sub(r'^.*?＊\s*', '', line)
+                                note = self.clean_text(note)
+                                if note and len(note) > 10:  # Только значимые заметки
+                                    notes.append(note)
+                
+                if notes:
+                    # Берем самую длинную/значимую заметку
+                    return max(notes, key=len) if notes else None
         
-        # Также проверяем инструкции на наличие примечаний
-        instructions_section = self.soup.find('div', class_='recipe_sg__process')
-        if instructions_section:
-            # Ищем примечания в тексте (обычно начинаются с ※)
-            notes = []
-            for p in instructions_section.find_all('p'):
-                text = p.get_text(strip=True)
-                if '※' in text:
-                    # Извлекаем текст после ※
-                    note = re.sub(r'^.*?※\s*', '', text)
-                    note = self.clean_text(note)
-                    if note:
-                        notes.append(note)
-            
-            if notes:
-                return ' '.join(notes)
+        # Также проверяем в meta description
+        meta_desc = self.soup.find('meta', {'name': 'description'})
+        if meta_desc and meta_desc.get('content'):
+            desc = meta_desc['content']
+            # Ищем примечание после последнего предложения
+            if '。' in desc:
+                parts = desc.split('。')
+                for part in reversed(parts):
+                    part = self.clean_text(part)
+                    # Ищем примечания типа "...は、...でも大丈夫です"
+                    if 'でも大丈夫です' in part or 'がない場合は' in part or 'コツです' in part:
+                        return part + '。'
         
         return None
     
