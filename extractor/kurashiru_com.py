@@ -152,7 +152,7 @@ class KurashiruExtractor(BaseRecipeExtractor):
         Парсинг строки ингредиента kurashiru в структурированный формат
         
         Args:
-            ingredient_str: Строка вида "ホットケーキミックス 150g" или "卵 1個"
+            ingredient_str: Строка вида "ホットケーキミックス 150g" или "卵 1個" или "砂糖 大さじ1"
             
         Returns:
             dict: {"name": "...", "amount": "...", "units": "..."} или None
@@ -167,15 +167,36 @@ class KurashiruExtractor(BaseRecipeExtractor):
         # Примеры: "ホットケーキミックス 150g", "卵 1個", "砂糖 大さじ1"
         
         # Сначала пробуем найти количество с единицей в конце
-        pattern = r'^(.+?)\s+([\d.]+\s*[gmlкгмл個大さじ小さじ適量カップ本枚]+|適量)$'
+        # Паттерн: текст + пробел + (число + единица ИЛИ единица + число ИЛИ просто "適量")
+        pattern = r'^(.+?)\s+(?:([\d.]+)\s*([gmlкгмл個大さじ小さじ適量カップ本枚]+)|(大さじ|小さじ|カップ)\s*([\d.]+)|適量)$'
         match = re.match(pattern, text)
         
         if match:
             name = match.group(1).strip()
-            quantity_str = match.group(2).strip()
             
-            # Парсим количество и единицу
-            amount, unit = self.parse_quantity(quantity_str)
+            # Проверяем разные группы совпадений
+            if match.group(2) and match.group(3):
+                # Случай: "150g" - число + единица
+                amount_str = match.group(2)
+                unit = match.group(3)
+            elif match.group(4) and match.group(5):
+                # Случай: "大さじ1" - единица + число
+                amount_str = match.group(5)
+                unit = match.group(4)
+            elif '適量' in text:
+                # Случай: "適量" - по вкусу
+                amount_str = None
+                unit = '適量'
+            else:
+                amount_str = None
+                unit = None
+            
+            # Парсим количество
+            if amount_str:
+                amount_float = float(amount_str)
+                amount = int(amount_float) if amount_float.is_integer() else amount_float
+            else:
+                amount = None
             
             return {
                 "name": name,
