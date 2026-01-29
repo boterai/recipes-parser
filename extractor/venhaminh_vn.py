@@ -307,6 +307,10 @@ class VenhaMinhExtractor(BaseRecipeExtractor):
                                 normalized_words.append(word.lower())
                         step_title = ' '.join(normalized_words)
                         
+                        # Добавляем точку в конце, если её нет
+                        if not step_title.endswith('.'):
+                            step_title += '.'
+                        
                         instructions.append(f"{step_num}. {step_title}")
                         step_num += 1
                     
@@ -331,6 +335,9 @@ class VenhaMinhExtractor(BaseRecipeExtractor):
                         # Делаем первую букву строчной
                         if text:
                             text = text[0].lower() + text[1:] if len(text) > 1 else text.lower()
+                        # Добавляем точку в конце, если её нет
+                        if not text.endswith('.') and not text.endswith('...'):
+                            text += '.'
                         instructions.append(f"{idx}. {text}")
                     break
         
@@ -360,22 +367,20 @@ class VenhaMinhExtractor(BaseRecipeExtractor):
         
         # Ищем паттерны времени подготовки/маринования
         patterns = [
-            r'(?:chuẩn\s+bị|prep|preparation|ướp)[:\s]*(\d+(?:-\d+)?)\s*(?:phút|minutes?|mins?)',
+            r'(?:chuẩn\s+bị|prep|preparation)[:\s]*(\d+(?:-\d+)?)\s*(?:phút|minutes?|mins?)',
             r'thời\s+gian\s+chuẩn\s+bị[:\s]*(\d+(?:-\d+)?)\s*(?:phút|minutes?)',
-            r'khoảng\s+(\d+(?:-\d+)?)\s*phút\.?\s*(?:để|cho|trong|khi).*?(?:ướp|chuẩn\s+bị)',
+            r'(?:ướp|ngấm\s+gia\s+vị).*?khoảng\s+(\d+(?:-\d+)?)\s*phút',
+            r'khoảng\s+(\d+(?:-\d+)?)\s*phút.*?(?:ướp|ngấm\s+gia\s+vị)',
         ]
         
         for pattern in patterns:
             match = re.search(pattern, text, re.IGNORECASE)
             if match:
                 time_val = match.group(1)
+                # Если диапазон, берем максимальное значение (более реалистичное)
+                if '-' in time_val:
+                    time_val = time_val.split('-')[1]
                 return f"{time_val} minutes"
-        
-        # Если нет явного упоминания, пытаемся найти время ướp (маринования) как prep time
-        match = re.search(r'(\d+)-(\d+)\s*phút.*?ướp', text, re.IGNORECASE)
-        if match:
-            # Берем среднее или первое значение
-            return f"{match.group(1)} minutes"
         
         return None
     
@@ -384,10 +389,12 @@ class VenhaMinhExtractor(BaseRecipeExtractor):
         text = self.soup.get_text()
         
         patterns = [
+            r'thời\s+gian\s+nấu\s+khoảng\s+(\d+(?:-\d+)?)\s*phút',
+            r'nấu\s+cho\s+đến\s+khi.*?khoảng\s+(\d+(?:-\d+)?)\s*phút',
             r'(?:nấu|cook|cooking)[:\s]*(\d+(?:-\d+)?)\s*(?:phút|minutes?|mins?)',
             r'thời\s+gian\s+nấu[:\s]*(\d+(?:-\d+)?)\s*(?:phút|minutes?)',
-            r'(?:hầm|ninh).*?(\d+(?:-\d+)?)\s*(?:phút|minutes)',
-            r'(\d+(?:-\d+)?)\s*phút.*?(?:nấu|hầm|ninh)',
+            r'(?:hầm|ninh).*?khoảng\s+(\d+(?:-\d+)?)\s*(?:phút|minutes)',
+            r'khoảng\s+(\d+(?:-\d+)?)\s*phút.*?(?:nấu|hầm|ninh)',
         ]
         
         for pattern in patterns:
@@ -424,10 +431,18 @@ class VenhaMinhExtractor(BaseRecipeExtractor):
                 cook_match = re.search(r'(\d+)(?:-(\d+))?', cook)
                 
                 if cook_match:
-                    # Если есть диапазон, берем среднее или максимум
-                    cook_num = int(cook_match.group(2)) if cook_match.group(2) else int(cook_match.group(1))
-                    total = prep_num + cook_num
-                    return f"{total} minutes"
+                    # Если есть диапазон в cook_time, берем максимум для total
+                    cook_min = int(cook_match.group(1))
+                    cook_max = int(cook_match.group(2)) if cook_match.group(2) else cook_min
+                    
+                    # Вычисляем диапазон общего времени
+                    total_min = prep_num + cook_min
+                    total_max = prep_num + cook_max
+                    
+                    if total_min == total_max:
+                        return f"{total_min} minutes"
+                    else:
+                        return f"{total_min}-{total_max} minutes"
             except (AttributeError, ValueError):
                 pass
         
