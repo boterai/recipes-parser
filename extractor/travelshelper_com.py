@@ -166,7 +166,8 @@ class TravelshelperExtractor(BaseRecipeExtractor):
         
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "2 pounds potatoes", "½ cup olive oil", "3-4 cloves garlic"
-        pattern = r'^([\d\s/.,\-–—]+)?\s*(pounds?|cups?|tablespoons?|teaspoons?|tbsps?|tsps?|lbs?|lb|oz|ounces?|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|cloves?|bunches?|sprigs?|pieces?|slices?|whole|halves?|quarters?|inch(?:es)?|servings?|packages?|cans?|jars?|bottles?|head(?:s)?)\s*(.+)'
+        # Улучшенный паттерн чтобы не захватывать одну букву как единицу
+        pattern = r'^([\d\s/.,\-–—]+)?\s*(pounds?|cups?|tablespoons?|teaspoons?|tbsps?|tsps?|lbs?|oz|ounces?|grams?|kilograms?|kg|milliliters?|liters?|ml|pinch(?:es)?|dash(?:es)?|cloves?|bunches?|sprigs?|pieces?|slices?|whole|halves?|quarters?|inch(?:es)?|servings?|packages?|cans?|jars?|bottles?|head(?:s)?)\s+(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -210,6 +211,9 @@ class TravelshelperExtractor(BaseRecipeExtractor):
         # Удаляем скобки с содержимым (дополнительные пояснения)
         name = re.sub(r'\([^)]*\)', '', name)
         name = re.sub(r'\[[^\]]*\]', '', name)
+        # Удаляем всё после точки с запятой (обычно дополнительные пояснения)
+        if ';' in name:
+            name = name.split(';')[0]
         # Удаляем всё после точки (обычно дополнительные пояснения)
         name = re.sub(r'\..*$', '', name)
         # Удаляем всё после запятой и тире (описания)
