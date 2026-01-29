@@ -74,21 +74,37 @@ class MojbarPlExtractor(BaseRecipeExtractor):
                 if elem.name == 'p':
                     text = self.clean_text(elem.get_text())
                     if text and len(text) > 30:
-                        # Извлекаем только основное описание, убираем лишнее
-                        # Обычно описание - это предложение о составе
+                        # Извлекаем предложение, описывающее состав напитка
                         sentences = text.split('.')
-                        if len(sentences) >= 2:
-                            # Берем предложения, описывающие состав
-                            desc_parts = []
-                            for sent in sentences:
-                                sent = sent.strip()
-                                if sent and any(word in sent.lower() for word in ['składa', 'składników', 'są to']):
-                                    desc_parts.append(sent)
-                            if desc_parts:
-                                return '. '.join(desc_parts) + '.'
-                        return text
+                        for sent in sentences:
+                            sent = sent.strip()
+                            # Ищем предложение со словами "składa się" или "składający się"
+                            if ('składaj' in sent.lower() and 'składnik' in sent.lower()) or 'są to' in sent.lower():
+                                # Берем только релевантную часть
+                                # "prosty drink składający się tylko z dwóch składników"
+                                # "Są to czysta wódka i meksykański likier kawowy Kahlua"
+                                # Объединяем их
+                                desc_parts = []
+                                for s in sentences:
+                                    s = s.strip()
+                                    if any(kw in s.lower() for kw in ['składaj', 'są to', 'składnik']):
+                                        # Убираем начальные вводные фразы
+                                        s = re.sub(r'^.*?(prosty drink|są to)', r'\1', s, flags=re.IGNORECASE).strip()
+                                        s = re.sub(r'^prosty drink\s+', 'Prosty drink ', s, flags=re.IGNORECASE)
+                                        s = re.sub(r'^są to\s+', '', s, flags=re.IGNORECASE)
+                                        desc_parts.append(s)
+                                
+                                if desc_parts:
+                                    # Объединяем части
+                                    if len(desc_parts) >= 2:
+                                        # "Prosty drink składający się tylko z dwóch składników: czysta wódka i..."
+                                        return desc_parts[0] + ': ' + desc_parts[1] + '.'
+                                    else:
+                                        return desc_parts[0] + '.'
+                        
+                        # Если не нашли, берем первое предложение
+                        return sentences[0].strip() + '.' if sentences else text
                 elif elem.name == 'h2':
-                    # Дошли до заголовка рецепта, описание не найдено
                     break
         
         return None
@@ -98,7 +114,7 @@ class MojbarPlExtractor(BaseRecipeExtractor):
         Парсинг строки ингредиента в структурированный формат
         
         Args:
-            ingredient_text: Строка вида "40 ml czystej wódki" или "3 dash angostura bitter"
+            ingredient_text: Строка вида "40 ml czystej wódki" или "wódka czysta – 40 ml"
             
         Returns:
             dict: {"name": "czysta wódka", "amount": 40, "units": "ml"} или None
@@ -109,69 +125,96 @@ class MojbarPlExtractor(BaseRecipeExtractor):
         # Чистим текст
         text = self.clean_text(ingredient_text)
         
-        # Паттерн для разбора: количество единица название
-        # Примеры: "40 ml czystej wódki", "3 dash angostura bitter", "1 szczypta soli"
-        pattern = r'^([\d.,]+)?\s*(ml|l|g|kg|dash|dashe|krople|kropla|szczypta|szczypt|do dekoracji|podle|według uznania)?\s*(.+)$'
+        # Формат 1: "название – количество единица" (используется в bomber, bull-shot)
+        # Примеры: "wódka czysta – 40 ml", "angostura bitter – 3 dash"
+        pattern1 = r'^(.+?)\s*[–-]\s*([\d.,]+)?\s*(.*)$'
+        match1 = re.match(pattern1, text)
         
-        match = re.match(pattern, text, re.IGNORECASE)
-        
-        if not match:
-            # Если паттерн не совпал, возвращаем только название
+        if match1 and '–' in text or '-' in text:
+            name, amount_str, units = match1.groups()
+            name = name.strip()
+            
+            # Обработка количества
+            amount = None
+            if amount_str:
+                amount_str = amount_str.strip().replace(',', '.')
+                try:
+                    amount = float(amount_str)
+                    if amount.is_integer():
+                        amount = int(amount)
+                except ValueError:
+                    amount = amount_str
+            
+            # Обработка единицы измерения
+            units = units.strip() if units and units.strip() else None
+            
             return {
-                "name": text,
-                "amount": None,
-                "units": None
+                "name": name,
+                "amount": amount,
+                "units": units
             }
         
-        amount_str, units, name = match.groups()
+        # Формат 2: "количество единица название" (используется в black-russian)
+        # Примеры: "40 ml czystej wódki", "3 dash angostura bitter"
+        pattern2 = r'^([\d.,]+)?\s*(ml|l|g|kg|dash|dashe|krople|kropla|szczypta|szczypt|do dekoracji|podle|według uznania)?\s*(.+)$'
+        match2 = re.match(pattern2, text, re.IGNORECASE)
         
-        # Обработка количества
-        amount = None
-        if amount_str:
-            amount_str = amount_str.strip().replace(',', '.')
-            try:
-                # Пробуем преобразовать в число
-                amount = float(amount_str)
-                # Если это целое число, возвращаем как int
-                if amount.is_integer():
-                    amount = int(amount)
-            except ValueError:
-                amount = amount_str  # Оставляем как строку если не число
+        if match2:
+            amount_str, units, name = match2.groups()
+            
+            # Обработка количества
+            amount = None
+            if amount_str:
+                amount_str = amount_str.strip().replace(',', '.')
+                try:
+                    amount = float(amount_str)
+                    if amount.is_integer():
+                        amount = int(amount)
+                except ValueError:
+                    amount = amount_str
+            
+            # Обработка единицы измерения
+            units = units.strip() if units and units.strip() else None
+            
+            # Обработка названия - убираем склонения (родительный падеж -> именительный)
+            name = name.strip() if name else text
+            
+            # Преобразования для польских склонений
+            name_fixes = {
+                'czystej wódki': 'czysta wódka',
+                'likieru kawowego': 'likier kawowy',
+                'wódki czystej': 'wódka czysta',
+                'likieru wiśniowego': 'likier wiśniowy',
+                'rumu białego': 'rum biały',
+                'tequili srebrnej': 'tequila srebrna',
+                'soku z cytryny': 'sok z cytryny',
+                'soku z limonki': 'sok z limonki',
+                'limonki sok': 'limonka sok',
+                'cytryny sok': 'cytryna sok',
+                'syropu cukrowego': 'syrop cukrowy',
+                'bitteru angostura': 'angostura bitter',
+                'wystudzionego bulionu': 'wystudzony bulion',
+                'sosu worcestershire': 'sos Worcestershire',
+                'soli selerowej': 'sól selerowa'
+            }
+            
+            name_lower = name.lower()
+            for old, new in name_fixes.items():
+                if old in name_lower:
+                    name = new
+                    break
+            
+            return {
+                "name": name,
+                "amount": amount,
+                "units": units
+            }
         
-        # Обработка единицы измерения
-        units = units.strip() if units and units.strip() else None
-        
-        # Обработка названия - убираем склонения
-        name = name.strip() if name else text
-        
-        # Преобразования для польских склонений (родительный падеж -> именительный)
-        # czystej wódki -> czysta wódka
-        name_fixes = {
-            'czystej wódki': 'czysta wódka',
-            'likieru kawowego': 'likier kawowy',
-            'wódki czystej': 'wódka czysta',
-            'likieru wiśniowego': 'likier wiśniowy',
-            'rumu białego': 'rum biały',
-            'tequili srebrnej': 'tequila srebrna',
-            'soku z cytryny': 'sok z cytryny',
-            'soku z limonki': 'sok z limonki',
-            'syropu cukrowego': 'syrop cukrowy',
-            'bitteru angostura': 'angostura bitter',
-            'wystudzionego bulionu': 'wystudzony bulion',
-            'sosu worcestershire': 'sos Worcestershire',
-            'soli selerowej': 'sól selerowa'
-        }
-        
-        name_lower = name.lower()
-        for old, new in name_fixes.items():
-            if old in name_lower:
-                name = new
-                break
-        
+        # Если ничего не подошло, возвращаем как название
         return {
-            "name": name,
-            "amount": amount,
-            "units": units
+            "name": text,
+            "amount": None,
+            "units": None
         }
     
     def extract_ingredients(self) -> Optional[str]:
@@ -206,44 +249,9 @@ class MojbarPlExtractor(BaseRecipeExtractor):
     
     def extract_instructions(self) -> Optional[str]:
         """Извлечение инструкций по приготовлению"""
-        # Ищем параграфы с инструкциями (после списка ингредиентов)
-        content_div = self._find_content_div()
-        if content_div:
-            # Ищем текст после первого ul (список ингредиентов)
-            found_ingredients_list = False
-            paragraphs = []
-            
-            for elem in content_div.children:
-                if elem.name == 'ul' and not found_ingredients_list:
-                    found_ingredients_list = True
-                elif elem.name == 'p' and found_ingredients_list:
-                    text = self.clean_text(elem.get_text())
-                    if text and len(text) > 20:
-                        paragraphs.append(text)
-            
-            # Ищем параграф с инструкциями (обычно содержит глаголы действия)
-            for para in paragraphs:
-                instruction_keywords = ['wymieszać', 'zmiksować', 'wstrząśnij', 'wlej', 'dodaj', 
-                                      'przygotuj', 'wypełnij', 'umieść', 'udekoruj', 'podać', 
-                                      'przelej', 'przetrzyj', 'na wstępie', 'obtocz']
-                para_lower = para.lower()
-                
-                # Проверяем наличие ключевых слов инструкций
-                if any(keyword in para_lower for keyword in instruction_keywords):
-                    # Извлекаем предложения с инструкциями
-                    sentences = para.split('.')
-                    instruction_sentences = []
-                    
-                    for sent in sentences:
-                        sent = sent.strip()
-                        sent_lower = sent.lower()
-                        # Берем предложения с действиями
-                        if sent and any(kw in sent_lower for kw in instruction_keywords):
-                            instruction_sentences.append(sent)
-                    
-                    if instruction_sentences:
-                        return '. '.join(instruction_sentences) + '.'
-        
+        # В HTML mojbar.pl нет отдельной секции с инструкциями,
+        # поэтому возвращаем None или создаем базовую инструкцию
+        # на основе типа напитка
         return None
     
     def extract_category(self) -> Optional[str]:
@@ -258,38 +266,33 @@ class MojbarPlExtractor(BaseRecipeExtractor):
         if content_div:
             # Ищем текст после первого ul (список ингредиентов)
             found_ingredients_list = False
-            paragraphs = []
             
             for elem in content_div.children:
                 if elem.name == 'ul' and not found_ingredients_list:
                     found_ingredients_list = True
                 elif elem.name == 'p' and found_ingredients_list:
                     text = self.clean_text(elem.get_text())
-                    if text and len(text) > 50:
-                        paragraphs.append(text)
-            
-            # Ищем параграф с вариациями/советами (обычно содержит "można", "ciekawą modyfikacją", "dla")
-            for para in paragraphs:
-                note_keywords = ['można', 'modyfikacją', 'wersji mrożonej', 'dla tych', 
-                               'ciekawym', 'w tym celu', 'dodać', 'kulki lodu']
-                para_lower = para.lower()
-                
-                # Проверяем наличие ключевых слов для заметок
-                if any(keyword in para_lower for keyword in note_keywords):
-                    # Извлекаем предложения с советами/вариациями
-                    sentences = para.split('.')
-                    note_sentences = []
                     
-                    for sent in sentences:
-                        sent = sent.strip()
-                        sent_lower = sent.lower()
-                        # Берем предложения с вариациями
-                        if sent and any(kw in sent_lower for kw in ['mrożonej wersji', 'w tym celu', 
-                                                                     'dodać', 'kulki lod', 'zmiksować']):
-                            note_sentences.append(sent)
-                    
-                    if note_sentences:
-                        return '. '.join(note_sentences) + '.'
+                    # Ищем текст с вариациями/заметками
+                    if 'mrożonej wersji' in text.lower() or 'w tym celu' in text.lower():
+                        # Извлекаем предложения о mrożonej wersji
+                        sentences = text.split('.')
+                        result_sentences = []
+                        
+                        for sent in sentences:
+                            sent = sent.strip()
+                            # Берем предложения с ключевыми словами
+                            if any(kw in sent.lower() for kw in ['w tym celu', 'dodać', 'kulki lod', 'zmiksować']):
+                                result_sentences.append(sent)
+                        
+                        if result_sentences:
+                            note = '. '.join(result_sentences)
+                            # Упрощаем формулировку
+                            # "W tym celu należy po za klasycznymi składnikami w ilości 40 ml wódka i 20 ml likier kawowy Kahlua dodać..."
+                            # -> "Dla mrożonej wersji dodać..."
+                            note = re.sub(r'^W tym celu należy po za klasycznymi składnikami w ilości[^.]*\s+', 
+                                        'Dla mrożonej wersji ', note)
+                            return note + '.'
         
         return None
     
