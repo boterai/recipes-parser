@@ -33,7 +33,16 @@ class DrinkowniaExtractor(BaseRecipeExtractor):
                 title = re.sub(r'\s*\([^)]*\)\s*$', '', title)
                 return self.clean_text(title)
         
-        # Если нет h3 "Składniki", пробуем из JSON-LD (Article)
+        # Также проверяем h2 "Składniki <название рецепта>"
+        h2_skladniki = self.soup.find('h2', string=re.compile(r'Składniki', re.I))
+        if h2_skladniki:
+            title = h2_skladniki.get_text()
+            # Убираем "Składniki" чтобы получить название
+            title = re.sub(r'^Składniki\s+', '', title, flags=re.I)
+            if title and len(title) > 3:
+                return self.clean_text(title)
+        
+        # Если нет специфичных заголовков, пробуем из JSON-LD (Article)
         json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
         
         for script in json_ld_scripts:
@@ -41,6 +50,10 @@ class DrinkowniaExtractor(BaseRecipeExtractor):
                 data = json.loads(script.string)
                 if data.get('@type') == 'Article' and data.get('headline'):
                     headline = data['headline']
+                    # Убираем "Jak zrobić" в начале
+                    headline = re.sub(r'^Jak zrobić\s+', '', headline, flags=re.I)
+                    # Убираем вопросительный знак и текст после него
+                    headline = re.sub(r'\?\s*.*$', '', headline)
                     # Убираем лишние части типа "– описание (N składniki)"
                     headline = re.sub(r'\s*–[^(]*\([^)]*\)\s*$', '', headline)
                     headline = re.sub(r'\s*–.*$', '', headline)
@@ -52,6 +65,8 @@ class DrinkowniaExtractor(BaseRecipeExtractor):
         og_title = self.soup.find('meta', property='og:title')
         if og_title and og_title.get('content'):
             title = og_title['content']
+            title = re.sub(r'^Jak zrobić\s+', '', title, flags=re.I)
+            title = re.sub(r'\?\s*.*$', '', title)
             title = re.sub(r'\s*–[^(]*\([^)]*\)\s*$', '', title)
             title = re.sub(r'\s*–.*$', '', title)
             return self.clean_text(title)
@@ -60,6 +75,8 @@ class DrinkowniaExtractor(BaseRecipeExtractor):
         title_tag = self.soup.find('title')
         if title_tag:
             title = title_tag.get_text()
+            title = re.sub(r'^Jak zrobić\s+', '', title, flags=re.I)
+            title = re.sub(r'\?\s*.*$', '', title)
             title = re.sub(r'\s*–[^(]*\([^)]*\)\s*$', '', title)
             title = re.sub(r'\s*–.*$', '', title)
             return self.clean_text(title)
@@ -78,10 +95,12 @@ class DrinkowniaExtractor(BaseRecipeExtractor):
                 p = h2.find_next('p')
                 if p and p.find_previous('h3') != h3_skladniki:
                     desc_text = p.get_text(strip=True)
-                    # Берем только первое предложение
-                    first_sentence = desc_text.split('.')[0]
-                    if first_sentence and len(first_sentence) > 10:
-                        return self.clean_text(first_sentence + '.')
+                    # Берем первые два предложения если доступны
+                    sentences = desc_text.split('.')
+                    if len(sentences) >= 2:
+                        return self.clean_text('. '.join(sentences[:2]) + '.')
+                    elif sentences and len(sentences[0]) > 10:
+                        return self.clean_text(sentences[0] + '.')
         
         # Пробуем из JSON-LD (Article)
         json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
