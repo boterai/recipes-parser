@@ -30,7 +30,7 @@ def create_issues(issue_prefix: str = "Создать парсер "):
     создание issues для новых парсеров
     """
     workflow = CopilotWorkflow()
-    workflow.check_review_requested_prs(issue_prefix=issue_prefix)
+    workflow.create_issues_for_parsers(issue_prefix=issue_prefix)
 
 def merge_completed_prs():
     """
@@ -220,14 +220,14 @@ if __name__ == "__main__":
         '--ports',
         type=int,
         nargs='+',
-        default=[9222],
+        default=[9222, 9223, 9224],
         help='Список портов Chrome (по умолчанию: 9222)'
     )
 
     parser.add_argument(
         '--target-sites-count',
         type=int,
-        default=200,
+        default=300,
         help='Минимальное количество необработанных, те уже собранных сайтов (по умолчанию: 150)'
     )
 

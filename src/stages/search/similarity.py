@@ -208,7 +208,12 @@ class SimilaritySearcher:
                 tasks.append(asyncio.create_task(run_one(sub_ids, sem)))
 
             for done in asyncio.as_completed(tasks):
-                sub_ids, batch_hits = await done
+                try:
+                    sub_ids, batch_hits = await done
+                except Exception as e:
+                    logger.error(f"Error in async task: {e}")
+                    continue
+                
                 if not batch_hits:
                     continue
 
@@ -379,10 +384,10 @@ if __name__ == "__main__":
     while True:
         ss = SimilaritySearcher(params=ClusterParams(
                     limit=30,
-                    score_threshold=0.98,
+                    score_threshold=0.95,
                     scroll_batch=1000,
                     query_batch=128
-                ), build_type="ingredients") # "image", "full", "ingredients"
+                ), build_type="image") # "image", "full", "ingredients"
         try:
             ss.load_dsu_state()
             clusters = asyncio.run(ss.build_clusters_async())

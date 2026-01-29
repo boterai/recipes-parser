@@ -6,9 +6,8 @@ import os
 import sys
 import logging
 from pathlib import Path
-from typing import List
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 from src.repositories.site import SiteRepository
 
@@ -36,11 +35,8 @@ class PromptGenerator:
         self.template_file = Path(template_file)
         self.output_dir = Path(output_dir)
         self.site_repository = SiteRepository()
-        
-        # Создаем директорию для промптов если не существует
-        self.output_dir.mkdir(exist_ok=True)
     
-    def scan_preprocessed_folders(self) -> List[str]:
+    def scan_preprocessed_folders(self) -> list[str]:
         """
         Сканирует папку preprocessed и получает имена всех подпапок
         
@@ -107,6 +103,10 @@ class PromptGenerator:
         Returns:
             True если успешно сохранено
         """
+        # создаем директорию если не существует
+        if not self.output_dir.exists():
+            self.output_dir.mkdir(parents=True)
+
         output_file = self.output_dir / f"{module_name}_prompt.md"
         
         try:
@@ -138,10 +138,7 @@ class PromptGenerator:
             logger.warning("Не найдено модулей для генерации")
             return {}
         
-        logger.info(f"\n{'='*70}")
-        logger.info(f"ГЕНЕРАЦИЯ ПРОМПТОВ ДЛЯ {len(module_names)} МОДУЛЕЙ")
-        logger.info(f"{'='*70}\n")
-        
+        logger.info(f"Начинаем генерацию промптов для {len(module_names)} модулей")
         prompt_dict = {}
         
         for idx, module_name in enumerate(module_names, 1):
@@ -157,21 +154,16 @@ class PromptGenerator:
             logger.info(f"  Найден сайт: {site.base_url}")
             
             # Генерируем промпт
-            prompt = self.generate_prompt(module_name, site.base_url, template)
+            prompt_dict[module_name] = self.generate_prompt(module_name, site.base_url, template)
             
-            # Сохраняем
-            if save_to_files:
+        # Сохраняем
+        if save_to_files:
+            for module_name, prompt in prompt_dict.items():
                 if self.save_prompt(module_name, prompt):
-                    prompt_dict[module_name] = prompt
-                else:
-                    logger.error(f"  ✗ Ошибка сохранения промпта для {module_name}")
-            else:
-                prompt_dict[module_name] = prompt
-        
-        logger.info(f"\n{'='*70}")
+                    logger.info(f"  ✓ Промпт для '{module_name}' сохранен")
+
         logger.info(f"ИТОГО: {len(prompt_dict)}/{len(module_names)} промптов создано")
         logger.info(f"Директория: {self.output_dir.absolute()}")
-        logger.info(f"{'='*70}\n")
         
         return prompt_dict
 
@@ -181,10 +173,10 @@ def main():
     generator = PromptGenerator()
     
     try:
-        count = generator.generate_all_prompts()
+        generated_prompts = generator.generate_all_prompts()
         
-        if count > 0:
-            logger.info(f"✓ Успешно сгенерировано {count} промптов")
+        if len(generated_prompts) > 0:
+            logger.info(f"✓ Успешно сгенерировано {len(generated_prompts)} промптов")
         else:
             logger.warning("Ни одного промпта не было создано")
     
