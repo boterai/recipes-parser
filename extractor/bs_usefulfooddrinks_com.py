@@ -419,10 +419,22 @@ class BsUsefulfooddrinksComExtractor(BaseRecipeExtractor):
                     'Glavno jelo': 'Main Course',
                     'Salate': 'Salad',
                     'Supe': 'Soup',
-                    'Hleb': 'Bread',
-                    'Drinks': 'Drinks'
+                    'Drinks': 'Drinks',
+                    'Najbolji recepti': 'Best Recipes',  # Может содержать разные типы
                 }
-                return category_map.get(category, category)
+                mapped_category = category_map.get(category, category)
+                
+                # Если категория общая (Najbolji recepti), пытаемся определить по заголовку
+                if mapped_category in ['Best Recipes', 'Popularni recepti', 'Zdrava hrana']:
+                    title = self.extract_dish_name()
+                    if title:
+                        title_lower = title.lower()
+                        if any(word in title_lower for word in ['hleb', 'bread', 'soda bread']):
+                            return 'Bread'
+                        elif any(word in title_lower for word in ['torta', 'kolač', 'cake']):
+                            return 'Dessert'
+                
+                return mapped_category
         
         # Альтернативно ищем в meta
         meta_section = self.soup.find('meta', itemprop='articleSection')
