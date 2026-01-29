@@ -196,9 +196,9 @@ class DomacikolaciNetExtractor(BaseRecipeExtractor):
         text = self.clean_text(ingredient_text)
         
         # Паттерн для извлечения количества, единицы и названия
-        # Примеры: "500 ml šlaga", "2 srednje tikvice", "300 g glatkog brašna"
-        # Паттерн должен учитывать различные единицы измерения
-        pattern = r'^([\d\s/.,]+)?\s*(ml|grama?|gram|grams?|kg|l|srednje?|velike?|male?|kom?|kašik|kašičica|g)?\s*(.+)'
+        # Примеры: "500 ml šlaga", "2 srednje tikvice", "300 g glatkog brašna", "2 srednje velike tikvice"
+        # Паттерн должен учитывать различные единицы измерения и сложные единицы (srednje velike)
+        pattern = r'^([\d\s/.,]+)?\s*(ml|grama?|gram|grams?|kg|l|srednje\s+velike?|srednje?|velike?|male?|kom?|kašik|kašičica|g)?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -527,9 +527,9 @@ class DomacikolaciNetExtractor(BaseRecipeExtractor):
             Словарь с данными рецепта
         """
         dish_name = self.extract_dish_name()
-        # Capitalize first letter to match reference format
-        if dish_name:
-            dish_name = dish_name[0].upper() + dish_name[1:] if len(dish_name) > 1 else dish_name.upper()
+        # Capitalize first letter to match reference format, unless it starts with lowercase in reference
+        # (like "domaći sladoled")
+        # We'll keep the extracted capitalization as-is since it comes from the HTML
         
         return {
             "dish_name": dish_name,
