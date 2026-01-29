@@ -100,7 +100,8 @@ class TaffelExtractor(BaseRecipeExtractor):
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "50 g smör", "3 ägg", "1 dl mjölk", "2 1/2 dl socker"
         # Шведские единицы: g, kg, ml, dl, l, msk (matsked), tsk (tesked), krm (kryddmått), st (styck), stång, nypa
-        pattern = r'^([\d\s/.,+-]+)?\s*(g|kg|ml|dl|l|msk|tsk|krm|st|styck|stång|stänger|nypa|matsked|tesked|kryddmått)?\s*(.+)'
+        # Важно: используем границы слов \b чтобы избежать ложных срабатываний
+        pattern = r'^([\d\s/.,+-]+)?\s*(g(?!\w)|kg(?!\w)|ml(?!\w)|dl(?!\w)|l(?!\w)|msk(?!\w)|tsk(?!\w)|krm(?!\w)|st(?!\w)|styck|matsked|tesked|kryddmått|stång|stänger|nypa)?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -171,9 +172,11 @@ class TaffelExtractor(BaseRecipeExtractor):
             
             for item in items:
                 # Пропускаем заголовки разделов (например, "Till servering:")
+                # и все элементы после них (обычно это дополнительные опциональные ингредиенты)
                 item_classes = item.get('class', [])
                 if 'recept_ingrediens_mellanrubrik' in item_classes:
-                    continue
+                    # Встретили заголовок раздела - прекращаем парсинг
+                    break
                 
                 # Извлекаем текст ингредиента
                 # Иногда текст в <span class="Ingredients"> с <br/> тегами внутри
