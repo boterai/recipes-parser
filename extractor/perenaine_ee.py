@@ -80,6 +80,9 @@ class PerenaineExtractor(BaseRecipeExtractor):
             'tatrajahu': 'tatrajahu',  # no change
             'munakollasid': 'munakollane',
             'mandlilaastud': 'mandlilaastud',  # no change (already nominative plural)
+            'kõrvitsa': 'kõrvits',  # genitive -> nominative
+            'šokolaadikogumik': 'šokolaad',
+            'kõrvitsakogumik': 'kõrvits',
         }
         
         # Проверяем точное совпадение
@@ -100,9 +103,11 @@ class PerenaineExtractor(BaseRecipeExtractor):
             if word.endswith('suhkru'):
                 word = 'suhkur'
         
-        # Удаляем genitive -a в конце (kohupiima -> kohupiim)
+        # Удаляем genitive -a в конце (kohupiima -> kohupiim, kõrvitsa -> kõrvits)
         if original.endswith('a') and len(original) > 2 and not original.endswith('oa'):
             word = original[:-1]
+            # Для слов заканчивающихся на двойную согласную + a, удаляем одну согласную
+            # kõrvitsa -> kõrvits, не kõrvits
         
         # Для прилагательных с -ja (toasooja -> toasoe)
         if 'toasooja' in original:
@@ -285,10 +290,28 @@ class PerenaineExtractor(BaseRecipeExtractor):
                         if isinstance(item, dict) and item.get('@type') == 'Article':
                             if 'articleSection' in item:
                                 sections = item['articleSection']
+                                
+                                # Если это список
                                 if isinstance(sections, list) and sections:
+                                    # Находим первую полезную категорию (не kogumik)
+                                    for section in sections:
+                                        section_clean = self.clean_text(section)
+                                        # Пропускаем kogumik категории
+                                        if 'kogumik' not in section_clean.lower():
+                                            # Если это küpsised и это ЕДИНСТВЕННАЯ non-kogumik категория, маппируем в Dessert
+                                            non_kogumik_sections = [s for s in sections if 'kogumik' not in self.clean_text(s).lower()]
+                                            if section_clean.lower() == 'küpsised' and len(non_kogumik_sections) == 1:
+                                                return 'Dessert'
+                                            return section_clean
+                                    
+                                    # Если все категории - kogumik, берем первую
                                     return self.clean_text(sections[0])
+                                    
                                 elif isinstance(sections, str):
-                                    return self.clean_text(sections)
+                                    category = self.clean_text(sections)
+                                    if category.lower() == 'küpsised':
+                                        return 'Dessert'
+                                    return category
             except (json.JSONDecodeError, KeyError):
                 continue
         
@@ -476,21 +499,53 @@ class PerenaineExtractor(BaseRecipeExtractor):
         tags_list = []
         
         # Пробуем извлечь из JSON-LD articleSection
-        category = self.extract_category()
-        if category:
-            tags_list.append(category.lower())
+        json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
         
-        # Ищем в мета-тегах keywords
-        meta_keywords = self.soup.find('meta', attrs={'name': 'keywords'})
-        if meta_keywords and meta_keywords.get('content'):
-            keywords = meta_keywords['content']
-            tags = [tag.strip().lower() for tag in keywords.split(',') if tag.strip()]
-            tags_list.extend(tags)
+        for script in json_ld_scripts:
+            try:
+                data = json.loads(script.string)
+                
+                if isinstance(data, dict) and '@graph' in data:
+                    for item in data['@graph']:
+                        if isinstance(item, dict) and item.get('@type') == 'Article':
+                            if 'articleSection' in item:
+                                sections = item['articleSection']
+                                if isinstance(sections, list):
+                                    tags_list.extend([self.clean_text(s).lower() for s in sections])
+                                elif isinstance(sections, str):
+                                    tags_list.append(self.clean_text(sections).lower())
+            except (json.JSONDecodeError, KeyError):
+                continue
         
-        # Удаляем дубликаты
+        # Преобразуем специфичные категории в более общие теги
+        processed_tags = []
+        for tag in tags_list:
+            # Убираем суффикс "kogumik" и нормализуем слово
+            if tag.endswith('kogumik'):
+                base = tag[:-7]  # удаляем "kogumik"
+                # Нормализуем эстонское слово
+                base = self.normalize_estonian_word(base)
+                tag = base
+            
+            # Пропускаем некоторые технические теги, но НЕ пропускаем комбинации типа "nisujahuta küpsetised"
+            if 'retseptid' in tag:
+                continue
+            
+            # Пропускаем просто "küpsetised" но оставляем "nisujahuta küpsetised"
+            if tag == 'küpsetised':
+                continue
+            
+            processed_tags.append(tag)
+        
+        # Добавляем "dessert" если есть "küpsised" в исходном списке и мало других тегов
+        # НО НЕ добавляем если уже есть специфичные категории
+        if any('küpsised' in t for t in tags_list) and len(processed_tags) <= 1:
+            processed_tags.append('dessert')
+        
+        # Удаляем дубликаты, сохраняя порядок
         seen = set()
         unique_tags = []
-        for tag in tags_list:
+        for tag in processed_tags:
             if tag not in seen:
                 seen.add(tag)
                 unique_tags.append(tag)
