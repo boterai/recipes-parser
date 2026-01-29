@@ -15,6 +15,59 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class MomLovesBakingExtractor(BaseRecipeExtractor):
     """Экстрактор для momlovesbaking.com"""
     
+    def __init__(self, html_path: str):
+        """
+        Args:
+            html_path: Путь к HTML файлу
+        """
+        super().__init__(html_path)
+        self._json_ld_recipe_cache = None  # Кэш для JSON-LD данных
+    
+    @staticmethod
+    def convert_fractions_to_decimal(text: str) -> str:
+        """
+        Конвертирует Unicode дроби в десятичные числа
+        Корректно обрабатывает смешанные числа (например, "1½" -> "1.5")
+        """
+        if not text:
+            return text
+        
+        # Маппинг дробей
+        fraction_map = {
+            '½': ' 0.5', '¼': ' 0.25', '¾': ' 0.75',
+            '⅓': ' 0.33', '⅔': ' 0.67', '⅛': ' 0.125',
+            '⅜': ' 0.375', '⅝': ' 0.625', '⅞': ' 0.875'
+        }
+        
+        # Заменяем каждую дробь на пробел + десятичное число
+        # Пробел нужен чтобы "1½" превратилось в "1 0.5", а не "10.5"
+        for fraction, decimal in fraction_map.items():
+            text = text.replace(fraction, decimal)
+        
+        # Если получили несколько чисел через пробел, суммируем их
+        parts = text.split()
+        try:
+            total = sum(float(p) for p in parts if p.replace('.', '').replace('-', '').isdigit())
+            return str(total) if total != 0 else text
+        except (ValueError, AttributeError):
+            return text
+    
+    @staticmethod
+    def parse_number(text: str) -> any:
+        """
+        Парсит текст в число (int или float)
+        """
+        if not text:
+            return None
+        
+        try:
+            # Пытаемся преобразовать в float
+            num = float(text)
+            # Если это целое число, возвращаем int
+            return int(num) if num.is_integer() else num
+        except (ValueError, AttributeError):
+            return text
+    
     @staticmethod
     def parse_iso_duration(duration: str) -> Optional[str]:
         """
@@ -54,7 +107,11 @@ class MomLovesBakingExtractor(BaseRecipeExtractor):
         return " ".join(parts) if parts else None
     
     def get_json_ld_recipe(self) -> Optional[dict]:
-        """Извлечение данных рецепта из JSON-LD"""
+        """Извлечение данных рецепта из JSON-LD (с кэшированием)"""
+        # Если уже есть в кэше, возвращаем
+        if self._json_ld_recipe_cache is not None:
+            return self._json_ld_recipe_cache if self._json_ld_recipe_cache != {} else None
+        
         json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
         
         for script in json_ld_scripts:
@@ -72,19 +129,24 @@ class MomLovesBakingExtractor(BaseRecipeExtractor):
                 if isinstance(data, list):
                     for item in data:
                         if is_recipe(item):
+                            self._json_ld_recipe_cache = item
                             return item
                 elif isinstance(data, dict):
                     if is_recipe(data):
+                        self._json_ld_recipe_cache = data
                         return data
                     # Проверяем @graph
                     if '@graph' in data:
                         for item in data['@graph']:
                             if is_recipe(item):
+                                self._json_ld_recipe_cache = item
                                 return item
                                 
             except (json.JSONDecodeError, KeyError):
                 continue
         
+        # Сохраняем пустой dict в кэш чтобы не искать повторно
+        self._json_ld_recipe_cache = {}
         return None
     
     def extract_dish_name(self) -> Optional[str]:
@@ -163,14 +225,9 @@ class MomLovesBakingExtractor(BaseRecipeExtractor):
                         
                         if amount_elem:
                             amount_text = self.clean_text(amount_elem.get_text())
-                            # Конвертируем дроби
-                            amount_text = amount_text.replace('½', '0.5').replace('¼', '0.25').replace('¾', '0.75')
-                            amount_text = amount_text.replace('⅓', '0.33').replace('⅔', '0.67')
-                            amount_text = amount_text.replace('⅛', '0.125').replace('⅜', '0.375').replace('⅝', '0.625').replace('⅞', '0.875')
-                            try:
-                                ingredient["amount"] = float(amount_text) if '.' in amount_text else int(amount_text)
-                            except ValueError:
-                                ingredient["amount"] = amount_text
+                            # Конвертируем дроби используя общий метод
+                            amount_text = self.convert_fractions_to_decimal(amount_text)
+                            ingredient["amount"] = self.parse_number(amount_text)
                         
                         if unit_elem:
                             ingredient["unit"] = self.clean_text(unit_elem.get_text())
@@ -198,7 +255,8 @@ class MomLovesBakingExtractor(BaseRecipeExtractor):
         text = self.clean_text(text)
         
         # Простой паттерн: количество единица название
-        pattern = r'^([\d\s/.,½¼¾⅓⅔]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|g|milliliters?|ml|very large|large|medium|small)?\s*(.+)$'
+        # Исключаем size descriptors из units (large, medium, small, etc.)
+        pattern = r'^([\d\s/.,½¼¾⅓⅔]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|g|milliliters?|ml)?\s*(.+)$'
         match = re.match(pattern, text, re.IGNORECASE)
         
         if match:
@@ -206,14 +264,8 @@ class MomLovesBakingExtractor(BaseRecipeExtractor):
             
             amount = None
             if amount_str:
-                amount_str = amount_str.strip()
-                # Конвертируем дроби
-                amount_str = amount_str.replace('½', '0.5').replace('¼', '0.25').replace('¾', '0.75')
-                amount_str = amount_str.replace('⅓', '0.33').replace('⅔', '0.67')
-                try:
-                    amount = float(amount_str) if '.' in amount_str else int(amount_str)
-                except ValueError:
-                    amount = amount_str
+                amount_str = self.convert_fractions_to_decimal(amount_str.strip())
+                amount = self.parse_number(amount_str)
             
             return {
                 "name": self.clean_text(name) if name else text,
@@ -275,8 +327,8 @@ class MomLovesBakingExtractor(BaseRecipeExtractor):
                         text_div = item.find('div', class_='wprm-recipe-instruction-text')
                         if text_div:
                             step_text = self.clean_text(text_div.get_text())
-                            # Пропускаем примечания в скобках в конце
-                            if step_text and not step_text.startswith('('):
+                            # Пропускаем примечания, которые полностью в скобках
+                            if step_text and not (step_text.startswith('(') and step_text.endswith(')')):
                                 steps.append(step_text)
         
         return ' '.join(steps) if steps else None
@@ -323,8 +375,8 @@ class MomLovesBakingExtractor(BaseRecipeExtractor):
                 # Извлекаем только число
                 minutes_match = re.search(r'(\d+)', minutes_text)
                 if minutes_match:
-                    minutes = minutes_match.group(1)
-                    return f"{minutes} minutes"
+                    minutes = int(minutes_match.group(1))
+                    return f"{minutes} minute" + ("s" if minutes != 1 else "")
         
         return None
     
@@ -430,7 +482,7 @@ class MomLovesBakingExtractor(BaseRecipeExtractor):
                     tags.append(tag_name)
             
             if tags:
-                # Возвращаем первые несколько тегов
+                # Возвращаем первые 10 тегов (ограничение для предотвращения избыточности)
                 return ', '.join(tags[:10])
         
         # Пробуем JSON-LD
