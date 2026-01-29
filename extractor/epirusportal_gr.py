@@ -113,8 +113,11 @@ class EpirusportalExtractor(BaseRecipeExtractor):
             name = re.sub(r'\([^)]*\)', '', name)
             # Удаляем фразы "to taste", "as needed" и греческие эквиваленты
             name = re.sub(r'\b(to taste|as needed|or more|if needed|optional|for garnish)\b', '', name, flags=re.IGNORECASE)
-            # Удаляем "από τις...", "ψιλοκομμένο", "τριμμένο" и подобные описания
-            name = re.sub(r'\s+(από τις|από τη|ψιλοκομμένο|τριμμένο|φρεσκοτριμμένο).*$', '', name, flags=re.IGNORECASE)
+            # Удаляем описательные префиксы (но не всё после них)
+            # Например: "από τις Ψαραγορές Blue Island" -> удаляется, "ψιλοκομμένο" -> удаляется
+            name = re.sub(r'\s+από τις\s+.*$', '', name, flags=re.IGNORECASE)
+            name = re.sub(r'\s+από τη\s+.*$', '', name, flags=re.IGNORECASE)
+            name = re.sub(r'\s+(ψιλοκομμένο|τριμμένο|φρεσκοτριμμένο)\b', '', name, flags=re.IGNORECASE)
             # Удаляем лишние пробелы и запятые
             name = re.sub(r'[,;]+$', '', name)
             name = re.sub(r'\s+', ' ', name).strip()
@@ -132,18 +135,17 @@ class EpirusportalExtractor(BaseRecipeExtractor):
             name = clean_ingredient_name(name.strip())
             
             # Нормализуем units
-            if units.lower() in ['γρ.', 'γρ', 'γραμμάρια', 'γραμμάριο', 'grams']:
+            units_lower = units.lower()
+            if units_lower in ['γρ.', 'γρ', 'γραμμάρια', 'γραμμάριο', 'grams', 'gram']:
                 units = 'g'
-            elif units.lower() in ['λίτρο', 'λίτρα']:
+            elif units_lower in ['λίτρο', 'λίτρα']:
                 units = 'l'
-            elif units.lower() in ['κ.γ.', 'teaspoon']:
+            elif units_lower in ['κ.γ.', 'teaspoon', 'teaspoons']:
                 units = 'teaspoon'
-            elif units.lower() in ['κ.σ.', 'tablespoons']:
+            elif units_lower in ['κ.σ.', 'tablespoon', 'tablespoons']:
                 units = 'tablespoons'
-            elif units.lower() == 'pieces':
+            elif units_lower in ['pieces', 'piece']:
                 units = 'pieces'
-            elif units.lower() == 'piece':
-                units = 'piece'
             
             return {
                 "name": name,
@@ -170,8 +172,8 @@ class EpirusportalExtractor(BaseRecipeExtractor):
             }
         
         # Паттерн 3: Количество + описательная единица + название
-        # "1 µεγάλο κρεµµύδι" -> amount="1", units="μεγάλο", name="κρεµµύδι"
-        pattern3 = r'^([\d\s/.,]+)\s+(µεγάλο|μεγάλο|μικρό|μικρό|μεσαίο|μεσαίου)\s+(.+)$'
+        # "1 μεγάλο κρεμμύδι" -> amount="1", units="μεγάλο", name="κρεμμύδι"
+        pattern3 = r'^([\d\s/.,]+)\s+(μεγάλο|μικρό|μεσαίο|μεσαίου)\s+(.+)$'
         
         match3 = re.match(pattern3, text, re.IGNORECASE)
         if match3:
@@ -180,7 +182,7 @@ class EpirusportalExtractor(BaseRecipeExtractor):
             name = clean_ingredient_name(name.strip())
             
             # Нормализуем описательные units
-            if units.lower() in ['µεγάλο', 'μεγάλο']:
+            if units.lower() == 'μεγάλο':
                 units = 'μεγάλο'
             elif units.lower() in ['μεσαίο', 'μεσαίου']:
                 units = 'medium'
@@ -249,7 +251,9 @@ class EpirusportalExtractor(BaseRecipeExtractor):
             if found_bullets and text.startswith('•'):
                 # Проверяем, содержит ли ингредиент "και" (and) для разделения
                 # Например: "Αλάτι και πιπέρι" -> ["Αλάτι", "πιπέρι"]
-                if ' και ' in text and not any(word in text.lower() for word in ['κουταλι', 'σούπας', 'γλυκού']):
+                # Избегаем разделения составных единиц типа "κουταλιές σούπας"
+                has_compound_unit = any(word in text.lower() for word in ['κουταλιές σούπας', 'κουταλάκι του γλυκού'])
+                if ' και ' in text and not has_compound_unit:
                     # Разделяем на части
                     parts = text.split(' και ')
                     for part in parts:
@@ -278,7 +282,7 @@ class EpirusportalExtractor(BaseRecipeExtractor):
                     if i + 1 < len(paragraphs):
                         ing_p = paragraphs[i + 1]
                         for content in ing_p.stripped_strings:
-                            if not content or content.startswith('Для'):
+                            if not content:
                                 continue
                             
                             parsed = self.parse_ingredient(content)
@@ -292,7 +296,7 @@ class EpirusportalExtractor(BaseRecipeExtractor):
                             # Проверяем, не является ли это началом инструкций
                             if 'ΕΚΤΕΛΕ' not in next_text.upper() and 'ΥΛΙΚΑ' not in next_text.upper():
                                 for content in next_p.stripped_strings:
-                                    if not content or content.startswith('Για'):
+                                    if not content:
                                         continue
                                     if ':' in content and 'Για' in content:  # Подзаголовок
                                         continue
@@ -321,7 +325,7 @@ class EpirusportalExtractor(BaseRecipeExtractor):
                         # Проверяем, не является ли это началом инструкций
                         if 'ΕΚΤΕΛΕ' not in next_text.upper():
                             for content in next_p.stripped_strings:
-                                if not content or content.startswith('Для'):
+                                if not content:
                                     continue
                                 if 'Για τη' in content and ':' in content:
                                     continue
@@ -355,7 +359,7 @@ class EpirusportalExtractor(BaseRecipeExtractor):
             text = p.get_text(strip=True)
             
             # Проверяем, является ли это заголовком секции инструкций
-            if text.upper() == 'ΕΚΤΕΛΕΣΗ' or text.upper() == 'ΕΚΤΕΛΕΣΗ' or 'ΕΚΤΕΛΕ' in text.upper():
+            if 'ΕΚΤΕΛΕ' in text.upper() or 'ΕΚΤΕΛΕΣΗ' in text.upper():
                 found_instructions_section = True
                 continue
             
@@ -580,7 +584,7 @@ def main():
         process_directory(EpirusportalExtractor, str(preprocessed_dir))
     else:
         print(f"Директория не найдена: {preprocessed_dir}")
-        print("Создайте директорию preprocessed/epirusportal_gr с HTML файлами")
+        print("Необходимо создать директорию preprocessed/epirusportal_gr с HTML файлами")
 
 
 if __name__ == "__main__":
