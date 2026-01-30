@@ -136,6 +136,88 @@ class ReceptmuvesHuExtractor(BaseRecipeExtractor):
         
         return None
     
+    def _extract_from_summary(self) -> Optional[tuple]:
+        """Извлечение данных из summary div (для страниц поиска/списков)"""
+        # Ищем div с id начинающимся на "summary"
+        summary = self.soup.find('div', id=lambda x: x and x.startswith('summary'))
+        if not summary:
+            return None
+        
+        # Ищем внутренний div с текстом
+        inner_div = summary.find('div')
+        if not inner_div:
+            return None
+        
+        text = inner_div.get_text()
+        text = self.clean_text(text)
+        
+        if not text:
+            return None
+        
+        # Текст имеет формат: "описание...НАЗВАНИЕ РЕЦЕПТА X személyreингредиент1ингредиент2...1. шаг12. шаг2..."
+        # Найдем начало ингредиентов (после "személyre")
+        ingredients = []
+        instructions_text = None
+        
+        # Ищем паттерн "X személyre" чтобы найти начало списка ингредиентов
+        match = re.search(r'\d+\s+személyre', text, re.IGNORECASE)
+        if match:
+            # Все после "személyre" содержит ингредиенты и инструкции
+            after_servings = text[match.end():]
+            
+            # Ищем первую инструкцию (начинается с "1.")
+            inst_match = re.search(r'1\.\s+', after_servings)
+            if inst_match:
+                # Ингредиенты - все между "személyre" и "1."
+                ingredients_text = after_servings[:inst_match.start()]
+                instructions_text = after_servings[inst_match.start():]
+                
+                # Парсим ингредиенты из текста
+                # Паттерн: "125 g finomliszt125 g teljes..." - нужно разбить
+                # Ищем все паттерны вида "число единица название"
+                ing_pattern = r'(\d+(?:[.,]\d+)?)\s*(g|ml|l|kg|dkg|teáskanál|evőkanál|csapott teáskanál|púpozott teáskanál|csészé?|kanál|csepp|csomag|db|darab|gerezd|szem|csipet)\s+([^0-9]+?)(?=\d+\s*(?:g|ml|l|kg|teáskanál|evőkanál|csapott|csészé?|kanál|csepp|csomag|db|darab|gerezd|szem|csipet)|$)'
+                
+                for match in re.finditer(ing_pattern, ingredients_text, re.IGNORECASE):
+                    amount_str, unit, name = match.groups()
+                    
+                    # Очистка названия
+                    name = re.sub(r'\([^)]*\)', '', name)
+                    name = self.clean_text(name).strip()
+                    
+                    if name:
+                        # Обработка количества
+                        amount_str = amount_str.replace(',', '.')
+                        try:
+                            amount = float(amount_str)
+                            if amount == int(amount):
+                                amount = int(amount)
+                        except ValueError:
+                            amount = amount_str
+                        
+                        ingredients.append({
+                            "name": name,
+                            "amount": amount,
+                            "unit": unit.strip()
+                        })
+                
+                # Парсим инструкции
+                # Формат: "1. текст2. текст3. текст..."
+                # Разбиваем по паттерну "число."
+                steps = re.split(r'(?=\d+\.\s+)', instructions_text)
+                steps = [s.strip() for s in steps if s.strip() and re.match(r'^\d+\.', s.strip())]
+                
+                if steps:
+                    # Добавляем точки если нужно и объединяем
+                    formatted_steps = []
+                    for step in steps:
+                        step = step.strip()
+                        if not step.endswith('.'):
+                            step = step + '.'
+                        formatted_steps.append(step)
+                    instructions_text = ' '.join(formatted_steps)
+        
+        return (ingredients, instructions_text)
+    
     def extract_ingredients(self) -> Optional[str]:
         """Извлечение ингредиентов"""
         ingredients = []
@@ -146,6 +228,13 @@ class ReceptmuvesHuExtractor(BaseRecipeExtractor):
             return None
         
         paragraphs = post_body.find_all('p')
+        
+        # Если параграфов нет или мало, пробуем извлечь из summary
+        if len(paragraphs) < 3:
+            summary_data = self._extract_from_summary()
+            if summary_data and summary_data[0]:
+                return json.dumps(summary_data[0], ensure_ascii=False)
+            return None
         
         # Флаг для определения, когда начались ингредиенты
         ingredients_started = False
@@ -192,6 +281,13 @@ class ReceptmuvesHuExtractor(BaseRecipeExtractor):
             return None
         
         paragraphs = post_body.find_all('p')
+        
+        # Если параграфов нет или мало, пробуем извлечь из summary
+        if len(paragraphs) < 3:
+            summary_data = self._extract_from_summary()
+            if summary_data and summary_data[1]:
+                return summary_data[1]
+            return None
         
         for p in paragraphs:
             text = p.get_text(strip=True)
