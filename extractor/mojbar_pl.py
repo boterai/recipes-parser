@@ -249,9 +249,57 @@ class MojbarPlExtractor(BaseRecipeExtractor):
     
     def extract_instructions(self) -> Optional[str]:
         """Извлечение инструкций по приготовлению"""
-        # В HTML mojbar.pl нет отдельной секции с инструкциями,
-        # поэтому возвращаем None или создаем базовую инструкцию
-        # на основе типа напитка
+        content_div = self._find_content_div()
+        if not content_div:
+            return None
+        
+        # Ищем параграфы после первого списка ингредиентов
+        found_ingredients = False
+        paragraphs = []
+        
+        for elem in content_div.children:
+            if elem.name == 'ul' and not found_ingredients:
+                found_ingredients = True
+            elif elem.name == 'p' and found_ingredients:
+                text = self.clean_text(elem.get_text())
+                if text:
+                    paragraphs.append(text)
+        
+        # Вариант 1: Ищем параграф с заголовком "Sposób przygotowania:"
+        for i, para in enumerate(paragraphs):
+            if 'Sposób przygotowania:' in para or 'sposób przygotowania:' in para.lower():
+                # Берем следующий параграф после заголовка
+                if i + 1 < len(paragraphs):
+                    return paragraphs[i + 1]
+                # Или если заголовок и текст в одном параграфе
+                instructions = para.replace('Sposób przygotowania:', '').strip()
+                if instructions:
+                    return instructions
+        
+        # Вариант 2: Ищем предложения с инструкциями в параграфах
+        # (для случаев как black-russian, где нет явного заголовка)
+        for para in paragraphs:
+            # Ищем ключевые фразы, указывающие на инструкции
+            if any(kw in para.lower() for kw in ['w tym celu należy', 'dokładnie zmiksować', 
+                                                   'wstrząśnij', 'przygotuj', 'udekoruj',
+                                                   'przetrzyj', 'przelej', 'wypełnij']):
+                # Извлекаем предложения с инструкциями
+                sentences = para.split('.')
+                instruction_sentences = []
+                
+                for sent in sentences:
+                    sent = sent.strip()
+                    # Берем предложения с глаголами действия
+                    if sent and any(kw in sent.lower() for kw in ['w tym celu należy', 'dodać', 
+                                                                    'zmiksować', 'wstrząśnij', 
+                                                                    'przygotuj', 'udekoruj',
+                                                                    'przetrzyj', 'przelej', 
+                                                                    'wypełnij', 'raczyć się']):
+                        instruction_sentences.append(sent)
+                
+                if instruction_sentences:
+                    return '. '.join(instruction_sentences) + '.'
+        
         return None
     
     def extract_category(self) -> Optional[str]:
