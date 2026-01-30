@@ -84,6 +84,7 @@ class ValidateParser:
                 reason="test_data_directory_not_found"
             )
             validation_report.details.append(system_error_result)
+            validation_report.system_errors += 1
             return validation_report
         
         if len(os.listdir(test_data_dir)) == 0:
@@ -93,6 +94,7 @@ class ValidateParser:
                 reason="test_data_directory_empty"
             )
             validation_report.details.append(sys_error)
+            validation_report.system_errors += 1
             return validation_report
         
         # запуск экстрактора для получения распарсеных данных
