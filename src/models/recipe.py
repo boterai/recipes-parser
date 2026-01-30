@@ -87,7 +87,7 @@ class Recipe(BaseModel):
         return {
             "dish_name": self.dish_name,
             "description": self.description,
-            "ingredients": self.ingredients,
+            "ingredients_with_amounts": self.ingredients_with_amounts,
             "tags": self.tags,
             "category": self.category,
             "instructions": self.instructions,

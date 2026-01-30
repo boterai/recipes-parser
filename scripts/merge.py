@@ -127,19 +127,21 @@ async def run_merge_with_same_lang(score_thresold: float,
             logger.error(f"Error merging cluster with pages {cluster}: {e}")
 
 if __name__ == "__main__":
+    from dotenv import load_dotenv # загружаем для доступа к .env переменным
+    load_dotenv()
 
     parser = argparse.ArgumentParser(description="Cluster recipes based on similarity.")
     parser.add_argument(
         "--score_threshold",
         type=float,
-        default=0.95,
-        help="Score threshold for clustering (default: 0.94)"
+        default=0.94,
+        help="Score threshold for clustering (default: 0.95)"
     )
     parser.add_argument(
         "--build_type",
         type=str,
         choices=["image", "full", "ingredients"],
-        default="image",
+        default="full",
         help="Type of build for clustering (default: full)"
     )
     args = parser.parse_args()

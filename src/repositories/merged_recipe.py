@@ -11,7 +11,7 @@ from src.models.merged_recipe import MergedRecipe
 from src.models.image import ImageORM
 from src.common.db.connection import get_db_connection
 import hashlib
-from sqlalchemy import insert, delete
+from sqlalchemy import insert
 
 logger = logging.getLogger(__name__)
 
@@ -71,6 +71,8 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
                 cook_time=merged_recipe.cook_time,
                 merge_comments=merged_recipe.merge_comments,
                 language=merged_recipe.language,
+                merge_model=merged_recipe.merge_model,
+                tags=merged_recipe.tags,
                 cluster_type=merged_recipe.cluster_type,
                 gpt_validated=merged_recipe.gpt_validated,
                 score_threshold=merged_recipe.score_threshold
@@ -161,7 +163,9 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
                     language=merged_recipe.language,
                     cluster_type=merged_recipe.cluster_type,
                     gpt_validated=merged_recipe.gpt_validated,
-                    score_threshold=merged_recipe.score_threshold
+                    score_threshold=merged_recipe.score_threshold,
+                    merge_model=merged_recipe.merge_model,
+                    tags=merged_recipe.tags,
                 )
                 new_recipes.append(merged_recipe_orm)
                 

@@ -246,12 +246,13 @@ class ClusterVariationGenerator:
     
 
     async def generate_variations(self, base: Recipe, batch_recipes: list[Recipe], variation_index: int,
-                                  validate_gpt: bool = False) -> Optional[MergedRecipe]:
+                                  validate_gpt: bool = False, target_language: Optional[str] = None) -> Optional[MergedRecipe]:
          # Генерируем 1 вариацию
         variation = await self._generate_single_variation_gpt(
             base=base,
             cluster_recipes=batch_recipes,
-            variation_index=variation_index
+            variation_index=variation_index,
+            target_language=target_language
         )
         
         if not variation:
@@ -312,7 +313,8 @@ class ClusterVariationGenerator:
                 save_to_db=save_to_db,
                 max_variations=max_combinations,
                 max_merged_recipes=max_merged_recipes,
-                image_ids=image_ids
+                image_ids=image_ids,
+                target_language=lang
             )
             merged_recipes.extend(variations)
         return merged_recipes
@@ -347,7 +349,8 @@ class ClusterVariationGenerator:
             return None
         
         for recipe in recipes:
-            recipe.fill_ingredients_with_amounts(self.page_repository)
+            if not recipe.ingredients_with_amounts: # fallback при отсутствии переведенных ингредиентов с количеством
+                recipe.fill_ingredients_with_amounts(self.page_repository)
             recipe.language  = recipe_language  # OLAP только с английскими рецептами
 
         max_combinations = self.merger.calculate_max_combinations( 
@@ -364,7 +367,8 @@ class ClusterVariationGenerator:
             save_to_db=save_to_db,
             max_variations=max_combinations,
             max_merged_recipes=max_merged_recipes,
-            image_ids=image_ids
+            image_ids=image_ids,
+            target_language=recipe_language
             )
     
     async def create_variations_from_cluster(
@@ -374,7 +378,8 @@ class ClusterVariationGenerator:
         save_to_db: bool,
         max_variations: int,
         max_merged_recipes: int,
-        image_ids: Optional[list[int]] = None
+        image_ids: Optional[list[int]] = None,
+        target_language: Optional[str] = None
     ) -> list[MergedRecipe]:
         """
         Создаёт 1-N различных вариаций рецепта на основе кластера.
@@ -452,7 +457,8 @@ class ClusterVariationGenerator:
                 base=base,
                 batch_recipes=batch_recipes,
                 variation_index=i,
-                validate_gpt=validate_gpt
+                validate_gpt=validate_gpt,
+                target_language=target_language
             ))
             i+=1
 
@@ -477,18 +483,33 @@ class ClusterVariationGenerator:
         self,
         base: Recipe,
         cluster_recipes: list[Recipe],
-        variation_index: int = 1
+        variation_index: int = 1,
+        target_language: Optional[str] = None
     ) -> Optional[MergedRecipe]:
-        """Генерирует ОДНУ вариацию рецепта через GPT из данных кластера"""
+        """Генерирует ОДНУ вариацию рецепта через GPT из данных кластера
         
-        system_prompt = """You are a professional chef creating a recipe variation.
+        Args:
+            base: Базовый рецепт
+            cluster_recipes: Список рецептов кластера
+            variation_index: Индекс вариации
+            target_language: Целевой язык для генерации (например 'en', 'ru', 'de'). 
+                           Если None - использует язык входных рецептов.
+        """
+        
+        # Определяем инструкцию по языку
+        if target_language:
+            language_instruction = f"Output the recipe in {target_language.upper()} language. Translate ALL text including dish name, ingredients, instructions, AND measurement units (g→г, cup→чашка, tbsp→ст.л., etc.)."
+        else:
+            language_instruction = "Use the SAME language as the input recipes (they are all in the same language)"
+        
+        system_prompt = f"""You are a professional chef creating a recipe variation.
 
 TASK: Create ONE EXECUTABLE recipe variation from the provided recipes.
 
 STRICT RULES - DO NOT VIOLATE:
 1. USE ONLY ingredients and techniques from the provided recipes - DO NOT invent new ones
 2. Combine elements from source recipes in a unique way
-3. Output language: Use the SAME language as the input recipes (they are all in the same language)
+3. Output language: {language_instruction}
 4. The recipe must be EXECUTABLE and REALISTIC:
    - All ingredients must be used in instructions
    - Cooking times must be realistic
@@ -511,18 +532,32 @@ FORBIDDEN:
 - Using numbered lists, bullet points, or line breaks in instructions
 
 Return ONLY valid JSON (no markdown):
-{
+{{
   "dish_name": "name",
   "description": "description",
   "ingredients_with_amounts": [
-    {"name": "ingredient name", "amount": 100, "unit": "g"},
+    {{"name": "ingredient name", "amount": 100, "unit": "g"}},
     ...
   ],
   "instructions": "Step 1. Do this. Step 2. Then do that. Step 3. Continue with... (as many steps as needed)",
+  "tags": ["tag1", "tag2", "tag3"],
   "cook_time": "X minutes or X hours X minutes" or null,
   "prep_time": "X minutes or X hours X minutes" or null,
   "source_notes": "which recipes contributed what (English, for logging)"
-}"""
+}}
+
+CRITICAL - UNITS MUST BE IN TARGET LANGUAGE:
+- For English: g, kg, ml, l, cup, tbsp, tsp, oz, lb, piece, clove, etc.
+- For Russian: г, кг, мл, л, чашка, ст.л., ч.л., шт, зубчик, etc.
+- NEVER mix languages - if target is English, ALL units must be English
+- Check each ingredient's unit field before outputting
+
+TAGS RULES:
+- Select 3-7 relevant tags that accurately describe the FINAL recipe
+- Tags should reflect: dish type, cuisine, diet restrictions, cooking method, main ingredients
+- Use lowercase English tags (e.g. "vegetarian", "quick", "italian", "baked", "chicken")
+- Only include tags that truly apply to the final combined recipe
+- If source recipes have conflicting tags (e.g. one is "vegan", another has meat), choose based on final recipe"""
 
         # Форматируем рецепты
         def format_recipe(r: Recipe, label: str) -> str:
@@ -532,9 +567,11 @@ Return ONLY valid JSON (no markdown):
                 for ing in ings[:30]
             ])
             inst = (r.instructions or "")[:3000]
+            tags_str = ", ".join(r.tags) if r.tags else "N/A"
             return f"""{label}:
 Name: {r.dish_name}
 Prep: {r.prep_time or 'N/A'}, Cook: {r.cook_time or 'N/A'}
+Tags: {tags_str}
 Ingredients: 
 {ing_list}
 Instructions: {inst}"""
@@ -547,13 +584,15 @@ Instructions: {inst}"""
         for i, r in enumerate(other_recipes):
             recipes_text += "\n\n" + format_recipe(r, f"SOURCE RECIPE {i+1}")
 
+        language_requirement = f"Output in {target_language.upper()} language" if target_language else "Output in the SAME language as the base recipe"
+        
         user_prompt = f"""Create ONE executable recipe variation (#{variation_index}) using ONLY these {len(cluster_recipes)} recipes:
 
 {recipes_text}
 
 Requirements:
 - Use ONLY ingredients and techniques from the recipes above
-- Output in the SAME language as the base recipe
+- {language_requirement}
 - Create a unique combination that is different from the sources
 - The recipe must be fully executable"""
 
@@ -579,14 +618,15 @@ Requirements:
                 description=result.get('description', ''),
                 ingredients=result.get('ingredients_with_amounts', []),
                 instructions=result.get('instructions', ''),
+                tags=result.get('tags', []),
                 cooking_time=str(result.get('cook_time') or base.cook_time or ''),
                 prep_time=str(result.get('prep_time') or base.prep_time or ''),
                 merge_comments=f"variation #{variation_index}; {result.get('source_notes', '')}",
                 language=base.language or "unknown",
                 cluster_type=self.clusters_build_type,
                 score_threshold=self.score_threshold,
-                gpt_validated=False
-
+                gpt_validated=False,
+                merge_model=GPT_MODEL_MERGE
             )
             
             return merged

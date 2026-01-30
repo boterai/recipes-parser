@@ -42,6 +42,8 @@ class MergedRecipeORM(Base):
 
     # язык объедененных рецептов, чтобы можно было фильтровать по языку (основной режим - объединение на английском)
     language = Column(String(10), default='en')  # язык рецепта (код ISO 639-1)
+    merge_model = Column(String(100))  # модель GPT использованная для создания (например 'gpt-4o-mini')
+    tags = Column(JSON)  # теги рецепта (список строк): ["vegetarian", "quick", "italian"]
     cluster_type = Column(String(50))  # "image", "full", "ingredients"
     gpt_validated = Column(String(5), default='TRUE')  # было ли
     score_threshold = Column(String(10), default='0.00')  # порог схожести для объединения
@@ -88,6 +90,8 @@ class MergedRecipeORM(Base):
             page_ids=page_ids,
             image_ids=image_ids,
             language=self.language,
+            merge_model=self.merge_model,
+            tags=self.tags,
             cluster_type=self.cluster_type,
             gpt_validated=self.gpt_validated,
             score_threshold=self.score_threshold
@@ -115,6 +119,8 @@ class MergedRecipe(BaseModel):
     merge_comments: Optional[str] = None
 
     language: Optional[str] = 'en'  # язык рецепта (код ISO 639-1)
+    merge_model: Optional[str] = None  # модель GPT использованная для создания
+    tags: Optional[list[str]] = None  # теги рецепта: ["vegetarian", "quick", "italian"]
     cluster_type: Optional[str] = None  # "image", "full", "ingredients"
     gpt_validated: Optional[bool] = True
     score_threshold: Optional[float] = 0.00
@@ -178,6 +184,8 @@ class MergedRecipe(BaseModel):
             page_ids=page_ids,
             image_ids=image_ids,
             language=orm_obj.language,
+            merge_model=orm_obj.merge_model,
+            tags=orm_obj.tags,
             cluster_type=orm_obj.cluster_type,
             gpt_validated=orm_obj.gpt_validated,
             score_threshold=orm_obj.score_threshold

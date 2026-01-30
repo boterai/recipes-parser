@@ -103,6 +103,8 @@ CREATE TABLE IF NOT EXISTS merged_recipes (
     cluster_type VARCHAR(50), -- "image", "full", "ingredients"
     gpt_validated BOOLEAN DEFAULT TRUE,
     score_threshold DECIMAL(5,2) DEFAULT 0.00,
+    merge_model VARCHAR(100),
+    tags JSON,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uq_pages_hash (pages_hash_sha256)
 ) ENGINE=InnoDB;
