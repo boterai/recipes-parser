@@ -72,6 +72,10 @@ class GreenContaminationExtractor(BaseRecipeExtractor):
         # Чистим текст
         text = self.clean_text(line).strip()
         
+        # Пропускаем очевидные заголовки секций (короткие, заканчиваются на ":")
+        if text.endswith(':') and len(text.split()) <= 3:
+            return None
+        
         # Специальный паттерн для диапазонов с единицами "1c-2c sale"
         range_pattern = r'^(\d+)([a-zA-Z]+)-(\d+)([a-zA-Z]+)\s+(.+)$'
         range_match = re.match(range_pattern, text)
@@ -137,7 +141,7 @@ class GreenContaminationExtractor(BaseRecipeExtractor):
                 "units": unit
             }
         
-        # Если нет числа в начале (например, "Pepe", "Basilico")
+        # Если нет числа в начале (например, "Pepe", "Basilico", "Olio, sale, pepe, zucchero")
         # Проверяем, не является ли это просто названием ингредиента
         if not re.match(r'^\d', text):
             # Может быть "q.b." в середине или конце
@@ -160,6 +164,9 @@ class GreenContaminationExtractor(BaseRecipeExtractor):
                     "units": "(facoltativo)"
                 }
             
+            # Если это список через запятую (например, "Olio, sale, pepe, zucchero")
+            # или содержит "o" в середине (например, "7 pomodori (tipo pelato) o 15 pomodorini")
+            # возвращаем как есть
             return {
                 "name": text,
                 "amount": None,
@@ -176,10 +183,38 @@ class GreenContaminationExtractor(BaseRecipeExtractor):
         if not article:
             return None
         
-        # Находим все параграфы
+        # Стратегия 1: Ищем H3 с "INGREDIENTI" и извлекаем все параграфы до следующего H2/H3
+        h3_ingredienti = article.find('h3', string=re.compile(r'INGREDIENTI', re.IGNORECASE))
+        if h3_ingredienti:
+            # Собираем все элементы после H3 до следующего H2 или H3
+            current = h3_ingredienti.find_next_sibling()
+            
+            while current:
+                # Останавливаемся на следующем заголовке H2 или H3
+                if current.name in ['h2', 'h3']:
+                    break
+                
+                # Обрабатываем параграфы и H4 (подсекции)
+                if current.name == 'p':
+                    text = current.get_text().strip()
+                    if text and len(text) < 150:
+                        # Пропускаем секционные заголовки (обычно заканчиваются на ":")
+                        if not text.endswith(':') or len(text.split()) > 3:
+                            parsed = self.parse_ingredient_line(text)
+                            if parsed and parsed['name']:
+                                ingredients.append(parsed)
+                elif current.name == 'h4':
+                    # H4 - это подсекция ингредиентов, продолжаем
+                    pass
+                
+                current = current.find_next_sibling()
+            
+            if ingredients:
+                return json.dumps(ingredients, ensure_ascii=False)
+        
+        # Стратегия 2: Ищем параграф с "INGREDIENTI:" (старый метод)
         paragraphs = article.find_all('p')
         
-        # Ищем параграф с "INGREDIENTI"
         ingredient_start_idx = None
         for i, p in enumerate(paragraphs):
             text = p.get_text().strip()
