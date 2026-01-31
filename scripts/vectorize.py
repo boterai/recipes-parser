@@ -90,7 +90,7 @@ async def vectorise_all_images():
     )
     await rv.vectorise_images_async(embed_function=embed_function)
 
-def translate_all_recipes(target_language: str = "en", translate_batch_size: int = 9):
+def translate_all_recipes(target_language: str = "en", translate_batch_size: int = 10):
     translator = Translator(target_language=target_language)
     asyncio.run(translator.translate_all(batch_size=translate_batch_size))
 

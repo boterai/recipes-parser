@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS recipe_en -- таблица переводов рец
     description String DEFAULT '',
     instructions String,
     ingredients Array(String), -- список ингредиентов без количества
-    ingredients_with_amounts Array(Tuple(name String, amount Float64, unit String)),
+    ingredients_with_amounts Array(Tuple(name String, amount Nullable(Float64), unit Nullable(String))),
     tags Array(String),
 
     cook_time String DEFAULT '',

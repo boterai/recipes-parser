@@ -197,24 +197,17 @@ class ClickHouseManager:
         if not recipes:
             return 0
         
+        column_names = [
+            'page_id', 'site_id', 'dish_name', 'description', 'instructions',
+            'ingredients', 'tags', 'cook_time', 'prep_time', 
+            'total_time', 'vectorised', 'category', 'ingredients_with_amounts'
+        ]
+        
         try:
             # Подготавливаем данные для вставки
             data = []
             for recipe in recipes:
-                data.append([
-                    recipe.page_id,
-                    recipe.site_id,
-                    recipe.dish_name or "",
-                    recipe.description or "",
-                    recipe.instructions or "",
-                    recipe.ingredients or [],
-                    recipe.tags or [],
-                    recipe.cook_time,
-                    recipe.prep_time,
-                    recipe.total_time,
-                    recipe.vectorised,
-                    recipe.category
-                ])
+                data.append(self._recipe_to_row(recipe))
             
             if not data:
                 logger.warning("Нет валидных рецептов для вставки")
@@ -224,11 +217,7 @@ class ClickHouseManager:
             self.client.insert(
                 table_name,
                 data,
-                column_names=[
-                    'page_id', 'site_id', 'dish_name', 'description', 'instructions',
-                    'ingredients', 'tags', 'cook_time', 'prep_time', 
-                    'total_time', 'vectorised', 'category'
-                ]
+                column_names=column_names
             )
             
             logger.info(f"✓ Вставлено {len(data)} рецептов в {table_name}")
@@ -236,9 +225,73 @@ class ClickHouseManager:
             
         except Exception as e:
             logger.error(f"Ошибка батчевой вставки рецептов: {e}")
-            import traceback
-            traceback.print_exc()
-            return 0
+            logger.info("Попытка вставки рецептов по одному...")
+            
+            # Fallback: вставляем по одному
+            return self._insert_recipes_one_by_one(recipes, table_name, column_names)
+    
+    def _recipe_to_row(self, recipe: Recipe) -> list:
+        """
+        Преобразует объект Recipe в строку для вставки в ClickHouse
+        
+        Args:
+            recipe: Объект Recipe
+            
+        Returns:
+            Список значений для вставки
+        """
+        return [
+            recipe.page_id,
+            recipe.site_id,
+            recipe.dish_name or "",
+            recipe.description or "",
+            recipe.instructions or "",
+            recipe.ingredients or [],
+            recipe.tags or [],
+            recipe.cook_time,
+            recipe.prep_time,
+            recipe.total_time,
+            recipe.vectorised,
+            recipe.category,
+            recipe.ingredients_with_amounts or []
+        ]
+    
+    def _insert_recipes_one_by_one(self, recipes: list[Recipe], table_name: str, column_names: list[str]) -> int:
+        """
+        Вставка рецептов по одному (fallback при ошибке батча)
+        
+        Args:
+            recipes: Список объектов Recipe
+            table_name: Имя таблицы
+            column_names: Список колонок
+            
+        Returns:
+            Количество успешно вставленных рецептов
+        """
+        success_count = 0
+        failed_ids = []
+        
+        for recipe in recipes:
+            try:
+                row = self._recipe_to_row(recipe)
+                self.client.insert(
+                    table_name,
+                    [row],
+                    column_names=column_names
+                )
+                success_count += 1
+            except Exception as e:
+                failed_ids.append(recipe.page_id)
+                logger.warning(f"✗ Ошибка вставки рецепта page_id={recipe.page_id}: {e}")
+                continue
+        
+        if failed_ids:
+            logger.warning(f"Не удалось вставить {len(failed_ids)} рецептов: {failed_ids[:10]}{'...' if len(failed_ids) > 10 else ''}")
+        
+        if success_count > 0:
+            logger.info(f"✓ Вставлено {success_count}/{len(recipes)} рецептов в {table_name} (поодиночке)")
+        
+        return success_count
     
     def upsert_recipes_batch(self, recipes: list, table_name: str = "recipe_en") -> int:
         """
@@ -281,7 +334,8 @@ class ClickHouseManager:
                     prep_time=str(row['prep_time']),
                     total_time=str(row['total_time']),
                     category=str(row['category']),
-                    vectorised=bool(row.get('vectorised', False))
+                    vectorised=bool(row.get('vectorised', False)),
+                    ingredients_with_amounts=list(row.get('ingredients_with_amounts', []))
                 )
                 if score_column and score_column in row:
                     recipes.append((float(row[score_column]), recipe))
@@ -325,7 +379,9 @@ class ClickHouseManager:
                     argMax(prep_time, last_updated) as prep_time,
                     argMax(total_time, last_updated) as total_time,
                     argMax(category, last_updated) as category,
-                    argMax(vectorised, last_updated) as vectorised
+                    argMax(vectorised, last_updated) as vectorised,
+                    argMax(tags, last_updated) as tags,
+                    argMax(ingredients_with_amounts, last_updated) as ingredients_with_amounts
                 FROM {table_name}
                 WHERE page_id IN %(page_ids)s
                 GROUP BY page_id
@@ -385,7 +441,8 @@ class ClickHouseManager:
                     argMax(prep_time, last_updated) as prep_time,
                     argMax(total_time, last_updated) as total_time,
                     argMax(category, last_updated) as category,
-                    argMax(vectorised, last_updated) as vectorised
+                    argMax(vectorised, last_updated) as vectorised,
+                    argMax(ingredients_with_amounts, last_updated) as ingredients_with_amounts
                 FROM {table_name}
                 WHERE site_id = %(site_id)s
                 GROUP BY page_id

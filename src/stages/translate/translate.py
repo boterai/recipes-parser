@@ -223,13 +223,21 @@ class Translator:
             system_prompt = f"""You are a professional recipe translator. Translate the following recipe JSON to {self.target_language} language.
 
 IMPORTANT:
-1. Translate completely and accurately these fields: "dish_name", "description", "ingredients", "tags", "category", "instructions", "cook_time", "prep_time", "total_time".
+1. Translate completely and accurately these fields: "dish_name", "description", "tags", "category", "ingredients_with_amounts", "instructions", "cook_time", "prep_time", "total_time".
 2. Return the result in the same valid JSON format without changing the structure or adding any comments
 3. If a field is null or empty, leave it as is
 4. Preserve all measurements, numbers, and formatting
 5. Keep the translation natural and culinary-appropriate for the target language
 6. CRITICAL: Never use double quotes (") inside string values. Remove them entirely. For example: "tofu steaks" not "tofu "steaks"", use: tofu steaks. Check Instructions and Ingredients carefully.
 7. Return ONLY valid JSON, no markdown formatting, no extra text
+8. For "ingredients_with_amounts" field (array of objects with "name", "amount", "unit"):
+   - Translate "name" (ingredient name) to the target language
+   - Translate "unit" to the target language (e.g., "г" -> "g", "ложка" -> "tbsp", "стакан" -> "cup")
+   - Convert string "amount" values to numbers: "whole" -> 1, "half" -> 0.5, "quarter" -> 0.25, "third" -> 0.33, "1/2" -> 0.5, "1/4" -> 0.25, "1/3" -> 0.33, "3/4" -> 0.75, "один" -> 1, "два" -> 2, "три" -> 3, "половина" -> 0.5, etc.
+   - If amount is already a number, keep it unchanged
+   - If amount cannot be converted to a number (e.g., "to taste", "по вкусу", "some", "немного"), use null
+   - Example: {{"name": "мука", "amount": "half", "unit": "стакан"}} -> {{"name": "flour", "amount": 0.5, "unit": "cup"}}
+   - Example: {{"name": "соль", "amount": "по вкусу", "unit": ""}} -> {{"name": "salt", "amount": null, "unit": ""}}
 """
 
             user_prompt = json.dumps(recipe_data, ensure_ascii=False)

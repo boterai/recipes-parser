@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, model_validator
 import json
 import logging
 
@@ -18,7 +18,7 @@ class Recipe(BaseModel):
     instructions: str
 
     # Structured content
-    ingredients: list[str]
+    ingredients:  Optional[list[str]] = None  # список ингредиентов без количества
     tags: Optional[list[str]] = None
     ingredients_with_amounts: Optional[list[dict]] = None  # список словарей с name и amount
 
@@ -33,6 +33,14 @@ class Recipe(BaseModel):
 
     language: Optional[str] = None  # язык рецепта (код ISO 639-1)
 
+    @model_validator(mode='after')
+    def auto_normalise(self) -> 'Recipe':
+        """Автоматическая нормализация после создания объекта"""
+        self.normalise_ingredients_with_amounts()
+        if self.ingredients_with_amounts and not self.ingredients:
+            self.ingredients = [item["name"] for item in self.ingredients_with_amounts]
+        return self
+
     def get_multivector_data(self, max_instruction_length: int = 400) -> dict:
         """Подготавливает данные для мульти-векторного эмбеддинга"""
         return {
@@ -42,6 +50,29 @@ class Recipe(BaseModel):
                 "tags": self.tags_to_str(),
                 "meta": self.get_meta_str() or ""
             }
+    
+    def amount_to_float(self, amount) -> Optional[float]:
+        """Преобразует количество в float, если возможно"""
+        try:
+            return float(amount)
+        except (ValueError, TypeError):
+            return None
+    
+    def normalise_ingredients_with_amounts(self):
+        """Нормализует ingredients_with_amounts, приводя имена к нижнему регистру и корректя типы"""
+        if not self.ingredients_with_amounts:
+            return
+        normalised_ingredients = []
+        for item in self.ingredients_with_amounts:
+            name = item.get("name", "").strip().lower()
+            amount = item.get("amount", None)
+            unit = item.get("unit", "").strip().lower() if item.get("unit") else None
+            normalised_ingredients.append({
+                "name": name,
+                "amount": self.amount_to_float(amount),
+                "unit": unit
+            })
+        self.ingredients_with_amounts = normalised_ingredients
     
     def ingredient_to_str(self, separator: str = ", ") -> str:
         """Возвращает ингредиенты в виде строки"""
@@ -82,6 +113,19 @@ class Recipe(BaseModel):
         
         return " ".join(parts)
     
+    def normalaize_instructions(self) -> str:
+        """Нормализует инструкции, убирая лишние пробелы и переносы строк"""
+        if self.instructions and '[' in self.instructions and ']' in self.instructions:
+            try:
+                steps = json.loads(self.instructions)
+                if isinstance(steps, list):
+                    cleaned_steps = [step.strip() for step in steps if isinstance(step, str)]
+                    self.instructions = " ".join(cleaned_steps).strip()
+                    return self.instructions
+            except json.JSONDecodeError:
+                pass
+        return self.instructions.strip() if self.instructions else ""
+    
     def to_dict_for_translation(self) -> dict:
         """Возвращает словарь с полями рецепта для перевода"""
         return {
@@ -90,7 +134,7 @@ class Recipe(BaseModel):
             "ingredients_with_amounts": self.ingredients_with_amounts,
             "tags": self.tags,
             "category": self.category,
-            "instructions": self.instructions,
+            "instructions": self.normalaize_instructions(),
             "cook_time": self.cook_time,
             "prep_time": self.prep_time,
             "total_time": self.total_time
@@ -101,6 +145,8 @@ class Recipe(BaseModel):
         response = self.model_dump()
         if required_fields:
             response = {key: response[key] for key in required_fields if key in response}
+        if response.get("ingredients_with_amounts"):
+            response["ingredients"] = [item["name"] for item in response["ingredients_with_amounts"]]
         return response
     
     def list_fields_to_lower(self):

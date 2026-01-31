@@ -239,6 +239,7 @@ class Page(BaseModel):
             description=self.description,
             tags=self.tags_to_json(),
             ingredients=self.ingredients_to_json(),
+            ingredients_with_amounts=json.loads(self.ingredients) if self.ingredients else [],
             instructions=self.instructions or "",
             cook_time=self.cook_time or "",
             prep_time=self.prep_time or "",
