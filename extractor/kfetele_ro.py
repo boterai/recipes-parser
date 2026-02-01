@@ -396,6 +396,8 @@ class KfeteleRoExtractor(BaseRecipeExtractor):
         Args:
             time_type: Тип времени ('prep', 'cook', 'total')
         """
+        result = None
+        
         # Сначала пробуем извлечь из JSON-LD
         json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
         
@@ -414,12 +416,52 @@ class KfeteleRoExtractor(BaseRecipeExtractor):
                     key = time_keys.get(time_type)
                     if key and key in data:
                         iso_time = data[key]
-                        return self.parse_iso_duration(iso_time)
+                        parsed_time = self.parse_iso_duration(iso_time)
+                        if parsed_time:  # Только если получилось распарсить
+                            result = parsed_time
+                            break
                         
             except (json.JSONDecodeError, KeyError):
                 continue
         
-        return None
+        # Если JSON-LD не дал результата, ищем в HTML тексте
+        if not result:
+            # Паттерны для разных типов времени на румынском
+            patterns = {
+                'prep': [
+                    r'(\d+)\s*(?:de\s+)?minute?.*?\(timp\s+de\s+preg[aă]tire\)',
+                    r'timp\s+de\s+preg[aă]tire[:\s]+(\d+)\s*(?:de\s+)?minute?',
+                ],
+                'cook': [
+                    r'respectiv.*?(\d+)\s*(?:de\s+)?minute?.*?\(timp\s+de\s+g[aă]tire\)',
+                    r'(\d+)\s*(?:de\s+)?minute?.*?\(timp\s+de\s+g[aă]tire\)',
+                    r'timp\s+de\s+g[aă]tire[:\s]+(\d+)\s*(?:de\s+)?minute?',
+                ],
+                'total': [
+                    r'(\d+)\s*(?:ore?|hours?).*?\(timp\s+total\)',
+                    r'timp\s+total[:\s]+(\d+)\s*(?:ore?|hours?)',
+                    r'aproximativ\s+(\d+)\s*(?:ore?|hours?).*?\(timp\s+total\)',
+                ]
+            }
+            
+            time_patterns = patterns.get(time_type, [])
+            
+            # Ищем в тексте страницы
+            page_text = self.soup.get_text()
+            
+            for pattern in time_patterns:
+                match = re.search(pattern, page_text, re.IGNORECASE | re.DOTALL)
+                if match:
+                    time_value = match.group(1)
+                    # Форматируем в зависимости от типа
+                    if time_type == 'total' and 'ore' in pattern.lower():
+                        # Для total time часы могут быть указаны
+                        result = f"{time_value} hours" if int(time_value) > 1 else f"{time_value} hour"
+                    else:
+                        result = f"{time_value} minutes"
+                    break
+        
+        return result
     
     def extract_prep_time(self) -> Optional[str]:
         """Извлечение времени подготовки"""
