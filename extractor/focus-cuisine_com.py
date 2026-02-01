@@ -15,6 +15,36 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class FocusCuisineExtractor(BaseRecipeExtractor):
     """Экстрактор для focus-cuisine.com"""
     
+    # Константы для парсинга ингредиентов
+    FRACTION_MAP = {
+        '½': '0.5', '¼': '0.25', '¾': '0.75',
+        '⅓': '0.33', '⅔': '0.67', '⅛': '0.125',
+        '⅜': '0.375', '⅝': '0.625', '⅞': '0.875',
+        '⅕': '0.2', '⅖': '0.4', '⅗': '0.6', '⅘': '0.8'
+    }
+    
+    # Список единиц измерения для ингредиентов
+    INGREDIENT_UNITS = [
+        'cups?', 'tablespoons?', 'teaspoons?', 'tbsps?', 'tsps?',
+        'pounds?', 'ounces?', 'lbs?', 'oz\\b', 'grams?', 'kilograms?',
+        'g\\b', 'kg\\b', 'milliliters?', 'liters?', 'ml\\b', 'l\\b',
+        'pinch(?:es)?', 'dash(?:es)?', 'packages?', 'cans?', 'jars?',
+        'bottles?', 'inch(?:es)?', 'slices?', 'cloves?', 'bunches?',
+        'sprigs?', 'whole', 'halves?', 'quarters?', 'pieces?', 'head', 'heads'
+    ]
+    
+    # Ключевые слова для поиска заметок
+    NOTE_KEYWORDS = [
+        'note:', 'tip:', 'advice:', 'hint:', 'important:',
+        'chef\'s note', 'cook\'s note', 'kitchen tip'
+    ]
+    
+    # Стоп-слова для фильтрации тегов
+    TAG_STOPWORDS = {
+        'recipe', 'recipes', 'how to make', 'how to', 'easy', 'cooking', 'quick',
+        'focus cuisine', 'food', 'focus-cuisine.com', 'kitchen'
+    }
+    
     def _get_json_ld_data(self) -> Optional[dict]:
         """Извлечение данных JSON-LD из страницы"""
         json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
@@ -208,19 +238,13 @@ class FocusCuisineExtractor(BaseRecipeExtractor):
         text = self.clean_text(ingredient_text)
         
         # Заменяем Unicode дроби на числа
-        fraction_map = {
-            '½': '0.5', '¼': '0.25', '¾': '0.75',
-            '⅓': '0.33', '⅔': '0.67', '⅛': '0.125',
-            '⅜': '0.375', '⅝': '0.625', '⅞': '0.875',
-            '⅕': '0.2', '⅖': '0.4', '⅗': '0.6', '⅘': '0.8'
-        }
-        
-        for fraction, decimal in fraction_map.items():
+        for fraction, decimal in self.FRACTION_MAP.items():
             text = text.replace(fraction, decimal)
         
         # Паттерн для извлечения количества, единицы и названия
-        # Используем \b для границ слов у коротких единиц (l, g, ml и т.д.)
-        pattern = r'^([\d\s/.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz\b|grams?|kilograms?|g\b|kg\b|milliliters?|liters?|ml\b|l\b|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads)?\s*(.+)'
+        # Используем предопределенный список единиц
+        units_pattern = '|'.join(self.INGREDIENT_UNITS)
+        pattern = rf'^([\d\s/.,]+)?\s*({units_pattern})?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -442,15 +466,10 @@ class FocusCuisineExtractor(BaseRecipeExtractor):
             return text if text else None
         
         # Ищем по ключевым словам в параграфах
-        note_keywords = [
-            'note:', 'tip:', 'advice:', 'hint:', 'important:',
-            'chef\'s note', 'cook\'s note', 'kitchen tip'
-        ]
-        
         paragraphs = self.soup.find_all('p')
         for p in paragraphs:
             text = p.get_text(strip=True)
-            for keyword in note_keywords:
+            for keyword in self.NOTE_KEYWORDS:
                 if text.lower().startswith(keyword):
                     cleaned_text = self.clean_text(text)
                     # Убираем ключевое слово из начала
@@ -461,12 +480,6 @@ class FocusCuisineExtractor(BaseRecipeExtractor):
     
     def extract_tags(self) -> Optional[str]:
         """Извлечение тегов"""
-        # Список общих слов без смысловой нагрузки для фильтрации
-        stopwords = {
-            'recipe', 'recipes', 'how to make', 'how to', 'easy', 'cooking', 'quick',
-            'focus cuisine', 'food', 'focus-cuisine.com', 'kitchen'
-        }
-        
         tags_list = []
         
         # Пробуем извлечь из мета-тега keywords
@@ -508,7 +521,7 @@ class FocusCuisineExtractor(BaseRecipeExtractor):
             tag_lower = tag.lower()
             
             # Пропускаем точные совпадения со стоп-словами
-            if tag_lower in stopwords:
+            if tag_lower in self.TAG_STOPWORDS:
                 continue
             
             # Пропускаем теги короче 3 символов
