@@ -309,8 +309,8 @@ class ChefsResourceExtractor(BaseRecipeExtractor):
         # Также может быть "Ready In:" вместо "Total Time:"
         
         time_labels = {
-            'prep': ['Prep Time:', 'Prep Time:'],
-            'cook': ['Cook Time:', 'Cook Time:'],
+            'prep': ['Prep Time:'],
+            'cook': ['Cook Time:'],
             'total': ['Total Time:', 'Ready In:']
         }
         
