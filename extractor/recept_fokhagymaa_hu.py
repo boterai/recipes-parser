@@ -86,53 +86,71 @@ class ReceptFokhagymaExtractor(BaseRecipeExtractor):
         """Извлечение ингредиентов в структурированном формате"""
         ingredients = []
         
-        # Ищем список ингредиентов с классом wprm-recipe-ingredient
-        ingredient_items = self.soup.find_all('li', class_='wprm-recipe-ingredient')
+        # Ищем контейнер с ингредиентами
+        ing_container = self.soup.find('div', class_='wprm-recipe-ingredients-container')
         
-        for item in ingredient_items:
-            # Извлекаем amount, unit, name из span элементов
-            amount_span = item.find('span', class_='wprm-recipe-ingredient-amount')
-            unit_span = item.find('span', class_='wprm-recipe-ingredient-unit')
-            name_span = item.find('span', class_='wprm-recipe-ingredient-name')
+        if not ing_container:
+            return None
+        
+        # Находим все группы ингредиентов (каждая группа - это ul)
+        ing_groups = ing_container.find_all('ul', class_='wprm-recipe-ingredients')
+        
+        for ul in ing_groups:
+            # Проверяем, есть ли название группы перед этим ul
+            group_name_elem = ul.find_previous_sibling('h4', class_='wprm-recipe-ingredient-group-name')
+            group_name = None
+            if group_name_elem:
+                group_name = self.clean_text(group_name_elem.get_text())
+                # Убираем двоеточие в конце если есть
+                if group_name and group_name.endswith(':'):
+                    group_name = group_name[:-1].strip()
             
-            # Извлекаем значения
-            amount = None
-            if amount_span:
-                amount_text = self.clean_text(amount_span.get_text())
-                # Преобразуем в число если возможно
-                try:
-                    amount = float(amount_text.replace(',', '.'))
-                    # Если это целое число, конвертируем в int
-                    if amount.is_integer():
-                        amount = int(amount)
-                except (ValueError, AttributeError):
-                    amount = amount_text if amount_text else None
+            # Ищем ингредиенты в этой группе
+            ingredient_items = ul.find_all('li', class_='wprm-recipe-ingredient')
             
-            unit = None
-            if unit_span:
-                unit = self.clean_text(unit_span.get_text())
-            
-            name = None
-            if name_span:
-                name = self.clean_text(name_span.get_text())
-            
-            # Проверяем наличие примечания в атрибуте data-notes
-            note = item.get('data-notes')
-            
-            # Формируем объект ингредиента
-            ingredient_obj = {
-                "name": name,
-                "units": unit,  # Используем 'units' как в эталонном JSON
-                "amount": amount
-            }
-            
-            # Добавляем примечание если есть
-            if note:
-                ingredient_obj["note"] = self.clean_text(note)
-            
-            # Добавляем только если есть хотя бы name
-            if name:
-                ingredients.append(ingredient_obj)
+            for item in ingredient_items:
+                # Извлекаем amount, unit, name из span элементов
+                amount_span = item.find('span', class_='wprm-recipe-ingredient-amount')
+                unit_span = item.find('span', class_='wprm-recipe-ingredient-unit')
+                name_span = item.find('span', class_='wprm-recipe-ingredient-name')
+                
+                # Извлекаем значения
+                amount = None
+                if amount_span:
+                    amount_text = self.clean_text(amount_span.get_text())
+                    # Преобразуем в число если возможно
+                    try:
+                        # Заменяем запятую на точку для дробных чисел
+                        amount_text = amount_text.replace(',', '.')
+                        amount = float(amount_text)
+                        # Если это целое число, конвертируем в int
+                        if amount.is_integer():
+                            amount = int(amount)
+                    except (ValueError, AttributeError):
+                        amount = amount_text if amount_text else None
+                
+                unit = None
+                if unit_span:
+                    unit = self.clean_text(unit_span.get_text())
+                
+                name = None
+                if name_span:
+                    name = self.clean_text(name_span.get_text())
+                
+                # Формируем объект ингредиента
+                ingredient_obj = {
+                    "name": name,
+                    "units": unit,  # Используем 'units' как в эталонном JSON
+                    "amount": amount
+                }
+                
+                # Добавляем группу как примечание если есть
+                if group_name:
+                    ingredient_obj["note"] = group_name
+                
+                # Добавляем только если есть хотя бы name
+                if name:
+                    ingredients.append(ingredient_obj)
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
