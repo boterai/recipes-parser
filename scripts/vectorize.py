@@ -10,11 +10,10 @@ import asyncio
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.common.embedding import get_embedding_function, get_image_embedding_function
+from src.common.embedding import get_embedding_function, get_siglip_embedding_function
 from src.stages.search.vectorise import RecipeVectorizer
 from src.models.recipe import Recipe
 from src.stages.search.similarity import SimilaritySearcher, ClusterParams, build_clusters_from_dsu
-from src.common.embedding import get_image_embedding_function
 from src.stages.search.vectorise import RecipeVectorizer
 from src.models.image import ImageORM, download_image_async
 from src.stages.translate import Translator
@@ -85,10 +84,10 @@ async def validate_and_save_image(image_url: str, save_dir: str = "images", use_
 
 async def vectorise_all_images():
     rv = RecipeVectorizer()
-    embed_function, _ = get_image_embedding_function(
+    embed_function, dims = get_siglip_embedding_function(
         batch_size=16
     )
-    await rv.vectorise_images_async(embed_function=embed_function)
+    await rv.vectorise_images_async(embed_function=embed_function, image_dims=dims)
 
 def translate_all_recipes(target_language: str = "en", translate_batch_size: int = 10):
     translator = Translator(target_language=target_language)

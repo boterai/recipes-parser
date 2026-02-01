@@ -3,7 +3,7 @@
 Модуль для векторизации рецептов с использованием векторных БД.
 """
 
-from typing import Any, Optional
+from typing import Optional
 from pathlib import Path
 import sys
 import logging
@@ -11,15 +11,11 @@ import logging
 # Добавляем корневую директорию в путь
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from src.models.page import Page
-from src.models.page import Recipe
-from src.models.search_config import ComponentWeights
 from src.common.db.qdrant import QdrantRecipeManager
 from src.common.db.clickhouse import ClickHouseManager
 from src.common.embedding import EmbeddingFunction, ImageEmbeddingFunction
 from src.repositories.page import PageRepository
 from src.repositories.image import ImageRepository
-from src.models.image import Image
 
 
 logger = logging.getLogger(__name__)
@@ -84,7 +80,6 @@ class RecipeVectorizer:
             batch_size: Размер партии для векторизации
             site_id: Идентификатор сайта для векторизации (если None, то для всех сайтов)
             dims: Размерность плотных векторов
-            colbert_dims: Размерность разреженных векторов ColBERT
             vectorised: Флаг, указывающий, векторизованы ли уже рецепты
         """
 
@@ -122,6 +117,7 @@ class RecipeVectorizer:
             self, 
             embed_function: ImageEmbeddingFunction, 
             limit: Optional[int]  = None, 
+            image_dims: int = 1152,
             image_retrieve_limit: int = 1000,
             batch_size: int = 8
             ):
@@ -140,6 +136,8 @@ class RecipeVectorizer:
             total = self.image_repository.get_not_vectorised_count()
         processed = 0
         last_page_id = None
+        self.vector_db.create_collections(image_dims=image_dims)
+        
         while processed < total:
             images = self.image_repository.get_not_vectorised(limit=image_retrieve_limit, last_page_id=last_page_id)
             if not images:

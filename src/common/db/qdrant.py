@@ -4,18 +4,19 @@
 
 import time
 import logging
-from typing import Any, Optional
+from typing import Optional
 from itertools import batched
 from src.common.embedding import EmbeddingFunction, ImageEmbeddingFunction
 from config.db_config import QdrantConfig
 from src.models.recipe import Recipe
 from qdrant_client import QdrantClient, AsyncQdrantClient
-from src.models.image import ImageORM, Image, download_image, download_image_async
+from src.models.image import ImageORM, download_image_async
 import asyncio
 from qdrant_client.models import QueryRequest, QueryResponse
-from collections.abc import Iterator, AsyncIterator
+from collections.abc import AsyncIterator
 from qdrant_client.models import (
     Distance, VectorParams, PointStruct)
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +67,7 @@ class QdrantRecipeManager:
             self.collections = {
                 "full": f"{collection_prefix}_full",
                 "mv": f"{collection_prefix}_mv",
-                "images": f"{collection_prefix}_images",
+                "images": f"{collection_prefix}_images_1152",
             }
             self.connected = False
             
@@ -78,6 +79,7 @@ class QdrantRecipeManager:
                     f"QdrantRecipeManager уже инициализирован с префиксом '{self.collection_prefix}'. "
                     f"Игнорируем новый префикс '{collection_prefix}'"
                 )
+
     @property
     def client(self) -> Optional[QdrantClient]:
         """Получение клиента ClickHouse"""
@@ -209,7 +211,7 @@ class QdrantRecipeManager:
         # Если дошли сюда - все попытки исчерпаны
         return False
         
-    def create_collections(self, dims: int = 1024, image_dims: int = 768) -> bool:
+    def create_collections(self, dims: int = 1024, image_dims: int = 1152) -> bool:
         """
         Создание отдельных коллекций для каждого типа эмбеддинга
         
@@ -267,7 +269,7 @@ class QdrantRecipeManager:
                     case "images":
                         vectors_config = {
                             "image": VectorParams(
-                                size=image_dims,  # Стандартный размер для CLIP/image embeddings
+                                size=image_dims,  # размер длz изображений
                                 distance=Distance.COSINE
                             )
                         }
@@ -442,51 +444,6 @@ class QdrantRecipeManager:
         logger.info(f"✓ Итого добавлено: {added_count} рецептов в {len(self.collections) - 1} коллекций")
         return added_count
     
-    def search_full(
-        self,
-        query_vector: list[float],
-        limit: int = 10,
-        score_threshold: float = 0.0,
-
-    ) -> list[dict[str, Any]]:
-        """
-        Поиск похожих рецептов в указанной коллекции
-        
-        Args:
-            query_recipe: вектор запроса
-            limit: Количество результатов
-            embedding_function: Функция для создания эмбеддинга
-            score_threshold: Минимальный порог схожести            
-        Returns:
-            Список найденных рецептов с метаданными
-        """
-        if not self.client:
-            logger.warning("Qdrant не подключен")
-            return []
-        collection = self.collections.get(self.full_collection)
-        try:
-            results = self.client.query_points(
-                collection_name=collection,
-                query=query_vector,
-                using="dense",
-                limit=limit,
-                with_payload=True,
-                score_threshold=score_threshold
-            )
-            
-            return [{
-                "recipe_id": hit.id,
-                "score": hit.score,
-                "dish_name": hit.payload.get("dish_name"),
-                "method": "Dense"
-            } for hit in results.points]
-        
-        except Exception as e:
-            logger.error(f"Ошибка поиска в коллекции 'full': {e}")
-            import traceback
-            traceback.print_exc()
-            return []
-    
     async def vectorise_images_async(
             self,
             images: list[ImageORM],
@@ -525,7 +482,7 @@ class QdrantRecipeManager:
                 img_pil_tasks = []
                 
                 for img in batch_images:
-                    if img.local_path:
+                    if img.local_path and os.path.isfile(img.local_path):
                         img_to_upload.append(img.local_path)
                         batch_to_process.append(img)
                     elif img.image_url:
@@ -592,110 +549,6 @@ class QdrantRecipeManager:
         
         logger.info(f"✓ Итого добавлено: {added_count} изображений")
         return added_count
-        
-    def search_images(
-        self,
-        query_vector: list[float],
-        limit: int = 10,
-        score_threshold: float = 0.0
-    ) -> list[tuple[float, Image]]:
-        """
-        Поиск похожих изображений по вектору запроса
-        
-        Args:
-            query_vector: Вектор запроса (embedding изображения)
-            limit: Количество результатов
-            score_threshold: Минимальный порог схожести
-        
-        Returns:
-            Список кортежей (score, Image) отсортированный по убыванию score
-        """
-        if not self.client:
-            logger.warning("Qdrant не подключен")
-            return []
-        
-        collection_name = self.collections.get(self.images_collection)
-        if not collection_name:
-            logger.error("Коллекция images не найдена")
-            return []
-        
-        try:
-            results = self.client.query_points(
-                collection_name=collection_name,
-                query=query_vector,
-                using="image",
-                limit=limit,
-                with_payload=True,
-                score_threshold=score_threshold
-            )
-            
-            # Формируем результаты как list[tuple[float, Image]]
-            output = []
-            for hit in results.points:
-                # Создаем Image из payload
-                image = Image(
-                    id=hit.payload.get("image_id"),
-                    page_id=hit.payload.get("page_id")
-                )
-                output.append((hit.score, image))
-            
-            logger.info(f"Найдено {len(output)} похожих изображений")
-            return output
-        
-        except Exception as e:
-            logger.error(f"Ошибка поиска изображений: {e}")
-            import traceback
-            traceback.print_exc()
-            return []
-        
-    def iter_points_with_vectors(
-            self, 
-            collection_name: str = "full", 
-            batch_size: int = 1000, 
-            using: str = "dense",
-            last_point_id: int = None) -> Iterator[list[int]]:
-        """
-        Итератор по всем точкам в коллекции, возвращающий батчи векторов.
-        Args:
-            collection_name: Имя коллекции
-            batch_size: Размер батча для скрола
-            last_point_id: Начальный point_id для скрола (если нужно продолжить с определенного места)
-        """
-        if not self.client:
-            raise QdrantNotConnectedError()
-
-        collection = self.collections.get(collection_name)
-        offset = last_point_id
-
-        while True:
-            points, offset = self.client.scroll(
-                collection_name=collection,
-                limit=batch_size,
-                offset=offset,
-                with_payload=False,
-                with_vectors=True,
-                timeout=60
-            )
-            if not points:
-                return
-            
-            vec_map: dict[int, list[float]] = {}
-            for p in points:
-                pid = int(p.id)
-                if last_point_id is not None and pid <= last_point_id:
-                    continue
-
-                v = p.vector.get(using) if isinstance(p.vector, dict) else p.vector
-                if v is None:
-                    continue
-
-                vec_map[pid] = v
-
-            if vec_map:
-                yield vec_map
-
-            if offset is None:
-                return
             
     async def async_iter_points_with_vectors(
             self, 
@@ -746,75 +599,6 @@ class QdrantRecipeManager:
 
             if offset is None:
                 return
-
-
-    def retrieve_vectors(self, ids: list[int], collection_name: str, using: str) -> dict[int, list[float]]:
-        """
-        Получить named-vector  для списка ids из коллекции.
-        Возвращает {page_id: vector}.
-        """
-        if not self.client:
-            raise QdrantNotConnectedError()
-
-        collection = self.collections.get(collection_name)
-
-        for attempt in range(3):
-            try:
-                points = self.client.retrieve(
-                    collection_name=collection,
-                    ids=ids,
-                    with_vectors=True,
-                    with_payload=False,
-                )
-            except Exception as e:
-                logger.warning(f"Ошибка retrieve_vectors (попытка {attempt + 1}/3): {e}")
-                time.sleep(2 ** attempt)
-                if self.connect():
-                    continue
-                else: raise e
-
-        out: dict[int, list[float]] = {}
-        for p in points:
-            vec = None
-            if p.vector is None:
-                continue
-            vec = p.vector.get(using)
-
-            if vec is None:
-                continue
-
-            out[int(p.id)] = list(vec)
-        return out
-
-    def query_batch(
-        self,
-        vectors: list[list[float]],
-        collection_name: str,
-        using: str,
-        limit: int = 30,
-        score_threshold: float = 0.0,
-    ) -> list[QueryResponse]:
-        """
-        Batch kNN по коллекции.
-        Возвращает на каждый query-вектор список: [QueryResponse, ...]
-        """
-        if not self.client:
-            raise QdrantNotConnectedError()
-
-        collection = self.collections.get(collection_name)
-
-        requests = [
-            QueryRequest(
-                query=v,
-                using=using,
-                limit=limit,
-                score_threshold=score_threshold,
-                with_payload=False,
-            )
-            for v in vectors
-        ]
-        resp = self.client.query_batch_points(collection_name=collection, requests=requests)
-        return resp
     
     async def async_query_batch(
         self,

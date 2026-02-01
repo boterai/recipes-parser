@@ -12,6 +12,7 @@ from src.models.image import ImageORM
 from src.common.db.connection import get_db_connection
 import hashlib
 from sqlalchemy import insert
+from sqlalchemy.orm import joinedload
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,16 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
             mysql_manager = get_db_connection()
         super().__init__(MergedRecipeORM, mysql_manager)
     
+    def get_by_id_with_images(self, id: int) -> Optional[MergedRecipeORM]:
+        """Получить объект по ID вместе с изображениями (если есть связь)"""
+        with self.get_session() as session:
+            result = session.query(MergedRecipeORM)\
+                .options(joinedload(MergedRecipeORM.images))\
+                .filter(MergedRecipeORM.id == id)\
+                .first()
+            if result:
+                session.expunge(result)
+            return result
     
     def create_merged_recipe(
         self,

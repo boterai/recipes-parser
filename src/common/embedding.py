@@ -9,12 +9,14 @@ from PIL.Image import Image as PILImage
 
 import torch
 from PIL import Image
+from transformers import AutoProcessor, AutoModel
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 EmbeddingFunctionReturn = list[list[float]] # (dense_vector, colbert_vectors) при том, что colbert_vectors может быть None и тогда его надо опредлять
 ContentType = Literal["full", "ingredients", "instructions", "descriptions", "description+name"]
 MODEL = 'BAAI/bge-large-en-v1.5'
+IMAGE_MODEL = "google/siglip-so400m-patch14-384"
 
 ImageInput = Union[str, Path, "PILImage"]
 ImageEmbeddingFunctionReturn = list[list[float]]
@@ -203,10 +205,59 @@ def get_image_embedding_function(
 
     return embedding_func, embedding_dimension
 
+def get_siglip_embedding_function(
+    model_name: str = IMAGE_MODEL,
+    device: Optional[str] = None,
+    batch_size: int = 16,
+) -> tuple[ImageEmbeddingFunction, int]:
+    """    
+    Модели:
+    - google/siglip-base-patch16-224 (768 dims)
+    - google/siglip-so400m-patch14-384 (1152 dims)
+    """
+    if device is None:
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+    
+    processor = AutoProcessor.from_pretrained(model_name)
+    model = AutoModel.from_pretrained(model_name).to(device)
+    model.eval()
+    
+    embedding_dimension = model.config.vision_config.hidden_size
+    
+    def _load_image(img: ImageInput) -> "PILImage":
+        if isinstance(img, Image.Image):
+            return img.convert("RGB")
+        return Image.open(img).convert("RGB")
+    
+    def embedding_func(images: ImageInput | list[ImageInput]) -> ImageEmbeddingFunctionReturn:
+        if isinstance(images, (str, Path)) or hasattr(images, "size"):
+            images_list = [images]
+        else:
+            images_list = list(images)
+        
+        pil_images = [_load_image(im) for im in images_list]
+        results: list[list[float]] = []
+        
+        with torch.no_grad():
+            for start in range(0, len(pil_images), batch_size):
+                batch = pil_images[start:start + batch_size]
+                inputs = processor(images=batch, return_tensors="pt").to(device)
+                
+                vision_outputs = model.vision_model(**{
+                    k: v for k, v in inputs.items() 
+                    if k.startswith("pixel")
+                })
+                feats = vision_outputs.pooler_output
+                
+                # Нормализация
+                feats = feats / feats.norm(dim=-1, keepdim=True)
+                results.extend(feats.cpu().tolist())
+        
+        return results
+    
+    return embedding_func, embedding_dimension
+
 if __name__ == "__main__":
     # Проверка доступных моделей и весов
-    print("\n=== Веса для ViT-L-14 ===")
-    print(open_clip.list_pretrained_tags_by_model("ViT-L-14"))
-    
-    ef, dims = get_image_embedding_function()
-    print(f"Размерность: {dims}")
+    ef, dims = get_siglip_embedding_function()
+    print(f"SigLIP Embedding function created with dimension: {dims}")
