@@ -302,8 +302,8 @@ class ReceptiComExtractor(BaseRecipeExtractor):
                         tags_list.append(tag_text)
                 break
         
-        # Возвращаем как строку через запятую без пробела
-        return ','.join(tags_list) if tags_list else None
+        # Возвращаем как строку через запятую с пробелом
+        return ', '.join(tags_list) if tags_list else None
     
     def extract_image_urls(self) -> Optional[str]:
         """Извлечение URL изображений"""
