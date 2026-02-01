@@ -1,0 +1,12 @@
+{
+    "dish_name": "Irlantilainen soodaleipä",
+    "description": "Irlantilainen soodaleipä on helppo ja nopea arkileipä, joka vie makumatkalle Irlantiin.",
+    "ingredients": "[{\"name\": \"jauhoja\", \"units\": \"g\", \"amount\": \"450-550\"}, {\"name\": \"kaurahiutaleita\", \"units\": \"g\", \"amount\": \"50\"}, {\"name\": \"suolaa\", \"units\": \"tl\", \"amount\": \"1\"}, {\"name\": \"ruokasoodaa\", \"units\": \"tl\", \"amount\": \"1\"}, {\"name\": \"piimää\", \"units\": \"dl\", \"amount\": \"4.5\"}, {\"name\": \"hunajaa\", \"units\": \"rkl\", \"amount\": \"1\"}, {\"name\": \"siirappia\", \"units\": \"rkl\", \"amount\": \"1\"}, {\"name\": \"voita\", \"units\": \"rkl\", \"amount\": \"1\"}]",
+    "instructions": "1. Lämmitä uuni 200 asteeseen. Voitele pala leivinpaperia ja aseta se uunipellille. 2. Sekoita kaikki kuivat aineet kulhossa ja tee seoksen keskelle kolo. 3. Sekoita piimä (tai maito ja sitruunamehu), hunaja ja siirappi. Lämmitä maito kädenlämpöiseksi, jotta hunaja sekoittuu paremmin. Kaada neste jauhoseoksen keskelle ja sekoita nopeasti käsin taikinaksi. Älä vaivaa. 4. Kumoa taikina uunipellille leivinpaperin päälle ja muotoile se varovasti pyöreähköksi limpuksi. Leikkaa limppuun syvä ristiviilto. 5. Paista 200-asteisessa uunissa noin 30 minuuttia. Voitele valmis leipä voisulalla ja anna jäähtyä ennen leikkaamista.",
+    "category": "Leipä",
+    "prep_time": "40 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "70 minutes",
+    "notes": "Syö pian, tämä leipä ei parane vanhetessaan!",
+    "tags": "Aamupala, Arkiruoka, Edulliset, Leipä, Leivonta, Irlantilainen soodaleipä"
+}

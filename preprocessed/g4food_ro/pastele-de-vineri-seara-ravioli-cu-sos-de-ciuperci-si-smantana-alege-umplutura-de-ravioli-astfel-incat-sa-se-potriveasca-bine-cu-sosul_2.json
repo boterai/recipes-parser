@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ravioli cu sos de ciuperci și smântână",
+    "description": "Ravioli served with a creamy mushroom sauce.",
+    "ingredients": "[{\"name\": \"Ravioli\", \"units\": \"pieces\", \"amount\": \"5-8\"}, {\"name\": \"Smântână de gătit\", \"units\": \"g\", \"amount\": \"100\"}, {\"name\": \"Sare\", \"units\": null, \"amount\": null}, {\"name\": \"Piper proaspăt măcinat\", \"units\": null, \"amount\": null}, {\"name\": \"Ceapă\", \"units\": null, \"amount\": null}, {\"name\": \"Usturoi\", \"units\": null, \"amount\": null}, {\"name\": \"Ulei de măsline\", \"units\": null, \"amount\": null}]",
+    "instructions": "Pregătim sosul. Facem o cremă de ciuperci, cu ceapă și usturoi. Apoi punem crema de ciuperci într-o tigaie și adăugăm smântână de gătit. Condimentăm cu sare și piper. Fierbem ravioli în apă cu sare, apoi îi adăugăm în sos și îi mai fierbem două minute. Servim pastele cu sos deasupra.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Alege umplutura de ravioli în funcție de sos.",
+    "tags": "ravioli, sos ciuperci, sos smântână, rețete paste"
+}

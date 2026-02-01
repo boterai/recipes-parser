@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gazdag ír szódás kenyér",
+    "description": "Puha, ízes és egyszerűen elkészíthető ír kenyér mazsolával.",
+    "ingredients": "[{\"name\": \"liszt\", \"units\": \"dkg\", \"amount\": 50}, {\"name\": \"cukor\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"só\", \"units\": \"g\", \"amount\": 5}, {\"name\": \"sütőpor\", \"units\": \"g\", \"amount\": 8}, {\"name\": \"köménymag\", \"units\": \"g\", \"amount\": 10}, {\"name\": \"vaj\", \"units\": \"g\", \"amount\": 60}, {\"name\": \"mazsola\", \"units\": \"dkg\", \"amount\": 30}, {\"name\": \"író\", \"units\": \"ml\", \"amount\": 350}, {\"name\": \"tojás\", \"units\": \"db\", \"amount\": 1}, {\"name\": \"szódabikarbóna\", \"units\": \"g\", \"amount\": 5}, {\"name\": \"tojássárgája\", \"units\": \"db\", \"amount\": 1}, {\"name\": \"habtejszín\", \"units\": \"ml\", \"amount\": 15}]",
+    "instructions": "A sütőt melegítsd elő 175°C-ra. Bélelj ki egy tepsit sütőpapírral. Szitáld bele a lisztet, keverd hozzá a cukrot, sót, sütőport és köménymagot. A hideg vajat morzsold el a lisztes keverékben. Szórd a mazsolát a keverékhez. Külön tálban keverd össze az írót, tojást és szódabikarbónát. Öntsd a nedves keveréket a száraz hozzávalókhoz, keverd össze. Formázz cipót, kend meg tojássárgájával és tejszínnel, majd vágj keresztet a tetejére. Süsd kb. 70 percig. Hűtsd le 30 percig.",
+    "category": "köret",
+    "prep_time": "15 minutes",
+    "cook_time": "1 hour 9 minutes",
+    "total_time": "1 hour 24 minutes",
+    "notes": "A kenyér fagyasztható, és 3-4 napig frissen tartható. Variálható mazsola helyett más szárított gyümölcsökkel.",
+    "tags": "édes kenyér, gyors házi kenyér, ír kenyér, mazsolás kenyér"
+}

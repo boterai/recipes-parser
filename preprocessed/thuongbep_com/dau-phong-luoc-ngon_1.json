@@ -1,0 +1,12 @@
+{
+    "dish_name": "Đậu phộng luộc",
+    "description": "Đậu phộng luộc là món ăn khiến bạn không thể ngừng được một khi bắt đầu.",
+    "ingredients": "[{\"name\": \"Đậu phộng tươi\", \"units\": null, \"amount\": null}, {\"name\": \"Muối\", \"units\": null, \"amount\": null}, {\"name\": \"Nước\", \"units\": null, \"amount\": null}]",
+    "instructions": "Bước 1: Rửa sạch đậu phộng. Rửa kỹ đậu phộng sống chưa bóc vỏ trong nước. Bước 2: Cho nước, muối, đậu phộng vào nồi lớn đun sôi. Đậy nắp và giảm nhiệt vừa đủ để duy trì độ sôi thấp. Đun sôi từ 20 phút trở lên, cho đến khi đậu phộng đạt độ mềm như mong muốn. Bước 3: Xả nước lạnh và bắt đầu thưởng thức.",
+    "category": null,
+    "prep_time": "5 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "25 minutes",
+    "notes": "Bạn có thể điều chỉnh thời gian để có độ chín phù hợp. Đậu phộng luộc trong nước muối càng lâu sẽ càng mặn nên điều chỉnh thời gian luộc cũng như lượng muối vào nhé.",
+    "tags": "snack, appetizer"
+}

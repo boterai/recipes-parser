@@ -1,0 +1,12 @@
+{
+    "dish_name": "Turkse Börek Met Kaas",
+    "description": "Börek met kaas is een van de populairste Turkse snackgerechten. Het resultaat is ongelooflijk lekker, knapperig en zeer vullend.",
+    "ingredients": "[{\"name\": \"baklava filodeeg\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"feta kaas oftewel witte kaas\", \"units\": \"g\", \"amount\": 350}, {\"name\": \"olijfolie\", \"units\": \"eetlepels\", \"amount\": 2}, {\"name\": \"boter\", \"units\": \"g\", \"amount\": 100}]",
+    "instructions": "Smelt de boter in een sauspan en doe ook olijfolie toe. Leg drie vellen filodeeg of baklava op elkaar en smeer tussen elk van de drie lagen met de botersaus. Prak de feta kaas met een vork en verdeel de kaasvulling over de korte zijde van het deeg. Rol het deeg vervolgens op naar boven toe. Plaats de lange Börek rollen naast elkaar in een ovenschaal. Bestrijk de Börek rollen met de botermix en snijd ze alvast in stukjes met een mes. Bak ze in een voorverwarmde oven op 180 graden Celsius gedurende ongeveer 35 minuten. Serveer de knapperige Börek met kaas warm en geniet van deze heerlijke snack.",
+    "category": "Bladerdeeg",
+    "prep_time": "20 minutes",
+    "cook_time": "35 minutes",
+    "total_time": "55 minutes",
+    "notes": null,
+    "tags": "Turks, snack, börek"
+}

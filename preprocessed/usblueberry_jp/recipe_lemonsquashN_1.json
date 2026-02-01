@@ -1,0 +1,12 @@
+{
+    "dish_name": "レモンスカッシュ",
+    "description": null,
+    "ingredients": "[{\"name\": \"ブルーベリー\", \"units\": \"g\", \"amount\": 20}, {\"name\": \"レモン果汁\", \"units\": \"g\", \"amount\": 20}, {\"name\": \"はちみつ\", \"units\": \"g\", \"amount\": 20}, {\"name\": \"炭酸水\", \"units\": \"ml\", \"amount\": 160}, {\"name\": \"氷\", \"units\": \"適量\", \"amount\": null}]",
+    "instructions": "グラスにレモン果汁、はちみつを入れてよく混ぜ合わせる。ブルーベリー、氷、炭酸水を入れて完成。（※飲むときに軽く混ぜ合わせる。）",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

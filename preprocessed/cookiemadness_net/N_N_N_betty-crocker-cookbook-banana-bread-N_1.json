@@ -1,0 +1,12 @@
+{
+    "dish_name": "Betty Crocker Cookbook Banana Bread",
+    "description": "A classic banana bread recipe from the Betty Crocker Cookbook, known for its crumbly texture and less sweet flavor.",
+    "ingredients": "[{\"name\": \"all-purpose flour\", \"units\": \"cups\", \"amount\": 2.5}, {\"name\": \"granulated sugar\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"baking powder\", \"units\": \"teaspoons\", \"amount\": 3.5}, {\"name\": \"salt\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"salad oil\", \"units\": \"tablespoons\", \"amount\": 3}, {\"name\": \"milk\", \"units\": \"cup\", \"amount\": 0.75}, {\"name\": \"egg\", \"units\": \"large\", \"amount\": 1}, {\"name\": \"finely chopped nuts\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"mashed very ripe bananas\", \"units\": \"cup\", \"amount\": 1}]",
+    "instructions": "Preheat oven to 350 degrees F. Grease and flour a 9x5 inch loaf pan or two smaller ones. Put all the ingredients in a large mixing bowl and beat on medium speed, scraping side and bottom of bowl often, until well blended. Pour into the pan (or pans). Bake the large loaf for 55 to 65 minutes or until wooden pick inserted in center comes out clean. For smaller loaves, start checking at 45 minutes. Let cool in the pan for about 30 minutes, then carefully remove from pan. Let the bread cool before slicing.",
+    "category": "Breakfast",
+    "prep_time": "10 minutes",
+    "cook_time": "1 hour",
+    "total_time": "1 hour 10 minutes",
+    "notes": "Perfect for adding toasted walnuts or pecans. Less sweet than many modern banana breads.",
+    "tags": "Banana Bread, Betty Crocker, Cookbook"
+}

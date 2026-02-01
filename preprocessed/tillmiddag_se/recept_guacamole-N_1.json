@@ -1,0 +1,12 @@
+{
+    "dish_name": "Guacamole",
+    "description": "Enkelt recept med lime & koriander",
+    "ingredients": "[{\"name\": \"avokado\", \"units\": \"st\", \"amount\": 3}, {\"name\": \"lime\", \"units\": \"st\", \"amount\": 1}, {\"name\": \"rödlök\", \"units\": \"st\", \"amount\": 0.5}, {\"name\": \"tomat\", \"units\": \"st\", \"amount\": 1}, {\"name\": \"vitlök\", \"units\": \"klyfta\", \"amount\": 1}, {\"name\": \"jalapeño\", \"units\": \"st\", \"amount\": 0.5}, {\"name\": \"färsk koriander\", \"units\": \"kruka\", \"amount\": 0.5}, {\"name\": \"spiskummin\", \"units\": \"tsk\", \"amount\": 0.5}, {\"name\": \"salt\", \"units\": \"tsk\", \"amount\": 0.5}, {\"name\": \"svartpeppar\", \"units\": \"krm\", \"amount\": 1}, {\"name\": \"chiliflakes\", \"units\": \"nypa\", \"amount\": 1}]",
+    "instructions": "Dela avokadon, ta ur kärnan och skopa ur fruktköttet. Mosa avokadon grovt med en gaffel i en skål. Pressa över limesaft och tillsätt ev. finrivet skal; rör om. Vänd ner rödlök, tomat, jalapeño, vitlök och koriander. Krydda med spiskummin, salt och svartpeppar; smaka av. Låt stå 5 minuter för att sätta smak och servera genast.",
+    "category": null,
+    "prep_time": "10 min",
+    "cook_time": null,
+    "total_time": "10 min",
+    "notes": "Håll färgen fräsch. Täck ytan med plastfilm tätt mot guacamolen och ställ svalt. Extra lime hjälper mot oxidation. Justera hetta och konsistens. Ta mer jalapeño för mer sting. Mixa kort för en slätare konsistens eller mosa mindre för mer bitar. Koriander-alternativ: Byt koriander mot persilja om du föredrar mildare örtton.",
+    "tags": "Mexikanskt, Såser & röror, Tillbehör, Glutenfri, Laktosfri, Vegansk, Vegetarisk"
+}

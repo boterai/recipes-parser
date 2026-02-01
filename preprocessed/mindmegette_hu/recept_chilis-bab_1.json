@@ -1,0 +1,12 @@
+{
+    "dish_name": "Chilis bab",
+    "description": "Chilis bab is a traditional Hungarian dish made with ground meat and beans.",
+    "ingredients": "[{\"name\": \"vöröshagyma\", \"units\": \"fej\", \"amount\": 2}, {\"name\": \"olaj\", \"units\": null, \"amount\": null}, {\"name\": \"fokhagyma\", \"units\": \"gerezd\", \"amount\": 4}, {\"name\": \"pirospaprika\", \"units\": \"tk\", \"amount\": 1}, {\"name\": \"darált hús\", \"units\": \"dkg\", \"amount\": 50}, {\"name\": \"paradicsompüré\", \"units\": \"dkg\", \"amount\": 10}, {\"name\": \"só\", \"units\": null, \"amount\": null}, {\"name\": \"bors\", \"units\": null, \"amount\": null}, {\"name\": \"őrölt csilipaprika\", \"units\": null, \"amount\": null}, {\"name\": \"vörösbab konzerv\", \"units\": \"doboz\", \"amount\": 2}, {\"name\": \"kukoricakonzerv\", \"units\": \"doboz\", \"amount\": 1}]",
+    "instructions": "A chilis bab elkészítéséhez a karikára vágott vöröshagymát olajon megpirítjuk, majd a zúzott fokhagymát is hozzápirítjuk 10 másodpercig. Rászórjuk a pirospaprikát, és felengedjük 1/2 dl vízzel. Hozzáadjuk a darált húst és fehéredésig pirítjuk. A paradicsompürét vízzel hígítjuk, ráöntjük a darált húsra, megsózzuk, megborsozzuk, és csilipaprikával ízesítjük. Amikor a hús megpuhult, hozzákeverjük a leszűrt babot és a kukoricát, és 5-10 perc alatt összeforraljuk. A csilis babot forrón kínáljuk.",
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "40 minutes",
+    "notes": "Ha valaki kevésbé csípősen szereti, akkor csili helyett használhat csípős paprikakrémet.",
+    "tags": "chili con carne, chilis bab, egytálétel, főételek, házias, klasszikus, mexikói"
+}

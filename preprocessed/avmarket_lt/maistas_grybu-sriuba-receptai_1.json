@@ -1,0 +1,12 @@
+{
+    "dish_name": "Grybų sriuba",
+    "description": "Aromatinga grybų sriuba, puikus pasirinkimas tiek kasdieniam pietų stalui, tiek šventinei vakarienei.",
+    "ingredients": "[{\"name\": \"Švieži grybai\", \"units\": null, \"amount\": null}, {\"name\": \"Bulvės\", \"units\": null, \"amount\": null}, {\"name\": \"Morkos\", \"units\": null, \"amount\": null}, {\"name\": \"Svogūnai\", \"units\": null, \"amount\": null}, {\"name\": \"Sviestas\", \"units\": null, \"amount\": null}, {\"name\": \"Mėsa sultinys\", \"units\": null, \"amount\": null}, {\"name\": \"Grietinė\", \"units\": null, \"amount\": null}, {\"name\": \"Laiškiniai svogūnai\", \"units\": null, \"amount\": null}, {\"name\": \"Krapai\", \"units\": null, \"amount\": null}, {\"name\": \"Druska\", \"units\": null, \"amount\": null}, {\"name\": \"Pipirai\", \"units\": null, \"amount\": null}]",
+    "instructions": "Šviežius grybus nuvalykite, nuplaukite ir apipilkite verdančiu vandeniu. Sudėkite grybus į keptuvę kartu su svogūnais ir miltais, apkepkite svieste. Apkeptas grybus sudėkite į molinius indelius, įpilkite karšto mėsos sultinio, sudėkite bulves. Pašaukite indelius į orkaitę ir troškinkite 20-25 minutes. Įdėkite grietinės, smulkintų laiškinių svogūnų, pasūdykite ir išpilstykite į lėkštes. Užbarstykite smulkintais krapais.",
+    "category": "Soup",
+    "prep_time": null,
+    "cook_time": "25 minutes",
+    "total_time": null,
+    "notes": "Ši sriuba - puikus pasirinkimas šaltuoju metų laiku, kai norisi kažko šildančio ir sotaus.",
+    "tags": "grybų, sriuba, receptai"
+}

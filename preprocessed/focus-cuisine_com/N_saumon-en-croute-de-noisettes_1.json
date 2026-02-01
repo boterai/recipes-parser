@@ -1,0 +1,12 @@
+{
+    "dish_name": "Saumon en croûte de noisettes",
+    "description": "Le saumon frais est mon poisson préféré, et cette recette avec une croûte parfumée et croquante contraste à merveille avec le moelleux du saumon.",
+    "ingredients": "[{\"name\": \"Saumon\", \"units\": \"pavés\", \"amount\": 4}, {\"name\": \"gros sel\", \"units\": \"cuillère à soupe\", \"amount\": 1}, {\"name\": \"amandes\", \"units\": \"cuillères à soupe\", \"amount\": 4}, {\"name\": \"noisettes\", \"units\": \"cuillères à soupe\", \"amount\": 4}, {\"name\": \"graines de sésame\", \"units\": \"cuillères à soupe\", \"amount\": 4}, {\"name\": \"coriandre hachée\", \"units\": \"cuillères à soupe\", \"amount\": 2}, {\"name\": \"poivre\", \"units\": \"cuillère à café\", \"amount\": 0.5}, {\"name\": \"huile d'olive\", \"units\": \"à 2 cuillères à soupe\", \"amount\": 1}]",
+    "instructions": "Placez les pavés dans une assiette. Couvrez-les de gros sel puis réservez-les 5 minutes. Pendant ce temps, hachez finement les noisettes et les amandes. Rincez les pavés et séchez-les au papier absorbant. Préchauffez votre four à 170°C. Dans un bol, mélangez les amandes, les noisettes, les graines de sésame, la coriandre et le poivre. Disposez les pavés sur une feuille de papier cuisson légèrement graissée et répartissez le mélange précédent sur le dessus des pavés, arrosez-les d’un filet d’huile d’olive et placez le tout au four à mi-hauteur 10-12 minutes selon l’épaisseur de vos pavés et la cuisson que vous souhaitez. Moi j’aime le saumon mi-cuit. Si vous l’aimez bien cuit poursuivez la cuisson quelques minutes. Servez bien chaud.",
+    "category": "Main Course",
+    "prep_time": "5 minutes",
+    "cook_time": "10-12 minutes",
+    "total_time": null,
+    "notes": "Je l’ai accompagné de riz et d’une poêlée de champignons.",
+    "tags": "saumon, noisettes, plat principal"
+}

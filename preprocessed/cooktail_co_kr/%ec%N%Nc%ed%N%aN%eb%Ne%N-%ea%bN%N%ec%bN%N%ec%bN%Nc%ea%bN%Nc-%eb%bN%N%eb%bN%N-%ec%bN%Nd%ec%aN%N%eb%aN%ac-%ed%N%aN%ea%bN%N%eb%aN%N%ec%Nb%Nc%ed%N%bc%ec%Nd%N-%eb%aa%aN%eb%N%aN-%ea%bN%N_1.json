@@ -1,0 +1,12 @@
+{
+    "dish_name": "김치찌개",
+    "description": "김치찌개의 비법과 조리법을 소개합니다.",
+    "ingredients": "[{\"name\": \"김치\", \"units\": null, \"amount\": null}, {\"name\": \"돼지고기\", \"units\": null, \"amount\": null}, {\"name\": \"두부\", \"units\": null, \"amount\": null}, {\"name\": \"대파\", \"units\": null, \"amount\": null}, {\"name\": \"양파\", \"units\": null, \"amount\": null}, {\"name\": \"청양고추\", \"units\": null, \"amount\": null}, {\"name\": \"고춧가루\", \"units\": null, \"amount\": null}, {\"name\": \"마늘\", \"units\": null, \"amount\": null}, {\"name\": \"국간장\", \"units\": null, \"amount\": null}, {\"name\": \"설탕\", \"units\": \"티스푼\", \"amount\": \"1/2\"}, {\"name\": \"맛술\", \"units\": \"테이블스푼\", \"amount\": \"1\"}, {\"name\": \"액젓\", \"units\": null, \"amount\": null}, {\"name\": \"후추\", \"units\": null, \"amount\": null}, {\"name\": \"참기름\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. 김치와 돼지고기를 준비합니다. 2. 육수를 끓입니다. 3. 재료를 넣고 끓입니다. 4. 양념을 추가합니다. 5. 끓이는 시간을 조절합니다. 6. 마지막에 추가 재료를 넣습니다.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "김치찌개에 적합한 돼지고기 부위는 삼겹살이나 목살입니다.",
+    "tags": "김치찌개, 한국 요리, 메인 요리"
+}

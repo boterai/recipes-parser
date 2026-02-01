@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tiramisu",
+    "description": "O rețetă ideală pentru o zi de weekend cu familia și prietenii, savurând un desert ușor de realizat și rapid.",
+    "ingredients": "[{\"name\": \"pișcoturi\", \"units\": null, \"amount\": \"set mic\"}, {\"name\": \"mascarpone\", \"units\": \"g\", \"amount\": \"500\"}, {\"name\": \"zahăr\", \"units\": \"g\", \"amount\": \"200\"}, {\"name\": \"cafea tare\", \"units\": \"ml\", \"amount\": \"200\"}, {\"name\": \"pudră de cacao\", \"units\": \"pentru decor\", \"amount\": null}, {\"name\": \"gălbenușuri de ou\", \"units\": null, \"amount\": \"4\"}, {\"name\": \"albușuri de ou\", \"units\": null, \"amount\": \"2\"}]",
+    "instructions": "1. Prepară cafeaua și las-o să se răcească. 2. Separă gălbenușurile de albușuri. 3. Bate albușurile cu un praf de sare. 4. Amestecă gălbenușurile cu zahărul. 5. Încorporează mascarponele. 6. Adaugă spuma de albușuri. 7. Înmoaie pișcoturile în cafea și așază-le în tavă. 8. Adaugă crema și repetă straturile. 9. Lasă la frigider pentru 2 ore.",
+    "category": "Dessert",
+    "prep_time": "60 minutes",
+    "cook_time": "60 minutes",
+    "total_time": "2 hours",
+    "notes": "Ideal ar fi să stea la frigider peste 2 ore.",
+    "tags": "desert, tiramisu, rețete de prăjituri"
+}

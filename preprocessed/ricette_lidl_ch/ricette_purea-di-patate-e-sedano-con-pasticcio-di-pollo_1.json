@@ -1,0 +1,12 @@
+{
+    "dish_name": "Purea di patate e sedano con pasticcio di pollo",
+    "description": null,
+    "ingredients": "[{\"name\": \"brodo di volatile\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"pollo\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"carote\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"champignons\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"piselli\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"burro\", \"units\": \"g\", \"amount\": 25}, {\"name\": \"farina\", \"units\": \"g\", \"amount\": 25}, {\"name\": \"crema\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"succo di limone\", \"units\": \"spruzzo\", \"amount\": 1}, {\"name\": \"sale\", \"units\": null, \"amount\": null}, {\"name\": \"pepe\", \"units\": null, \"amount\": null}, {\"name\": \"patate\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"sedano\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"latte\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"burro\", \"units\": \"cucchiai\", \"amount\": 2}, {\"name\": \"noce moscata\", \"units\": null, \"amount\": null}]",
+    "instructions": "Se si ha a disposizione del pollo già cotto, si può usare questo. Altrimenti bollire la carne di pollo nel brodo. Far raffreddare la carne e tagliare a cubetti. Pelare e tagliare le carote nel verso della lunghezza a fettine. Con degli stampini ritagliare numeri o animali. Lavare e tagliare a fettine gli champignon. Preparare il brodo di pollo. Preparare ora il roux facendo sciogliere 25g di burro in una pentola e aggiungendo poi 25g di farina. Mescolando continuamente con una frusta far soffriggere la farina nel burro fino a ottenere il colore giallo dorato. Aggiungere man mano sempre mescolando il brodo di pollo. Mescolare velocemente per evitare la formazione di grumi. Portare tutto a bollore brevemente. Aggiungere poi la panna e la verdura. Far sobbollire il tutto per ca. 5 minuti e mescolare di tanto in tanto. Condire il pasticcio di pollo con del succo di limone, sale e pepe. Aggiungere infine la carne di pollo per farla scaldare. Pelare il sedano e le patate. Tagliare tutto in pezzi di grandezza uguale. Dopodiché bollire entrambe per ca. 15 minuti in acqua salata. Trascorso il tempo, verificare la cottura. Scolare le patate e il sedano. Alla fine aggiungere subito burro e latte. Ridurre a purea fino alla consistenza desiderata. Condire con sale e noce moscata.",
+    "category": null,
+    "prep_time": "35 min",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

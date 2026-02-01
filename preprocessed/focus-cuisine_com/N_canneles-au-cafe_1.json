@@ -1,0 +1,12 @@
+{
+    "dish_name": "Cannelés au café",
+    "description": "Petites douceurs au goût de café qui accompagnent parfaitement un expresso.",
+    "ingredients": "[{\"name\": \"lait\", \"units\": \"Cl\", \"amount\": 50}, {\"name\": \"oeufs entiers\", \"units\": \"units\", \"amount\": 2}, {\"name\": \"jaunes d'oeufs\", \"units\": \"units\", \"amount\": 2}, {\"name\": \"café expresso\", \"units\": \"tasse\", \"amount\": 1}, {\"name\": \"beurre\", \"units\": \"G\", \"amount\": 75}, {\"name\": \"farine\", \"units\": \"G\", \"amount\": 100}, {\"name\": \"sucre\", \"units\": \"G\", \"amount\": 150}, {\"name\": \"gousse de vanille\", \"units\": \"units\", \"amount\": 1}, {\"name\": \"rhum brun\", \"units\": \"CS\", \"amount\": 2}]",
+    "instructions": "La veille : Dans une casserole, amener le lait à ébullition avec le café, le beurre et la gousse de vanille fendue en deux. Dans un saladier, mélanger au fouet le sucre avec les oeufs entiers et les jaunes, puis incorporer la farine. Verser ensuite le lait chaud sans cesser de fouetter pour obtenir une pâte lisse. Laisser un peu refroidir et ajouter le rhum. Mettre au réfrigérateur 24 Heures. Le jour même, préchauffer le four à 210°. Sortir la pâte et retirer la gousse de vanille. Remuer bien et verser la pâte dans des empreintes à cannelés en les remplissant au 3/4. Enfourner et au bout de 10 minutes abaisser la température à 180°. Poursuivre la cuisson sans ouvrir le four pendant environ 50 minutes (les cannelés doivent être bien dorés).",
+    "category": "Dessert",
+    "prep_time": "24 hours",
+    "cook_time": "60 minutes",
+    "total_time": "25 hours",
+    "notes": "Les cannelés doivent être bien dorés.",
+    "tags": "café, dessert, cannelés"
+}

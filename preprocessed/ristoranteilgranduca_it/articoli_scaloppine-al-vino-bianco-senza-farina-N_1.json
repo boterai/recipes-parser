@@ -1,0 +1,12 @@
+{
+    "dish_name": "Scaloppine al Vino Bianco Senza Farina",
+    "description": "Delicate e Saporite scaloppine al vino bianco senza farina.",
+    "ingredients": "[{\"name\": \"carne di vitello\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"vino bianco secco\", \"units\": \"bicchiere\", \"amount\": 0.5}, {\"name\": \"cipolla tritata\", \"units\": \"cipolla\", \"amount\": 0.25}, {\"name\": \"olio extravergine di oliva\", \"units\": \"cucchiai\", \"amount\": 2}, {\"name\": \"rosmarino\", \"units\": \"rametto\", \"amount\": 1}, {\"name\": \"sale\", \"units\": null, \"amount\": null}, {\"name\": \"pepe nero macinato fresco\", \"units\": null, \"amount\": null}]",
+    "instructions": "Battete leggermente la carne, poi fate rosolare in padella con olio e cipolla. Aggiungete il vino bianco, il rosmarino, sale e pepe. Cuocete a fuoco medio per circa 10-15 minuti.",
+    "category": "Main Course",
+    "prep_time": "null",
+    "cook_time": "15 minutes",
+    "total_time": "null",
+    "notes": "La marinatura è fondamentale per la tenerezza della carne. Utilizzare vino di buona qualità.",
+    "tags": "Farina"
+}

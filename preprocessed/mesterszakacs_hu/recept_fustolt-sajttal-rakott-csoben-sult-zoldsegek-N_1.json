@@ -1,0 +1,12 @@
+{
+    "dish_name": "Füstölt sajttal rakott, csőben sült zöldségek",
+    "description": null,
+    "ingredients": "[{\"name\": \"padlizsán\", \"units\": \"db\", \"amount\": 1}, {\"name\": \"cukkini\", \"units\": \"db\", \"amount\": 2}, {\"name\": \"csiperke gomba\", \"units\": \"dkg\", \"amount\": 25}, {\"name\": \"só\", \"units\": null, \"amount\": null}, {\"name\": \"őrölt bors\", \"units\": null, \"amount\": null}, {\"name\": \"petrezselyem\", \"units\": \"nagy csokor\", \"amount\": 1}, {\"name\": \"olívaolaj\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"sárgarépa\", \"units\": \"szál\", \"amount\": 2}, {\"name\": \"brokkoli\", \"units\": \"dkg\", \"amount\": 50}, {\"name\": \"zöldségleves\", \"units\": \"dl\", \"amount\": 6}, {\"name\": \"füstölt sajt\", \"units\": \"dkg\", \"amount\": 25}]",
+    "instructions": "1. A megmosott padlizsánt, cukkinit, csiperkét félujjnyi vastagra szeleteljük, majd sóval, borssal, az aprított petrezselyemmel fűszerezzük, majd kevés olajon minden zöldséget pirosra sütünk. 2. A meghámozott sárgarépát zöldséghámozóval vékonyra szeleteljük, a brokkolit rózsáira szedjük, és mind a két zöldséget külön-külön a forró zöldséglevesben roppanósra főzzük, majd leszűrjük. 3. A füstölt sajtot lereszeljük, majd minden zöldséget és a sajtot egy hőálló tálba, vagy tepsibe rétegezzük. A teteje sajt legyen, majd 190 °C-os sütőben 25-30 perc alatt pirosra sütjük. 4. Ha elkészült, 10 percet pihentetjük, és kockákra vágva tálaljuk.",
+    "category": "Egytál",
+    "prep_time": null,
+    "cook_time": "30 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "rakott, zöldség, füstölt, sajt, csőben sült"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Broccolitærte",
+    "description": "Broccolitærte er en skøn klassiker, som aldrig går af mode. Opskriften består helt enkelt af en fuldkornsbund, letkogt broccoli samt fyld af æg, kvark og ost.",
+    "ingredients": "[{\"name\": \"Hvedemel\", \"units\": \"g\", \"amount\": 120}, {\"name\": \"Fuldkornshvedemel\", \"units\": \"g\", \"amount\": 60}, {\"name\": \"Groft salt\", \"units\": \"tsp\", \"amount\": 0.5}, {\"name\": \"Koldt smør\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"Vand\", \"units\": \"tbsp\", \"amount\": 2}, {\"name\": \"Broccoli\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"Æg\", \"units\": null, \"amount\": 3}, {\"name\": \"Kvark eller creme fraiche\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"Groft salt\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"Revet cheddar- og maasdammerost\", \"units\": \"g\", \"amount\": 100}]",
+    "instructions": "Bland hvedemel, fuldkornshvedemel og salt. Skær smørret i mindre stykker og smuldr det i melet. Saml dejen let med vand og hæld den løse dej i en tærteform (ca. 22 cm i diameter). Tryk dejen ud i tærteformen og tryk den godt op ad kanten. Forbag bunden midt i ovnen ca. 15 min. ved 200° - traditionel ovn. Skær små broccolibuketter fra stilken. Skær stilken i tynde skiver. Kom broccolien i kogende vand tilsat salt. Kog den under låg i ca. 1 min. Lad den dryppe af i en sigte. Pisk æggene sammen og tilsæt kvark eller creme fraiche og salt. Fordel broccolien på den forbagte bund, hæld æggemassen over og drys med ost. Bag tærten midt i ovnen ca. 35 min. ved 200° - traditionel ovn.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "35 minutes",
+    "total_time": "1 hour",
+    "notes": "Server broccolitærten til frokost, evt. med en salat - eller som en del af en buffet eller picnic.",
+    "tags": "vegetarian, tart, broccoli"
+}

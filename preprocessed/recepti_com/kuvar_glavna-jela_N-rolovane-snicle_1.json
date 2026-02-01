@@ -1,0 +1,12 @@
+{
+    "dish_name": "Rolovane šnicle",
+    "description": null,
+    "ingredients": "[{\"name\": \"svinjske šnicle\", \"units\": null, \"amount\": 4}, {\"name\": \"šnite suvog vrata\", \"units\": null, \"amount\": 4}, {\"name\": \"so\", \"units\": \"po ukusu\", \"amount\": null}, {\"name\": \"senf\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"kisela pavlake\", \"units\": \"kašika\", \"amount\": 1}, {\"name\": \"vode\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"kocka za supu\", \"units\": null, \"amount\": 1}, {\"name\": \"čačkalica\", \"units\": null, \"amount\": 8}, {\"name\": \"ulje\", \"units\": \"po potrebi\", \"amount\": null}]",
+    "instructions": "Šnicle istući kuhinjskim čekićem. Čačkalice staviti u činiju i preliti ih vodom. Dve šnicle premazati senfom, a druge dve premazati kiselom pavlakom. Preko poređati po šnitu suvog vrata, urolati i pričvrstiti sa po 2 čačkalice. U šerpu sipati malo ulja, zagrejati i pripremljene šnicle pržiti desetak minuta ukupno (sa svih strana). U 300 ml vode rastvoriti kocku sa supu i lagano sipati u šerpu. Poklopiti i ukrčkati 15 minuta na umerenoj vatri uz često okretanje. Pripremljene šnicle uzvaditi iz šerpe i poslužiti.",
+    "category": "Glavna jela",
+    "prep_time": "45 min",
+    "cook_time": null,
+    "total_time": "45 min",
+    "notes": "Nisam dodatno solila pošto je suvi vrat sam po sebi slan, a i krčka se u rastvorenoj kocki za supu. Vi posolite po svom ukusu. Sebi sam pripremila sa kiselom pavlakom, a mom suprugu sa senfom. Ove šnicle su bile male. Vi pripremite po svom izboru. Možete koristiti i krmenadle. Poslužiti uz pomfrit i uz sezonsku salatu. Prijatno!",
+    "tags": "svinjetina, šnicle, pavlaka"
+}

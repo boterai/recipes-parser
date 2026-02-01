@@ -1,0 +1,12 @@
+{
+    "dish_name": "Grašak sa noklicama",
+    "description": "Grašak sa noklicama je obično, domaće, jednostavno i jeftino jelo.",
+    "ingredients": "[{\"name\": \"mladi očišćeni grašak\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"šargarepe\", \"units\": \"pieces\", \"amount\": 3}, {\"name\": \"crni luk\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"aleva paprika\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"so\", \"units\": null, \"amount\": null}, {\"name\": \"biber\", \"units\": null, \"amount\": null}, {\"name\": \"jaje\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"oštrog brašna\", \"units\": \"tablespoons\", \"amount\": 4}, {\"name\": \"jabukovo sirće\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"ulje\", \"units\": null, \"amount\": null}]",
+    "instructions": "Šargarepu iseckajte na kockice, a crni luk sitno iseckajte i stavite ga u šerpu sa zagrejanim uljem (1-2 kašike). Kada luk požuti dodajte grašak i šargarepu. Kratko sve zajedno propržite i pre nego što sipate vodu dodajte i alevu papriku (slatku ili ljutu po ukusu). Vode je potrebno toliko da sve bude prekriveno i malo preko. Količina vode zavisi i od toga da li želite manje ili više čorbasto jelo. Kuvajte uz povremeno mešanje, da jelo ne zagori. Dužina kuvanja zavisi od graška, mladi grašak se skuva za dvadesetak minuta, dok je starijem potrebno duže vreme. U činiji izmešajte jaje, so, dodajte brašno da dobijete žitku smesu za knedle. Knedle vadite kašikom i spuštajte ih u šerpu sa omekšalim graškom. Kuvajte sve zajedno još par minuta, dok knedle ne isplivaju na površinu. Na kraju kuvanja u grašak sa knedlicama dodajte iseckani peršunov list, jabukovo sirće (ili sok od limuna), u zavisnosti od toga da li volite manje ili više kiselo jelo.",
+    "category": "Jela bez mesa",
+    "prep_time": null,
+    "cook_time": "20 minutes",
+    "total_time": null,
+    "notes": "Kada kuvate grašak, ako volite slađi grašak, možete uvek dodati malo šećera. Tako se nekad kod nas kuvalo - na slatko.",
+    "tags": "povrće, supe, grašak, šargarepa, brzo i jednostavno, bez mesa"
+}

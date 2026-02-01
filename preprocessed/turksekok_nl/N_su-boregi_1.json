@@ -1,0 +1,12 @@
+{
+    "dish_name": "Su böregi",
+    "description": "Heerlijke börek bestaande uit verschillende kaas. Ideaal voor bij de lunch of als tussendoortje.",
+    "ingredients": "[{\"name\": \"loempiavellen\", \"units\": null, \"amount\": 40}, {\"name\": \"zonnebloemolie\", \"units\": \"glass\", \"amount\": 0.5}, {\"name\": \"melk\", \"units\": \"glasses\", \"amount\": 2}, {\"name\": \"eieren\", \"units\": null, \"amount\": 3}, {\"name\": \"bakpoeder\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"witte kaas\", \"units\": \"glass\", \"amount\": 1}, {\"name\": \"geraspte Nederlandse kaas\", \"units\": \"glass\", \"amount\": 1}]",
+    "instructions": "Voeg de melk, eieren, zonnebloemolie en bakpoeder toe in een kom. Goed kloppen! Dompel de loempiabladeren in het sausmengsel. Bedek de bodem van de bakplaat met 12 stuks gedompelde loempiabladeren. Rasp de witte kaas met een vork op een bord, en mix deze met de geraspte Nederlandse kaas. Strooi dit mengsel vervolgens over de loempiabladeren in de bakplaat. Bedek dit wederom met 12 stuks gedompelde loempiabladeren. Strooi wederom het kaasmengsel over de loempiabladeren. Leg de overige 16 stuks gedompelde loempiabladeren eroverheen. Snijd het geheel in blokjes. Leg de bakplaat voor 20 minuten op 180 graden in de oven. Eet smakelijk!",
+    "category": "Börek",
+    "prep_time": "45 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "65 minutes",
+    "notes": null,
+    "tags": "Turkish, Börek, Cheese"
+}

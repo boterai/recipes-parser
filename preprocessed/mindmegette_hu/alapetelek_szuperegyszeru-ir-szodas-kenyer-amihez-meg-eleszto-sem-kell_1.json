@@ -1,0 +1,12 @@
+{
+    "dish_name": "Szuperegyszerű ír szódás kenyér",
+    "description": "Az írek hagyományos szódás kenyere kelesztés nélkül készül, egy óra alatt megvagy vele.",
+    "ingredients": "[{\"name\": \"liszt\", \"units\": \"dkg\", \"amount\": 35}, {\"name\": \"só\", \"units\": \"tk\", \"amount\": 0.5}, {\"name\": \"szódabikarbóna\", \"units\": \"tk\", \"amount\": 0.5}, {\"name\": \"író\", \"units\": \"dl\", \"amount\": 3}]",
+    "instructions": "A sütőt 200 fokra előmelegítjük. Egy tálban elkeverjük a lisztet a sóval és a szódabikarbónával. Csinálunk egy krátert a liszt közepébe, beleöntjük az írót, és gyorsan összegyúrjuk. A tésztát enyhén lisztezett munkalapra borítjuk, és átgyúrjuk. A masszából golyót formázunk, majd kb. 3-4 cm vastag koronggá lapítjuk. A tészta tetejét kereszt alakban bevágjuk. Egy sütőpapírral bélelt tepsibe vagy sütőtálba tesszük, és aranybarnára sütjük kb. 30 perc alatt. Tálalás előtt rácson hagyjuk kb. 15 percig hűlni.",
+    "category": "Alapételek",
+    "prep_time": "1 hour",
+    "cook_time": "30 minutes",
+    "total_time": "1 hour 30 minutes",
+    "notes": "A tészta nem túl kemény, de nem is túl ragacsos legyen.",
+    "tags": "kenyér, házilag, ír szódás kenyér, élesztő nélkül, kenyér recept"
+}

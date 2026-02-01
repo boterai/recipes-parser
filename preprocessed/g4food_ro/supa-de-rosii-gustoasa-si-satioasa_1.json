@@ -1,0 +1,12 @@
+{
+    "dish_name": "Supa de roșii",
+    "description": "Supa de roșii, gustoasă și sățioasă, perfectă pentru o cină ușoară.",
+    "ingredients": "[{\"name\": \"unt nesărat\", \"units\": \"linguri\", \"amount\": 4}, {\"name\": \"cepe galbene\", \"units\": \"bucăți\", \"amount\": 2}, {\"name\": \"usturoi\", \"units\": \"căței\", \"amount\": 3}, {\"name\": \"roșii zdrobite\", \"units\": \"kilograme\", \"amount\": 1.6}, {\"name\": \"supă de pui\", \"units\": \"mililitri\", \"amount\": 480}, {\"name\": \"busuioc proaspăt\", \"units\": \"mililitri\", \"amount\": 60}, {\"name\": \"zahăr\", \"units\": \"lingură\", \"amount\": 1}, {\"name\": \"piper negru\", \"units\": \"linguriță\", \"amount\": 0.5}, {\"name\": \"smântână dulce pentru gătit\", \"units\": \"mililitri\", \"amount\": 120}, {\"name\": \"parmezan ras\", \"units\": \"grame\", \"amount\": 30}]",
+    "instructions": "Încinge o oală cu fund gros la foc mediu. Adaugă untul, apoi ceapa tocată. Călește timp de 10 până la 12 minute, până devine moale și aurie. Adaugă usturoiul și gătește încă un minut. Pune roșiile cu tot cu suc, supa de pui, busuiocul, zahărul și piperul. Amestecă și adu la fierbere. Redu focul și lasă să fiarbă ușor timp de 10 minute. Dacă vrei o supă fină, pasează cu un blender vertical direct în oală. Adaugă smântâna și parmezanul. Adu din nou la punctul de fierbere. Potrivește de sare și piper, după nevoie. Oprește focul. Servește supa fierbinte, cu parmezan ras și frunze proaspete de busuioc.",
+    "category": "Soup",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Rețeta poate fi adaptată pentru un conținut scăzut de sodiu.",
+    "tags": "supa, rosii, sanatoasa, reteta"
+}

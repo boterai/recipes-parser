@@ -1,0 +1,12 @@
+{
+    "dish_name": "Homemade Chocolate Chip Cookies",
+    "description": "Classic homemade chocolate chip cookies optimized for over 75 years.",
+    "ingredients": "[{\"name\": \"Gold Medal™ All Purpose Flour\", \"units\": \"cups\", \"amount\": 2.25}, {\"name\": \"baking soda\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"salt\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"butter\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"granulated sugar\", \"units\": \"cup\", \"amount\": 0.75}, {\"name\": \"packed brown sugar\", \"units\": \"cup\", \"amount\": 0.75}, {\"name\": \"egg\", \"units\": null, \"amount\": 1}, {\"name\": \"vanilla\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"semisweet chocolate chips\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"coarsely chopped nuts\", \"units\": \"cup\", \"amount\": 1}]",
+    "instructions": "1. Heat oven to 375°F. 2. In large bowl, beat softened butter, granulated sugar, and brown sugar with electric mixer on medium speed until fluffy and thoroughly mixed, scraping downside of bowl occasionally. Or, mix with a spoon for about 1 minute. 3. Add egg and vanilla. Beat until smooth and thoroughly blended. 4. Stir in flour, baking soda, and salt just until blended (dough will be stiff). 5. Stir in chocolate chips and nuts. 6. Scoop dough into heaping tablespoonfuls (#24 cookie scoop) and drop at least 2 inches apart, onto ungreased or parchment-lined cookie sheets. 7. Bake 8 to 10 minutes or until light golden brown (centers will be soft). Cool 2 minutes on cookie sheet; remove cookies from cookie sheet to cooling rack. 8. Cool completely, about 30 minutes. Store covered in airtight container.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "1 hour 30 minutes",
+    "notes": "For crispier cookies, reduce the flour from 2 1/4 cups to 2 cups.",
+    "tags": "cookies, dessert, chocolate chip"
+}

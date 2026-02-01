@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ramen",
+    "description": "Un ramen casalingo con brodo di manzo e ajitsuke-tamago.",
+    "ingredients": "[{\"name\": \"Carne di manzo\", \"units\": \"g\", \"amount\": 600}, {\"name\": \"Aglio\", \"units\": \"spicchi\", \"amount\": 4}, {\"name\": \"Cipollotti verdi\", \"units\": null, \"amount\": 4}, {\"name\": \"Zenzero\", \"units\": \"cm\", \"amount\": 3}, {\"name\": \"Peperoncino piccante macinato\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"Chiodi di garofano\", \"units\": null, \"amount\": 3}, {\"name\": \"Pepe nero\", \"units\": null, \"amount\": null}, {\"name\": \"Pepe di Jamaica\", \"units\": null, \"amount\": null}, {\"name\": \"Salsa di soia\", \"units\": \"ml\", \"amount\": 60}, {\"name\": \"Fungo shiitake\", \"units\": null, \"amount\": 1}, {\"name\": \"Zucchero\", \"units\": \"cucchiaio\", \"amount\": 1}, {\"name\": \"Dado in polvere\", \"units\": \"cucchiaio\", \"amount\": 1}, {\"name\": \"Olio vegetale\", \"units\": null, \"amount\": null}, {\"name\": \"Sale\", \"units\": null, \"amount\": null}, {\"name\": \"Pepe\", \"units\": null, \"amount\": null}, {\"name\": \"Acqua\", \"units\": \"litri\", \"amount\": 2}, {\"name\": \"Uova\", \"units\": null, \"amount\": 4}, {\"name\": \"Mentsuyu\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"Acqua (per le uova)\", \"units\": \"ml\", \"amount\": 50}]",
+    "instructions": "1. Rosolare la carne in una pentola a pressione con olio. 2. Aggiungere acqua e ingredienti per il brodo. 3. Cuocere in pressione per un'ora. 4. Preparare le ajitsuke-tamago. 5. Cuocere gli spaghettini. 6. Filtrare il brodo e servire con carne, uova e guarnizioni.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "1 hour",
+    "total_time": "1 hour 15 minutes",
+    "notes": "Le ajitsuke-tamago sono facoltative ma migliorano il piatto. Utilizzare spaghettini ramen o yakisoba.",
+    "tags": "ramen, cucina giapponese, ricetta"
+}

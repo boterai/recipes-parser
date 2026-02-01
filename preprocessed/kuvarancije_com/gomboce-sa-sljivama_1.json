@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gomboce sa šljivama",
+    "description": "Domaće, jednostavno i jeftino jelo od testa i voća.",
+    "ingredients": "[{\"name\": \"krompir\", \"units\": \"kg\", \"amount\": \"1\"}, {\"name\": \"brašno\", \"units\": \"kg\", \"amount\": \"0.5\"}, {\"name\": \"jaje\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"so\", \"units\": null, \"amount\": null}, {\"name\": \"ulje\", \"units\": \"kašike\", \"amount\": \"2-3\"}, {\"name\": \"prezle\", \"units\": \"kašike\", \"amount\": \"2-3\"}, {\"name\": \"šljive\", \"units\": null, \"amount\": null}]",
+    "instructions": "Krompir skuvajte u ljusci i ispasirajte ga kao za pire. Dodajte brašno i jedno jaje, prstohvat soli i umesite. Testo razvucite na debljinu od oko pola santimetra i isecite ga na kvadrate, na koje slažete očišćene šljive. Presavijete krajeve i formirate knedle. Kuvajte ih u kipućoj, malo posoljenoj vodi dok ne isplivaju. U drugoj šerpi propržite prezlu na malo putera i uvaljajte skuvane gomboce.",
+    "category": "Slatkiši",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Ovo su orijentacione mere, jer u zavisnosti od toga kakav je krompir možda vam zatreba koji gram više ili manje brašna.",
+    "tags": "slatkiši, jaja, šljive, kajsije, brašno, šećer, prezla"
+}

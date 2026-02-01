@@ -1,0 +1,12 @@
+{
+    "dish_name": "Strawberry Cake Mix Cookies",
+    "description": "Delightful homemade cookies that are soft, chewy, and perfectly sweet with a charming crinkly powdered sugar exterior.",
+    "ingredients": "[{\"name\": \"strawberry cake mix\", \"units\": \"box (15.25 oz)\", \"amount\": \"1\"}, {\"name\": \"baking powder\", \"units\": \"teaspoon\", \"amount\": \"½\"}, {\"name\": \"large eggs\", \"units\": null, \"amount\": \"2\"}, {\"name\": \"vegetable or canola oil\", \"units\": \"cup\", \"amount\": \"⅓\"}, {\"name\": \"powdered sugar\", \"units\": \"cup\", \"amount\": \"½\"}]",
+    "instructions": "1. Preheat your oven to 375°F. Line a cookie sheet with parchment paper. 2. In a small bowl, whisk together the strawberry cake mix and baking powder. 3. In a larger mixing bowl, blend eggs and oil until smooth. 4. Gradually incorporate the dry mix into the wet ingredients. 5. Roll dough into balls and coat in powdered sugar. 6. Bake for 8-10 minutes until crinkly. 7. Let cool for 5 minutes before transferring to a cooling rack.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "25 minutes",
+    "notes": "These cookies freeze well and can be stored in an airtight container for up to 5 days.",
+    "tags": "cookies,dessert,strawberry"
+}

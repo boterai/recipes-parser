@@ -1,0 +1,12 @@
+{
+    "dish_name": "Limesill",
+    "description": "En klassisk ättikslag blandad med limejuice, hackad färsk koriander och persilja.",
+    "ingredients": "[{\"name\": \"inläggningssill\", \"units\": \"burkar (à 420 g)\", \"amount\": 2}, {\"name\": \"lime\", \"units\": \"st\", \"amount\": 3}, {\"name\": \"ättika\", \"units\": \"dl\", \"amount\": 0.5}, {\"name\": \"vatten\", \"units\": \"dl\", \"amount\": 5}, {\"name\": \"socker\", \"units\": \"dl\", \"amount\": 4}, {\"name\": \"färsk hackad koriander\", \"units\": \"msk\", \"amount\": 2}, {\"name\": \"finskuren persilja\", \"units\": \"dl\", \"amount\": 0.5}, {\"name\": \"lime\", \"units\": \"st (rivet skal)\", \"amount\": 2}]",
+    "instructions": "Riv det yttersta skalet av limefrukterna till garnering. Dela limefrukterna och pressa ner juicen i en kastrull. Tillsätt ättika, vatten och socker. Koka upp under omrörning. Ställ sedan kallt att svalna. Rör ner koriander och persilja. Skölj sillen. Låt den rinna av väl. Skär sillen tvärs över i cm-breda bitar. Lägg dem i en bunke/skål och häll över den kalla lagen. Blanda försiktigt. Marinera i 2 dygn. Lägg upp i en skål och garnera med limeskalet.",
+    "category": null,
+    "prep_time": "Över 60 min",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Fri från gluten, laktos, mjölkprotein och ägg.",
+    "tags": "inlagd sill, midsommar, jul, inlagd fisk"
+}

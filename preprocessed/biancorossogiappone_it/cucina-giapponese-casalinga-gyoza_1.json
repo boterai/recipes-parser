@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gyoza",
+    "description": "Рецепт приготовления японских пельменей gyoza с домашней пастой.",
+    "ingredients": "[{\"name\": \"farina 00\", \"units\": \"g\", \"amount\": 240}, {\"name\": \"sale fino\", \"units\": \"cucchiaino\", \"amount\": 0.5}, {\"name\": \"acqua calda\", \"units\": \"ml\", \"amount\": \"120-150\"}, {\"name\": \"amido o fecola di patate\", \"units\": \"q.b.\", \"amount\": null}]",
+    "instructions": "1. Setacciare la farina in un recipiente capiente. 2. Aggiungere l'acqua con il sale e mescolare. 3. Impastare per 10 minuti e formare una palla. 4. Dividere in cilindri e far riposare. 5. Stendere e formare dischi di pasta.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "La pasta per gyoza può essere acquistata già pronta, ma la ricetta include anche il procedimento per prepararla artigianalmente.",
+    "tags": "gyoza, ravioli, cucina giapponese"
+}

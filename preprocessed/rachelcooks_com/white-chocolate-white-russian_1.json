@@ -1,0 +1,12 @@
+{
+    "dish_name": "White Chocolate White Russian",
+    "description": "Perfectly chilled, a white chocolate white Russian is sophisticated and beautiful, a wonderfully sweet and creamy dessert drink.",
+    "ingredients": "[{\"name\": \"white chocolate\", \"units\": \"cup\", \"amount\": \"¼\"}, {\"name\": \"vodka\", \"units\": \"ounce\", \"amount\": \"1\"}, {\"name\": \"white chocolate liqueur\", \"units\": \"ounce\", \"amount\": \"1\"}, {\"name\": \"coffee liqueur\", \"units\": \"ounce\", \"amount\": \"1\"}, {\"name\": \"Irish cream liqueur\", \"units\": \"ounce\", \"amount\": \"1\"}, {\"name\": \"half-and-half\", \"units\": \"ounce\", \"amount\": \"1\"}]",
+    "instructions": "To Rim the Glass: Dip the edge of a rocks glass into the melted white chocolate about ¼”. Set aside. Make the Cocktail: Fill a shaker with ice. Add the vodka, white chocolate liquor, coffee liquor, Irish cream liqueur, and half-and-half. Shake until chilled– about 30 seconds. Strain into the rimmed rocks glass. Serve immediately.",
+    "category": "Beverages",
+    "prep_time": "5 minutes",
+    "cook_time": null,
+    "total_time": "5 minutes",
+    "notes": "Lighten it up or make it richer, using milk or heavy cream instead of half-and-half. Serve it on the rocks instead of shaken with ice.",
+    "tags": "cocktail, dessert drink, white chocolate"
+}

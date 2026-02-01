@@ -1,0 +1,12 @@
+{
+    "dish_name": "Λαζάνια με τόνο και μανιτάρια",
+    "description": null,
+    "ingredients": "[{\"name\": \"μαργαρίνη\", \"units\": null, \"amount\": null}, {\"name\": \"κρεμμύδι\", \"units\": null, \"amount\": null}, {\"name\": \"μανιτάρια\", \"units\": null, \"amount\": null}, {\"name\": \"τόνος\", \"units\": null, \"amount\": null}, {\"name\": \"σκόρδο\", \"units\": null, \"amount\": null}, {\"name\": \"κρασί\", \"units\": null, \"amount\": null}, {\"name\": \"λεμόνι\", \"units\": null, \"amount\": null}, {\"name\": \"γάλα\", \"units\": null, \"amount\": null}, {\"name\": \"μαϊντανός\", \"units\": null, \"amount\": null}, {\"name\": \"λαζάνια\", \"units\": null, \"amount\": null}, {\"name\": \"αλατισμένο νερό\", \"units\": null, \"amount\": null}]",
+    "instructions": "Σε κατσαρόλα βάζουμε τη μαργαρίνη και ροδίζουμε το κρεμμύδι. Ρίχνουμε τα μανιτάρια, τον τόνο, το σκόρδο, και σβήνουμε με το κρασί. Προσθέτουμε το λεμόνι, το γάλα και τον μαϊντανό και αφήνουμε να βράσουν σε χαμηλή φωτιά. Σε άλλη κατσαρόλα βράζουμε τα λαζάνια σε αλατισμένο νερό. Τα σουρώνουμε και τα ρίχνουμε στη σάλτσα τόνου-μανιταριών. Ανακατεύουμε προσεκτικά και αποσύρουμε από τη φωτιά.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Καλή σας όρεξη!",
+    "tags": null
+}

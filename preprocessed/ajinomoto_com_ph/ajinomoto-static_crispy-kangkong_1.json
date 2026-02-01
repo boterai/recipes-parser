@@ -1,0 +1,12 @@
+{
+    "dish_name": "Crispy Kangkong",
+    "description": "A crispy dish made with kangkong leaves, coated in a batter and fried.",
+    "ingredients": "[{\"name\": \"Oil\", \"units\": \"cups (450ml)\", \"amount\": 2}, {\"name\": \"Egg\", \"units\": \"pcs\", \"amount\": 2}, {\"name\": \"Cornstarch\", \"units\": \"cup (62g)\", \"amount\": 0.5}, {\"name\": \"TASTY BOY® Breading Mix (Regular)\", \"units\": \"cup (95g)\", \"amount\": 0.75}, {\"name\": \"Kangkong\", \"units\": \"cups (130g)\", \"amount\": 4}, {\"name\": \"Mayonnaise\", \"units\": \"tablespoons (58.40g)\", \"amount\": 4}, {\"name\": \"Mustard\", \"units\": \"tablespoons (40g)\", \"amount\": 2}, {\"name\": \"Pepper, ground\", \"units\": \"teaspoon (1g)\", \"amount\": 0.5}]",
+    "instructions": "MIX egg, cornstarch and TASTY BOY® (Regular) in a small bowl. COAT kangkong leaves evenly with mixed batter. COMBINE mayonnaise, mustard and ground pepper and set aside. FRY in oil the kangkong leaves with temperature of 175˚C until kangkong is cooked. SERVE and enjoy.",
+    "category": "Appetizer",
+    "prep_time": "30 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "You can also use alugbati and spinach leaves for this dish.",
+    "tags": "Asian, Filipino, Main Course, Appetizer"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Negroni sbagliato",
+    "description": null,
+    "ingredients": "[{\"name\": \"Prosecco\", \"units\": \"cl\", \"amount\": 3}, {\"name\": \"Bitter rosso\", \"units\": \"cl\", \"amount\": 3}, {\"name\": \"Vermouth rosso\", \"units\": \"cl\", \"amount\": 3}, {\"name\": \"Ghiaccio\", \"units\": \"cubo\", \"amount\": 1}, {\"name\": \"Scorza d’arancia\", \"units\": \"q.b.\", \"amount\": null}]",
+    "instructions": "Per preparare il Negroni sbagliato, come prima cosa mettete un cubo di ghiaccio all’interno di un tumbler basso. Versate il bitter rosso, il vermouth rosso e una parte di prosecco. Mescolate velocemente con un bar spoon, con movimenti dal basso verso l’alto. Versate l’altra parte di prosecco fino a che la schiuma non lambirà il bordo del bicchiere. Passate una zest di arancia sul bordo del bicchiere per poi tuffarla nel cocktail come guarnizione. Il vostro Negroni sbagliato è pronto per essere gustato!",
+    "category": "Bevande",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Il Negroni sbagliato è un cocktail che si apprezza al meglio appena preparato, quindi non può essere conservato perchè si perderebbero la freschezza e l’effervescenza del prosecco. Potete abbinate il Negroni sbagliato stuzzichini leggeri come: olive, formaggi a pasta dura o bruschette.",
+    "tags": null
+}

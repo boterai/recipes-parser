@@ -1,0 +1,12 @@
+{
+    "dish_name": "Napoleonka",
+    "description": "Poljska kremšnita poznata kao napoleonka, koja se sastoji od lisnatog tijesta i bogate kreme.",
+    "ingredients": "[{\"name\": \"maslac\", \"units\": \"g\", \"amount\": 230}, {\"name\": \"mlijeko\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"šećer\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"glatko brašno\", \"units\": \"g\", \"amount\": 85}, {\"name\": \"žumanjci\", \"units\": null, \"amount\": 5}, {\"name\": \"mahuna vanilije\", \"units\": null, \"amount\": 1}, {\"name\": \"lisnato tijesto\", \"units\": null, \"amount\": null}, {\"name\": \"šećer u prahu\", \"units\": null, \"amount\": null}]",
+    "instructions": "Pobrašnite radnu površinu i razvaljajte lisnato tijesto na debljinu od oko 2 mm. Izrežite dva pravokutnika jednake veličine. Tijesto prebacite na lim obložen papirom za pečenje. Pokrijte kuhinjskom krpom i ostavite da odmara najmanje jedan sat. Zagrijte pećnicu na 200 °C i pecite tijesto oko 20 minuta ili dok ne poprimi lijepu zlatnu boju. U lonac ulijte mlijeko, dodajte mahunu vanilije i zagrijavajte gotovo do vrenja. Umutite žumanjke i šećer, dodajte brašno i miješajte. Polako ulijevajte vruće mlijeko uz stalno miješanje. Vratite smjesu u lonac i kuhajte dok se krema ne zgusne. Ohladite kremu i umiješajte omekšali maslac. Na jedan pečeni list tijesta rasporedite kremu, pokrijte drugim listom i stavite u hladnjak preko noći.",
+    "category": "Dessert",
+    "prep_time": "1 hour",
+    "cook_time": "20 minutes",
+    "total_time": "1 hour 20 minutes",
+    "notes": null,
+    "tags": "kremšnita, napoleonka, Poljska, poljska kuhinja"
+}

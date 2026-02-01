@@ -1,0 +1,12 @@
+{
+    "dish_name": "Piadina con salmone e pesto",
+    "description": null,
+    "ingredients": "[{\"name\": \"Piadelle Gustose\", \"units\": null, \"amount\": 3}, {\"name\": \"Salmone affumicato\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"Aneto\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Scorza di limone\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Scorza d’arancia\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Basilico\", \"units\": \"g\", \"amount\": 90}, {\"name\": \"Olio extravergine d’oliva\", \"units\": \"g\", \"amount\": 90}, {\"name\": \"Parmigiano Reggiano DOP\", \"units\": \"g\", \"amount\": 75}, {\"name\": \"Pinoli\", \"units\": \"g\", \"amount\": 25}, {\"name\": \"Sale grosso\", \"units\": \"q.b.\", \"amount\": null}]",
+    "instructions": "Per preparare la piadina con salmone e pesto come prima cosa realizzate il pesto: in un mixer versate le foglioline di basilico pulite e asciutte, un pizzico di sale grosso, il Parmigiano Reggiano grattugiato e i pinoli. Aggiungete anche l’olio e frullate il tutto sino ad ottenere una crema omogenea. Trasferitela in una ciotolina e tenetela da parte. A questo punto sistemate una piadella in una padella e scaldatela per 90 secondi, poi giratela e scaldatela per altri 90 secondi. Trasferite su un piatto e spalmate uno strato abbondante di pesto su metà piadina. Posizionate sopra il salmone affumicato, arricchite con foglioline di aneto e scorza di limone grattugiata. Aggiungete anche la scorza d’arancia grattugiata. Ripiegate a metà e servite la vostra piadina con salmone e pesto!",
+    "category": "Piatti Unici",
+    "prep_time": null,
+    "cook_time": "3 minutes",
+    "total_time": null,
+    "notes": "Consigliamo di servire la piadina con salmone e pesto appena pronta. E’ possibile preparare il pesto con qualche ora d’anticipo, ma consigliamo di farcire la piadella poco prima di servirla. Al posto dell’aneto potete utilizzare del finocchietto. Se amate un pesto dal sapore deciso aggiungete mezzo spicchio d’aglio senza anima e sostituite il Parmigiano con il Pecorino grattugiato.",
+    "tags": null
+}

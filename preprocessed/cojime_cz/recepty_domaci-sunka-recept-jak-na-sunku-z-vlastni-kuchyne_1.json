@@ -1,0 +1,12 @@
+{
+    "dish_name": "Domácí šunka",
+    "description": "Recept na domácí šunku a naučíte se, jak si vyrobit tu nejlepší šunku přímo z vaší vlastní kuchyně.",
+    "ingredients": "[{\"name\": \"vepřová kýta nebo plec\", \"units\": null, \"amount\": null}, {\"name\": \"sůl\", \"units\": null, \"amount\": null}, {\"name\": \"voda\", \"units\": null, \"amount\": null}, {\"name\": \"koření (pepř, nové koření, bobkový list)\", \"units\": null, \"amount\": null}, {\"name\": \"med nebo medový ocet\", \"units\": null, \"amount\": null}, {\"name\": \"česnek\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Vyberte kvalitní maso. 2. Připravte marinádu. 3. Marinujte šunku. 4. Pečte šunku. 5. Nechte šunku odpočívat.",
+    "category": "Main Course",
+    "prep_time": "24 hours",
+    "cook_time": "30 minutes",
+    "total_time": "24 hours 30 minutes",
+    "notes": "Uchovávejte v chladu, dobře zabalená.",
+    "tags": "šunka, domácí, recept"
+}

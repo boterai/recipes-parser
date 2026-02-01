@@ -1,0 +1,12 @@
+{
+    "dish_name": "Upma",
+    "description": "A quick and delicious South Indian breakfast dish made with semolina, spices, and vegetables.",
+    "ingredients": "[{\"name\": \"semolina (rava / sooji)\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"oil\", \"units\": \"tbsp\", \"amount\": 1.5}, {\"name\": \"mustard seeds (rai / sarson)\", \"units\": \"tsp\", \"amount\": 0.5}, {\"name\": \"urad dal (split black lentils)\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"curry leaves (kadi patta)\", \"units\": \"pieces\", \"amount\": 4}, {\"name\": \"slit green chilli\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"finely chopped onion\", \"units\": \"cup\", \"amount\": 0.25}, {\"name\": \"salt\", \"units\": \"to taste\", \"amount\": null}, {\"name\": \"lemon juice\", \"units\": \"tsp\", \"amount\": 2}, {\"name\": \"sugar\", \"units\": \"tsp\", \"amount\": 2}, {\"name\": \"finely chopped coriander (dhania)\", \"units\": \"tbsp\", \"amount\": 1}]",
+    "instructions": "To make upma, heat the semolina in a kadhai and dry roast on a medium flame for 4 to 5 minutes, while stirring occasionally. Keep aside. Heat the oil in a kadhai and add the mustard seeds. When the seeds crackle, add the urad dal, curry leaves and green chillies and sauté on a medium flame for a few seconds. Add the onions and sauté on a medium flame for 1 to 2 minutes. Add the roasted semolina, 3 cups of hot water and salt and mix well and cover with a lid and cook on a slow flame for 3 to 4 minutes, while stirring occasionally. Add the lemon juice and sugar, mix well and cook on a medium flame for another 1 minute, while stirring continuously. Fill the upma in a glass bowl and demould on a plate. Serve the upma immediately garnished with coriander.",
+    "category": "Breakfast",
+    "prep_time": "5 minutes",
+    "cook_time": "12 minutes",
+    "total_time": "17 minutes",
+    "notes": "Feel free to add vegetables like carrots, peas, or potatoes for added nutrition. Serve with coconut chutney or sambhar.",
+    "tags": "Indian, Breakfast, Quick, Vegetarian"
+}

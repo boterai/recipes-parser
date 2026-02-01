@@ -1,0 +1,12 @@
+{
+    "dish_name": "오레오 쉐이크",
+    "description": "달콤한 오레오 쉐이크를 만드는 간단한 레시피.",
+    "ingredients": "[{\"name\": \"오레오\", \"units\": \"개\", \"amount\": 6}, {\"name\": \"우유\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"바닐라 아이스크림\", \"units\": \"스쿱\", \"amount\": 2}, {\"name\": \"얼음\", \"units\": \"개\", \"amount\": 5}]",
+    "instructions": "믹서에 모든 재료를 넣고 곱게 갈아줍니다. 취향에 따라 휘핑크림이나 오레오 쿠키로 장식하면 더욱 맛있습니다.",
+    "category": "음료",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "오레오 쿠키를 살짝 부숴서 넣으면 씹는 맛을 더할 수 있습니다.",
+    "tags": "오레오, 쉐이크, 음료, 디저트"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Peppermint Mocha",
+    "description": "A festive blend of rich chocolate and refreshing peppermint that warms the soul.",
+    "ingredients": "[{\"name\": \"brewed coffee\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"milk\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"chocolate syrup\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"peppermint extract\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"whipped cream\", \"units\": \"whole\", \"amount\": 1}, {\"name\": \"crushed peppermint candies\", \"units\": \"whole\", \"amount\": 1}]",
+    "instructions": "1. Brew Fresh Coffee First. 2. Warm Milk With Chocolate. 3. Combine Coffee and Chocolate Mixture. 4. Add Whipped Cream Topping. 5. Sprinkle Crushed Peppermint Candies.",
+    "category": "Beverage",
+    "prep_time": "8 minutes",
+    "cook_time": null,
+    "total_time": "8 minutes",
+    "notes": "Use high-quality coffee beans for the best results. Adjust the amount of chocolate syrup and peppermint extract to find your ideal balance of flavors.",
+    "tags": "coffee, holiday, festive, peppermint, mocha"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tamagoyaki",
+    "description": "Giappone frittata, composta da tante frittatine sottili arrotolate l’una sull’altra.",
+    "ingredients": "[{\"name\": \"uova\", \"units\": null, \"amount\": 3}, {\"name\": \"acqua\", \"units\": \"cucchiai\", \"amount\": 3}, {\"name\": \"sale\", \"units\": \"pizzico\", \"amount\": 1}, {\"name\": \"zucchero\", \"units\": \"pizzico\", \"amount\": 1}, {\"name\": \"dashi\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"olio vegetale\", \"units\": \"per ungere la padella\", \"amount\": null}]",
+    "instructions": "In una scodella versare le tre uova, lo zucchero, il sale, l’acqua, il dashi granulare. Sbattere le uova. Scaldate la padella, ungetene l’interno con la carta da cucina imbevuta d’olio. Versare un primo mestolino di uovo sbattuto e arrotolare la frittata. Continuare fino a utilizzare tutto il composto.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Se non avete il dashi granulare, potete usare dashi fresco o salsa di soia.",
+    "tags": "tamagoyaki, cucina giapponese, ricetta, uova"
+}

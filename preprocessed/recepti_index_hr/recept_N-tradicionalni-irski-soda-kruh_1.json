@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tradicionalni irski soda-kruh",
+    "description": "Tradicionalni irski soda kruh se priprema od brašna, mlaćenice i sode bikarbone, a može se raditi od bijelog ili tamnog brašna. Priprema je iznimno brza i jednostavna.",
+    "ingredients": "[{\"name\": \"pšenično brašno od cjelovitog zrna\", \"units\": \"g\", \"amount\": 450}, {\"name\": \"krupne zobene pahuljice\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"sol\", \"units\": \"žličica\", \"amount\": 1}, {\"name\": \"soda bikarbona\", \"units\": \"žličica\", \"amount\": 1}, {\"name\": \"nerafinirani šećer\", \"units\": \"žlica\", \"amount\": 1}, {\"name\": \"med\", \"units\": \"žlica\", \"amount\": 1}, {\"name\": \"mlaćenica\", \"units\": \"ml\", \"amount\": 450}, {\"name\": \"rastopljeni maslac\", \"units\": \"žlica\", \"amount\": 1}]",
+    "instructions": "1. Zagrijte pećnicu. Prvo stavite grijati pećnicu na 200 stupnjeva i namastite lim za pečenje. 2. Umijesite tijesto. Nakon što se pećnica zagrije, stavite sve suhe sastojke u veliku zdjelu za miješanje i promiješajte tako da se sjedine. U sredini napravite udubinu. U udubinu ulijte mlaćenicu, dodajte med i zatim vrlo brzo rukama mijesite dok ne dobijete mekano, ljepljivo tijesto. 3. Pecite u pećnici. Na limu za pečenje oblikujte tijesto u okruglu štrucu i izrežite duboki križ na vrhu. Pecite između 50 minuta do sat vremena uz povremeno pogledavanje. Kruh je gotov kada korica postane zlatna, a štruca ne zvuči šuplje kada se udari od ispod. 4. Premažite maslacem. Gotov kruh premažite otopljenim maslacem i ostavite da se ohladi prije nego što ga počnete rezati.",
+    "category": null,
+    "prep_time": "10 minutes",
+    "cook_time": "1 hour",
+    "total_time": "1 hour 10 minutes",
+    "notes": "Pojedite što prije, jer ovakav tip kruha ne može dugo stajati.",
+    "tags": "kruh, peciva, brzo i lako, kruh bez kvasca, soda kruh, beskvasni kruh, soda bikarbona, kruh sa sodom, kruh sa sodom bikarbonom"
+}

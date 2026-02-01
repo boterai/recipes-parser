@@ -1,0 +1,12 @@
+{
+    "dish_name": "Baked Pumpkin Crisp",
+    "description": "Baked Pumpkin Crisp is a delightful dessert that perfectly captures the essence of autumn. This comforting treat combines the creamy sweetness of pumpkin pie with a crunchy, buttery topping.",
+    "ingredients": "[{\"name\": \"pumpkin puree\", \"units\": \"15 oz can\", \"amount\": \"1\"}, {\"name\": \"granulated sugar\", \"units\": \"cup\", \"amount\": \"1\"}, {\"name\": \"packed brown sugar\", \"units\": \"cup\", \"amount\": \"1/2\"}, {\"name\": \"large eggs\", \"units\": null, \"amount\": \"3\"}, {\"name\": \"pumpkin pie spice\", \"units\": \"teaspoon\", \"amount\": \"1\"}, {\"name\": \"salt\", \"units\": \"teaspoon\", \"amount\": \"1/2\"}, {\"name\": \"heavy cream\", \"units\": \"cup\", \"amount\": \"2/3\"}, {\"name\": \"vanilla extract\", \"units\": \"teaspoon\", \"amount\": \"1\"}, {\"name\": \"unsalted butter\", \"units\": \"cup\", \"amount\": \"1/2\"}, {\"name\": \"all-purpose flour\", \"units\": \"cup\", \"amount\": \"1\"}, {\"name\": \"packed brown sugar\", \"units\": \"cup\", \"amount\": \"1/2\"}, {\"name\": \"salt\", \"units\": \"teaspoon\", \"amount\": \"1/4\"}, {\"name\": \"cinnamon\", \"units\": \"teaspoon\", \"amount\": \"1/2\"}]",
+    "instructions": "Preheat your oven to 375°F (190°C). Grease a 9×13 inch baking dish. In a large bowl, whisk together the pumpkin puree, granulated sugar, brown sugar, eggs, pumpkin pie spice, salt, heavy cream, and vanilla extract until smooth. Pour the filling into the prepared baking dish. In a separate bowl, combine the melted butter, flour, brown sugar, salt, and cinnamon. Stir until crumbly. Sprinkle the crumbly topping evenly over the filling. Bake in the preheated oven for 45-50 minutes, or until the filling is set and the topping is golden brown. Let cool slightly before serving.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "45-50 minutes",
+    "total_time": "1 hour",
+    "notes": "Keep a close eye on the baked pumpkin crisp as it bakes. The filling should be set, but the topping should still have a bit of a golden-brown crunch. Overbaking can result in a dry and crumbly dessert. Feel free to add your own personal touch to this recipe.",
+    "tags": "baked, fall desserts, pumpkin crisp"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Crockpot Hot White Russians",
+    "description": "A warm, creamy drink combining coffee, cream, and Kahlúa with a dash of cinnamon, perfect for fall and winter evenings.",
+    "ingredients": "[{\"name\": \"brewed coffee\", \"units\": \"cups\", \"amount\": 4}, {\"name\": \"half & half\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"vodka\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"Kahlúa\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"whipped cream\", \"units\": null, \"amount\": null}, {\"name\": \"ground cinnamon\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Brew the Coffee: Start with freshly brewed coffee for the best flavor. Pour it into your slow cooker. 2. Add the Cream: Pour in the half & half, stirring gently to combine. 3. Mix in the Spirits: Add the vodka and Kahlúa, giving it a good stir. 4. Set and Forget: Set your slow cooker to “low” and let it warm for about 1 hour, allowing all the flavors to meld. 5. Serve and Enjoy: Ladle the hot mixture into mugs, top with whipped cream, and sprinkle with cinnamon for a festive touch.",
+    "category": "Drinks",
+    "prep_time": null,
+    "cook_time": "1 hour",
+    "total_time": null,
+    "notes": "For a kid-friendly version, omit the vodka and Kahlúa. Use high-quality coffee for the best flavor.",
+    "tags": "alcohol, Cocktail, Crockpot, drinks, easy, White Russian"
+}

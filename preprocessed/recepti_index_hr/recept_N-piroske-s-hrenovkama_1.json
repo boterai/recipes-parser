@@ -1,0 +1,12 @@
+{
+    "dish_name": "Piroške s hrenovkama",
+    "description": "Piroške su najukusnije dok su tople, a ovaj recept sigurno vas neće razočarati.",
+    "ingredients": "[{\"name\": \"brašno\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"mlijeko\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"suhog kvasca\", \"units\": \"vrećica\", \"amount\": 1}, {\"name\": \"šećera\", \"units\": \"žličica\", \"amount\": 1}, {\"name\": \"tekućeg jogurta\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"jaje\", \"units\": null, \"amount\": 1}, {\"name\": \"praška za pecivo\", \"units\": \"vrećica\", \"amount\": 1}, {\"name\": \"soli\", \"units\": \"prstohvat\", \"amount\": 1}, {\"name\": \"malih hrenovki\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"ulja za prženje\", \"units\": \"ml\", \"amount\": 500}]",
+    "instructions": "1. Pripremite tijesto i oblikujte piroške. Kvasac izmiješajte sa šećerom i toplim mlijekom i pustite desetak minuta da se zapjeni. Dodajte u gltako brašno i od svih sastojaka umijesite glatko tijesto. Pustite oko pola sata da se digne pa razvaljajte na debljinu od 2 cm i izrežite na komade dužine hrenovki, a širine dovoljne da ih možete zatvoriti. Stavite hrenovku na sredinu tijesta i oblikujte piroške. Ako ne možete zalijepiti tijesto, utapkajte malo vode na mjesto koje želite spojiti jer tako će se tijesto lakše zalijepiti. 2. Ispržite piroške. U dubokoj posudi u vrućem ulju pecite piroške oko 5 minuta sa svake strane dok ne dobiju zlatno-smeđu boju. Gotove piroške stavite na papirnate ubruse da se ocijedi višak ulja. Poslužite ih s omiljenim umakom.",
+    "category": null,
+    "prep_time": "15 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "25 minutes",
+    "notes": null,
+    "tags": "kruh i peciva, snackovi, brzo i lako, jeftini recepti, mesna jela"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Piščanec iz počasnega kuhalnika",
+    "description": "Sočen piščanec, počasi kuhan do popolnosti z jogurtovo marinado in aromatičnimi začimbami.",
+    "ingredients": "[{\"name\": \"Piščančja stegna brez kosti in kože\", \"units\": \"g\", \"amount\": 800}, {\"name\": \"Navadni jogurt\", \"units\": \"ml\", \"amount\": 120}, {\"name\": \"Oljčno olje\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"Strok česna, drobno sesekljan\", \"units\": \"g\", \"amount\": 10}, {\"name\": \"Limonin sok\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"Mleta paprika\", \"units\": \"g\", \"amount\": 5}, {\"name\": \"Mleta kumina\", \"units\": \"g\", \"amount\": 5}, {\"name\": \"Mlet koriander\", \"units\": \"g\", \"amount\": 3}, {\"name\": \"Kurkuma v prahu\", \"units\": \"g\", \"amount\": 2}, {\"name\": \"Sol\", \"units\": \"g\", \"amount\": 5}, {\"name\": \"Mleti črni poper\", \"units\": \"g\", \"amount\": 2}, {\"name\": \"Svež peteršilj, sesekljan\", \"units\": \"g\", \"amount\": 10}, {\"name\": \"Voda ali piščančja jušna osnova\", \"units\": \"ml\", \"amount\": 100}]",
+    "instructions": "V srednje veliki posodi zmešamo jogurt, oljčno olje, drobno sesekljan česen, limonin sok, mleto papriko, mleto kumino, koriander, kurkumo, sol in črni poper. Vse skupaj dobro premešamo, da dobimo enotno marinado. Piščančja stegna damo v marinado in jih temeljito premažemo. Posodo pokrijemo in pustimo, da se meso marinira najmanj 30 minut, po možnosti čez noč. Meso skupaj z marinado prenesemo v počasni kuhalnik. Dodamo vodo ali jušno osnovo. Posodo pokrijemo in kuhamo na nizki temperaturi približno 5 ur oziroma dokler meso ni mehko in se zlahka razdrobi. Pred serviranjem jed potresemo s sesekljanim svežim peteršiljem.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "300 minutes",
+    "total_time": "315 minutes",
+    "notes": "Jogurt lahko nadomestimo z rastlinskim jogurtom. Za manjšo vsebnost natrija uporabimo nesoljeno jušno osnovo ali zmanjšamo količino soli.",
+    "tags": "piščanec, počasni kuhalnik, enostavno, zdravo"
+}

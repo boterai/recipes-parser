@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pate din ciuperci",
+    "description": "Pate din ciuperci, ideal pentru o cină sau o gustare de post.",
+    "ingredients": "[{\"name\": \"ciuperci\", \"units\": \"gr\", \"amount\": 250}, {\"name\": \"ceapă\", \"units\": \"unit\", \"amount\": 1}, {\"name\": \"ulei de măsline extravirgin\", \"units\": \"linguri\", \"amount\": null}, {\"name\": \"sare\", \"units\": null, \"amount\": null}, {\"name\": \"piper\", \"units\": null, \"amount\": null}, {\"name\": \"usturoi\", \"units\": \"cățel\", \"amount\": 1}]",
+    "instructions": "Spălăm și uscăm bine ciupercile. Curățăm și tocăm ceapa și usturoiul. În uleiul încins călim ceapa câteva minute, punem pentru 2 minute și usturoiul. Adăugăm ciupercile și mai lăsăm 10 min (să se evapore tot lichidul). Condimentăm cu sare, piper. Cu un blender omogenizăm totul până are consistența unui pate. Îl întindem pe pâine sau îl servim cu chipsuri și legume tăiate.",
+    "category": "Snack",
+    "prep_time": null,
+    "cook_time": "10 minutes",
+    "total_time": null,
+    "notes": "Îl servim alături de legume proaspete pentru o masă nutritivă.",
+    "tags": "pate, ciuperci, post, rețete"
+}

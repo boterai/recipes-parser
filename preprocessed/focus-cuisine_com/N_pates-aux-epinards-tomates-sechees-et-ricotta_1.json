@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pâtes aux épinards, tomates séchées et Ricotta",
+    "description": "Voici une belle assiette de pâtes avant les grands froids avec des épinards, des tomates séchées et de la Ricotta.",
+    "ingredients": "[{\"name\": \"pâtes\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"épinards frais\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"échalote\", \"units\": \"unit\", \"amount\": 1}, {\"name\": \"ricotta\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"pignons de pin\", \"units\": \"g\", \"amount\": 30}, {\"name\": \"tomates séchées\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"huile d'olive\", \"units\": null, \"amount\": null}, {\"name\": \"sel\", \"units\": null, \"amount\": null}, {\"name\": \"poivre\", \"units\": null, \"amount\": null}]",
+    "instructions": "Egoutter les tomates séchées et les couper en petits morceaux. Faire griller les pignons de pin dans une poêle à sec; Faire chauffer un grand récipient avec 1 cuillère à soupe d’huile d’olive. Faire revenir l’échalote émincée. Lorsqu’elle est translucide ajouter les épinards. Remuer jusqu’à ce que les épinards soient réduits. Faire cuire les pâtes selon les indications sur le paquet. Lorsqu’elles sont cuites les égoutter et les verser sur les épinards. Ajouter les tomates séchées et les pignons de pin. Bien mélanger. Dresser les assiettes et déposer sur le dessus une quenelle de Ricotta. Arroser d’un filet d’huile d’olive. Avec une pincée de piment d’Espelette et le voyage est parfait.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Je vous souhaite une bonne journée.",
+    "tags": null
+}

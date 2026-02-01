@@ -1,0 +1,12 @@
+{
+    "dish_name": "Baileys Latte",
+    "description": "krämig kaffedrink med espresso",
+    "ingredients": "[{\"name\": \"Baileys Irish Cream\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"espresso\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"mjölk\", \"units\": \"ml\", \"amount\": 150}, {\"name\": \"sockerlag\", \"units\": \"tsk\", \"amount\": 1}, {\"name\": \"mald kanel\", \"units\": \"nypa\", \"amount\": 1}]",
+    "instructions": "Brygg en stark espresso. Värm och skumma mjölken. Häll Baileys i ett värmetåligt glas. Tillsätt espresson och rör om. Fyll på med mjölk och toppa med skum. Smaka av med sockerlag. Pudra över kanel och servera genast.",
+    "category": "Drinkar & cocktails",
+    "prep_time": "5 min",
+    "cook_time": null,
+    "total_time": "5 min",
+    "notes": "Gör den kall: Använd kall espresso och is. Skaka Baileys och mjölk med is och sila över färsk is. Justera styrkan: För mer kaffe, använd dubbel espresso. För mer likör, öka Baileys till 60 ml. Välj rätt mjölk: Havrebarista skummar bra och ger fin sötma. Undvik för söt mjölk om du använder sockerlag.",
+    "tags": "drink, kaffe, Baileys"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pasta Sfoglia con Scarola",
+    "description": "Una ricetta semplice e gustosa di pasta sfoglia ripiena di scarola.",
+    "ingredients": "[{\"name\": \"scarola\", \"units\": \"cespo\", \"amount\": 1}, {\"name\": \"olio extravergine di oliva\", \"units\": \"cucchiai\", \"amount\": 2}, {\"name\": \"aglio\", \"units\": \"spicchio\", \"amount\": 1}, {\"name\": \"sale\", \"units\": null, \"amount\": null}, {\"name\": \"pepe\", \"units\": null, \"amount\": null}, {\"name\": \"pasta sfoglia\", \"units\": \"rotolo\", \"amount\": 1}, {\"name\": \"parmigiano grattugiato\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"uovo\", \"units\": \"sbattuto\", \"amount\": 1}]",
+    "instructions": "1. Lavare la scarola e tagliarla a strisce sottili. 2. Riscaldare l'olio in una padella e rosolare l'aglio. 3. Aggiungere la scarola e farla appassire. 4. Preparare la pasta sfoglia e stenderla. 5. Distribuire il parmigiano e la scarola sulla pasta. 6. Arrotolare la pasta e sigillare le estremità. 7. Infornare a 200°C per 25-30 minuti.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Per un gusto più intenso, aggiungere peperoncino o olive nere. Può essere servita tiepida o a temperatura ambiente.",
+    "tags": "Pasta, Scarola, Antipasto"
+}

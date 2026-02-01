@@ -1,0 +1,12 @@
+{
+    "dish_name": "Hot Mocha Latte",
+    "description": "A Hot Mocha Latte is the perfect blend of rich espresso, creamy milk, and decadent chocolate, making it an ideal treat for any coffee lover.",
+    "ingredients": "[{\"name\": \"milk\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"espresso\", \"units\": \"shot\", \"amount\": 1}, {\"name\": \"chocolate syrup\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"sugar\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"whipped cream\", \"units\": \"whole\", \"amount\": 1}, {\"name\": \"chocolate shavings\", \"units\": \"whole\", \"amount\": 1}]",
+    "instructions": "Brew a fresh espresso shot or strong coffee as the base. Pour milk into a small saucepan and heat over medium heat until warm but not boiling (around 150°F). Whisk in chocolate syrup or cocoa powder until fully dissolved. Add sugar if desired. Pour the espresso into the chocolate milk mixture and stir gently to combine. Top with whipped cream and garnish with chocolate shavings or cocoa powder.",
+    "category": null,
+    "prep_time": "13 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "28 minutes",
+    "notes": "Use freshly brewed espresso and high-quality chocolate for best results. Adjust sweetness and toppings based on personal preference. Experiment with different types of milk for varied flavors.",
+    "tags": "coffee, latte, mocha, beverage"
+}

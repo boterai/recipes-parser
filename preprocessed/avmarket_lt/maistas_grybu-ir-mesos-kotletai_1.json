@@ -1,0 +1,12 @@
+{
+    "dish_name": "Grybų ir Mėsos Kotletai",
+    "description": "Įvairūs skoniai kiekvienam, universalus patiekalas, mėgstamas tiek vaikų, tiek suaugusiųjų.",
+    "ingredients": "[{\"name\": \"Bulvės\", \"units\": \"vnt.\", \"amount\": 6}, {\"name\": \"Pievagrybiai\", \"units\": null, \"amount\": null}, {\"name\": \"Aliejus\", \"units\": \"valg. š.\", \"amount\": 2}, {\"name\": \"Kiaušinis\", \"units\": null, \"amount\": 1}, {\"name\": \"Fermentinis sūris\", \"units\": \"tarkuotas\", \"amount\": null}, {\"name\": \"Džiūvėsėliai\", \"units\": null, \"amount\": null}, {\"name\": \"Svogūnų laiškai\", \"units\": \"smulkiai pjaustyti\", \"amount\": null}, {\"name\": \"Krapai\", \"units\": \"kapoti\", \"amount\": null}, {\"name\": \"Druska\", \"units\": \"pagal skonį\", \"amount\": null}, {\"name\": \"Pipirai\", \"units\": \"pagal skonį\", \"amount\": null}, {\"name\": \"Aliejus\", \"units\": \"(kepimui)\", \"amount\": null}]",
+    "instructions": "Išvirkite bulves ir paruoškite bulvių košę. Smulkiai supjaustytus pievagrybius apkepkite su dviem šaukštais aliejaus, nupilkite susidariusį skystį ir pievagrybius sudėkite į bulvių košę. Dideliame dubenyje sumaišykite bulvių košę, kiaušinį, tarkuotą fermentinį sūrį, džiūvėsėlius (arba miltus), smulkiai pjaustytus svogūnų laiškus, kapotus krapus, druską ir pipirus. Jei matote, kad masė per tiršta, įmuškite dar vieną kiaušinį arba įdėkite šaukštą grietinės. Jei matote, kad masė per skysta, įberkite daugiau džiūvėsėlių arba miltų. Paruoštą masę padalinkite į maždaug 12-15 lygių dalių. Iš kiekvienos jų drėgnais delnais suformuokite kamuoliuką ir suplokite juos į plokščius taisyklingus kotletukus. Kepkite suformuotus kotletukus iš abiejų pusių po porą minučių, kol gražiai apskrus. Iškepusius perkelkite ant popierinių rankšluosčių ir nusausinkite aliejų. Patiekite su grietine ar mėgstamu padažu.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "grybų, mėsos, kotletų, receptai"
+}

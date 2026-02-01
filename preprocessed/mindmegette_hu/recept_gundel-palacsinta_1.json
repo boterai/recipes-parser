@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gundel palacsinta",
+    "description": "A Gundel palacsinta különleges desszert, amit a diós töltelék és a csokiöntet tesz felejthetetlenné.",
+    "ingredients": "[{\"name\": \"liszt\", \"units\": \"dkg\", \"amount\": 20}, {\"name\": \"só\", \"units\": \"csipet\", \"amount\": 1}, {\"name\": \"tojás\", \"units\": \"db\", \"amount\": 2}, {\"name\": \"olaj\", \"units\": \"dl\", \"amount\": 0.75}, {\"name\": \"tej\", \"units\": \"dl\", \"amount\": 3}, {\"name\": \"szénsavas ásványvíz\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"dió\", \"units\": \"dkg\", \"amount\": 10}, {\"name\": \"porcukor\", \"units\": \"ek.\", \"amount\": 5}, {\"name\": \"vaníliás cukor\", \"units\": \"tasak\", \"amount\": 1}, {\"name\": \"mazsola\", \"units\": \"ek.\", \"amount\": 2}, {\"name\": \"rum\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"tejszín\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"étcsokoládé\", \"units\": \"dkg\", \"amount\": 10}, {\"name\": \"vaj\", \"units\": \"dkg\", \"amount\": 2}, {\"name\": \"tejszín\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"dióbél\", \"units\": \"apróra tört\", \"amount\": null}]",
+    "instructions": "A Gundel palacsinta receptjét a palacsintatészta elkészítésével kezdjük. A lisztet és a csipet sót egy tálba szórjuk, beleütjük a tojást, hozzáöntünk egy kevés olajat és folyamatos kevergetés mellett hozzáadagoljuk a tejet, míg csomómentes masszát nem kapunk. Legvégül belekeverjük a szénsavas vizet és sütés előtt 15 percig pihentetjük. A palacsintákat vékonyan kiolajozott forró serpenyőben egyesével kisütjük. A Gundel palacsinta töltelékéhez egy tálba öntjük és összekeverjük a darált diót és a porcukrot, hozzáadjuk a vaníliás cukrot, a mazsolát, a rumot és a tejszínt és ezt is elvegyítjük. A csokiöntethez az étcsokoládét vízgőz felet megolvasztjuk, hozzákeverjük a vajat és a tejszínt, alaposan simára dolgozzuk és félretesszük. A kisült palacsintákat megkenjük a diós töltelékkel, majd mindegyiket háromszög alakúra hajtogatjuk és tálaláskor meglocsoljuk a csokiöntettel, megszórjuk tört dióval.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": null,
+    "total_time": "45 minutes",
+    "notes": null,
+    "tags": "desszert,diós,gundel palacsinta"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Börek met Spinazie en Feta",
+    "description": "Dit recept is een lekkere en simpele krokante börek, gemaakt en gevuld met spinazie en feta.",
+    "ingredients": "[{\"name\": \"Baklava deeg\", \"units\": \"laagjes\", \"amount\": 14}, {\"name\": \"witte kaas of feta kaas\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"spinazie\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"lente uien\", \"units\": null, \"amount\": 3}, {\"name\": \"rode paprika vlokken\", \"units\": \"theelepel\", \"amount\": 1}, {\"name\": \"melk\", \"units\": \"ml\", \"amount\": 125}, {\"name\": \"zonnebloemolie\", \"units\": \"ml\", \"amount\": 125}, {\"name\": \"water\", \"units\": \"ml\", \"amount\": 125}, {\"name\": \"zout\", \"units\": null, \"amount\": null}, {\"name\": \"eigeel\", \"units\": null, \"amount\": 1}, {\"name\": \"olie mengsel\", \"units\": \"eetlepels\", \"amount\": 5}, {\"name\": \"sesamzaadjes\", \"units\": null, \"amount\": null}]",
+    "instructions": "Snij de lente uien fijn en bak ze met 3 eetlepels zonnebloemolie. Snij de gewassen spinazie fijn en bak ze 2 minuten. Verwarm de pan en zet het vuur uit zodra je de spinazie in de pan doet. Prak de witte kaas met een vork en voeg die aan de spinazie toe. Doe rode paprika vlokken, zwarte peper en een klein beetje zout erbij. Roer het spinazie mengsel goed en laat het afkoelen. Maak een mengsel van water, melk, zonnebloemolie en een beetje zout. Open het pak met de baklava deegbladen en pak 2 baklava bladen. Leg een theedoek over het pak, zodat het niet snel droogt. Leg de 2 baklava deegbladen op elkaar en smeer ze in met mengsel uit stap 6. Leg de spinazie aan de lange rand van het blad. Rol ze op en maak een rondje net als een roos. Leg de börek roosjes op een ovenschaal. Klop het eigeel met 5 eetlepels olie mengsel en smeer die op de börek. Strooi sesamzaadjes op de börek en bak ze goudbruin in een voorverwarmde oven op 175 C voor ongeveer 35 minuten.",
+    "category": "Vegetarisch, Deeg",
+    "prep_time": "25 minutes",
+    "cook_time": "35 minutes",
+    "total_time": "60 minutes",
+    "notes": "Als alternatieve vulling kan je gekookte aardappeltjes gebruiken.",
+    "tags": "börek, spinazie, feta, Turks, vegetarisch"
+}

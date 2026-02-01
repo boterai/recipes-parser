@@ -1,0 +1,12 @@
+{
+    "dish_name": "Domácí Low Carb Baileys",
+    "description": "Recept na domácí low carb Baileys bez cukru.",
+    "ingredients": "[{\"name\": \"Kondenzované kokosové mléko\", \"units\": null, \"amount\": null}, {\"name\": \"Káva\", \"units\": null, \"amount\": null}, {\"name\": \"Rum\", \"units\": null, \"amount\": null}, {\"name\": \"Kokosový extrakt\", \"units\": null, \"amount\": null}, {\"name\": \"Stevia\", \"units\": null, \"amount\": null}]",
+    "instructions": "Smíchejte všechny ingredience dohromady a uložte do lahve.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Můžete si přizpůsobit chuť dle svých preferencí.",
+    "tags": "low carb, likér, bez cukru"
+}

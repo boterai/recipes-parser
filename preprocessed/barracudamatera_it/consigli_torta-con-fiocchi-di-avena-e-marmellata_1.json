@@ -1,0 +1,12 @@
+{
+    "dish_name": "Torta con Fiocchi di Avena e Marmellata",
+    "description": "Una torta sana e deliziosa che combina il piacere del gusto con i benefici nutrizionali dell'avena.",
+    "ingredients": "[{\"name\": \"fiocchi di avena\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"farina\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"zucchero di canna integrale\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"uova\", \"units\": null, \"amount\": 2}, {\"name\": \"olio di semi\", \"units\": \"ml\", \"amount\": 120}, {\"name\": \"latte\", \"units\": \"ml\", \"amount\": 150}, {\"name\": \"lievito per dolci\", \"units\": \"bustina\", \"amount\": 1}, {\"name\": \"sale\", \"units\": null, \"amount\": null}, {\"name\": \"marmellata\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"scorza di limone\", \"units\": null, \"amount\": null}]",
+    "instructions": "Preriscaldare il forno a 180°C e ungere e infarinare una tortiera di circa 22 cm di diametro. In una ciotola capiente, mescolare i fiocchi di avena, la farina, lo zucchero e il sale. In un'altra ciotola, sbattere le uova con l'olio e il latte. Versare gli ingredienti liquidi nella ciotola con gli ingredienti secchi e mescolare fino ad ottenere un composto omogeneo. Aggiungere il lievito e mescolare delicatamente. Versare metà del composto nella tortiera preparata. Distribuire uniformemente la marmellata sulla superficie. Coprire con il restante composto. Infornare per circa 35-40 minuti, o finché la torta non sarà dorata e uno stuzzicadenti inserito al centro uscirà pulito. Sfornare e lasciare raffreddare completamente prima di sformare e servire.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "35-40 minutes",
+    "total_time": null,
+    "notes": "La ricetta può essere facilmente adattata a diete vegetariane, vegane e senza glutine.",
+    "tags": "Torta, Marmellata"
+}

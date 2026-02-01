@@ -1,0 +1,12 @@
+{
+    "dish_name": "Irski Soda hleb",
+    "description": null,
+    "ingredients": "[{\"name\": \"brašna\", \"units\": \"g\", \"amount\": 230}, {\"name\": \"praška za pecivo\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"sode bikarbone\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"meda\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"soli\", \"units\": null, \"amount\": \"dobar naprstak\"}, {\"name\": \"semenki bundeve\", \"units\": \"g\", \"amount\": 20}, {\"name\": \"semenki suncokreta\", \"units\": \"g\", \"amount\": 20}, {\"name\": \"susama\", \"units\": \"g\", \"amount\": 20}, {\"name\": \"ovsenih pahuljica\", \"units\": \"g\", \"amount\": 20}, {\"name\": \"mleka\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"jogurta\", \"units\": \"ml\", \"amount\": 115}]",
+    "instructions": "Prosejemo brašno, sodu bikarbonu, prašak za pecivo i so, u veliku činiju. Izmešamo. Dodamo, med, mleko i jogurt. Ponovo pomešamo, varjačom. Testo nije elastično, bude više kao gusto testo. Tako da ne brinite i ne dodajte više brašna. Napunimo male tepsije za pečenje hleba. Predgrejemo rernu na 190 stepeni Celzija i pečemo 35-40 minuta.",
+    "category": "Pite i Testa",
+    "prep_time": "40 min",
+    "cook_time": "35-40 min",
+    "total_time": null,
+    "notes": "Uvek kada napišem koliko traje pečenje, to je samo indikativno vreme za moj šporet. Vi svakako proverite dali je hleb dovoljno pečen.",
+    "tags": "susam,hleb,testo,suncokret,ovsene pahuljice"
+}

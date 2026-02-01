@@ -1,0 +1,1054 @@
+<html lang="vi" style="transform: none;"><head><script>if(navigator.userAgent.match(/MSIE|Internet Explorer/i)||navigator.userAgent.match(/Trident\/7\..*?rv:11/i)){var href=document.location.href;if(!href.match(/[?&]nowprocket/)){if(href.indexOf("?")==-1){if(href.indexOf("#")==-1){document.location.href=href+"?nowprocket=1"}else{document.location.href=href.replace("#","?nowprocket=1#")}}else{if(href.indexOf("#")==-1){document.location.href=href+"&nowprocket=1"}else{document.location.href=href.replace("#","&nowprocket=1#")}}}}</script><script>class RocketLazyLoadScripts{constructor(e){this.triggerEvents=e,this.eventOptions={passive:!0},this.userEventListener=this.triggerListener.bind(this),this.delayedScripts={normal:[],async:[],defer:[]},this.allJQueries=[]}_addUserInteractionListener(e){this.triggerEvents.forEach((t=>window.addEventListener(t,e.userEventListener,e.eventOptions)))}_removeUserInteractionListener(e){this.triggerEvents.forEach((t=>window.removeEventListener(t,e.userEventListener,e.eventOptions)))}triggerListener(){this._removeUserInteractionListener(this),"loading"===document.readyState?document.addEventListener("DOMContentLoaded",this._loadEverythingNow.bind(this)):this._loadEverythingNow()}async _loadEverythingNow(){this._delayEventListeners(),this._delayJQueryReady(this),this._handleDocumentWrite(),this._registerAllDelayedScripts(),this._preloadAllScripts(),await this._loadScriptsFromList(this.delayedScripts.normal),await this._loadScriptsFromList(this.delayedScripts.defer),await this._loadScriptsFromList(this.delayedScripts.async),await this._triggerDOMContentLoaded(),await this._triggerWindowLoad(),window.dispatchEvent(new Event("rocket-allScriptsLoaded"))}_registerAllDelayedScripts(){document.querySelectorAll("script[type=rocketlazyloadscript]").forEach((e=>{e.hasAttribute("src")?e.hasAttribute("async")&&!1!==e.async?this.delayedScripts.async.push(e):e.hasAttribute("defer")&&!1!==e.defer||"module"===e.getAttribute("data-rocket-type")?this.delayedScripts.defer.push(e):this.delayedScripts.normal.push(e):this.delayedScripts.normal.push(e)}))}async _transformScript(e){return await this._requestAnimFrame(),new Promise((t=>{const n=document.createElement("script");let i;[...e.attributes].forEach((e=>{let t=e.nodeName;"type"!==t&&("data-rocket-type"===t&&(t="type",i=e.nodeValue),n.setAttribute(t,e.nodeValue))})),e.hasAttribute("src")&&this._isValidScriptType(i)?(n.addEventListener("load",t),n.addEventListener("error",t)):(n.text=e.text,t()),e.parentNode.replaceChild(n,e)}))}_isValidScriptType(e){return!e||""===e||"string"==typeof e&&["text/javascript","text/x-javascript","text/ecmascript","text/jscript","application/javascript","application/x-javascript","application/ecmascript","application/jscript","module"].includes(e.toLowerCase())}async _loadScriptsFromList(e){const t=e.shift();return t?(await this._transformScript(t),this._loadScriptsFromList(e)):Promise.resolve()}_preloadAllScripts(){var e=document.createDocumentFragment();[...this.delayedScripts.normal,...this.delayedScripts.defer,...this.delayedScripts.async].forEach((t=>{const n=t.getAttribute("src");if(n){const t=document.createElement("link");t.href=n,t.rel="preload",t.as="script",e.appendChild(t)}})),document.head.appendChild(e)}_delayEventListeners(){let e={};function t(t,n){!function(t){function n(n){return e[t].eventsToRewrite.indexOf(n)>=0?"rocket-"+n:n}e[t]||(e[t]={originalFunctions:{add:t.addEventListener,remove:t.removeEventListener},eventsToRewrite:[]},t.addEventListener=function(){arguments[0]=n(arguments[0]),e[t].originalFunctions.add.apply(t,arguments)},t.removeEventListener=function(){arguments[0]=n(arguments[0]),e[t].originalFunctions.remove.apply(t,arguments)})}(t),e[t].eventsToRewrite.push(n)}function n(e,t){const n=e[t];Object.defineProperty(e,t,{get:n||function(){},set:n=>{e["rocket"+t]=n}})}t(document,"DOMContentLoaded"),t(window,"DOMContentLoaded"),t(window,"load"),t(window,"pageshow"),t(document,"readystatechange"),n(document,"onreadystatechange"),n(window,"onload"),n(window,"onpageshow")}_delayJQueryReady(e){let t=window.jQuery;Object.defineProperty(window,"jQuery",{get:()=>t,set(n){if(n&&n.fn&&!e.allJQueries.includes(n)){n.fn.ready=n.fn.init.prototype.ready=function(t){e.domReadyFired?t.bind(document)(n):document.addEventListener("rocket-DOMContentLoaded",(()=>t.bind(document)(n)))};const t=n.fn.on;n.fn.on=n.fn.init.prototype.on=function(){if(this[0]===window){function e(e){return e.split(" ").map((e=>"load"===e||0===e.indexOf("load.")?"rocket-jquery-load":e)).join(" ")}"string"==typeof arguments[0]||arguments[0]instanceof String?arguments[0]=e(arguments[0]):"object"==typeof arguments[0]&&Object.keys(arguments[0]).forEach((t=>{delete Object.assign(arguments[0],{[e(t)]:arguments[0][t]})[t]}))}return t.apply(this,arguments),this},e.allJQueries.push(n)}t=n}})}async _triggerDOMContentLoaded(){this.domReadyFired=!0,await this._requestAnimFrame(),document.dispatchEvent(new Event("rocket-DOMContentLoaded")),await this._requestAnimFrame(),window.dispatchEvent(new Event("rocket-DOMContentLoaded")),await this._requestAnimFrame(),document.dispatchEvent(new Event("rocket-readystatechange")),await this._requestAnimFrame(),document.rocketonreadystatechange&&document.rocketonreadystatechange()}async _triggerWindowLoad(){await this._requestAnimFrame(),window.dispatchEvent(new Event("rocket-load")),await this._requestAnimFrame(),window.rocketonload&&window.rocketonload(),await this._requestAnimFrame(),this.allJQueries.forEach((e=>e(window).trigger("rocket-jquery-load"))),window.dispatchEvent(new Event("rocket-pageshow")),await this._requestAnimFrame(),window.rocketonpageshow&&window.rocketonpageshow()}_handleDocumentWrite(){const e=new Map;document.write=document.writeln=function(t){const n=document.currentScript,i=document.createRange(),r=n.parentElement;let a=e.get(n);void 0===a&&(a=n.nextSibling,e.set(n,a));const o=document.createDocumentFragment();i.setStart(o,0),o.appendChild(i.createContextualFragment(t)),r.insertBefore(o,a)}}async _requestAnimFrame(){return new Promise((e=>requestAnimationFrame(e)))}static run(){const e=new RocketLazyLoadScripts(["keydown","mousemove","touchmove","touchstart","touchend","touchcancel","touchforcechange","wheel"]);e._addUserInteractionListener(e)}}RocketLazyLoadScripts.run();
+</script>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+			<link rel="shortcut icon" href="https://thuongbep.com/wp-content/uploads/2023/05/thuong-bep-nen-scaled.jpg" type="image/x-icon">
+		<link rel="apple-touch-icon" sizes="180x180" href="https://thuongbep.com/wp-content/uploads/2023/05/thuong-bep-nen-scaled.jpg">
+		<link rel="alternate" type="application/rss+xml" title="Thuong bep RSS Feed" href="https://thuongbep.com/feed/">
+	<link rel="alternate" type="application/atom+xml" title="Thuong bep Atom Feed" href="https://thuongbep.com/feed/atom/">
+	<link rel="pingback" href="https://thuongbep.com/xmlrpc.php">
+	<!--[if lt IE 9]>
+	<script src="https://thuongbep.com/wp-content/themes/soledad/js/html5.js"></script>
+	<![endif]-->
+	<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<link rel="preload" href="https://thuongbep.com/wp-content/plugins/rate-my-post/public/css/fonts/ratemypost.ttf" type="font/ttf" as="font" crossorigin="anonymous">
+	<!-- This site is optimized with the Yoast SEO plugin v22.8 - https://yoast.com/wordpress/plugins/seo/ -->
+	<title>Phở Bò áp chảo - Món phở dễ làm, đậm đà hương vị</title><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald%3A400%7CPlayfair%20Display%20SC%3A300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C700%2C700italic%2C800%2C800italic%7CMontserrat%3A300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C700%2C700italic%2C800%2C800italic%7CPatrick%20Hand%20SC%3A300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C700%2C700italic%2C800%2C800italic%7CLato%3A300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C700%2C700italic%2C800%2C800italic%7CLora%3A300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C700%2C700italic%2C800%2C800italic%26amp%3Bsubset%3Dlatin%2Ccyrillic%2Ccyrillic-ext%2Cgreek%2Cgreek-ext%2Clatin-ext&amp;display=swap">
+	<meta name="description" content="Phở Bò áp chảo là một bát phở nóng hổi, thơm ngon vào một buổi tối trong tuần mà không cần mất hàng giờ ninh nước dùng.">
+	<link rel="canonical" href="https://thuongbep.com/pho-bo-ap-chao/">
+	<meta property="og:locale" content="vi_VN">
+	<meta property="og:type" content="article">
+	<meta property="og:title" content="Phở Bò áp chảo - Món phở dễ làm, đậm đà hương vị">
+	<meta property="og:description" content="Phở Bò áp chảo là một bát phở nóng hổi, thơm ngon vào một buổi tối trong tuần mà không cần mất hàng giờ ninh nước dùng.">
+	<meta property="og:url" content="https://thuongbep.com/pho-bo-ap-chao/">
+	<meta property="og:site_name" content="Thuong bep">
+	<meta property="article:published_time" content="2025-07-07T13:28:07+00:00">
+	<meta property="article:modified_time" content="2025-07-07T13:28:14+00:00">
+	<meta property="og:image" content="https://thuongbep.com/wp-content/uploads/2025/07/Pho-Bo-ap-chao-8.webp">
+	<meta property="og:image:width" content="800">
+	<meta property="og:image:height" content="530">
+	<meta property="og:image:type" content="image/webp">
+	<meta name="author" content="Thuongbep">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:label1" content="Được viết bởi">
+	<meta name="twitter:data1" content="Thuongbep">
+	<meta name="twitter:label2" content="Ước tính thời gian đọc">
+	<meta name="twitter:data2" content="8 phút">
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"Article","@id":"https://thuongbep.com/pho-bo-ap-chao/#article","isPartOf":{"@id":"https://thuongbep.com/pho-bo-ap-chao/"},"author":{"name":"Thuongbep","@id":"https://thuongbep.com/#/schema/person/2002f979fa5166bb2a10cd91abce4ee7"},"headline":"Phở Bò áp chảo","datePublished":"2025-07-07T13:28:07+00:00","dateModified":"2025-07-07T13:28:14+00:00","mainEntityOfPage":{"@id":"https://thuongbep.com/pho-bo-ap-chao/"},"wordCount":1463,"commentCount":0,"publisher":{"@id":"https://thuongbep.com/#/schema/person/2002f979fa5166bb2a10cd91abce4ee7"},"image":{"@id":"https://thuongbep.com/pho-bo-ap-chao/#primaryimage"},"thumbnailUrl":"https://thuongbep.com/wp-content/uploads/2025/07/Pho-Bo-ap-chao-8.webp","articleSection":["Công thức","Món ăn hàng ngày"],"inLanguage":"vi","potentialAction":[{"@type":"CommentAction","name":"Comment","target":["https://thuongbep.com/pho-bo-ap-chao/#respond"]}]},{"@type":"WebPage","@id":"https://thuongbep.com/pho-bo-ap-chao/","url":"https://thuongbep.com/pho-bo-ap-chao/","name":"Phở Bò áp chảo - Món phở dễ làm, đậm đà hương vị","isPartOf":{"@id":"https://thuongbep.com/#website"},"primaryImageOfPage":{"@id":"https://thuongbep.com/pho-bo-ap-chao/#primaryimage"},"image":{"@id":"https://thuongbep.com/pho-bo-ap-chao/#primaryimage"},"thumbnailUrl":"https://thuongbep.com/wp-content/uploads/2025/07/Pho-Bo-ap-chao-8.webp","datePublished":"2025-07-07T13:28:07+00:00","dateModified":"2025-07-07T13:28:14+00:00","description":"Phở Bò áp chảo là một bát phở nóng hổi, thơm ngon vào một buổi tối trong tuần mà không cần mất hàng giờ ninh nước dùng.","breadcrumb":{"@id":"https://thuongbep.com/pho-bo-ap-chao/#breadcrumb"},"inLanguage":"vi","potentialAction":[{"@type":"ReadAction","target":["https://thuongbep.com/pho-bo-ap-chao/"]}]},{"@type":"ImageObject","inLanguage":"vi","@id":"https://thuongbep.com/pho-bo-ap-chao/#primaryimage","url":"https://thuongbep.com/wp-content/uploads/2025/07/Pho-Bo-ap-chao-8.webp","contentUrl":"https://thuongbep.com/wp-content/uploads/2025/07/Pho-Bo-ap-chao-8.webp","width":800,"height":530},{"@type":"BreadcrumbList","@id":"https://thuongbep.com/pho-bo-ap-chao/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Trang chủ","item":"https://thuongbep.com/"},{"@type":"ListItem","position":2,"name":"Phở Bò áp chảo"}]},{"@type":"WebSite","@id":"https://thuongbep.com/#website","url":"https://thuongbep.com/","name":"Thuong bep","description":"Thương bếp là nơi chia sẻ ngẫu nhiên các công thức, món ăn ngon","publisher":{"@id":"https://thuongbep.com/#/schema/person/2002f979fa5166bb2a10cd91abce4ee7"},"potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thuongbep.com/?s={search_term_string}"},"query-input":"required name=search_term_string"}],"inLanguage":"vi"},{"@type":["Person","Organization"],"@id":"https://thuongbep.com/#/schema/person/2002f979fa5166bb2a10cd91abce4ee7","name":"Thuongbep","image":{"@type":"ImageObject","inLanguage":"vi","@id":"https://thuongbep.com/#/schema/person/image/","url":"https://thuongbep.com/wp-content/uploads/2023/05/thuong-bep-nen-scaled.jpg","contentUrl":"https://thuongbep.com/wp-content/uploads/2023/05/thuong-bep-nen-scaled.jpg","width":2560,"height":2560,"caption":"Thuongbep"},"logo":{"@id":"https://thuongbep.com/#/schema/person/image/"},"sameAs":["https://thuongbep.com"],"url":"https://thuongbep.com/author/thuongbep/"}]}</script>
+	<!-- / Yoast SEO plugin. -->
+
+
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<link href="https://fonts.gstatic.com" crossorigin="" rel="preconnect">
+<link rel="alternate" type="application/rss+xml" title="Dòng thông tin Thuong bep »" href="https://thuongbep.com/feed/">
+<link rel="alternate" type="application/rss+xml" title="Thuong bep » Dòng bình luận" href="https://thuongbep.com/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="Thuong bep » Phở Bò áp chảo Dòng bình luận" href="https://thuongbep.com/pho-bo-ap-chao/feed/">
+<style id="wp-emoji-styles-inline-css" type="text/css">
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+</style>
+<link rel="stylesheet" as="style" onload="this.onload=null;this.rel='stylesheet'" id="wp-block-library-css" href="https://thuongbep.com/wp-includes/css/dist/block-library/style.min.css?ver=6.5.7" type="text/css" media="all"><noscript><link id="wp-block-library-css" rel="stylesheet" href="https://thuongbep.com/wp-includes/css/dist/block-library/style.min.css?ver=6.5.7"></noscript><style id="wp-block-library-theme-inline-css" type="text/css">
+.wp-block-audio figcaption{color:#555;font-size:13px;text-align:center}.is-dark-theme .wp-block-audio figcaption{color:#ffffffa6}.wp-block-audio{margin:0 0 1em}.wp-block-code{border:1px solid #ccc;border-radius:4px;font-family:Menlo,Consolas,monaco,monospace;padding:.8em 1em}.wp-block-embed figcaption{color:#555;font-size:13px;text-align:center}.is-dark-theme .wp-block-embed figcaption{color:#ffffffa6}.wp-block-embed{margin:0 0 1em}.blocks-gallery-caption{color:#555;font-size:13px;text-align:center}.is-dark-theme .blocks-gallery-caption{color:#ffffffa6}.wp-block-image figcaption{color:#555;font-size:13px;text-align:center}.is-dark-theme .wp-block-image figcaption{color:#ffffffa6}.wp-block-image{margin:0 0 1em}.wp-block-pullquote{border-bottom:4px solid;border-top:4px solid;color:currentColor;margin-bottom:1.75em}.wp-block-pullquote cite,.wp-block-pullquote footer,.wp-block-pullquote__citation{color:currentColor;font-size:.8125em;font-style:normal;text-transform:uppercase}.wp-block-quote{border-left:.25em solid;margin:0 0 1.75em;padding-left:1em}.wp-block-quote cite,.wp-block-quote footer{color:currentColor;font-size:.8125em;font-style:normal;position:relative}.wp-block-quote.has-text-align-right{border-left:none;border-right:.25em solid;padding-left:0;padding-right:1em}.wp-block-quote.has-text-align-center{border:none;padding-left:0}.wp-block-quote.is-large,.wp-block-quote.is-style-large,.wp-block-quote.is-style-plain{border:none}.wp-block-search .wp-block-search__label{font-weight:700}.wp-block-search__button{border:1px solid #ccc;padding:.375em .625em}:where(.wp-block-group.has-background){padding:1.25em 2.375em}.wp-block-separator.has-css-opacity{opacity:.4}.wp-block-separator{border:none;border-bottom:2px solid;margin-left:auto;margin-right:auto}.wp-block-separator.has-alpha-channel-opacity{opacity:1}.wp-block-separator:not(.is-style-wide):not(.is-style-dots){width:100px}.wp-block-separator.has-background:not(.is-style-dots){border-bottom:none;height:1px}.wp-block-separator.has-background:not(.is-style-wide):not(.is-style-dots){height:2px}.wp-block-table{margin:0 0 1em}.wp-block-table td,.wp-block-table th{word-break:normal}.wp-block-table figcaption{color:#555;font-size:13px;text-align:center}.is-dark-theme .wp-block-table figcaption{color:#ffffffa6}.wp-block-video figcaption{color:#555;font-size:13px;text-align:center}.is-dark-theme .wp-block-video figcaption{color:#ffffffa6}.wp-block-video{margin:0 0 1em}.wp-block-template-part.has-background{margin-bottom:0;margin-top:0;padding:1.25em 2.375em}
+</style>
+<style id="classic-theme-styles-inline-css" type="text/css">
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+</style>
+<style id="global-styles-inline-css" type="text/css">
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 12px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 32px;--wp--preset--font-size--x-large: 42px;--wp--preset--font-size--normal: 14px;--wp--preset--font-size--huge: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}body .is-layout-flex{flex-wrap: wrap;align-items: center;}body .is-layout-flex > *{margin: 0;}body .is-layout-grid{display: grid;}body .is-layout-grid > *{margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+.wp-block-navigation a:where(:not(.wp-element-button)){color: inherit;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+.wp-block-pullquote{font-size: 1.5em;line-height: 1.6;}
+</style>
+
+<link rel="stylesheet" id="rate-my-post-css" href="https://thuongbep.com/wp-content/plugins/rate-my-post/public/css/rate-my-post.css?ver=3.4.1" type="text/css" media="all">
+<style id="rate-my-post-inline-css" type="text/css">
+.rmp-widgets-container.rmp-wp-plugin.rmp-main-container {  text-align:left;}
+</style>
+<link rel="stylesheet" id="simply-gallery-block-frontend-css" href="https://thuongbep.com/wp-content/plugins/simply-gallery-block/blocks/pgc_sgb.min.style.css?ver=3.1.6" type="text/css" media="all">
+<link rel="stylesheet" id="pgc-simply-gallery-plugin-lightbox-style-css" href="https://thuongbep.com/wp-content/plugins/simply-gallery-block/plugins/pgc_sgb_lightbox.min.style.css?ver=3.1.6" type="text/css" media="all">
+<link rel="stylesheet" id="ez-toc-css" href="https://thuongbep.com/wp-content/plugins/easy-table-of-contents/assets/css/screen.min.css?ver=2.0.50" type="text/css" media="all">
+<style id="ez-toc-inline-css" type="text/css">
+div#ez-toc-container p.ez-toc-title {font-size: 120%;}div#ez-toc-container p.ez-toc-title {font-weight: 500;}div#ez-toc-container ul li {font-size: 95%;}div#ez-toc-container nav ul ul li ul li {font-size: 90%!important;}
+.ez-toc-container-direction {direction: ltr;}.ez-toc-counter ul{counter-reset: item ;}.ez-toc-counter nav ul li a::before {content: counters(item, ".", decimal) ". ";display: inline-block;counter-increment: item;flex-grow: 0;flex-shrink: 0;margin-right: .2em; float: left;}.ez-toc-widget-direction {direction: ltr;}.ez-toc-widget-container ul{counter-reset: item ;}.ez-toc-widget-container nav ul li a::before {content: counters(item, ".", decimal) ". ";display: inline-block;counter-increment: item;flex-grow: 0;flex-shrink: 0;margin-right: .2em; float: left;}
+</style>
+<link rel="stylesheet" id="ez-toc-sticky-css" href="https://thuongbep.com/wp-content/plugins/easy-table-of-contents/assets/css/ez-toc-sticky.min.css?ver=2.0.50" type="text/css" media="all">
+<style id="ez-toc-sticky-inline-css" type="text/css">
+.ez-toc-sticky-fixed{position: fixed;top: 0;left: 0;z-index: 999999;width: auto;max-width: 100%;} .ez-toc-sticky-fixed .ez-toc-sidebar {position: relative;top: auto;width: auto !important;height: 100%;box-shadow: 1px 1px 10px 3px rgb(0 0 0 / 20%);box-sizing: border-box;padding: 20px 30px;background: white;margin-left: 0 !important;height: auto; max-height: 100vh; overflow-y: auto;overflow-x: hidden;} .ez-toc-sticky-fixed .ez-toc-sidebar #ez-toc-sticky-container { max-width: auto; max-width: auto;padding: 0px;border: none;margin-bottom: 0;margin-top: 70px;} #ez-toc-sticky-container a { color: #000;} .ez-toc-sticky-fixed .ez-toc-sidebar .ez-toc-sticky-title-container {border-bottom-color: #EEEEEE;background-color: #FAFAFA;padding: 15px;border-bottom: 1px solid #e5e5e5;width: 100%;position: absolute;height: auto;top: 0;left: 0;z-index: 99999999;} .ez-toc-sticky-fixed .ez-toc-sidebar .ez-toc-sticky-title-container .ez-toc-sticky-title {font-weight: 550;font-size: 18px;color: #111;} .ez-toc-sticky-fixed .ez-toc-close-icon {-webkit-appearance: none;padding: 0;cursor: pointer;background: 0 0;border: 0;float: right;font-size: 30px;font-weight: 600;line-height: 1;position: relative;color: #000;top: -2px;text-decoration: none;} .ez-toc-open-icon {position: fixed;left: 0px;top: 8%;text-decoration: none;font-weight: bold;padding: 5px 10px 15px 10px;box-shadow: 1px -5px 10px 5px rgb(0 0 0 / 10%);background-color: #fff;display: inline-grid;line-height: 1.4;border-radius: 0px 10px 10px 0px;z-index: 999999;} .ez-toc-sticky-fixed.hide {-webkit-transition: opacity 0.3s linear, left 0.3s cubic-bezier(0.4, 0, 1, 1);-ms-transition: opacity 0.3s linear, left 0.3s cubic-bezier(0.4, 0, 1, 1);-o-transition: opacity 0.3s linear, left 0.3s cubic-bezier(0.4, 0, 1, 1);transition: opacity 0.3s linear, left 0.3s cubic-bezier(0.4, 0, 1, 1);left: -100%;} .ez-toc-sticky-fixed.show {-webkit-transition: left 0.3s linear, left 0.3s easy-out;-moz-transition: left 0.3s linear;-o-transition: left 0.3s linear;transition: left 0.3s linear;left: 0;} .ez-toc-open-icon span.arrow { font-size: 18px; } .ez-toc-open-icon span.text {font-size: 13px;writing-mode: vertical-rl;text-orientation: mixed;} @media screen  and (max-device-width: 640px) {.ez-toc-sticky-fixed .ez-toc-sidebar {min-width: auto;} .ez-toc-sticky-fixed .ez-toc-sidebar.show { padding-top: 35px; } .ez-toc-sticky-fixed .ez-toc-sidebar #ez-toc-sticky-container { min-width: 100%; } }
+.ez-toc-sticky-toggle-direction {direction: ltr;}.ez-toc-sticky-toggle-counter ul{counter-reset: item ;}.ez-toc-sticky-toggle-counter nav ul li a::before {content: counters(item, ".", decimal) ". ";display: inline-block;counter-increment: item;flex-grow: 0;flex-shrink: 0;margin-right: .2em; float: left;}
+</style>
+<link rel="stylesheet" id="penci-soledad-parent-style-css" href="https://thuongbep.com/wp-content/themes/soledad/style.css?ver=6.5.7" type="text/css" media="all">
+<noscript></noscript><link rel="stylesheet" id="penci_style-css" href="https://thuongbep.com/wp-content/themes/soledad-child/style.css?ver=7.5.1" type="text/css" media="all">
+<link rel="stylesheet" as="style" onload="this.onload=null;this.rel='stylesheet'" id="penci-font-awesomeold-css" href="https://thuongbep.com/wp-content/themes/soledad/css/font-awesome.4.7.0.min.css?ver=4.7.0" type="text/css" media="all"><noscript><link id="penci-font-awesomeold-css" rel="stylesheet" href="https://thuongbep.com/wp-content/themes/soledad/css/font-awesome.4.7.0.min.css?ver=4.7.0"></noscript><link rel="stylesheet" as="style" onload="this.onload=null;this.rel='stylesheet'" id="penci-font-iconmoon-css" href="https://thuongbep.com/wp-content/themes/soledad/css/iconmoon.css?ver=1.0" type="text/css" media="all"><noscript><link id="penci-font-iconmoon-css" rel="stylesheet" href="https://thuongbep.com/wp-content/themes/soledad/css/iconmoon.css?ver=1.0"></noscript><link rel="stylesheet" as="style" onload="this.onload=null;this.rel='stylesheet'" id="penci-font-iweather-css" href="https://thuongbep.com/wp-content/themes/soledad/css/weather-icon.css?ver=2.0" type="text/css" media="all"><noscript><link id="penci-font-iweather-css" rel="stylesheet" href="https://thuongbep.com/wp-content/themes/soledad/css/weather-icon.css?ver=2.0"></noscript><link rel="stylesheet" id="penci-recipe-css-css" href="https://thuongbep.com/wp-content/plugins/penci-recipe/css/recipe.css?ver=2.6" type="text/css" media="all">
+<script type="text/javascript" src="https://thuongbep.com/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" id="jquery-core-js"></script>
+<script type="text/javascript" src="https://thuongbep.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1" id="jquery-migrate-js"></script>
+<script type="text/javascript" id="qubely_local_script-js-extra">
+/* <![CDATA[ */
+var qubely_urls = {"plugin":"https:\/\/thuongbep.com\/wp-content\/plugins\/qubely\/","ajax":"https:\/\/thuongbep.com\/wp-admin\/admin-ajax.php","nonce":"c6c31241d4","actual_url":"thuongbep.com"};
+/* ]]> */
+</script>
+<script type="text/javascript" id="qubely_container_width-js-extra">
+/* <![CDATA[ */
+var qubely_container_width = {"sm":"540","md":"720","lg":"960","xl":"1140"};
+/* ]]> */
+</script>
+<script type="text/javascript" id="ez-toc-scroll-scriptjs-js-after">
+/* <![CDATA[ */
+jQuery(document).ready(function(){document.querySelectorAll(".ez-toc-section").forEach(t=>{t.setAttribute("ez-toc-data-id","#"+decodeURI(t.getAttribute("id")))}),jQuery("a.ez-toc-link").click(function(){let t=jQuery(this).attr("href"),e=jQuery("#wpadminbar"),i=0;30>30&&(i=30),e.length&&(i+=e.height()),jQuery('[ez-toc-data-id="'+decodeURI(t)+'"]').length>0&&(i=jQuery('[ez-toc-data-id="'+decodeURI(t)+'"]').offset().top-i),jQuery("html, body").animate({scrollTop:i},500)})});
+/* ]]> */
+</script>
+<link rel="https://api.w.org/" href="https://thuongbep.com/wp-json/"><link rel="alternate" type="application/json" href="https://thuongbep.com/wp-json/wp/v2/posts/6051"><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://thuongbep.com/xmlrpc.php?rsd">
+<meta name="generator" content="WordPress 6.5.7">
+<link rel="shortlink" href="https://thuongbep.com/?p=6051">
+<link rel="alternate" type="application/json+oembed" href="https://thuongbep.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fthuongbep.com%2Fpho-bo-ap-chao%2F">
+<link rel="alternate" type="text/xml+oembed" href="https://thuongbep.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fthuongbep.com%2Fpho-bo-ap-chao%2F&amp;format=xml">
+	<style type="text/css">
+				.penci-recipe-tagged .prt-icon span, .penci-recipe-action-buttons .penci-recipe-button:hover{ background-color:#f77b00; }																																																				.post-entry .penci-recipe-heading a.penci-recipe-print { color:#f77b00; } .post-entry .penci-recipe-heading a.penci-recipe-print { border-color:#f77b00; } .post-entry .penci-recipe-heading a.penci-recipe-print:hover, .wrapper-buttons-style4 .penci-recipe-print-btn, .wrapper-buttons-overlay .penci-recipe-print-btn { background-color:#f77b00; border-color:#f77b00; } .post-entry .penci-recipe-heading a.penci-recipe-print:hover { color:#fff; }.wrapper-buttons-overlay .penci-recipe-print-btn{ -webkit-box-shadow: 0 5px 20px #f77b00; box-shadow: 0 5px 20px #f77b00; }																																		.penci-recipe-index .cat > a.penci-cat-name { color:#f77b00; }									</style>
+	<style type="text/css">
+																											</style>
+<noscript><style>.simply-gallery-amp{ display: block !important; }</style></noscript><noscript><style>.sgb-preloader{ display: none !important; }</style></noscript><style id="penci-custom-style" type="text/css">.penci-image-holder:before{ padding-top: 100%; } #main .bbp-login-form .bbp-submit-wrapper button[type="submit"], h1, h2, h3, h4, h5, h6, h2.penci-heading-video, #navigation .menu li a, .penci-photo-2-effect figcaption h2, .headline-title, a.penci-topbar-post-title, #sidebar-nav .menu li a, .penci-slider .pencislider-container .pencislider-content .pencislider-title, .penci-slider .pencislider-container .pencislider-content .pencislider-button, .author-quote span, .penci-more-link a.more-link, .penci-post-share-box .dt-share, .post-share a .dt-share, .author-content h5, .post-pagination h5, .post-box-title, .penci-countdown .countdown-amount, .penci-countdown .countdown-period, .penci-pagination a, .penci-pagination .disable-url, ul.footer-socials li a span, .penci-button,.widget input[type="submit"],.penci-user-logged-in .penci-user-action-links a, .widget button[type="submit"], .penci-sidebar-content .widget-title, #respond h3.comment-reply-title span, .widget-social.show-text a span, .footer-widget-wrapper .widget .widget-title,.penci-user-logged-in .penci-user-action-links a, .container.penci-breadcrumb span, .container.penci-breadcrumb span a, .penci-container-inside.penci-breadcrumb span, .penci-container-inside.penci-breadcrumb span a, .container.penci-breadcrumb span, .container.penci-breadcrumb span a, .error-404 .go-back-home a, .post-entry .penci-portfolio-filter ul li a, .penci-portfolio-filter ul li a, .portfolio-overlay-content .portfolio-short .portfolio-title a, .home-featured-cat-content .magcat-detail h3 a, .post-entry blockquote cite, .post-entry blockquote .author, .tags-share-box.hide-tags.page-share .share-title, .widget ul.side-newsfeed li .side-item .side-item-text h4 a, .thecomment .comment-text span.author, .thecomment .comment-text span.author a, .post-comments span.reply a, #respond h3, #respond label, .wpcf7 label, #respond #submit, div.wpforms-container .wpforms-form.wpforms-form .wpforms-field-label,div.wpforms-container .wpforms-form.wpforms-form input[type=submit], div.wpforms-container .wpforms-form.wpforms-form button[type=submit], div.wpforms-container .wpforms-form.wpforms-form .wpforms-page-button, .wpcf7 input[type="submit"], .widget_wysija input[type="submit"], .archive-box span, .archive-box h1, .gallery .gallery-caption, .contact-form input[type=submit], ul.penci-topbar-menu > li a, div.penci-topbar-menu > ul > li a, .featured-style-29 .penci-featured-slider-button a, .pencislider-container .pencislider-content .pencislider-title, .pencislider-container .pencislider-content .pencislider-button, ul.homepage-featured-boxes .penci-fea-in.boxes-style-3 h4 span span, .pencislider-container .pencislider-content .pencislider-button, .woocommerce div.product .woocommerce-tabs .panel #respond .comment-reply-title, .penci-recipe-index-wrap .penci-index-more-link a, .penci-menu-hbg .menu li a, #sidebar-nav .menu li a, .penci-readmore-btn.penci-btn-make-button a, .bos_searchbox_widget_class #flexi_searchbox h1, .bos_searchbox_widget_class #flexi_searchbox h2, .bos_searchbox_widget_class #flexi_searchbox h3, .bos_searchbox_widget_class #flexi_searchbox h4, .bos_searchbox_widget_class #flexi_searchbox #b_searchboxInc .b_submitButton_wrapper .b_submitButton:hover, .bos_searchbox_widget_class #flexi_searchbox #b_searchboxInc .b_submitButton_wrapper .b_submitButton, .penci-featured-cat-seemore.penci-btn-make-button a, .penci-menu-hbg-inner .penci-hbg_sitetitle { font-family: 'Patrick Hand SC', cursive; } .featured-style-29 .penci-featured-slider-button a, #bbpress-forums #bbp-search-form .button{ font-weight: bold; } #main #bbpress-forums .bbp-login-form fieldset.bbp-form select, #main #bbpress-forums .bbp-login-form .bbp-form input[type="password"], #main #bbpress-forums .bbp-login-form .bbp-form input[type="text"], body, textarea, #respond textarea, .widget input[type="text"], .widget input[type="email"], .widget input[type="date"], .widget input[type="number"], .wpcf7 textarea, .mc4wp-form input, #respond input, div.wpforms-container .wpforms-form.wpforms-form input[type=date], div.wpforms-container .wpforms-form.wpforms-form input[type=datetime], div.wpforms-container .wpforms-form.wpforms-form input[type=datetime-local], div.wpforms-container .wpforms-form.wpforms-form input[type=email], div.wpforms-container .wpforms-form.wpforms-form input[type=month], div.wpforms-container .wpforms-form.wpforms-form input[type=number], div.wpforms-container .wpforms-form.wpforms-form input[type=password], div.wpforms-container .wpforms-form.wpforms-form input[type=range], div.wpforms-container .wpforms-form.wpforms-form input[type=search], div.wpforms-container .wpforms-form.wpforms-form input[type=tel], div.wpforms-container .wpforms-form.wpforms-form input[type=text], div.wpforms-container .wpforms-form.wpforms-form input[type=time], div.wpforms-container .wpforms-form.wpforms-form input[type=url], div.wpforms-container .wpforms-form.wpforms-form input[type=week], div.wpforms-container .wpforms-form.wpforms-form select, div.wpforms-container .wpforms-form.wpforms-form textarea, .wpcf7 input, #searchform input.search-input, ul.homepage-featured-boxes .penci-fea-in h4, .widget.widget_categories ul li span.category-item-count, .about-widget .about-me-heading, .widget ul.side-newsfeed li .side-item .side-item-text .side-item-meta { font-weight: normal;font-family: 'Lato', sans-serif; } p { line-height: 1.8; } .header-slogan .header-slogan-text{ font-family: 'Lora', serif; } #navigation .menu li a, .penci-menu-hbg .menu li a, #sidebar-nav .menu li a { font-family: 'Lato', sans-serif; font-weight: normal; } .penci-hide-tagupdated{ display: none !important; } .header-slogan .header-slogan-text { font-weight:400; } body, .widget ul li a{ font-size: 18px; } .widget ul li, .post-entry, p, .post-entry p { font-size: 18px; line-height: 1.8; } h1, h2, h3, h4, h5, h6, #sidebar-nav .menu li a, #navigation .menu li a, a.penci-topbar-post-title, .penci-slider .pencislider-container .pencislider-content .pencislider-title, .penci-slider .pencislider-container .pencislider-content .pencislider-button, .headline-title, .author-quote span, .penci-more-link a.more-link, .author-content h5, .post-pagination h5, .post-box-title, .penci-countdown .countdown-amount, .penci-countdown .countdown-period, .penci-pagination a, .penci-pagination .disable-url, ul.footer-socials li a span, .penci-sidebar-content .widget-title, #respond h3.comment-reply-title span, .widget-social.show-text a span, .footer-widget-wrapper .widget .widget-title, .error-404 .go-back-home a, .home-featured-cat-content .magcat-detail h3 a, .post-entry blockquote cite, .pencislider-container .pencislider-content .pencislider-title, .pencislider-container .pencislider-content .pencislider-button, .post-entry blockquote .author, .tags-share-box.hide-tags.page-share .share-title, .widget ul.side-newsfeed li .side-item .side-item-text h4 a, .thecomment .comment-text span.author, .thecomment .comment-text span.author a, #respond h3, #respond label, .wpcf7 label, div.wpforms-container .wpforms-form.wpforms-form .wpforms-field-label,div.wpforms-container .wpforms-form.wpforms-form input[type=submit], div.wpforms-container .wpforms-form.wpforms-form button[type=submit], div.wpforms-container .wpforms-form.wpforms-form .wpforms-page-button, #respond #submit, .wpcf7 input[type="submit"], .widget_wysija input[type="submit"], .archive-box span, .archive-box h1, .gallery .gallery-caption, .widget input[type="submit"],.penci-button, #main .bbp-login-form .bbp-submit-wrapper button[type="submit"], .widget button[type="submit"], .contact-form input[type=submit], ul.penci-topbar-menu > li a, div.penci-topbar-menu > ul > li a, .penci-recipe-index-wrap .penci-index-more-link a, #bbpress-forums #bbp-search-form .button, .penci-menu-hbg .menu li a, #sidebar-nav .menu li a, .penci-readmore-btn.penci-btn-make-button a, .penci-featured-cat-seemore.penci-btn-make-button a, .penci-menu-hbg-inner .penci-hbg_sitetitle { font-weight: normal; } .featured-area .penci-image-holder, .featured-area .penci-slider4-overlay, .featured-area .penci-slide-overlay .overlay-link, .featured-style-29 .featured-slider-overlay, .penci-slider38-overlay{ border-radius: ; -webkit-border-radius: ; } .penci-featured-content-right:before{ border-top-right-radius: ; border-bottom-right-radius: ; } .penci-flat-overlay .penci-slide-overlay .penci-mag-featured-content:before{ border-bottom-left-radius: ; border-bottom-right-radius: ; } .container-single .post-image{ border-radius: ; -webkit-border-radius: ; } .penci-mega-thumbnail .penci-image-holder{ border-radius: ; -webkit-border-radius: ; } #navigation .menu li a, .penci-menu-hbg .menu li a, #sidebar-nav .menu li a { font-weight: 600; } #header .inner-header .container { padding:30px 0; } #logo a { max-width:800px; } @media only screen and (max-width: 960px) and (min-width: 768px){ #logo img{ max-width: 100%; } } .penci-single-style-7:not( .penci-single-pheader-noimg ).penci_sidebar #main article.post, .penci-single-style-3:not( .penci-single-pheader-noimg ).penci_sidebar #main article.post { background-color: #ffffff; } @media only screen and (max-width: 767px){ .standard-post-special_wrapper { background: #ffffff; } } .wrapper-boxed, .wrapper-boxed.enable-boxed, .home-pupular-posts-title span, .penci-post-box-meta.penci-post-box-grid .penci-post-share-box, .penci-pagination.penci-ajax-more a.penci-ajax-more-button, #searchform input.search-input, .woocommerce .woocommerce-product-search input[type="search"], .overlay-post-box-meta, .widget ul.side-newsfeed li.featured-news2 .side-item .side-item-text, .widget select, .widget select option, .woocommerce .woocommerce-error, .woocommerce .woocommerce-info, .woocommerce .woocommerce-message, #penci-demobar, #penci-demobar .style-toggle, .grid-overlay-meta .grid-header-box, .header-standard.standard-overlay-meta{ background-color: #ffffff; } .penci-grid .list-post.list-boxed-post .item > .thumbnail:before{ border-right-color: #ffffff; } .penci-grid .list-post.list-boxed-post:nth-of-type(2n+2) .item > .thumbnail:before{ border-left-color: #ffffff; } #main #bbpress-forums .bbp-login-form fieldset.bbp-form select, #main #bbpress-forums .bbp-login-form .bbp-form input[type="password"], #main #bbpress-forums .bbp-login-form .bbp-form input[type="text"], .widget ul li, .grid-mixed, .penci-post-box-meta, .penci-pagination.penci-ajax-more a.penci-ajax-more-button, .widget-social a i, .penci-home-popular-posts, .header-header-1.has-bottom-line, .header-header-4.has-bottom-line, .header-header-7.has-bottom-line, .container-single .post-entry .post-tags a,.tags-share-box.tags-share-box-2_3,.tags-share-box.tags-share-box-top, .tags-share-box, .post-author, .post-pagination, .post-related, .post-comments .post-title-box, .comments .comment, #respond textarea, .wpcf7 textarea, #respond input, div.wpforms-container .wpforms-form.wpforms-form input[type=date], div.wpforms-container .wpforms-form.wpforms-form input[type=datetime], div.wpforms-container .wpforms-form.wpforms-form input[type=datetime-local], div.wpforms-container .wpforms-form.wpforms-form input[type=email], div.wpforms-container .wpforms-form.wpforms-form input[type=month], div.wpforms-container .wpforms-form.wpforms-form input[type=number], div.wpforms-container .wpforms-form.wpforms-form input[type=password], div.wpforms-container .wpforms-form.wpforms-form input[type=range], div.wpforms-container .wpforms-form.wpforms-form input[type=search], div.wpforms-container .wpforms-form.wpforms-form input[type=tel], div.wpforms-container .wpforms-form.wpforms-form input[type=text], div.wpforms-container .wpforms-form.wpforms-form input[type=time], div.wpforms-container .wpforms-form.wpforms-form input[type=url], div.wpforms-container .wpforms-form.wpforms-form input[type=week], div.wpforms-container .wpforms-form.wpforms-form select, div.wpforms-container .wpforms-form.wpforms-form textarea, .wpcf7 input, .widget_wysija input, #respond h3, #searchform input.search-input, .post-password-form input[type="text"], .post-password-form input[type="email"], .post-password-form input[type="password"], .post-password-form input[type="number"], .penci-recipe, .penci-recipe-heading, .penci-recipe-ingredients, .penci-recipe-notes, .penci-pagination ul.page-numbers li span, .penci-pagination ul.page-numbers li a, #comments_pagination span, #comments_pagination a, body.author .post-author, .tags-share-box.hide-tags.page-share, .penci-grid li.list-post, .penci-grid li.list-boxed-post-2 .content-boxed-2, .home-featured-cat-content .mag-post-box, .home-featured-cat-content.style-2 .mag-post-box.first-post, .home-featured-cat-content.style-10 .mag-post-box.first-post, .widget select, .widget ul ul, .widget input[type="text"], .widget input[type="email"], .widget input[type="date"], .widget input[type="number"], .widget input[type="search"], .widget .tagcloud a, #wp-calendar tbody td, .woocommerce div.product .entry-summary div[itemprop="description"] td, .woocommerce div.product .entry-summary div[itemprop="description"] th, .woocommerce div.product .woocommerce-tabs #tab-description td, .woocommerce div.product .woocommerce-tabs #tab-description th, .woocommerce-product-details__short-description td, th, .woocommerce ul.cart_list li, .woocommerce ul.product_list_widget li, .woocommerce .widget_shopping_cart .total, .woocommerce.widget_shopping_cart .total, .woocommerce .woocommerce-product-search input[type="search"], .woocommerce nav.woocommerce-pagination ul li a, .woocommerce nav.woocommerce-pagination ul li span, .woocommerce div.product .product_meta, .woocommerce div.product .woocommerce-tabs ul.tabs, .woocommerce div.product .related > h2, .woocommerce div.product .upsells > h2, .woocommerce #reviews #comments ol.commentlist li .comment-text, .woocommerce table.shop_table td, .post-entry td, .post-entry th, #add_payment_method .cart-collaterals .cart_totals tr td, #add_payment_method .cart-collaterals .cart_totals tr th, .woocommerce-cart .cart-collaterals .cart_totals tr td, .woocommerce-cart .cart-collaterals .cart_totals tr th, .woocommerce-checkout .cart-collaterals .cart_totals tr td, .woocommerce-checkout .cart-collaterals .cart_totals tr th, .woocommerce-cart .cart-collaterals .cart_totals table, .woocommerce-cart table.cart td.actions .coupon .input-text, .woocommerce table.shop_table a.remove, .woocommerce form .form-row .input-text, .woocommerce-page form .form-row .input-text, .woocommerce .woocommerce-error, .woocommerce .woocommerce-info, .woocommerce .woocommerce-message, .woocommerce form.checkout_coupon, .woocommerce form.login, .woocommerce form.register, .woocommerce form.checkout table.shop_table, .woocommerce-checkout #payment ul.payment_methods, .post-entry table, .wrapper-penci-review, .penci-review-container.penci-review-count, #penci-demobar .style-toggle, #widget-area, .post-entry hr, .wpb_text_column hr, #buddypress .dir-search input[type=search], #buddypress .dir-search input[type=text], #buddypress .groups-members-search input[type=search], #buddypress .groups-members-search input[type=text], #buddypress ul.item-list, #buddypress .profile[role=main], #buddypress select, #buddypress div.pagination .pagination-links span, #buddypress div.pagination .pagination-links a, #buddypress div.pagination .pag-count, #buddypress div.pagination .pagination-links a:hover, #buddypress ul.item-list li, #buddypress table.forum tr td.label, #buddypress table.messages-notices tr td.label, #buddypress table.notifications tr td.label, #buddypress table.notifications-settings tr td.label, #buddypress table.profile-fields tr td.label, #buddypress table.wp-profile-fields tr td.label, #buddypress table.profile-fields:last-child, #buddypress form#whats-new-form textarea, #buddypress .standard-form input[type=text], #buddypress .standard-form input[type=color], #buddypress .standard-form input[type=date], #buddypress .standard-form input[type=datetime], #buddypress .standard-form input[type=datetime-local], #buddypress .standard-form input[type=email], #buddypress .standard-form input[type=month], #buddypress .standard-form input[type=number], #buddypress .standard-form input[type=range], #buddypress .standard-form input[type=search], #buddypress .standard-form input[type=password], #buddypress .standard-form input[type=tel], #buddypress .standard-form input[type=time], #buddypress .standard-form input[type=url], #buddypress .standard-form input[type=week], .bp-avatar-nav ul, .bp-avatar-nav ul.avatar-nav-items li.current, #bbpress-forums li.bbp-body ul.forum, #bbpress-forums li.bbp-body ul.topic, #bbpress-forums li.bbp-footer, .bbp-pagination-links a, .bbp-pagination-links span.current, .wrapper-boxed .bbp-pagination-links a:hover, .wrapper-boxed .bbp-pagination-links span.current, #buddypress .standard-form select, #buddypress .standard-form input[type=password], #buddypress .activity-list li.load-more a, #buddypress .activity-list li.load-newest a, #buddypress ul.button-nav li a, #buddypress div.generic-button a, #buddypress .comment-reply-link, #bbpress-forums div.bbp-template-notice.info, #bbpress-forums #bbp-search-form #bbp_search, #bbpress-forums .bbp-forums-list, #bbpress-forums #bbp_topic_title, #bbpress-forums #bbp_topic_tags, #bbpress-forums .wp-editor-container, .widget_display_stats dd, .widget_display_stats dt, div.bbp-forum-header, div.bbp-topic-header, div.bbp-reply-header, .widget input[type="text"], .widget input[type="email"], .widget input[type="date"], .widget input[type="number"], .widget input[type="search"], .widget input[type="password"], blockquote.wp-block-quote, .post-entry blockquote.wp-block-quote, .wp-block-quote:not(.is-large):not(.is-style-large), .post-entry pre, .wp-block-pullquote:not(.is-style-solid-color), .post-entry hr.wp-block-separator, .wp-block-separator, .wp-block-latest-posts, .wp-block-yoast-how-to-block ol.schema-how-to-steps, .wp-block-yoast-how-to-block ol.schema-how-to-steps li, .wp-block-yoast-faq-block .schema-faq-section, .post-entry .wp-block-quote, .wpb_text_column .wp-block-quote, .woocommerce .page-description .wp-block-quote, .wp-block-search .wp-block-search__input{ border-color: #f77b00; } .penci-recipe-index-wrap h4.recipe-index-heading > span:before, .penci-recipe-index-wrap h4.recipe-index-heading > span:after{ border-color: #f77b00; opacity: 1; } .tags-share-box .single-comment-o:after, .post-share a.penci-post-like:after{ background-color: #f77b00; } .penci-grid .list-post.list-boxed-post{ border-color: #f77b00 !important; } .penci-post-box-meta.penci-post-box-grid:before, .woocommerce .widget_price_filter .ui-slider .ui-slider-range{ background-color: #f77b00; } .penci-pagination.penci-ajax-more a.penci-ajax-more-button.loading-posts{ border-color: #f77b00 !important; } .penci-vernav-enable .penci-menu-hbg{ box-shadow: none; -webkit-box-shadow: none; -moz-box-shadow: none; } .penci-vernav-enable.penci-vernav-poleft .penci-menu-hbg{ border-right: 1px solid #f77b00; } .penci-vernav-enable.penci-vernav-poright .penci-menu-hbg{ border-left: 1px solid #f77b00; } .penci-menuhbg-toggle:hover .lines-button:after, .penci-menuhbg-toggle:hover .penci-lines:before, .penci-menuhbg-toggle:hover .penci-lines:after,.tags-share-box.tags-share-box-s2 .post-share-plike,.penci-video_playlist .penci-playlist-title,.pencisc-column-2.penci-video_playlist .penci-video-nav .playlist-panel-item, .pencisc-column-1.penci-video_playlist .penci-video-nav .playlist-panel-item,.penci-video_playlist .penci-custom-scroll::-webkit-scrollbar-thumb, .pencisc-button, .post-entry .pencisc-button, .penci-dropcap-box, .penci-dropcap-circle{ background: #f77b00; } a, .post-entry .penci-portfolio-filter ul li a:hover, .penci-portfolio-filter ul li a:hover, .penci-portfolio-filter ul li.active a, .post-entry .penci-portfolio-filter ul li.active a, .penci-countdown .countdown-amount, .archive-box h1, .post-entry a, .container.penci-breadcrumb span a:hover, .post-entry blockquote:before, .post-entry blockquote cite, .post-entry blockquote .author, .wpb_text_column blockquote:before, .wpb_text_column blockquote cite, .wpb_text_column blockquote .author, .penci-pagination a:hover, ul.penci-topbar-menu > li a:hover, div.penci-topbar-menu > ul > li a:hover, .penci-recipe-heading a.penci-recipe-print,.penci-review-metas .penci-review-btnbuy, .main-nav-social a:hover, .widget-social .remove-circle a:hover i, .penci-recipe-index .cat > a.penci-cat-name, #bbpress-forums li.bbp-body ul.forum li.bbp-forum-info a:hover, #bbpress-forums li.bbp-body ul.topic li.bbp-topic-title a:hover, #bbpress-forums li.bbp-body ul.forum li.bbp-forum-info .bbp-forum-content a, #bbpress-forums li.bbp-body ul.topic p.bbp-topic-meta a, #bbpress-forums .bbp-breadcrumb a:hover, #bbpress-forums .bbp-forum-freshness a:hover, #bbpress-forums .bbp-topic-freshness a:hover, #buddypress ul.item-list li div.item-title a, #buddypress ul.item-list li h4 a, #buddypress .activity-header a:first-child, #buddypress .comment-meta a:first-child, #buddypress .acomment-meta a:first-child, div.bbp-template-notice a:hover, .penci-menu-hbg .menu li a .indicator:hover, .penci-menu-hbg .menu li a:hover, #sidebar-nav .menu li a:hover, .penci-rlt-popup .rltpopup-meta .rltpopup-title:hover, .penci-video_playlist .penci-video-playlist-item .penci-video-title:hover, .penci_list_shortcode li:before, .penci-dropcap-box-outline, .penci-dropcap-circle-outline, .penci-dropcap-regular, .penci-dropcap-bold{ color: #f77b00; } .penci-home-popular-post ul.slick-dots li button:hover, .penci-home-popular-post ul.slick-dots li.slick-active button, .post-entry blockquote .author span:after, .error-image:after, .error-404 .go-back-home a:after, .penci-header-signup-form, .woocommerce span.onsale, .woocommerce #respond input#submit:hover, .woocommerce a.button:hover, .woocommerce button.button:hover, .woocommerce input.button:hover, .woocommerce nav.woocommerce-pagination ul li span.current, .woocommerce div.product .entry-summary div[itemprop="description"]:before, .woocommerce div.product .entry-summary div[itemprop="description"] blockquote .author span:after, .woocommerce div.product .woocommerce-tabs #tab-description blockquote .author span:after, .woocommerce #respond input#submit.alt:hover, .woocommerce a.button.alt:hover, .woocommerce button.button.alt:hover, .woocommerce input.button.alt:hover, #top-search.shoping-cart-icon > a > span, #penci-demobar .buy-button, #penci-demobar .buy-button:hover, .penci-recipe-heading a.penci-recipe-print:hover,.penci-review-metas .penci-review-btnbuy:hover, .penci-review-process span, .penci-review-score-total, #navigation.menu-style-2 ul.menu ul:before, #navigation.menu-style-2 .menu ul ul:before, .penci-go-to-top-floating, .post-entry.blockquote-style-2 blockquote:before, #bbpress-forums #bbp-search-form .button, #bbpress-forums #bbp-search-form .button:hover, .wrapper-boxed .bbp-pagination-links span.current, #bbpress-forums #bbp_reply_submit:hover, #bbpress-forums #bbp_topic_submit:hover,#main .bbp-login-form .bbp-submit-wrapper button[type="submit"]:hover, #buddypress .dir-search input[type=submit], #buddypress .groups-members-search input[type=submit], #buddypress button:hover, #buddypress a.button:hover, #buddypress a.button:focus, #buddypress input[type=button]:hover, #buddypress input[type=reset]:hover, #buddypress ul.button-nav li a:hover, #buddypress ul.button-nav li.current a, #buddypress div.generic-button a:hover, #buddypress .comment-reply-link:hover, #buddypress input[type=submit]:hover, #buddypress div.pagination .pagination-links .current, #buddypress div.item-list-tabs ul li.selected a, #buddypress div.item-list-tabs ul li.current a, #buddypress div.item-list-tabs ul li a:hover, #buddypress table.notifications thead tr, #buddypress table.notifications-settings thead tr, #buddypress table.profile-settings thead tr, #buddypress table.profile-fields thead tr, #buddypress table.wp-profile-fields thead tr, #buddypress table.messages-notices thead tr, #buddypress table.forum thead tr, #buddypress input[type=submit] { background-color: #f77b00; } .penci-pagination ul.page-numbers li span.current, #comments_pagination span { color: #fff; background: #f77b00; border-color: #f77b00; } .footer-instagram h4.footer-instagram-title > span:before, .woocommerce nav.woocommerce-pagination ul li span.current, .penci-pagination.penci-ajax-more a.penci-ajax-more-button:hover, .penci-recipe-heading a.penci-recipe-print:hover,.penci-review-metas .penci-review-btnbuy:hover, .home-featured-cat-content.style-14 .magcat-padding:before, .wrapper-boxed .bbp-pagination-links span.current, #buddypress .dir-search input[type=submit], #buddypress .groups-members-search input[type=submit], #buddypress button:hover, #buddypress a.button:hover, #buddypress a.button:focus, #buddypress input[type=button]:hover, #buddypress input[type=reset]:hover, #buddypress ul.button-nav li a:hover, #buddypress ul.button-nav li.current a, #buddypress div.generic-button a:hover, #buddypress .comment-reply-link:hover, #buddypress input[type=submit]:hover, #buddypress div.pagination .pagination-links .current, #buddypress input[type=submit], #searchform.penci-hbg-search-form input.search-input:hover, #searchform.penci-hbg-search-form input.search-input:focus, .penci-dropcap-box-outline, .penci-dropcap-circle-outline { border-color: #f77b00; } .woocommerce .woocommerce-error, .woocommerce .woocommerce-info, .woocommerce .woocommerce-message { border-top-color: #f77b00; } .penci-slider ol.penci-control-nav li a.penci-active, .penci-slider ol.penci-control-nav li a:hover, .penci-related-carousel .owl-dot.active span, .penci-owl-carousel-slider .owl-dot.active span{ border-color: #f77b00; background-color: #f77b00; } .woocommerce .woocommerce-message:before, .woocommerce form.checkout table.shop_table .order-total .amount, .woocommerce ul.products li.product .price ins, .woocommerce ul.products li.product .price, .woocommerce div.product p.price ins, .woocommerce div.product span.price ins, .woocommerce div.product p.price, .woocommerce div.product .entry-summary div[itemprop="description"] blockquote:before, .woocommerce div.product .woocommerce-tabs #tab-description blockquote:before, .woocommerce div.product .entry-summary div[itemprop="description"] blockquote cite, .woocommerce div.product .entry-summary div[itemprop="description"] blockquote .author, .woocommerce div.product .woocommerce-tabs #tab-description blockquote cite, .woocommerce div.product .woocommerce-tabs #tab-description blockquote .author, .woocommerce div.product .product_meta > span a:hover, .woocommerce div.product .woocommerce-tabs ul.tabs li.active, .woocommerce ul.cart_list li .amount, .woocommerce ul.product_list_widget li .amount, .woocommerce table.shop_table td.product-name a:hover, .woocommerce table.shop_table td.product-price span, .woocommerce table.shop_table td.product-subtotal span, .woocommerce-cart .cart-collaterals .cart_totals table td .amount, .woocommerce .woocommerce-info:before, .woocommerce div.product span.price, .penci-container-inside.penci-breadcrumb span a:hover { color: #f77b00; } .standard-content .penci-more-link.penci-more-link-button a.more-link, .penci-readmore-btn.penci-btn-make-button a, .penci-featured-cat-seemore.penci-btn-make-button a{ background-color: #f77b00; color: #fff; } .penci-vernav-toggle:before{ border-top-color: #f77b00; color: #fff; } .penci-container-inside.penci-breadcrumb i, .container.penci-breadcrumb i, .penci-container-inside.penci-breadcrumb span, .penci-container-inside.penci-breadcrumb span a, .container.penci-breadcrumb span, .container.penci-breadcrumb span a{ color: #0a0a0a; } .penci-pagination a, .penci-pagination .disable-url, .penci-pagination ul.page-numbers li span, .penci-pagination ul.page-numbers li a, #comments_pagination span, #comments_pagination a{ font-size: 14px; } .penci-pagination.penci-ajax-more a.penci-ajax-more-button{ color: #f77b00; } .penci-pagination.penci-ajax-more a.penci-ajax-more-button{ border-color: #f77b00; } .penci-pagination.penci-ajax-more a.penci-ajax-more-button{ background-color: #f77b00; } .penci-pagination.penci-ajax-more a.penci-ajax-more-button:hover{ color: #f77b00; } .penci-pagination.penci-ajax-more a.penci-ajax-more-button:hover{ border-color: #f77b00; } .penci-pagination.penci-ajax-more a.penci-ajax-more-button:hover{ background-color: #f77b00; } .home-pupular-posts-title{ font-size: 20px; } .headline-title { background-color: #f77b00; } a.penci-topbar-post-title:hover { color: #f77b00; } ul.penci-topbar-menu > li a:hover, div.penci-topbar-menu > ul > li a:hover { color: #f77b00; } .penci-topbar-social a:hover { color: #f77b00; } #navigation ul.menu > li > a:before, #navigation .menu > ul > li > a:before{ content: none; } #navigation .menu li a:hover, #navigation .menu li.current-menu-item > a, #navigation .menu > li.current_page_item > a, #navigation .menu li:hover > a, #navigation .menu > li.current-menu-ancestor > a, #navigation .menu > li.current-menu-item > a { color: #f7a400; } #navigation ul.menu > li > a:before, #navigation .menu > ul > li > a:before { background: #f7a400; } #navigation .penci-megamenu .penci-mega-child-categories a.cat-active, #navigation .menu .penci-megamenu .penci-mega-child-categories a:hover, #navigation .menu .penci-megamenu .penci-mega-latest-posts .penci-mega-post a:hover { color: #f7a400; } #navigation .penci-megamenu .penci-mega-thumbnail .mega-cat-name { background: #f7a400; } #navigation .menu .sub-menu li a:hover, #navigation .menu .sub-menu li.current-menu-item > a, #navigation .sub-menu li:hover > a { color: #f7a400; } #navigation.menu-style-2 ul.menu ul:before, #navigation.menu-style-2 .menu ul ul:before { background-color: #f7a400; } .penci-owl-carousel .pencislider-item .penci-image-holder{ height: auto !important; } .penci-owl-carousel .pencislider-item .penci-image-holder:before { content: ''; padding-top: 1%; } .penci-header-signup-form { padding-top: px; padding-bottom: px; } .penci-header-signup-form { background-color: #fc6d00; } .header-social a:hover i, .main-nav-social a:hover, .penci-menuhbg-toggle:hover .lines-button:after, .penci-menuhbg-toggle:hover .penci-lines:before, .penci-menuhbg-toggle:hover .penci-lines:after { color: #f78300; } #sidebar-nav .menu li a:hover, .header-social.sidebar-nav-social a:hover i, #sidebar-nav .menu li a .indicator:hover, #sidebar-nav .menu .sub-menu li a .indicator:hover{ color: #f7a400; } #sidebar-nav-logo:before{ background-color: #f7a400; } p.penci-sub-heading-video { color: #f77b00; } .penci-slide-overlay .overlay-link { background: -moz-linear-gradient(top, transparent 60%, #000000 100%); background: -webkit-linear-gradient(top, transparent 60%, #000000 100%); background: -o-linear-gradient(top, transparent 60%, #000000 100%); background: -ms-linear-gradient(top, transparent 60%, #000000 100%); background: linear-gradient(to bottom, transparent 60%, #000000 100%); } .penci-slider4-overlay{ background: -moz-linear-gradient(left, transparent 26%, #000000 65%); background: -webkit-gradient(linear, left top, right top, color-stop(26%, #000000), color-stop(65%,transparent)); background: -webkit-linear-gradient(left, transparent 26%, #000000 65%); background: -o-linear-gradient(left, transparent 26%, #000000 65%); background: -ms-linear-gradient(left, transparent 26%, #000000 65%); background: linear-gradient(to right, transparent 26%, #000000 65%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#000000',GradientType=1 ); } @media only screen and (max-width: 960px){ .featured-style-4 .penci-featured-content .featured-slider-overlay, .featured-style-5 .penci-featured-content .featured-slider-overlay { background-color: #000000; } } .penci-slider38-overlay, .penci-flat-overlay .penci-slide-overlay .penci-mag-featured-content:before{ background-color: #000000; } .penci-slide-overlay .overlay-link, .penci-slider38-overlay, .penci-flat-overlay .penci-slide-overlay .penci-mag-featured-content:before { opacity: ; } .penci-item-mag:hover .penci-slide-overlay .overlay-link, .featured-style-38 .item:hover .penci-slider38-overlay, .penci-flat-overlay .penci-item-mag:hover .penci-slide-overlay .penci-mag-featured-content:before { opacity: ; } .penci-featured-content .featured-slider-overlay { opacity: ; } .penci-featured-content .featured-slider-overlay, .penci-featured-content-right:before, .penci-featured-content-right .feat-text-right:before { background: #000000; } .featured-style-29 .featured-slider-overlay { opacity: ; } .featured-style-29 .featured-slider-overlay { background-color: #000000; } .featured-style-29 .penci-featured-slider-button a:hover, .featured-style-35 .penci-featured-slider-button a:hover, .featured-style-38 .penci-featured-slider-button a:hover { color: #010101; } .featured-area .penci-slider { max-height: 1px; } .penci-standard-cat .cat > a.penci-cat-name { color: #f77b00; } .penci-standard-cat .cat:before, .penci-standard-cat .cat:after { background-color: #f77b00; } .header-standard > h2 a:hover { color: #f77b00; } .standard-content .penci-post-box-meta .penci-post-share-box a:hover, .standard-content .penci-post-box-meta .penci-post-share-box a.liked { color: #f77b00; } .header-standard .post-entry a:hover, .header-standard .author-post span a:hover, .standard-content a, .standard-content .post-entry a, .standard-post-entry a.more-link:hover, .penci-post-box-meta .penci-box-meta a:hover, .standard-content .post-entry blockquote:before, .post-entry blockquote cite, .post-entry blockquote .author, .standard-content-special .author-quote span, .standard-content-special .format-post-box .post-format-icon i, .standard-content-special .format-post-box .dt-special a:hover, .standard-content .penci-more-link a.more-link, .standard-content .penci-post-box-meta .penci-box-meta a:hover { color: #f77b00; } .standard-content .penci-more-link.penci-more-link-button a.more-link{ background-color: #f77b00; color: #fff; } .standard-content-special .author-quote span:before, .standard-content-special .author-quote span:after, .standard-content .post-entry ul li:before, .post-entry blockquote .author span:after, .header-standard:after { background-color: #f77b00; } .penci-more-link a.more-link:before, .penci-more-link a.more-link:after { border-color: #f77b00; } .penci-grid .cat a.penci-cat-name, .penci-masonry .cat a.penci-cat-name { color: #f77b00; } .penci-grid .cat a.penci-cat-name:after, .penci-masonry .cat a.penci-cat-name:after { border-color: #f77b00; } .penci-post-share-box a.liked, .penci-post-share-box a:hover { color: #f77b00; } .overlay-post-box-meta .overlay-share a:hover, .overlay-author a:hover, .penci-grid .standard-content-special .format-post-box .dt-special a:hover, .grid-post-box-meta span a:hover, .grid-post-box-meta span a.comment-link:hover, .penci-grid .standard-content-special .author-quote span, .penci-grid .standard-content-special .format-post-box .post-format-icon i, .grid-mixed .penci-post-box-meta .penci-box-meta a:hover { color: #f77b00; } .penci-grid .standard-content-special .author-quote span:before, .penci-grid .standard-content-special .author-quote span:after, .grid-header-box:after, .list-post .header-list-style:after { background-color: #f77b00; } .penci-grid .post-box-meta span:after, .penci-masonry .post-box-meta span:after { border-color: #f77b00; } .penci-readmore-btn.penci-btn-make-button a{ background-color: #f77b00; color: #fff; } .penci-grid li.typography-style .overlay-typography { opacity: ; } .penci-grid li.typography-style:hover .overlay-typography { opacity: ; } .penci-grid li.typography-style .item .main-typography h2 a:hover { color: #f77b00; } .penci-grid li.typography-style .grid-post-box-meta span a:hover { color: #f77b00; } .overlay-header-box .cat > a.penci-cat-name:hover { color: #f77b00; } .header-standard h2 a, .overlay-header-box .overlay-title a{font-size:22px;} .penci-grid li .item h2 a, .penci-masonry .item-masonry h2 a{font-size:18px;} .penci-sidebar-content .widget { margin-bottom: 50px; } .penci-sidebar-content .penci-border-arrow .inner-arrow, .penci-sidebar-content.style-4 .penci-border-arrow .inner-arrow:before, .penci-sidebar-content.style-4 .penci-border-arrow .inner-arrow:after, .penci-sidebar-content.style-5 .penci-border-arrow, .penci-sidebar-content.style-7 .penci-border-arrow, .penci-sidebar-content.style-9 .penci-border-arrow { border-color: #ff6600; } .penci-sidebar-content .penci-border-arrow:before { border-top-color: #ff6600; } .penci-sidebar-content.style-7 .penci-border-arrow .inner-arrow:before, .penci-sidebar-content.style-9 .penci-border-arrow .inner-arrow:before { background-color: #f77b00; } .penci-video_playlist .penci-video-playlist-item .penci-video-title:hover,.widget ul.side-newsfeed li .side-item .side-item-text h4 a:hover, .widget a:hover, .penci-sidebar-content .widget-social a:hover span, .widget-social a:hover span, .penci-tweets-widget-content .icon-tweets, .penci-tweets-widget-content .tweet-intents a, .penci-tweets-widget-content .tweet-intents span:after, .widget-social.remove-circle a:hover i , #wp-calendar tbody td a:hover, .penci-video_playlist .penci-video-playlist-item .penci-video-title:hover{ color: #ef7f00; } .widget .tagcloud a:hover, .widget-social a:hover i, .widget input[type="submit"]:hover,.penci-user-logged-in .penci-user-action-links a:hover,.penci-button:hover, .widget button[type="submit"]:hover { color: #fff; background-color: #ef7f00; border-color: #ef7f00; } .about-widget .about-me-heading:before { border-color: #ef7f00; } .penci-tweets-widget-content .tweet-intents-inner:before, .penci-tweets-widget-content .tweet-intents-inner:after, .pencisc-column-1.penci-video_playlist .penci-video-nav .playlist-panel-item, .penci-video_playlist .penci-custom-scroll::-webkit-scrollbar-thumb, .penci-video_playlist .penci-playlist-title { background-color: #ef7f00; } .penci-owl-carousel.penci-tweets-slider .owl-dots .owl-dot.active span, .penci-owl-carousel.penci-tweets-slider .owl-dots .owl-dot:hover span { border-color: #ef7f00; background-color: #ef7f00; } ul.footer-socials li a i{ font-size: 18px; } ul.footer-socials li a svg{ width: 18px; } ul.footer-socials li a span { font-size: 20px; } #footer-copyright * { font-size: 16px; } .footer-subscribe h4.footer-subscribe-title { color: #ed6521; } .footer-subscribe .mc4wp-form .mdes { color: #5c5c5c; } .footer-subscribe .widget .mc4wp-form input[type="email"], .footer-subscribe .widget .mc4wp-form input[type="text"] { border-color: #ed6521; } .footer-subscribe .widget .mc4wp-form input[type="email"]:focus, .footer-subscribe .widget .mc4wp-form input[type="email"]:hover, .footer-subscribe .widget .mc4wp-form input[type="text"]:focus, .footer-subscribe .widget .mc4wp-form input[type="text"]:hover { border-color: #ed6521; } .footer-subscribe .widget .mc4wp-form input[type="email"], .footer-subscribe .widget .mc4wp-form input[type="text"] { color: #ed6521; } .footer-subscribe input[type="email"]::-webkit-input-placeholder { color: #ed6521; } .footer-subscribe input[type="email"]:-moz-placeholder { color: #ed6521; } .footer-subscribe input[type="email"]::-moz-placeholder { color: #ed6521; } .footer-subscribe input[type="email"]:-ms-input-placeholder {color: #ed6521;} .footer-subscribe input[type="email"]::-ms-input-placeholder {color: #ed6521;} .footer-subscribe input[type="text"]::-webkit-input-placeholder { color: #ed6521; } .footer-subscribe input[type="text"]:-moz-placeholder { color: #ed6521; } .footer-subscribe input[type="text"]::-moz-placeholder { color: #ed6521; } .footer-subscribe input[type="text"]:-ms-input-placeholder {color: #ed6521;} .footer-subscribe input[type="text"]::-ms-input-placeholder {color: #ed6521;} .footer-subscribe .widget .mc4wp-form input[type="submit"] { background-color: #ed6521; } .footer-subscribe .widget .mc4wp-form input[type="submit"]:hover { background-color: #ed6521; } .footer-widget-wrapper, .footer-widget-wrapper .widget.widget_categories ul li, .footer-widget-wrapper .widget.widget_archive ul li, .footer-widget-wrapper .widget input[type="text"], .footer-widget-wrapper .widget input[type="email"], .footer-widget-wrapper .widget input[type="date"], .footer-widget-wrapper .widget input[type="number"], .footer-widget-wrapper .widget input[type="search"] { color: #fc5d23; } .footer-widget-wrapper .widget .widget-title { text-align: center; } .footer-widget-wrapper .widget .widget-title { color: #ed6521; } .footer-widget-wrapper .penci-tweets-widget-content .icon-tweets, .footer-widget-wrapper .penci-tweets-widget-content .tweet-intents a, .footer-widget-wrapper .penci-tweets-widget-content .tweet-intents span:after, .footer-widget-wrapper .widget ul.side-newsfeed li .side-item .side-item-text h4 a:hover, .footer-widget-wrapper .widget a:hover, .footer-widget-wrapper .widget-social a:hover span, .footer-widget-wrapper a:hover, .footer-widget-wrapper .widget-social.remove-circle a:hover i { color: #f77b00; } .footer-widget-wrapper .widget .tagcloud a:hover, .footer-widget-wrapper .widget-social a:hover i, .footer-widget-wrapper .mc4wp-form input[type="submit"]:hover, .footer-widget-wrapper .widget input[type="submit"]:hover,.footer-widget-wrapper .penci-user-logged-in .penci-user-action-links a:hover, .footer-widget-wrapper .widget button[type="submit"]:hover { color: #fff; background-color: #f77b00; border-color: #f77b00; } .footer-widget-wrapper .about-widget .about-me-heading:before { border-color: #f77b00; } .footer-widget-wrapper .penci-tweets-widget-content .tweet-intents-inner:before, .footer-widget-wrapper .penci-tweets-widget-content .tweet-intents-inner:after { background-color: #f77b00; } .footer-widget-wrapper .penci-owl-carousel.penci-tweets-slider .owl-dots .owl-dot.active span, .footer-widget-wrapper .penci-owl-carousel.penci-tweets-slider .owl-dots .owl-dot:hover span { border-color: #f77b00; background: #f77b00; } ul.footer-socials li a i { color: #ed6521; border-color: #ed6521; } ul.footer-socials li a:hover i { background-color: #f77b00; border-color: #f77b00; } ul.footer-socials li a span { color: #fcfcfc; } ul.footer-socials li a:hover span { color: #f77b00; } .footer-socials-section { border-color: #212121; } #footer-section { background-color: #313131; } #footer-section .footer-menu li a { color: #f9f9f9; } #footer-section .footer-menu li a:hover { color: #f77b00; } #footer-section, #footer-copyright * { color: #d3d3d3; } #footer-section .go-to-top i, #footer-section .go-to-top-parent span { color: #f77b00; } .penci-go-to-top-floating { background-color: #f77b00; } #footer-section a { color: #f77b00; } .widget input[type="submit"], .widget button[type="submit"], .contact-form input[type=submit], #respond #submit, .wpcf7 input[type="submit"], .widget_wysija input[type="submit"], div.wpforms-container .wpforms-form.wpforms-form input[type=submit], div.wpforms-container .wpforms-form.wpforms-form button[type=submit], div.wpforms-container .wpforms-form.wpforms-form .wpforms-page-button, .mc4wp-form input[type=submit]{ background-color: #f77b00; } .widget input[type="submit"], .widget button[type="submit"], .contact-form input[type=submit], #respond #submit, .wpcf7 input[type="submit"], .widget_wysija input[type="submit"], div.wpforms-container .wpforms-form.wpforms-form input[type=submit], div.wpforms-container .wpforms-form.wpforms-form button[type=submit], div.wpforms-container .wpforms-form.wpforms-form .wpforms-page-button, .mc4wp-form input[type=submit]{ color: #f77b00; } .footer-widget-wrapper .widget button[type="submit"]:hover,.footer-widget-wrapper .mc4wp-form input[type="submit"]:hover, .footer-widget-wrapper .widget input[type="submit"]:hover,.widget input[type="submit"]:hover, .widget button[type="submit"]:hover, .contact-form input[type=submit]:hover, #respond #submit:hover, .wpcf7 input[type="submit"]:hover, .widget_wysija input[type="submit"]:hover, div.wpforms-container .wpforms-form.wpforms-form input[type=submit]:hover, div.wpforms-container .wpforms-form.wpforms-form button[type=submit]:hover, div.wpforms-container .wpforms-form.wpforms-form .wpforms-page-button:hover, .mc4wp-form input[type=submit]:hover{ background-color: #f77b00; } .footer-widget-wrapper .widget button[type="submit"]:hover,.footer-widget-wrapper .mc4wp-form input[type="submit"]:hover, .footer-widget-wrapper .widget input[type="submit"]:hover,.widget input[type="submit"]:hover, .widget button[type="submit"]:hover, .contact-form input[type=submit]:hover, #respond #submit:hover, .wpcf7 input[type="submit"]:hover, .widget_wysija input[type="submit"]:hover, div.wpforms-container .wpforms-form.wpforms-form input[type=submit]:hover, div.wpforms-container .wpforms-form.wpforms-form button[type=submit]:hover, div.wpforms-container .wpforms-form.wpforms-form .wpforms-page-button:hover, .mc4wp-form input[type=submit]:hover{ color: #f77b00; } .container-single .penci-standard-cat .cat > a.penci-cat-name { color: #f77b00; } .container-single .penci-standard-cat .cat:before, .container-single .penci-standard-cat .cat:after { background-color: #f77b00; } .container-single .single-post-title { text-transform: none; letter-spacing: 1px; } @media only screen and (min-width: 769px){ .container-single .single-post-title { font-size: 50px; } } .post-entry h1, .wpb_text_column h1, .elementor-text-editor h1, .woocommerce .page-description h1 { font-size: 28px; } .post-entry h2, .wpb_text_column h2, .elementor-text-editor h2, .woocommerce .page-description h2 { font-size: 35px; } .post-entry h3, .wpb_text_column h3, .elementor-text-editor h3, .woocommerce .page-description h3 { font-size: 30px; } .post-entry h4, .wpb_text_column h4, .elementor-text-editor h4, .woocommerce .page-description h4 { font-size: 25px; } .post-entry, .post-entry p, .wpb_text_column p, .woocommerce .page-description p { font-size: 18px; } .post-entry blockquote.wp-block-quote p, .wpb_text_column blockquote.wp-block-quote p, .post-entry blockquote, .post-entry blockquote p, .wpb_text_column blockquote, .wpb_text_column blockquote p, .woocommerce .page-description blockquote, .woocommerce .page-description blockquote p{ font-size: 16px; } .container-single .penci-standard-cat .cat > a.penci-cat-name{ font-size: 15px; } .post-box-meta-single, .tags-share-box .single-comment-o{ font-size: 12px; } .post-pagination span{ font-size: 14px; } .post-pagination h5{ font-size: 18px; } .post-related .item-related h3 a{ font-size: 24px; } .post-related .item-related span.date{ font-size: 10px; } .thecomment .comment-text span.date{ font-size: 14px; } .container-single .single-post-title { letter-spacing: 0; } .container-single .cat a.penci-cat-name { text-transform: uppercase; } .list-post .header-list-style:after, .grid-header-box:after, .penci-overlay-over .overlay-header-box:after, .home-featured-cat-content .first-post .magcat-detail .mag-header:after { content: none; } .list-post .header-list-style, .grid-header-box, .penci-overlay-over .overlay-header-box, .home-featured-cat-content .first-post .magcat-detail .mag-header{ padding-bottom: 0; } .container-single .item-related h3 a { text-transform: none; letter-spacing: 0; } .container-single .post-share a:hover, .container-single .post-share a.liked, .page-share .post-share a:hover { color: #f77b00; } .tags-share-box.tags-share-box-2_3 .post-share .count-number-like, .post-share .count-number-like { color: #f77b00; } .comment-content a, .container-single .post-entry a, .container-single .format-post-box .dt-special a:hover, .container-single .author-quote span, .container-single .author-post span a:hover, .post-entry blockquote:before, .post-entry blockquote cite, .post-entry blockquote .author, .wpb_text_column blockquote:before, .wpb_text_column blockquote cite, .wpb_text_column blockquote .author, .post-pagination a:hover, .author-content h5 a:hover, .author-content .author-social:hover, .item-related h3 a:hover, .container-single .format-post-box .post-format-icon i, .container.penci-breadcrumb.single-breadcrumb span a:hover, .penci_list_shortcode li:before, .penci-dropcap-box-outline, .penci-dropcap-circle-outline, .penci-dropcap-regular, .penci-dropcap-bold, .header-standard .post-box-meta-single .author-post span a:hover{ color: #f77b00; } .container-single .standard-content-special .format-post-box, ul.slick-dots li button:hover, ul.slick-dots li.slick-active button, .penci-dropcap-box-outline, .penci-dropcap-circle-outline { border-color: #f77b00; } ul.slick-dots li button:hover, ul.slick-dots li.slick-active button, #respond h3.comment-reply-title span:before, #respond h3.comment-reply-title span:after, .post-box-title:before, .post-box-title:after, .container-single .author-quote span:before, .container-single .author-quote span:after, .post-entry blockquote .author span:after, .post-entry blockquote .author span:before, .post-entry ul li:before, #respond #submit:hover, div.wpforms-container .wpforms-form.wpforms-form input[type=submit]:hover, div.wpforms-container .wpforms-form.wpforms-form button[type=submit]:hover, div.wpforms-container .wpforms-form.wpforms-form .wpforms-page-button:hover, .wpcf7 input[type="submit"]:hover, .widget_wysija input[type="submit"]:hover, .post-entry.blockquote-style-2 blockquote:before,.tags-share-box.tags-share-box-s2 .post-share-plike, .penci-dropcap-box, .penci-dropcap-circle { background-color: #f77b00; } .container-single .post-entry .post-tags a:hover { color: #fff; border-color: #f77b00; background-color: #f77b00; } .post-entry a, .container-single .post-entry a{ color: #f77b00; } .penci-rlt-popup .rltpopup-meta .rltpopup-title:hover{ color: #f77b00; } ul.homepage-featured-boxes .penci-fea-in:hover h4 span { color: #f77b00; } .penci-home-popular-post .item-related h3 a:hover { color: #f77b00; } .penci-homepage-title.style-7 .inner-arrow:before, .penci-homepage-title.style-9 .inner-arrow:before{ background-color: #f77b00; } .home-featured-cat-content .magcat-detail h3 a:hover { color: #f77b00; } .home-featured-cat-content .grid-post-box-meta span a:hover { color: #f77b00; } .home-featured-cat-content .first-post .magcat-detail .mag-header:after { background: #f77b00; } .penci-slider ol.penci-control-nav li a.penci-active, .penci-slider ol.penci-control-nav li a:hover { border-color: #f77b00; background: #f77b00; } .home-featured-cat-content .mag-photo .mag-overlay-photo { opacity: ; } .home-featured-cat-content .mag-photo:hover .mag-overlay-photo { opacity: ; } .inner-item-portfolio:hover .penci-portfolio-thumbnail a:after { opacity: ; } .grid-post-box-meta span, .grid-post-box-meta a {font-size: 12px}</style><script>
+var penciBlocksArray=[];
+var portfolioDataJs = portfolioDataJs || [];var PENCILOCALCACHE = {};
+		(function () {
+				"use strict";
+		
+				PENCILOCALCACHE = {
+					data: {},
+					remove: function ( ajaxFilterItem ) {
+						delete PENCILOCALCACHE.data[ajaxFilterItem];
+					},
+					exist: function ( ajaxFilterItem ) {
+						return PENCILOCALCACHE.data.hasOwnProperty( ajaxFilterItem ) && PENCILOCALCACHE.data[ajaxFilterItem] !== null;
+					},
+					get: function ( ajaxFilterItem ) {
+						return PENCILOCALCACHE.data[ajaxFilterItem];
+					},
+					set: function ( ajaxFilterItem, cachedData ) {
+						PENCILOCALCACHE.remove( ajaxFilterItem );
+						PENCILOCALCACHE.data[ajaxFilterItem] = cachedData;
+					}
+				};
+			}
+		)();function penciBlock() {
+		    this.atts_json = '';
+		    this.content = '';
+		}</script>
+<script type="application/ld+json">{
+    "@context": "https:\/\/schema.org\/",
+    "@type": "organization",
+    "@id": "#organization",
+    "logo": {
+        "@type": "ImageObject",
+        "url": "https:\/\/thuongbep.com\/wp-content\/uploads\/2023\/05\/thuong-bep-nen-scaled.jpg"
+    },
+    "url": "https:\/\/thuongbep.com\/",
+    "name": "Thuong bep",
+    "description": "Th\u01b0\u01a1ng b\u1ebfp l\u00e0 n\u01a1i chia s\u1ebb ng\u1eabu nhi\u00ean c\u00e1c c\u00f4ng th\u1ee9c, m\u00f3n \u0103n ngon"
+}</script><script type="application/ld+json">{
+    "@context": "https:\/\/schema.org\/",
+    "@type": "WebSite",
+    "name": "Thuong bep",
+    "alternateName": "Th\u01b0\u01a1ng b\u1ebfp l\u00e0 n\u01a1i chia s\u1ebb ng\u1eabu nhi\u00ean c\u00e1c c\u00f4ng th\u1ee9c, m\u00f3n \u0103n ngon",
+    "url": "https:\/\/thuongbep.com\/"
+}</script><script type="application/ld+json">{
+    "@context": "https:\/\/schema.org\/",
+    "@type": "BlogPosting",
+    "headline": "Ph\u1edf B\u00f2 \u00e1p ch\u1ea3o",
+    "description": "B\u1ea1n c\u00f3 tin r\u1eb1ng c\u00f3 th\u1ec3 l\u00e0m m\u1ed9t b\u00e1t ph\u1edf b\u00f2 n\u00f3ng h\u1ed5i, th\u01a1m ngon v\u00e0o m\u1ed9t bu\u1ed5i t\u1ed1i trong tu\u1ea7n m\u00e0 kh\u00f4ng&hellip;",
+    "datePublished": "2025-07-07",
+    "datemodified": "2025-07-07",
+    "mainEntityOfPage": "https:\/\/thuongbep.com\/pho-bo-ap-chao\/",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https:\/\/thuongbep.com\/wp-content\/uploads\/2025\/07\/Pho-Bo-ap-chao-8.webp",
+        "width": 800,
+        "height": 530
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Thuong bep",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https:\/\/thuongbep.com\/wp-content\/uploads\/2023\/05\/thuong-bep-nen-scaled.jpg"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "@id": "#person-Thuongbep",
+        "name": "Thuongbep"
+    }
+}</script><script type="application/ld+json">{
+    "@context": "https:\/\/schema.org\/",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "item": {
+                "@id": "https:\/\/thuongbep.com",
+                "name": "Home"
+            }
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "item": {
+                "@id": "https:\/\/thuongbep.com\/cong-thuc\/",
+                "name": "C\u00f4ng th\u1ee9c"
+            }
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "item": {
+                "@id": "https:\/\/thuongbep.com\/pho-bo-ap-chao\/",
+                "name": "Ph\u1edf B\u00f2 \u00e1p ch\u1ea3o"
+            }
+        }
+    ]
+}</script><link rel="icon" href="https://thuongbep.com/wp-content/uploads/2023/05/cropped-thuong-bep-nen-scaled-1-32x32.jpg" sizes="32x32">
+<link rel="icon" href="https://thuongbep.com/wp-content/uploads/2023/05/cropped-thuong-bep-nen-scaled-1-192x192.jpg" sizes="192x192">
+<link rel="apple-touch-icon" href="https://thuongbep.com/wp-content/uploads/2023/05/cropped-thuong-bep-nen-scaled-1-180x180.jpg">
+<meta name="msapplication-TileImage" content="https://thuongbep.com/wp-content/uploads/2023/05/cropped-thuong-bep-nen-scaled-1-270x270.jpg">
+<style type="text/css"></style><link href="https://thuongbep.com/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" rel="preload" as="script"><link href="https://thuongbep.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1" rel="preload" as="script"><link href="https://thuongbep.com/wp-content/plugins/penci-review/js/jquery.easypiechart.min.js?ver=1.0" rel="preload" as="script"><link href="https://thuongbep.com/wp-content/plugins/penci-review/js/review.js?ver=1.0" rel="preload" as="script"><link href="https://thuongbep.com/wp-content/plugins/rate-my-post/public/js/rate-my-post.js?ver=3.4.1" rel="preload" as="script"><link href="https://thuongbep.com/wp-content/plugins/simply-gallery-block/plugins/pgc_sgb_lightbox.min.js?ver=3.1.6" rel="preload" as="script"><link href="https://thuongbep.com/wp-content/themes/soledad/js/libs-script.min.js?ver=7.5.1" rel="preload" as="script"><link href="https://thuongbep.com/wp-content/themes/soledad/js/main.js?ver=7.5.1" rel="preload" as="script"><link href="https://thuongbep.com/wp-content/themes/soledad/js/post-like.js?ver=7.5.1" rel="preload" as="script"><link href="https://thuongbep.com/wp-content/plugins/penci-recipe/js/jquery.rateyo.min.js?ver=2.6" rel="preload" as="script"><link href="https://thuongbep.com/wp-content/plugins/penci-recipe/js/rating_recipe.js?ver=2.6" rel="preload" as="script"><link href="https://thuongbep.com/wp-content/plugins/simply-gallery-block/blocks/pgc_sgb.min.js?ver=3.1.6" rel="preload" as="script"><link href="https://thuongbep.com/wp-content/plugins/easy-table-of-contents/vendor/js-cookie/js.cookie.min.js?ver=2.2.1" rel="preload" as="script"><link href="https://thuongbep.com/wp-content/plugins/easy-table-of-contents/vendor/sticky-kit/jquery.sticky-kit.min.js?ver=1.9.2" rel="preload" as="script"><link href="https://thuongbep.com/wp-content/plugins/easy-table-of-contents/assets/js/front.min.js?ver=2.0.50-1686461720" rel="preload" as="script"><link href="https://thuongbep.com/wp-includes/js/comment-reply.min.js?ver=6.5.7" rel="preload" as="script"><link id="pgc_sgb_grid_style" rel="stylesheet" type="text/css" href="https://thuongbep.com/wp-content/plugins/simply-gallery-block/blocks/skins/pgc_sgb_grid.style.css?ver=3.1.6"><style id="fit-vids-style">.fluid-width-video-wrapper{width:100%;position:relative;padding:0;}.fluid-width-video-wrapper iframe,.fluid-width-video-wrapper object,.fluid-width-video-wrapper embed {position:absolute;top:0;left:0;width:100%;height:100%;}</style><style>.theiaStickySidebar:after {content: ""; display: table; clear: both;}</style></head>
+
+<body class="post-template-default single single-post postid-6051 single-format-standard qubely qubely-frontend" style="transform: none;">
+	<a id="close-sidebar-nav" class="header-3"><i class="penci-faicon fa fa-close"></i></a>
+	<nav id="sidebar-nav" class="header-3" role="navigation" itemscope="" itemtype="https://schema.org/SiteNavigationElement">
+
+					<div id="sidebar-nav-logo">
+															<a href="https://thuongbep.com/"><img width="6" height="4" class="penci-lazy" src="https://thuongbep.com/wp-content/uploads/2022/01/thuong-bep-2.png" alt="Thuong bep" style=""></a>
+												</div>
+		
+					<div class="header-social sidebar-nav-social">
+				<div class="inner-header-social">
+			<a href="https://www.facebook.com/Thng-Bp-100267225180512/" rel="nofollow" target="_blank"><i class="penci-faicon fa fa-facebook"></i></a>
+					<a href="https://www.instagram.com/thuong_bep_0_0/" rel="nofollow" target="_blank"><i class="penci-faicon fa fa-instagram"></i></a>
+				<a href="https://www.pinterest.com/thuongbep859" rel="nofollow" target="_blank"><i class="penci-faicon fa fa-pinterest"></i></a>
+								<a href="https://www.youtube.com/channel/UCA0hu3oh6C54OKqOW0fesWg" rel="nofollow" target="_blank"><i class="penci-faicon fa fa-youtube-play"></i></a>
+																																	<a href="https://www.tiktok.com/@thuongbep859" rel="nofollow" target="_blank"><i class="penci-icon-tiktok"><svg aria-hidden="true" data-prefix="fab" data-icon="tiktok" class="penci-svg-tiktok" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z" class=""></path></svg></i></a>
+	</div>			</div>
+				
+		
+		<ul id="menu-thanh-menu-dau-trang" class="menu"><li id="menu-item-1711" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1711"><a href="https://thuongbep.com/">Trang chủ</a></li>
+<li id="menu-item-1712" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-has-children menu-item-1712"><a href="https://thuongbep.com/cong-thuc/">Công thức<u class="indicator"><i class="fa fa-angle-down"></i></u></a>
+<ul class="sub-menu">
+	<li id="menu-item-1718" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-1718"><a href="https://thuongbep.com/mon-an-hang-ngay/">Món ăn hàng ngày</a></li>
+	<li id="menu-item-1719" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1719"><a href="https://thuongbep.com/mon-an-vat/">Món ăn vặt</a></li>
+	<li id="menu-item-1716" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1716"><a href="https://thuongbep.com/mon-chay-ngon/">Món chay ngon</a></li>
+</ul>
+</li>
+<li id="menu-item-1715" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1715"><a href="https://thuongbep.com/meo-vat-va-chia-se/">Mẹo vặt &amp; Chia sẻ</a></li>
+<li id="menu-item-1717" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1717"><a href="https://thuongbep.com/review-mon-ngon/">Review Món Ngon</a></li>
+<li id="menu-item-1714" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1714"><a href="https://thuongbep.com/khong-so-beo/">Không sợ béo</a></li>
+<li id="menu-item-1713" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1713"><a href="https://thuongbep.com/cua-hang-nho/">Cửa hàng nhỏ</a></li>
+<li id="menu-item-1721" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1721"><a href="https://thuongbep.com/gioi-thieu-lien-he/">Giới thiệu &amp; Liên hệ</a></li>
+</ul>	</nav>
+<div class="wrapper-boxed header-style-header-3" style="transform: none;">
+<div class="penci-header-wrap"><header id="header" class="header-header-3 has-bottom-line" itemscope="itemscope" itemtype="https://schema.org/WPHeader">
+			<div class="inner-header penci-header-second">
+			<div class="container align-left-logo">
+				<div id="logo">
+					<a href="https://thuongbep.com/"><img width="1500" height="244" src="https://thuongbep.com/wp-content/uploads/2022/01/thuong-bep-2.png" alt="Thuong bep"></a>									</div>
+
+							</div>
+		</div>
+						<div id="navigation-sticky-wrapper" class="sticky-wrapper is-sticky" style="height: 60px;"><nav id="navigation" class="header-layout-bottom header-3 menu-style-1" role="navigation" itemscope="" itemtype="https://schema.org/SiteNavigationElement" style="position: fixed; top: 0px;">
+			<div class="container">
+				<div class="button-menu-mobile header-3"><i class="penci-faicon fa fa-bars"></i></div>
+				<ul id="menu-thanh-menu-dau-trang-1" class="menu"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1711"><a href="https://thuongbep.com/">Trang chủ</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-has-children menu-item-1712"><a href="https://thuongbep.com/cong-thuc/">Công thức</a>
+<ul class="sub-menu">
+	<li class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-1718"><a href="https://thuongbep.com/mon-an-hang-ngay/">Món ăn hàng ngày</a></li>
+	<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1719"><a href="https://thuongbep.com/mon-an-vat/">Món ăn vặt</a></li>
+	<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1716"><a href="https://thuongbep.com/mon-chay-ngon/">Món chay ngon</a></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1715"><a href="https://thuongbep.com/meo-vat-va-chia-se/">Mẹo vặt &amp; Chia sẻ</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1717"><a href="https://thuongbep.com/review-mon-ngon/">Review Món Ngon</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1714"><a href="https://thuongbep.com/khong-so-beo/">Không sợ béo</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1713"><a href="https://thuongbep.com/cua-hang-nho/">Cửa hàng nhỏ</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1721"><a href="https://thuongbep.com/gioi-thieu-lien-he/">Giới thiệu &amp; Liên hệ</a></li>
+</ul><div id="top-search" class="penci-top-search">
+	<a class="search-click"><i class="penci-faicon fa fa-search"></i></a>
+	<div class="show-search">
+		<form role="search" method="get" id="searchform" action="https://thuongbep.com/">
+    <div>
+		<input type="text" class="search-input" placeholder="Type and hit enter..." name="s" id="s">
+	 </div>
+</form>		<a class="search-click close-search"><i class="penci-faicon fa fa-close"></i></a>
+	</div>
+</div>									<div class="main-nav-social">
+						<div class="inner-header-social">
+			<a href="https://www.facebook.com/Thng-Bp-100267225180512/" rel="nofollow" target="_blank"><i class="penci-faicon fa fa-facebook"></i></a>
+					<a href="https://www.instagram.com/thuong_bep_0_0/" rel="nofollow" target="_blank"><i class="penci-faicon fa fa-instagram"></i></a>
+				<a href="https://www.pinterest.com/thuongbep859" rel="nofollow" target="_blank"><i class="penci-faicon fa fa-pinterest"></i></a>
+								<a href="https://www.youtube.com/channel/UCA0hu3oh6C54OKqOW0fesWg" rel="nofollow" target="_blank"><i class="penci-faicon fa fa-youtube-play"></i></a>
+																																	<a href="https://www.tiktok.com/@thuongbep859" rel="nofollow" target="_blank"><i class="penci-icon-tiktok"><svg aria-hidden="true" data-prefix="fab" data-icon="tiktok" class="penci-svg-tiktok" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z" class=""></path></svg></i></a>
+	</div>					</div>
+				
+			</div>
+		</nav></div><!-- End Navigation -->
+			
+</header>
+<!-- end #header --></div>
+			<div class="container penci-breadcrumb single-breadcrumb">
+			<span><a class="crumb" href="https://thuongbep.com/">Home</a></span><i class="penci-faicon fa fa-angle-right"></i>			<span><a class="crumb" href="https://thuongbep.com/cong-thuc/">Công thức</a></span><i class="penci-faicon fa fa-angle-right"></i>			<span>Phở Bò áp chảo</span>
+		</div>
+			
+
+<div class="container container-single penci_sidebar  penci-enable-lightbox" style="transform: none;">
+	<div id="main" class="penci-main-sticky-sidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+		<div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 1px; position: static;">
+											<article id="post-6051" class="post type-post status-publish">
+
+	
+	
+	<div class="header-standard header-classic single-header">
+		
+		<h1 class="post-title single-post-title entry-title">Phở Bò áp chảo</h1>
+				<div class="penci-hide-tagupdated">
+			<span class="author-italic author vcard">by <a class="url fn n" href="https://thuongbep.com/author/thuongbep/">Thuongbep</a></span>
+			<time class="entry-date published" datetime="2025-07-07T13:28:07+00:00">07/07/2025</time>		</div>
+					</div>
+
+		
+	
+	
+	
+							
+	
+	
+	
+	
+		<div class="post-entry blockquote-style-1">
+		<div class="inner-post-entry entry-content" id="penci-post-entry-inner">
+			
+<p>Bạn có tin rằng có thể làm một bát phở bò nóng hổi, thơm ngon vào một buổi tối trong tuần mà không cần mất hàng giờ ninh nước dùng? Câu trả lời là <strong>CÓ</strong> – nhờ vào phiên bản phở bò áp chảo (hay còn gọi là phở tái lăn) đầy sáng tạo và dễ thực hiện này!</p><div id="ez-toc-container" class="ez-toc-v2_0_50 counter-hierarchy ez-toc-counter ez-toc-grey ez-toc-container-direction">
+<div class="ez-toc-title-container">
+<p class="ez-toc-title">Nội dung bài viết</p>
+<span class="ez-toc-title-toggle"><a href="#" class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle ez-toc-loaded" aria-label="Toggle Table of Content" role="button"><label for="item-697ec45e0bc97" aria-hidden="true"><span style="display: flex;align-items: center;width: 35px;height: 30px;justify-content: center;direction:ltr;"><svg style="fill: #999;color:#999" xmlns="http://www.w3.org/2000/svg" class="list-377408" width="20px" height="20px" viewBox="0 0 24 24" fill="none"><path d="M6 6H4v2h2V6zm14 0H8v2h12V6zM4 11h2v2H4v-2zm16 0H8v2h12v-2zM4 16h2v2H4v-2zm16 0H8v2h12v-2z" fill="currentColor"></path></svg><svg style="fill: #999;color:#999" class="arrow-unsorted-368013" xmlns="http://www.w3.org/2000/svg" width="10px" height="10px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny"><path d="M18.2 9.3l-6.2-6.3-6.2 6.3c-.2.2-.3.4-.3.7s.1.5.3.7c.2.2.4.3.7.3h11c.3 0 .5-.1.7-.3.2-.2.3-.5.3-.7s-.1-.5-.3-.7zM5.8 14.7l6.2 6.3 6.2-6.3c.2-.2.3-.5.3-.7s-.1-.5-.3-.7c-.2-.2-.4-.3-.7-.3h-11c-.3 0-.5.1-.7.3-.2.2-.3.5-.3.7s.1.5.3.7z"></path></svg></span></label><input type="checkbox" id="item-697ec45e0bc97"></a></span></div>
+<nav><ul class="ez-toc-list ez-toc-list-level-1 eztoc-visibility-hide-by-default" style="display: none;"><li class="ez-toc-page-1 ez-toc-heading-level-2"><a class="ez-toc-link ez-toc-heading-1" href="#huong_vi_xua_cu_cam_hung_hien_dai" title="Hương vị xưa cũ, cảm hứng hiện đại">Hương vị xưa cũ, cảm hứng hiện đại</a></li><li class="ez-toc-page-1 ez-toc-heading-level-2"><a class="ez-toc-link ez-toc-heading-2" href="#lam_pho_tai_nha_%e2%80%93_khong_con_la_thu_thach" title="Làm phở tại nhà – Không còn là thử thách">Làm phở tại nhà – Không còn là thử thách</a></li><li class="ez-toc-page-1 ez-toc-heading-level-2"><a class="ez-toc-link ez-toc-heading-3" href="#nguyen_lieu_can_chuan_bi_cho_mon_pho_bo_ap_chao" title="Nguyên liệu cần chuẩn bị cho món Phở Bò áp chảo">Nguyên liệu cần chuẩn bị cho món Phở Bò áp chảo</a></li><li class="ez-toc-page-1 ez-toc-heading-level-2"><a class="ez-toc-link ez-toc-heading-4" href="#cach_nau_pho_bo_ap_chao" title="Cách nấu Phở Bò áp chảo">Cách nấu Phở Bò áp chảo</a><ul class="ez-toc-list-level-3"><li class="ez-toc-heading-level-3"><a class="ez-toc-link ez-toc-heading-5" href="#meo_nho_de_mon_an_them_phan_hap_dan" title="Mẹo nhỏ để món ăn thêm phần hấp dẫn">Mẹo nhỏ để món ăn thêm phần hấp dẫn</a></li><li class="ez-toc-page-1 ez-toc-heading-level-3"><a class="ez-toc-link ez-toc-heading-6" href="#thuong_thuc_mon_pho_theo_cach_cua_ban" title="Thưởng thức món phở theo cách của bạn">Thưởng thức món phở theo cách của bạn</a></li></ul></li></ul></nav></div>
+
+
+
+
+<figure class="wp-block-image size-full"><img fetchpriority="high" decoding="async" width="800" height="530" src="https://thuongbep.com/wp-content/uploads/2025/07/Pho-Bo-ap-chao-8.webp" alt="" class="wp-image-6059"></figure>
+
+
+
+<h2 class="wp-block-heading"><span class="ez-toc-section" id="huong_vi_xua_cu_cam_hung_hien_dai" ez-toc-data-id="#huong_vi_xua_cu_cam_hung_hien_dai"></span>Hương vị xưa cũ, cảm hứng hiện đại<span class="ez-toc-section-end"></span></h2>
+
+
+
+<p>Lớn lên cùng những bát phở truyền thống, tôi luôn yêu thích sự hòa quyện tinh tế giữa sợi phở mềm dai, nước dùng đậm đà và lát thịt bò thơm ngon. Tôi biết năng lực của mình chẳng bao giờ có thể làm ra được một món ăn truyền thống đúng chuẩn và cũng không có quá nhiều thời gian trong cuộc sống quay cuồng này. Nên món phở áp chảo, nơi thịt bò được xào chín nhanh với hành tỏi và đặt lên trên sợi phở đã áp chảo sơ qua chính là cách tôi làm phở tại nhà.</p>
+
+
+
+<p>Cảm hứng của món này chính là “không có thời gian – nhưng thèm phở”. Món này có mùi thơm đặc trưng từ chảo nóng (wok hei), nơi “áp” nghĩa là chạm nhẹ, còn “chảo” là chiếc chảo gang nung nóng. Tôi không chắc nó có “va chạm” với fan phở truyền thống hay không nhưng hãy thử xem nhé.</p>
+
+
+
+<blockquote class="wp-block-quote is-layout-flow wp-block-quote-is-layout-flow">
+<p>Bạn có thể quan tâm <strong><a href="https://thuongbep.com/cach-lam-thit-bo-ham-ngon-nhat/">CÁCH LÀM THỊT BÒ HẦM NGON NHẤT</a></strong></p>
+</blockquote>
+
+
+
+<h2 class="wp-block-heading"><span class="ez-toc-section" id="lam_pho_tai_nha_%e2%80%93_khong_con_la_thu_thach" ez-toc-data-id="#lam_pho_tai_nha_–_khong_con_la_thu_thach"></span>Làm phở tại nhà – Không còn là thử thách<span class="ez-toc-section-end"></span></h2>
+
+
+
+<p>Công thức dưới đây được rút gọn, dễ làm và vẫn giữ được hương vị phở truyền thống nhờ sử dụng nước dùng đóng hộp (bạn có thể thay bằng nước dùng ninh tại nhà nếu có thời gian). Bí quyết là kết hợp nước dùng bò và gà để tạo độ thanh, không bị nặng vị.</p>
+
+
+
+<figure class="wp-block-image size-full"><img decoding="async" width="800" height="1119" src="https://thuongbep.com/wp-content/uploads/2025/07/Pho-Bo-ap-chao-4.webp" alt="" class="wp-image-6055"></figure>
+
+
+
+<p>Bạn có thể chuẩn bị từng phần trước:</p>
+
+
+
+<ul>
+<li>Nước dùng nấu trước 3 ngày</li>
+
+
+
+<li>Thịt bò ướp trước 1 ngày</li>
+
+
+
+<li>Mì gạo nên luộc trong ngày để giữ được độ mềm</li>
+</ul>
+
+
+
+<blockquote class="wp-block-quote is-layout-flow wp-block-quote-is-layout-flow">
+<p>Bạn có thể quan tâm <strong><a href="https://thuongbep.com/thit-bo-ham-kieu-ireland/">THỊT BÒ HẦM KIỂU IRELAND</a></strong></p>
+</blockquote>
+
+
+
+<p><strong>Thông tin dinh dưỡng của món Phở Bò áp chảo</strong></p>
+
+
+
+<figure class="wp-block-table"><table><tbody><tr><td class="has-text-align-center" data-align="center"><strong>Calo</strong></td><td class="has-text-align-center" data-align="center"><strong>Fat</strong></td><td class="has-text-align-center" data-align="center"><strong>Carbs</strong></td><td class="has-text-align-center" data-align="center"><strong>Protein</strong></td></tr><tr><td class="has-text-align-center" data-align="center">531 calo</td><td class="has-text-align-center" data-align="center">25g</td><td class="has-text-align-center" data-align="center">48g</td><td class="has-text-align-center" data-align="center">35g</td></tr></tbody></table><figcaption class="wp-element-caption"><em><strong>Lưu ý:</strong> Thông tin dinh dưỡng được tính toán dựa theo các thành phần và chỉ là tỷ lệ ước tính. Trong trường hợp có nhiều thành phần khác sẽ được tính theo tỷ lệ khác nhau</em></figcaption></figure>
+
+
+
+<h2 class="wp-block-heading"><span class="ez-toc-section" id="nguyen_lieu_can_chuan_bi_cho_mon_pho_bo_ap_chao" ez-toc-data-id="#nguyen_lieu_can_chuan_bi_cho_mon_pho_bo_ap_chao"></span>Nguyên liệu cần chuẩn bị cho món Phở Bò áp chảo<span class="ez-toc-section-end"></span></h2>
+
+
+
+<h4 class="wp-block-heading"><strong>Phần nước dùng:</strong></h4>
+
+
+
+<ul>
+<li>Gừng tươi (2–3 lát, đập dập)</li>
+
+
+
+<li>3 cây hành lá, phần trắng đập dập, phần xanh thái nhỏ để trang trí</li>
+
+
+
+<li>1-2 hoa hồi</li>
+
+
+
+<li>1 thanh quế</li>
+
+
+
+<li>3 đinh hương</li>
+
+
+
+<li>4 cốc nước dùng bò ít muối (Swanson hoặc tương đương)</li>
+
+
+
+<li>4 cốc nước dùng gà ít muối</li>
+
+
+
+<li>2 cốc nước lọc</li>
+
+
+
+<li>1 thìa cà phê muối biển</li>
+
+
+
+<li>1,5 thìa canh nước mắm</li>
+
+
+
+<li>1 thìa đường hữu cơ hoặc 2 thìa si-rô cây phong (tùy chọn)</li>
+</ul>
+
+
+
+<figure class="wp-block-image size-full"><img decoding="async" width="800" height="1112" src="https://thuongbep.com/wp-content/uploads/2025/07/Pho-Bo-ap-chao-6.webp" alt="" class="wp-image-6057"></figure>
+
+
+
+<h4 class="wp-block-heading"><strong>Phần phở và thịt:</strong></h4>
+
+
+
+<ul>
+<li>280g mì gạo khô bản vừa (mì pad Thái là lựa chọn tốt)</li>
+
+
+
+<li>340g thịt bò mềm (thăn, ba chỉ, hoặc sườn), thái lát mỏng vừa ăn</li>
+
+
+
+<li>1/4 thìa cà phê tiêu đen xay</li>
+
+
+
+<li>3/4 thìa cà phê đường</li>
+
+
+
+<li>1 thìa bột ngô</li>
+
+
+
+<li>2 thìa nước mắm</li>
+
+
+
+<li>2 thìa xì dầu</li>
+
+
+
+<li>2 tép tỏi băm nhỏ</li>
+
+
+
+<li>1/2 củ hành tây nhỏ, thái múi mỏng</li>
+
+
+
+<li>1/2 cốc rau mùi thái nhỏ</li>
+
+
+
+<li>2 thìa dầu ăn</li>
+</ul>
+
+
+
+<p><strong>Tùy chọn thêm:</strong> Giá đỗ, ớt thái lát, húng quế, bạc hà, chanh tươi, nước tương đen, tương ớt</p>
+
+
+
+<blockquote class="wp-block-quote is-layout-flow wp-block-quote-is-layout-flow">
+<p>Bạn có thể quan tâm <strong><a href="https://thuongbep.com/pealla-hai-san/">CÁCH LÀM PEALLA HẢI SẢN</a></strong></p>
+</blockquote>
+
+
+
+<figure class="wp-block-table"><table><tbody><tr><td class="has-text-align-center" data-align="center"><strong>Thời gian chuẩn bị</strong></td><td class="has-text-align-center" data-align="center"><strong>Thời gian nấu</strong></td><td class="has-text-align-center" data-align="center"><strong>Tổng thời gian</strong></td><td class="has-text-align-center" data-align="center"><strong>Số lượng</strong></td></tr><tr><td class="has-text-align-center" data-align="center">10 phút</td><td class="has-text-align-center" data-align="center">45 phút</td><td class="has-text-align-center" data-align="center">55 phút</td><td class="has-text-align-center" data-align="center">4 phần ăn</td></tr></tbody></table><figcaption class="wp-element-caption"><em><em>Lưu ý: Số lượng thời gian nấu ăn được ước tính bằng số lượng nguyên liệu</em></em></figcaption></figure>
+
+
+
+<h2 class="wp-block-heading"><span class="ez-toc-section" id="cach_nau_pho_bo_ap_chao" ez-toc-data-id="#cach_nau_pho_bo_ap_chao"></span>Cách nấu Phở Bò áp chảo<span class="ez-toc-section-end"></span></h2>
+
+
+
+<p><strong>Bước 1</strong>: Nấu nước dùng nhanh. </p>
+
+
+
+<ul>
+<li>Rang khô hoa hồi, quế, đinh hương trong nồi cho thơm. </li>
+
+
+
+<li>Thêm gừng và hành lá đập dập, đảo thêm 30 giây.</li>
+
+
+
+<li>Rót nước dùng bò, gà và nước lọc vào. Thêm muối.</li>
+
+
+
+<li>Đun sôi rồi hạ nhỏ lửa, ninh liu riu 30 phút.</li>
+
+
+
+<li>Lọc qua rây, nêm nước mắm và đường. Đun giữ ấm.</li>
+</ul>
+
+
+
+<blockquote class="wp-block-quote is-layout-flow wp-block-quote-is-layout-flow">
+<p>Bạn có thể quan tâm <strong><a href="https://thuongbep.com/cong-thuc-nau-nuoc-dung-ga/">CÔNG THỨC NẤU NƯỚC DÙNG GÀ</a></strong></p>
+</blockquote>
+
+
+<div class="pgc-sgb-cb wp-block-pgcsimplygalleryblock-grid " data-gallery-id="ede51214"><script type="application/json" class="sgb-data">{"collectionColumns":2,"galleryType":"pgc_sgb_grid","galleryId":"ede51214","images":[{"id":6053,"title":"Phở Bò áp chảo (2)","url":"https://thuongbep.com/wp-content/uploads/2025/07/Pho-Bo-ap-chao-2.webp","link":"https://thuongbep.com/?attachment_id=6053","alt":"","description":"","caption":"","mime":"image/webp","type":"image","width":800,"height":532,"sizes":{"full":{"url":"https://thuongbep.com/wp-content/uploads/2025/07/Pho-Bo-ap-chao-2.webp","height":532,"width":800,"orientation":"landscape"}},"imageMeta":{"aperture":"0","credit":"","camera":"","caption":"","created_timestamp":"0","copyright":"","focal_length":"0","iso":"0","shutter_speed":"0","title":"","orientation":"0","keywords":[]},"meta":false,"postlink":"https://thuongbep.com/?attachment_id=6053"},{"id":6056,"title":"Phở Bò áp chảo (5)","url":"https://thuongbep.com/wp-content/uploads/2025/07/Pho-Bo-ap-chao-5.webp","link":"https://thuongbep.com/?attachment_id=6056","alt":"","description":"","caption":"","mime":"image/webp","type":"image","width":800,"height":530,"sizes":{"full":{"url":"https://thuongbep.com/wp-content/uploads/2025/07/Pho-Bo-ap-chao-5.webp","height":530,"width":800,"orientation":"landscape"}},"imageMeta":{"aperture":"0","credit":"","camera":"","caption":"","created_timestamp":"0","copyright":"","focal_length":"0","iso":"0","shutter_speed":"0","title":"","orientation":"0","keywords":[]},"meta":false,"postlink":"https://thuongbep.com/?attachment_id=6056"}],"itemsMetaDataCollection":[]}</script><script>(function(){if(window.PGC_SGB && window.PGC_SGB.searcher){window.PGC_SGB.searcher.initBlocks()}})()</script><div class="pgcsimplygalleryblock-grid-collection action-lightbox"><style id="style_ede51214">
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-main-wrap{
+      padding:2.5px;
+      color:rgba(255,255,255,1);
+      font-size:18px;
+      border-radius:0px;
+    }
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-item-button{
+      color:rgba(0,0,0,1);
+      font-size:18px;
+      background-color:rgba(255,255,255,1);
+      box-shadow:10px 0 0 rgba(255,255,255,1), -10px 0 0 rgba(255,255,255,1);
+    }
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-load-more{
+      color:rgba(255,255,255,1);
+      font-size:16px;
+      background-color:rgba(0,0,0,1);
+    }
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-load-more:hover{
+      color:rgba(0,0,0,1);
+      background-color:rgba(255,255,255,1);
+    }
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-item-button:hover{
+      color:rgba(255,255,255,1);
+      background-color:rgba(0,0,0,1);
+      box-shadow:10px 0 0 rgba(0,0,0,1), -10px 0 0 rgba(0,0,0,1);
+    }
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-item-title{
+      background-color:rgba(0,0,0,0.8);
+      box-shadow:10px 0 0 rgba(0,0,0,0.8), -10px 0 0 rgba(0,0,0,0.8);
+    }
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-item-thumb-price{
+      color:rgba(255,255,255,1);
+      background-color:rgba(0,0,0,0.8);
+    }
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-item-hover{
+      background-color:rgba(0,0,0,0.4);
+    }
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-item-inner.action-lightbox{
+      cursor: zoom-in;
+    }
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-item-inner.action-postlink{
+      cursor: pointer;
+    }
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-item-badge{
+      background-color:rgba(0,0,0,0.8);
+      fill:rgba(255,255,255,1);
+    }
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-next-prev-navi{
+      margin:2.5px;
+      background-color:rgba(255,255,255,1);
+      fill:rgba(0,0,0,1);
+    }
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-next-prev-navi:hover{
+      background-color:rgba(0,0,0,1);
+      fill:rgba(255,255,255,1);
+    }
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-dot-navi,
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-thumbs-navi{
+      margin: 2.5px 2.5px 0;
+    }
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-dot{
+      background-color:rgba(0,0,0,0.4);
+    }
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-dot.pgc-selected,
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-dot:hover{
+      background-color:rgba(255,255,255,1);
+    }
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-next-prev-navi.prev{
+      left:-5px;
+    }
+    div[data-gallery-id="ede51214"] .pgcsimplygalleryblock-grid-next-prev-navi.next{
+      right:-5px;
+    }
+    div[id="ede51214_lightbox"] .pgc-rev-slider-post-informer-button a{
+      color:rgba(255,255,255,1);
+    }
+    div[id="ede51214_lightbox"] .pgc-rev-slider-post-informer-button:hover a{
+      color:rgba(0,0,0,1);
+    }
+    div[id="ede51214_lightbox"] .pgc-rev-slider-post-informer-button,
+    div[id="ede51214_lightbox"] .pgc-rev-slider-post-informer-price{
+      background-color:rgba(0,0,0,1);
+      color:rgba(255,255,255,1);
+    }
+    div[id="ede51214_lightbox"] .pgc-rev-slider-post-informer-button:hover{
+      background-color:rgba(255,255,255,1);
+      color:rgba(0,0,0,1);
+    }
+    </style><style id="custom_style_ede51214"></style><div class="pgcsimplygalleryblock-grid-content" style="background-color: rgba(0, 0, 0, 0); border-radius: 0px; padding: 2.5px;"><div class="pgcsimplygalleryblock-grid-item pgc-image" data-id="6053" style="width: 237px; height: 237px; display: block; opacity: 1;"><div class="pgcsimplygalleryblock-grid-main-wrap pgc-image" data-index="0"><div class="pgcsimplygalleryblock-grid-item-wrap"><img loading="lazy" src="https://thuongbep.com/wp-content/uploads/2025/07/Pho-Bo-ap-chao-2.webp" style="width: 349px; height: 232px; left: -58px; top: 0px;" alt="Phở Bò áp chảo (2)"><div class="pgcsimplygalleryblock-grid-item-hover"></div><div class="pgcsimplygalleryblock-grid-item-inner action-lightbox" tabindex="1" data-pgc-action="click" data-pgc-gallery="ede51214" data-index="0"><div class="pgcsimplygalleryblock-grid-item-menu-holder"></div><div class="pgcsimplygalleryblock-grid-title-wrap" style="pointer-events: none;"><div class="pgcsimplygalleryblock-grid-info-wrap"><div class="pgcsimplygalleryblock-grid-item-title"></div></div></div></div></div></div></div><div class="pgcsimplygalleryblock-grid-item pgc-image" data-id="6056" style="width: 237px; height: 237px; display: block; opacity: 1;"><div class="pgcsimplygalleryblock-grid-main-wrap pgc-image" data-index="1"><div class="pgcsimplygalleryblock-grid-item-wrap"><img loading="lazy" src="https://thuongbep.com/wp-content/uploads/2025/07/Pho-Bo-ap-chao-5.webp" style="width: 350px; height: 232px; left: -59px; top: 0px;" alt="Phở Bò áp chảo (5)"><div class="pgcsimplygalleryblock-grid-item-hover"></div><div class="pgcsimplygalleryblock-grid-item-inner action-lightbox" tabindex="1" data-pgc-action="click" data-pgc-gallery="ede51214" data-index="1"><div class="pgcsimplygalleryblock-grid-item-menu-holder"></div><div class="pgcsimplygalleryblock-grid-title-wrap" style="pointer-events: none;"><div class="pgcsimplygalleryblock-grid-info-wrap"><div class="pgcsimplygalleryblock-grid-item-title"></div></div></div></div></div></div></div></div><audio preload="auto" id="simplyAudioPlayer" type="audio/mpeg" codecs="mp3"></audio></div></div>
+
+
+<p><strong>Bước 2</strong>: Nấu phở. Luộc mì 5- 7 phút đến khi mềm, xả nước lạnh, để ráo (sẽ ngon hơn nếu dùng phở tươi). Chia đều vào 4 bát.</p>
+
+
+
+<figure class="wp-block-image size-full"><img loading="lazy" decoding="async" width="800" height="534" src="https://thuongbep.com/wp-content/uploads/2025/07/Pho-Bo-ap-chao-3.webp" alt="" class="wp-image-6054"></figure>
+
+
+
+<p><strong>Bước 3</strong>: Ướp và xào thịt:</p>
+
+
+
+<ul>
+<li>Trộn thịt với tiêu, đường, bột ngô, nước mắm, xì dầu.</li>
+
+
+
+<li>Đun nóng chảo, phi hành tỏi thơm, cho thịt vào xào lửa lớn, đảo nhanh tay 1–2 phút đến khi thịt vừa chín tới.</li>
+</ul>
+
+
+
+<figure class="wp-block-image size-full"><img loading="lazy" decoding="async" width="800" height="522" src="https://thuongbep.com/wp-content/uploads/2025/07/Pho-Bo-ap-chao-1.webp" alt="" class="wp-image-6052"></figure>
+
+
+
+<p><strong>Bước 4</strong>: Trình bày. Đặt thịt bò xào lên bát mì. Chan nước dùng nóng. Rắc hành lá, rau mùi, thêm giá, chanh, ớt và rau thơm tùy thích.</p>
+
+
+
+<figure class="wp-block-image size-full"><img loading="lazy" decoding="async" width="800" height="534" src="https://thuongbep.com/wp-content/uploads/2025/07/Pho-Bo-ap-chao-9.webp" alt="" class="wp-image-6060"></figure>
+
+
+
+<h3 class="wp-block-heading"><span class="ez-toc-section" id="meo_nho_de_mon_an_them_phan_hap_dan" ez-toc-data-id="#meo_nho_de_mon_an_them_phan_hap_dan"></span>Mẹo nhỏ để món ăn thêm phần hấp dẫn<span class="ez-toc-section-end"></span></h3>
+
+
+
+<ul>
+<li>Sau khi xào thịt, có thể cho giá đỗ vào chảo để “gom” phần thịt dính chảo và làm ấm giá.</li>
+
+
+
+<li>Nếu có chảo gang hoặc chảo wok, hãy dùng để tăng mùi thơm đặc trưng.</li>
+
+
+
+<li>Nước dùng có thể lọc qua khăn mỏng nếu bạn thích nước trong hơn.</li>
+</ul>
+
+
+
+<h3 class="wp-block-heading"><span class="ez-toc-section" id="thuong_thuc_mon_pho_theo_cach_cua_ban" ez-toc-data-id="#thuong_thuc_mon_pho_theo_cach_cua_ban"></span>Thưởng thức món phở theo cách của bạn<span class="ez-toc-section-end"></span></h3>
+
+
+
+<p>Phở bò áp chảo là sự kết hợp giữa truyền thống và hiện đại – thơm ngon, tiện lợi, dễ chế biến nhưng vẫn giữ được linh hồn của món phở Việt. Hãy thử nấu món này cho gia đình vào một buổi tối cuối tuần hoặc ngày trong tuần bận rộn, và cảm nhận hương vị nhé.</p>
+
+
+
+<p><strong>BÀI VIẾT LIÊN QUAN</strong></p>
+
+
+
+<ul>
+<li><strong><a href="https://thuongbep.com/cach-lam-mon-ca-ham-thom-ngon/">CÁCH LÀM MÓN CÁ HẦM THƠM NGON</a></strong></li>
+
+
+
+<li><strong><a href="https://thuongbep.com/etouffee-tom-nau-nhu-the-nao/">ETOUFFEE TÔM NẤU NHƯ THẾ NÀO?</a></strong></li>
+
+
+
+<li><strong><a href="https://thuongbep.com/sup-hanh-tay-kieu-phap/">SÚP HÀNH TÂY KIỂU PHÁP</a></strong></li>
+</ul>
+
+
+
+<div class="wp-block-cover is-light has-normal-font-size"><span aria-hidden="true" class="wp-block-cover__background has-background-dim" style="background-color:#eadeca"></span><img loading="lazy" decoding="async" width="800" height="550" class="wp-block-cover__image-background wp-image-5947" alt="" src="https://thuongbep.com/wp-content/uploads/2025/05/Thuong-bep-1.webp" style="object-position:68% 10%" data-object-fit="cover" data-object-position="68% 10%"><div class="wp-block-cover__inner-container is-layout-flow wp-block-cover-is-layout-flow">
+<ul class="wp-block-list">
+<li class="has-medium-font-size"><strong>Facebook</strong>:<strong> <a href="https://www.facebook.com/people/Th%C6%B0%C6%A1ng-B%E1%BA%BFp/100069869483639/#">Thương Bếp</a></strong></li>
+
+
+
+<li class="has-medium-font-size"><strong>Gmail: bepthuong859@gmail.com</strong></li>
+</ul>
+</div></div>
+<!-- Rate my Post Plugin --><div class="rmp-widgets-container rmp-wp-plugin rmp-main-container js-rmp-widgets-container js-rmp-widgets-container--6051 " data-post-id="6051">    <!-- Rating widget -->  <div class="rmp-rating-widget js-rmp-rating-widget">          <p class="rmp-heading rmp-heading--title">        Bài viết này có hữu ích không?      </p>              <p class="rmp-heading rmp-heading--subtitle">        Tặng 5 sao khích lệ người viết nha!      </p>        <div class="rmp-rating-widget__icons">      <ul class="rmp-rating-widget__icons-list js-rmp-rating-icons-list">                  <li class="rmp-rating-widget__icons-list__icon js-rmp-rating-item" data-descriptive-rating="Not at all useful" data-value="1" style="cursor: pointer;">            <i class="js-rmp-rating-icon rmp-icon rmp-icon--ratings rmp-icon--star rmp-icon--full-highlight"></i>          </li>                  <li class="rmp-rating-widget__icons-list__icon js-rmp-rating-item" data-descriptive-rating="Somewhat useful" data-value="2" style="cursor: pointer;">            <i class="js-rmp-rating-icon rmp-icon rmp-icon--ratings rmp-icon--star rmp-icon--full-highlight"></i>          </li>                  <li class="rmp-rating-widget__icons-list__icon js-rmp-rating-item" data-descriptive-rating="Useful" data-value="3" style="cursor: pointer;">            <i class="js-rmp-rating-icon rmp-icon rmp-icon--ratings rmp-icon--star rmp-icon--full-highlight"></i>          </li>                  <li class="rmp-rating-widget__icons-list__icon js-rmp-rating-item" data-descriptive-rating="Fairly useful" data-value="4" style="cursor: pointer;">            <i class="js-rmp-rating-icon rmp-icon rmp-icon--ratings rmp-icon--star rmp-icon--full-highlight"></i>          </li>                  <li class="rmp-rating-widget__icons-list__icon js-rmp-rating-item" data-descriptive-rating="Very useful" data-value="5" style="cursor: pointer;">            <i class="js-rmp-rating-icon rmp-icon rmp-icon--ratings rmp-icon--star rmp-icon--full-highlight"></i>          </li>              </ul>    </div>    <p class="rmp-rating-widget__hover-text js-rmp-hover-text"></p>    <button class="rmp-rating-widget__submit-btn rmp-btn js-submit-rating-btn">      Submit Rating    </button>    <p class="rmp-rating-widget__results js-rmp-results ">      Đánh giá <span class="rmp-rating-widget__results__rating js-rmp-avg-rating">5</span> / 5. Số lượt đánh giá: <span class="rmp-rating-widget__results__votes js-rmp-vote-count">10</span>    </p>    <p class="rmp-rating-widget__not-rated js-rmp-not-rated rmp-rating-widget__not-rated--hidden">          </p>    <p class="rmp-rating-widget__msg js-rmp-msg"></p>  </div>  <!--Structured data -->  <script type="application/ld+json">{  "@context": "http://schema.org",  "@type": "CreativeWorkSeries",  "aggregateRating": {    "@type": "AggregateRating",    "bestRating": "5",    "ratingCount": "10",    "ratingValue": "5"  },  "image": "https://thuongbep.com/wp-content/uploads/2025/07/Pho-Bo-ap-chao-8.webp",  "name": "Phở Bò áp chảo",  "description": "Phở Bò áp chảo"}</script>      </div>			
+			<div class="penci-single-link-pages">
+						</div>
+			
+					</div>
+	</div>
+
+	
+		
+	
+	
+	
+		
+		
+	
+	
+	
+		
+		
+	
+	
+	
+					<div class="post-related">
+		<div class="post-title-box"><h4 class="post-box-title">Bài viết hữu ích với bạn</h4></div>
+				<div class="penci-owl-carousel penci-owl-carousel-slider penci-related-carousel owl-loaded owl-drag" data-lazy="true" data-item="3" data-desktop="3" data-tablet="2" data-tabsmall="2" data-auto="false" data-speed="300" data-dots="true" data-nav="false">
+								
+						
+						
+						
+						
+						
+						
+						
+						
+						
+		<div class="owl-stage-outer owl-height" style="height: 304.188px;"><div class="owl-stage" style="transform: translate3d(-1200px, 0px, 0px); transition: all; width: 4800px;"><div class="owl-item cloned" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/07/khoai-tay-confit-2.webp" href="https://thuongbep.com/cach-lam-khoai-tay-confit/" title="Cách làm khoai tây confit béo ngậy, thơm mềm như bơ">
+																			</a>
+										<h3><a href="https://thuongbep.com/cach-lam-khoai-tay-confit/">Cách làm khoai tây confit béo ngậy, thơm...</a></h3>
+									</div></div><div class="owl-item cloned" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/07/Banh-phong-pho-mai-Cheddar-6.webp" href="https://thuongbep.com/banh-phong-pho-mai-cheddar/" title="Bánh phồng phô mai Cheddar">
+																			</a>
+										<h3><a href="https://thuongbep.com/banh-phong-pho-mai-cheddar/">Bánh phồng phô mai Cheddar</a></h3>
+									</div></div><div class="owl-item cloned" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/07/Cach-nuong-banh-mi-kep-thit-nuong-–-Burger-11.webp" href="https://thuongbep.com/cach-nuong-banh-mi-kep-thit-nuong-burger/" title="Cách nướng bánh mì kẹp thịt nướng – Burger">
+																			</a>
+										<h3><a href="https://thuongbep.com/cach-nuong-banh-mi-kep-thit-nuong-burger/">Cách nướng bánh mì kẹp thịt nướng –...</a></h3>
+									</div></div><div class="owl-item cloned" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/07/Banh-quiche-rau-bina-va-atiso-–-Mon-banh-tinh-te-6.webp" href="https://thuongbep.com/banh-quiche-rau-bina-va-atiso/" title="Bánh quiche rau bina và atisô">
+																			</a>
+										<h3><a href="https://thuongbep.com/banh-quiche-rau-bina-va-atiso/">Bánh quiche rau bina và atisô</a></h3>
+									</div></div><div class="owl-item cloned" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/07/Mon-ca-ngu-nuong-ngon-nhat-4.webp" href="https://thuongbep.com/mon-ca-ngu-nuong-ngon-nhat/" title="Món cá ngừ nướng ngon nhất">
+																			</a>
+										<h3><a href="https://thuongbep.com/mon-ca-ngu-nuong-ngon-nhat/">Món cá ngừ nướng ngon nhất</a></h3>
+									</div></div><div class="owl-item active" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/10/Bruschetta-voi-ca-chua-va-hung-que-Mon-khai-vi-Y-don-gian-5.webp" href="https://thuongbep.com/bruschetta-voi-ca-chua-va-hung-que/" title="Bruschetta với cà chua và húng quế – Món khai vị Ý đơn giản" style="background-image: url(&quot;https://thuongbep.com/wp-content/uploads/2025/10/Bruschetta-voi-ca-chua-va-hung-que-Mon-khai-vi-Y-don-gian-5.webp&quot;); opacity: 1;">
+																			</a>
+										<h3><a href="https://thuongbep.com/bruschetta-voi-ca-chua-va-hung-que/">Bruschetta với cà chua và húng quế –...</a></h3>
+									</div></div><div class="owl-item active" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/08/Salad-com-Ca-Ri-Mon-an-kem-la-mieng-de-lam-tu-com-thua-5.webp" href="https://thuongbep.com/salad-com-ca-ri/" title="Salad cơm Cà Ri – Món ăn kèm lạ miệng, dễ làm từ cơm thừa" style="background-image: url(&quot;https://thuongbep.com/wp-content/uploads/2025/08/Salad-com-Ca-Ri-Mon-an-kem-la-mieng-de-lam-tu-com-thua-5.webp&quot;); opacity: 1;">
+																			</a>
+										<h3><a href="https://thuongbep.com/salad-com-ca-ri/">Salad cơm Cà Ri – Món ăn kèm...</a></h3>
+									</div></div><div class="owl-item" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/08/Cach-lam-vo-banh-bo-Pate-Brisee-Vo-banh-ngot-va-man-gion-tan-8.webp" href="https://thuongbep.com/cach-lam-vo-banh-bo-pate-brisee/" title="Cách làm vỏ bánh bơ Pâte Brisée – Vỏ bánh ngọt và mặn giòn tan">
+																			</a>
+										<h3><a href="https://thuongbep.com/cach-lam-vo-banh-bo-pate-brisee/">Cách làm vỏ bánh bơ Pâte Brisée –...</a></h3>
+									</div></div><div class="owl-item" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/08/Che-Ba-Mau-Pudding-Ba-Mau-Viet-Nam-2.webp" href="https://thuongbep.com/che-ba-mau-pudding-ba-mau-viet-nam/" title="Chè Ba Màu (Pudding Ba Màu Việt Nam)">
+																			</a>
+										<h3><a href="https://thuongbep.com/che-ba-mau-pudding-ba-mau-viet-nam/">Chè Ba Màu (Pudding Ba Màu Việt Nam)</a></h3>
+									</div></div><div class="owl-item" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/08/Khoai-tay-nuong-3.webp" href="https://thuongbep.com/khoai-tay-nuong/" title="Khoai tây nướng – Món ăn kèm lý tưởng cho mọi bữa tiệc nướng">
+																			</a>
+										<h3><a href="https://thuongbep.com/khoai-tay-nuong/">Khoai tây nướng – Món ăn kèm lý...</a></h3>
+									</div></div><div class="owl-item" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/07/khoai-tay-confit-2.webp" href="https://thuongbep.com/cach-lam-khoai-tay-confit/" title="Cách làm khoai tây confit béo ngậy, thơm mềm như bơ">
+																			</a>
+										<h3><a href="https://thuongbep.com/cach-lam-khoai-tay-confit/">Cách làm khoai tây confit béo ngậy, thơm...</a></h3>
+									</div></div><div class="owl-item" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/07/Banh-phong-pho-mai-Cheddar-6.webp" href="https://thuongbep.com/banh-phong-pho-mai-cheddar/" title="Bánh phồng phô mai Cheddar">
+																			</a>
+										<h3><a href="https://thuongbep.com/banh-phong-pho-mai-cheddar/">Bánh phồng phô mai Cheddar</a></h3>
+									</div></div><div class="owl-item" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/07/Cach-nuong-banh-mi-kep-thit-nuong-–-Burger-11.webp" href="https://thuongbep.com/cach-nuong-banh-mi-kep-thit-nuong-burger/" title="Cách nướng bánh mì kẹp thịt nướng – Burger">
+																			</a>
+										<h3><a href="https://thuongbep.com/cach-nuong-banh-mi-kep-thit-nuong-burger/">Cách nướng bánh mì kẹp thịt nướng –...</a></h3>
+									</div></div><div class="owl-item" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/07/Banh-quiche-rau-bina-va-atiso-–-Mon-banh-tinh-te-6.webp" href="https://thuongbep.com/banh-quiche-rau-bina-va-atiso/" title="Bánh quiche rau bina và atisô">
+																			</a>
+										<h3><a href="https://thuongbep.com/banh-quiche-rau-bina-va-atiso/">Bánh quiche rau bina và atisô</a></h3>
+									</div></div><div class="owl-item" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/07/Mon-ca-ngu-nuong-ngon-nhat-4.webp" href="https://thuongbep.com/mon-ca-ngu-nuong-ngon-nhat/" title="Món cá ngừ nướng ngon nhất">
+																			</a>
+										<h3><a href="https://thuongbep.com/mon-ca-ngu-nuong-ngon-nhat/">Món cá ngừ nướng ngon nhất</a></h3>
+									</div></div><div class="owl-item cloned" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/10/Bruschetta-voi-ca-chua-va-hung-que-Mon-khai-vi-Y-don-gian-5.webp" href="https://thuongbep.com/bruschetta-voi-ca-chua-va-hung-que/" title="Bruschetta với cà chua và húng quế – Món khai vị Ý đơn giản" style="background-image: url(&quot;https://thuongbep.com/wp-content/uploads/2025/10/Bruschetta-voi-ca-chua-va-hung-que-Mon-khai-vi-Y-don-gian-5.webp&quot;); opacity: 1;">
+																			</a>
+										<h3><a href="https://thuongbep.com/bruschetta-voi-ca-chua-va-hung-que/">Bruschetta với cà chua và húng quế –...</a></h3>
+									</div></div><div class="owl-item cloned" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/08/Salad-com-Ca-Ri-Mon-an-kem-la-mieng-de-lam-tu-com-thua-5.webp" href="https://thuongbep.com/salad-com-ca-ri/" title="Salad cơm Cà Ri – Món ăn kèm lạ miệng, dễ làm từ cơm thừa" style="background-image: url(&quot;https://thuongbep.com/wp-content/uploads/2025/08/Salad-com-Ca-Ri-Mon-an-kem-la-mieng-de-lam-tu-com-thua-5.webp&quot;); opacity: 1;">
+																			</a>
+										<h3><a href="https://thuongbep.com/salad-com-ca-ri/">Salad cơm Cà Ri – Món ăn kèm...</a></h3>
+									</div></div><div class="owl-item cloned" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/08/Cach-lam-vo-banh-bo-Pate-Brisee-Vo-banh-ngot-va-man-gion-tan-8.webp" href="https://thuongbep.com/cach-lam-vo-banh-bo-pate-brisee/" title="Cách làm vỏ bánh bơ Pâte Brisée – Vỏ bánh ngọt và mặn giòn tan">
+																			</a>
+										<h3><a href="https://thuongbep.com/cach-lam-vo-banh-bo-pate-brisee/">Cách làm vỏ bánh bơ Pâte Brisée –...</a></h3>
+									</div></div><div class="owl-item cloned" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/08/Che-Ba-Mau-Pudding-Ba-Mau-Viet-Nam-2.webp" href="https://thuongbep.com/che-ba-mau-pudding-ba-mau-viet-nam/" title="Chè Ba Màu (Pudding Ba Màu Việt Nam)">
+																			</a>
+										<h3><a href="https://thuongbep.com/che-ba-mau-pudding-ba-mau-viet-nam/">Chè Ba Màu (Pudding Ba Màu Việt Nam)</a></h3>
+									</div></div><div class="owl-item cloned" style="width: 240px;"><div class="item-related">
+																		<a class="related-thumb penci-image-holder owl-lazy" data-src="https://thuongbep.com/wp-content/uploads/2025/08/Khoai-tay-nuong-3.webp" href="https://thuongbep.com/khoai-tay-nuong/" title="Khoai tây nướng – Món ăn kèm lý tưởng cho mọi bữa tiệc nướng">
+																			</a>
+										<h3><a href="https://thuongbep.com/khoai-tay-nuong/">Khoai tây nướng – Món ăn kèm lý...</a></h3>
+									</div></div></div></div><div class="owl-nav disabled"><div class="owl-prev"><i class="fa fa-angle-left"></i></div><div class="owl-next"><i class="fa fa-angle-right"></i></div></div><div class="owl-dots"><div class="owl-dot active"><span></span></div><div class="owl-dot"><span></span></div><div class="owl-dot"><span></span></div><div class="owl-dot"><span></span></div><div class="owl-dot"><span></span></div></div></div></div>		
+		
+	
+	
+	
+		
+		
+		
+	
+</article>					</div>
+	</div>
+	
+<div id="sidebar" class="penci-sidebar-right penci-sidebar-content style-4 pcalign-center penci-sticky-sidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+	<div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 1px; position: static;">
+		<aside id="search-2" class="widget widget_search"><form role="search" method="get" id="searchform" action="https://thuongbep.com/">
+    <div>
+		<input type="text" class="search-input" placeholder="Type and hit enter..." name="s" id="s">
+	 </div>
+</form></aside><aside id="penci_about_widget-1" class="widget penci_about_widget"><h4 class="widget-title penci-border-arrow"><span class="inner-arrow">Về Thương Bếp</span></h4>			<div id="penci-aboutmewg-6218" class="about-widget pc_aligncenter">
+																				<img width="6" height="4" class="penci-widget-about-image nopin holder-square penci-lazy" nopin="nopin" src="https://thuongbep.com/wp-content/uploads/2020/11/2-022.png" alt="Về Thương Bếp" style="border-radius: 50%;">
+														
+									<h2 class="about-me-heading">Một chút về Thương Bếp</h2>
+				
+									<div class="about-me-desc"><p>Thương Bếp không thuộc tổ chức, doanh nghiệp nào cả. Nó là một chiếc blog nhỏ của một cô gái đam mê ăn uống và hay tự sướng rằng "mình có thiên phú nấu ăn".</p></div>
+				
+			</div>
+			</aside><aside id="penci_social_widget-1" class="widget penci_social_widget"><h4 class="widget-title penci-border-arrow"><span class="inner-arrow">Keep in touch</span></h4>
+			<div class="widget-social pc_aligncenter">
+									<a href="https://www.facebook.com/Thng-Bp-100267225180512/" rel="nofollow" target="_blank"><i class="penci-faicon fa fa-facebook" style="font-size: 14px"></i><span style="font-size: 13px">Facebook</span></a>
+				
+				
+									<a href="https://www.instagram.com/thuong_bep_0_0/" rel="nofollow" target="_blank"><i class="penci-faicon fa fa-instagram" style="font-size: 14px"></i><span style="font-size: 13px">Instagram</span></a>
+				
+									<a href="https://www.pinterest.com/thuongbep859" rel="nofollow" target="_blank"><i class="penci-faicon fa fa-pinterest" style="font-size: 14px"></i><span style="font-size: 13px">Pinterest</span></a>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+								
+				
+								
+								
+								
+								
+				
+				
+																							</div>
+
+			</aside>	</div>
+</div><!-- END CONTAINER -->
+</div>
+
+<div class="clear-footer"></div>
+
+
+
+
+
+<footer id="footer-section" class="penci-footer-social-media penci-lazy footer-social-remove-circle" itemscope="" itemtype="https://schema.org/WPFooter">
+	<div class="container">
+									<div class="footer-logo-copyright footer-not-logo">
+				
+				
+									<div id="footer-copyright">
+						<p>Ăn ngon, sống khỏe cùng Thương Bếp nha!
+Bạn có thể chia sẻ và liên hệ với Thương Bếp thông qua:
+📧 Gmail: Bepthuong859@gmail.com
+👍 Fanpage: Thương Bếp
+️🎯 Instagram: thuong_bep_0_0</p>
+					</div>
+													<div class="go-to-top-parent"><a href="#" class="go-to-top"><span><i class="penci-faicon fa fa-angle-up"></i> <br></span></a></div>
+							</div>
+					</div>
+</footer>
+
+</div><!-- End .wrapper-boxed -->
+
+<div id="fb-root"></div>
+					<div class="ez-toc-sticky">
+				        <div class="ez-toc-sticky-fixed hide">
+		                    <div class="ez-toc-sidebar"><div class="ez-toc-sticky-title-container">
+<p class="ez-toc-sticky-title">Nội dung bài viết</p>
+<a class="ez-toc-close-icon" href="javascript:void(0)" onclick="ezTOC_hideBar(event)" aria-label="×"><span aria-hidden="true">×</span></a>
+</div>
+<div id="ez-toc-sticky-container" class="ez-toc-sticky-v2_0_50 counter-flat ez-toc-sticky-toggle-counter">
+<nav class="ez-toc-sticky-toggle-direction"><ul class="ez-toc-sticky-list ez-toc-sticky-list-level-1 eztoc-visibility-hide-by-default"><li class="ez-toc-page-1 ez-toc-heading-level-2"><a class="ez-toc-link ez-toc-heading-1" href="#huong_vi_xua_cu_cam_hung_hien_dai" title="Hương vị xưa cũ, cảm hứng hiện đại">Hương vị xưa cũ, cảm hứng hiện đại</a></li><li class="ez-toc-page-1 ez-toc-heading-level-2"><a class="ez-toc-link ez-toc-heading-2" href="#lam_pho_tai_nha_%e2%80%93_khong_con_la_thu_thach" title="Làm phở tại nhà – Không còn là thử thách">Làm phở tại nhà – Không còn là thử thách</a></li><li class="ez-toc-page-1 ez-toc-heading-level-2"><a class="ez-toc-link ez-toc-heading-3" href="#nguyen_lieu_can_chuan_bi_cho_mon_pho_bo_ap_chao" title="Nguyên liệu cần chuẩn bị cho món Phở Bò áp chảo">Nguyên liệu cần chuẩn bị cho món Phở Bò áp chảo</a></li><li class="ez-toc-page-1 ez-toc-heading-level-2"><a class="ez-toc-link ez-toc-heading-4" href="#cach_nau_pho_bo_ap_chao" title="Cách nấu Phở Bò áp chảo">Cách nấu Phở Bò áp chảo</a><ul class="ez-toc-list-level-3"><li class="ez-toc-heading-level-3"><a class="ez-toc-link ez-toc-heading-5" href="#meo_nho_de_mon_an_them_phan_hap_dan" title="Mẹo nhỏ để món ăn thêm phần hấp dẫn">Mẹo nhỏ để món ăn thêm phần hấp dẫn</a></li><li class="ez-toc-page-1 ez-toc-heading-level-3"><a class="ez-toc-link ez-toc-heading-6" href="#thuong_thuc_mon_pho_theo_cach_cua_ban" title="Thưởng thức món phở theo cách của bạn">Thưởng thức món phở theo cách của bạn</a></li></ul></li></ul></nav></div>
+</div>
+				        </div>
+			            <a class="ez-toc-open-icon" href="javascript:void(0)" onclick="ezTOC_showBar(event)">
+                            <span class="arrow">→</span>
+                            <span class="text">Xem thêm</span>
+                        </a>
+					</div><script type="text/javascript" src="https://thuongbep.com/wp-content/plugins/penci-review/js/jquery.easypiechart.min.js?ver=1.0" id="jquery-penci-piechart-js"></script>
+<script type="text/javascript" src="https://thuongbep.com/wp-content/plugins/penci-review/js/review.js?ver=1.0" id="jquery-penci-review-js"></script>
+<script type="text/javascript" id="rate-my-post-js-extra">
+/* <![CDATA[ */
+var rmp_frontend = {"admin_ajax":"https:\/\/thuongbep.com\/wp-admin\/admin-ajax.php","postID":"6051","noVotes":"","cookie":"T\u1eb7ng 5 sao kh\u00edch l\u1ec7 ng\u01b0\u1eddi vi\u1ebft nha!","afterVote":"C\u1ea3m \u01a1n \u0111\u00e1nh gi\u00e1 c\u1ee7a b\u1ea1n","notShowRating":"1","social":"1","feedback":"1","cookieDisable":"1","emptyFeedback":"Please insert your feedback in the box above!","hoverTexts":"1","preventAccidental":"1","grecaptcha":"1","siteKey":"","votingPriv":"1","loggedIn":"","positiveThreshold":"2","ajaxLoad":"1","disableClearCache":"1","nonce":"bbbdb1a30a"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://thuongbep.com/wp-content/plugins/rate-my-post/public/js/rate-my-post.js?ver=3.4.1" id="rate-my-post-js"></script>
+<script type="text/javascript" id="pgc-simply-gallery-plugin-lightbox-script-js-extra">
+/* <![CDATA[ */
+var PGC_SGB_LIGHTBOX = {"lightboxPreset":"","postType":"post","lightboxSettigs":""};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://thuongbep.com/wp-content/plugins/simply-gallery-block/plugins/pgc_sgb_lightbox.min.js?ver=3.1.6" id="pgc-simply-gallery-plugin-lightbox-script-js"></script>
+<script type="text/javascript" id="ez-toc-sticky-js-after">
+/* <![CDATA[ */
+function ezTOC_hideBar(e) { var sidebar = document.querySelector(".ez-toc-sticky-fixed"); if ( typeof(sidebar) !== "undefined" && sidebar !== null ) { sidebar.classList.remove("show"); sidebar.classList.add("hide"); setTimeout(function() { document.querySelector(".ez-toc-open-icon").style = "z-index: 9999999"; }, 200); } } function ezTOC_showBar(e) { document.querySelector(".ez-toc-open-icon").style = "z-index: -1;";setTimeout(function() { var sidebar = document.querySelector(".ez-toc-sticky-fixed"); sidebar.classList.remove("hide"); sidebar.classList.add("show"); }, 200); } (function() { let ez_toc_sticky_fixed_container = document.querySelector('div.ez-toc-sticky-fixed');if(ez_toc_sticky_fixed_container) { document.body.addEventListener("click", function (evt) { ezTOC_hideBar(evt); }); ez_toc_sticky_fixed_container.addEventListener('click', function(event) { event.stopPropagation(); }); document.querySelector('.ez-toc-open-icon').addEventListener('click', function(event) { event.stopPropagation(); }); } })();
+                
+                
+/* ]]> */
+</script>
+<script type="text/javascript" id="rocket-browser-checker-js-after">
+/* <![CDATA[ */
+"use strict";var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||!1,descriptor.configurable=!0,"value"in descriptor&&(descriptor.writable=!0),Object.defineProperty(target,descriptor.key,descriptor)}}return function(Constructor,protoProps,staticProps){return protoProps&&defineProperties(Constructor.prototype,protoProps),staticProps&&defineProperties(Constructor,staticProps),Constructor}}();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor))throw new TypeError("Cannot call a class as a function")}var RocketBrowserCompatibilityChecker=function(){function RocketBrowserCompatibilityChecker(options){_classCallCheck(this,RocketBrowserCompatibilityChecker),this.passiveSupported=!1,this._checkPassiveOption(this),this.options=!!this.passiveSupported&&options}return _createClass(RocketBrowserCompatibilityChecker,[{key:"_checkPassiveOption",value:function(self){try{var options={get passive(){return!(self.passiveSupported=!0)}};window.addEventListener("test",null,options),window.removeEventListener("test",null,options)}catch(err){self.passiveSupported=!1}}},{key:"initRequestIdleCallback",value:function(){!1 in window&&(window.requestIdleCallback=function(cb){var start=Date.now();return setTimeout(function(){cb({didTimeout:!1,timeRemaining:function(){return Math.max(0,50-(Date.now()-start))}})},1)}),!1 in window&&(window.cancelIdleCallback=function(id){return clearTimeout(id)})}},{key:"isDataSaverModeOn",value:function(){return"connection"in navigator&&!0===navigator.connection.saveData}},{key:"supportsLinkPrefetch",value:function(){var elem=document.createElement("link");return elem.relList&&elem.relList.supports&&elem.relList.supports("prefetch")&&window.IntersectionObserver&&"isIntersecting"in IntersectionObserverEntry.prototype}},{key:"isSlowConnection",value:function(){return"connection"in navigator&&"effectiveType"in navigator.connection&&("2g"===navigator.connection.effectiveType||"slow-2g"===navigator.connection.effectiveType)}}]),RocketBrowserCompatibilityChecker}();
+/* ]]> */
+</script>
+<script type="text/javascript" id="rocket-preload-links-js-extra">
+/* <![CDATA[ */
+var RocketPreloadLinksConfig = {"excludeUris":"\/(.+\/)?feed\/?.+\/?|\/(?:.+\/)?embed\/|\/(index\\.php\/)?wp\\-json(\/.*|$)|\/wp-admin\/|\/logout\/|\/wp-login.php","usesTrailingSlash":"1","imageExt":"jpg|jpeg|gif|png|tiff|bmp|webp|avif","fileExt":"jpg|jpeg|gif|png|tiff|bmp|webp|avif|php|pdf|html|htm","siteUrl":"https:\/\/thuongbep.com","onHoverDelay":"100","rateThrottle":"3"};
+/* ]]> */
+</script>
+<script type="text/javascript" id="rocket-preload-links-js-after">
+/* <![CDATA[ */
+(function() {
+"use strict";var r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},e=function(){function i(e,t){for(var n=0;n<t.length;n++){var i=t[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}return function(e,t,n){return t&&i(e.prototype,t),n&&i(e,n),e}}();function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}var t=function(){function n(e,t){i(this,n),this.browser=e,this.config=t,this.options=this.browser.options,this.prefetched=new Set,this.eventTime=null,this.threshold=1111,this.numOnHover=0}return e(n,[{key:"init",value:function(){!this.browser.supportsLinkPrefetch()||this.browser.isDataSaverModeOn()||this.browser.isSlowConnection()||(this.regex={excludeUris:RegExp(this.config.excludeUris,"i"),images:RegExp(".("+this.config.imageExt+")$","i"),fileExt:RegExp(".("+this.config.fileExt+")$","i")},this._initListeners(this))}},{key:"_initListeners",value:function(e){-1<this.config.onHoverDelay&&document.addEventListener("mouseover",e.listener.bind(e),e.listenerOptions),document.addEventListener("mousedown",e.listener.bind(e),e.listenerOptions),document.addEventListener("touchstart",e.listener.bind(e),e.listenerOptions)}},{key:"listener",value:function(e){var t=e.target.closest("a"),n=this._prepareUrl(t);if(null!==n)switch(e.type){case"mousedown":case"touchstart":this._addPrefetchLink(n);break;case"mouseover":this._earlyPrefetch(t,n,"mouseout")}}},{key:"_earlyPrefetch",value:function(t,e,n){var i=this,r=setTimeout(function(){if(r=null,0===i.numOnHover)setTimeout(function(){return i.numOnHover=0},1e3);else if(i.numOnHover>i.config.rateThrottle)return;i.numOnHover++,i._addPrefetchLink(e)},this.config.onHoverDelay);t.addEventListener(n,function e(){t.removeEventListener(n,e,{passive:!0}),null!==r&&(clearTimeout(r),r=null)},{passive:!0})}},{key:"_addPrefetchLink",value:function(i){return this.prefetched.add(i.href),new Promise(function(e,t){var n=document.createElement("link");n.rel="prefetch",n.href=i.href,n.onload=e,n.onerror=t,document.head.appendChild(n)}).catch(function(){})}},{key:"_prepareUrl",value:function(e){if(null===e||"object"!==(void 0===e?"undefined":r(e))||!1 in e||-1===["http:","https:"].indexOf(e.protocol))return null;var t=e.href.substring(0,this.config.siteUrl.length),n=this._getPathname(e.href,t),i={original:e.href,protocol:e.protocol,origin:t,pathname:n,href:t+n};return this._isLinkOk(i)?i:null}},{key:"_getPathname",value:function(e,t){var n=t?e.substring(this.config.siteUrl.length):e;return n.startsWith("/")||(n="/"+n),this._shouldAddTrailingSlash(n)?n+"/":n}},{key:"_shouldAddTrailingSlash",value:function(e){return this.config.usesTrailingSlash&&!e.endsWith("/")&&!this.regex.fileExt.test(e)}},{key:"_isLinkOk",value:function(e){return null!==e&&"object"===(void 0===e?"undefined":r(e))&&(!this.prefetched.has(e.href)&&e.origin===this.config.siteUrl&&-1===e.href.indexOf("?")&&-1===e.href.indexOf("#")&&!this.regex.excludeUris.test(e.href)&&!this.regex.images.test(e.href))}}],[{key:"run",value:function(){"undefined"!=typeof RocketPreloadLinksConfig&&new n(new RocketBrowserCompatibilityChecker({capture:!0,passive:!0}),RocketPreloadLinksConfig).init()}}]),n}();t.run();
+}());
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://thuongbep.com/wp-content/themes/soledad/js/libs-script.min.js?ver=7.5.1" id="penci-libs-js-js"></script>
+<script type="text/javascript" id="main-scripts-js-extra">
+/* <![CDATA[ */
+var ajax_var_more = {"url":"https:\/\/thuongbep.com\/wp-admin\/admin-ajax.php","nonce":"796f01058c","errorPass":"<p class=\"message message-error\">Password does not match the confirm password<\/p>","login":"Email Address","password":"Password"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://thuongbep.com/wp-content/themes/soledad/js/main.js?ver=7.5.1" id="main-scripts-js"></script>
+<script type="text/javascript" id="penci_ajax_like_post-js-extra">
+/* <![CDATA[ */
+var ajax_var = {"url":"https:\/\/thuongbep.com\/wp-admin\/admin-ajax.php","nonce":"796f01058c","errorPass":"<p class=\"message message-error\">Password does not match the confirm password<\/p>","login":"Email Address","password":"Password"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://thuongbep.com/wp-content/themes/soledad/js/post-like.js?ver=7.5.1" id="penci_ajax_like_post-js"></script>
+<script type="text/javascript" src="https://thuongbep.com/wp-includes/js/comment-reply.min.js?ver=6.5.7" id="comment-reply-js" async="async" data-wp-strategy="async"></script>
+<script type="text/javascript" src="https://thuongbep.com/wp-content/plugins/penci-recipe/js/jquery.rateyo.min.js?ver=2.6" id="jquery-recipe-rateyo-js"></script>
+<script type="text/javascript" id="penci_rateyo-js-extra">
+/* <![CDATA[ */
+var PENCI = {"ajaxUrl":"https:\/\/thuongbep.com\/wp-admin\/admin-ajax.php","nonce":"796f01058c"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://thuongbep.com/wp-content/plugins/penci-recipe/js/rating_recipe.js?ver=2.6" id="penci_rateyo-js"></script>
+<script type="text/javascript" id="simply-gallery-block-script-js-extra">
+/* <![CDATA[ */
+var PGC_SGB = {"assets":"https:\/\/thuongbep.com\/wp-content\/plugins\/simply-gallery-block\/assets\/","skinsFolder":"https:\/\/thuongbep.com\/wp-content\/plugins\/simply-gallery-block\/blocks\/skins\/","skinsList":{"pgc_sgb_albumnavigator":"https:\/\/thuongbep.com\/wp-content\/plugins\/simply-gallery-block\/blocks\/skins\/pgc_sgb_albumnavigator.js?ver=3.1.6","pgc_sgb_albums":"https:\/\/thuongbep.com\/wp-content\/plugins\/simply-gallery-block\/blocks\/skins\/pgc_sgb_albums.js?ver=3.1.6","pgc_sgb_grid":"https:\/\/thuongbep.com\/wp-content\/plugins\/simply-gallery-block\/blocks\/skins\/pgc_sgb_grid.js?ver=3.1.6","pgc_sgb_justified":"https:\/\/thuongbep.com\/wp-content\/plugins\/simply-gallery-block\/blocks\/skins\/pgc_sgb_justified.js?ver=3.1.6","pgc_sgb_masonry":"https:\/\/thuongbep.com\/wp-content\/plugins\/simply-gallery-block\/blocks\/skins\/pgc_sgb_masonry.js?ver=3.1.6","pgc_sgb_slider":"https:\/\/thuongbep.com\/wp-content\/plugins\/simply-gallery-block\/blocks\/skins\/pgc_sgb_slider.js?ver=3.1.6","pgc_sgb_viewer":"https:\/\/thuongbep.com\/wp-content\/plugins\/simply-gallery-block\/blocks\/skins\/pgc_sgb_viewer.js?ver=3.1.6"},"wpApiRoot":"https:\/\/thuongbep.com\/wp-json\/","postType":"pgc_simply_gallery","skinsSettings":{"pgc_sgb_albumnavigator":false,"pgc_sgb_albums":false,"pgc_sgb_grid":false,"pgc_sgb_justified":false,"pgc_sgb_masonry":false,"pgc_sgb_slider":false,"pgc_sgb_viewer":false}};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://thuongbep.com/wp-content/plugins/simply-gallery-block/blocks/pgc_sgb.min.js?ver=3.1.6" id="simply-gallery-block-script-js"></script>
+<script type="text/javascript" src="https://thuongbep.com/wp-content/plugins/easy-table-of-contents/vendor/js-cookie/js.cookie.min.js?ver=2.2.1" id="ez-toc-js-cookie-js"></script>
+<script type="text/javascript" src="https://thuongbep.com/wp-content/plugins/easy-table-of-contents/vendor/sticky-kit/jquery.sticky-kit.min.js?ver=1.9.2" id="ez-toc-jquery-sticky-kit-js"></script>
+<script type="text/javascript" id="ez-toc-js-js-extra">
+/* <![CDATA[ */
+var ezTOC = {"smooth_scroll":"1","visibility_hide_by_default":"1","width":"auto","scroll_offset":"30","fallbackIcon":"<span style=\"display: flex;align-items: center;width: 35px;height: 30px;justify-content: center;direction:ltr;\"><svg style=\"fill: #999;color:#999\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\" class=\"list-377408\" width=\"20px\" height=\"20px\" viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M6 6H4v2h2V6zm14 0H8v2h12V6zM4 11h2v2H4v-2zm16 0H8v2h12v-2zM4 16h2v2H4v-2zm16 0H8v2h12v-2z\" fill=\"currentColor\"><\/path><\/svg><svg style=\"fill: #999;color:#999\" class=\"arrow-unsorted-368013\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"10px\" height=\"10px\" viewBox=\"0 0 24 24\" version=\"1.2\" baseProfile=\"tiny\"><path d=\"M18.2 9.3l-6.2-6.3-6.2 6.3c-.2.2-.3.4-.3.7s.1.5.3.7c.2.2.4.3.7.3h11c.3 0 .5-.1.7-.3.2-.2.3-.5.3-.7s-.1-.5-.3-.7zM5.8 14.7l6.2 6.3 6.2-6.3c.2-.2.3-.5.3-.7s-.1-.5-.3-.7c-.2-.2-.4-.3-.7-.3h-11c-.3 0-.5.1-.7.3-.2.2-.3.5-.3.7s.1.5.3.7z\"\/><\/svg><\/span>"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://thuongbep.com/wp-content/plugins/easy-table-of-contents/assets/js/front.min.js?ver=2.0.50-1686461720" id="ez-toc-js-js"></script>
+
+
+
+
+<script type="text/javascript" src="https://thuongbep.com/wp-content/plugins/simply-gallery-block/blocks/skins/pgc_sgb_grid.js?ver=3.1.6" id="pgc_sgb_grid_js" async=""></script></body></html>

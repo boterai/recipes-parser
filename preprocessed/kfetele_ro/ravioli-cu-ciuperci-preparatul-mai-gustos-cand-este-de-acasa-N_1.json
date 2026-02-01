@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ravioli cu ciuperci",
+    "description": "Rețetă delicioasă de ravioli cu ciuperci, preparată în doar câțiva pași simpli.",
+    "ingredients": "[{\"name\": \"făină\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"apă\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"ulei de măsline\", \"units\": \"linguri\", \"amount\": 4}, {\"name\": \"sare\", \"units\": null, \"amount\": null}, {\"name\": \"ciuperci feliate\", \"units\": \"g\", \"amount\": 550}, {\"name\": \"cepe medii, tocate\", \"units\": null, \"amount\": 3}, {\"name\": \"ulei\", \"units\": \"linguri\", \"amount\": 3}, {\"name\": \"căței de usturoi, pisați\", \"units\": null, \"amount\": 5}, {\"name\": \"cimbru proaspăt\", \"units\": null, \"amount\": null}, {\"name\": \"nucșoară măcinată\", \"units\": \"linguriță\", \"amount\": 0.5}, {\"name\": \"piper negru măcinat\", \"units\": null, \"amount\": null}, {\"name\": \"făină pentru sos\", \"units\": \"linguri\", \"amount\": 5}, {\"name\": \"lapte\", \"units\": \"ml\", \"amount\": 350}, {\"name\": \"căței de usturoi\", \"units\": null, \"amount\": 6}, {\"name\": \"fulgi de drojdie inactivă\", \"units\": \"linguri\", \"amount\": 6}, {\"name\": \"sare\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Pregătiți umplutura de ciuperci: adăugați ulei într-o oală mare, adăugați ingredientele pentru umplutură și gătiți până se evaporă umezeala. 2. Pregătiți aluatul: amestecați făina, apa, uleiul de măsline și sarea până obțineți un aluat elastic. 3. Întindeți aluatul și tăiați-l în forme dorite. 4. Umpleți raviolii cu umplutura de ciuperci și fierbeți-i în apă sărată. 5. Pregătiți sosul de usturoi și turnați-l peste ravioli înainte de servire.",
+    "category": "Main Course",
+    "prep_time": "60 minutes",
+    "cook_time": "60 minutes",
+    "total_time": "120 minutes",
+    "notes": "Cantitățile de ingrediente sunt pentru 4 persoane. Dublați sau triplați ingredientele pentru porții mai mari.",
+    "tags": "Rețete de paste, Rețete pentru masa de prânz"
+}

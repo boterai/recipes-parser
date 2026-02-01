@@ -1,0 +1,12 @@
+{
+    "dish_name": "Nopea soodaleipä Irlannista",
+    "description": "Irlantilainen soodaleipä on rustiikkinen ja herkullinen leipä, joka valmistuu nopeasti ilman hiivaa. Tämä leipä on täydellinen lisä moneen ateriaan tai nautittavaksi sellaisenaan.",
+    "ingredients": "[{\"name\": \"vehnäjauhoja\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"suolaa\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"ruokasoodaa\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"maitoa\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"etikkaa\", \"units\": \"rkl\", \"amount\": 1}]",
+    "instructions": "1. Lämmitä uuni 220 asteeseen (kuuma ilma 200 astetta).\n2. Sekoita suuressa kulhossa vehnäjauhot, suola ja ruokasooda.\n3. Tee jauhojen keskelle kuoppa ja kaada siihen maito ja etikka. Sekoita nopeasti taikina yhteen, kunnes se on juuri ja juuri sekoittunut.\n4. Kaada taikina kevyesti jauhotetulle pöydälle ja vaivaa kevyesti noin 1-2 minuuttia, kunnes taikina on tasaista.\n5. Muotoile taikinasta pyöreä leipä ja siirrä se leivinpaperilla vuoratulle pellille.\n6. Leikkaa leivän pintaan ristikkäinen viilto terävällä veitsellä.\n7. Paista uunissa noin 30-35 minuuttia, kunnes leipä on kullanruskea ja koputtaessa se kuulostaa ontolta.\n8. Anna leivän jäähtyä hetken ennen viipaloimista.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "30-35 minutes",
+    "total_time": "40 minutes",
+    "notes": null,
+    "tags": "Irlantilainen, Nopea leipä, Rustiikkinen, Soodaleipä"
+}

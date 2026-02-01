@@ -1,0 +1,12 @@
+{
+    "dish_name": "Warm White Russian",
+    "description": "A rich and decadent drink that combines the bold flavors of coffee, chocolate, and liqueur with a hint of sweetness.",
+    "ingredients": "[{\"name\": \"hot strong coffee\", \"units\": \"fluid ounces\", \"amount\": 3}, {\"name\": \"coffee-flavored liqueur\", \"units\": \"fluid ounce\", \"amount\": 1}, {\"name\": \"vodka\", \"units\": \"fluid ounce\", \"amount\": 1}, {\"name\": \"half-and-half\", \"units\": \"fluid ounce\", \"amount\": 1}, {\"name\": \"chocolate truffle\", \"units\": \"round\", \"amount\": 1}]",
+    "instructions": "Fill a heat-safe glass mug with boiling water. Let it stand for a few minutes to warm the mug. Discard the water. Add coffee, coffee liqueur, and vodka to the mug. Stir gently to combine. Drizzle half-and-half over the drink. Place the chocolate truffle on a spoon or thread onto a decorative pick and balance it on the glass rim. Just before drinking, tip the truffle into the drink.",
+    "category": "Cocktail",
+    "prep_time": "5 minutes",
+    "cook_time": null,
+    "total_time": "5 minutes",
+    "notes": "To make the drink even more decadent, add a splash of whipped cream or a sprinkle of cocoa powder on top. For an extra layer of flavor, use a flavored coffee liqueur like Kahlua or Tia Maria. Consider using a higher-quality chocolate truffle for an intense chocolate experience.",
+    "tags": "cocktail, dessert, winter"
+}

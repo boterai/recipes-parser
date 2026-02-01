@@ -1,0 +1,12 @@
+{
+    "dish_name": "Torta con Fiocchi d'Avena",
+    "description": "La torta con fiocchi d'avena rappresenta un'alternativa deliziosa e salutare ai dolci tradizionali.",
+    "ingredients": "[{\"name\": \"fiocchi d'avena\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"farina\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"zucchero di canna integrale\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"uova\", \"units\": null, \"amount\": 2}, {\"name\": \"olio di semi\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"latte\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"lievito per dolci\", \"units\": \"bustina\", \"amount\": 1}, {\"name\": \"sale\", \"units\": null, \"amount\": null}, {\"name\": \"aromi a piacere\", \"units\": null, \"amount\": null}]",
+    "instructions": "In una ciotola capiente, mescolare i fiocchi d'avena, la farina, lo zucchero, il lievito e il sale. In un'altra ciotola, sbattere le uova con l'olio e il latte. Versare gli ingredienti liquidi nella ciotola con gli ingredienti secchi e mescolare bene fino ad ottenere un composto omogeneo. Aggiungere gli aromi a piacere. Versare il composto in una tortiera precedentemente imburrata e infarinata. Cuocere in forno preriscaldato a 180°C per circa 30-40 minuti, o fino a quando la torta sarà dorata e uno stuzzicadenti inserito al centro uscirà pulito. Lasciare raffreddare completamente prima di tagliare e servire.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "30-40 minutes",
+    "total_time": null,
+    "notes": "La ricetta base della torta con fiocchi d'avena è un ottimo punto di partenza per sperimentare e creare varianti personalizzate.",
+    "tags": "Torta, Avena, Dessert"
+}

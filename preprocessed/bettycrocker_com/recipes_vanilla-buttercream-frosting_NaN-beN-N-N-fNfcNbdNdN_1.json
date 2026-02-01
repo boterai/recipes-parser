@@ -1,0 +1,12 @@
+{
+    "dish_name": "Vanilla Buttercream Frosting",
+    "description": "This easy vanilla buttercream frosting is sure to steal the show on any cake, cookie, or cupcake. Creamy, sweet, fluffy, and foolproof to make with just five ingredients.",
+    "ingredients": "[{\"name\": \"powdered sugar\", \"units\": \"cups\", \"amount\": 5}, {\"name\": \"unsalted butter\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"vanilla\", \"units\": \"teaspoons\", \"amount\": 2}, {\"name\": \"whole milk\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"kosher salt\", \"units\": \"pinch\", \"amount\": 1}]",
+    "instructions": "1. In a medium bowl, mix powdered sugar and softened butter by hand with a spoon or rubber spatula, or use an electric mixer on low speed until combined. Increase speed on mixture to high and beat for 1 minute until light and fluffy or mix vigorously by hand. Depending on the power of your electric mixer, it may take an additional minute for the butter to blend with the powdered sugar into a stiff mixture. 2. Add vanilla, 2 tablespoons of the milk, and the salt. Using an electric mixer on low speed, mix for 30 to 60 seconds, or stir by hand, until fully incorporated. The frosting should have a slightly smoother consistency but will remain thick. Scrape down the bowl occasionally as you mix. 3. Gradually beat in the remaining tablespoon milk, adding about 1/2 teaspoon at a time until frosting is smooth and spreadable. 4. If the frosting is too thick, beat in more milk, just a few drops at a time, until it is smooth and easy to spread. If the frosting is too thin, gradually beat in a small amount of powdered sugar—about 1 tablespoon at a time—until it thickens and holds its shape. After adding any additional ingredients, mix the frosting for about 1 minute to ensure everything is fully incorporated. 5. Makes about 3 1/4 cups of frosting which is enough to generously frost a 13x9-inch cake, an 8- or 9-inch two-layer cake or 24 cupcakes.",
+    "category": "Dessert",
+    "prep_time": "10 minutes",
+    "cook_time": null,
+    "total_time": "10 minutes",
+    "notes": "It’s essential to use softened or room temperature butter for this recipe. If you’ve forgotten to soften your butter, here’s a quick fix: Microwave it in 5-second increments on Medium (50%), turning the butter frequently to soften it without melting.",
+    "tags": "frosting, dessert, vanilla, buttercream"
+}

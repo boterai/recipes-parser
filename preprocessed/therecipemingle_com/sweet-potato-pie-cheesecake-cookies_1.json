@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sweet Potato Pie Cheesecake Cookies",
+    "description": "Creamy, dreamy, and packed with cozy flavor—these cookies taste just like your favorite holiday pie with a luscious cheesecake surprise in the center.",
+    "ingredients": "[{\"name\": \"unsalted butter\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"brown sugar\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"granulated sugar\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"large eggs\", \"units\": null, \"amount\": 2}, {\"name\": \"vanilla extract\", \"units\": \"tsp\", \"amount\": 2}, {\"name\": \"all-purpose flour\", \"units\": \"cups\", \"amount\": 2.5}, {\"name\": \"baking soda\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"cinnamon\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"nutmeg\", \"units\": \"tsp\", \"amount\": 0.5}, {\"name\": \"salt\", \"units\": \"tsp\", \"amount\": 0.5}, {\"name\": \"mashed sweet potato\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"brown sugar\", \"units\": \"cup\", \"amount\": 0.25}, {\"name\": \"cinnamon\", \"units\": \"tsp\", \"amount\": 0.5}, {\"name\": \"nutmeg\", \"units\": \"tsp\", \"amount\": 0.25}, {\"name\": \"cream cheese\", \"units\": \"oz\", \"amount\": 8}, {\"name\": \"powdered sugar\", \"units\": \"cup\", \"amount\": 0.25}, {\"name\": \"vanilla extract\", \"units\": \"tsp\", \"amount\": 0.5}]",
+    "instructions": "1. Prep Cheesecake Filling: Mix cream cheese, powdered sugar, and vanilla until smooth. Scoop into 1 tsp-sized balls and freeze for 30 minutes. 2. Make Sweet Potato Mixture: Combine mashed sweet potato with brown sugar, cinnamon, and nutmeg. Set aside. 3. Cookie Dough Time: Cream butter with both sugars until fluffy. Add eggs and vanilla. In a separate bowl, whisk dry ingredients. Combine with wet mix. 4. Assemble Cookies: Scoop cookie dough and flatten into a disc. Add a small scoop of sweet potato mixture and a frozen cream cheese ball in the center. Wrap dough around fillings and seal edges. Place on lined baking sheet. 5. Bake: Preheat oven to 350°F (175°C). Bake cookies for 12–14 minutes or until edges are golden. Let cool before serving (the centers will set as they cool).",
+    "category": "Dessert",
+    "prep_time": "30 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "45 minutes",
+    "notes": "These cookies are meant to be shared, to be the centerpiece of a conversation, to be the thing everyone remembers about the party.",
+    "tags": "cookies, dessert, holiday, sweet potato, cheesecake"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pizza rolice",
+    "description": "Donosimo vam recept za ukusne zalogaje – pizza rolice, idealan finger food za druženje s prijateljima.",
+    "ingredients": "[{\"name\": \"svježe lisnato tijesto\", \"units\": \"paket (275 g)\", \"amount\": 1}, {\"name\": \"šunka po izboru\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"pasirana rajčica\", \"units\": \"ml\", \"amount\": 150}, {\"name\": \"polutvrdi sir (gauda)\", \"units\": \"g\", \"amount\": 80}, {\"name\": \"mozzarella\", \"units\": \"g\", \"amount\": 70}, {\"name\": \"origano\", \"units\": null, \"amount\": 1}, {\"name\": \"jaje\", \"units\": null, \"amount\": 1}]",
+    "instructions": "Razmotajte tijesto na lagano pobrašnjenoj radnoj podlozi. Tijesto ravnomjerno premažite pasiranom rajčicom, ostavljajući otprilike 1 cm od rubova tijesta prazno. Na rajčicu poslažite šunku, po njoj naribajte gaudu, a zatim pospite naribanu mozzarellu. Tijesto zarolajte po širem djelu i prebacite u zamrzivač na 15 minuta. Izvadite tijesto i narežite na kriške debljine 2,5 cm. Rolice prebacite na lim za pečenje obložen papirom za pečenje. Razmutite jaje i premažite svaku rolicu. Pospite origanom po ukusu. Pećnicu zagrijte na 200 stupnjeva i pecite 15 minuta ili dok rolice ne dobiju zlatnu boju. Ostavite da se kratko ohlade, a zatim ih poslužite s umakom po izboru.",
+    "category": null,
+    "prep_time": "10 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "25 minutes",
+    "notes": null,
+    "tags": "pizza rolice, pasirana rajčica"
+}

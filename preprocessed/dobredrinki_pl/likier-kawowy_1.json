@@ -1,0 +1,12 @@
+{
+    "dish_name": "Likier kawowy",
+    "description": "Domowy likier kawowy, który można wykorzystać w różnych drinkach i deserach.",
+    "ingredients": "[{\"name\": \"spirytus\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"mocna kawa\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"skondensowane mleko\", \"units\": \"ml\", \"amount\": 250}]",
+    "instructions": "Zaparz kawę i odstaw do ostygnięcia. Wlej do garnka mleko skondensowane i delikatnie podgrzej. Powoli wlej kawę, cały czas mieszając. Odstaw garnek na bok, a gdy likier ostygnie, dodaj do niego spirytus. Przelej likier do butelki i postaw w chłodnym miejscu na minimum 24 godziny.",
+    "category": "Likiery",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": "24 hours",
+    "notes": "Można wykorzystać do przygotowania drinków takich jak White Russian i Black Russian.",
+    "tags": "likier, kawa, domowy, alkohol"
+}

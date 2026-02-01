@@ -1,0 +1,12 @@
+{
+    "dish_name": "Neodolatelný Zdravý Tvarohový Krém",
+    "description": "Lahodný dezert plný chuti a zároveň skvělý zdroj bílkovin a živin pro vaše tělo.",
+    "ingredients": "[{\"name\": \"tvaroh\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"banán\", \"units\": null, \"amount\": 1}, {\"name\": \"med\", \"units\": \"lžíce\", \"amount\": 1}, {\"name\": \"vanilkový extrakt\", \"units\": \"lžička\", \"amount\": 1}]",
+    "instructions": "Smíchejte tvaroh s medem a vanilkovým extraktem dohladka. Podávejte s čerstvým ovocem podle chuti.",
+    "category": "Dessert",
+    "prep_time": "10 minutes",
+    "cook_time": null,
+    "total_time": "10 minutes",
+    "notes": "Můžete experimentovat s různými variantami receptu přidáním čerstvého ovoce nebo ořechů.",
+    "tags": "dessert, healthy, easy, quick"
+}

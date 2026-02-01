@@ -1,0 +1,12 @@
+{
+    "dish_name": "Losos u miso marinadi",
+    "description": "Losos u miso marinadi odličan je izbor kada poželite nešto drugačije, a opet brzo i jednostavno za pripremu.",
+    "ingredients": "[{\"name\": \"crveni miso umak\", \"units\": \"žlice\", \"amount\": 2}, {\"name\": \"sake\", \"units\": \"žlice\", \"amount\": 2}, {\"name\": \"šećer\", \"units\": \"žlice\", \"amount\": 2}, {\"name\": \"umak od soje\", \"units\": \"čajne žličice\", \"amount\": 2}, {\"name\": \"fileti lososa\", \"units\": \"komada\", \"amount\": 4}]",
+    "instructions": "Pomiješajte miso, sake, umak od soje i šećer u maloj zdjeli. Prilagodite omjere po ukusu. Ulijte polovicu smjese u posudu dovoljno veliku da u nju stanu fileti, a zatim ostatak umaka prelijte preko lososa. Pazite da je sasvim uronjen u umak. Poklopite i ostavite da se marinira najmanje 30 minuta ili preko noći, ali ne duže. Zagrijete pećnicu na 180 stupnjeva. Obložite lim za pečenje aluminijskom folijom. Premažite foliju s malo biljnog ulja i na nju položite filete lososa. Pazite da povrh ribe bude ravnomjeran, tanak sloj marinade. Filete stavite na 15 cm od grijača u pećnici. Pecite 8 do 13 minuta, ovisno o debljini fileta i temperaturi pečenja. Ako počne zagorijevati marinada počene zagorijevati, a losos još nije pečen, prebacite posudu na nižu rešetku. Poslužite s rižom i povrćem.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "13 minutes",
+    "total_time": "43 minutes",
+    "notes": "Losos ostaje sočan i zadržava svoju teksturu.",
+    "tags": "losos, miso, marinada, glavno jelo"
+}

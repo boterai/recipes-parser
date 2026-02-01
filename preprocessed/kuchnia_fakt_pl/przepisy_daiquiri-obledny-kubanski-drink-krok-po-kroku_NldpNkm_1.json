@@ -1,0 +1,12 @@
+{
+    "dish_name": "Daiquiri",
+    "description": "Obłędny kubański drink na bazie rumu, syropu cukrowego i soku z limety.",
+    "ingredients": "[{\"name\": \"Jasny rum\", \"units\": \"ml\", \"amount\": 40}, {\"name\": \"Sok z limonki\", \"units\": \"ml\", \"amount\": 20}, {\"name\": \"syrop cukrowy\", \"units\": \"ml\", \"amount\": 10}, {\"name\": \"Lód\", \"units\": \"kostki\", \"amount\": 4}]",
+    "instructions": "Wlewamy wszystkie składniki do shakera z kostkami lodu i kilkukrotnie wstrząsamy. Wlewamy gotowe Daiquiri do kieliszka odcedzając sitkiem barmańskim kostki lodu. Do dekoracji kieliszka można użyć limonki.",
+    "category": "Drink",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Kluczowe w dobrym Daiquiri jest zachowanie proporcji trzech składników.",
+    "tags": "drink, koktajl, kubański, Daiquiri"
+}

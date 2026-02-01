@@ -1,0 +1,12 @@
+{
+    "dish_name": "Faworki",
+    "description": "Prosty przepis na chrust, idealny na tłusty czwartek.",
+    "ingredients": "[{\"name\": \"mąka pszenna\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"śmietana\", \"units\": \"g\", \"amount\": 60}, {\"name\": \"żółtka\", \"units\": null, \"amount\": 4}, {\"name\": \"spirytus\", \"units\": \"łyżka\", \"amount\": 1}, {\"name\": \"cukier puder\", \"units\": \"łyżeczki\", \"amount\": 2}, {\"name\": \"sól\", \"units\": \"szczypta\", \"amount\": null}]",
+    "instructions": "Do miski wsyp przesianą mąkę. Dodaj żółtka, śmietanę, spirytus, cukier puder i odrobinę soli. Wymieszaj wszystkie składniki i wyrób z nich ciasto. Jeśli masa będzie zbyt zwarta, dodaj nieco śmietany. Jeśli z kolei ciasto okaże się zbyt rzadkie, dosyp trochę mąki. Wyrobione ciasto przełóż na blat posypany mąką i rozwałkuj. Złóż uzyskany 'naleśnik' na pół i ponownie rozwałkuj. Czynność tę powtarzaj przez kilka minut. Owiń masę folią spożywczą i odłóż na 30 minut. Po tym czasie podziel ciasto na kilka części, a każdą z nich precyzyjnie rozwałkuj, a następnie pokrój na prostokąty. Na środku każdego kawałka zrób nacięcie. Przekładaj jeden bok prostokąta, tworząc specyficzny kształt faworka. W wysokim garnku zagotuj olej rzepakowy. Kiedy tłuszcz osiągnie 180 st. Celsjusza, zacznij stopniowo zanurzać w nim surowe chruściki. Gdy nabiorą złocistego koloru, wyłów je z garnka i przełóż na talerz wyłożony ręcznikiem papierowym. Kontynuuj, aż cały chrust będzie usmażony i odsączony z tłuszczu. Na koniec oprósz smakołyki cukrem pudrem. Smacznego!",
+    "category": "Dessert",
+    "prep_time": "30 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Kluczem do nadania chruścikom chrupkości jest dodanie łyżki spirytusu, wódki lub białego octu do masy.",
+    "tags": "faworki, chrust, tłusty czwartek, deser"
+}

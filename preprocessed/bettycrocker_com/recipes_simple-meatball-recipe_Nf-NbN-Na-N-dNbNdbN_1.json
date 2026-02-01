@@ -1,0 +1,12 @@
+{
+    "dish_name": "Simple Meatballs",
+    "description": "A simple meatball recipe that is easy to prepare and versatile for various dishes.",
+    "ingredients": "[{\"name\": \"lean ground beef\", \"units\": \"lb\", \"amount\": \"1\"}, {\"name\": \"Progresso Italian Style Bread Crumbs\", \"units\": \"cup\", \"amount\": \"1/2\"}, {\"name\": \"2% milk\", \"units\": \"cup\", \"amount\": \"1/4\"}, {\"name\": \"salt\", \"units\": \"teaspoon\", \"amount\": \"1/2\"}, {\"name\": \"Worcestershire sauce\", \"units\": \"teaspoon\", \"amount\": \"1/2\"}, {\"name\": \"pepper\", \"units\": \"teaspoon\", \"amount\": \"1/4\"}, {\"name\": \"small onion, finely chopped\", \"units\": \"small\", \"amount\": \"1\"}, {\"name\": \"large egg\", \"units\": null, \"amount\": \"1\"}]",
+    "instructions": "1. Heat oven to 400°F. Line 13x9-inch pan with foil; spray with cooking spray. 2. In large bowl, mix all ingredients just until combined. 3. Shape mixture into 24 (1 1/2-inch) meatballs by rolling into balls between the palms of your hands, using a meat baller, or a cookie scoop. 4. Place meatballs 1 inch apart on a baking sheet with sides. 5. Bake uncovered 18 to 22 minutes or until internal temperature reaches 160°F and meatballs are no longer pink in the center. 6. Serve over pasta and top with your favorite sauce.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "25 minutes",
+    "total_time": "40 minutes",
+    "notes": "If desired, substitute 1 lb lean ground turkey or chicken for the ground beef. Using a jar of store-bought pasta sauce is one of our favorite dinnertime shortcuts.",
+    "tags": "meatballs, beef, main course, easy recipe"
+}

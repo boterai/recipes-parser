@@ -1,0 +1,12 @@
+{
+    "dish_name": "Waffle di spinaci con prosciutto di tacchino",
+    "description": null,
+    "ingredients": "[{\"name\": \"spinaci\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"fiocchi d'avena\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"formaggio cottage\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"uova\", \"units\": null, \"amount\": 4}, {\"name\": \"preparato\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"olio\", \"units\": null, \"amount\": null}, {\"name\": \"sale\", \"units\": null, \"amount\": null}, {\"name\": \"prosciutto di tacchino\", \"units\": null, \"amount\": 100}, {\"name\": \"formaggio cottage\", \"units\": null, \"amount\": 200}, {\"name\": \"cetrioli da insalata\", \"units\": null, \"amount\": null}, {\"name\": \"pomodori\", \"units\": null, \"amount\": null}]",
+    "instructions": "Preparare i waffle di spinaci: Scongelare gli spinaci, strizzarli e tagliarli grossolanamente. Nel bicchiere di un frullatore a immersione aggiungere spinaci, fiocchi d’avena, ricotta, uova e una presa di sale e la polvere lievitante e ridurre il tutto a purea. Cuocere i waffle: Scaldare la piastra per waffle e ungerla leggermente. Versare un mestolo di pastella nella piastra per waffle e cuocere i waffle finché non saranno croccanti. Ripetere questo passaggio finché la pastella non è finita. Servire: Adagiare il waffle di spinaci su un piatto e condire con ricotta e prosciutto di tacchino. Guarnire con del basilico. Si possono aggiungere facoltativamente anche pomodori ciliegini freschi e cetrioli da insalata.",
+    "category": null,
+    "prep_time": "15 min",
+    "cook_time": "15 min",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lentil Curry",
+    "description": "Lentil Curry is what comfort food dreams are made of! It’s a hearty one-pot meal that’s filled with protein-packed lentils, warm spices, and coconut milk.",
+    "ingredients": "[{\"name\": \"olive oil\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"garlic\", \"units\": \"cloves\", \"amount\": 6}, {\"name\": \"grated fresh ginger\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"ground turmeric\", \"units\": \"teaspoons\", \"amount\": 2}, {\"name\": \"ground cumin\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"ground coriander\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"cayenne pepper\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"salt\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"water\", \"units\": \"cups\", \"amount\": 3}, {\"name\": \"dried brown lentils\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"crushed tomatoes\", \"units\": \"ounces\", \"amount\": 28}, {\"name\": \"coconut milk\", \"units\": \"ounces\", \"amount\": 13.5}, {\"name\": \"fresh lemon juice\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"cilantro\", \"units\": \"cup\", \"amount\": 0.5}]",
+    "instructions": "Heat the olive oil in a large deep skillet over medium heat. Add the garlic and ginger and cook for 1-2 minutes, until fragrant. Add the turmeric, cumin, coriander, cayenne pepper and salt and cook for 30-60 seconds, stirring constantly so it doesn't burn. Add a few tablespoons of water if needed. Pour in the water, scraping any bits stuck to the pan. Add the lentils and crushed tomatoes and mix well. Bring to a boil, then lower heat to a simmer, cover and cook for 30-40 minutes (if using red lentils, it will only take 25-30 minutes), until the lentils are soft and cooked. Stir occasionally. Once the lentils are cooked, stir in the coconut milk and lemon juice. Taste; add more salt as desired. Remove from heat and stir in the cilantro. Serve with rice, naan and garnish with more fresh cilantro, if desired.",
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "40 minutes",
+    "total_time": "50 minutes",
+    "notes": "Use jarred chopped garlic and a tube of ginger if you want to make it easier and quick, but fresh will taste best. This is a great freezer recipe, cool in freezer friendly containers and freeze.",
+    "tags": "vegan, curry, lentils, comfort food, one-pot meal"
+}

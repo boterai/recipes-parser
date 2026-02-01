@@ -1,0 +1,12 @@
+{
+    "dish_name": "Vietnamese Chicken Salad",
+    "description": "This refreshing and flavorful Vietnamese Chicken Salad is a perfect entree for any occasion, whether it’s a summer gathering or a quick and easy meal.",
+    "ingredients": "[{\"name\": \"chicken breast halves\", \"units\": \"pieces\", \"amount\": 4}, {\"name\": \"leekum kee chili-garlic sauce or chili paste\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"garlic clove\", \"units\": \"clove\", \"amount\": 1}, {\"name\": \"sugar\", \"units\": \"tablespoons\", \"amount\": 3}, {\"name\": \"rice wine vinegar\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"freshly squeezed lime juice\", \"units\": \"tablespoons\", \"amount\": 6}, {\"name\": \"fish sauce\", \"units\": \"tablespoons\", \"amount\": 4}, {\"name\": \"peanut oil\", \"units\": \"tablespoons\", \"amount\": 6}, {\"name\": \"savoy cabbage\", \"units\": \"head\", \"amount\": 1}, {\"name\": \"fresh mint leaves\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"fresh cilantro leaves\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"red onion\", \"units\": \"small\", \"amount\": 1}, {\"name\": \"fresh red hot chili peppers or green hot chili pepper\", \"units\": \"small\", \"amount\": 1}, {\"name\": \"roasted peanuts\", \"units\": \"cup\", \"amount\": 0.5}]",
+    "instructions": "1. Preheat the oven to 400°F (200°C). Season the chicken breast halves with salt and pepper. Roast the chicken in the oven for 20-25 minutes, or until cooked through. 2. In a small bowl, whisk together chili paste, garlic, sugar, vinegar, lime juice, fish sauce, and peanut oil until well combined. 3. In a medium bowl, toss together cabbage, mint, and cilantro. 4. Place the roasted chicken on a large platter or 4 individual platters. Top the cabbage mixture with onion, pepper, cucumber, carrots, bell pepper, and chicken. 5. Drizzle the reserved dressing over the salad and garnish with peanuts and cilantro sprigs.",
+    "category": "Main Course",
+    "prep_time": "1 hour 10 minutes",
+    "cook_time": "20-25 minutes",
+    "total_time": "1 hour 10 minutes",
+    "notes": "Use a precooked whole chicken to make this salad even quicker and easier to prepare. Adjust the level of spiciness to your liking by using more or less chili paste. Add other ingredients such as diced bell peppers or chopped scallions to make the salad more substantial. Serve the salad chilled, garnished with additional peanuts and herbs if desired.",
+    "tags": "salad,vietnamese,chicken"
+}

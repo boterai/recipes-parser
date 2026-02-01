@@ -1,0 +1,12 @@
+{
+    "dish_name": "Manok na may gulay",
+    "description": "Ulam na manok na niluto sa oven kasama ang iba't ibang gulay.",
+    "ingredients": "[{\"name\": \"manok\", \"units\": \"kilo\", \"amount\": 1}, {\"name\": \"sibuyas\", \"units\": \"ulo\", \"amount\": 1}, {\"name\": \"patatas\", \"units\": \"gramo\", \"amount\": 800}, {\"name\": \"mga kamatis\", \"units\": \"piraso\", \"amount\": 5}, {\"name\": \"talong\", \"units\": \"piraso\", \"amount\": 1}, {\"name\": \"mayonnaise\", \"units\": \"spoons\", \"amount\": 2}, {\"name\": \"paminta\", \"units\": \"pinches\", \"amount\": 2}, {\"name\": \"asin\", \"units\": \"pinches\", \"amount\": 2}, {\"name\": \"chili\", \"units\": \"kutsarita\", \"amount\": 0.25}, {\"name\": \"bay leaf\", \"units\": \"piraso\", \"amount\": 2}]",
+    "instructions": "1. Balatan at coarsely tumaga ang patatas. 2. Ihalo ang spices, asin, at langis ng gulay, at iprito sa mainit na kawali. 3. Tanggalin ang buto ng manok sa a la carte piraso. 4. Crush ang sibuyas. 5. Sa isang lalagyan, haluin ang mayonesa, sibuyas, pampalasa, at manok, at i-marinate ng kalahating oras. 6. Coarsely tinadtad ang talong at kamatis. 7. Sa pan, ilatag ang patatas, talong, kamatis, at ang marinated na manok. 8. I-preheat ang oven sa 180 degrees at maghurno ng 40 minuto.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "40 minutes",
+    "total_time": "70 minutes",
+    "notes": "Maaari mong palitan ang mga gulay ayon sa iyong gusto.",
+    "tags": "manok, gulay, oven, recipe"
+}

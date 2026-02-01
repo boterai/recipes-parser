@@ -1,0 +1,12 @@
+{
+    "dish_name": "Svinjski kotlet brez kosti",
+    "description": "Preprost mesni užitek, ki združuje hitrost priprave in vrhunski okus.",
+    "ingredients": "[{\"name\": \"Svinjski kotleti brez kosti\", \"units\": \"g\", \"amount\": 600}, {\"name\": \"Oljčno olje\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"Limonin sok\", \"units\": \"ml\", \"amount\": 15}, {\"name\": \"Česen, drobno sesekljan\", \"units\": \"g\", \"amount\": 6}, {\"name\": \"Svež rožmarin, drobno sesekljan\", \"units\": \"g\", \"amount\": 4}, {\"name\": \"Svež timijan\", \"units\": \"g\", \"amount\": 2}, {\"name\": \"Sol\", \"units\": \"g\", \"amount\": 5}, {\"name\": \"Mleti črni poper\", \"units\": \"g\", \"amount\": 2}, {\"name\": \"Prekajena paprika\", \"units\": \"g\", \"amount\": 2}, {\"name\": \"Voda\", \"units\": \"ml\", \"amount\": 15}]",
+    "instructions": "1. Svinjske kotlete osušimo s papirnatimi brisačkami. Po potrebi jih rahlo potolčemo z mehčalcem mesa, da dosežemo enakomerno debelino (približno 2 cm / ¾ inch). Položimo jih v plitvo posodo ali vrečko z zapiranjem. 2. V manjši skledi zmešamo oljčno olje, limonin sok, sesekljan česen, rožmarin, timijan, sol, poper in prekajeno papriko. Mešanico prelijemo čez kotlete. Posodo pokrijemo in mariniramo vsaj 30 minut pri sobni temperaturi ali do 4 ure v hladilniku. 3. Večjo ponev segrejemo na srednje visoki temperaturi. Dodamo nekaj olja ali marinado in kotlete položimo v ponev. Pečemo jih 3–4 minute na vsaki strani, da dobijo zlato rjavo skorjo. 4. Temperaturo zmanjšamo. Po potrebi ponev deglaziramo z vodo. Ponev pokrijemo in kotlete kuhamo še 4–5 minut, pri čemer jih enkrat obrnemo, dokler notranja temperatura ne doseže 63 °C (145 °F). 5. Pečene kotlete prestavimo na krožnik in pustimo počivati 5 minut, da se sokovi enakomerno porazdelijo. 6. Postrežemo jih cele ali narezane z izbranimi prilogami.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "30 minutes",
+    "notes": "Z uporabo svežih sestavin, pravilnim začinjanjem in pozornostjo pri kuhanju boste vsakič znova dosegli odličen rezultat.",
+    "tags": "svinjski kotlet, meso, enostavno, hitro"
+}

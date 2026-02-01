@@ -1,0 +1,12 @@
+{
+    "dish_name": "White Russian",
+    "description": "Sip on a creamy white Russian cocktail, with vodka, Kahlúa, and whipped cream. This perfectly sweet dessert drink is almost like coffee with cream and sugar but so, so much more!",
+    "ingredients": "[{\"name\": \"vodka\", \"units\": \"oz.\", \"amount\": 4}, {\"name\": \"Kahlúa\", \"units\": \"oz.\", \"amount\": 4}, {\"name\": \"heavy cream\", \"units\": \"oz.\", \"amount\": 4}, {\"name\": \"Ice cubes\", \"units\": null, \"amount\": null}]",
+    "instructions": "Fill two lowball glasses with ice cubes. Add 2 oz. vodka and 2 oz. Kahlúa to each glass. Top each drink evenly with lightly whipped heavy cream. Serve immediately.",
+    "category": "Beverages",
+    "prep_time": "5 minutes",
+    "cook_time": null,
+    "total_time": "5 minutes",
+    "notes": "To lighten the calorie count, use half and half or even 2% or whole milk. Milk won’t float as nicely but it’s a good option, especially if you stir it in.",
+    "tags": "cocktail, dessert drink, easy recipe"
+}

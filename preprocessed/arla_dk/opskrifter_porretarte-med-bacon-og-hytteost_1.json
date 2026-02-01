@@ -1,0 +1,12 @@
+{
+    "dish_name": "Porretærte med bacon og hytteost",
+    "description": "En dejlig porretærte med bacon og hytteost - og også med gule beder (som kan skiftes ud med kartofler), så I bliver mætte.",
+    "ingredients": "[{\"name\": \"Havregryn\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"Hvedemel\", \"units\": \"g\", \"amount\": 125}, {\"name\": \"Groft salt\", \"units\": \"tsp\", \"amount\": 0.5}, {\"name\": \"Smør\", \"units\": \"g\", \"amount\": 25}, {\"name\": \"Hytteost\", \"units\": \"g\", \"amount\": 75}, {\"name\": \"Sammenpisket æg\", \"units\": \"pcs\", \"amount\": 1}, {\"name\": \"Vand\", \"units\": \"liter\", \"amount\": 1}, {\"name\": \"Groft salt\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"Porrer\", \"units\": \"pcs\", \"amount\": 4}, {\"name\": \"Gule beder\", \"units\": \"pcs\", \"amount\": 4}, {\"name\": \"Æg\", \"units\": \"pcs\", \"amount\": 2}, {\"name\": \"Hytteost\", \"units\": \"g\", \"amount\": 175}, {\"name\": \"Revet muskatnød\", \"units\": \"tsp\", \"amount\": 0.5}, {\"name\": \"Groft salt\", \"units\": \"tsp\", \"amount\": 0.5}, {\"name\": \"Kalkunbacon\", \"units\": \"g\", \"amount\": 125}, {\"name\": \"Dampede grønne bønner\", \"units\": \"g\", \"amount\": 350}, {\"name\": \"Finthakket rødløg\", \"units\": \"g\", \"amount\": 50}]",
+    "instructions": "Hak havregrynene fint i en foodprocessor, til det ligner groft mel. Tilsæt hvedemel og salt og kør et kort øjeblik. Tilsæt smør og hytteost og kør i ca. 5 sek. Hæld dejen i en skål og saml den let med æg og vand. Tryk dejen ud i en smurt springform (ca. 24 cm i diameter) - tryk dejen halvt op ad kanten. Forbag bunden midt i ovnen i ca. 20 min. ved 200° - traditionel ovn. - læg et stykke bagepapir over efter ca. 10 min, så kanten ikke bliver for mørk senere. Bring vand tilsat salt i kog i en gryde. Kog porrer og beder ved kraftig varme i ca. 3 min. Lad grøntsagerne dampe godt tørre i en sigte. Pisk ægggene sammen i en stor skål og bland dem med hytteost, muskatnød og salt. Vend bacon og de afdryppede grøntsager i hytteostblandingen og fordel i den forbagte bund. Bag tærten midt i ovnen i ca. ½ time ved 200° - traditionel ovn. Tag porretærten ud af formen og server den med bønnesalat.",
+    "category": null,
+    "prep_time": "20 minutes",
+    "cook_time": "50 minutes",
+    "total_time": "1 hour 10 minutes",
+    "notes": "I stedet for gule beder, kan du bruge kartofler.",
+    "tags": null
+}

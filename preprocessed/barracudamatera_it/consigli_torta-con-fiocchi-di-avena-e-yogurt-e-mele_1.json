@@ -1,0 +1,12 @@
+{
+    "dish_name": "Torta leggera con avena, yogurt e mele",
+    "description": "Una torta leggera e salutare a base di avena, yogurt e mele, perfetta per un dessert o una merenda.",
+    "ingredients": "[{\"name\": \"farina d'avena\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"farina integrale\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"amido di mais\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"zucchero di canna integrale\", \"units\": \"g\", \"amount\": 80}, {\"name\": \"uova\", \"units\": \"medie\", \"amount\": 2}, {\"name\": \"yogurt bianco naturale\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"olio di semi di girasole\", \"units\": \"ml\", \"amount\": 80}, {\"name\": \"lievito per dolci\", \"units\": \"bustina\", \"amount\": 1}, {\"name\": \"sale\", \"units\": \"pizzico\", \"amount\": 1}, {\"name\": \"mele\", \"units\": \"medie\", \"amount\": 2}, {\"name\": \"cannella in polvere\", \"units\": \"facoltativa\", \"amount\": null}, {\"name\": \"scorza di limone grattugiata\", \"units\": \"facoltativa\", \"amount\": null}, {\"name\": \"noci tritate o mandorle a lamelle\", \"units\": \"facoltative\", \"amount\": null}]",
+    "instructions": "1. Preriscaldare il forno a 180°C. Imburrare e infarinare una tortiera. 2. Preparare le mele: lavare, sbucciare e tagliare a fettine. 3. Mescolare gli ingredienti secchi in una ciotola. 4. In un'altra ciotola, sbattere le uova e aggiungere yogurt e olio. 5. Incorporare gli ingredienti secchi al composto liquido. 6. Aggiungere le mele e mescolare. 7. Versare l'impasto nella tortiera e decorare con fettine di mela. 8. Infornare per 35-40 minuti. 9. Lasciare raffreddare prima di servire.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "35-40 minutes",
+    "total_time": "50-55 minutes",
+    "notes": "Può essere personalizzata con diverse farine e dolcificanti. Versione vegana possibile sostituendo le uova e lo yogurt.",
+    "tags": "Torta, Mele"
+}

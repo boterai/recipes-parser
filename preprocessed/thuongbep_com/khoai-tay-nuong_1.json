@@ -1,0 +1,12 @@
+{
+    "dish_name": "Khoai tây nướng",
+    "description": "Khoai tây nướng kiểu này không chỉ dễ làm mà còn dễ gây nghiện. Với vỏ ngoài giòn thơm, ruột mềm béo và hương chanh nướng thoang thoảng.",
+    "ingredients": "[{\"name\": \"khoai tây nhỏ\", \"units\": \"pound\", \"amount\": 1.5}, {\"name\": \"muối kosher\", \"units\": \"thìa cà phê\", \"amount\": 2.5}, {\"name\": \"dầu ô liu\", \"units\": \"thìa canh\", \"amount\": 1}, {\"name\": \"hạt tiêu đen\", \"units\": \"thìa cà phê\", \"amount\": 0.25}, {\"name\": \"tỏi dạng hạt\", \"units\": \"thìa cà phê\", \"amount\": 0.25}, {\"name\": \"chanh\", \"units\": \"quả\", \"amount\": 1}, {\"name\": \"rau mùi tây Ý tươi\", \"units\": \"thìa canh\", \"amount\": 1}]",
+    "instructions": "1. Trộn khoai tây đã luộc với dầu ô liu, 1/2 thìa cà phê muối còn lại, tiêu và tỏi hạt. 2. Đặt khoai lên vỉ, mặt cắt úp xuống, nướng trực tiếp khoảng 3 phút cho đến khi cháy cạnh. Lật mặt, nướng thêm 3 phút. Đồng thời, đặt nửa quả chanh lên vỉ (mặt cắt hướng xuống), nướng đến khi cháy xém, khoảng 3 phút. 3. Nếu cần thêm thời gian cho món chính, chuyển khoai sang vùng nướng gián tiếp để giữ ấm, không lo bị cháy. 4. Bỏ khoai và chanh khỏi vỉ. Vắt nước cốt chanh nướng lên khoai, rắc rau mùi tây, đảo đều và thưởng thức.",
+    "category": null,
+    "prep_time": "8 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "28 minutes",
+    "notes": "Thông tin dinh dưỡng được tính toán dựa theo các thành phần và chỉ là tỷ lệ ước tính.",
+    "tags": "khoai tây, nướng, món ăn kèm"
+}

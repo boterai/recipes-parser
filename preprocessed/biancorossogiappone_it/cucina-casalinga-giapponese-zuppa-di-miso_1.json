@@ -1,0 +1,12 @@
+{
+    "dish_name": "Zuppa di miso",
+    "description": "Una deliziosa zuppa di miso casalinga.",
+    "ingredients": "[{\"name\": \"acqua\", \"units\": \"ml\", \"amount\": 450}, {\"name\": \"miso\", \"units\": \"cucchiai\", \"amount\": 2}, {\"name\": \"dashi in polvere\", \"units\": \"g\", \"amount\": 3}, {\"name\": \"cipollotto\", \"units\": \"unit\", \"amount\": 0.5}, {\"name\": \"alga wakame essiccata\", \"units\": \"g\", \"amount\": 3}, {\"name\": \"tofu fresco\", \"units\": \"g\", \"amount\": 60}]",
+    "instructions": "Affettare il tofu a cubetti. Affettare finemente il cipollotto usando, se si vuole, anche la parte verde. Mettere l’alga wakame a bagno in un po’ d’acqua calda e lasciarla a mollo per 2 minuti. Strizzare le alghe e tagliuzzarle grossolanamente. Mettere a bollire i 450ml d’acqua in un pentolino e versarvi il dashi in polvere. Un po’ prima dell’ebollizione aggiungere il tofu e il cipollotto. Mescolare e spegnere la fiamma. A fuoco spento aggiungere per ultimi l’alga wakame e il miso. Stemperare quest’ultimo aiutandosi con un colino. Mescolare bene e servire subito!",
+    "category": "Soup",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "È sempre bene aggiungere l’alga wakame per ultimo per evitare che diventi viscida. Non fate MAI cuocere il miso!",
+    "tags": "zuppa, miso, giapponese, ricetta"
+}

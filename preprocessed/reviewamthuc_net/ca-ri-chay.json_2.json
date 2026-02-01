@@ -1,0 +1,12 @@
+{
+    "dish_name": "Cà ri chay",
+    "description": "Cà ri chay là phiên bản không sử dụng thịt của món cà ri truyền thống, kết hợp tinh tế của các loại rau củ và gia vị.",
+    "ingredients": "[{\"name\": \"Khoai lang\", \"units\": null, \"amount\": null}, {\"name\": \"Khoai môn\", \"units\": null, \"amount\": null}, {\"name\": \"Cà rốt\", \"units\": null, \"amount\": null}, {\"name\": \"Đậu hũ chiên\", \"units\": \"miếng\", \"amount\": 2}, {\"name\": \"Tàu hũ ky chiên\", \"units\": \"cọng\", \"amount\": 2}, {\"name\": \"Nấm đông cô khô\", \"units\": \"g\", \"amount\": 14}, {\"name\": \"Nước cốt dừa\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"Nước dừa\", \"units\": \"ml\", \"amount\": 800}, {\"name\": \"Sữa tươi không đường\", \"units\": \"ml\", \"amount\": 150}, {\"name\": \"Hành tây\", \"units\": null, \"amount\": null}, {\"name\": \"Nấm đùi gà\", \"units\": null, \"amount\": null}, {\"name\": \"Ớt bột\", \"units\": null, \"amount\": null}, {\"name\": \"Bột cà ri\", \"units\": null, \"amount\": null}, {\"name\": \"Dầu màu điều\", \"units\": null, \"amount\": null}, {\"name\": \"Hành boa-rô\", \"units\": null, \"amount\": null}, {\"name\": \"Sả\", \"units\": null, \"amount\": null}, {\"name\": \"Gia vị: hạt nêm chay, muối, đường\", \"units\": null, \"amount\": null}]",
+    "instructions": "Bước 1: Sơ chế nguyên liệu. Rửa sạch các loại củ, gọt vỏ và cắt miếng vừa ăn. Nấm đông cô thì bạn ngâm nước ấm cho mềm, rửa sạch. Hành tây bóc vỏ, thái múi cau; nấm đùi gà cắt miếng nhỏ. Bước 2: Chiên các loại củ. Chiên sơ khoai lang, khoai môn và cà rốt đến khi vàng đều. Bước 3: Xào các loại củ. Phi thơm hành boa-rô với dầu màu điều, thêm sả băm và sả đập dập. Bước 4: Nấu cà ri chay. Chuyển hỗn hợp củ vào nồi, đổ nước dừa tươi vào và đun sôi. Bước 5: Thành phẩm. Múc cà ri ra tô, rắc ít hành ngò lên trên và thưởng thức.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "cà ri, chay, món ăn Việt Nam"
+}

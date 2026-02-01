@@ -1,0 +1,12 @@
+{
+    "dish_name": "Mafini sa lešnik karamelama",
+    "description": null,
+    "ingredients": "[{\"name\": \"jaja\", \"units\": null, \"amount\": 2}, {\"name\": \"jogurt\", \"units\": \"čaša (od 180 g)\", \"amount\": 1}, {\"name\": \"šećer\", \"units\": \"čaša\", \"amount\": 1}, {\"name\": \"vanilin šećer\", \"units\": \"kesice\", \"amount\": 2}, {\"name\": \"ulje\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"brašno\", \"units\": \"pune čaše\", \"amount\": 2}, {\"name\": \"prašak za pecivo\", \"units\": \"kesica\", \"amount\": 1}, {\"name\": \"lešnik karamele\", \"units\": \"g\", \"amount\": 100}]",
+    "instructions": "Mikserom umutiti jaja sa šećerom i vanilin šećerom. Dodati ulje, jogurt i izmiksati. Postepeno dodavati brašno koje ste pomešali sa praškom za pecivo i lagano mutiti mikserom kako bi se svi sastojci sjedinili. Udubljenja u kalupu za mafine popuniti silikonskim modlicama/papirnim korpicama te rasporediti pripremljenu smesu. Preko rasporediti seckane lešnik karamele. Peći u dobro zagrejanoj rerni na 180 stepeni oko 25 minuta. Pečene mafine izvaditi iz rerne i ostaviti da se prohlade te izručiti iz kalupa. Mafine izručiti iz modlica, složiti na tacnu i poslužiti.",
+    "category": "Kolači",
+    "prep_time": null,
+    "cook_time": "25 minutes",
+    "total_time": "50 minutes",
+    "notes": "Šećer i brašno meriti čašom od jogurta. Prijatno!",
+    "tags": "mafini, karamele, vanila"
+}

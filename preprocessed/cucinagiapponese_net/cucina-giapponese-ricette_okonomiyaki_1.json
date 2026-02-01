@@ -1,0 +1,12 @@
+{
+    "dish_name": "Okonomiyaki",
+    "description": "Piatto tipico giapponese simile a una frittata, ricco di ingredienti e varianti.",
+    "ingredients": "[{\"name\": \"cavolo\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"uova\", \"units\": null, \"amount\": 2}, {\"name\": \"erba cipollina\", \"units\": \"g\", \"amount\": 30}, {\"name\": \"pancetta fresca\", \"units\": \"fette\", \"amount\": 6}, {\"name\": \"farina 00\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"dashi\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"beni shoga\", \"units\": \"cucchiaio\", \"amount\": 1}, {\"name\": \"nagaimo\", \"units\": \"g\", \"amount\": 50}]",
+    "instructions": "1. Lava e strizza il cavolo, elimina le coste dure e tritalo. 2. Taglia l'erba cipollina e il beni shoga. 3. Sbatti le uova con la farina e il dashi. 4. Mescola il cavolo con gli altri ingredienti. 5. Cuoci in una piastra calda con olio. 6. Guarnisci con maionese e salsa okonomiyaki.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "60 minutes",
+    "notes": "Puoi aggiungere varianti come seppia o gamberi. L'okonomiyaki è un piatto unico e si accompagna bene con birra.",
+    "tags": "giapponese, street food, frittata"
+}

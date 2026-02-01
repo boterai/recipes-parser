@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tartă delicioasă și crocantă cu broccoli",
+    "description": "O idee de meniu savuroasă și foarte sănătoasă pe care ar trebui să o încercați.",
+    "ingredients": "[{\"name\": \"făină integrală sau un amestec de făină albă și făină integrală\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"sare\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"ulei de măsline\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"apă\", \"units\": \"ml\", \"amount\": 120}, {\"name\": \"mix de condimente uscate (oregano, cimbru, busuioc)\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"lapte\", \"units\": \"ml\", \"amount\": 300}, {\"name\": \"vegetă\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"făină integrală\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"brânză de vaci cremoasă\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"sare și piper\", \"units\": null, \"amount\": null}, {\"name\": \"verdețuri tocate foarte mărunt (mărar, cimbru, oregano, busuioc, pătrunjel)\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"broccoli congelat sau proaspăt\", \"units\": \"g\", \"amount\": 400}]",
+    "instructions": "1. Prepararea aluatului: amestecați făina, sarea, uleiul de măsline, apa și condimentele. Frământați aluatul și lăsați-l să se odihnească. 2. Întindeți aluatul într-o formă de tartă. 3. Prepararea umpluturii: încingeți uleiul, adăugați făina și laptele treptat, amestecând. Condimentați cu sare și piper. 4. Adăugați brânza de vaci și verdețurile. 5. Turnați umplutura peste aluat și adăugați broccoli. 6. Coaceți la 175°C timp de 25 de minute.",
+    "category": "Main Course",
+    "prep_time": "60 minutes",
+    "cook_time": "60 minutes",
+    "total_time": "2 hours",
+    "notes": null,
+    "tags": "rețete de gustare, rețete pentru aperitiv, rețete pentru cină"
+}

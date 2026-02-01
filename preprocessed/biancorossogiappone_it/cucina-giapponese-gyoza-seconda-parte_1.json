@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gyoza",
+    "description": "Ricetta per gyoza al tonno e verdure.",
+    "ingredients": "[{\"name\": \"Mezzo cavolo verza\", \"units\": null, \"amount\": null}, {\"name\": \"1 cipollotto verde\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"1 scatoletta di tonno sott’olio\", \"units\": \"g\", \"amount\": \"120\"}, {\"name\": \"1 rondella di zenzero fresco\", \"units\": \"cm\", \"amount\": \"1.5\"}, {\"name\": \"sale e pepe\", \"units\": null, \"amount\": \"q.b.\"}, {\"name\": \"1 pizzico di amido o fecola di patate\", \"units\": null, \"amount\": null}, {\"name\": \"40 dischi di pasta per gyoza\", \"units\": null, \"amount\": \"40\"}, {\"name\": \"olio per friggere\", \"units\": null, \"amount\": \"q.b.\"}, {\"name\": \"acqua\", \"units\": null, \"amount\": \"q.b.\"}]",
+    "instructions": "1. Cuocere il cavolo verza al vapore per pochi minuti. 2. Raffreddare e tagliare finemente. 3. Strizzare il cavolo e mescolare con cipollotto, zenzero, tonno, sale, pepe e amido. 4. Assemblare i gyoza con il ripieno. 5. Cuocere in padella con olio e acqua per completare la cottura al vapore.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Utilizzare ingredienti facilmente reperibili. Possibilità di varianti vegetariane o con carne diversa.",
+    "tags": "gyoza, cucina giapponese, ricetta"
+}

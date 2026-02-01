@@ -1,0 +1,12 @@
+{
+    "dish_name": "Baileys Martini",
+    "description": "krämig dessertdrink med vodka & kaffelikör",
+    "ingredients": "[{\"name\": \"Baileys Irish Cream\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"vodka\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"kaffelikör (t.ex. Kahlúa)\", \"units\": \"ml\", \"amount\": 20}, {\"name\": \"isbitar (till skakning)\", \"units\": \"st\", \"amount\": 6}, {\"name\": \"riven mörk choklad (garnityr)\", \"units\": \"tsk\", \"amount\": 1}]",
+    "instructions": "Kyl ett martiniglas med is eller i frysen. Fyll en shaker med is. Häll i Baileys, vodka och kaffelikör. Skaka kraftigt i 10–15 sekunder tills drinken är riktigt kall. Dubbelsila i det välkylda martiniglaset. Garnera med riven mörk choklad och servera direkt.",
+    "category": "Drinkar & cocktails",
+    "prep_time": "5 minutes",
+    "cook_time": null,
+    "total_time": "5 minutes",
+    "notes": "Gör den mer kaffig: Tillsätt 20 ml nybryggd espresso och minska kaffelikören något för en torrare profil. Justera sötman: För mindre sötma, öka vodkan med 10 ml. För mer dessertkänsla, byt kaffelikör mot chokladlikör.",
+    "tags": "drink, cocktail, dessert"
+}

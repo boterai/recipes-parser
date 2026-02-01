@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kuřecí prsa se žampiony",
+    "description": null,
+    "ingredients": "[{\"name\": \"Solamyl\", \"units\": \"lžíce\", \"amount\": 1}, {\"name\": \"Kuřecí prsa\", \"units\": \"kusy\", \"amount\": 4}, {\"name\": \"Sůl\", \"units\": \"lžička\", \"amount\": 1}, {\"name\": \"Olej stolní\", \"units\": \"gramů\", \"amount\": 200}, {\"name\": \"Máslo čerstvé\", \"units\": \"lžíce\", \"amount\": 2}, {\"name\": \"Žampiony čerstvé\", \"units\": \"gramů\", \"amount\": 100}, {\"name\": \"Mandle\", \"units\": \"gramů\", \"amount\": 40}, {\"name\": \"Vejce slepičí\", \"units\": \"kusy\", \"amount\": 2}, {\"name\": \"Kari koření\", \"units\": \"lžička\", \"amount\": 1}]",
+    "instructions": "1. Kuřecí prsa omyjeme, nakrájíme na tenké plátky a mírně rozklepeme. Osolíme, obalíme ve vejcích rozšlehaných se škrobovou moučkou a opečeme po obou stranách na rozehřátém tuku dozlatova. 2. Na másle podusíme očištěné a na plátky nakrájené žampiony. Přidáme karí koření a spařené, oloupané a nakrájené mandle. 3. Podáváme s rýží a přeléváme podušenými žampiony.",
+    "category": "Maso",
+    "prep_time": "40 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

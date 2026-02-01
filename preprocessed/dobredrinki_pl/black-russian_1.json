@@ -1,0 +1,12 @@
+{
+    "dish_name": "Black Russian",
+    "description": "Black Russian to drink wyjątkowy. Dzięki niemu możesz cieszyć się aromatem kawy, a jednocześnie zrelaksować przy wódce.",
+    "ingredients": "[{\"name\": \"wódka\", \"units\": \"ml\", \"amount\": 40}, {\"name\": \"likier kawowy\", \"units\": \"ml\", \"amount\": 20}]",
+    "instructions": "Weź szklankę typu old–fashioned, wypełnij ją lodem, a po wlaniu wódki i likieru starannie wymieszaj składniki.",
+    "category": "Drink",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Możesz poszerzyć przepis o 20 ml Coli i 2 łyżeczki soku z limonki, możesz też dodać odrobinę mleka lub śmietanki.",
+    "tags": "drink, wódka, likier kawowy"
+}

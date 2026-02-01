@@ -1,0 +1,12 @@
+{
+    "dish_name": "Delicious chicken leg sa oven",
+    "description": "A recipe for preparing chicken legs in the oven with a creamy sauce and cheese.",
+    "ingredients": "[{\"name\": \"manok panambol sariwa o defrosted\", \"units\": \"pcs\", \"amount\": 8}, {\"name\": \"makapal na non-acidic smetana\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"mababang-taba mayonesa\", \"units\": \"g\", \"amount\": 180}, {\"name\": \"asin\", \"units\": null, \"amount\": null}, {\"name\": \"pulang matamis paminta\", \"units\": null, \"amount\": null}, {\"name\": \"tuya dill\", \"units\": null, \"amount\": null}, {\"name\": \"matamis kampanilya paminta\", \"units\": null, \"amount\": null}, {\"name\": \"keso solid\", \"units\": \"g\", \"amount\": 160}, {\"name\": \"mirasol langis\", \"units\": \"ml\", \"amount\": 35}, {\"name\": \"adjika acute\", \"units\": \"large tablespoons\", \"amount\": 5}, {\"name\": \"sariwang lemon juice\", \"units\": \"fruit\", \"amount\": 1}, {\"name\": \"black matamis paminta\", \"units\": null, \"amount\": null}, {\"name\": \"tuya balanoy\", \"units\": null, \"amount\": null}, {\"name\": \"malaking bawang\", \"units\": \"cloves\", \"amount\": 2}, {\"name\": \"berdeng sibuyas\", \"units\": \"bundle\", \"amount\": 1}, {\"name\": \"perehil sariwang\", \"units\": \"bundle\", \"amount\": 1}]",
+    "instructions": "1. Wash the chicken legs and season with salt and pepper. Let them absorb the spices. 2. Prepare the sauce by mixing mayonnaise, sour cream, dill, and sweet pepper. 3. Grease a baking dish with oil, place the seasoned chicken legs, coat with the sauce, and sprinkle with grated cheese. 4. Bake in the oven for about 35 minutes. 5. For the second recipe, marinate the chicken legs with adjika, lemon juice, and other spices for 60-90 minutes, then bake in a culinary sleeve for 40 minutes.",
+    "category": "Main Course",
+    "prep_time": "60-90 minutes",
+    "cook_time": "35 minutes",
+    "total_time": "95-125 minutes",
+    "notes": "Serve with rice, mashed potatoes, or pasta.",
+    "tags": "chicken, oven, main course, recipe"
+}

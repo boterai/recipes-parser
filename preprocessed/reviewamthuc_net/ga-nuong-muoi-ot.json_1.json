@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gà Nướng Muối Ớt",
+    "description": "Món gà nướng muối ớt thơm ngon, hấp dẫn và dễ làm tại nhà.",
+    "ingredients": "[{\"name\": \"Gà ta\", \"units\": \"con (khoảng 1.5 – 2kg)\", \"amount\": \"1\"}, {\"name\": \"Tôm khô\", \"units\": \"g\", \"amount\": \"30\"}, {\"name\": \"Muối hột\", \"units\": \"muỗng canh\", \"amount\": \"2\"}, {\"name\": \"Bột ngọt\", \"units\": \"muỗng cà phê\", \"amount\": \"1\"}, {\"name\": \"Đường\", \"units\": \"muỗng cà phê\", \"amount\": \"1\"}, {\"name\": \"Tương ớt\", \"units\": \"muỗng cà phê\", \"amount\": \"1\"}, {\"name\": \"Mật ong\", \"units\": \"muỗng cà phê\", \"amount\": \"1\"}, {\"name\": \"Dầu điều\", \"units\": \"muỗng canh\", \"amount\": \"1\"}, {\"name\": \"Nước mắm\", \"units\": \"muỗng canh\", \"amount\": \"1\"}, {\"name\": \"Ớt bột\", \"units\": \"muỗng canh\", \"amount\": \"2\"}, {\"name\": \"Ớt xiêm xanh\", \"units\": \"quả\", \"amount\": \"15-20\"}, {\"name\": \"Đường trắng\", \"units\": \"g\", \"amount\": \"25\"}, {\"name\": \"Muối\", \"units\": \"g\", \"amount\": \"10\"}, {\"name\": \"Sữa đặc\", \"units\": \"g\", \"amount\": \"40\"}, {\"name\": \"Nước cốt chanh\", \"units\": \"ml\", \"amount\": \"50\"}, {\"name\": \"Lá chanh non\", \"units\": \"lá\", \"amount\": \"2\"}, {\"name\": \"Rau ăn kèm\", \"units\": null, \"amount\": null}, {\"name\": \"Giấy bạc\", \"units\": null, \"amount\": null}, {\"name\": \"Máy xay\", \"units\": null, \"amount\": null}, {\"name\": \"Xiên nướng\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Sơ chế gà: Rửa sạch gà, khử mùi tanh bằng muối và rượu. 2. Sơ chế tôm khô: Ngâm tôm khô trong nước. 3. Làm sốt ướp: Xay nhuyễn tỏi, ớt, sả và tôm khô, trộn với các gia vị khác. 4. Ướp gà: Xoa đều hỗn hợp sốt lên gà và ướp ít nhất 2-3 tiếng. 5. Nướng gà: Nướng gà trên bếp than hoặc lò nướng cho đến khi chín vàng. 6. Pha nước chấm: Xay nhuyễn ớt xiêm xanh, lá chanh, đường, muối, bột ngọt, nước cốt chanh và sữa đặc. 7. Thưởng thức: Dùng gà nướng với xôi hoặc cơm và rau sống.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "40 minutes",
+    "total_time": "55 minutes",
+    "notes": "Nên chọn gà ta hoặc gà thả vườn để có thịt ngon hơn.",
+    "tags": "gà, nướng, muối ớt, món ăn Việt Nam"
+}

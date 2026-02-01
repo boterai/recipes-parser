@@ -1,0 +1,12 @@
+{
+    "dish_name": "Polpette di Pollo",
+    "description": "Ricetta semplicissima e gustosa della cucina casalinga giapponese, le polpette di pollo.",
+    "ingredients": "[{\"name\": \"polpa di pollo\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"erba cipollina o porro\", \"units\": null, \"amount\": null}, {\"name\": \"zenzero grattugiato\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"salsa di soia\", \"units\": \"cucchiai\", \"amount\": 2}, {\"name\": \"sale\", \"units\": \"pizzico\", \"amount\": null}, {\"name\": \"fecola di mais\", \"units\": \"cucchiai\", \"amount\": 2}]",
+    "instructions": "1. Preparare la carne di pollo, mantenendo la pelle. 2. Tritare la carne e mescolarla con gli altri ingredienti. 3. Formare delle polpette e cuocerle nel brodo per 2-3 minuti.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "3 minutes",
+    "total_time": null,
+    "notes": "Le polpette possono essere servite con salsa teriyaki. È possibile aggiungere cartilagini per una consistenza migliore.",
+    "tags": "pollo, giapponese, polpette"
+}

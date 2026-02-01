@@ -1,0 +1,12 @@
+{
+    "dish_name": "Dijonsill med örter",
+    "description": "Ett tjusigt recept på smakrik dijonsill med örter som passar bra till midsommar.",
+    "ingredients": "[{\"name\": \"sill\", \"units\": \"burkar (à 450 g)\", \"amount\": 2}, {\"name\": \"turkisk yoghurt\", \"units\": \"dl\", \"amount\": 4}, {\"name\": \"dijonsenap\", \"units\": \"msk\", \"amount\": 2}, {\"name\": \"flytande honung\", \"units\": \"msk\", \"amount\": 1}, {\"name\": \"olivolja\", \"units\": \"msk\", \"amount\": 1}, {\"name\": \"skuren gräslök\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"skuren basilika\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"skuren persilja\", \"units\": \"dl\", \"amount\": 1}]",
+    "instructions": "Låt sillen rinna av väl. Blanda yoghurt med alla ingredienser. Vänd ner sillen. Låt sillen stå någon timme innan servering.",
+    "category": null,
+    "prep_time": "Över 60 min",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Servera med knäckebröd. Rätten är äggfri. Gör glutenfri: servera med glutenfritt bröd. Gör laktosfri: byt ut yoghurt mot laktosfri variant. Gör mjölkproteinfri: byt ut yoghurt mot Sour Supreme (innehåller soja).",
+    "tags": null
+}

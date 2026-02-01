@@ -1,0 +1,12 @@
+{
+    "dish_name": "Čorba od tikve",
+    "description": "Ukusna i zasitna supa savršen je vjesnik jeseni.",
+    "ingredients": "[{\"name\": \"mali luk\", \"units\": \"komad\", \"amount\": 1}, {\"name\": \"putera\", \"units\": \"kašike\", \"amount\": 4}, {\"name\": \"sjeckane tikve\", \"units\": \"šolja\", \"amount\": 6}, {\"name\": \"vode\", \"units\": \"šolja\", \"amount\": 3}, {\"name\": \"kocka kokošije supe\", \"units\": \"komad\", \"amount\": 1}, {\"name\": \"sušenog mažurana\", \"units\": \"kašičica\", \"amount\": 0.5}, {\"name\": \"krem sira\", \"units\": \"gr\", \"amount\": 500}, {\"name\": \"so\", \"units\": null, \"amount\": null}, {\"name\": \"biber\", \"units\": null, \"amount\": null}]",
+    "instructions": "U velikoj šerpi prodinstajte luk i margarin dok ne omekšaju. Dodajte tikvu, vodu i pileću supu. Umiješajte začine, so i biber i kuhajte dok tikva ne omekša oko 20 minuta. Sameljite tikvu i krem sir u multipraktiku i vratite u šerpu. Zagrijte i servirajte.",
+    "category": "Soup",
+    "prep_time": "20 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "50 minutes",
+    "notes": null,
+    "tags": "soup, pumpkin, autumn"
+}

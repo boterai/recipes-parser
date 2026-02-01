@@ -1,0 +1,12 @@
+{
+    "dish_name": "Cuketa a žampiony v těstíčku",
+    "description": null,
+    "ingredients": "[{\"name\": \"Cuketa\", \"units\": \"gramů\", \"amount\": 250}, {\"name\": \"Žampiony čerstvé\", \"units\": \"gramů\", \"amount\": 250}, {\"name\": \"Mouka pšeničná hladká T 650\", \"units\": \"gramů\", \"amount\": 100}, {\"name\": \"Sůl\", \"units\": \"gramů\", \"amount\": 6}, {\"name\": \"Citronová kůra\", \"units\": \"gramů\", \"amount\": 6}, {\"name\": \"Olej olivový extra panenský\", \"units\": \"gramů\", \"amount\": 20}, {\"name\": \"Víno bílé\", \"units\": \"mililitrů\", \"amount\": 250}, {\"name\": \"Bazalka\", \"units\": \"gramů\", \"amount\": 10}, {\"name\": \"Olej slunečnicový\", \"units\": \"gramů\", \"amount\": 60}]",
+    "instructions": "1. Cuketu nakrájíme na kroužky tak, že ji nejdříve nakrájíme na silnější kolečka a nožem opatrně vyřízneme střed se semínky. Ze žampionů vybereme menší kousky. 2. Do misky nasypeme mouku, sůl, strouhanou citronovou kůru, přilijeme bílé víno a trochu olivového oleje. Vymícháme těstíčko, ve kterém obalujeme jednotlivé kousky cukety a žampiony. V pánvi rozpálíme slunečnicový olej, přiložíme obalenou zeleninu a usmažíme dozlatova. Můžeme použít i fritovací hrnec. 3. Usmažené kousky upravíme na servírovací mísu, posypeme posekanou čerstvou bazalkou a podáváme s nějakou pikantní omáčkou nebo dipem.",
+    "category": "Teplé předkrmy",
+    "prep_time": "21 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

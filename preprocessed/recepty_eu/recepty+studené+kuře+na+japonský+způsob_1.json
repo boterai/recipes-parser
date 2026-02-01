@@ -1,0 +1,12 @@
+{
+    "dish_name": "Studené kuře na japonský způsob",
+    "description": null,
+    "ingredients": "[{\"name\": \"kuřecí prsíčka\", \"units\": null, \"amount\": null}, {\"name\": \"sůl\", \"units\": null, \"amount\": null}, {\"name\": \"voda\", \"units\": \"ml\", \"amount\": \"150\"}, {\"name\": \"víno\", \"units\": null, \"amount\": null}]",
+    "instructions": "Kuřecí prsíčka propícháme vidličkou, osolíme, pokapeme, nalijeme 150 ml vody, přilijeme zbylé víno a přidáme kuřecí.",
+    "category": "Drůbeží maso",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "studené, kuře, japonský způsob"
+}

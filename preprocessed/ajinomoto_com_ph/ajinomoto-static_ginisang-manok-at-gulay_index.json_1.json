@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ginisang Manok at Gulay",
+    "description": "A Filipino dish made with chicken and vegetables, sautéed with seasoning.",
+    "ingredients": "[{\"name\": \"Mantika\", \"units\": \"kutsara (15ml)\", \"amount\": \"1\"}, {\"name\": \"Sibuyas\", \"units\": \"tasa (35 grams)\", \"amount\": \"1/4\"}, {\"name\": \"Bawang\", \"units\": \"kutsara (12 grams)\", \"amount\": \"1\"}, {\"name\": \"Manok\", \"units\": \"tasa (250 grams)\", \"amount\": \"1 1/2\"}, {\"name\": \"Carrot\", \"units\": \"tasa (100 grams)\", \"amount\": \"1\"}, {\"name\": \"Repolyo\", \"units\": \"tasa (150 grams)\", \"amount\": \"3\"}, {\"name\": \"Paminta\", \"units\": null, \"amount\": \"pinch\"}, {\"name\": \"Chickensavor® All-in-One Seasoning mix\", \"units\": \"pakete\", \"amount\": \"1\"}]",
+    "instructions": "1. Sa isang kawali na may mainit na mantika, mag-gisa ng sibuyas, buwang, at manok. 2. Idagdag ang carrots at repolyo. 3. Ihalo ang paminta at ChickenSavor® Seasoning mix.",
+    "category": "Main Course",
+    "prep_time": "5 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Ayon sa iyong nais, maari itong sagdagn ng kamote o patatas para sa dagdag sustansya.",
+    "tags": "Filipino, Chicken, Vegetables, Main Course"
+}

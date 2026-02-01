@@ -1,0 +1,12 @@
+{
+    "dish_name": "Torta ai Frutti di Bosco Surgelati e Yogurt",
+    "description": "Un dolce fresco e delizioso, perfetto per una merenda estiva o per un dessert leggero.",
+    "ingredients": "[{\"name\": \"biscotti secchi\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"burro fuso\", \"units\": \"g\", \"amount\": 80}, {\"name\": \"zucchero di canna\", \"units\": \"cucchiai\", \"amount\": 2}, {\"name\": \"yogurt bianco naturale\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"panna fresca liquida\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"zucchero a velo\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"gelatina alimentare\", \"units\": \"fogli\", \"amount\": 4}, {\"name\": \"latte\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"frutti di bosco surgelati\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"zucchero\", \"units\": \"cucchiai\", \"amount\": 2}, {\"name\": \"succo di limone\", \"units\": \"cucchiaio\", \"amount\": 1}, {\"name\": \"frutti di bosco freschi o surgelati\", \"units\": null, \"amount\": null}, {\"name\": \"zucchero a velo\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Tritate finemente i biscotti e mescolateli con burro fuso e zucchero. Pressate nella tortiera e refrigerate. 2. Ammorbidite la gelatina in acqua, scaldate il latte e sciogliete la gelatina. 3. Montate la panna e mescolate con yogurt e gelatina. 4. Versate la crema sulla base e refrigerate per almeno 5 ore. 5. Preparate la salsa con frutti di bosco, zucchero e succo di limone. 6. Decorate la torta con la salsa e frutti di bosco freschi.",
+    "category": "Dessert",
+    "prep_time": "30 minutes",
+    "cook_time": null,
+    "total_time": "5 hours",
+    "notes": "Può essere personalizzata con yogurt greco o frutta fresca di stagione.",
+    "tags": "Torta,Yogurt"
+}

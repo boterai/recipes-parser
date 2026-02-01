@@ -1,0 +1,12 @@
+{
+    "dish_name": "Crêpes faciles",
+    "description": "Une recette simple et rapide pour préparer des crêpes délicieuses.",
+    "ingredients": "[{\"name\": \"Farine\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"Lait\", \"units\": \"cl\", \"amount\": 50}, {\"name\": \"Œuf(s)\", \"units\": null, \"amount\": 3}, {\"name\": \"Sucre en poudre\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"Sucre vanillé\", \"units\": \"sachet\", \"amount\": 1}, {\"name\": \"Sel\", \"units\": \"pincée\", \"amount\": 1}]",
+    "instructions": "1 : Préparation de la pâte. Dans un saladier, mélangez la farine, le sel et le sucre en poudre. Creusez ensuite un puits pour y casser les œufs. Mélangez en effectuant des cercles du centre vers l’extérieur. Versez ensuite le lait petit à petit, puis ajoutez le sucre vanillé. Laissez reposer 30 min. 2 : Cuisson des crêpes. Avec un coton, badigeonnez d’huile le fond de votre crêpière et faites-la chauffer à feu vif. Une fois bien chaude, versez-y une louche de pâte et laissez cuire 3 min de chaque côté. Procédez ainsi jusqu’à épuisement de la pâte. 3 : Conservation des crêpes. Empilez les crêpes sur une assiette, en les recouvrant éventuellement d’un torchon propre pour les conserver au chaud !",
+    "category": "Dessert",
+    "prep_time": "7 minutes",
+    "cook_time": "3 minutes",
+    "total_time": "10 minutes",
+    "notes": "Pour une recette de crêpes légère, troquez le sucre blanc pour du sucre de coco et le lait de vache pour du lait d’amande ou d’avoine.",
+    "tags": "Desserts, Crêpes, Facile, Rapide"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Vin chaud facile",
+    "description": "Une recette de vin chaud facile à réaliser qui réchauffera les cœurs.",
+    "ingredients": "[{\"name\": \"Vin rouge\", \"units\": \"l\", \"amount\": 1}, {\"name\": \"Sucre roux\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"Orange(s) bio\", \"units\": null, \"amount\": 3}, {\"name\": \"Bâton(s) de cannelle\", \"units\": null, \"amount\": 3}, {\"name\": \"Etoile de Badiane\", \"units\": null, \"amount\": 2}, {\"name\": \"Clou(s) de girofle\", \"units\": null, \"amount\": 2}]",
+    "instructions": "Étape 1: Lavez et séchez les oranges. Pressez le jus de deux d'entre elles et coupez la troisième en rondelles. Étape 2: Versez le vin dans une casserole, ajoutez le jus d’orange ainsi que le sucre roux et portez à ébullition. Étape 3: Ajoutez les bâtons de cannelle cassés en morceaux, les clous de girofle et les étoiles de badiane. Étape 4: Couvrez et laissez infuser 15 min. Étape 5: Répartissez les rondelles d’orange dans 6 verres, versez le vin chaud par-dessus et servez immédiatement.",
+    "category": "Boissons",
+    "prep_time": "5 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "20 minutes",
+    "notes": "Vous pouvez servir ce vin chaud facile avec des biscuits à la cannelle ou une tranche de pain d'épices.",
+    "tags": "vin chaud, hiver, facile, boisson"
+}

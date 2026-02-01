@@ -1,0 +1,12 @@
+{
+    "dish_name": "Deluxe Sugar Cookies",
+    "description": "Tender sugar cookies with a delicate crispness and a soft, buttery center, subtly flavored with vanilla and almond.",
+    "ingredients": "[{\"name\": \"butter\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"confectioners' sugar\", \"units\": \"cups\", \"amount\": 1.5}, {\"name\": \"egg\", \"units\": \"large\", \"amount\": 1}, {\"name\": \"vanilla extract\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"almond extract\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"all-purpose flour\", \"units\": \"cups\", \"amount\": 2.5}, {\"name\": \"baking soda\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"cream of tartar\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"granulated sugar\", \"units\": \"for sprinkling\", \"amount\": null}]",
+    "instructions": "1. Cream the butter and confectioners' sugar until smooth and creamy. 2. Beat in the egg, vanilla, and almond extract. 3. In a separate bowl, whisk together flour, baking soda, and cream of tartar. 4. Add dry ingredients to wet mixture and mix until combined. 5. Chill the dough for 2-3 hours. 6. Preheat oven to 375°F (190°C). 7. Roll out dough and cut into shapes. 8. Sprinkle with granulated sugar. 9. Bake for 7-8 minutes until edges are lightly golden.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "8 minutes",
+    "total_time": "2 hours 23 minutes",
+    "notes": "Chill the dough to prevent spreading. Can be decorated with icing or sprinkles.",
+    "tags": "cookies, dessert, baking, sugar cookies"
+}

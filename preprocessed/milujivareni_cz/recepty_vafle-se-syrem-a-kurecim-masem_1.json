@@ -1,0 +1,12 @@
+{
+    "dish_name": "Vafle se sýrem a kuřecím masem",
+    "description": null,
+    "ingredients": "[{\"name\": \"Máslo čerstvé\", \"units\": \"gramů\", \"amount\": 100}, {\"name\": \"Vejce slepičí\", \"units\": \"kusy\", \"amount\": 3}, {\"name\": \"Mouka žitná bílá\", \"units\": \"gramů\", \"amount\": 100}, {\"name\": \"Kypřicí prášek do pečiva\", \"units\": \"gramů\", \"amount\": 5}, {\"name\": \"Mléko - podmáslí\", \"units\": \"mililitrů\", \"amount\": 100}, {\"name\": \"Mouka pšeničná celozrnná\", \"units\": \"gramů\", \"amount\": 50}, {\"name\": \"Sýr krémový\", \"units\": \"gramů\", \"amount\": 40}, {\"name\": \"Kuřecí maso vařené\", \"units\": \"gramů\", \"amount\": 100}, {\"name\": \"Okurka salátová\", \"units\": \"gramů\", \"amount\": 80}, {\"name\": \"Rajčata\", \"units\": \"gramů\", \"amount\": 60}, {\"name\": \"Tuk\", \"units\": \"gramů\", \"amount\": 10}]",
+    "instructions": "1. Vařená nebo pečená kuřecí prsíčka nakrájíme na nudličky, salátovou okurku na kolečka, rajčata na plátky. 2. Do mísy nasypeme mouku, prášek do pečiva, přidáme máslo, vejce, přilijeme podmáslí a vypracujeme těsto na vafle. Vaflovač potřeme tukem a z těsta pečeme postupně křupavé vafle. 3. Vafle rozdělíme na talířky, pomažeme je krémovým sýrem, na každou položíme kolečko okurky, posypeme nudličkami kuřecího masa a navrch položíme plátek rajčete. Podáváme vychladlé.",
+    "category": "Studené předkrmy",
+    "prep_time": null,
+    "cook_time": "30 min.",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

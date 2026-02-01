@@ -1,0 +1,12 @@
+{
+    "dish_name": "Čorba sa tikvom i mrkvom",
+    "description": "Prava narandžasta eksplozija. Savršena za hladne zimske dane.",
+    "ingredients": "[{\"name\": \"tikva\", \"units\": \"gr\", \"amount\": 800}, {\"name\": \"mrkve\", \"units\": \"velike\", \"amount\": 2}, {\"name\": \"luk\", \"units\": null, \"amount\": 1}, {\"name\": \"vrhnja za kuhanje\", \"units\": \"ml\", \"amount\": 150}, {\"name\": \"sjemenki tikve\", \"units\": \"gr\", \"amount\": 50}, {\"name\": \"So\", \"units\": null, \"amount\": null}, {\"name\": \"biber\", \"units\": null, \"amount\": null}, {\"name\": \"maslinovo ulje\", \"units\": null, \"amount\": null}]",
+    "instructions": "Luk izrežite na kockice pa izdinstajte na maslinovom ulju. Tikvu očistite i izrežite na kockice zajedno sa mrkvom. Dodajte u šerpu i kuhajte 10-ak minuta. Podlijte vodom i kuhajte pola sata dok ne omekša. Sameljite štapnim miskerom pa dodajte vrhnje za kuhanje. Pospite sjemenkama i servirajte.",
+    "category": null,
+    "prep_time": "15 minutes",
+    "cook_time": "45 minutes",
+    "total_time": "1 h 00 min",
+    "notes": null,
+    "tags": null
+}

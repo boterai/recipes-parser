@@ -1,0 +1,12 @@
+{
+    "dish_name": "Dunje punjene orasima",
+    "description": "Punjene dunje s orasima, ili dunjfahije, su slatkiš koji se priprema od dunja punjenih orašastim plodovima.",
+    "ingredients": "[{\"name\": \"dunje\", \"units\": null, \"amount\": 4}, {\"name\": \"šećer\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"voda\", \"units\": \"l\", \"amount\": 0.5}, {\"name\": \"cimet\", \"units\": \"štapić\", \"amount\": 1}, {\"name\": \"karanfilić\", \"units\": null, \"amount\": 2}, {\"name\": \"vanil šećer\", \"units\": null, \"amount\": 1}, {\"name\": \"limun\", \"units\": null, \"amount\": 1}, {\"name\": \"mleveni orasi\", \"units\": \"kašike\", \"amount\": 4}, {\"name\": \"suvog grožđa\", \"units\": \"kašika\", \"amount\": 1}, {\"name\": \"rum\", \"units\": \"čašica\", \"amount\": 1}, {\"name\": \"belance\", \"units\": \"od većeg jajeta\", \"amount\": 1}]",
+    "instructions": "Dunje operite i izdubite. Suvo grožđe prelijte rumom i ostavite da se natapa. U šerpu sipajte vodu, stavite dunje i kuvajte dok ne omekšaju. Ocedite ih i složite u tepsiju. Rernu zagrijte na 180-200°C. Umutite belance, dodajte orahe i suvo grožđe, punite dunje ovom smesom. Prekrijte alufolijom i pecite 10-15 minuta. Pripremite sirup od vode, šećera, cimeta i limuna. Pečene dunje prelijte sirupom i poslužite.",
+    "category": "Slatkiši",
+    "prep_time": null,
+    "cook_time": "10-15 minutes",
+    "total_time": null,
+    "notes": "Umesto oraha možete koristiti lešnik, badem, pistaće.",
+    "tags": "voće, slatkiši, orasi, dunje, cimet, jednostavno, bez mesa, vegetarijano, bez glutena, posno"
+}

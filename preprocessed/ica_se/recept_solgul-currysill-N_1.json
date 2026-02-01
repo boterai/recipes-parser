@@ -1,0 +1,12 @@
+{
+    "dish_name": "Solgul currysill",
+    "description": "Det här receptet på solgul currysill är en härlig och krämig sill med mycket smak.",
+    "ingredients": "[{\"name\": \"inläggningssill\", \"units\": \"förp (à 420 g)\", \"amount\": 2}, {\"name\": \"hett vatten\", \"units\": \"msk\", \"amount\": 2}, {\"name\": \"honung\", \"units\": \"msk\", \"amount\": 1}, {\"name\": \"curry\", \"units\": \"msk\", \"amount\": 1}, {\"name\": \"stort äpple\", \"units\": \"st\", \"amount\": 1}, {\"name\": \"gräddfil\", \"units\": \"dl\", \"amount\": 3}, {\"name\": \"salt\", \"units\": \"tsk\", \"amount\": 0.5}, {\"name\": \"svartpeppar\", \"units\": \"från kvarnen\", \"amount\": null}, {\"name\": \"hackad persilja\", \"units\": \"att strö över\", \"amount\": null}]",
+    "instructions": "Låt sillen rinna av väl. Blanda vatten, honung och curry, låt svalna. Skär äpplet i strimlor. Blanda curryblandningen med gräddfil och salt. Vänd ner äpplet och sillen. Låt sillen stå någon timme innan servering. Strö hackad persilja över vid serveringen.",
+    "category": null,
+    "prep_time": "Över 60 min",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Fri från gluten och ägg. Gör laktosfri: välj laktosfri gräddfil. Gör möjölkproteinfri: byt gräddfil mot mjölkproteinfri ersättningsprodukt.",
+    "tags": null
+}

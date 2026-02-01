@@ -1,0 +1,12 @@
+{
+    "dish_name": "Nanuk szelet",
+    "description": "A Nanuk szelet igazi múltidéző sütemény, aminek már az illata is emlékeket hoz elő.",
+    "ingredients": "[{\"name\": \"tojás\", \"units\": \"db\", \"amount\": 4}, {\"name\": \"porcukor\", \"units\": \"dkg\", \"amount\": 25}, {\"name\": \"víz\", \"units\": \"evőkanál\", \"amount\": 6}, {\"name\": \"liszt\", \"units\": \"dkg\", \"amount\": 12}, {\"name\": \"sütőpor\", \"units\": \"csomag\", \"amount\": 0.5}, {\"name\": \"darált dió\", \"units\": \"dkg\", \"amount\": 20}, {\"name\": \"tej\", \"units\": \"dl\", \"amount\": 2.5}, {\"name\": \"liszt\", \"units\": \"evőkanál\", \"amount\": 3}, {\"name\": \"vaníliás cukor\", \"units\": \"csomag\", \"amount\": 1}, {\"name\": \"tojás\", \"units\": \"db\", \"amount\": 1}, {\"name\": \"vaj\", \"units\": \"dkg\", \"amount\": 25}, {\"name\": \"porcukor\", \"units\": \"dkg\", \"amount\": 20}, {\"name\": \"darált dió\", \"units\": \"dkg\", \"amount\": 10}, {\"name\": \"étcsokoládé\", \"units\": \"dkg\", \"amount\": 10}, {\"name\": \"vaj\", \"units\": \"dkg\", \"amount\": 5}]",
+    "instructions": "A tojásokat szétválasztjuk. A tojássárgákat a porcukorral és a hideg vízzel simára, habosra keverjük. Hozzáadjuk a liszt, a sütőport és a darált dió keverékét, majd óvatosan beleforgatjuk a kemény habbá vert tojásfehérjét. A masszát sütőpapírral bélelt, közepes méretű tepsibe öntjük és előmelegített, 200 fokos sütőben körülbelül 20–25 perc alatt megsütjük. Tűpróbával ellenőrizzük, majd teljesen kihűtjük. A krémhez a tejet a liszttel és a vaníliás cukorral csomómentesre keverjük, hozzáadjuk a tojást, elkeverjük, majd sűrű krémmé főzzük és hagyjuk kihűlni. A vajat a porcukorral habosra keverjük, majd hozzáadjuk a kihűlt főzött krémet. Végül beleforgatjuk a darált diót is. A kész krémet egyenletesen a kihűlt tészta tetejére simítjuk. A csokimázhoz az étcsokoládét a vajjal együtt felolvasztjuk, majd a krém tetején elsimítjuk. Hűvös helyen pihentetjük, hogy a rétegek szépen összeérjenek, ezután szeleteljük.",
+    "category": "Dessert",
+    "prep_time": "20 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "40 minutes",
+    "notes": null,
+    "tags": "desszert, sütemény, édesség"
+}

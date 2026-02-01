@@ -1,0 +1,12 @@
+{
+    "dish_name": "Fileti skuše u mediteranskom umaku",
+    "description": "Fileti skuše so gurmanska poslastica. Lahko jih uživamo samostojno, odlični pa so tudi postreženi s testeninami in drugimi prilogami za posebna kulinarična doživetja.",
+    "ingredients": "[{\"name\": \"Skuša Mediteran\", \"units\": \"125 G\", \"amount\": 2}, {\"name\": \"stabljika celera\", \"units\": null, \"amount\": 1}, {\"name\": \"luk\", \"units\": null, \"amount\": 1}, {\"name\": \"maslinova ulja\", \"units\": \"žlice\", \"amount\": 2}, {\"name\": \"češnja češnjaka\", \"units\": null, \"amount\": 2}, {\"name\": \"sušene rajčice\", \"units\": null, \"amount\": 2}, {\"name\": \"suhi čili\", \"units\": null, \"amount\": 1}, {\"name\": \"cherry rajčica\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"grančica sveže bosiljka\", \"units\": null, \"amount\": 1}, {\"name\": \"nasjeckane rajčice\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"soli\", \"units\": \"žličica\", \"amount\": 1}, {\"name\": \"zelenih maslina\", \"units\": \"g\", \"amount\": 50}]",
+    "instructions": "Na štednjak stavite veću tavu. U njoj zagrijte maslinovo ulje na kojem uz miješanje prepržite nasjeckani luk, nasjeckanu stabljiku celera, nasjeckane češnjeve češnjaka, nasjeckanu sušenu rajčicu i nasjeckani suhi čili. Dodajte nasjeckanu rajčicu i lagano pirjajte oko 10 minuta da se umak zgusne. Redovito miješajte i začinite solju po ukusu, dodajte masline i promiješajte. Filete skuša rasporedite po umaku i odmaknite jelo sa štednjaka. Pospite svježim bosiljkom i poslužite sa svježim kruhom.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "30 min",
+    "total_time": null,
+    "notes": "Jelo se može poslužiti kao hladno ili toplo predjelo sa svježim kruhom. Umak možete upotrijebiti i kao preljev za tjesteninu po želji. Mediteranski umak sa skušom možete poslužiti i kao doručak s prženim jajetom. Umak možete pripremiti i unaprijed i čuvati ga smrznutim do mjesec dana. Mediteranski umak podgrijte i poslužite uz ribu.",
+    "tags": null
+}

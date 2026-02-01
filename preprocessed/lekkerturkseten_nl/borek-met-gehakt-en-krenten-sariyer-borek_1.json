@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sariyer Borek",
+    "description": "Sariyer Börek is een knapperige Turkse street food snack, dun deeg blad gevuld met gehakt, pijnboompitten en krenten.",
+    "ingredients": "[{\"name\": \"baklava deeg\", \"units\": \"bladeren\", \"amount\": 14}, {\"name\": \"gehakt\", \"units\": \"gr.\", \"amount\": 400}, {\"name\": \"ui\", \"units\": null, \"amount\": 1}, {\"name\": \"gedroogde bessen of rozijntjes\", \"units\": \"eetlepels\", \"amount\": 2}, {\"name\": \"pijnboompitten\", \"units\": \"eetlepels\", \"amount\": 2}, {\"name\": \"kaneel poeder\", \"units\": \"theelepel\", \"amount\": 0.5}, {\"name\": \"zout\", \"units\": null, \"amount\": null}, {\"name\": \"peper\", \"units\": null, \"amount\": null}, {\"name\": \"ei\", \"units\": null, \"amount\": 1}, {\"name\": \"melk\", \"units\": \"ml.\", \"amount\": 100}, {\"name\": \"olijfolie\", \"units\": \"ml.\", \"amount\": 50}]",
+    "instructions": "Doe de gedroogde bessen in heet water zodat die zachter worden. Bak het gehakt al roerend in de pan. Snij de ui fijn en bak die ook met het gehakt. Voeg pijnboompitten en gedroogde bessen toe aan het gehakt mengsel. Doe zout, peper en kaneel poeder erbij en roer alles goed door. Zet het vuur uit en laat het mengsel afkoelen. Voor de saus, klop het ei met melk en olijfolie. Leg het eerste deeg blad op het aanrecht. Besprenkel dat blad met saus. Leg het tweede blad erop en herhaal het besprenkelen met het tweede, derde en vierde baklava deegblad. Leg nu het vijfde blad erop (Let op!! geen saus op het vijfde laagje) en verdeel het gehakt mengsel aan de brede kant van het deeg. Rol het deeg voorzichtig naar boven toe. Besprenkel het met saus aan het eind om de borek dicht te plakken. Geef nu de borek een U-vorm en leg zo alle 3 börek op de oven schaal. Smeer de overgebleven saus en/of olijfolie over de borek. Bak de börek in een verwarmde oven op 200 graden, ongeveer 35-40 minuten totdat ze goud bruin worden.",
+    "category": "Deeg",
+    "prep_time": "15 minutes",
+    "cook_time": "45 minutes",
+    "total_time": "60 minutes",
+    "notes": "Je kan het deeg zelf maken. Dat kost dan tijd en moeite. Gelukkig kunnen we deze börek ook maken met baklava deeg. Het is dan heel makkelijk te maken.",
+    "tags": "Turks, snack, hoofdgerecht"
+}

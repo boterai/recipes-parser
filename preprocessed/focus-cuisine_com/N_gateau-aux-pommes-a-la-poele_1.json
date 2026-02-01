@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gâteau aux pommes à la poêle",
+    "description": "Recette de gâteau aux pommes que vous pouvez réaliser sur votre lieu de vacances et/ou en l’absence de four.",
+    "ingredients": "[{\"name\": \"farine\", \"units\": \"verre\", \"amount\": 1}, {\"name\": \"levure chimique\", \"units\": \"cuillère à café\", \"amount\": 1}, {\"name\": \"sucre en poudre\", \"units\": \"verre\", \"amount\": 0.5}, {\"name\": \"sucre en poudre\", \"units\": \"cuillères à soupe\", \"amount\": 2}, {\"name\": \"lait\", \"units\": \"verre\", \"amount\": 0.5}, {\"name\": \"rhum\", \"units\": \"cuillère à soupe\", \"amount\": 1}, {\"name\": \"oeufs\", \"units\": null, \"amount\": 2}, {\"name\": \"pommes\", \"units\": \"ou 3 selon leur taille\", \"amount\": 2}, {\"name\": \"beurre\", \"units\": \"noisettes\", \"amount\": 2}, {\"name\": \"sucre glace\", \"units\": \"facultatif\", \"amount\": null}]",
+    "instructions": "Épluchez les pommes, retirez le trognon et coupez-les en dés. Dans une poêle de 20-22 cm maxi, déposez une noisette de beurre, les dés de pommes et saupoudrez de deux cuillères à soupe de sucre. Sur feu vif, faites revenir les pommes jusqu’à ce qu’elles prennent une jolie couleur dorée. Pendant ce temps, dans un saladier, mélangez la farine, la levure, le sucre puis ajoutez les oeufs, le rhum et terminez par le lait que vous verserez petit à petit en ne cessant de fouetter pour éviter la formation de grumeaux. La pâte doit être bien lisse et homogène. Versez la pâte sur les pommes, et baissez le feu au minimum. Couvrez et laissez cuire à feu très doux pendant environ 6 minutes. Le dessus du gâteau ne doit plus être liquide. Faites glisser très délicatement le gâteau sur une assiette. Déposez une nouvelle noisette de beurre dans la poêle et retournez le gâteau sur la poêle pour cuire l’autre côté pendant 3 à 4 minutes toujours à feu doux. Faites à nouveau glisser la gâteau aux pommes sur un plat de service et saupoudrez de sucre glace. C’est prêt ! Vous n’avez plus qu’à vous régaler !!!",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "10 minutes",
+    "total_time": null,
+    "notes": "Vous pouvez remplacer les pommes par d’autres fruits comme la pêche.",
+    "tags": "gâteau, pommes, dessert, facile"
+}

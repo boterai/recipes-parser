@@ -1,0 +1,12 @@
+{
+    "dish_name": "Hovězí po japonsku s nudlemi soba",
+    "description": null,
+    "ingredients": "[{\"name\": \"tmavé sójové omáčky\", \"units\": \"lžic\", \"amount\": 5}, {\"name\": \"nasekané stroužky česneku\", \"units\": null, \"amount\": 2}, {\"name\": \"pasty z křenu wasabi\", \"units\": \"lžíce\", \"amount\": 1}, {\"name\": \"libové svíčkové\", \"units\": \"g\", \"amount\": 450}, {\"name\": \"japonských pohankových nudlí soba\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"slunečnicového oleje\", \"units\": \"lžíce\", \"amount\": 2}, {\"name\": \"velké červené papriky\", \"units\": null, \"amount\": 1}, {\"name\": \"jarních cibulek\", \"units\": \"svazek\", \"amount\": 1}, {\"name\": \"hub šitake\", \"units\": \"g\", \"amount\": 125}, {\"name\": \"vývaru\", \"units\": \"ml\", \"amount\": 750}, {\"name\": \"japonských řas nori\", \"units\": \"plát\", \"amount\": 1}, {\"name\": \"nasekaného čerstvého koriandru\", \"units\": \"g\", \"amount\": 15}]",
+    "instructions": "Smícháme 3 lžíce sójové omáčky, česnek, kukuřičnou mouku a wasabi. Přidáme hovězí maso a promícháme. Uvaříme nudle podle návodu na obalu. V pánvi na oleji opečeme červenou papriku, jarní cibulky, houby a za stálého mícháme smažíme do měkka asi 4 minuty. Směs vybereme z pánve a na oleji osmažíme i maso doměkka a vyndáme z pánve. Do pánve pak nalijeme vývar, 2 lžíce sójové omáčky, přidáme nudle, zeleninu, řasy nori a koriandr. Nudle, zeleninu a maso rozdělíme do misek, zalijeme vývarem a podáváme.",
+    "category": "Zahraniční recepty",
+    "prep_time": null,
+    "cook_time": "1 hour",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Bečki čokoladni keksi",
+    "description": "Prhki bečki keksi umočeni u čokoladu, s nježnom teksturom i glatkim čokoladnim premazom.",
+    "ingredients": "[{\"name\": \"maslac\", \"units\": \"g\", \"amount\": 240}, {\"name\": \"šećer u prahu\", \"units\": \"g\", \"amount\": 65}, {\"name\": \"sol\", \"units\": null, \"amount\": null}, {\"name\": \"glatko brašno\", \"units\": \"g\", \"amount\": 230}, {\"name\": \"kukuruzni škrob\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"kakao prah\", \"units\": \"g\", \"amount\": 25}, {\"name\": \"liker od kave\", \"units\": \"žličica\", \"amount\": 1}, {\"name\": \"mlijeko\", \"units\": \"žlice\", \"amount\": \"1-2\"}, {\"name\": \"tamna čokolada\", \"units\": \"g\", \"amount\": 120}, {\"name\": \"šarene mrvice\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. U posudi izmiksaj omekšali maslac dok ne postane potpuno gladak. Dodaj prosijani šećer u prahu i prstohvat soli te ponovno miksaj dok smjesa ne postane lagana i pjenasta. 2. U zasebnoj posudi prosij zajedno brašno, kakao i kukuruzni škrob. Dodaj ih u smjesu od maslaca zajedno s likerom od kave ili ekstraktom vanilije. Miksaj na laganoj brzini samo dok se svi sastojci ne povežu. 3. Ako ti se tijesto čini previše čvrsto za istiskivanje, dodaj 1-2 žlice mlijeka dok smjesa ne postane mekana, ali ne premekana. 4. Pripremi dresir vrećicu s nastavkom u obliku zvjezdice. Napuni vrećicu tijestom za kekse i istiskuj spirale na lim obložen papirom za pečenje. 5. Ohladi oblikovane kekse 20-30 minuta. 6. Peci kekse na 170°C 11–12 minuta. 7. Otopi čokoladu. Umoči ohlađeni keks do pola, lagano otresajući višak čokolade.",
+    "category": "Desert",
+    "prep_time": "20 minutes",
+    "cook_time": "12 minutes",
+    "total_time": "30 minutes",
+    "notes": "Ovaj osnovni recept stoji savršen je sam po sebi: s njime ćeš dobiti prhke, duboko čokoladne i elegantne bečke kekse.",
+    "tags": "keksi, čokolada, desert, blagdanski recept"
+}

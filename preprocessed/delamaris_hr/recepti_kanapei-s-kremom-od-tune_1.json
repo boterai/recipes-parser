@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kanapei s kremom od tune",
+    "description": null,
+    "ingredients": "[{\"name\": \"pašteta od tune premium\", \"units\": \"x 80 g\", \"amount\": \"2\"}, {\"name\": \"nemasne skute\", \"units\": \"g\", \"amount\": \"200\"}, {\"name\": \"limunov sok\", \"units\": null, \"amount\": null}, {\"name\": \"crvena paprika\", \"units\": null, \"amount\": null}, {\"name\": \"sol i papar\", \"units\": null, \"amount\": null}, {\"name\": \"kruščići\", \"units\": null, \"amount\": null}]",
+    "instructions": "Skutu zgnječite, dodajte papriku, začinite i dodajte paštetu od tune. Kremu od tune stavite na kruščiće i ukrasite crnim maslinama i peršinom.",
+    "category": null,
+    "prep_time": "10 min",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

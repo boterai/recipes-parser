@@ -1,0 +1,12 @@
+{
+    "dish_name": "Wild Garlic Irish Soda Bread",
+    "description": "This wild garlic bread is yeast-free and it doesn’t require any waiting. Instead, it uses baking soda and kefir milk with some wild garlic leaves which gives it a vibrant green color.",
+    "ingredients": "[{\"name\": \"all-purpose flour\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"whole grain spelt flour\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"kefir milk\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"baking soda\", \"units\": \"g\", \"amount\": 6}, {\"name\": \"sea salt\", \"units\": \"g\", \"amount\": 6}, {\"name\": \"wild garlic leaves\", \"units\": \"g\", \"amount\": 40}]",
+    "instructions": "Preheat the oven to 200°C (392°F). Line a baking tray with parchment paper. Wash and dry the wild garlic leaves. Chop them roughly with a knife and transfer them to a blender with kefir milk. Blend for 30 seconds. Sift the flour together with baking soda and salt into a large bowl. Make an indent in the middle and pour the green kefir while stirring the mixture with a wooden spoon until combined. You don't need to knead it too much. On a well-floured surface, shape the dough into a ball. Transfer it to the baking sheet covered with parchment paper and cut it with a knife to make a cross shape. Bake in the oven for about 25-30 minutes. Check if the bread is done with a toothpick because every oven is different. Also, you can tap the bread on the underside – it should sound hollow. Let it cool down on a cooling rack completely. Then, the bread is ready for slicing! Enjoy.",
+    "category": "Bread",
+    "prep_time": "10 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "40 minutes",
+    "notes": "For this soda bread, I use homemade kefir milk which I make at home using kefir grains. You can also use storebought kefir. In order to get an even green color, I mixed the wild garlic leaves in my blender with kefir, but if you want to skip this step, just finely chop the leaves with a knife and add them to the rest of the ingredients. The color won’t be this vibrant but the flavor will still be great!",
+    "tags": "kefir milk, soda bread, whole grain spelt flour, wild garlic"
+}

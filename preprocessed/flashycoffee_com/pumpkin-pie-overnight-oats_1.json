@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pumpkin Pie Overnight Oats",
+    "description": "A no-cook breakfast that combines the comforting flavors of pumpkin pie with the convenience of overnight oats.",
+    "ingredients": "[{\"name\": \"rolled oats\", \"units\": \"cup\", \"amount\": \"1/2\"}, {\"name\": \"canned pumpkin purée\", \"units\": \"cup\", \"amount\": \"1/2\"}, {\"name\": \"milk\", \"units\": \"cup\", \"amount\": \"1/2\"}, {\"name\": \"plain Greek yogurt\", \"units\": \"cup\", \"amount\": \"1/4\"}, {\"name\": \"maple syrup\", \"units\": \"tablespoon\", \"amount\": \"1\"}, {\"name\": \"pumpkin pie spice\", \"units\": \"teaspoon\", \"amount\": \"1/2\"}]",
+    "instructions": "Combine 1/2 cup rolled oats, 1/2 cup canned pumpkin purée, 1/2 cup milk, 1/4 cup plain Greek yogurt, 1 tablespoon maple syrup, and 1/2 teaspoon pumpkin pie spice in a container or mason jar. Stir everything until smooth and creamy, making sure those oats are fully coated with the pumpkin mixture. Cover your container and refrigerate overnight, or for at least a few hours if you’re short on time. The next morning, give it a good stir and adjust the consistency by adding more milk if it’s thicker than you prefer. Pour your overnight oats into a bowl, top with whipped cream or a sprinkle of cinnamon if desired, and enjoy.",
+    "category": "Breakfast",
+    "prep_time": "8 minutes",
+    "cook_time": null,
+    "total_time": "8 hours 8 minutes",
+    "notes": "You can customize the recipe by using different types of milk or adding toppings like granola or nuts. Store up to five days for convenient breakfasts.",
+    "tags": "breakfast, oats, pumpkin, fall, healthy"
+}

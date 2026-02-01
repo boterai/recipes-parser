@@ -1,0 +1,12 @@
+{
+    "dish_name": "Đậu hũ sốt cà chua",
+    "description": "Món ăn thuần chay quen thuộc với hương vị thanh nhẹ và dễ ăn, kết hợp giữa đậu hũ mềm mịn và sốt cà chua đậm đà.",
+    "ingredients": "[{\"name\": \"Đậu hũ trắng\", \"units\": \"miếng\", \"amount\": 2}, {\"name\": \"Cà chua\", \"units\": \"quả\", \"amount\": 2}, {\"name\": \"Hành tím\", \"units\": \"củ\", \"amount\": 1}, {\"name\": \"Nước mắm\", \"units\": \"muỗng canh\", \"amount\": 2}, {\"name\": \"Đường\", \"units\": \"muỗng canh\", \"amount\": 1}, {\"name\": \"Nước lọc\", \"units\": \"muỗng canh\", \"amount\": 4}, {\"name\": \"Bột ngọt\", \"units\": \"muỗng cà phê\", \"amount\": 1}, {\"name\": \"Ngò rí\", \"units\": \"vài nhánh\", \"amount\": null}, {\"name\": \"Dầu ăn\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Rửa sạch đậu hũ, để ráo, cắt miếng vừa ăn rồi chiên vàng giòn ở lửa nhỏ, sau đó để ráo dầu. 2. Rửa sạch cà chua, cắt hạt lựu; hành tím lột vỏ, băm nhuyễn; ngò rí rửa sạch, cắt nhỏ. 3. Phi thơm hành tím rồi cho tiếp cà chua vào đảo chín. Thêm nước mắm, đường, bột ngọt và nước lọc, đun sôi, nêm nếm vừa ăn. 4. Thả đậu hũ chiên vào sốt, nấu vài phút cho ngấm, rồi tắt bếp, rắc ngò rí lên trên và thưởng thức.",
+    "category": "Món chay",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Có thể linh hoạt nêm nếm lại gia vị theo khẩu vị cá nhân.",
+    "tags": "đậu hũ, món chay, ẩm thực Việt Nam"
+}

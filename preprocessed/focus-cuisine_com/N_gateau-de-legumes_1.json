@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gâteau de légumes",
+    "description": "Ce gâteau de légumes au faux air de cake salé se mange froid.",
+    "ingredients": "[{\"name\": \"carottes\", \"units\": \"pieces\", \"amount\": 8}, {\"name\": \"haricots verts\", \"units\": \"g\", \"amount\": 350}, {\"name\": \"oeufs\", \"units\": \"pieces\", \"amount\": 3}, {\"name\": \"farine\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"levure chimique\", \"units\": \"sachet\", \"amount\": 1}, {\"name\": \"huile d'olive\", \"units\": \"cl\", \"amount\": 10}, {\"name\": \"crème liquide\", \"units\": \"cl\", \"amount\": 10}, {\"name\": \"sel\", \"units\": null, \"amount\": null}, {\"name\": \"poivre\", \"units\": null, \"amount\": null}]",
+    "instructions": "Pelez et lavez les carottes. Coupez les extrémités puis détaillez-les en bâtonnets. Si vous utilisez des haricots verts frais, équeutez-les puis lavez-les. Faites cuire les carottes et les haricots verts 10 minutes dans une grande casserole d’eau bouillante salée. Égouttez-les puis réservez. Dans un saladier, tamisez ensemble la farine et la levure chimique. Faites un puits puis cassez-y les oeufs et mélangez. Incorporez ensuite petit à petit l’huile d’olive et la crème liquide en ne cessant de fouetter pour éviter les grumeaux. Salez et poivrez selon vos goûts. Préchauffez votre four à 160 °C. Tapissez un moule à cake de papier sulfurisé et disposez dans le fond les bâtonnets de carottes puis par dessus les haricots verts et recouvrez le tout avec la pâte en remplissant bien les interstices. Pour cela, tapotez votre moule sur votre plan de travail pour aider la pâte a bien se répartir. Placez votre moule dans un grand plat creux et versez 1 cm d’eau autour. Enfournez pour 1 heure environ. Laissez refroidir dans le four éteint et placez pour une heure au moins au réfrigérateur. Coupez le cake en tranches et servez avec un peu de moutarde ou petit sauce au fromage blanc aux herbes.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "60 minutes",
+    "total_time": null,
+    "notes": "Servi avec une pointe de moutarde, il était parfait.",
+    "tags": "cake, légumes, salé, recette"
+}

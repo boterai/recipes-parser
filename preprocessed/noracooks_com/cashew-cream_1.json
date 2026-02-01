@@ -1,0 +1,12 @@
+{
+    "dish_name": "Cashew Cream",
+    "description": "Learn how to make Cashew Cream with only two ingredients: cashews and water! This versatile dairy-free heavy cream substitute is perfect for soups, sauces, vegan sour cream, and even desserts.",
+    "ingredients": "[{\"name\": \"raw cashews\", \"units\": \"cups\", \"amount\": 1.5}, {\"name\": \"water\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"salt\", \"units\": \"teaspoon\", \"amount\": 0.75}, {\"name\": \"garlic\", \"units\": \"cloves\", \"amount\": 1}, {\"name\": \"Sriracha hot sauce\", \"units\": \"teaspoons\", \"amount\": 1}, {\"name\": \"nutritional yeast\", \"units\": \"cup\", \"amount\": 0.25}, {\"name\": \"pure maple syrup\", \"units\": \"tablespoons\", \"amount\": 3}, {\"name\": \"pure vanilla extract\", \"units\": \"teaspoons\", \"amount\": 2}]",
+    "instructions": "1. Soak the cashews: Bring 4 cups of water to a boil. Pour the hot water over the cashews and let soak for 5 minutes. 2. Blend: Drain the cashews, discard the soaking water and add to high powered blender along with 1 cup fresh water. Blend until very smooth, scraping down the sides of the blender as needed. For savory cream, add salt, garlic and optional Sriracha or nutritional yeast. For sweet cream, add maple syrup and vanilla. 3. For coffee creamer, use the sweet version (maple syrup + vanilla) and add an additional 1/2 cup of water. 4. Store cashew cream in the refrigerator for 5-6 days. You can also freeze cashew cream, simply re-blend or whisk well once it thaws.",
+    "category": "Sauces & Dressings",
+    "prep_time": "10 minutes",
+    "cook_time": null,
+    "total_time": "10 minutes",
+    "notes": "A high powered blender such as a Vitamix works best for this recipe, but a regular blender or food processor will work okay. If you don’t have a Vitamix, soak the cashews for at least an hour or overnight.",
+    "tags": "vegan, dairy-free, sauce, cream"
+}

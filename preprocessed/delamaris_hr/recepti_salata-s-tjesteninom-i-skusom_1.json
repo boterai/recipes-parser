@@ -1,0 +1,12 @@
+{
+    "dish_name": "Salata s tjesteninom i skušom",
+    "description": null,
+    "ingredients": "[{\"name\": \"Fileta skuše u suncokretovu ulju\", \"units\": \"x 125 g\", \"amount\": \"2\"}, {\"name\": \"kiselih krastavaca\", \"units\": \"g\", \"amount\": \"40\"}, {\"name\": \"tjestenine (svrdla)\", \"units\": \"g\", \"amount\": \"300\"}, {\"name\": \"majoneze\", \"units\": \"žlice\", \"amount\": \"4\"}, {\"name\": \"limunov sok\", \"units\": null, \"amount\": null}, {\"name\": \"kapari\", \"units\": null, \"amount\": null}, {\"name\": \"peršin\", \"units\": null, \"amount\": null}]",
+    "instructions": "Skuhajte i ohladite tjesteninu. U zdjeli joj dodajte sve ostale sastojke (osim rokule), dobro promiješajte i stavite u hladnjak na najmanje pola sata. Na duboki tanjur stavite malo rokule i na nju stavite ohlađenu salatu.",
+    "category": null,
+    "prep_time": "30 min",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

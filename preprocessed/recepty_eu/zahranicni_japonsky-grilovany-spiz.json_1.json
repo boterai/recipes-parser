@@ -1,0 +1,12 @@
+{
+    "dish_name": "Japonský grilovaný špíz",
+    "description": "Tento pokrm je pro lidi, kteří rádi experimentují a mají rádi asijské, speciálně japonské chutě.",
+    "ingredients": "[{\"name\": \"vepřové maso\", \"units\": \"kg\", \"amount\": \"0.5\"}, {\"name\": \"cibulka\", \"units\": null, \"amount\": null}, {\"name\": \"omáčka\", \"units\": null, \"amount\": null}, {\"name\": \"ocet\", \"units\": null, \"amount\": null}, {\"name\": \"plátek zázvor\", \"units\": \"tenké\", \"amount\": \"3\"}, {\"name\": \"pažitka\", \"units\": \"čerstvá\", \"amount\": null}]",
+    "instructions": "Cibulku srolujte společně s vepřovým a napíchněte na špíz. Opakujte proces, dokud není vše na špízu. Nyní marinování. Do mrazícího sáčku nalijte 2 dc sojové omáčky, 1 dc rýžového octu, přidejte zbytek jarní cibulky a též 3 tenké plátky zázvoru. Směs v sáčku promíchejte, vložte smotaný naplněný špíz a nechte marinovat 24 h. Po vytažení opláchněte pod tekoucí vodou a grilujte na cca 180 ° C. Můžete při grilování potírat použitou omáčkou. Servírujte na talíři s jemně nakrájenou pažitkou a jako příloha může být rýže.",
+    "category": null,
+    "prep_time": "24 hours",
+    "cook_time": "1 hour",
+    "total_time": "24 hours",
+    "notes": null,
+    "tags": "grilování, japonské, špízy"
+}

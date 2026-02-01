@@ -1,0 +1,12 @@
+{
+    "dish_name": "Caipiroska",
+    "description": "Prosty przepis na orzeźwiający drink z limonką.",
+    "ingredients": "[{\"name\": \"wódka\", \"units\": \"ml\", \"amount\": 40}, {\"name\": \"połówka limonki\", \"units\": null, \"amount\": 1}, {\"name\": \"cukier trzcinowy\", \"units\": \"łyżeczki\", \"amount\": 2}, {\"name\": \"kruszony lód\", \"units\": null, \"amount\": null}]",
+    "instructions": "Wrzuć do szklanki limonkę, zasyp cukrem trzcinowym i ugniataj tak, by owoce puściły sok. Następnie dodaj pokruszony lód, wlej wódkę i zamieszaj. Jeśli nie masz Thermomixa, rozgnieć limonkę muddlerem.",
+    "category": "Drinki",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Idealny drink na plażę, łatwy do przygotowania w domu.",
+    "tags": "drink, orzeźwiający, wódka, limonka"
+}

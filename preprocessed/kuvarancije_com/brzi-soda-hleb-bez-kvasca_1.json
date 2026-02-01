@@ -1,0 +1,12 @@
+{
+    "dish_name": "Irski soda hleb bez kvasca",
+    "description": "Brzi i ukusni hleb bez kvasca koji se lako priprema.",
+    "ingredients": "[{\"name\": \"integralnog pšeničnog brašna\", \"units\": \"šolje\", \"amount\": 2}, {\"name\": \"pšeničnog brašna tip 500\", \"units\": \"šolje\", \"amount\": 2}, {\"name\": \"soli\", \"units\": \"kašikica\", \"amount\": 1}, {\"name\": \"sode bikarbone\", \"units\": \"kašikica\", \"amount\": 1.5}, {\"name\": \"piva\", \"units\": \"šolje\", \"amount\": 2}]",
+    "instructions": "Rernu uključite da se greje na 220°C. Brašno sipajte u veću posudu za mešenje, dodajte so i sodu bikarbonu i sve promešajte. U suve sastojke postepeno sipajte pivo, dok ne umesite testo srednje čvrstine. Testo preručite u kalup za pečenje i stavite u zagrejanu rernu. Smanjite temperaturu rerne na 180°C i pecite hleb oko 30 minuta ili dok se ne napravi lepa zlatno žuta korica.",
+    "category": "Testo",
+    "prep_time": null,
+    "cook_time": "30 minutes",
+    "total_time": null,
+    "notes": "Možete praviti i neke zamene brašna, pa tako umesto integralnog možete staviti raženo ili ovseno brašno. Umesto piva možete koristiti mineralnu vodu ili jogurt.",
+    "tags": "brzo, jednostavno, hleb, testo, jeftino, integralno brašno, pivo, bez mesa, vegetarijano, posno"
+}

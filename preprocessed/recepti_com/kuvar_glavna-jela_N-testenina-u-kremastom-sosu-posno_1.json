@@ -1,0 +1,12 @@
+{
+    "dish_name": "Testenina u kremastom sosu (posno)",
+    "description": null,
+    "ingredients": "[{\"name\": \"posne testenine\", \"units\": \"g\", \"amount\": 350}, {\"name\": \"praziluk\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"šampinjona\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"veća čena belog luka\", \"units\": null, \"amount\": 2}, {\"name\": \"posne pavlake za kuvanje\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"senfa\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"biljnog kačkavalja\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"vode u kojoj se kuvala testenina\", \"units\": \"kutlače\", \"amount\": 2}, {\"name\": \"suvog biljnog začina\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"mlevenog bibera\", \"units\": \"kašičica\", \"amount\": 0.5}, {\"name\": \"pesto od bosiljka\", \"units\": \"po ukusu\", \"amount\": null}, {\"name\": \"so\", \"units\": \"po ukusu\", \"amount\": null}, {\"name\": \"ulje\", \"units\": \"po potrebi\", \"amount\": null}]",
+    "instructions": "Praziluk iseckati na polukrugove, šampinjone iseći na listiće, a beli luk sitno iseckati. U dublji tiganj sa nelepljivim dnom sipati 1-2 kašike ulja i staviti da se ulje zagreje na srednjoj temperaturi. Na zagrejano ulje ubaciti praziluk, šampinjone i iseckani beli luk, posuti sa kašičicom suvog biljnog začina i pola kašičice mlevenog bibera, promešati i pržiti da povrće omekša. Za to vreme staviti da se kuva testenina po uputstvu sa pakovanja. Kada se testenina skuvala, odvojiti na stranu dve kutlače vode, a ostatak prosuti, procediti testeninu. Kada je povrće omekšalo ubaciti kašičicu senfa, promešati, pa sipati pavlaku za kuvanje. Sve dobro promešati i kada provri ubaciti vodu koju smo odvojili od vode u kojoj se testenina kuvala. Promešati i na tihoj vatri ostaviti da ključa 1-2 minuta. Dodati krupno narendani kačkavalj, promešati i ostaviti da se kačkavalj otopi. Probati da li treba dodati još šta od začina. U sos ubaciti oceđenu testeninu, iz dva puta. Dobro promešati i poslužiti. Ko želi, u tanjir može dodati i pesto od bosiljka, po ukusu, pa promešati da se sjedini sa testeninom.",
+    "category": "Glavna jela",
+    "prep_time": "40 min",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Testenina je toliko ukusna da ne možete znati da je posna, ako vam se ne kaže.",
+    "tags": "testenina,posno,šampinjoni,pečurke"
+}

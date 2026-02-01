@@ -1,0 +1,12 @@
+{
+    "dish_name": "Blåbärsmuffins",
+    "description": "Saftiga muffins med citron och vanilj.",
+    "ingredients": "[{\"name\": \"vetemjöl\", \"units\": \"dl\", \"amount\": 4}, {\"name\": \"strösocker\", \"units\": \"dl\", \"amount\": 1.5}, {\"name\": \"bakpulver\", \"units\": \"tsk\", \"amount\": 2}, {\"name\": \"vaniljsocker\", \"units\": \"tsk\", \"amount\": 1}, {\"name\": \"salt\", \"units\": \"tsk\", \"amount\": 0.5}, {\"name\": \"ägg\", \"units\": \"st\", \"amount\": 2}, {\"name\": \"mjölk\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"smör\", \"units\": \"g\", \"amount\": 75}, {\"name\": \"blåbär\", \"units\": \"dl\", \"amount\": 3}, {\"name\": \"citron\", \"units\": \"st\", \"amount\": 0.5}, {\"name\": \"muffinsformar\", \"units\": \"st\", \"amount\": 12}, {\"name\": \"råsocker\", \"units\": \"msk\", \"amount\": 2}]",
+    "instructions": "Sätt ugnen på 200°C över/undervärme och klä en muffinsplåt med 12 formar. Blanda vetemjöl, strösocker, bakpulver, vaniljsocker och salt i en stor bunke. Vispa lätt ihop ägg, mjölk och det avsvalnade smöret i en annan bunke. Häll vätskan i de torra ingredienserna och rör precis ihop. Överarbeta inte smeten. Vänd försiktigt ner blåbär och finrivet citronskal. Spara gärna några bär till topping. Fördela smeten i formarna och fyll till cirka 3/4. Toppa med resterande blåbär och strö över råsocker om du vill. Grädda mitt i ugnen i 18–22 minuter, tills gyllene och torr provsticka. Låt svalna 5 minuter i plåten. Lyft sedan över till galler för att svalna. Servera ljumma eller rumstempererade.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "35 minutes",
+    "notes": "Fina blåbär utan färgblödning: Vänd frysta blåbär i 1 msk av mjölet innan du blandar i smeten, så blöder de mindre. Extra saftiga muffins: Byt 1 dl mjölk mot 1 dl gräddfil eller yoghurt.",
+    "tags": "muffins, blåbär, dessert, fika"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Stuffed Bell Peppers",
+    "description": "Bell peppers stuffed with a mixture of tuna, potatoes, and cheese, baked until golden.",
+    "ingredients": "[{\"name\": \"Capsicum\", \"units\": \"pcs.\", \"amount\": 5}, {\"name\": \"Butter\", \"units\": \"Tbsp.\", \"amount\": 1}, {\"name\": \"Milk\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"All-purpose flour\", \"units\": \"Tbsp.\", \"amount\": 1}, {\"name\": \"Salt\", \"units\": \"tsp.\", \"amount\": 0.5}, {\"name\": \"Pepper\", \"units\": \"tsp.\", \"amount\": 0.5}, {\"name\": \"AJI-NO-MOTO® Umami Seasoning\", \"units\": \"pack\", \"amount\": 0.5}, {\"name\": \"Potatoes\", \"units\": \"cups\", \"amount\": 1.5}, {\"name\": \"Tuna\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"Bread crumbs\", \"units\": \"cup\", \"amount\": 0.33}, {\"name\": \"Cheese\", \"units\": \"cup\", \"amount\": 0.33}]",
+    "instructions": "1. Cut capsicum into half and remove the seeds. 2. In a hot saucepan, melt the butter, then add milk, flour, salt, pepper, and AJI-NO-MOTO®. Cook until it thickens. Add boiled potatoes and tuna chunks, mix well then set aside. 3. In a roasting pan, assemble the capsicum and add the potato-tuna mixture. Cover with breadcrumbs followed by grated cheese. 4. In a pre-heated oven, bake capsicum at 340°F (171°C) for 20 minutes, then remove from the oven to cool. 5. Transfer to a platter, assemble it nicely then serve and enjoy.",
+    "category": "Main Course",
+    "prep_time": "20 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "50 minutes",
+    "notes": "You can use a portable kitchen torch to give a nice 'grill effect' on the edges of roasted bell peppers.",
+    "tags": "Stuffed, Bell Peppers, Main Course, Tuna"
+}

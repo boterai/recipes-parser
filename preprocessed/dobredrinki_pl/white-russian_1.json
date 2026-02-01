@@ -1,0 +1,12 @@
+{
+    "dish_name": "White Russian",
+    "description": "Biały Rusek to idealny drink dla niecierpliwych. Przygotujesz go w 5 minut.",
+    "ingredients": "[{\"name\": \"wódka\", \"units\": \"ml\", \"amount\": 60}, {\"name\": \"likier kawowy\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"śmietanka 30%\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"kostki lodu\", \"units\": null, \"amount\": null}]",
+    "instructions": "Przygotuj niską szklankę o pojemności 200 ml, wrzuć do szklanki kilka kostek lodu, wlej porcję wódki, dodaj porcję likieru kawowego, dodaj słodką śmietankę.",
+    "category": "Drink",
+    "prep_time": "5 minutes",
+    "cook_time": null,
+    "total_time": "5 minutes",
+    "notes": "Możesz podawać w wersji warstwowej lub wymieszać składniki. Możesz udekorować wiórkami czekoladowymi lub cynamonem.",
+    "tags": "drink, alkohol, wódka, likier kawowy"
+}

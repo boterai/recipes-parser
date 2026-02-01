@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gomboce sa kajsijama",
+    "description": "Gomboce sa kajsijama, ili knedle s kajsijama, su slatkiši od krompira punjeni svežim kajsijama.",
+    "ingredients": "[{\"name\": \"krompir\", \"units\": \"kg\", \"amount\": \"1\"}, {\"name\": \"oštro brašno\", \"units\": \"kg\", \"amount\": \"0.5\"}, {\"name\": \"jaja\", \"units\": \"pcs\", \"amount\": \"2\"}, {\"name\": \"so\", \"units\": null, \"amount\": \"a little\"}, {\"name\": \"ulje\", \"units\": \"tablespoons\", \"amount\": \"2\"}, {\"name\": \"putera\", \"units\": \"tablespoons\", \"amount\": \"2\"}, {\"name\": \"prezle\", \"units\": \"tablespoons\", \"amount\": \"3-4\"}, {\"name\": \"mlevenih oraha\", \"units\": \"tablespoons\", \"amount\": \"3-4\"}, {\"name\": \"vanil šećer\", \"units\": \"packet\", \"amount\": \"1\"}, {\"name\": \"sveže kajsije\", \"units\": null, \"amount\": null}]",
+    "instructions": "Krompir skuvajte u ljusci, oljuštite i ispasirajte. Dodajte so, brašno i jaje, umesite testo. Operite kajsije, izvadite koštice i isecite na polovine. Razvucite testo, isecite na kvadrate, stavite kajsije, formirajte knedle. Kuvajte u kipućoj vodi dok ne isplivaju. Propržite prezle i orahe na puteru i ulju, dodajte vanil šećer, a kuvane knedle obložite prezlom.",
+    "category": "Slatkiši",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Jednostavnije mere su na 1 deo krompira treba 1/2 dela brašna. Možete koristiti i drugo voće.",
+    "tags": "slatkiši,jaja,kajsije,bez mesa,brašno,šećer,prezla"
+}

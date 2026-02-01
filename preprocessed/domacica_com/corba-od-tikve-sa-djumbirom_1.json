@@ -1,0 +1,12 @@
+{
+    "dish_name": "Čorba od tikve sa đumbirom",
+    "description": "Prava sezonska čorbica će potpuno promijeniti svoj ukus sa dodatkom đumbira.",
+    "ingredients": "[{\"name\": \"tikva\", \"units\": \"gr\", \"amount\": 500}, {\"name\": \"mlijeko\", \"units\": \"ml\", \"amount\": 300}, {\"name\": \"bijeli luk\", \"units\": \"čehne\", \"amount\": 4}, {\"name\": \"đumbir\", \"units\": \"cm\", \"amount\": 1}, {\"name\": \"svježa majčina dušica\", \"units\": \"kašika\", \"amount\": 1}, {\"name\": \"maslinovo ulje\", \"units\": null, \"amount\": null}, {\"name\": \"so\", \"units\": null, \"amount\": null}, {\"name\": \"biber\", \"units\": null, \"amount\": null}]",
+    "instructions": "Tikvu očistite i izrežite na kockice. Ispecite u rerni zagrijanoj na 200 stepeni oko 30 minuta dok ne omekša. Sameljite štapnim mikserom ili u multipraktiku. Uspite u šerpu i pomiješajte sa mlijekom. Dodajte vode po potrebi i rendani đumbir. Posolite, pobiberite i dodajte majčinu dušicu i kuhajte nekoliko minuta.",
+    "category": null,
+    "prep_time": "10 min",
+    "cook_time": "40 min",
+    "total_time": "50 min",
+    "notes": null,
+    "tags": null
+}

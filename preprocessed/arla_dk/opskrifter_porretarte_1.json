@@ -1,0 +1,12 @@
+{
+    "dish_name": "Porretærte",
+    "description": "Nem opskrift på tærte med sprød bund.",
+    "ingredients": "[{\"name\": \"Hvedemel\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"Fuldkornshvedemel\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"Fint salt\", \"units\": \"tsk\", \"amount\": 0.5}, {\"name\": \"Koldt smør\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"Koldt vand\", \"units\": \"spsk\", \"amount\": 4}, {\"name\": \"Smør\", \"units\": \"g\", \"amount\": 15}, {\"name\": \"Porrer\", \"units\": \"stk\", \"amount\": 3}, {\"name\": \"Tørret timian\", \"units\": \"tsk\", \"amount\": 1}, {\"name\": \"Muskatnød\", \"units\": \"tsk\", \"amount\": 1}, {\"name\": \"Citron\", \"units\": \"stk\", \"amount\": 0.5}, {\"name\": \"Groft salt\", \"units\": \"tsk\", \"amount\": 0.5}, {\"name\": \"Friskkværnet peber\", \"units\": null, \"amount\": null}, {\"name\": \"Mælk\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"Æg\", \"units\": \"stk\", \"amount\": 4}, {\"name\": \"Revet cheddar- og maasdammerost\", \"units\": \"g\", \"amount\": 75}]",
+    "instructions": "Bland de 2 slags mel og salt. Skær smørret i mindre stykker og smuldr det i melet. Saml dejen let med vand og tryk den smuldrede dej ud i en springform eller en tærteform (ca. 25 cm i diameter). Tryk den godt op af kanten og forbag tærtebunden midt i ovnen i 15 min. ved 200° - traditionel ovn. Smelt smørret i en pande eller gryde og steg porrene møre - de skal være klare og falde sammen. Tilsæt timian, muskatnød, citronsaft, salt og peber. Tag panden af blusset og tilsæt mælk, æg og ost. Rør det hele sammen og hæld blandingen ud i den forbagte tærtedej. Bag tærten færdig midt i ovnen i 25-30 min. ved 200° - traditionel ovn.",
+    "category": "Main Course",
+    "prep_time": "30 min",
+    "cook_time": "45 min",
+    "total_time": "1 time 15 min",
+    "notes": "Tærten kan fryses og serveres varm, lun eller kold. Kan laves vegetarisk eller med bacon.",
+    "tags": "tærte, porrer, vegetarisk, hovedret"
+}

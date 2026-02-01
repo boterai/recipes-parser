@@ -1,0 +1,12 @@
+{
+    "dish_name": "Krůtí špíz",
+    "description": null,
+    "ingredients": "[{\"name\": \"Krůtí prsa\", \"units\": \"gramů\", \"amount\": 1000}, {\"name\": \"Citronová šťáva\", \"units\": \"mililitrů\", \"amount\": 50}, {\"name\": \"Olej olivový extra panenský\", \"units\": \"mililitrů\", \"amount\": 20}, {\"name\": \"Paprika mletá sladká\", \"units\": \"gramů\", \"amount\": 5}, {\"name\": \"Sůl\", \"units\": \"špetka\", \"amount\": 1}]",
+    "instructions": "1. Omyté a osušené maso nakrájíme na kostky.\n2. Připravíme si marinádu z citrónové šťávy, papriky a oleje.\n3. Maso napícháme na špíz, osolíme a potřeme marinádou.\n4. Připravené špízy grilujeme.",
+    "category": null,
+    "prep_time": "25 min.",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Aperol Spritz",
+    "description": "Finezyjny drink na spotkanie z przyjaciółmi.",
+    "ingredients": "[{\"name\": \"prosecco\", \"units\": \"porcje\", \"amount\": 3}, {\"name\": \"Woda gazowana\", \"units\": \"porcja\", \"amount\": 1}, {\"name\": \"Aperol\", \"units\": \"porcje\", \"amount\": 2}, {\"name\": \"Lód\", \"units\": \"kostek\", \"amount\": 5}, {\"name\": \"Pomarańcza\", \"units\": \"sztuki\", \"amount\": 0.5}]",
+    "instructions": "Wsypujemy do kieliszka kostki lodu i wlewamy wcześniej schłodzone prosecco. Do kieliszka dodajemy Aperol. Drinka uzupełniamy wodą gazowaną. Na koniec do szklanki wrzucamy plastry pomarańczy przekrojone na połówki i wkładamy przyciętą do odpowiedniej długości ekologiczną słomkę.",
+    "category": "Drink",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "cocktail, drink, Aperol Spritz"
+}

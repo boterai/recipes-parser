@@ -1,0 +1,12 @@
+{
+    "dish_name": "Klasszikus kekszszalámi",
+    "description": "A kekszszalámi az egyik kedvenc sütés nélküli sütink. Gyorsan elkészül, mégis mindig nagy sikere van, főleg ha egy napot pihenhet a hűtőben.",
+    "ingredients": "[{\"name\": \"háztartási keksz\", \"units\": \"dkg\", \"amount\": 50}, {\"name\": \"tej\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"porcukor\", \"units\": \"dkg\", \"amount\": 25}, {\"name\": \"cukrozatlan kakaópor\", \"units\": \"dkg\", \"amount\": 4}, {\"name\": \"margarin\", \"units\": \"dkg\", \"amount\": 25}, {\"name\": \"mazsola\", \"units\": \"ízlés szerint\", \"amount\": null}, {\"name\": \"dió\", \"units\": \"dkg\", \"amount\": 10}, {\"name\": \"rumaroma\", \"units\": \"ízlés szerint\", \"amount\": null}]",
+    "instructions": "A háztartási kekszet egy tálban összetörjük, nem túl apróra, jó, ha maradnak benne kisebb-nagyobb darabok. A tejet a porcukorral és a kakaóporral egy lábasban összefőzzük, amíg teljesen sima nem lesz. Ezután hozzáadjuk a margarint, és addig melegítjük, amíg teljesen elolvad benne. A forró kakaós masszát a kekszhez öntjük, majd belekeverjük a mazsolát, az apróra vágott diót és ízlés szerint rumaromával ízesítjük. Amikor a keksz szépen magába szívta a masszát, a keveréket nedves folpackra tesszük, és szorosan rúd alakúra formázzuk. Hűtőbe tesszük és legalább egy napig pihentetjük, hogy jól összeálljon. Másnap szeletelve tálaljuk.",
+    "category": "Dessert",
+    "prep_time": "20 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "sütemény, desszert, sütés nélküli"
+}

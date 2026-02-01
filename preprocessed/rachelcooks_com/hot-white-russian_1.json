@@ -1,0 +1,12 @@
+{
+    "dish_name": "Hot White Russian",
+    "description": "Perfect for the holidays or any chilly day, this hot white Russian dessert cocktail is cozy while still packing a bit of a punch and is a great adult alternative to hot cocoa.",
+    "ingredients": "[{\"name\": \"freshly brewed coffee\", \"units\": \"oz.\", \"amount\": 4}, {\"name\": \"Kahlúa\", \"units\": \"oz.\", \"amount\": 2}, {\"name\": \"whole milk\", \"units\": \"oz.\", \"amount\": 2}, {\"name\": \"vodka\", \"units\": \"oz.\", \"amount\": 1}, {\"name\": \"whipped cream\", \"units\": null, \"amount\": null}]",
+    "instructions": "In a small saucepan over medium heat, combine all ingredients and heat until warm (I recommend 150 to 155°F). Do not boil. Pour into mug(s) and serve immediately, topped with whipped cream, if desired.",
+    "category": "Beverage",
+    "prep_time": "2 minutes",
+    "cook_time": "5 minutes",
+    "total_time": "7 minutes",
+    "notes": "The recipe is written for one drink, with 1 part = ¼ cup. To double the recipe, use ½ cup as a part which will make three 6-ounce servings or two 9-ounce servings. Skim milk is not recommended for this recipe.",
+    "tags": "cocktail, dessert, holiday, warm drink"
+}
