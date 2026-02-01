@@ -212,8 +212,6 @@ class UsblueberryJpExtractor(BaseRecipeExtractor):
             if step_text:
                 # Убираем номера в начале типа "①", "②" и т.д.
                 step_text = re.sub(r'^[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]+\s*', '', step_text)
-                # Убираем также римские цифры с кружками в начале
-                step_text = re.sub(r'^[③⑥⑦⑩]+\s*', '', step_text)
                 steps.append(step_text)
         
         if steps:
