@@ -3,6 +3,8 @@
 """
 
 import sys
+import os
+import re
 from pathlib import Path
 import json
 from typing import Optional
@@ -37,7 +39,6 @@ class ReceptFokhagymaExtractor(BaseRecipeExtractor):
         og_desc = self.soup.find('meta', property='og:description')
         if og_desc and og_desc.get('content'):
             desc_text = og_desc['content']
-            import re
             
             # Вариант 1: Есть "–" (тире)
             # "Házi croissant recept – Francia péksütemény... Croissant recept hozzávalók"
@@ -285,7 +286,6 @@ class ReceptFokhagymaExtractor(BaseRecipeExtractor):
 
 
 def main():
-    import os
     # Обрабатываем папку preprocessed/recept_fokhagymaa_hu
     recipes_dir = os.path.join("preprocessed", "recept_fokhagymaa_hu")
     if os.path.exists(recipes_dir) and os.path.isdir(recipes_dir):
