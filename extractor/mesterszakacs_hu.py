@@ -172,50 +172,19 @@ class MesterszakacsExtractor(BaseRecipeExtractor):
     
     def extract_prep_time(self) -> Optional[str]:
         """Извлечение времени подготовки"""
+        # На сайте mesterszakacs.hu нет явного prep_time
+        # Оставляем None, если не найдено
+        return None
+    
+    def extract_cook_time(self) -> Optional[str]:
+        """Извлечение времени приготовления"""
         # Ищем dt с текстом "Elkészítési idő"
         time_dt = self.soup.find('dt', string=re.compile(r'Elkészítési idő', re.IGNORECASE))
         if time_dt:
             time_dd = time_dt.find_next_sibling('dd')
             if time_dd:
                 time_text = self.clean_text(time_dd.get_text())
-                # Конвертируем "60-120 perc" в "60 minutes" (берем нижнюю границу)
-                if 'perc' in time_text.lower():
-                    # Извлекаем первое число
-                    match = re.search(r'(\d+)', time_text)
-                    if match:
-                        minutes = match.group(1)
-                        return f"{minutes} minutes"
-                    time_text = time_text.replace('perc', 'minutes')
-                    return time_text
-        
-        return None
-    
-    def extract_cook_time(self) -> Optional[str]:
-        """Извлечение времени приготовления"""
-        # Пытаемся найти время готовки в инструкциях
-        # Ищем фразы типа "30 percig sütjük" (30 минут печём)
-        method_full = self.soup.find('div', id='method_full')
-        if method_full:
-            text = method_full.get_text()
-            # Ищем упоминания о времени приготовления/запекания
-            patterns = [
-                r'(\d+)\s*percig\s+sütjük',  # X минут печём
-                r'(\d+)\s*percig\s+főzzük',  # X минут варим
-                r'(\d+)\s*perc\s+alatt\s+.*sütjük',  # за X минут ... печём
-            ]
-            
-            for pattern in patterns:
-                match = re.search(pattern, text, re.IGNORECASE)
-                if match:
-                    minutes = match.group(1)
-                    return f"{minutes} minutes"
-        
-        # Если не нашли в инструкциях, используем "Elkészítési idő"
-        time_dt = self.soup.find('dt', string=re.compile(r'Elkészítési idő', re.IGNORECASE))
-        if time_dt:
-            time_dd = time_dt.find_next_sibling('dd')
-            if time_dd:
-                time_text = self.clean_text(time_dd.get_text())
+                # Конвертируем "60-120 perc" в "60-120 minutes"
                 if 'perc' in time_text.lower():
                     time_text = time_text.replace('perc', 'minutes')
                 return time_text
@@ -224,19 +193,8 @@ class MesterszakacsExtractor(BaseRecipeExtractor):
     
     def extract_total_time(self) -> Optional[str]:
         """Извлечение общего времени"""
-        # Пытаемся вычислить из prep_time и cook_time
-        prep = self.extract_prep_time()
-        cook = self.extract_cook_time()
-        
-        if prep and cook:
-            # Извлекаем числа из строк
-            prep_match = re.search(r'(\d+)', prep)
-            cook_match = re.search(r'(\d+)', cook)
-            
-            if prep_match and cook_match:
-                total_minutes = int(prep_match.group(1)) + int(cook_match.group(1))
-                return f"{total_minutes} minutes"
-        
+        # На сайте mesterszakacs.hu нет явного total_time
+        # Оставляем None, если не найдено
         return None
     
     def extract_notes(self) -> Optional[str]:
@@ -278,36 +236,45 @@ class MesterszakacsExtractor(BaseRecipeExtractor):
         dish_name = self.extract_dish_name()
         if dish_name:
             # Обрабатываем название
-            # Например: "Füstölt sajttal rakott, csőben sült zöldségek"
-            # Нужно получить: "rakott, zöldség, füstölt, sajt, csőben sült"
-            
             name_lower = dish_name.lower()
             
-            # Разбиваем по запятым, сохраняя фразы
+            # Если название состоит из одного слова, добавляем его и категорию
+            words_in_name = len(name_lower.split())
+            if words_in_name == 1:
+                tags.append(name_lower)
+                # Добавляем категорию
+                category = self.extract_category()
+                if category:
+                    tags.append(category.lower())
+                return ', '.join(tags)
+            
+            # Для составных названий разбираем по частям
             # "Füstölt sajttal rakott, csőben sült zöldségek" -> ["füstölt sajttal rakott", "csőben sült zöldségek"]
             phrases = [p.strip() for p in name_lower.split(',')]
             
             # Обрабатываем каждую фразу
             for phrase in phrases:
                 words = phrase.split()
-                
-                # Проверяем, не является ли фраза устойчивым выражением (2 слова)
-                if len(words) == 2:
-                    # Проверяем венгерские предлоги/суффиксы
-                    # Если второе слово - форма глагола/прилагательного, сохраняем фразу
-                    if words[1] in ['sült', 'főtt', 'sütött', 'rakott', 'párolt', 'rántott']:
-                        tags.append(phrase)
-                        continue
-                
-                # Иначе разбиваем на отдельные слова
-                for word in words:
-                    word = word.strip()
+                i = 0
+                while i < len(words):
+                    word = words[i]
+                    
+                    # Проверяем, не начинается ли с этого места устойчивое выражение
+                    # Паттерны: "csőben sült", "jól főtt", и т.д. (adverb/postposition + participle)
+                    if i + 1 < len(words):
+                        next_word = words[i + 1]
+                        # Если следующее слово - причастие
+                        if next_word in ['sült', 'főtt', 'sütött', 'rakott', 'párolt', 'rántott', 'főzött']:
+                            # И текущее слово заканчивается на характерные суффиксы (adverbial)
+                            if word.endswith(('ben', 'ban', 'en', 'an', 'on', 'ön', 'en')):
+                                # Сохраняем фразу из двух слов
+                                tags.append(f"{word} {next_word}")
+                                i += 2
+                                continue
+                    
+                    # Обычная обработка слова
                     if len(word) > 2:
                         # Удаляем венгерские падежные окончания
-                        # -val/-vel (with), -nak/-nek (for), -ból/-ből (from), -ban/-ben (in)
-                        # -hoz/-hez/-höz (to), -ra/-re (onto), -on/-en/-ön (on)
-                        # -tól/-től (from), -ért (for), -ba/-be (into)
-                        # -tal/-tel (with), -ak/-ek/-ok/-ök (plural)
                         word_cleaned = re.sub(r'(tal|tel|val|vel|nak|nek|ból|ből|ban|ben|hoz|hez|höz|ra|re|tól|től|ért|ba|be|on|en|ön|ak|ek|ok|ök)$', '', word)
                         
                         # Если после удаления суффикса слово стало слишком коротким, используем оригинал
@@ -318,13 +285,8 @@ class MesterszakacsExtractor(BaseRecipeExtractor):
                         stopwords = {'a', 'az', 'és', 'vagy', 'de', 'meg', 'is', 'csak', 'mint', 'ha', 'ez', 'egy'}
                         if word not in stopwords:
                             tags.append(word)
-            
-        # Также добавляем категорию, если есть
-        category = self.extract_category()
-        if category:
-            cat_lower = category.lower()
-            if cat_lower not in tags:
-                tags.append(cat_lower)
+                    
+                    i += 1
         
         if tags:
             # Удаляем дубликаты, сохраняя порядок
