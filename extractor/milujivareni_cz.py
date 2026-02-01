@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 import json
 import re
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Any
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
@@ -70,7 +70,7 @@ class MilujivareniCzExtractor(BaseRecipeExtractor):
         return f"{total_minutes} min." if total_minutes > 0 else None
     
     @staticmethod
-    def parse_ingredient(ingredient_text: str) -> Optional[Dict[str, any]]:
+    def parse_ingredient(ingredient_text: str) -> Optional[Dict[str, Any]]:
         """
         Парсинг строки ингредиента в структурированный формат
         
