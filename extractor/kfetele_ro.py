@@ -134,26 +134,62 @@ class KfeteleRoExtractor(BaseRecipeExtractor):
                         if isinstance(ingredient_list, str):
                             ingredient_list = [i.strip() for i in ingredient_list.split(',') if i.strip()]
                         
-                        for ingredient_text in ingredient_list:
-                            # Очищаем от лишних символов и пробелов
-                            ingredient_text = self.clean_text(ingredient_text)
-                            # Удаляем переносы строк
-                            ingredient_text = ingredient_text.replace('\r', '').replace('\n', '')
+                        # Только если список НЕ пустой
+                        if ingredient_list:
+                            for ingredient_text in ingredient_list:
+                                # Очищаем от лишних символов и пробелов
+                                ingredient_text = self.clean_text(ingredient_text)
+                                # Удаляем переносы строк
+                                ingredient_text = ingredient_text.replace('\r', '').replace('\n', '')
+                                
+                                # Пропускаем заметки типа "la temperatura camerei"
+                                if re.match(r'^(la temperatura camerei|după gust|pentru decor)$', ingredient_text, re.IGNORECASE):
+                                    continue
+                                
+                                if ingredient_text and len(ingredient_text) > 1:
+                                    parsed = self.parse_ingredient(ingredient_text)
+                                    if parsed:
+                                        ingredients.append(parsed)
                             
-                            # Пропускаем заметки типа "la temperatura camerei"
-                            if re.match(r'^(la temperatura camerei|după gust|pentru decor)$', ingredient_text, re.IGNORECASE):
-                                continue
-                            
-                            if ingredient_text and len(ingredient_text) > 1:
-                                parsed = self.parse_ingredient(ingredient_text)
-                                if parsed:
-                                    ingredients.append(parsed)
-                        
-                        if ingredients:
-                            break
+                            if ingredients:
+                                break
                         
             except (json.JSONDecodeError, KeyError):
                 continue
+        
+        # Если JSON-LD не дал результатов, пробуем извлечь из HTML
+        if not ingredients:
+            # Ищем секцию с заголовком "Ingrediente"
+            # Паттерн: заголовок h2/h3 с текстом "Ingrediente", затем список <li>
+            sections = self.soup.find_all(['h2', 'h3', 'h4'])
+            
+            for section in sections:
+                section_text = section.get_text(strip=True)
+                if re.search(r'ingrediente', section_text, re.IGNORECASE):
+                    # Ищем следующий элемент - обычно это <ul> или <ol>
+                    next_elem = section.find_next_sibling()
+                    
+                    # Иногда список может быть не прямым соседом, ищем все <li> после заголовка
+                    # до следующего заголовка
+                    li_items = []
+                    current = section.find_next()
+                    
+                    while current and current.name not in ['h2', 'h3', 'h4']:
+                        if current.name == 'li':
+                            li_items.append(current)
+                        current = current.find_next()
+                    
+                    for li in li_items:
+                        ingredient_text = li.get_text(separator=' ', strip=True)
+                        ingredient_text = self.clean_text(ingredient_text)
+                        
+                        if ingredient_text and len(ingredient_text) > 3:
+                            parsed = self.parse_ingredient(ingredient_text)
+                            if parsed:
+                                ingredients.append(parsed)
+                    
+                    if ingredients:
+                        break
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
@@ -273,20 +309,60 @@ class KfeteleRoExtractor(BaseRecipeExtractor):
                 if isinstance(data, dict) and data.get('@type') == 'Recipe':
                     if 'recipeInstructions' in data:
                         instructions = data['recipeInstructions']
-                        if isinstance(instructions, list):
-                            for idx, step in enumerate(instructions, 1):
-                                if isinstance(step, dict) and 'text' in step:
-                                    step_text = self.clean_text(step['text'])
-                                    steps.append(f"{idx}. {step_text}")
-                                elif isinstance(step, str):
-                                    step_text = self.clean_text(step)
-                                    steps.append(f"{idx}. {step_text}")
                         
-                        if steps:
-                            break
+                        # Только если список НЕ пустой
+                        if instructions:
+                            if isinstance(instructions, list):
+                                for idx, step in enumerate(instructions, 1):
+                                    if isinstance(step, dict) and 'text' in step:
+                                        step_text = self.clean_text(step['text'])
+                                        steps.append(f"{idx}. {step_text}")
+                                    elif isinstance(step, str):
+                                        step_text = self.clean_text(step)
+                                        steps.append(f"{idx}. {step_text}")
+                            
+                            if steps:
+                                break
                         
             except (json.JSONDecodeError, KeyError):
                 continue
+        
+        # Если JSON-LD не дал результатов, пробуем извлечь из HTML
+        if not steps:
+            # Ищем секцию с заголовком "Mod de preparare" или похожим
+            sections = self.soup.find_all(['h2', 'h3', 'h4'])
+            
+            for section in sections:
+                section_text = section.get_text(strip=True)
+                if re.search(r'mod\s+de\s+preparare|preparare|instruc[tț]iuni', section_text, re.IGNORECASE):
+                    # Ищем все <li> после заголовка до следующего заголовка
+                    li_items = []
+                    current = section.find_next()
+                    
+                    while current and current.name not in ['h2', 'h3', 'h4']:
+                        if current.name == 'li':
+                            li_items.append(current)
+                        # Также ищем <p> с инструкциями
+                        elif current.name == 'p':
+                            # Только если параграф содержит достаточно текста
+                            text = current.get_text(strip=True)
+                            if len(text) > 50:
+                                li_items.append(current)
+                        current = current.find_next()
+                    
+                    for idx, li in enumerate(li_items, 1):
+                        step_text = li.get_text(separator=' ', strip=True)
+                        step_text = self.clean_text(step_text)
+                        
+                        if step_text and len(step_text) > 10:
+                            # Если шаг уже начинается с номера, используем его
+                            if re.match(r'^\d+\.', step_text):
+                                steps.append(step_text)
+                            else:
+                                steps.append(f"{idx}. {step_text}")
+                    
+                    if steps:
+                        break
         
         return ' '.join(steps) if steps else None
     
