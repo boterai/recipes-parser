@@ -185,9 +185,10 @@ class CucinandoItalianoExtractor(BaseRecipeExtractor):
                 continue
             
             # Проверяем, не начались ли заметки
+            # Учитываем разные варианты апострофа: ' (U+0027 ASCII) и ' (U+2019 Unicode)
             if text and (text.startswith('Consigliamo') or text.startswith('Si consiglia') or 
                         text.startswith('E\' possibile') or text.startswith('È possibile') or
-                        text.startswith("E' possibile") or  # вариант без обратного слеша
+                        text.startswith("E' possibile") or text.startswith("E\u2019 possibile") or
                         text.startswith('Al posto') or text.startswith('Se amate') or
                         text.startswith('Conservazione:')):
                 notes_started = True
@@ -195,6 +196,8 @@ class CucinandoItalianoExtractor(BaseRecipeExtractor):
             
             # Если заметки еще не начались и текст достаточно длинный - это инструкция
             if not notes_started and text and len(text) > 50:
+                # Удаляем ссылки на фото в круглых скобках: (1), (12), (13) и т.д.
+                text = re.sub(r'\s*\(\d+\)', '', text)
                 instructions_text.append(text)
         
         # Объединяем в единую строку
@@ -316,9 +319,10 @@ class CucinandoItalianoExtractor(BaseRecipeExtractor):
             text = self.clean_text(text)
             
             # Проверяем различные паттерны для заметок
+            # Учитываем разные варианты апострофа: ' (U+0027 ASCII) и ' (U+2019 Unicode)
             if text and (text.startswith('Consigliamo') or text.startswith('Si consiglia') or 
                         text.startswith('E\' possibile') or text.startswith('È possibile') or
-                        text.startswith("E' possibile") or  # вариант без обратного слеша
+                        text.startswith("E' possibile") or text.startswith("E\u2019 possibile") or
                         text.startswith('Al posto') or text.startswith('Se amate') or
                         'conservare' in text.lower()[:50] or 'conservazione' in text.lower()[:50]):
                 notes.append(text)
