@@ -25,12 +25,12 @@ class FocusCuisineExtractor(BaseRecipeExtractor):
     
     # Список единиц измерения для ингредиентов
     INGREDIENT_UNITS = [
-        'cups?', 'tablespoons?', 'teaspoons?', 'tbsps?', 'tsps?',
-        'pounds?', 'ounces?', 'lbs?', 'oz\\b', 'grams?', 'kilograms?',
-        'g\\b', 'kg\\b', 'milliliters?', 'liters?', 'ml\\b', 'l\\b',
-        'pinch(?:es)?', 'dash(?:es)?', 'packages?', 'cans?', 'jars?',
-        'bottles?', 'inch(?:es)?', 'slices?', 'cloves?', 'bunches?',
-        'sprigs?', 'whole', 'halves?', 'quarters?', 'pieces?', 'head', 'heads'
+        r'cups?', r'tablespoons?', r'teaspoons?', r'tbsps?', r'tsps?',
+        r'pounds?', r'ounces?', r'lbs?', r'oz', r'grams?', r'kilograms?',
+        r'g', r'kg', r'milliliters?', r'liters?', r'ml', r'l',
+        r'pinch(?:es)?', r'dash(?:es)?', r'packages?', r'cans?', r'jars?',
+        r'bottles?', r'inch(?:es)?', r'slices?', r'cloves?', r'bunches?',
+        r'sprigs?', r'whole', r'halves?', r'quarters?', r'pieces?', r'head', r'heads'
     ]
     
     # Ключевые слова для поиска заметок
@@ -242,21 +242,32 @@ class FocusCuisineExtractor(BaseRecipeExtractor):
             text = text.replace(fraction, decimal)
         
         # Паттерн для извлечения количества, единицы и названия
-        # Используем предопределенный список единиц
+        # Сначала пробуем паттерн с единицей измерения
         units_pattern = '|'.join(self.INGREDIENT_UNITS)
-        pattern = rf'^([\d\s/.,]+)?\s*({units_pattern})?\s*(.+)'
+        # Добавляем word boundary после единиц для корректного разделения (особенно для коротких единиц типа g, l, ml)
+        pattern_with_unit = rf'^([\d\s/.,]+)\s+({units_pattern})\b\s+(.+)'
         
-        match = re.match(pattern, text, re.IGNORECASE)
+        match = re.match(pattern_with_unit, text, re.IGNORECASE)
+        amount_str = None
+        unit = None
+        name = None
         
+        # Если не совпало, пробуем паттерн без единицы (только количество и название)
         if not match:
-            # Если паттерн не совпал, возвращаем только название
-            return {
-                "name": text,
-                "amount": None,
-                "unit": None
-            }
-        
-        amount_str, unit, name = match.groups()
+            pattern_no_unit = r'^([\d\s/.,]+)\s+(.+)'
+            match_no_unit = re.match(pattern_no_unit, text, re.IGNORECASE)
+            if match_no_unit:
+                amount_str, name = match_no_unit.groups()
+                unit = None
+            else:
+                # Если все еще не совпало, возвращаем только название
+                return {
+                    "name": text,
+                    "amount": None,
+                    "unit": None
+                }
+        else:
+            amount_str, unit, name = match.groups()
         
         # Обработка количества
         amount = None
@@ -269,6 +280,9 @@ class FocusCuisineExtractor(BaseRecipeExtractor):
                 for part in parts:
                     if '/' in part:
                         num, denom = part.split('/')
+                        # Проверка на деление на ноль
+                        if float(denom) == 0:
+                            continue
                         total += float(num) / float(denom)
                     else:
                         total += float(part)
@@ -593,7 +607,8 @@ class FocusCuisineExtractor(BaseRecipeExtractor):
                     seen.add(url)
                     unique_urls.append(url)
             
-            # Возвращаем как строку через запятую без пробелов (как требует спецификация)
+            # Возвращаем как строку через запятую без пробелов
+            # Формат: "url1,url2,url3" (согласно требованиям в issue)
             return ','.join(unique_urls) if unique_urls else None
         
         return None
