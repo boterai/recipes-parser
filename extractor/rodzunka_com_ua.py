@@ -210,55 +210,60 @@ class RodzunkaComUaExtractor(BaseRecipeExtractor):
         if not entry_content:
             return None
         
-        # Стратегия 1: Ищем заголовок "Покроковий рецепт" или "Приготування"
+        # Стратегия 1: Ищем заголовок "Покроковий рецепт" ПОСЛЕ списка ингредиентов
+        ul = entry_content.find('ul')  # Находим список ингредиентов
         found_instructions_section = False
-        for heading in entry_content.find_all(['h3', 'h2', 'h4']):
-            heading_text = heading.get_text().strip().lower()
-            # Ищем заголовок рецепта, но НЕ заголовок ингредиентов
-            if ('покроков' in heading_text or 'приготування' in heading_text) and 'нгредієнт' not in heading_text:
-                # Собираем все параграфы после этого заголовка до следующего заголовка
-                next_el = heading.find_next_sibling()
-                while next_el:
-                    if next_el.name == 'p':
-                        text = self.clean_text(next_el.get_text())
-                        # Пропускаем заголовки ингредиентов и пустые параграфы
-                        if text and len(text) > 15 and 'читати також' not in text.lower() and 'нгредієнт' not in text.lower():
-                            instructions.append(text)
-                    elif next_el.name in ['h2', 'h3', 'h4']:
-                        # Новый заголовок - прекращаем
-                        break
-                    elif next_el.name == 'ol':
-                        # Нумерованный список инструкций
-                        for li in next_el.find_all('li'):
-                            text = self.clean_text(li.get_text())
-                            if text:
-                                instructions.append(text)
-                    next_el = next_el.find_next_sibling()
-                
-                found_instructions_section = True
-                break
         
-        # Стратегия 2: Если нет заголовка, берем параграфы сразу после UL (списка ингредиентов)
-        if not found_instructions_section:
-            ul = entry_content.find('ul')
-            if ul:
-                next_el = ul.find_next_sibling()
-                while next_el:
-                    if next_el.name == 'p':
-                        text = self.clean_text(next_el.get_text())
-                        # Берем все параграфы, пропуская только "Читати також" и очень короткие
-                        if text and len(text) > 15 and 'читати також' not in text.lower():
-                            instructions.append(text)
-                    elif next_el.name in ['h2', 'h3', 'h4']:
-                        # Следующий раздел - прекращаем
+        if ul:
+            # Ищем заголовок ПОСЛЕ списка ингредиентов
+            current = ul.find_next_sibling()
+            while current:
+                if current.name in ['h3', 'h2', 'h4']:
+                    heading_text = current.get_text().strip().lower()
+                    # Ищем заголовок с ключевыми словами
+                    if 'покроков' in heading_text:
+                        # Собираем все параграфы после этого заголовка
+                        next_el = current.find_next_sibling()
+                        while next_el:
+                            if next_el.name == 'p':
+                                text = self.clean_text(next_el.get_text())
+                                if text and len(text) > 15 and 'читати також' not in text.lower():
+                                    if not (len(text) < 100 and any(emoji in text for emoji in ['🎄', '👼', '🍑', '🍌', '🍒', '🍇', '🍓', '🌱'])):
+                                        instructions.append(text)
+                            elif next_el.name in ['h2', 'h3', 'h4']:
+                                break
+                            elif next_el.name == 'ol':
+                                for li in next_el.find_all('li'):
+                                    text = self.clean_text(li.get_text())
+                                    if text:
+                                        instructions.append(text)
+                            next_el = next_el.find_next_sibling()
+                        
+                        found_instructions_section = True
                         break
-                    elif next_el.name == 'ol':
-                        # Нумерованный список
-                        for li in next_el.find_all('li'):
-                            text = self.clean_text(li.get_text())
-                            if text:
-                                instructions.append(text)
-                    next_el = next_el.find_next_sibling()
+                current = current.find_next_sibling()
+        
+        # Стратегия 2: Если нет заголовка "Покроковий", берем параграфы сразу после UL
+        if not found_instructions_section and ul:
+            next_el = ul.find_next_sibling()
+            while next_el:
+                if next_el.name == 'p':
+                    text = self.clean_text(next_el.get_text())
+                    # Берем все параграфы, пропуская "Читати також" и очень короткие
+                    if text and len(text) > 15 and 'читати також' not in text.lower():
+                        # Проверяем, что это не ссылка на другую статью
+                        if not (len(text) < 100 and any(emoji in text for emoji in ['🎄', '👼', '🍑', '🍌', '🍒', '🍇', '🍓', '🌱'])):
+                            instructions.append(text)
+                elif next_el.name in ['h2', 'h3', 'h4']:
+                    # Следующий раздел - прекращаем
+                    break
+                elif next_el.name == 'ol':
+                    # Нумерованный список
+                    for li in next_el.find_all('li'):
+                        text = self.clean_text(li.get_text())
+                        if text:
+                            instructions.append(text)
+                next_el = next_el.find_next_sibling()
         
         return ' '.join(instructions) if instructions else None
     
