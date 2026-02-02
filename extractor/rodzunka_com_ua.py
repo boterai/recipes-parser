@@ -17,14 +17,37 @@ class RodzunkaComUaExtractor(BaseRecipeExtractor):
     
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
-        # Ищем в заголовке h1.entry-title
+        entry_content = self.soup.find('div', class_='entry-content')
         h1 = self.soup.find('h1', class_='entry-title')
+        
+        # Проверяем H1 - если это короткое название рецепта (не статья), используем его
         if h1:
-            dish_name = self.clean_text(h1.get_text())
-            # Убираем эмодзи и суффиксы типа ": рецепт приготування"
-            dish_name = re.sub(r'[🎃🍫💚🌱🍇🍓🍌🍑🍒❖]', '', dish_name)
-            dish_name = re.sub(r':\s*(рецепт|приготування).*$', '', dish_name, flags=re.IGNORECASE)
-            return self.clean_text(dish_name)
+            h1_text = self.clean_text(h1.get_text())
+            # Убираем эмодзи и суффиксы
+            h1_clean = re.sub(r'[🎃🍫💚🌱🍇🍓🍌🍑🍒❖🥬🌶️]', '', h1_text)
+            h1_clean = re.sub(r':\s*(рецепт|приготування|простий рецепт|секрети).*$', '', h1_clean, flags=re.IGNORECASE)
+            h1_clean = self.clean_text(h1_clean)
+            
+            # Если H1 достаточно короткий и не содержит "як" или "секрети" (признак статьи),
+            # то это название рецепта
+            if h1_clean and len(h1_clean) < 60 and 'як' not in h1_clean.lower():
+                return h1_clean
+        
+        # Для статей с несколькими рецептами ищем первый H3 заголовок в content
+        # (например, "Компот із винограду", "Маринований виноград" и т.д.)
+        if entry_content:
+            first_h3 = entry_content.find('h3')
+            if first_h3:
+                dish_name = self.clean_text(first_h3.get_text())
+                # Убираем эмодзи
+                dish_name = re.sub(r'[🎃🍫💚🌱🍇🍓🍌🍑🍒❖🥬🌶️]', '', dish_name)
+                # Не используем H3, если это "Приготування..." (это заголовок инструкций)
+                if dish_name and len(dish_name) > 5 and not dish_name.lower().startswith('приготування'):
+                    return dish_name
+        
+        # Fallback на H1 если ничего не нашли
+        if h1:
+            return h1_clean if h1_clean else self.clean_text(h1.get_text())
         
         # Альтернативно - из meta og:title
         og_title = self.soup.find('meta', property='og:title')
@@ -171,15 +194,14 @@ class RodzunkaComUaExtractor(BaseRecipeExtractor):
         """Извлечение ингредиентов"""
         ingredients = []
         
-        # Ищем заголовок "Інгредієнти"
         entry_content = self.soup.find('div', class_='entry-content')
         if not entry_content:
             return None
         
-        # Ищем h3 с текстом "Інгредієнти"
+        # Ищем заголовок "Інгредієнти" или "Складники"
         for heading in entry_content.find_all(['h3', 'h2', 'p', 'strong']):
             heading_text = heading.get_text().strip()
-            if 'нгредієнт' in heading_text:
+            if 'нгредієнт' in heading_text or 'кладник' in heading_text:
                 # Ищем следующий ul после этого заголовка
                 next_el = heading.find_next_sibling()
                 while next_el:
@@ -191,7 +213,26 @@ class RodzunkaComUaExtractor(BaseRecipeExtractor):
                                 parsed = self.parse_ingredient(ingredient_text)
                                 if parsed:
                                     ingredients.append(parsed)
-                        break
+                        # Продолжаем искать следующие списки (например, маринад)
+                        next_el = next_el.find_next_sibling()
+                        continue
+                    elif next_el.name == 'p':
+                        # Проверяем, не специи ли это (например, "Спеції: ...")
+                        text = next_el.get_text().strip()
+                        if text.startswith('Спеці') or text.startswith('Маринад'):
+                            # Парсим специи из текста параграфа
+                            # Формат: "Спеції: лавровий лист – 3 шт., перець – 5 шт."
+                            if ':' in text:
+                                spices_text = text.split(':', 1)[1].strip()
+                                # Разбиваем по запятым
+                                for spice in spices_text.split(','):
+                                    spice = spice.strip().rstrip('.')
+                                    if spice:
+                                        parsed = self.parse_ingredient(spice)
+                                        if parsed:
+                                            ingredients.append(parsed)
+                        next_el = next_el.find_next_sibling()
+                        continue
                     elif next_el.name in ['h2', 'h3', 'h4']:
                         # Новый заголовок - прекращаем поиск
                         break
@@ -199,6 +240,40 @@ class RodzunkaComUaExtractor(BaseRecipeExtractor):
                 
                 if ingredients:
                     break
+        
+        # Если не нашли по заголовку, ищем в тексте (для таких как компот из винограда)
+        # где ингредиенты упоминаются в тексте инструкций
+        if not ingredients:
+            # Ищем упоминания сиропа, сахара и т.д. в тексте
+            for p in entry_content.find_all('p'):
+                text = p.get_text()
+                # Ищем упоминания типа "550 г цукру на 1 л води"
+                sugar_match = re.search(r'(\d+)\s*г\s+цукр[уа]', text)
+                water_match = re.search(r'(\d+)\s*л\s+вод[иі]', text)
+                
+                if sugar_match or water_match:
+                    # Это похоже на рецепт компота
+                    # Добавляем виноград (если в тексте есть)
+                    if 'виноград' in text.lower():
+                        ingredients.append({
+                            "name": "виноград",
+                            "amount": None,
+                            "units": None
+                        })
+                    if sugar_match:
+                        ingredients.append({
+                            "name": "цукор",
+                            "amount": int(sugar_match.group(1)),
+                            "units": "г"
+                        })
+                    if water_match:
+                        ingredients.append({
+                            "name": "вода",
+                            "amount": int(water_match.group(1)),
+                            "units": "л"
+                        })
+                    if ingredients:
+                        break
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
@@ -210,7 +285,7 @@ class RodzunkaComUaExtractor(BaseRecipeExtractor):
         if not entry_content:
             return None
         
-        # Стратегия 1: Ищем заголовок "Покроковий рецепт" ПОСЛЕ списка ингредиентов
+        # Стратегия 1: Ищем заголовок "Покроковий рецепт" или "Приготування" ПОСЛЕ списка ингредиентов
         ul = entry_content.find('ul')  # Находим список ингредиентов
         found_instructions_section = False
         
@@ -221,7 +296,7 @@ class RodzunkaComUaExtractor(BaseRecipeExtractor):
                 if current.name in ['h3', 'h2', 'h4']:
                     heading_text = current.get_text().strip().lower()
                     # Ищем заголовок с ключевыми словами
-                    if 'покроков' in heading_text:
+                    if 'покроков' in heading_text or 'приготування' in heading_text:
                         # Собираем все параграфы после этого заголовка
                         next_el = current.find_next_sibling()
                         while next_el:
@@ -243,27 +318,58 @@ class RodzunkaComUaExtractor(BaseRecipeExtractor):
                         break
                 current = current.find_next_sibling()
         
-        # Стратегия 2: Если нет заголовка "Покроковий", берем параграфы сразу после UL
-        if not found_instructions_section and ul:
-            next_el = ul.find_next_sibling()
-            while next_el:
-                if next_el.name == 'p':
-                    text = self.clean_text(next_el.get_text())
-                    # Берем все параграфы, пропуская "Читати також" и очень короткие
-                    if text and len(text) > 15 and 'читати також' not in text.lower():
-                        # Проверяем, что это не ссылка на другую статью
-                        if not (len(text) < 100 and any(emoji in text for emoji in ['🎄', '👼', '🍑', '🍌', '🍒', '🍇', '🍓', '🌱'])):
-                            instructions.append(text)
-                elif next_el.name in ['h2', 'h3', 'h4']:
-                    # Следующий раздел - прекращаем
-                    break
-                elif next_el.name == 'ol':
-                    # Нумерованный список
-                    for li in next_el.find_all('li'):
-                        text = self.clean_text(li.get_text())
-                        if text:
-                            instructions.append(text)
-                next_el = next_el.find_next_sibling()
+        # Стратегия 2: Если нет заголовка "Покроковий", ищем параграфы с описанием процесса
+        # Для страниц типа "компот из винограда", где инструкции идут сразу в тексте
+        if not found_instructions_section:
+            # Ищем первый H3 заголовок (название рецепта) и берем параграфы после него
+            first_h3 = entry_content.find('h3')
+            if first_h3:
+                next_el = first_h3.find_next_sibling()
+                while next_el:
+                    if next_el.name == 'p':
+                        text = self.clean_text(next_el.get_text())
+                        # Берем параграфы с инструкциями (достаточно длинные)
+                        if text and len(text) > 30 and 'читати також' not in text.lower():
+                            # Пропускаем параграфы типа "Сезон приготування"
+                            if not text.startswith('Сезон') and not (len(text) < 100 and any(emoji in text for emoji in ['🎄', '👼', '🍑', '🍌', '🍒', '🍇', '🍓', '🌱'])):
+                                # Проверяем, что это действительно инструкция (содержит глаголы действия)
+                                if any(verb in text.lower() for verb in ['миють', 'миют', 'дають', 'укладають', 'заливають', 'кип\'ятять', 'додають', 'закупорюють', 'стерилізують', 'насікти', 'очистити', 'натерти', 'складіть', 'змішайте', 'закип\'ятіть', 'залийте', 'покладіть', 'варити', 'нарізати', 'приготувати', 'збити', 'випікати']):
+                                    # Если параграф начинается с "Для приготування компоту...", 
+                                    # извлекаем только часть начиная с основного действия
+                                    if text.startswith('Для приготування'):
+                                        # Ищем первое упоминание действия с ингредиентом
+                                        for verb in ['Виноград миють', 'Капусту', 'М\'ясо']:
+                                            if verb in text:
+                                                # Извлекаем текст начиная с этого действия
+                                                idx = text.index(verb)
+                                                text = text[idx:]
+                                                break
+                                    instructions.append(text)
+                    elif next_el.name in ['h2', 'h3', 'h4']:
+                        # Следующий рецепт - прекращаем
+                        break
+                    elif next_el.name == 'ul':
+                        # Пропускаем списки (это не инструкции)
+                        pass
+                    next_el = next_el.find_next_sibling()
+            
+            # Если всё ещё не нашли, берем параграфы после UL
+            if not instructions and ul:
+                next_el = ul.find_next_sibling()
+                while next_el:
+                    if next_el.name == 'p':
+                        text = self.clean_text(next_el.get_text())
+                        if text and len(text) > 15 and 'читати також' not in text.lower():
+                            if not (len(text) < 100 and any(emoji in text for emoji in ['🎄', '👼', '🍑', '🍌', '🍒', '🍇', '🍓', '🌱'])):
+                                instructions.append(text)
+                    elif next_el.name in ['h2', 'h3', 'h4']:
+                        break
+                    elif next_el.name == 'ol':
+                        for li in next_el.find_all('li'):
+                            text = self.clean_text(li.get_text())
+                            if text:
+                                instructions.append(text)
+                    next_el = next_el.find_next_sibling()
         
         return ' '.join(instructions) if instructions else None
     
