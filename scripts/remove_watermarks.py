@@ -1,12 +1,9 @@
 """
 Удаление водяных знаков с изображений через LaMa inpainting.
-
-Установка:
-    pip install simple-lama-inpainting
-    # или для GPU: pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
 """
 
 import logging
+import warnings
 from pathlib import Path
 from typing import Optional, Union
 from io import BytesIO
@@ -15,22 +12,98 @@ import cv2
 import numpy as np
 from PIL import Image, ImageDraw
 import requests
+import asyncio
 import sys
-sys.path.insert(0, str(Path(__file__).parent.parent))
+import base64
 from simple_lama_inpainting import SimpleLama
+import torch
+from diffusers import StableDiffusionXLInpaintPipeline
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from src.common.gpt.client import GPTClient
+
 logger = logging.getLogger(__name__)
+
+MODEL_ID = "diffusers/stable-diffusion-xl-1.0-inpainting-0.1"  # один из популярных SDXL-inpaint чекпойнтов
 
 
 class WatermarkRemover:
     """Удаление водяных знаков через LaMa inpainting"""
     
-    def __init__(self, device: str = "cuda"):
+    def __init__(self, device: str = "cuda", use_sdxl: bool = True, max_image_size: int = 1024):
         """
         Args:
             device: "cuda" или "cpu"
+            use_sdxl: Использовать SDXL вместо LaMa (лучше качество, но требует больше памяти)
+            max_image_size: Максимальный размер изображения (для экономии памяти)
         """
         self.device = device
+        self.use_sdxl = use_sdxl
+        self.max_image_size = max_image_size
         self._model = None
+        self._sdxl_model = None
+
+    def sdxl_inpaint(self, pil_image_rgb: Image.Image, pil_mask_l: Image.Image) -> Image.Image:
+        # Уменьшаем разрешение если нужно (для экономии памяти)
+        orig_size = pil_image_rgb.size
+        if max(orig_size) > self.max_image_size:
+            ratio = self.max_image_size / max(orig_size)
+            new_size = (int(orig_size[0] * ratio), int(orig_size[1] * ratio))
+            pil_image_rgb = pil_image_rgb.resize(new_size, Image.Resampling.LANCZOS)
+            pil_mask_l = pil_mask_l.resize(new_size, Image.Resampling.LANCZOS)
+            logger.info(f"Resized {orig_size} -> {new_size} to save memory")
+        
+        prompt = "photo of food, high detail, no watermark, no logo"
+        negative = "text, watermark, logo, letters, signature, blurry"
+        
+        # Очищаем кэш перед генерацией
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        
+        out = self.sdxl_model(
+            prompt=prompt,
+            negative_prompt=negative,
+            image=pil_image_rgb,
+            mask_image=pil_mask_l,
+            guidance_scale=6.5,
+            num_inference_steps=20,  # Уменьшаем шаги для скорости
+            strength=0.95,
+        )
+        
+        result = out.images[0]
+        
+        # Возвращаем к оригинальному размеру если нужно
+        if result.size != orig_size:
+            result = result.resize(orig_size, Image.Resampling.LANCZOS)
+        
+        return result
+
+    @property
+    def sdxl_model(self):
+        if self._sdxl_model is None:
+            self._sdxl_model = StableDiffusionXLInpaintPipeline.from_pretrained(
+                MODEL_ID,
+                torch_dtype=torch.float16,
+                variant="fp16",
+            )
+            
+            # CPU offload для экономии памяти (модель загружается по частям)
+            self._sdxl_model.enable_model_cpu_offload()
+            
+            # Memory-efficient attention (если установлен xformers)
+            try:
+                self._sdxl_model.enable_xformers_memory_efficient_attention()
+                logger.info("xformers memory efficient attention enabled")
+            except Exception:
+                # xformers is optional - silently continue without it
+                pass
+            
+            # VAE tiling для больших изображений (use new API)
+            self._sdxl_model.vae.enable_tiling()
+            
+            logger.info("SDXL model loaded with memory optimizations")
+        return self._sdxl_model
     
     @property
     def model(self):
@@ -55,98 +128,6 @@ class WatermarkRemover:
                 return Image.open(source).convert("RGB")
         
         raise ValueError(f"Unsupported source type: {type(source)}")
-    
-    def detect_watermark_region(
-        self,
-        image: Image.Image,
-        position: str = "auto",
-        margin_ratio: float = 0.15
-    ) -> Image.Image:
-        """
-        Создаёт маску для типичных позиций водяных знаков.
-        
-        Args:
-            image: PIL Image
-            position: "auto", "bottom-right", "bottom-left", "bottom", "center", 
-                      "corners", "diagonal", "full-center", "top", "all", "none"
-            margin_ratio: размер области (доля от размера изображения)
-        
-        Returns:
-            Маска (белый = область для inpainting)
-        """
-        w, h = image.size
-        mask = Image.new("L", (w, h), 0)  # Чёрная маска
-        
-        if position == "none":
-            return mask  # Пустая маска
-        
-        margin_w = int(w * margin_ratio)
-        margin_h = int(h * margin_ratio)
-        
-        draw = ImageDraw.Draw(mask)
-        
-        if position == "bottom-right" or position == "auto":
-            # Правый нижний угол — самое частое место
-            draw.rectangle([w - margin_w * 2, h - margin_h, w, h], fill=255)
-        
-        if position == "bottom-left" or position == "auto":
-            draw.rectangle([0, h - margin_h, margin_w * 2, h], fill=255)
-        
-        if position == "bottom" or position == "auto":
-            # Нижняя полоса по центру
-            draw.rectangle([margin_w, h - margin_h, w - margin_w, h], fill=255)
-        
-        if position == "top":
-            # Верхняя полоса
-            draw.rectangle([0, 0, w, margin_h], fill=255)
-        
-        if position == "center":
-            # Центральный водяной знак (небольшой)
-            cx, cy = w // 2, h // 2
-            draw.rectangle([
-                cx - margin_w, cy - margin_h // 2,
-                cx + margin_w, cy + margin_h // 2
-            ], fill=255)
-        
-        if position == "full-center":
-            # Большой центральный водяной знак (как у стоков)
-            cx, cy = w // 2, h // 2
-            draw.rectangle([
-                cx - int(w * 0.3), cy - int(h * 0.15),
-                cx + int(w * 0.3), cy + int(h * 0.15)
-            ], fill=255)
-        
-        if position == "diagonal":
-            # Диагональный водяной знак (как у Shutterstock, Getty)
-            # Рисуем полосу по диагонали
-            thickness = int(min(w, h) * 0.12)
-            for i in range(-thickness, thickness):
-                draw.line([(0, i), (w, h + i)], fill=255, width=3)
-        
-        if position == "corners":
-            # Все углы
-            draw.rectangle([0, 0, margin_w, margin_h], fill=255)
-            draw.rectangle([w - margin_w, 0, w, margin_h], fill=255)
-            draw.rectangle([0, h - margin_h, margin_w, h], fill=255)
-            draw.rectangle([w - margin_w, h - margin_h, w, h], fill=255)
-        
-        if position == "all":
-            # Все типичные места сразу (агрессивный режим)
-            # Нижняя полоса
-            draw.rectangle([0, h - margin_h, w, h], fill=255)
-            # Верхняя полоса
-            draw.rectangle([0, 0, w, int(margin_h * 0.7)], fill=255)
-            # Центр
-            cx, cy = w // 2, h // 2
-            draw.rectangle([
-                cx - int(w * 0.25), cy - int(h * 0.1),
-                cx + int(w * 0.25), cy + int(h * 0.1)
-            ], fill=255)
-            # Углы
-            draw.rectangle([0, 0, margin_w, margin_h], fill=255)
-            draw.rectangle([w - margin_w, 0, w, margin_h], fill=255)
-        
-        return mask
     
     def detect_watermark_by_contrast(
         self,
@@ -214,11 +195,11 @@ class WatermarkRemover:
         # Создаём маску
         w, h = image.size
         mask = Image.new("L", (w, h), 0)
-        from PIL import ImageDraw
+        
         draw = ImageDraw.Draw(mask)
         
-        for (bbox, text, confidence) in results:
-            if confidence > 0.5:  # Фильтруем слабые детекции
+        for (bbox, _, confidence) in results:
+            if confidence > 0.6:  # Фильтруем слабые детекции
                 xs = [p[0] for p in bbox]
                 ys = [p[1] for p in bbox]
                 x1, y1 = max(0, min(xs) - expand_pixels), max(0, min(ys) - expand_pixels)
@@ -244,10 +225,6 @@ class WatermarkRemover:
         Returns:
             Маска с обнаруженными водяными знаками или None
         """
-        from src.common.gpt.client import GPTClient
-        import base64
-        from io import BytesIO
-        
         gpt_client = GPTClient()
         
         # Конвертируем изображение в base64
@@ -313,7 +290,6 @@ Be thorough - check corners, edges, center, and any semi-transparent overlays.""
             
             # Создаём маску
             mask = Image.new("L", (w, h), 0)
-            from PIL import ImageDraw
             draw = ImageDraw.Draw(mask)
             
             for wm in watermarks:
@@ -343,43 +319,14 @@ Be thorough - check corners, edges, center, and any semi-transparent overlays.""
             logger.error(f"GPT watermark detection failed: {e}")
             return None
     
-    def detect_watermark_by_gpt_sync(
-        self,
-        image: Image.Image,
-        expand_pixels: int = 15
-    ) -> Optional[Image.Image]:
-        """
-        Синхронная обёртка для detect_watermark_by_gpt.
-        """
-        import asyncio
-        
-        try:
-            loop = asyncio.get_event_loop()
-            if loop.is_running():
-                # Если уже в async контексте
-                import concurrent.futures
-                with concurrent.futures.ThreadPoolExecutor() as executor:
-                    future = executor.submit(
-                        asyncio.run,
-                        self.detect_watermark_by_gpt(image, expand_pixels)
-                    )
-                    return future.result()
-            else:
-                return loop.run_until_complete(
-                    self.detect_watermark_by_gpt(image, expand_pixels)
-                )
-        except RuntimeError:
-            return asyncio.run(self.detect_watermark_by_gpt(image, expand_pixels))
-    
     def remove_watermark(
         self,
         image: Union[str, Path, Image.Image],
         mask: Optional[Image.Image] = None,
-        position: str = "auto",
         use_text_detection: bool = False,
         use_contrast_detection: bool = False,
         use_gpt_detection: bool = False,
-        combine_masks: bool = True
+        combine_masks: bool = True,
     ) -> Image.Image:
         """
         Удаляет водяной знак с изображения.
@@ -387,8 +334,6 @@ Be thorough - check corners, edges, center, and any semi-transparent overlays.""
         Args:
             image: Изображение (URL, путь или PIL Image)
             mask: Готовая маска (белый = область для удаления)
-            position: Позиция водяного знака: "auto", "bottom", "center", 
-                      "full-center", "diagonal", "corners", "all", "top"
             use_text_detection: Использовать OCR для детекции текста
             use_contrast_detection: Использовать анализ контраста
             use_gpt_detection: Использовать GPT Vision для детекции (наиболее точный)
@@ -405,9 +350,9 @@ Be thorough - check corners, edges, center, and any semi-transparent overlays.""
         if mask is not None:
             masks_to_combine.append(mask)
         else:
-            # GPT Vision детекция (самая точная, но платная)
+            # GPT Vision детекция
             if use_gpt_detection:
-                gpt_mask = self.detect_watermark_by_gpt_sync(pil_image)
+                gpt_mask = asyncio.run(self.detect_watermark_by_gpt(pil_image))
                 if gpt_mask is not None:
                     masks_to_combine.append(gpt_mask)
                     logger.info("Watermark detected via GPT Vision")
@@ -425,21 +370,19 @@ Be thorough - check corners, edges, center, and any semi-transparent overlays.""
                 if contrast_mask is not None:
                     masks_to_combine.append(contrast_mask)
                     logger.info("Watermark detected via contrast analysis")
-            
-            # Позиционная маска (если ничего не нашли или как дополнение)
-            if not masks_to_combine or position != "none":
-                position_mask = self.detect_watermark_region(pil_image, position=position)
-                masks_to_combine.append(position_mask)
         
         # Объединяем маски
         if combine_masks and len(masks_to_combine) > 1:
             w, h = pil_image.size
-            combined = Image.new("L", (w, h), 0)
+            
+            # Объединение (OR) - все области любой из масок
+            combined = Image.new("L", (w, h), 0)  # Начинаем с черного
             for m in masks_to_combine:
-                # Убеждаемся что размеры совпадают
                 if m.size != (w, h):
                     m = m.resize((w, h))
                 combined = Image.fromarray(np.maximum(np.array(combined), np.array(m)))
+            logger.info(f"Combined {len(masks_to_combine)} masks using UNION")
+            
             mask = combined
         else:
             mask = masks_to_combine[0] if masks_to_combine else self.detect_watermark_region(pil_image, position=position)
@@ -450,17 +393,26 @@ Be thorough - check corners, edges, center, and any semi-transparent overlays.""
             logger.info("No watermark region detected, returning original")
             return pil_image
         
-        # Inpainting через LaMa
-        result = self.model(pil_image, mask)
+        # Inpainting через SDXL или LaMa
+        if self.use_sdxl:
+            # Используем SDXL (лучше качество, но требует GPU)
+            result = self.sdxl_inpaint(pil_image, mask)
+            logger.info(f"Watermark removed using SDXL from image {pil_image.size}")
+        else:
+            # Используем LaMa (быстрее, меньше памяти)
+            result = self.model(pil_image, mask)
+            logger.info(f"Watermark removed using LaMa from image {pil_image.size}")
         
-        logger.info(f"Watermark removed from image {pil_image.size}")
+        # Очищаем кэш после обработки
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        
         return result
     
     def save_debug_mask(
         self,
         image: Union[str, Path, Image.Image],
         output_path: str = "debug_mask.png",
-        position: str = "auto",
         use_text_detection: bool = False,
         use_contrast_detection: bool = False
     ):
@@ -481,9 +433,6 @@ Be thorough - check corners, edges, center, and any semi-transparent overlays.""
             if contrast_mask:
                 masks.append(("contrast", contrast_mask))
         
-        position_mask = self.detect_watermark_region(pil_image, position=position)
-        masks.append(("position", position_mask))
-        
         # Сохраняем комбинированную маску
         w, h = pil_image.size
         combined = Image.new("L", (w, h), 0)
@@ -499,85 +448,54 @@ Be thorough - check corners, edges, center, and any semi-transparent overlays.""
 
 _remover: Optional[WatermarkRemover] = None
 
-def get_watermark_remover(device: str = "cuda") -> WatermarkRemover:
+def get_watermark_remover(device: str = "cuda", use_sdxl: bool = True, max_image_size: int = 1024) -> WatermarkRemover:
     global _remover
     if _remover is None:
-        _remover = WatermarkRemover(device=device)
+        _remover = WatermarkRemover(device=device, use_sdxl=use_sdxl, max_image_size=max_image_size)
     return _remover
 
-def remove_watermark(
-    image: Union[str, Path, Image.Image],
-    mask: Optional[Image.Image] = None,
-    position: str = "auto",
-    device: str = "cuda"
-) -> Image.Image:
-    """
-    Быстрая функция для удаления водяного знака.
-    
-    Примеры:
-        # Из URL
-        clean = remove_watermark("https://example.com/image.jpg")
-        
-        # Из файла
-        clean = remove_watermark("photo.jpg")
-        
-        # С указанием позиции
-        clean = remove_watermark("photo.jpg", position="bottom-right")
-        
-        # С кастомной маской
-        mask = Image.open("mask.png")
-        clean = remove_watermark("photo.jpg", mask=mask)
-    """
-    remover = get_watermark_remover(device)
-    return remover.remove_watermark(image, mask=mask, position=position)
-
 if __name__ == "__main__":
+    import os
     logging.basicConfig(level=logging.INFO)
-    remover = get_watermark_remover(device="cuda")
     
-    image_path = "images/ffb135f242cdc67c.jpg"
+    # Включаем управление фрагментацией памяти CUDA
+    os.environ["PYTORCH_ALLOC_CONF"] = "expandable_segments:True"
     
-    # Сначала сохраним маску для отладки (чтобы увидеть какие области будут обработаны)
-    """ remover.save_debug_mask(
+    # Используем LaMa (экономит память) или SDXL (иногда чуть лучше качество, не касается сайта поваренок ид 5)
+    remover = get_watermark_remover(
+        device="cuda",
+        use_sdxl=False,
+        max_image_size=1024
+    )
+    
+    image_path = "images/ffdfe31a43f8568c.jpg"
+    
+    # метод для сохранения маски для отладки
+    remover.save_debug_mask(
         image_path,
-        output_path="debug_mask.png",
-        position="all",  # Попробуй разные: "auto", "full-center", "diagonal", "all"
+        output_path="wm_img/debug_mask.png",
         use_text_detection=True,
         use_contrast_detection=True
     )
-    logger.info("Check debug_mask.png to see which areas will be processed")"""
+    logger.info("Check debug_mask.png to see which areas will be processed")
 
-
+    # Вариант 1: Union (объединение всех масок) - удалит все что найдено любым методом
     cleaned_image = remover.remove_watermark(
         image_path,
-        position="auto",
         use_gpt_detection=False,
         use_text_detection=True,
         use_contrast_detection=True,
         combine_masks=True
     )
-    cleaned_image.save("cleaned_no_gpt.jpg", quality=95)
+    cleaned_image.save("wm_img/cleaned.jpg", quality=100)
     
-    # Теперь удаляем водяной знак
-    # Вариант 1: Только GPT детекция (самый точный, но платный ~$0.01 за изображение)
+    """# Вариант 2: Только GPT детекция
     cleaned_image = remover.remove_watermark(
         image_path,
-        position="none",  # Отключаем позиционную маску, полагаемся на GPT
         use_gpt_detection=True,  # GPT Vision определит где водяной знак
         use_text_detection=False,
         use_contrast_detection=False,
         combine_masks=False
     )
-    cleaned_image.save("cleaned_gpt.jpg", quality=95)
-    logger.info("Cleaned image (GPT) saved to cleaned_gpt.jpg")
-    
-    # Вариант 2: Комбинированный (GPT + все остальные методы)
-    # cleaned_image = remover.remove_watermark(
-    #     image_path,
-    #     position="auto",
-    #     use_gpt_detection=True,  # GPT Vision
-    #     use_text_detection=True,  # OCR
-    #     use_contrast_detection=True,  # Анализ контраста
-    #     combine_masks=True
-    # )
-    # cleaned_image.save("cleaned_combined.jpg", quality=95)
+    cleaned_image.save("cleaned_gpt_classic.jpg", quality=100)
+    logger.info("Cleaned image (GPT) saved to cleaned_gpt.jpg")"""
