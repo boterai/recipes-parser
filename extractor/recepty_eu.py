@@ -55,7 +55,25 @@ class ReceptyEuExtractor(BaseRecipeExtractor):
     
     def is_search_results_page(self) -> bool:
         """Проверка, является ли страница страницей поиска/списка рецептов"""
-        # Проверяем наличие множественных recipe-box элементов
+        # Проверяем наличие полноценного рецепта (JSON-LD Recipe или itemprop ingredients)
+        has_full_recipe = False
+        
+        # Проверяем JSON-LD Recipe
+        recipe_data = self.get_json_ld_recipe()
+        if recipe_data:
+            has_full_recipe = True
+        
+        # Проверяем itemprop="recipeIngredient"
+        if not has_full_recipe:
+            ingredients = self.soup.find_all('li', itemprop='recipeIngredient')
+            if ingredients:
+                has_full_recipe = True
+        
+        # Если есть полноценный рецепт, это не страница поиска
+        if has_full_recipe:
+            return False
+        
+        # Если нет полноценного рецепта, но есть recipe-box, это страница поиска
         recipe_boxes = self.soup.find_all('div', class_='recipe-box')
         return len(recipe_boxes) > 0
     
