@@ -94,7 +94,8 @@ class ReceptyEuExtractor(BaseRecipeExtractor):
         
         # Паттерны для извлечения ингредиентов с количеством
         # Пример: "150 ml vody" -> voda: 150 ml
-        pattern_with_amount = r'(\d+(?:[.,]\d+)?)\s*(ml|g|kg|l|dl|lžic|lžíce|lžička|lžiček|stroužky|stroužek|svazek|plát)\s+([a-zA-Zá-žÁ-Žěščřžýáíéúůťďňó]+)'
+        # Используем \w для букв (включает латиницу и unicode буквы)
+        pattern_with_amount = r'(\d+(?:[.,]\d+)?)\s*(ml|g|kg|l|dl|lžic|lžíce|lžička|lžiček|stroužky|stroužek|svazek|plát)\s+([\wáčďéěíňóřšťúůýžÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]+)'
         matches = re.finditer(pattern_with_amount, text, re.IGNORECASE)
         
         found_ingredients = set()
