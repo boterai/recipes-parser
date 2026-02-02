@@ -173,7 +173,7 @@ class KuvarancipjeExtractor(BaseRecipeExtractor):
                     val = float(amount_str.replace(',', '.'))
                     # Возвращаем как число (int или float)
                     amount = int(val) if val == int(val) else val
-                except:
+                except (ValueError, TypeError):
                     amount = amount_str
         
         # Обработка единицы измерения
