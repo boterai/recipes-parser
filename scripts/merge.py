@@ -11,6 +11,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.stages.search.similarity import SimilaritySearcher, ClusterParams, build_clusters_from_dsu
 from src.stages.merge.merge import ClusterVariationGenerator
+from src.repositories.merged_recipe import MergedRecipeRepository
 from typing import Literal
 # Базовая настройка только для консоли
 logging.basicConfig(
@@ -125,6 +126,13 @@ async def run_merge_with_same_lang(score_thresold: float,
             save_clusters_to_history(existing_clusters, cluster_processing_history)
         except Exception as e:
             logger.error(f"Error merging cluster with pages {cluster}: {e}")
+
+def view_recipes(merge_recipe_id: int = 534):
+    mr = MergedRecipeRepository()
+    merged_recipes = mr.get_by_id_with_images(merge_recipe_id)
+    img_urls = [img.id for img in merged_recipes.images] if merged_recipes and merged_recipes.images else []
+    logger.info(f"Merged Recipe ID: {merged_recipes.id if merged_recipes else 'Not Found'}")
+    logger.info(f"Image URLs: {img_urls}")   
 
 if __name__ == "__main__":
     from dotenv import load_dotenv # загружаем для доступа к .env переменным

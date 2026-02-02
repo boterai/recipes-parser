@@ -117,6 +117,26 @@ class Image(BaseModel):
         """Преобразование модели в JSON-совместимый словарь"""
         return self.model_dump(mode='json', exclude_none=True)
     
+    async def get_pil_image_async(self, max_retries: int = 3, use_proxy: bool = True) -> PILImage | None:
+        """
+        Асинхронно скачать изображение и вернуть как PIL.Image.Image
+        
+        Args:
+            max_retries: Максимальное количество попыток скачивания
+            use_proxy: Использовать прокси из переменной окружения PROXY
+        
+        Returns:
+            PIL.Image.Image или None при ошибке
+        """
+        if self.local_path and os.path.exists(self.local_path):
+            try:
+                img = PIL.open(self.local_path)
+                img.load()
+                return img
+            except Exception as e:
+                logger.error(f"Ошибка при открытии локального изображения {self.local_path}: {e}")
+        
+        return await download_image_async(self.image_url, max_retries=max_retries, use_proxy=use_proxy)
 
 def download_image(image_url: str, timeout: float = 30.0, max_retries: int = 3) -> PILImage | None:
     """

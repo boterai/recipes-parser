@@ -212,6 +212,25 @@ class ImageRepository(BaseRepository[ImageORM]):
             ).scalar()
         finally:
             session.close()
+
+    def get_by_page_ids(self, page_ids: List[int]) -> List[ImageORM]:
+        """
+        Получить изображения по списку ID страниц
+        
+        Args:
+            page_ids: Список ID страниц
+        
+        Returns:
+            Список изображений
+        """
+        session = self.get_session()
+        try:
+            images = session.query(ImageORM).filter(
+                ImageORM.page_id.in_(page_ids)
+            ).all()
+            return images
+        finally:
+            session.close()
     
     def get_page_ids_by_image_ids(self, image_ids: List[int]) -> List[int]:
         """

@@ -26,6 +26,7 @@ from src.common.gpt.client import GPTClient
 from src.common.db.clickhouse import ClickHouseManager
 from src.repositories.page import PageRepository
 from src.repositories.merged_recipe import MergedRecipeRepository
+from src.repositories.image import ImageRepository
 
 logger = logging.getLogger(__name__)
 
@@ -222,6 +223,90 @@ Is this still the same dish type? (approve unless completely different dish)"""
             logger.error(f"GPT validation failed: {e}")
             return True, "GPT unavailable, assuming valid"
 
+    async def validate_images_for_recipe(
+        self,
+        recipe: MergedRecipe,
+        image_urls: list[str],
+        min_valid_ratio: float = 0.5
+    ) -> list[str]:
+        """
+        Проверяет, подходят ли изображения к рецепту через GPT Vision.
+        
+        Args:
+            recipe: Merged рецепт для проверки
+            image_urls: Список URL изображений для проверки
+            min_valid_ratio: Минимальная доля валидных изображений (по умолчанию 50%)
+            
+        Returns:
+            (valid_urls, validation_results) - список валидных URL и детали проверки
+        """
+        if not image_urls:
+            return []
+        
+        # Берём ключевые ингредиенты для проверки
+        key_ingredients = [
+            ing.get('name', '') 
+            for ing in (recipe.ingredients or [])[:5]
+            if ing.get('name')
+        ]
+        
+        system_prompt = """You are a food image validator. Check if images match the given recipe.
+
+For EACH image, evaluate:
+1. Does the dish type match? (soup should look like soup, salad like salad, etc.)
+2. Are key ingredients visible or expected in this type of dish?
+3. Is it a photo of finished dish (not raw ingredients, not packaging)?
+
+APPROVE if the image reasonably represents this type of dish.
+REJECT only if:
+- Completely different dish type (e.g., cake image for soup recipe)
+- Not a food photo at all (landscape, person, text only)
+- Raw ingredients only, not a prepared dish
+- Packaging/product photo instead of cooked dish
+
+Return JSON array with validation for each image in order:
+[
+  {"index": 0, "valid": true, "confidence": 0.9, "reason": "Shows prepared pasta dish with visible tomatoes"},
+  {"index": 1, "valid": false, "confidence": 0.8, "reason": "Image shows raw vegetables, not cooked dish"}
+]"""
+
+        user_prompt = f"""Recipe: {recipe.dish_name}
+Key ingredients: {', '.join(key_ingredients)}
+Description: {(recipe.description or '')[:200]}
+
+Validate these {len(image_urls)} images. Do they show this dish or similar?"""
+
+        try:
+            result = await self.gpt_client.async_request_with_images(
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                image_urls=image_urls,
+                temperature=0.1,
+                max_tokens=300 + len(image_urls) * 100
+            )
+            
+            # Парсим результат
+            validation_results = result if isinstance(result, list) else []
+            
+            valid_urls = []
+            for item in validation_results:
+                idx = item.get('index', -1)
+                if item.get('valid', False) and 0 <= idx < len(image_urls) and item.get('confidence', 0) >= min_valid_ratio:
+                    valid_urls.append(image_urls[idx])
+                    logger.debug(f"Image {idx} VALID: {item.get('reason', 'N/A')}")
+                else:
+                    logger.debug(f"Image {idx} REJECTED: {item.get('reason', 'N/A')}")
+            
+            valid_ratio = len(valid_urls) / len(image_urls) if image_urls else 0
+            logger.info(f"Image validation for '{recipe.dish_name}': "
+                       f"{len(valid_urls)}/{len(image_urls)} valid ({valid_ratio:.0%})")
+            
+            return valid_urls
+            
+        except Exception as e:
+            logger.error(f"GPT Vision validation failed: {e}")
+            # При ошибке возвращаем все изображения (fail-open)
+            return image_urls
 
 class ClusterVariationGenerator:
     """Генератор вариаций из кластера рецептов"""
@@ -231,6 +316,7 @@ class ClusterVariationGenerator:
         self._olap_db = None
         self.page_repository = PageRepository()
         self.merge_repository = MergedRecipeRepository()
+        self.image_repository = ImageRepository()
         self.score_threshold = score_threshold
         self.clusters_build_type = clusters_build_type
         self.merged_recipe_schema = json.load(open("src/models/schemas/merged_recipe.json", "r", encoding="utf-8"))
@@ -479,6 +565,31 @@ class ClusterVariationGenerator:
         
         return variations
     
+    async def add_image_to_merged_recipe(self, merged_recipe_id: int) -> None:
+        """
+            Добавляет валидные изображения к MergedRecipe по его ID
+            Args:
+                merged_recipe_id: ID MergedRecipe
+        
+        """
+        merged_recipe = self.merge_repository.get_by_id_with_images(merged_recipe_id)
+        if not merged_recipe:
+            logger.error(f"MergedRecipe с ID {merged_recipe_id} не найден")
+            return
+        merged_recipe = merged_recipe.to_pydantic()
+        images = self.image_repository.get_by_page_ids(merged_recipe.page_ids)
+        if not images:
+            logger.warning(f"Изображения для MergedRecipe ID {merged_recipe_id} не найдены")
+            return
+        
+        urls = [img.image_url for img in images if img.image_url]
+        valid_urls = await self.merger.validate_images_for_recipe(merged_recipe, urls)
+        if not valid_urls:
+            logger.warning(f"Нет валидных изображений для MergedRecipe ID {merged_recipe_id}")
+            return
+        valid_images_id = [img.id for img in images if img.image_url in valid_urls]
+        self.merge_repository.add_images_to_recipe(merged_recipe_id, valid_images_id)
+    
     async def _generate_single_variation_gpt(
         self,
         base: Recipe,
@@ -640,6 +751,9 @@ if __name__ == "__main__":
     import random
     import asyncio
     logging.basicConfig(level=logging.INFO)
+    generator = ClusterVariationGenerator()
+    generator.image_repository
+    asyncio.run(generator.add_image_to_merged_recipe(merged_recipe_id=429))
 
     async def example():
         generator = ClusterVariationGenerator()

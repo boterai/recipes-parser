@@ -9,6 +9,9 @@ from sqlalchemy import Column, String, TIMESTAMP, Text, text, BIGINT, JSON, CHAR
 from sqlalchemy.orm import relationship
 from src.models.base import Base
 import hashlib
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Промежуточная таблица для связи многие-ко-многим
 merged_recipe_images = Table(
@@ -73,7 +76,11 @@ class MergedRecipeORM(Base):
                 page_ids = []
         
         # Извлекаем image_ids из relationship
-        image_ids = [img.id for img in self.images] if self.images else []
+        try:
+            image_ids = [img.id for img in self.images] if self.images else []
+        except Exception as e:
+            logger.error(f"Error extracting image_ids from MergedRecipeORM id={self.id}: {e}")
+            image_ids = []
         
         return MergedRecipe(
             id=self.id,

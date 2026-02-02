@@ -389,11 +389,11 @@ Return ONLY JSON array of IDs representing similar recipes."""
         
         return page_ids_to_image_ids
         
-    def save_clusters_to_file(self, clusters: list[list[int]]) -> None:
+    def save_clusters_to_file(self, clusters: list[list[int]], recalculate_mapping: bool = False) -> None:
         """Сохраняет текущие кластеры в файл в формате JSON."""
         # конвертируем кластеры из изображений в кластеры по ID рецептов
         if self.build_type == "image":
-            if not os.path.exists(self.cluter_image_mapping):
+            if not os.path.exists(self.cluter_image_mapping) or recalculate_mapping:
                 page_ids_to_image_ids = {"image_to_page": {}, "page_to_image": {}}
                 recipe_clisters = []
                 for image_ids in clusters:
@@ -450,4 +450,4 @@ if __name__ == "__main__":
             continue
 
     final_clusters = build_clusters_from_dsu(ss.dsu, min_cluster_size=2)
-    ss.save_clusters_to_file(final_clusters)
+    ss.save_clusters_to_file(final_clusters, recalculate_mapping=True)

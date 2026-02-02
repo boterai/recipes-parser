@@ -343,6 +343,106 @@ class GPTClient:
         
         return text.strip()
 
+    async def async_request_with_images(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        image_urls: list[str],
+        model: str = "gpt-4o",
+        temperature: float = 0.1,
+        max_tokens: int = 500,
+        timeout: int = 60,
+        retry_attempts: int = 3,
+    ) -> dict[str, Any]:
+        """
+        Асинхронный запрос к GPT с изображениями (Vision API).
+        
+        Args:
+            system_prompt: Системный промпт
+            user_prompt: Пользовательский промпт
+            image_urls: Список URL изображений для анализа
+            model: Модель (gpt-4o, gpt-4o-mini поддерживают vision)
+            temperature: Температура генерации
+            max_tokens: Максимальное количество токенов
+            timeout: Таймаут запроса
+            retry_attempts: Количество повторных попыток
+            
+        Returns:
+            Распарсенный JSON ответ
+        """
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.api_key}"
+        }
+        
+        # Формируем content с текстом и изображениями
+        content = [{"type": "text", "text": user_prompt}]
+        for url in image_urls:
+            content.append({
+                "type": "image_url",
+                "image_url": {"url": url, "detail": "low"}  # low для экономии токенов
+            })
+        
+        payload = {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": content}
+            ],
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+        }
+        
+        last_exception = None
+        timeout_obj = aiohttp.ClientTimeout(total=timeout)
+        
+        for attempt in range(retry_attempts):
+            try:
+                async with aiohttp.ClientSession(timeout=timeout_obj) as session:
+                    async with session.post(
+                        self.api_url,
+                        headers=headers,
+                        json=payload,
+                        proxy=self.proxy if self.proxy else None
+                    ) as response:
+                        response.raise_for_status()
+                        response_data = await response.json()
+                        result_text = response_data['choices'][0]['message']['content'].strip()
+                        
+                        result_text = self._clean_markdown(result_text)
+                        return json.loads(result_text)
+                        
+            except json.JSONDecodeError as e:
+                logger.error(f"Ошибка парсинга JSON от GPT Vision: {e}")
+                logger.error(f"Ответ GPT: {result_text if 'result_text' in locals() else 'N/A'}")
+                last_exception = e
+                break
+                
+            except aiohttp.ClientResponseError as e:
+                if e.status == 403:
+                    logger.error("Ошибка 403 (Forbidden): проверьте API ключ")
+                    raise
+                
+                last_exception = e
+                if attempt < retry_attempts - 1:
+                    delay = 2 ** attempt
+                    logger.warning(f"HTTP ошибка {e.status}: попытка {attempt + 1}/{retry_attempts}. Повтор через {delay}с...")
+                    await asyncio.sleep(delay)
+                    
+            except (aiohttp.ClientError, asyncio.TimeoutError) as e:
+                last_exception = e
+                if attempt < retry_attempts - 1:
+                    delay = 2 ** attempt
+                    logger.warning(f"Ошибка запроса к GPT Vision: попытка {attempt + 1}/{retry_attempts}. Повтор через {delay}с...")
+                    await asyncio.sleep(delay)
+                    
+            except Exception as e:
+                logger.error(f"Неожиданная ошибка запроса к GPT Vision: {e}")
+                last_exception = e
+                break
+        
+        raise last_exception if last_exception else Exception("Неизвестная ошибка запроса к GPT Vision")
+
 if __name__ == "__main__":
     client = GPTClient()
     data = '{"dish_name": "Crushed Crispy Oven-Baked Potatoes", "description": "Crushed crispy oven-baked potatoes are something in between boiled and roasted (we use this expression without a negative connotation, just to describe the essence of the dish, its texture). Tender on the inside but crispy on the outside. It resembles either potato pancakes or hash browns, but turns out softer than classic hash browns and more interesting than regular baked potatoes. The secret lies in crushing boiled potatoes, turning them into thick flat cakes with jagged edges, and then baking them until crispy. Crushed potatoes baked in the oven will surprise both kids and adults, and are very easy to make!", "ingredients": ["potatoes", "olive oil", "dried garlic", "dried rosemary", "salt", "ground black pepper", "sweet paprika"], "tags": ["potatoes", "oven dishes", "side dish", "oven-baked potatoes"], "category": "main course", "instructions": "Step 1: Thoroughly scrub the potatoes with a brush. Choose potatoes of roughly the same size so they cook evenly. In a large pot, bring salted water to a boil. Add the potatoes to the boiling water and cook for 20-25 minutes after it starts boiling, until they are soft but not falling apart. The potatoes should be easily pierced with a fork. Step 2: Preheat the oven to 220°C. Line a baking sheet with parchment paper and grease it with 1 tbsp of olive oil. Place the boiled potatoes on the baking sheet. Take a wooden masher or a cup and gently press down on each potato to flatten them to a thickness of 2-2.5 cm. Step 3: In a small bowl, mix the remaining olive oil with dried garlic, rosemary, paprika, salt, and pepper. Generously spread this flavorful mixture on each potato "pancaked", making sure the oil gets into all the cracks. Step 4: Place the baking sheet in the preheated oven for 15-20 minutes. Do not flip the potatoes during cooking. Check for doneness by the golden-brown crispy edges and surface. For extra crispiness, you can turn on the grill for 3-4 minutes at the end of cooking. Step 5: The crushed, oven-baked potatoes are ready. Remove from the oven and let them rest for 2-3 minutes. Serve hot, optionally sprinkled with coarse sea salt and fresh rosemary. Perfect with sour cream or Greek yogurt-based sauces."}'
