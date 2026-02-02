@@ -112,10 +112,18 @@ class TillmiddagExtractor(BaseRecipeExtractor):
                 
                 if rest_span:
                     name_text = self.clean_text(rest_span.get_text())
-                    # Убираем скобки с дополнительной информацией
-                    name_text = re.sub(r'\([^)]*\)', '', name_text)
+                    # Убираем скобки с дополнительной информацией (включая вложенные)
+                    # Повторяем пока есть скобки
+                    while '(' in name_text or ')' in name_text:
+                        prev_text = name_text
+                        name_text = re.sub(r'\([^)]*\)', '', name_text)
+                        # Убираем оставшиеся одиночные скобки
+                        name_text = name_text.replace('(', '').replace(')', '')
+                        if prev_text == name_text:  # Защита от бесконечного цикла
+                            break
                     # Убираем фразы "valfritt", "efter smak"
                     name_text = re.sub(r'\b(valfritt|efter smak|till servering)\b', '', name_text, flags=re.IGNORECASE)
+                    # Убираем лишние символы в конце (запятые, точки с запятой)
                     name_text = re.sub(r'[,;]+$', '', name_text)
                     name_text = re.sub(r'\s+', ' ', name_text).strip()
                     name = name_text
