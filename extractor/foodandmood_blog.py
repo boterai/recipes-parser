@@ -141,13 +141,14 @@ class FoodAndMoodExtractor(BaseRecipeExtractor):
             # Находим все шаги
             step_items = instructions_container.find_all('li', class_='wprm-recipe-instruction')
             
-            for item in step_items:
+            for idx, item in enumerate(step_items, 1):
                 # Извлекаем текст инструкции
                 text_elem = item.find('div', class_='wprm-recipe-instruction-text')
                 if text_elem:
                     step_text = self.clean_text(text_elem.get_text())
                     if step_text:
-                        steps.append(step_text)
+                        # Добавляем нумерацию
+                        steps.append(f"{idx}. {step_text}")
         
         # Если HTML не помог, пробуем JSON-LD
         if not steps:
@@ -155,16 +156,13 @@ class FoodAndMoodExtractor(BaseRecipeExtractor):
             if json_ld and 'recipeInstructions' in json_ld:
                 instructions = json_ld['recipeInstructions']
                 if isinstance(instructions, list):
-                    for step in instructions:
+                    for idx, step in enumerate(instructions, 1):
                         if isinstance(step, dict) and 'text' in step:
-                            steps.append(self.clean_text(step['text']))
+                            steps.append(f"{idx}. {self.clean_text(step['text'])}")
                         elif isinstance(step, str):
-                            steps.append(self.clean_text(step))
+                            steps.append(f"{idx}. {self.clean_text(step)}")
         
         if steps:
-            # Добавляем нумерацию если её нет
-            if not re.match(r'^\d+\.', steps[0]):
-                steps = [f"{idx}. {step}" for idx, step in enumerate(steps, 1)]
             return ' '.join(steps)
         
         return None
@@ -300,7 +298,30 @@ class FoodAndMoodExtractor(BaseRecipeExtractor):
         """Извлечение тегов"""
         tags = []
         
-        # Пробуем из JSON-LD
+        # Сначала пробуем из JSON-LD Article (приоритет)
+        json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
+        
+        for script in json_ld_scripts:
+            try:
+                data = json.loads(script.string)
+                
+                # Проверяем @graph (Yoast SEO)
+                if isinstance(data, dict) and '@graph' in data:
+                    for item in data['@graph']:
+                        # Ищем Article с keywords
+                        if item.get('@type') == 'Article' and 'keywords' in item:
+                            keywords = item['keywords']
+                            if isinstance(keywords, list):
+                                tags = keywords
+                            elif isinstance(keywords, str):
+                                tags = [tag.strip() for tag in keywords.split(',') if tag.strip()]
+                            if tags:
+                                return ', '.join(tags)
+                
+            except (json.JSONDecodeError, KeyError):
+                continue
+        
+        # Если не нашли в Article, пробуем из Recipe
         json_ld = self._get_json_ld_recipe()
         if json_ld and 'keywords' in json_ld:
             keywords = json_ld['keywords']
