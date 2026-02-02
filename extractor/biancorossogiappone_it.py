@@ -98,7 +98,7 @@ class BiancorossogiapponeExtractor(BaseRecipeExtractor):
         
         # Паттерн для извлечения: количество + единица + "di" + название
         # Примеры: "450ml di acqua fredda", "2 cucchiai di miso", "60g di tofu"
-        pattern = r'^([\d\s/.,\-]+)\s*(ml|g|kg|l|cucchiai|cucchiaio|cucchiaini|cucchiaino|pizzico|spicchi|spicchio|cm|litri|litro|unit)?\s+(?:di\s+)?(.+)$'
+        pattern = r'^([\d\s/.,\-]+)\s*(ml|g|kg|l|cucchiai|cucchiaio|cucchiaini|cucchiaino|pizzico|spicchi|spicchio|cm|litri|litro)?\s+(?:di\s+)?(.+)$'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
