@@ -11,6 +11,13 @@ from typing import Optional
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
 
+# Паттерн для извлечения чисел из японского текста
+# Включает: полноширинные цифры (０-９), японские числительные (一二三 и т.д.), дроби (½¼¾)
+NUMERIC_PATTERN = r'^([０-９0-9一二三四五六七八九十百千万½¼¾⅓⅔⅛⅜⅝⅞]+(?:[./][０-９0-9]+)?)'
+
+# Глагольные окончания для фильтрации предложений с действиями
+VERB_ENDINGS = ['ます', 'する', 'れる', 'える']
+
 
 class SirogohanComExtractor(BaseRecipeExtractor):
     """Экстрактор для sirogohan.com"""
@@ -90,8 +97,8 @@ class SirogohanComExtractor(BaseRecipeExtractor):
         amount_unit = parts[1].strip()
         
         # Парсим amount и units
-        # Ищем числа в начале
-        amount_match = re.match(r'^([０-９0-9一二三四五六七八九十百千万½¼¾⅓⅔⅛⅜⅝⅞]+(?:[./][０-９0-9]+)?)', amount_unit)
+        # Ищем числа в начале используя предопределенный паттерн
+        amount_match = re.match(NUMERIC_PATTERN, amount_unit)
         
         amount = None
         units = None
@@ -204,8 +211,8 @@ class SirogohanComExtractor(BaseRecipeExtractor):
                     sentences = re.split(r'[。！]', text)
                     for sent in sentences:
                         sent = sent.strip()
-                        # Берем только предложения с действиями (содержащие глаголы в форме ます)
-                        if sent and ('ます' in sent or 'する' in sent or 'れる' in sent or 'える' in sent):
+                        # Берем только предложения с действиями (содержащие глагольные окончания)
+                        if sent and any(ending in sent for ending in VERB_ENDINGS):
                             # Убираем объяснения в скобках
                             sent = re.sub(r'[（(].*?[)）]', '', sent)
                             # Убираем лишние пробелы
@@ -234,6 +241,10 @@ class SirogohanComExtractor(BaseRecipeExtractor):
     
     def extract_cooking_time(self) -> Optional[str]:
         """Извлечение времени приготовления"""
+        # Кешируем результат, чтобы избежать повторного парсинга
+        if hasattr(self, '_cached_cooking_time'):
+            return self._cached_cooking_time
+        
         # Ищем #cooking-time
         time_elem = self.soup.find(id='cooking-time')
         if time_elem:
@@ -243,8 +254,11 @@ class SirogohanComExtractor(BaseRecipeExtractor):
             time_match = re.search(r'(\d+)\s*分', time_text)
             if time_match:
                 minutes = time_match.group(1)
-                return f"{minutes} minutes"
+                result = f"{minutes} minutes"
+                self._cached_cooking_time = result
+                return result
         
+        self._cached_cooking_time = None
         return None
     
     def extract_prep_time(self) -> Optional[str]:
