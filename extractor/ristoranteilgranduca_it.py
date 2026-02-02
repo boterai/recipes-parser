@@ -120,6 +120,12 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
                         if not part:
                             continue
                         
+                        # Специальная обработка для "sale e pepe"
+                        if re.match(r'^sale\s+(e|o)\s+pepe', part, re.I):
+                            ingredients.append({"name": "sale", "amount": None, "units": None})
+                            ingredients.append({"name": "pepe", "amount": None, "units": None})
+                            continue
+                        
                         # Парсим каждый ингредиент
                         parsed = self.parse_ingredient_italian(part)
                         if parsed and parsed.get('name') and len(parsed.get('name', '')) > 1:
@@ -132,7 +138,7 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
         Парсинг итальянского ингредиента
         
         Args:
-            text: Строка вида "1 cespo di scarola" или "2 cucchiai di olio"
+            text: Строка вида "1 cespo di scarola" или "2 cucchiai di olio" или "1 uovo sbattuto"
             
         Returns:
             dict: {"name": "scarola", "amount": 1, "units": "cespo"} или None
@@ -141,10 +147,42 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
             return None
         
         # Чистим текст
-        text = self.clean_text(text).lower()
+        text = self.clean_text_italian(text).lower()
         
-        # Заменяем Unicode символы разделителей
-        text = text.replace('‚', ',').replace('⁚', ':')
+        # Специальная обработка для "sale e pepe"
+        if re.match(r'^sale\s+(e|o)\s+pepe', text, re.I):
+            return {
+                "name": "sale",
+                "amount": None,
+                "units": None
+            }
+        
+        # Паттерн: "1 cespo di scarola" или "100g di parmigiano" или "1 spicchio d'aglio"
+        # Для "d'aglio" обрабатываем отдельно
+        pattern_dapostrophe = r'^([\d.,/]+)\s+([a-zàèéìòù]+)\s+d\'(.+)$'
+        match = re.match(pattern_dapostrophe, text, re.I)
+        
+        if match:
+            amount_str, unit, name = match.groups()
+            
+            # Обработка количества
+            amount = None
+            if amount_str:
+                amount_str = amount_str.strip().replace(',', '.')
+                try:
+                    if '/' in amount_str:
+                        parts = amount_str.split('/')
+                        amount = float(parts[0]) / float(parts[1])
+                    else:
+                        amount = float(amount_str)
+                except ValueError:
+                    amount = None
+            
+            return {
+                "name": name.strip(),
+                "amount": amount,
+                "units": unit.strip() if unit else None
+            }
         
         # Паттерн: "1 cespo di scarola" или "100g di parmigiano"
         # Группы: (количество) (единица) di (название)
@@ -167,7 +205,10 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
                 except ValueError:
                     amount = None
             
-            # Очистка названия
+            # Очистка названия - убираем "d'" в начале если есть
+            name = name.strip()
+            
+            # Очистка названия от других артефактов
             name = re.sub(r'\s*\(.*?\)\s*', '', name)  # Убираем скобки
             name = re.sub(r'\s+', ' ', name).strip()
             
@@ -180,7 +221,35 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
                 "units": unit.strip() if unit else None
             }
         
-        # Паттерн без "di": "sale e pepe q.b"
+        # Паттерн для "1 uovo sbattuto" или "1 rotolo di pasta sfoglia rettangolare"
+        # Здесь "sbattuto" - это состояние (unit), а "uovo" - название
+        # Группы: (количество) (название) (состояние/описание)
+        pattern_with_adjective = r'^([\d.,/]+)\s+([a-zàèéìòù]+)\s+(sbattuto|tritato|grattugiato|macinato|tagliato|affettato)(.*)$'
+        match = re.match(pattern_with_adjective, text, re.I)
+        
+        if match:
+            amount_str, name, state, rest = match.groups()
+            
+            # Обработка количества
+            amount = None
+            if amount_str:
+                amount_str = amount_str.strip().replace(',', '.')
+                try:
+                    if '/' in amount_str:
+                        parts = amount_str.split('/')
+                        amount = float(parts[0]) / float(parts[1])
+                    else:
+                        amount = float(amount_str)
+                except ValueError:
+                    amount = None
+            
+            return {
+                "name": name.strip(),
+                "amount": amount,
+                "units": state.strip() if state else None
+            }
+        
+        # Паттерн без "di": "sale e pepe q.b" или другие простые названия
         pattern_simple = r'^([\d.,/]+)?\s*([a-zàèéìòù]+)?\s*(.+)$'
         match = re.match(pattern_simple, text, re.I)
         
@@ -188,13 +257,15 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
             amount_str, unit, name = match.groups()
             
             # Проверяем, не является ли это просто названием без количества
-            # Например "sale e pepe q.b"
             if not amount_str and not unit:
                 # Это просто название
                 name = text
                 # Убираем "q.b" и подобные пометки
                 name = re.sub(r'\s*q\.b\.?\s*$', '', name, flags=re.I)
                 name = name.strip()
+                # Пропускаем пустые названия и слишком длинные строки
+                if not name or len(name) < 2 or len(name) > 50:
+                    return None
                 return {
                     "name": name,
                     "amount": None,
@@ -217,9 +288,12 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
             # Очистка названия
             name = re.sub(r'\s*\(.*?\)\s*', '', name)
             name = re.sub(r'\s*q\.b\.?\s*$', '', name, flags=re.I)
+            # Убираем описания типа "per spennellare"
+            name = re.sub(r'\s+per\s+.*$', '', name, flags=re.I)
             name = re.sub(r'\s+', ' ', name).strip()
             
-            if not name or len(name) < 2:
+            # Пропускаем пустые названия и слишком длинные строки
+            if not name or len(name) < 2 or len(name) > 50:
                 return None
             
             return {
@@ -230,7 +304,7 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
         
         # Если не совпадает ни один паттерн, возвращаем только название
         return {
-            "name": text,
+            "name": text if len(text) <= 50 else None,
             "amount": None,
             "units": None
         }
@@ -275,15 +349,17 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
     
     def extract_category(self) -> Optional[str]:
         """Извлечение категории"""
-        # Определяем по ключевым словам в названии и тексте
+        # Определяем по ключевым словам в названии
         dish_name = self.extract_dish_name()
-        text_content = self.soup.get_text().lower()
         
-        # Проверяем название на ключевые слова
-        dish_lower = dish_name.lower() if dish_name else ""
+        if not dish_name:
+            return "Main Course"
         
-        # Десерты и сладости
-        if any(word in dish_lower or word in text_content for word in ['torta', 'dolce', 'dessert', 'ciambella', 'biscotti', 'gelato']):
+        dish_lower = dish_name.lower()
+        
+        # Десерты и сладости - должны иметь слово torta, dolce, etc в названии
+        dessert_keywords = ['torta', 'dolce', 'dessert', 'ciambella', 'biscotti', 'gelato', 'tiramisù']
+        if any(word in dish_lower for word in dessert_keywords):
             return "Dessert"
         
         # Антипасто
