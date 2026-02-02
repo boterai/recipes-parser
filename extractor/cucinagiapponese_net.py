@@ -21,7 +21,18 @@ class CucinaGiapponeseExtractor(BaseRecipeExtractor):
         title_elem = self.soup.find('h1', class_='entry-title')
         if title_elem:
             title = title_elem.get_text(strip=True)
-            # Убираем японские символы после ・
+            # Формат: "Japanese Name・日本語 – Italian Name" or "Japanese Name・日本語"
+            # Предпочитаем итальянское название (после –)
+            if '–' in title or '—' in title:
+                # Берем часть после длинного тире
+                parts = re.split(r'[–—]', title)
+                if len(parts) > 1:
+                    italian_name = parts[-1].strip()
+                    # Убираем японские символы если остались
+                    italian_name = re.sub(r'・.*$', '', italian_name)
+                    return self.clean_text(italian_name)
+            
+            # Иначе убираем японские символы после ・
             title = re.sub(r'・.*$', '', title)
             return self.clean_text(title)
         
@@ -29,6 +40,16 @@ class CucinaGiapponeseExtractor(BaseRecipeExtractor):
         og_title = self.soup.find('meta', property='og:title')
         if og_title and og_title.get('content'):
             title = og_title['content']
+            # Применяем ту же логику
+            if '–' in title or '—' in title:
+                parts = re.split(r'[–—]', title)
+                if len(parts) > 1:
+                    italian_name = parts[-1].strip()
+                    italian_name = re.sub(r'・.*$', '', italian_name)
+                    # Убираем суффиксы типа "- Ricette..."
+                    italian_name = re.sub(r'\s*-\s*Ricette.*$', '', italian_name, flags=re.IGNORECASE)
+                    return self.clean_text(italian_name)
+            
             title = re.sub(r'・.*$', '', title)
             return self.clean_text(title)
         
