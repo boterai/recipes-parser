@@ -102,6 +102,20 @@ class CookieMadnessExtractor(BaseRecipeExtractor):
         
         return None
     
+    # Common measurement units for ingredient parsing
+    MEASUREMENT_UNITS = [
+        'cup', 'cups', 'tablespoon', 'tablespoons', 'teaspoon', 'teaspoons',
+        'tbsp', 'tsp', 'pound', 'pounds', 'ounce', 'ounces', 'lb', 'lbs', 'oz',
+        'gram', 'grams', 'kilogram', 'kilograms', 'g', 'kg',
+        'milliliter', 'milliliters', 'liter', 'liters', 'ml', 'l',
+        'pinch', 'pinches', 'dash', 'dashes',
+        'package', 'packages', 'can', 'cans', 'jar', 'jars', 'bottle', 'bottles',
+        'inch', 'inches', 'slice', 'slices', 'clove', 'cloves',
+        'bunch', 'bunches', 'sprig', 'sprigs',
+        'whole', 'half', 'halves', 'quarter', 'quarters',
+        'piece', 'pieces', 'head', 'heads', 'stick', 'sticks', 'unit'
+    ]
+    
     def parse_ingredient(self, ingredient_text: str) -> Optional[dict]:
         """
         Парсинг строки ингредиента в структурированный формат
@@ -137,7 +151,8 @@ class CookieMadnessExtractor(BaseRecipeExtractor):
         
         # Паттерн для извлечения количества, единицы и названия
         # Поддерживает форматы: "1 cup flour", "2 tablespoons butter", "1/2 teaspoon salt", "1 1/2 cups flour"
-        pattern = r'^([\d\s/]+)?\s*(cup|cups|tablespoon|tablespoons|teaspoon|teaspoons|tbsp|tsp|pound|pounds|ounce|ounces|lb|lbs|oz|gram|grams|kilogram|kilograms|g|kg|milliliter|milliliters|liter|liters|ml|l|pinch|pinches|dash|dashes|package|packages|can|cans|jar|jars|bottle|bottles|inch|inches|slice|slices|clove|cloves|bunch|bunches|sprig|sprigs|whole|half|halves|quarter|quarters|piece|pieces|head|heads|stick|sticks|unit)s?\s+(.+)'
+        units_pattern = '|'.join(self.MEASUREMENT_UNITS)
+        pattern = rf'^([\d\s/]+)?\s*({units_pattern})s?\s+(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -284,9 +299,12 @@ class CookieMadnessExtractor(BaseRecipeExtractor):
         if recipe_data and 'keywords' in recipe_data:
             keywords = recipe_data['keywords']
             if isinstance(keywords, str):
-                # Если keywords уже строка с разделителями
-                # Нормализуем разделители: заменяем запятую с пробелом на ", "
+                # Нормализуем разделители: сначала заменяем ', ' на временный маркер
+                keywords = keywords.replace(', ', '|||')
+                # Затем заменяем одиночные запятые на ', '
                 keywords = keywords.replace(',', ', ')
+                # Возвращаем обратно уже нормализованные ', '
+                keywords = keywords.replace('|||', ', ')
                 # Убираем множественные пробелы
                 keywords = re.sub(r'\s+', ' ', keywords)
                 return keywords.strip()
