@@ -128,51 +128,50 @@ class AvmarketLtExtractor(BaseRecipeExtractor):
         """Извлечение ингредиентов"""
         ingredients = []
         
-        # Ищем первую секцию с ингредиентами после первого h2 с рецептом
-        # Обычно это первый рецепт на странице
+        # Ищем первый h2 с "Ingredientai:" или секцией ингредиентов
         h2_tags = self.soup.find_all('h2')
-        
-        # Флаг, указывающий, что мы нашли первый рецепт
-        found_first_recipe = False
-        found_ingredient_section = False
         
         for h2 in h2_tags:
             h2_text = self.clean_text(h2.get_text())
             
-            # Ищем первый рецепт (обычно содержит название типа "Klasikiniai...")
-            if not found_first_recipe and h2_text and not h2_text.endswith(':'):
-                # Это может быть заголовок первого рецепта
-                found_first_recipe = True
-                continue
-            
-            # После нахождения первого рецепта ищем ингредиенты
-            if found_first_recipe:
-                # Проверяем, что это секция ингредиентов
-                if h2_text and (h2_text.endswith(':') or 
-                               'ingredientai' in h2_text.lower() or
-                               'kotletams' in h2_text.lower() or
-                               'padažui' in h2_text.lower() or
-                               'kukuliams' in h2_text.lower()):
-                    
-                    # Ищем следующий ul после этого h2
-                    next_ul = h2.find_next_sibling('ul')
-                    if next_ul:
-                        found_ingredient_section = True
-                        items = next_ul.find_all('li', recursive=False)
-                        for item in items:
-                            ingredient_text = item.get_text(separator=' ', strip=True)
-                            ingredient_text = self.clean_text(ingredient_text)
-                            
-                            if ingredient_text:
-                                parsed = self.parse_ingredient(ingredient_text)
-                                if parsed:
-                                    ingredients.append(parsed)
+            # Проверяем, что это секция ингредиентов
+            if h2_text and ('ingredientai' in h2_text.lower() or
+                           (h2_text.endswith(':') and any(keyword in h2_text.lower() 
+                            for keyword in ['kotletams', 'padažui', 'kukuliams', 'sriubai']))):
                 
-                # Проверяем, не начался ли следующий рецепт
-                # (h2 без двоеточия после того как нашли ингредиенты)
-                elif found_ingredient_section and h2_text and not h2_text.endswith(':') and 'gaminimo' not in h2_text.lower():
-                    # Начался новый рецепт, прекращаем сбор ингредиентов
-                    break
+                # Ищем следующий ul после этого h2
+                next_ul = h2.find_next_sibling('ul')
+                if next_ul:
+                    items = next_ul.find_all('li', recursive=False)
+                    for item in items:
+                        ingredient_text = item.get_text(separator=' ', strip=True)
+                        ingredient_text = self.clean_text(ingredient_text)
+                        
+                        if ingredient_text:
+                            parsed = self.parse_ingredient(ingredient_text)
+                            if parsed:
+                                ingredients.append(parsed)
+                    
+                    # Проверяем, нашли ли мы хотя бы несколько ингредиентов
+                    # Если да, продолжаем искать другие секции того же рецепта
+                    if ingredients:
+                        # Ищем следующий h2
+                        next_h2 = h2.find_next_sibling('h2')
+                        
+                        # Если следующий h2 также секция ингредиентов того же рецепта
+                        # (например, "Padažui:"), продолжаем
+                        if next_h2:
+                            next_h2_text = self.clean_text(next_h2.get_text())
+                            if next_h2_text and next_h2_text.endswith(':') and any(keyword in next_h2_text.lower() 
+                                for keyword in ['kotletams', 'padažui', 'kukuliams', 'sriubai', 'ingredientai']):
+                                # Это еще одна секция ингредиентов того же рецепта, продолжаем цикл
+                                continue
+                            else:
+                                # Это уже другой раздел (Gaminimas: или новый рецепт), прекращаем
+                                break
+                        else:
+                            # Нет следующего h2, прекращаем
+                            break
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
