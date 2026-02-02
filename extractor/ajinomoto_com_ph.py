@@ -190,9 +190,14 @@ class AjinomotoComPhExtractor(BaseRecipeExtractor):
             # Находим следующий элемент с классом fusion-text
             fusion_text = ingredients_heading.find_next('div', class_='fusion-text')
             if fusion_text:
-                # Извлекаем параграф с ингредиентами
-                p = fusion_text.find('p')
-                if p:
+                # Извлекаем ВСЕ параграфы с ингредиентами
+                paragraphs = fusion_text.find_all('p')
+                for p in paragraphs:
+                    # Пропускаем параграфы с заголовками типа "Mga Sangkap" или "Reference:"
+                    p_text = p.get_text(strip=True)
+                    if 'Reference:' in p_text or (p_text.startswith('Mga Sangkap') and len(p_text) < 100):
+                        continue
+                    
                     # Разбиваем по <br> тегам
                     # Используем get_text с разделителем, чтобы избежать слияния текста из разных строк
                     for br in p.find_all('br'):
@@ -203,6 +208,9 @@ class AjinomotoComPhExtractor(BaseRecipeExtractor):
                     lines = [line.strip() for line in text.split('|||') if line.strip()]
                     
                     for line in lines:
+                        # Пропускаем строки с заголовками
+                        if 'Reference:' in line or line.startswith('Mga Sangkap'):
+                            continue
                         parsed = self.parse_ingredient_line(line)
                         if parsed and parsed['name']:
                             ingredients.append(parsed)
