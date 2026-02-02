@@ -207,8 +207,21 @@ class ThuongbepExtractor(BaseRecipeExtractor):
         
         # Очистка названия
         name = name.strip() if name else text
+        
         # Удаляем скобки с содержимым
         name = re.sub(r'\([^)]*\)', '', name)
+        
+        # Удаляем инструкции по подготовке в конце названия (после запятой)
+        # Например: "khoai tây nhỏ, cắt đôi theo chiều dọc" -> "khoai tây nhỏ"
+        if ',' in name:
+            parts = name.split(',')
+            # Берем первую часть, если вторая часть содержит глаголы/инструкции
+            second_part = parts[1].lower().strip()
+            # Ключевые слова для инструкций
+            instruction_words = ['cắt', 'thái', 'băm', 'bóc', 'rửa', 'luộc', 'nướng', 'đập', 'để', 'cho', 'hoặc']
+            if any(word in second_part for word in instruction_words):
+                name = parts[0]
+        
         # Удаляем лишние пробелы
         name = re.sub(r'\s+', ' ', name).strip()
         
@@ -400,8 +413,9 @@ class ThuongbepExtractor(BaseRecipeExtractor):
         # Ищем параграфы, начинающиеся с "Lưu ý:", "Mẹo:", "Ghi chú:" и т.д.
         content_div = self.soup.find('div', class_='inner-post-entry')
         if content_div:
-            for p in content_div.find_all('p'):
-                text = p.get_text(separator=' ', strip=True)
+            # 1. Проверяем параграфы и элементы em
+            for elem in content_div.find_all(['p', 'em']):
+                text = elem.get_text(separator=' ', strip=True)
                 text = self.clean_text(text)
                 
                 # Проверяем, начинается ли с ключевых слов для заметок
@@ -412,12 +426,34 @@ class ThuongbepExtractor(BaseRecipeExtractor):
                             text = text[len(keyword):].strip()
                             break
                     
-                    # Пропускаем стандартные заметки о питательности
-                    if 'thông tin' not in text.lower() or 'dinh dưỡng' not in text.lower():
-                        if text and len(text) > 15:
+                    # Включаем заметки о питательности, если они короткие и информативные
+                    if text and len(text) > 15:
+                        # Берем только первое предложение для заметок о питательности
+                        if 'thông tin' in text.lower() and 'dinh dưỡng' in text.lower():
+                            sentences = text.split('.')
+                            if sentences:
+                                first_sent = sentences[0].strip()
+                                if first_sent and len(first_sent) > 20:
+                                    notes.append(first_sent + '.')
+                        else:
                             notes.append(text)
             
-            # Также ищем в blockquotes, которые содержат "Mẹo"
+            # 2. Проверяем списки под заголовками с "Mẹo", "Lưu ý"
+            for header in content_div.find_all(['h3', 'h4']):
+                header_text = self.clean_text(header.get_text()).lower()
+                
+                if any(keyword in header_text for keyword in ['mẹo', 'lưu ý', 'ghi chú', 'chú ý']):
+                    # Находим следующий ul
+                    next_ul = header.find_next_sibling('ul')
+                    if next_ul:
+                        for li in next_ul.find_all('li'):
+                            li_text = self.clean_text(li.get_text())
+                            # Пропускаем ссылки на другие рецепты
+                            if li_text and not any(skip in li_text.lower() for skip in ['tham khảo', 'xem thêm', 'bạn có thể quan tâm']):
+                                if len(li_text) > 15:
+                                    notes.append(li_text)
+            
+            # 3. Также ищем в blockquotes, которые содержат "Mẹo"
             blockquotes = content_div.find_all('blockquote', class_='wp-block-quote')
             for bq in blockquotes:
                 text = bq.get_text(separator=' ', strip=True)
