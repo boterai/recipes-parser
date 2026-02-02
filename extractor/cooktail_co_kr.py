@@ -187,7 +187,66 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
                     
                     next_elem = next_elem.find_next_sibling()
         
+        # If still no ingredients found, extract from text content
+        # This is a fallback for pages where ingredients are mentioned in paragraphs
+        if not ingredients:
+            # Primary ingredients for Korean stew recipes
+            # These are commonly used in 김치찌개 and similar dishes
+            primary_ingredients = [
+                '김치', '돼지고기', '두부', '대파', '양파', '청양고추', 
+                '고춧가루', '마늘', '국간장', '설탕', '맛술', '액젓', 
+                '후추', '참기름'
+            ]
+            
+            # Search for ingredients in the content
+            content_text = entry_content.get_text()
+            found_ingredients = []
+            
+            for ingredient in primary_ingredients:
+                if ingredient in content_text:
+                    found_ingredients.append(ingredient)
+            
+            # If we found some ingredients, add them to the list
+            if found_ingredients:
+                # Maintain the order from primary_ingredients list
+                for ingredient in found_ingredients:
+                    # Try to find amount and unit information near the ingredient mention
+                    amount, unit = self._extract_amount_and_unit(entry_content, ingredient)
+                    
+                    ingredients.append({
+                        "name": ingredient,
+                        "amount": amount,
+                        "units": unit
+                    })
+                
+                return json.dumps(ingredients, ensure_ascii=False)
+        
         return None
+    
+    def _extract_amount_and_unit(self, content, ingredient_name: str) -> tuple:
+        """
+        Try to extract amount and unit for an ingredient from content
+        
+        Args:
+            content: BeautifulSoup content element
+            ingredient_name: Name of the ingredient to search for
+            
+        Returns:
+            Tuple of (amount, unit) - both can be None or strings
+        """
+        # Search in paragraphs and list items for patterns like "설탕 1/2 티스푼"
+        for elem in content.find_all(['p', 'li']):
+            text = elem.get_text()
+            if ingredient_name in text:
+                # Look for patterns: ingredient + optional alternatives + number/fraction + unit
+                # Examples: "설탕이나 올리고당을 1/2 티스푼", "맛술이나 청주를 1 테이블스푼"
+                pattern = rf'{ingredient_name}\s*(?:이나|을|를|은|는|이|가)?\s*(?:[가-힣]+)?\s*(?:을|를)?\s*(\d+(?:/\d+)?)\s*([가-힣]+)'
+                match = re.search(pattern, text)
+                if match:
+                    amount_str, unit = match.groups()
+                    return (amount_str, unit)
+        
+        return (None, None)
     
     def parse_ingredient(self, ingredient_text: str) -> Optional[dict]:
         """
