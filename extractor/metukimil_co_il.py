@@ -28,16 +28,37 @@ class MetukimilExtractor(BaseRecipeExtractor):
             except (json.JSONDecodeError, KeyError):
                 continue
         
+        # Пробуем из WPRM recipe name (для print страниц)
+        wprm_name = self.soup.find(class_='wprm-recipe-name')
+        if wprm_name:
+            return self.clean_text(wprm_name.get_text())
+        
         # Ищем в заголовке h1
         h1 = self.soup.find('h1')
         if h1:
             return self.clean_text(h1.get_text())
+        
+        # Пробуем h2 (для print страниц)
+        h2 = self.soup.find('h2')
+        if h2:
+            text = self.clean_text(h2.get_text())
+            # Пропускаем общие заголовки
+            if text and text not in ['המצרכים', 'הוראות הכנה', 'הערות']:
+                return text
         
         # Альтернативно - из meta тега og:title
         og_title = self.soup.find('meta', property='og:title')
         if og_title and og_title.get('content'):
             title = og_title['content']
             # Убираем суффиксы типа " - מתכונים מתוקים"
+            title = re.sub(r'\s*[||-].*$', '', title)
+            return self.clean_text(title)
+        
+        # Из title тега (последний вариант)
+        title_tag = self.soup.find('title')
+        if title_tag:
+            title = title_tag.get_text()
+            # Убираем суффиксы
             title = re.sub(r'\s*[||-].*$', '', title)
             return self.clean_text(title)
         
