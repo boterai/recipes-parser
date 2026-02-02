@@ -211,9 +211,9 @@ class FoodAndMoodExtractor(BaseRecipeExtractor):
         # Форматируем вывод
         result = []
         if hours > 0:
-            result.append(f"{hours} hour" + ("s" if hours > 1 else ""))
+            result.append(f"{hours} hour{'s' if hours > 1 else ''}")
         if minutes > 0:
-            result.append(f"{minutes} minute" + ("s" if minutes > 1 else ""))
+            result.append(f"{minutes} minute{'s' if minutes > 1 else ''}")
         
         return ' '.join(result) if result else None
     
