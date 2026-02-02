@@ -11,7 +11,6 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
 import queue
 from typing import Optional
-import random
 # Добавление корневой директории в PYTHONPATH
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -140,7 +139,7 @@ def main(module_name: str = "24kitchen_nl", port: int = 9222):
     )
 
 
-def run_parallel(ports: list[int], modules: list[str] = None, max_urls: int = 4000, 
+def run_parallel(ports: list[int], modules: Optional[list[str]] = None, max_urls: int = 4000, 
                  max_depth: int = 4, max_recipes_per_module: Optional[int] = 4000):
     """
     Запуск парсеров в нескольких потоках с отдельными логами
@@ -156,16 +155,13 @@ def run_parallel(ports: list[int], modules: list[str] = None, max_urls: int = 40
     
     parser = RecipeParserRunner(extractor_dir="extractor")
 
-    processed_modules = []
-    if max_recipes_per_module is not None:
-        processed_modules = parser.site_repository.get_extractors(min_recipes=max_recipes_per_module)
+    # получаем модули для парсинга с учетом max_recipes_per_module и сортируя по убыванию количества рецептов
+    site_names = parser.site_repository.get_extractors(max_recipes=max_recipes_per_module, order="asc")
 
     if not modules:
-        modules = [ex for ex in parser.available_extractors if ex not in processed_modules]
+        modules = [site_name for site_name in site_names if site_name in parser.available_extractors]
     else:
-        extractors = parser.available_extractors.copy()
-        extractors = [ex for ex in extractors if not (ex in processed_modules or ex in modules)]
-        random.shuffle(extractors)
+        extractors = [site_name for site_name in site_names if (site_name not in modules and site_name in parser.available_extractors)]
         modules.extend(extractors)
     
     logger.info(f"\nВсего модулей: {len(modules)}, Портов: {len(ports)}")
@@ -293,6 +289,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     if args.parallel:
-        run_parallel(ports=args.ports,  modules=args.modules, max_recipes_per_module=args.max_recipes_per_module, max_urls=args.max_urls)
+        run_parallel(ports=args.ports,  modules=None, max_recipes_per_module=args.max_recipes_per_module, max_urls=args.max_urls)
     else:
         main(args.modules[0], args.ports[0])

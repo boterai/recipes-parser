@@ -3,7 +3,7 @@
 """
 
 import logging
-from typing import Optional, List
+from typing import Optional, Literal
 from sqlalchemy import or_, func
 
 from src.repositories.base import BaseRepository
@@ -67,7 +67,7 @@ class SiteRepository(BaseRepository[SiteORM]):
         logger.info(f"✓ Создан новый сайт: {site_data.name} (ID: {created.id})")
         return created
     
-    def search_by_domain(self, domain_pattern: str) -> List[SiteORM]:
+    def search_by_domain(self, domain_pattern: str) -> list[SiteORM]:
         """
         Поиск сайтов по части домена
         
@@ -102,7 +102,7 @@ class SiteRepository(BaseRepository[SiteORM]):
             ).count()
             return count
         
-    def get_unprocessed_sites(self, limit: Optional[int] = None, random_order: bool = False) -> List[SiteORM]:
+    def get_unprocessed_sites(self, limit: Optional[int] = None, random_order: bool = False) -> list[SiteORM]:
         """
         Получить список сайтов без паттерна и не прошедших поиск рецептов
         
@@ -157,7 +157,8 @@ class SiteRepository(BaseRepository[SiteORM]):
         finally:
             session.close()
 
-    def get_extractors(self, max_recipes: Optional[int] = None, min_recipes: Optional[int] = None) -> List[str]:
+    def get_extractors(self, max_recipes: Optional[int] = None, min_recipes: Optional[int] = None,
+                       order: Literal["asc", "desc"] = "desc") -> list[str]:
         """
         получить доменные имена сайтов, для которых есть экстракторы и которые еще не набрали максимум рецептов
         
@@ -175,8 +176,12 @@ class SiteRepository(BaseRepository[SiteORM]):
                 .join(PageORM, PageORM.site_id == SiteORM.id)
                 .filter(PageORM.is_recipe == True)
                 .group_by(SiteORM.id, SiteORM.name)
-                .order_by(func.count(PageORM.id).desc())
             )
+
+            if order == "asc":
+                query = query.order_by(func.count(PageORM.id).asc())
+            else:
+                query = query.order_by(func.count(PageORM.id).desc())
             
             if max_recipes is not None:
                 query = query.having(func.count(PageORM.id) <= max_recipes)
