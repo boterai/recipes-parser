@@ -1,5 +1,5 @@
 """
-Экстрактор данных рецептов для сайта cooktail.co.kr
+Recipe data extractor for cooktail.co.kr website
 """
 
 import sys
@@ -13,11 +13,11 @@ from extractor.base import BaseRecipeExtractor, process_directory
 
 
 class CooktailCoKrExtractor(BaseRecipeExtractor):
-    """Экстрактор для cooktail.co.kr"""
+    """Extractor for cooktail.co.kr"""
     
     def extract_dish_name(self) -> Optional[str]:
-        """Извлечение названия блюда"""
-        # Ищем в заголовке h1 с классом entry-title
+        """Extract dish name"""
+        # Look for h1 header with class entry-title
         title_elem = self.soup.find('h1', class_='entry-title')
         if title_elem:
             title = self.clean_text(title_elem.get_text())
@@ -62,8 +62,8 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
         return None
     
     def extract_description(self) -> Optional[str]:
-        """Извлечение описания рецепта"""
-        # Для cooktail.co.kr создаем краткое описание на основе названия блюда
+        """Extract recipe description"""
+        # For cooktail.co.kr create short description based on dish name
         dish_name = self.extract_dish_name()
         
         if dish_name:
@@ -77,9 +77,9 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
     
     def extract_ingredients(self) -> Optional[str]:
         """
-        Извлечение ингредиентов
+        Extract ingredients
         
-        На cooktail.co.kr ингредиенты могут быть в списках с "준비물:" (подготовительные материалы)
+        On cooktail.co.kr ingredients can be in lists with "준비물:" (preparation materials)
         """
         ingredients = []
         
@@ -87,7 +87,7 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
         if not entry_content:
             return None
         
-        # Ищем списки
+        # Look for lists
         lists = entry_content.find_all(['ul', 'ol'])
         
         for lst in lists:
@@ -95,31 +95,31 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
             for item in items:
                 text = item.get_text().strip()
                 
-                # Проверяем, начинается ли с "준비물:"
+                # Check if starts with "준비물:"
                 if text.startswith('준비물:'):
-                    # Убираем "준비물:" и парсим ингредиенты
+                    # Remove "준비물:" and parse ingredients
                     ingredients_text = text.replace('준비물:', '').strip()
                     
-                    # Разделяем по запятым
+                    # Split by commas
                     parts = ingredients_text.split(',')
                     
                     for part in parts:
                         part = part.strip()
-                        # Паттерн: "오레오 6개", "우유 200ml", "바닐라 아이스크림 2스쿱", "얼음 5~6개"
-                        # Ищем название + количество + единица
+                        # Pattern: "오레오 6개", "우유 200ml", "바닐라 아이스크림 2스쿱", "얼음 5~6개"
+                        # Looking for name + amount + unit
                         match = re.match(r'^([가-힣a-zA-Z\s]+?)\s+(\d+(?:~\d+)?)\s*([가-힣mlg개스쿱]+)$', part)
                         
                         if match:
                             name, amount, unit = match.groups()
                             
-                            # Обрабатываем диапазоны типа "5~6" - берем нижнюю границу
+                            # Handle ranges like "5~6" - take lower bound
                             if '~' in amount:
                                 amount = amount.split('~')[0]
                             
-                            # Конвертируем в число
+                            # Convert to number
                             try:
                                 amount_num = int(amount)
-                            except:
+                            except (ValueError, TypeError):
                                 amount_num = amount
                             
                             ingredients.append({
@@ -128,7 +128,7 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
                                 "units": unit
                             })
                         else:
-                            # Если паттерн не совпал, просто сохраняем название
+                            # If pattern didn't match, just save the name
                             if part and len(part) > 1:
                                 ingredients.append({
                                     "name": self.clean_text(part),
@@ -136,19 +136,19 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
                                     "units": None
                                 })
                     
-                    # Если нашли ингредиенты, выходим
+                    # If found ingredients, return
                     if ingredients:
                         return json.dumps(ingredients, ensure_ascii=False)
         
-        # Если ничего не нашли через "준비물:", пробуем найти через заголовки
+        # If nothing found via "준비물:", try finding via headers
         h2_elements = entry_content.find_all(['h2', 'h3'])
         
         for h2 in h2_elements:
             heading_text = h2.get_text().strip()
             
-            # Ищем заголовки с упоминанием рецепта или ингредиентов
+            # Look for headers mentioning recipes or ingredients
             if any(keyword in heading_text for keyword in ['기본', '레시피', '재료']):
-                # Ищем следующий список после заголовка
+                # Look for next list after header
                 next_elem = h2.find_next_sibling()
                 
                 while next_elem and next_elem.name not in ['h2', 'h3']:
@@ -156,9 +156,9 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
                         items = next_elem.find_all('li')
                         for item in items:
                             text = item.get_text().strip()
-                            # Парсим элементы списка
+                            # Parse list items
                             if '준비물:' in text:
-                                # Уже обработали выше
+                                # Already processed above
                                 ingredients_text = text.split('준비물:')[1].strip()
                                 parts = ingredients_text.split(',')
                                 
@@ -173,7 +173,7 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
                                         
                                         try:
                                             amount_num = int(amount)
-                                        except:
+                                        except (ValueError, TypeError):
                                             amount_num = amount
                                         
                                         ingredients.append({
@@ -191,13 +191,13 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
     
     def parse_ingredient(self, ingredient_text: str) -> Optional[dict]:
         """
-        Парсинг строки ингредиента в структурированный формат
+        Parse ingredient string into structured format
         
         Args:
-            ingredient_text: Строка вида "오레오 6개" или "우유 200ml"
+            ingredient_text: String like "오레오 6개" or "우유 200ml"
             
         Returns:
-            dict: {"name": "오레오", "amount": 6, "units": "개"} или None
+            dict: {"name": "오레오", "amount": 6, "units": "개"} or None
         """
         if not ingredient_text:
             return None
@@ -244,12 +244,12 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
         return None
     
     def extract_instructions(self) -> Optional[str]:
-        """Извлечение инструкций по приготовлению"""
+        """Extract cooking instructions"""
         entry_content = self.soup.find('div', class_='entry-content')
         if not entry_content:
             return None
         
-        # Ищем списки с "만드는 법:" (способ приготовления)
+        # Look for lists with "만드는 법:" (cooking method)
         lists = entry_content.find_all(['ul', 'ol'])
         
         for lst in lists:
@@ -257,33 +257,33 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
             for item in items:
                 text = item.get_text().strip()
                 
-                # Проверяем, начинается ли с "만드는 법:"
+                # Check if starts with "만드는 법:"
                 if text.startswith('만드는 법:'):
-                    # Убираем "만드는 법:" и возвращаем инструкции
+                    # Remove "만드는 법:" and return instructions
                     instructions = text.replace('만드는 법:', '').strip()
                     return self.clean_text(instructions)
         
-        # Если не нашли "만드는 법:", создаем стандартные инструкции
+        # If "만드는 법:" not found, create standard instructions
         dish_name = self.extract_dish_name()
         
         if dish_name:
             if any(word in dish_name for word in ['찌개', '탕', '국']):
-                # Для супов/рагу
+                # For soups/stews
                 return "1. 김치와 돼지고기를 준비합니다. 2. 육수를 끓입니다. 3. 재료를 넣고 끓입니다. 4. 양념을 추가합니다. 5. 끓이는 시간을 조절합니다. 6. 마지막에 추가 재료를 넣습니다."
             elif any(word in dish_name for word in ['쉐이크', '음료', '주스']):
-                # Для напитков
+                # For beverages
                 return "믹서에 모든 재료를 넣고 곱게 갈아줍니다. 취향에 따라 휘핑크림이나 오레오 쿠키로 장식하면 더욱 맛있습니다."
         
         return None
     
     def extract_category(self) -> Optional[str]:
-        """Извлечение категории"""
-        # Ищем в метаданных article:section
+        """Extract category"""
+        # Look for article:section metadata
         meta_section = self.soup.find('meta', property='article:section')
         if meta_section and meta_section.get('content'):
             section = meta_section['content']
-            # Все рецепты на cooktail.co.kr имеют section "정보" (информация)
-            # Определяем категорию по названию блюда
+            # All recipes on cooktail.co.kr have section "정보" (information)
+            # Determine category by dish name
             dish_name = self.extract_dish_name()
             if dish_name:
                 if any(word in dish_name for word in ['쉐이크', '음료', '주스', '차', '커피']):
@@ -296,19 +296,19 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
         return 'Main Course'
     
     def extract_prep_time(self) -> Optional[str]:
-        """Извлечение времени подготовки"""
-        # На cooktail.co.kr время обычно не указывается в HTML
-        # Возвращаем стандартное значение для определенных типов блюд
+        """Extract preparation time"""
+        # On cooktail.co.kr time is usually not specified in HTML
+        # Return standard value for certain dish types
         dish_name = self.extract_dish_name()
         if dish_name:
             if any(word in dish_name for word in ['쉐이크', '음료']):
-                return None  # Для напитков время не указывается
+                return None  # No time for beverages
             elif any(word in dish_name for word in ['찌개', '탕']):
                 return "15 minutes"
         return None
     
     def extract_cook_time(self) -> Optional[str]:
-        """Извлечение времени приготовления"""
+        """Extract cooking time"""
         dish_name = self.extract_dish_name()
         if dish_name:
             if any(word in dish_name for word in ['쉐이크', '음료']):
@@ -318,7 +318,7 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
         return None
     
     def extract_total_time(self) -> Optional[str]:
-        """Извлечение общего времени"""
+        """Extract total time"""
         dish_name = self.extract_dish_name()
         if dish_name:
             if any(word in dish_name for word in ['쉐이크', '음료']):
@@ -328,12 +328,12 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
         return None
     
     def extract_notes(self) -> Optional[str]:
-        """Извлечение заметок и советов"""
+        """Extract notes and tips"""
         entry_content = self.soup.find('div', class_='entry-content')
         if not entry_content:
             return None
         
-        # Ищем списки с "꿀팁:" (полезные советы)
+        # Look for lists with "꿀팁:" (useful tips)
         lists = entry_content.find_all(['ul', 'ol'])
         
         for lst in lists:
@@ -341,13 +341,13 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
             for item in items:
                 text = item.get_text().strip()
                 
-                # Проверяем, начинается ли с "꿀팁:"
+                # Check if starts with "꿀팁:"
                 if text.startswith('꿀팁:'):
-                    # Убираем "꿀팁:" и возвращаем совет
+                    # Remove "꿀팁:" and return tip
                     notes = text.replace('꿀팁:', '').strip()
                     return self.clean_text(notes)
         
-        # Если не нашли "꿀팁:", создаем стандартные заметки
+        # If "꿀팁:" not found, create standard notes
         dish_name = self.extract_dish_name()
         
         if dish_name:
@@ -359,22 +359,22 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
         return None
     
     def extract_tags(self) -> Optional[str]:
-        """Извлечение тегов"""
-        # Создаем теги на основе названия блюда и категории
+        """Extract tags"""
+        # Create tags based on dish name and category
         dish_name = self.extract_dish_name()
         category = self.extract_category()
         
         tags = []
         
         if dish_name:
-            # Для "오레오 쉐이크"
+            # For "오레오 쉐이크"
             if '쉐이크' in dish_name:
-                # Добавляем "오레오" первым если есть
+                # Add "오레오" first if present
                 if '오레오' in dish_name:
                     tags.append('오레오')
                 tags.append('쉐이크')
                 tags.extend(['음료', '디저트'])
-            # Для "김치찌개"
+            # For "김치찌개"
             elif '김치찌개' in dish_name or '찌개' in dish_name:
                 tags.append(dish_name)
                 tags.extend(['한국 요리', '메인 요리'])
@@ -384,17 +384,17 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
         return ', '.join(tags) if tags else None
     
     def extract_image_urls(self) -> Optional[str]:
-        """Извлечение URL изображений"""
-        # На cooktail.co.kr изображения рецептов обычно отсутствуют в HTML
-        # или это только логотип сайта
+        """Extract image URLs"""
+        # On cooktail.co.kr recipe images are usually not present in HTML
+        # or only site logo is available
         return None
     
     def extract_all(self) -> dict:
         """
-        Извлечение всех данных рецепта
+        Extract all recipe data
         
         Returns:
-            Словарь с данными рецепта
+            Dictionary with recipe data
         """
         dish_name = self.extract_dish_name()
         description = self.extract_description()
@@ -424,18 +424,18 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
 
 
 def main():
-    """Точка входа для обработки директории с HTML файлами"""
+    """Entry point for processing directory with HTML files"""
     import os
     
-    # Ищем директорию с HTML-страницами
+    # Look for directory with HTML pages
     preprocessed_dir = os.path.join("preprocessed", "cooktail_co_kr")
     
     if os.path.exists(preprocessed_dir) and os.path.isdir(preprocessed_dir):
-        print(f"Обработка директории: {preprocessed_dir}")
+        print(f"Processing directory: {preprocessed_dir}")
         process_directory(CooktailCoKrExtractor, preprocessed_dir)
     else:
-        print(f"Директория не найдена: {preprocessed_dir}")
-        print("Использование: python cooktail_co_kr.py")
+        print(f"Directory not found: {preprocessed_dir}")
+        print("Usage: python cooktail_co_kr.py")
 
 
 if __name__ == "__main__":
