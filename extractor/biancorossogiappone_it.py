@@ -93,8 +93,9 @@ class BiancorossogiapponeExtractor(BaseRecipeExtractor):
         if not ingredient_text:
             return None
         
-        # Чистим текст
+        # Чистим текст и убираем звездочки
         text = self.clean_text(ingredient_text).lower()
+        text = re.sub(r'\*+', '', text).strip()
         
         # Паттерн для извлечения: количество + единица + "di" + название
         # Примеры: "450ml di acqua fredda", "2 cucchiai di miso", "60g di tofu"
@@ -137,6 +138,8 @@ class BiancorossogiapponeExtractor(BaseRecipeExtractor):
         # Очистка названия
         # Удаляем "q.b.", "a scelta", и т.д.
         name = re.sub(r'\b(q\.b\.|a scelta|optional|per.*)\b', '', name, flags=re.IGNORECASE)
+        # Удаляем звездочки
+        name = re.sub(r'\*+', '', name)
         # Удаляем лишние пробелы
         name = re.sub(r'\s+', ' ', name).strip()
         
@@ -180,6 +183,43 @@ class BiancorossogiapponeExtractor(BaseRecipeExtractor):
                     
                     if ingredients:
                         break
+        
+        # Если не нашли в ul, ищем в последовательности параграфов после "Ingredienti"
+        if not ingredients:
+            found_ingredienti = False
+            for elem in self.soup.find_all(['p', 'strong']):
+                text = elem.get_text()
+                text_upper = text.upper()
+                
+                # Ищем заголовок "INGREDIENTI"
+                if 'INGREDIENTI' in text_upper and ('PER' in text_upper or len(text) < 100):
+                    found_ingredienti = True
+                    continue
+                
+                # Если нашли заголовок, собираем следующие параграфы
+                if found_ingredienti:
+                    # Останавливаемся на "PROCEDIMENTO" или другом заголовке
+                    if any(keyword in text_upper for keyword in ['PROCEDIMENTO', 'PREPARAZIONE', 'ISTRUZIONI']):
+                        break
+                    
+                    # Пропускаем слишком длинные тексты (это комментарии, не ингредиенты)
+                    if len(text) > 100:
+                        continue
+                    
+                    # Пропускаем звездочки и примечания
+                    if text.startswith('*'):
+                        continue
+                    
+                    ingredient_text = self.clean_text(text)
+                    
+                    # Проверяем, что это похоже на ингредиент (короткая строка с количеством)
+                    # Ингредиенты обычно начинаются с числа или имеют число в начале
+                    if ingredient_text and len(ingredient_text) < 100:
+                        # Проверяем наличие количественных слов или чисел
+                        if any(word in ingredient_text.lower() for word in ['cucchiai', 'cucchiaio', 'pizzico', 'g ', 'ml ', 'kg ', 'litri', 'litro']) or re.match(r'^\d', ingredient_text):
+                            parsed = self.parse_ingredient_item(ingredient_text)
+                            if parsed and parsed['name'] and len(parsed['name']) < 50:
+                                ingredients.append(parsed)
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
