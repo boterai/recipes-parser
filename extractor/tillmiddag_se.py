@@ -99,12 +99,12 @@ class TillmiddagExtractor(BaseRecipeExtractor):
                                 else:
                                     total += float(part)
                             amount = total
-                        except:
+                        except (ValueError, ZeroDivisionError):
                             amount = amount_text
                     else:
                         try:
                             amount = float(amount_text) if '.' in amount_text else int(float(amount_text))
-                        except:
+                        except (ValueError, TypeError):
                             amount = amount_text
                 
                 if unit_span:
