@@ -152,8 +152,9 @@ class BarracudaMateraExtractor(BaseRecipeExtractor):
                 # Удаляем остатки скобок если facoltativ* не был найден
                 name = re.sub(r'\([^)]*\)', '', text)
             
-            # Удаляем фразы "facoltativo", "a piacere", "q.b."
-            name = re.sub(r'\b(facoltativo|facoltativi|facoltativa|facoltative|a piacere|q\.?b\.?|opzionale|un pizzico di)\b', '', name, flags=re.IGNORECASE)
+            # Удаляем фразы только если они стоят отдельно, но НЕ если они часть названия "aromi a piacere"
+            if not re.search(r'aromi\s+a\s+piacere', name, re.IGNORECASE):
+                name = re.sub(r'\b(facoltativo|facoltativi|facoltativa|facoltative|a piacere|q\.?b\.?|opzionale|un pizzico di)\b', '', name, flags=re.IGNORECASE)
             # Удаляем артикли и другие ненужные слова
             name = re.sub(r'\b(di un|di una|del|della)\b', 'di', name, flags=re.IGNORECASE)
             name = re.sub(r'\bgrattugiata?\b', '', name, flags=re.IGNORECASE)
