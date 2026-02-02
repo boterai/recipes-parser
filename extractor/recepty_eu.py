@@ -77,6 +77,88 @@ class ReceptyEuExtractor(BaseRecipeExtractor):
         recipe_boxes = self.soup.find_all('div', class_='recipe-box')
         return len(recipe_boxes) > 0
     
+    def extract_ingredients_from_text(self, text: str) -> Optional[str]:
+        """
+        Извлечение ингредиентов из текста инструкций (для поисковых страниц)
+        
+        Args:
+            text: Текст с упоминанием ингредиентов
+            
+        Returns:
+            JSON строка с ингредиентами или None
+        """
+        if not text:
+            return None
+        
+        ingredients = []
+        
+        # Паттерны для извлечения ингредиентов с количеством
+        # Пример: "150 ml vody" -> voda: 150 ml
+        pattern_with_amount = r'(\d+(?:[.,]\d+)?)\s*(ml|g|kg|l|dl|lžic|lžíce|lžička|lžiček|stroužky|stroužek|svazek|plát)\s+([a-zA-Zá-žÁ-Žěščřžýáíéúůťďňó]+)'
+        matches = re.finditer(pattern_with_amount, text, re.IGNORECASE)
+        
+        found_ingredients = set()
+        for match in matches:
+            amount = match.group(1)
+            unit = match.group(2)
+            name = match.group(3)
+            
+            # Нормализуем название (родительный падеж -> именительный)
+            # vody -> voda, víno остается víno
+            if name.endswith('y'):
+                name = name[:-1] + 'a'
+            
+            ingredient_key = name.lower()
+            if ingredient_key not in found_ingredients:
+                found_ingredients.add(ingredient_key)
+                ingredients.append({
+                    "name": name,
+                    "amount": amount,
+                    "units": unit
+                })
+        
+        # Ищем упоминания ингредиентов без количества
+        # Паттерны глаголов с ингредиентами: "osolíme" (мы солим) -> sůl (соль)
+        verb_to_ingredient = {
+            r'osol[íi]me': ('sůl', None, None),  # солим -> соль
+            r'op[eě]p[rř][íi]me': ('pepř', None, None),  # перчим -> перец
+        }
+        
+        for verb_pattern, (ingredient_name, amount, unit) in verb_to_ingredient.items():
+            if re.search(verb_pattern, text, re.IGNORECASE):
+                if ingredient_name.lower() not in found_ingredients:
+                    found_ingredients.add(ingredient_name.lower())
+                    ingredients.append({
+                        "name": ingredient_name,
+                        "amount": amount,
+                        "units": unit
+                    })
+        
+        # Ищем общие упоминания ингредиентов
+        # Например: "kuřecí prsíčka", "víno"
+        common_ingredients = [
+            r'ku[rř]ec[ií]\s+prs[ií][čc]ka',  # куриные грудки
+            r'v[ií]no',  # вино
+            r'olej',  # масло
+            r'cibul[ek]',  # лук
+            r'česnek',  # чеснок
+        ]
+        
+        for pattern in common_ingredients:
+            match = re.search(pattern, text, re.IGNORECASE)
+            if match:
+                ingredient_text = match.group(0)
+                ingredient_key = ingredient_text.lower()
+                if ingredient_key not in found_ingredients:
+                    found_ingredients.add(ingredient_key)
+                    ingredients.append({
+                        "name": ingredient_text,
+                        "amount": None,
+                        "units": None
+                    })
+        
+        return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
+    
     def extract_first_recipe_from_search(self) -> dict:
         """Извлечение данных первого рецепта из страницы поиска"""
         recipe_boxes = self.soup.find_all('div', class_='recipe-box')
@@ -123,10 +205,15 @@ class ReceptyEuExtractor(BaseRecipeExtractor):
         # Извлекаем теги (все теги на странице могут быть связаны)
         tags = self.extract_tags()
         
+        # Пытаемся извлечь ингредиенты из текста инструкций
+        ingredients = None
+        if instructions:
+            ingredients = self.extract_ingredients_from_text(instructions)
+        
         return {
             "dish_name": dish_name,
             "description": None,  # На странице поиска нет полного описания
-            "ingredients": None,  # На странице поиска нет ингредиентов
+            "ingredients": ingredients,  # Извлекаем из текста инструкций
             "instructions": instructions,
             "category": category,
             "prep_time": None,
