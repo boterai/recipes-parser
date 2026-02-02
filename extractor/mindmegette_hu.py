@@ -204,17 +204,18 @@ class MindmegetteExtractor(BaseRecipeExtractor):
     
     def extract_ingredients(self) -> Optional[str]:
         """Извлечение ингредиентов в структурированном формате"""
-        # Сначала пробуем из HTML (более структурированные данные)
-        ingredients = self.extract_ingredients_from_html()
+        ingredients = []
         
-        # Если не нашли в HTML, пробуем из JSON-LD
+        # Сначала пробуем из JSON-LD (более полные данные)
+        recipe_data = self.get_recipe_from_json_ld()
+        if recipe_data and 'recipeIngredient' in recipe_data:
+            for ing_text in recipe_data['recipeIngredient']:
+                parsed = self.parse_ingredient_text(ing_text)
+                ingredients.append(parsed)
+        
+        # Если не нашли в JSON-LD, пробуем из HTML
         if not ingredients:
-            recipe_data = self.get_recipe_from_json_ld()
-            if recipe_data and 'recipeIngredient' in recipe_data:
-                ingredients = []
-                for ing_text in recipe_data['recipeIngredient']:
-                    parsed = self.parse_ingredient_text(ing_text)
-                    ingredients.append(parsed)
+            ingredients = self.extract_ingredients_from_html()
         
         # Возвращаем как JSON строку
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
@@ -246,13 +247,35 @@ class MindmegetteExtractor(BaseRecipeExtractor):
         """Извлечение категории"""
         recipe_data = self.get_recipe_from_json_ld()
         
-        # Используем recipeCuisine как основную категорию
         if recipe_data:
-            # Проверяем recipeCuisine (например, "mexikói")
+            # Сначала проверяем recipeCategory (более специфичная)
+            if 'recipeCategory' in recipe_data:
+                category = recipe_data['recipeCategory']
+                if category:
+                    # Мапим категории
+                    category_map = {
+                        'desszert': 'Dessert',
+                        'desszertek': 'Dessert',
+                        'alapételek': 'Alapételek',
+                        'alapanyagtípus': 'Main Course',
+                        'előétel': 'Appetizer',
+                        'előételek': 'Appetizer',
+                        'leves': 'Soup',
+                        'levesek': 'Soup',
+                        'főétel': 'Main Course',
+                        'főételek': 'Main Course',
+                    }
+                    mapped = category_map.get(category.lower())
+                    if mapped:
+                        return mapped
+                    # Если нет маппинга, возвращаем как есть
+                    return category
+            
+            # Если recipeCategory не найдена, проверяем recipeCuisine
             if 'recipeCuisine' in recipe_data:
                 cuisine = recipe_data['recipeCuisine']
                 if cuisine:
-                    # Мапим венгерские названия на английские
+                    # Мапим венгерские названия кухонь на Main Course по умолчанию
                     cuisine_map = {
                         'mexikói': 'Main Course',
                         'magyar': 'Main Course',
@@ -261,27 +284,9 @@ class MindmegetteExtractor(BaseRecipeExtractor):
                         'kínai': 'Main Course',
                         'indiai': 'Main Course',
                     }
-                    # Проверяем, есть ли маппинг
                     mapped = cuisine_map.get(cuisine.lower())
                     if mapped:
                         return mapped
-            
-            # Проверяем recipeCategory
-            if 'recipeCategory' in recipe_data:
-                category = recipe_data['recipeCategory']
-                if category:
-                    # Мапим категории
-                    category_map = {
-                        'desszert': 'Dessert',
-                        'alapételek': 'Alapételek',
-                        'alapanyagtípus': 'Main Course',
-                        'előétel': 'Appetizer',
-                        'leves': 'Soup',
-                    }
-                    mapped = category_map.get(category.lower())
-                    if mapped:
-                        return mapped
-                    return category
         
         return None
     
