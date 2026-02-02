@@ -189,7 +189,7 @@ class ReviewamthucNetExtractor(BaseRecipeExtractor):
                                     parsed = self.parse_ingredient(ingredient_text)
                                     if parsed:
                                         ingredients.append(parsed)
-                    break
+                    # Не break - продолжаем искать другие списки после этого заголовка
                 elif next_elem.name in ['h2', 'h3', 'h4']:
                     # Если встретили другой заголовок, прекращаем поиск
                     break
@@ -291,13 +291,19 @@ class ReviewamthucNetExtractor(BaseRecipeExtractor):
             content_div = self.soup.find('div', class_='content-inner')
             if content_div:
                 # Ищем упорядоченный список <ol>
-                ol = content_div.find('ol')
-                if ol:
+                ols = content_div.find_all('ol')
+                for ol in ols:
                     items = ol.find_all('li', recursive=False)
-                    for idx, item in enumerate(items, 1):
-                        step_text = self.clean_text(item.get_text())
-                        if step_text:
-                            instructions.append(f"{idx}. {step_text}")
+                    # Проверяем, не является ли это оглавлением (обычно короткие фразы)
+                    # Шаги рецепта обычно длиннее 50 символов
+                    if items and len(items) >= 3:
+                        avg_length = sum(len(item.get_text()) for item in items) / len(items)
+                        if avg_length > 50:  # Вероятно, это шаги рецепта, а не оглавление
+                            for idx, item in enumerate(items, 1):
+                                step_text = self.clean_text(item.get_text())
+                                if step_text:
+                                    instructions.append(f"{idx}. {step_text}")
+                            break
         
         return ' '.join(instructions) if instructions else None
     
