@@ -7,6 +7,7 @@ from pathlib import Path
 import json
 import re
 from typing import Optional
+from bs4 import BeautifulSoup
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
@@ -90,11 +91,10 @@ class DelamarisHrExtractor(BaseRecipeExtractor):
                 # Если не получилось, пробуем очистить от управляющих символов
                 try:
                     # Используем strict=False для более мягкой обработки
-                    import ast
                     # Очищаем управляющие символы и пробуем снова
                     cleaned = script.string.encode('utf-8', 'ignore').decode('utf-8')
                     data = json.loads(cleaned, strict=False)
-                except:
+                except Exception:
                     # Если и это не помогло, пропускаем этот скрипт
                     continue
             except (KeyError, AttributeError, TypeError):
@@ -161,7 +161,6 @@ class DelamarisHrExtractor(BaseRecipeExtractor):
             desc = recipe_data['description']
             if desc:
                 # Очищаем от HTML тегов если они есть
-                from bs4 import BeautifulSoup
                 desc_soup = BeautifulSoup(desc, 'lxml')
                 desc_text = desc_soup.get_text(separator=' ', strip=True)
                 return self.clean_text(desc_text)
@@ -421,8 +420,6 @@ def main():
     """
     Точка входа для обработки HTML файлов из preprocessed/delamaris_hr
     """
-    import os
-    
     # Определяем путь к директории относительно корня репозитория
     repo_root = Path(__file__).parent.parent
     preprocessed_dir = repo_root / "preprocessed" / "delamaris_hr"
