@@ -231,15 +231,16 @@ class KuvarancipjeExtractor(BaseRecipeExtractor):
                     continue
                 
                 if found_priprema:
-                    # Проверяем, не начинается ли новая секция
-                    if text.startswith('Napomena') or text.startswith('Jednostavnije mere'):
+                    # Проверяем, не начинается ли новая секция или заметки
+                    if (text.startswith('Napomena') or 
+                        text.startswith('Jednostavnije mere') or
+                        text.startswith('Osim') or
+                        text.startswith('Sve u svemu')):
                         break
                     
                     # Пропускаем пустые параграфы и параграфы со скриптами
                     if text and len(text) > 10 and 'adsbygoogle' not in text:
-                        # Пропускаем параграфы, которые являются частью заметок
-                        if not (text.startswith('Osim') or text.startswith('Možete praviti')):
-                            steps.append(text)
+                        steps.append(text)
         
         return ' '.join(steps) if steps else None
     
