@@ -225,8 +225,9 @@ class MatiaGrExtractor(BaseRecipeExtractor):
             text = instructions_section.get_text()
             
             # Ищем конкретные паттерны времени готовки в духовке/на плите
-            # "ψήνουμε ... για X λεπτά", "ψήνουμε για ένα τέταρτο"
-            baking_match = re.search(r'ψήνουμε.*?(?:για\s+)?(?:(?:ένα\s+)?τέταρτο(?:\s+της\s+ώρας)?|είκοσι\s+λεπτ[άα]|δέκα\s+λεπτ[άα]|(\d+)\s+λεπτ[άα])', text, re.IGNORECASE)
+            # "ψήνουμε ... για X λεπτά", "ψήνουμε ... δέκα λεπτά"
+            # Более широкий паттерн для поиска времени после глаголов готовки
+            baking_match = re.search(r'ψήνουμε.{0,100}?(?:για\s+)?(?:(?:ένα\s+)?τέταρτο(?:\s+της\s+ώρας)?|είκοσι\s+(?:περίπου\s+)?λεπτ[άα]|δέκα\s+(?:περίπου\s+)?λεπτ[άα]|(\d+)\s+(?:περίπου\s+)?λεπτ[άα])', text, re.IGNORECASE)
             if baking_match:
                 if 'τέταρτο' in baking_match.group(0):
                     return "15 minutes"
@@ -238,7 +239,7 @@ class MatiaGrExtractor(BaseRecipeExtractor):
                     return f"{baking_match.group(1)} minutes"
             
             # Если не нашли, ищем общие упоминания времени с числами
-            time_match = re.search(r'(\d+)\s*λεπτ[άα]', text, re.IGNORECASE)
+            time_match = re.search(r'(\d+)\s*(?:περίπου\s+)?λεπτ[άα]', text, re.IGNORECASE)
             if time_match:
                 minutes = time_match.group(1)
                 # Фильтруем слишком малые числа (например, "5 пόντους")
