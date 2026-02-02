@@ -173,32 +173,48 @@ class Mican428TistoryComExtractor(BaseRecipeExtractor):
             # Ищем параграфы с data-ke-size
             paragraphs = content_div.find_all('p', attrs={'data-ke-size': True})
             
-            for p in paragraphs:
+            for i, p in enumerate(paragraphs):
                 text = p.get_text(strip=True)
                 
-                # Вариант 1: Проверяем, содержит ли параграф слово "재료" и "준비"
-                if '재료' in text and '준비' in text:
+                # Вариант 1: Если параграф содержит "필요한 재료는 다음과 같습니다"
+                # то ингредиенты находятся в следующем параграфе
+                if '필요한 재료는 다음과 같습니다' in text or ('재료' in text and '준비하기' in text and '다음' in text):
+                    # Проверяем следующий параграф
+                    if i + 1 < len(paragraphs):
+                        next_p = paragraphs[i + 1]
+                        ingredient_text = next_p.get_text(strip=True)
+                        # Убираем пустой текст вроде nbsp
+                        if ingredient_text and ingredient_text != '':
+                            ingredients = self.parse_ingredient_text(ingredient_text)
+                            if ingredients:
+                                break
+                
+                # Вариант 2: Проверяем, содержит ли параграф слово "재료" и "준비"
+                # и ингредиенты идут сразу после него
+                if not ingredients and '재료' in text and '준비' in text:
                     # Извлекаем только часть после "재료 준비"
                     parts = text.split('재료 준비')
                     if len(parts) > 1:
                         ingredient_text = parts[1].strip()
                         # Убираем начальные символы типа ":", "-", "하기"
                         ingredient_text = re.sub(r'^[:\-\s하기필요한다음과같습니다]+', '', ingredient_text)
-                        ingredients = self.parse_ingredient_text(ingredient_text)
-                        if ingredients:
-                            break
+                        if ingredient_text:
+                            ingredients = self.parse_ingredient_text(ingredient_text)
+                            if ingredients:
+                                break
                 
-                # Вариант 2: Если текст начинается с ингредиентов (например, "건미역 30g, 소고기 100g...")
-                # и содержит характерные единицы измерения
+                # Вариант 3: Если текст содержит характерные единицы измерения
+                # и это не часть инструкции
                 if not ingredients and re.search(r'\d+(g|ml|컵|큰술|스푼|개)', text):
                     # Проверяем, что это не часть инструкции (нет глаголов действия)
-                    if not any(word in text for word in ['넣고', '볶습니다', '끓입니다', '준비합니다', '자릅니다']):
+                    if not any(word in text for word in ['넣고', '볶습니다', '끓입니다', '준비합니다', '자릅니다', '씻', '볶', '끓', '준비', '담가']):
                         # Это может быть список ингредиентов
-                        ingredients = self.parse_ingredient_text(text)
-                        if len(ingredients) >= 3:  # Минимум 3 ингредиента
+                        test_ingredients = self.parse_ingredient_text(text)
+                        if len(test_ingredients) >= 3:  # Минимум 3 ингредиента
+                            ingredients = test_ingredients
                             break
         
-        # Паттерн 3: ищем в таблицах
+        # Паттерн 4: ищем в таблицах
         if not ingredients:
             tables = self.soup.find_all('table')
             for table in tables:
@@ -236,36 +252,53 @@ class Mican428TistoryComExtractor(BaseRecipeExtractor):
             step_counter = 1
             
             for p in paragraphs:
+                # Получаем текст с сохранением <br> как разделителей
                 text = p.get_text(separator=' ', strip=True)
                 
                 # Пропускаем до раздела с ингредиентами
-                if '재료' in text or 'ingredient' in text.lower():
-                    found_ingredients = True
+                # Проверяем, является ли это именно секцией ингредиентов
+                # (а не просто упоминанием "재료 준비하기" в названии шага)
+                if not found_ingredients and '재료' in text and ('준비하기' in text or 'ingredient' in text.lower()):
+                    # Дополнительно проверяем что это именно секция ингредиентов
+                    # Обычно содержит "필요한 재료" или "재료는" или short paragraph about ingredients
+                    if '필요한' in text or '재료는' in text or '다음과 같습니다' in text or len(text) < 50:
+                        found_ingredients = True
+                        continue
+                
+                # Пропускаем короткие заголовки (вероятно заголовок раздела)
+                if found_ingredients and len(text) < 20:
+                    # Пропускаем заголовки вроде "만드는 방법", "미역국 끓이는 법" и т.д.
                     continue
                 
+                # Останавливаемся, если дошли до раздела с питательной ценностью или описанием вкуса
+                if found_ingredients and any(word in text for word in ['영양소', '영양', '효능', '맛표현', '맛 표현', '특징']):
+                    break
+                
                 # После раздела с ингредиентами ищем инструкции
-                if found_ingredients and text:
-                    # Пропускаем заголовки секций
-                    if text in ['만드는 방법', '조리법', '만드는법']:
-                        continue
-                    
+                if found_ingredients and text and len(text) > 20:
                     # Разбиваем параграф на секции (по заголовкам вида "준비하기", "볶기", etc.)
-                    # Ищем паттерны: текст + "하기" или "볶기" или "끓이기" и т.д.
-                    sections = re.split(r'(\S+\s*(?:준비하기|볶기|끓이기|만들기|조리하기))', text)
+                    # Используем <br> в исходном HTML для разделения
+                    html_text = str(p)
+                    # Разбиваем по <br> тегам
+                    sections_raw = re.split(r'<br\s*/?>',  html_text, flags=re.IGNORECASE)
                     
-                    for i, section in enumerate(sections):
-                        section = section.strip()
-                        if not section:
+                    current_section_text = []
+                    for section_html in sections_raw:
+                        # Удаляем HTML теги
+                        section = re.sub(r'<[^>]+>', '', section_html).strip()
+                        
+                        if not section or len(section) < 5:
                             continue
                         
-                        # Пропускаем сами заголовки секций
-                        if re.match(r'\S+\s*(?:준비하기|볶기|끓이기|만들기|조리하기)$', section):
+                        # Проверяем, является ли это заголовком секции (заканчивается на "하기", "볶기", "끓이기")
+                        if re.match(r'^[가-힣\s]+(?:준비하기|볶기|끓이기|만들기|조리하기|팁)$', section.strip()):
+                            # Это заголовок секции, пропускаем
                             continue
                         
                         # Если секция содержит действия (глаголы)
-                        if any(verb in section for verb in ['합니다', '넣고', '볶아', '끓', '담가', '자릅니다', '제거', '부어', '섞', '추가']):
-                            # Разбиваем на предложения
-                            sentences = re.split(r'(?<=[다요])\.\s*|\s+(?=\d+\.)', section)
+                        if any(verb in section for verb in ['합니다', '넣고', '볶아', '끓', '담가', '자릅니다', '제거', '부어', '섞', '추가', '씻', '잘라', '말리고', '사용', '줄여', '맞춥']):
+                            # Разбиваем на предложения по точкам
+                            sentences = re.split(r'(?<=[다요])\.\s+', section)
                             for sent in sentences:
                                 sent = sent.strip('. ')
                                 if sent and len(sent) > 10:  # Минимальная длина предложения
@@ -289,12 +322,10 @@ class Mican428TistoryComExtractor(BaseRecipeExtractor):
         category_span = self.soup.find('span', class_='category')
         if category_span:
             category_text = self.clean_text(category_span.get_text())
-            # Переводим на английский для консистентности
-            # "요리" -> "Main Course", "간식" -> "간식"
+            # Возвращаем как есть, без перевода
+            # Только "요리" переводим в "Main Course" для консистентности
             if category_text == '요리':
                 return 'Main Course'
-            elif category_text == '간식':
-                return '간식'
             return category_text
         
         # Альтернативно из meta article:section
@@ -303,8 +334,6 @@ class Mican428TistoryComExtractor(BaseRecipeExtractor):
             category_text = self.clean_text(meta_section['content']).strip("'")
             if category_text == '요리':
                 return 'Main Course'
-            elif category_text == '간식':
-                return '간식'
             return category_text
         
         return None
