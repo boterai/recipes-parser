@@ -60,50 +60,125 @@ class CojimeCzExtractor(BaseRecipeExtractor):
         if not entry_content:
             return None
         
-        # Ищем заголовок "Ingredience" и следующий за ним список
-        h2_tags = entry_content.find_all(['h2', 'h3', 'h4'])
-        
-        for h_tag in h2_tags:
-            h_text = h_tag.get_text(strip=True).lower()
-            
-            # Проверяем, содержит ли заголовок слово "ingredience"
-            if 'ingredience' in h_text or 'suroviny' in h_text:
-                # Ищем следующий элемент списка
-                next_elem = h_tag.find_next_sibling()
-                
-                while next_elem:
-                    if next_elem.name == 'ul':
-                        # Извлекаем элементы списка
-                        items = next_elem.find_all('li', recursive=False)
-                        for item in items:
-                            ingredient_text = item.get_text(strip=True)
-                            ingredient_text = self.clean_text(ingredient_text)
-                            
-                            if ingredient_text and len(ingredient_text) > 2:
-                                # Создаем структурированный ингредиент
-                                parsed = self.parse_ingredient(ingredient_text)
-                                if parsed:
-                                    ingredients.append(parsed)
-                        
-                        if ingredients:
-                            break
-                    
-                    # Также проверяем параграфы на случай, если список не оформлен через ul/li
-                    elif next_elem.name == 'p':
-                        text = next_elem.get_text(strip=True)
-                        # Если это не пустой параграф и не начало нового раздела
-                        if text and not any(keyword in text.lower() for keyword in ['recept', 'postup', 'příprava']):
-                            next_elem = next_elem.find_next_sibling()
-                            continue
-                    
-                    # Если встретили новый заголовок, прекращаем поиск
-                    if next_elem.name in ['h2', 'h3', 'h4']:
-                        break
-                    
-                    next_elem = next_elem.find_next_sibling()
+        # 1. Сначала ищем таблицу с ингредиентами (wp-block-table)
+        tables = entry_content.find_all('table', class_='wp-block-table')
+        for table in tables:
+            # Проверяем, есть ли в таблице "Ingredience:"
+            table_text = table.get_text().lower()
+            if 'ingredience' in table_text:
+                rows = table.find_all('tr')
+                for row in rows:
+                    cells = row.find_all(['th', 'td'])
+                    # Пропускаем строку с заголовком "Ingredience:"
+                    if len(cells) >= 2:
+                        # Берем второй столбец как ингредиент
+                        ingredient_text = cells[1].get_text(strip=True)
+                        if ingredient_text and 'ingredience' not in ingredient_text.lower():
+                            parsed = self.parse_ingredient(ingredient_text)
+                            if parsed:
+                                ingredients.append(parsed)
                 
                 if ingredients:
-                    break
+                    return json.dumps(ingredients, ensure_ascii=False)
+        
+        # 2. Ищем в списках с "Připravte marinádu:" или подобными
+        uls = entry_content.find_all('ul')
+        for ul in uls:
+            lis = ul.find_all('li', recursive=False)
+            for li in lis:
+                li_text = li.get_text()
+                # Ищем "Připravte marinádu:" и извлекаем ингредиенты из текста
+                if 'připravte marinádu' in li_text.lower() or 'marinádu:' in li_text.lower():
+                    # Извлекаем упоминания ингредиентов
+                    # Типичный текст: "Smíchejte vodu, různé koření (např. pepř, nové koření, bobkový list), koření pro šunku a sůl podle chuti"
+                    # Ищем после двоеточия
+                    if ':' in li_text:
+                        ingredient_part = li_text.split(':', 1)[1]
+                        # Извлекаем основные ингредиенты
+                        # Простой парсинг: разделяем по запятым
+                        parts = re.split(r',|a\s+', ingredient_part)
+                        for part in parts:
+                            part = part.strip()
+                            part = re.sub(r'\([^)]*\)', '', part)  # Удаляем скобки
+                            part = part.strip()
+                            # Проверяем, является ли это ингредиентом
+                            if any(ing in part.lower() for ing in ['voda', 'koření', 'sůl', 'pepř', 'med', 'ocet', 'list', 'česnek', 'maso', 'šunka']):
+                                if len(part) > 3:
+                                    parsed = self.parse_ingredient(part)
+                                    if parsed:
+                                        ingredients.append(parsed)
+                    
+                    if ingredients:
+                        break
+            
+            if ingredients:
+                break
+        
+        # 3. Если все еще не нашли, ищем после заголовка "Ingredience:"
+        if not ingredients:
+            h2_tags = entry_content.find_all(['h2', 'h3', 'h4', 'p', 'strong'])
+            
+            for idx, h_tag in enumerate(h2_tags):
+                h_text = h_tag.get_text(strip=True).lower()
+                
+                # Проверяем "Ingredience:" в параграфе или заголовке
+                if 'ingredience:' in h_text or 'suroviny:' in h_text:
+                    # Ищем следующий элемент списка
+                    next_elem = h_tag.find_next_sibling()
+                    
+                    # Проверяем, может список ul сразу после параграфа
+                    while next_elem:
+                        if next_elem.name == 'ul':
+                            # Извлекаем элементы списка
+                            items = next_elem.find_all('li', recursive=False)
+                            for item in items:
+                                ingredient_text = item.get_text(strip=True)
+                                ingredient_text = self.clean_text(ingredient_text)
+                                
+                                if ingredient_text and len(ingredient_text) > 2:
+                                    # Создаем структурированный ингредиент
+                                    parsed = self.parse_ingredient(ingredient_text)
+                                    if parsed:
+                                        ingredients.append(parsed)
+                            
+                            if ingredients:
+                                break
+                        
+                        # Если встретили новый заголовок, прекращаем поиск
+                        if next_elem.name in ['h2', 'h3', 'h4']:
+                            break
+                        
+                        next_elem = next_elem.find_next_sibling()
+                    
+                    if ingredients:
+                        break
+                
+                # Проверяем "ingredience" в заголовке
+                elif 'ingredience' in h_text or 'suroviny' in h_text:
+                    next_elem = h_tag.find_next_sibling()
+                    
+                    while next_elem:
+                        if next_elem.name == 'ul':
+                            items = next_elem.find_all('li', recursive=False)
+                            for item in items:
+                                ingredient_text = item.get_text(strip=True)
+                                ingredient_text = self.clean_text(ingredient_text)
+                                
+                                if ingredient_text and len(ingredient_text) > 2:
+                                    parsed = self.parse_ingredient(ingredient_text)
+                                    if parsed:
+                                        ingredients.append(parsed)
+                            
+                            if ingredients:
+                                break
+                        
+                        if next_elem.name in ['h2', 'h3', 'h4']:
+                            break
+                        
+                        next_elem = next_elem.find_next_sibling()
+                    
+                    if ingredients:
+                        break
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
@@ -147,7 +222,33 @@ class CojimeCzExtractor(BaseRecipeExtractor):
         if not entry_content:
             return None
         
-        # Ищем заголовок с "recept", "postup", "příprava"
+        # 1. Сначала ищем в списках с инструкциями
+        uls = entry_content.find_all('ul')
+        for ul in uls:
+            lis = ul.find_all('li', recursive=False)
+            for li in lis:
+                li_text = li.get_text(strip=True)
+                # Ищем шаги с ключевыми словами
+                if any(keyword in li_text.lower() for keyword in ['marinujte', 'pečte', 'vložte', 'nechte', 'připravte', 'smíchejte']):
+                    # Очищаем текст от strong тегов но оставляем содержимое
+                    cleaned = self.clean_text(li_text)
+                    if cleaned and len(cleaned) > 15:
+                        instructions.append(cleaned)
+            
+            # Если нашли инструкции в этом списке, продолжаем собирать
+            if instructions and len(instructions) >= 2:
+                break
+        
+        # Если нашли достаточно инструкций, возвращаем
+        if instructions:
+            # Форматируем как нумерованный список
+            formatted = []
+            for idx, instr in enumerate(instructions, 1):
+                formatted.append(f"{idx}. {instr}")
+            return ' '.join(formatted)
+        
+        # 2. Ищем заголовок с "recept", "postup", "příprava"
+        instructions = []
         h2_tags = entry_content.find_all(['h2', 'h3', 'h4'])
         
         for h_tag in h2_tags:
