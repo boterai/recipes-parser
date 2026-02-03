@@ -257,11 +257,17 @@ class Mican428TistoryComExtractor(BaseRecipeExtractor):
                 
                 # Пропускаем до раздела с ингредиентами
                 # Проверяем, является ли это именно секцией ингредиентов
-                # (а не просто упоминанием "재료 준비하기" в названии шага)
-                if not found_ingredients and '재료' in text and ('준비하기' in text or 'ingredient' in text.lower()):
-                    # Дополнительно проверяем что это именно секция ингредиентов
-                    # Обычно содержит "필요한 재료" или "재료는" или short paragraph about ingredients
-                    if '필요한' in text or '재료는' in text or '다음과 같습니다' in text or len(text) < 50:
+                # Паттерны: "2.1 재료 준비", "재료 준비하기", "필요한 재료"
+                if not found_ingredients and '재료' in text:
+                    # Check for different ingredient section patterns
+                    is_ingredient_section = (
+                        ('준비' in text and len(text) < 100) or  # "재료 준비" with short text
+                        '필요한' in text or  # "필요한 재료"
+                        '재료는' in text or  # "재료는"
+                        '다음과 같습니다' in text or  # "다음과 같습니다"
+                        (re.match(r'^\d+\.\d+\s*재료', text))  # "2.1 재료"
+                    )
+                    if is_ingredient_section:
                         found_ingredients = True
                         continue
                 
@@ -282,7 +288,6 @@ class Mican428TistoryComExtractor(BaseRecipeExtractor):
                     # Разбиваем по <br> тегам
                     sections_raw = re.split(r'<br\s*/?>',  html_text, flags=re.IGNORECASE)
                     
-                    current_section_text = []
                     for section_html in sections_raw:
                         # Удаляем HTML теги
                         section = re.sub(r'<[^>]+>', '', section_html).strip()
@@ -290,13 +295,14 @@ class Mican428TistoryComExtractor(BaseRecipeExtractor):
                         if not section or len(section) < 5:
                             continue
                         
-                        # Проверяем, является ли это заголовком секции (заканчивается на "하기", "볶기", "끓이기")
-                        if re.match(r'^[가-힣\s]+(?:준비하기|볶기|끓이기|만들기|조리하기|팁)$', section.strip()):
+                        # Проверяем, является ли это заголовком секции (короткий текст с "준비", "조리" и т.д.)
+                        # Примеры: "시래기 준비", "시래기 조리", "2.3 나물 된장 무침 맛 표현"
+                        if len(section) < 40 and re.match(r'^(\d+\.\d+\s*)?[가-힣\s]+(준비|조리|표현|팁)$', section.strip()):
                             # Это заголовок секции, пропускаем
                             continue
                         
                         # Если секция содержит действия (глаголы)
-                        if any(verb in section for verb in ['합니다', '넣고', '볶아', '끓', '담가', '자릅니다', '제거', '부어', '섞', '추가', '씻', '잘라', '말리고', '사용', '줄여', '맞춥']):
+                        if any(verb in section for verb in ['합니다', '넣고', '볶아', '끓', '담가', '자릅니다', '제거', '부어', '섞', '추가', '씻', '잘라', '말리고', '사용', '줄여', '맞춥', '손질', '불린']):
                             # Разбиваем на предложения по точкам
                             sentences = re.split(r'(?<=[다요])\.\s+', section)
                             for sent in sentences:
