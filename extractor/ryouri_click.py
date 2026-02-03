@@ -15,6 +15,43 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class RyouriClickExtractor(BaseRecipeExtractor):
     """Экстрактор для ryouri.click"""
     
+    @staticmethod
+    def convert_time_to_english(time_str: str) -> Optional[str]:
+        """
+        Конвертирует японский формат времени в английский
+        
+        Args:
+            time_str: Время на японском (например, "20分", "1時間30分", "3時間40分")
+            
+        Returns:
+            Время на английском (например, "20 minutes", "1 hour 30 minutes", "3 hours 40 minutes")
+        """
+        if not time_str:
+            return None
+        
+        # Извлекаем часы и минуты
+        hours = 0
+        minutes = 0
+        
+        # Ищем часы (時間)
+        hour_match = re.search(r'(\d+)\s*時間', time_str)
+        if hour_match:
+            hours = int(hour_match.group(1))
+        
+        # Ищем минуты (分)
+        min_match = re.search(r'(\d+)\s*分', time_str)
+        if min_match:
+            minutes = int(min_match.group(1))
+        
+        # Формируем строку на английском
+        parts = []
+        if hours > 0:
+            parts.append(f"{hours} hour{'s' if hours > 1 else ''}")
+        if minutes > 0:
+            parts.append(f"{minutes} minute{'s' if minutes > 1 else ''}")
+        
+        return ' '.join(parts) if parts else None
+    
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
         # Ищем в заголовке рецепта h1
@@ -78,108 +115,127 @@ class RyouriClickExtractor(BaseRecipeExtractor):
         """Извлечение ингредиентов в структурированном формате"""
         ingredients = []
         
-        # Ищем секцию с заголовком "材料" (Ingredients)
-        h3_tags = self.soup.find_all('h3')
+        # Ищем все секции с ингредиентами
+        # Могут быть: "材料", "クリームチーズフロスティングの場合:", и т.д.
+        h3_tags = self.soup.find_all(['h3', 'h4'])
         for h3 in h3_tags:
-            if '材料' in h3.get_text():
-                # Находим следующий <ul> после этого заголовка
-                section = h3.find_parent('section')
-                if not section:
-                    section = h3.find_next_sibling()
-                
-                # Ищем <ul> в этой секции
-                ul = None
-                if section:
-                    ul = section.find('ul')
-                if not ul:
-                    ul = h3.find_next('ul')
-                
-                if ul:
-                    # Извлекаем каждый ингредиент из <li>
-                    for li in ul.find_all('li', recursive=True):
-                        # Получаем все span элементы
-                        spans = li.find_all('span')
+            header_text = h3.get_text()
+            # Проверяем, является ли это секцией ингредиентов
+            # (содержит "材料" или "の場合:" что означает ингредиенты для определенной части)
+            if '材料' not in header_text and 'の場合:' not in header_text:
+                continue
+            
+            # Находим следующий <ul> после этого заголовка
+            ul = h3.find_next('ul')
+            
+            if ul:
+                # Извлекаем каждый ингредиент из <li>
+                for li in ul.find_all('li', recursive=False):
+                    # Пропускаем элементы с nutritional info
+                    li_text = li.get_text(strip=True)
+                    if 'カロリー' in li_text or 'kcal' in li_text or '脂肪' in li_text:
+                        continue
+                    
+                    # Получаем все span элементы
+                    spans = li.find_all('span')
+                    
+                    # Случай 1: Есть структура со span-ами (более сложная)
+                    if spans and len(spans) >= 2:
+                        # Первый span содержит имя и иногда часть количества
+                        name_text = spans[0].get_text(strip=True)
                         
-                        # Случай 1: Есть структура со span-ами (более сложная)
-                        if spans and len(spans) >= 2:
-                            # Первый span содержит имя и иногда часть количества
-                            name_text = spans[0].get_text(strip=True)
-                            
-                            # Разделяем имя и количество
-                            name_match = re.match(r'^(.+?)\s+([\d\.]+)$', name_text)
-                            if name_match:
-                                name = name_match.group(1).strip()
-                                amount_part1 = name_match.group(2)
-                            else:
-                                name = name_text.strip()
-                                amount_part1 = None
-                            
-                            # Следующие span-ы могут содержать дополнительную часть количества и единицу
-                            amount = amount_part1
-                            unit = None
-                            
-                            # Обрабатываем остальные span-ы
-                            for i, span in enumerate(spans[1:], 1):
-                                span_text = span.get_text(strip=True)
-                                # Пропускаем описания (обычно длинные тексты с запятыми или с символом "、")
-                                if '、' in span_text or len(span_text) > 20:
-                                    continue
-                                
-                                # Проверяем, является ли это единицей измерения
-                                units_pattern = r'(カップ|小さじ|大さじ|グラム|個|オンス|ミリリットル|リットル|ポンド|キログラム|g|ml|kg|lb|oz|杯|枚|本|つ|片)'
-                                if re.search(units_pattern, span_text):
-                                    unit = span_text
-                                # Если это дробь или число (например, "と1/2")
-                                elif re.search(r'[\d/]', span_text):
-                                    # Добавляем к количеству
-                                    if amount:
-                                        # Обрабатываем "と1/2" -> добавляем к amount
-                                        fraction_match = re.search(r'と?([\d/\.]+)', span_text)
-                                        if fraction_match:
-                                            fraction_text = fraction_match.group(1)
-                                            # Преобразуем дробь в десятичное число
-                                            if '/' in fraction_text:
-                                                parts = fraction_text.split('/')
-                                                if len(parts) == 2:
-                                                    try:
-                                                        fraction_value = float(parts[0]) / float(parts[1])
-                                                        amount = str(float(amount) + fraction_value)
-                                                    except ValueError:
-                                                        pass
-                                            else:
-                                                try:
-                                                    amount = str(float(amount) + float(fraction_text))
-                                                except ValueError:
-                                                    pass
-                                    else:
-                                        amount = span_text.replace('と', '')
-                            
-                            # Очистка названия от лишних символов
-                            name = re.sub(r'[,、，]+$', '', name).strip()
-                            
-                            if name:
-                                ingredients.append({
-                                    "name": name,
-                                    "amount": amount,
-                                    "unit": unit
-                                })
-                        
-                        # Случай 2: Простой формат - текст прямо в <li> без множества span-ов
+                        # Разделяем имя и количество
+                        name_match = re.match(r'^(.+?)\s+([\d\.]+)$', name_text)
+                        if name_match:
+                            name = name_match.group(1).strip()
+                            amount_part1 = name_match.group(2)
                         else:
-                            li_text = li.get_text(strip=True)
-                            if not li_text:
+                            name = name_text.strip()
+                            amount_part1 = None
+                        
+                        # Следующие span-ы могут содержать дополнительную часть количества и единицу
+                        amount = amount_part1
+                        unit = None
+                        
+                        # Обрабатываем остальные span-ы
+                        for i, span in enumerate(spans[1:], 1):
+                            span_text = span.get_text(strip=True)
+                            # Пропускаем описания (обычно длинные тексты с запятыми или с символом "、")
+                            if '、' in span_text or len(span_text) > 20:
                                 continue
                             
-                            # Парсим текст вида "牛ひき肉 1ポンド" или "玉ねぎ 1個（みじん切り）"
-                            # Удаляем примечания в скобках
-                            clean_text = re.sub(r'（[^）]*）', '', li_text)
-                            clean_text = re.sub(r'\([^)]*\)', '', clean_text)
-                            
-                            # Паттерн: "название количество+единица" или просто "название"
-                            # Примеры: "牛ひき肉 1ポンド", "塩 小さじ1/2"
-                            pattern = r'^(.+?)\s+([\d./]+)\s*(.*)$'
-                            match = re.match(pattern, clean_text)
-                            
+                            # Проверяем, является ли это единицей измерения
+                            units_pattern = r'(カップ|小さじ|大さじ|グラム|個|オンス|ミリリットル|リットル|ポンド|キログラム|g|ml|kg|lb|oz|杯|枚|本|つ|片)'
+                            if re.search(units_pattern, span_text):
+                                unit = span_text
+                            # Если это дробь или число (например, "と1/2")
+                            elif re.search(r'[\d/]', span_text):
+                                # Добавляем к количеству
+                                if amount:
+                                    # Обрабатываем "と1/2" -> добавляем к amount
+                                    fraction_match = re.search(r'と?([\d/\.]+)', span_text)
+                                    if fraction_match:
+                                        fraction_text = fraction_match.group(1)
+                                        # Преобразуем дробь в десятичное число
+                                        if '/' in fraction_text:
+                                            parts = fraction_text.split('/')
+                                            if len(parts) == 2:
+                                                try:
+                                                    fraction_value = float(parts[0]) / float(parts[1])
+                                                    amount = str(float(amount) + fraction_value)
+                                                except ValueError:
+                                                    pass
+                                        else:
+                                            try:
+                                                amount = str(float(amount) + float(fraction_text))
+                                            except ValueError:
+                                                    pass
+                                else:
+                                    amount = span_text.replace('と', '')
+                        
+                        # Очистка названия от лишних символов
+                        name = re.sub(r'[,、，]+$', '', name).strip()
+                        
+                        if name:
+                            ingredients.append({
+                                "name": name,
+                                "amount": amount,
+                                "unit": unit
+                            })
+                    
+                    # Случай 2: Простой формат - текст прямо в <li> без множества span-ов
+                    else:
+                        li_text = li.get_text(strip=True)
+                        if not li_text:
+                            continue
+                        
+                        # Парсим текст вида "牛ひき肉 1ポンド" или "玉ねぎ 1個（みじん切り）"
+                        # Удаляем примечания в скобках
+                        clean_text = re.sub(r'（[^）]*）', '', li_text)
+                        clean_text = re.sub(r'\([^)]*\)', '', clean_text)
+                        clean_text = re.sub(r'、[^、]+$', '', clean_text)  # Удаляем комментарии после запятой
+                        
+                        # Паттерн: "название количество+единица" или просто "название"
+                        # Примеры: "牛ひき肉 1ポンド", "塩 小さじ1/2"
+                        # Может быть формат "8オンスの...クリームチーズ" (количество в начале)
+                        pattern1 = r'^([\d./]+)\s*([^\s\d]+)\s+(.+)$'  # "8オンス クリームチーズ"
+                        pattern2 = r'^(.+?)\s+([\d./]+)\s*(.*)$'  # "牛ひき肉 1 ポンド"
+                        
+                        match = re.match(pattern1, clean_text)
+                        if match:
+                            # Формат: количество + возможная единица + название
+                            amount = match.group(1).strip()
+                            potential_unit = match.group(2).strip()
+                            name = match.group(3).strip()
+                            # Проверяем, является ли это реальной единицей или частью названия
+                            units_pattern = r'(カップ|小さじ|大さじ|グラム|個|オンス|ミリリットル|リットル|ポンド|キログラム|g|ml|kg|lb|oz|杯|枚|本|つ|片|の)'
+                            if re.match(units_pattern, potential_unit):
+                                unit = potential_unit.replace('の', '')  # Убираем "の"
+                            else:
+                                name = potential_unit + ' ' + name
+                                unit = None
+                        else:
+                            match = re.match(pattern2, clean_text)
                             if match:
                                 name = match.group(1).strip()
                                 amount = match.group(2).strip()
@@ -189,16 +245,13 @@ class RyouriClickExtractor(BaseRecipeExtractor):
                                 name = clean_text.strip()
                                 amount = None
                                 unit = None
-                            
-                            if name:
-                                ingredients.append({
-                                    "name": name,
-                                    "amount": amount,
-                                    "unit": unit
-                                })
-                    
-                    if ingredients:
-                        break
+                        
+                        if name:
+                            ingredients.append({
+                                "name": name,
+                                "amount": amount,
+                                "unit": unit
+                            })
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
@@ -298,15 +351,18 @@ class RyouriClickExtractor(BaseRecipeExtractor):
     
     def extract_prep_time(self) -> Optional[str]:
         """Извлечение времени подготовки"""
-        return self.extract_time('準備')
+        time_jp = self.extract_time('準備')
+        return self.convert_time_to_english(time_jp) if time_jp else None
     
     def extract_cook_time(self) -> Optional[str]:
         """Извлечение времени приготовления"""
-        return self.extract_time('調理')
+        time_jp = self.extract_time('調理')
+        return self.convert_time_to_english(time_jp) if time_jp else None
     
     def extract_total_time(self) -> Optional[str]:
         """Извлечение общего времени"""
-        return self.extract_time('合計')
+        time_jp = self.extract_time('合計')
+        return self.convert_time_to_english(time_jp) if time_jp else None
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок"""
