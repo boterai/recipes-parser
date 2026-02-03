@@ -10,10 +10,26 @@ from src.stages.workflow.generate_prompt import PromptGenerator
 from src.common.github.client import GitHubClient
 from src.stages.workflow.branch_manager import BranchManager
 from src.stages.workflow.validation_models import ValidationReport
+import tempfile
+import json
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
+def get_tempdir():
+    if os.name == 'posix':
+        try:
+            test_filename = os.path.join('/var','tmp','test_file.txt')
+            with open(test_filename, 'wb') as f: f.write(b'test')
+            with open(test_filename, 'rb') as f: f.read()
+            os.remove(test_filename)
+            return os.path.join('/var','tmp')
+        except Exception as e:
+            logger.warning(f"Не удалось использовать /var/tmp в качестве временной директории: {e}. Будет использована стандартная временная директория.")
+    return tempfile.gettempdir()
+
 ISSUE_PREFIX = "Создать парсер "
+TEMPDIR = get_tempdir()
 
 class CopilotWorkflow:
 
@@ -21,6 +37,7 @@ class CopilotWorkflow:
         self.prompt_generator = PromptGenerator()
         self.github_client = GitHubClient()
         self.branch_manager = BranchManager()
+        self.pr_filename = os.path.join(TEMPDIR, "pr_changes.json")
 
     def autocommit_preprocessed_data(self, commit_message: str = "Автокоммит тестовых данных на основе которых нужно делать парсеры", push: bool = True):
         """Автокоммитит preprocessed данные в текущую ветку.
@@ -141,7 +158,47 @@ class CopilotWorkflow:
                 pr_comment += "---\n\n"
         
         return pr_comment
+    
+    def save_pr_request_changes(self, pr_number: int):
+        """Сохраняет в локальную директорию временные данные для PR с требованием изменений.
+        
+        Args:
+            pr_number: Номер pull request
+        """
+        pr_data = {}
+        if  os.path.exists(self.pr_filename):        
+            with open(self.pr_filename, 'r', encoding='utf-8') as f:
+                pr_data = json.load(f)
+        
+        pr_data[str(pr_number)] = datetime.now().astimezone().isoformat()
 
+        with open(self.pr_filename, 'w', encoding='utf-8') as f:
+            json.dump(pr_data, f, ensure_ascii=False, indent=2)
+
+    def is_pr_updated_since_last_check(self, pr_number: int) -> bool:
+        """Проверяет, были ли новые коммиты в PR с момента последней проверки.
+        """
+        if not os.path.exists(self.pr_filename):
+            return True  # файл не существует, значит проверяем впервые
+        
+        with open(self.pr_filename, 'r', encoding='utf-8') as f:
+            pr_data = json.load(f)
+
+        pr_key = str(pr_number)
+        if pr_key not in pr_data:
+            return True  # PR не найден в истории, проверяем впервые
+        
+        saved_commit_date_str = pr_data[pr_key]
+        
+        current_commit_date = self.github_client.get_last_commit_date(pr_number)
+        if not current_commit_date:
+            logger.warning(f"Не удалось получить дату последнего коммита для PR #{pr_number}")
+            return False
+        
+        saved_commit_date = datetime.fromisoformat(saved_commit_date_str)
+        
+        return current_commit_date > saved_commit_date
+        
     def check_review_requested_prs(self):
         """Проверяет завершенные PR и обновляет статусы задач.
         Для каждого PR с запрошенным ревью выполняет валидацию парсера.
@@ -152,6 +209,10 @@ class CopilotWorkflow:
         logger.info(f"Найдено {len(prs)} PR с запрошенным ревью.")
         for pr in prs:
             logger.info(f"Проверка PR #{pr['number']}: {pr['title']}")
+            # проверяем были ли новые коммиты с момента последней проверки
+            if not self.is_pr_updated_since_last_check(pr['number']):
+                logger.info(f"В PR #{pr['number']} нет новых коммитов с момента последней проверки. Пропуск валидации.")
+                continue
             errors: list[ValidationReport] = self.branch_manager.check_branch(pr['head']['ref'], chck_all_with_gpt=False) # проверяем гпт только если нет каких-то нужных полей
             # проверка, чтобы в результате не было системной ошибки иначе пропускаем обновление статуса pr
             if any(err.system_errors for err in errors):
@@ -167,6 +228,7 @@ class CopilotWorkflow:
                 print(pr_comment)
                 if self.github_client.add_review_to_pr(pr['number'], pr_comment, "REQUEST_CHANGES"):
                     logger.info(f"Добавлено требование изменений к PR #{pr['number']}.")
+                    self.save_pr_request_changes(pr['number'])
                 continue
 
             logger.info(f"PR #{pr['number']} прошел валидацию. Закрытие ревью, мердж pull request.")
@@ -178,7 +240,6 @@ class CopilotWorkflow:
             self.branch_manager.update_current_branch()
         except Exception as e:
             logger.error(f"Не удалось обновить текущую ветку автоматически: {e}, пожалуйста, выполните git pull вручную.")
-        self.clear_preprocessed_data()
 
 if __name__ == "__main__":
     workflow = CopilotWorkflow()

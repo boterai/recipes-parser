@@ -4,6 +4,7 @@ import logging
 import requests
 from typing import Optional, Any
 from dotenv import load_dotenv
+from datetime import datetime
 # Загрузка переменных окружения
 load_dotenv()
 
@@ -25,6 +26,24 @@ class GitHubClient:
             "Authorization": f"Bearer {self.token}",
             "X-GitHub-Api-Version": "2022-11-28"
         }
+
+    def get_json_response(self, url: str, params: Optional[dict] = None) -> Optional[dict]:
+        """
+        Выполняет GET запрос и возвращает JSON ответ
+        
+        Args:
+            url: URL для запроса
+        
+        Returns:
+            JSON ответ или None при ошибке
+        """
+        response = requests.get(url, headers=self.headers, params=params)
+        
+        if response.status_code == 200:
+            return response.json()
+        else:
+            logger.error(f"Failed to fetch data from {url}: {response.status_code} - {response.text}")
+            return None
 
     def create_issue_from_dict(
         self,
@@ -141,14 +160,7 @@ class GitHubClient:
         params = {
             "per_page": 100
         }
-        
-        response = requests.get(url, headers=self.headers, params=params)
-        
-        if response.status_code == 200:
-            return response.json()
-        else:
-            logger.error(f"Failed to fetch branches: {response.status_code} - {response.text}")
-            return None
+        return self.get_json_response(url, params=params)
         
     def list_pr(self) -> Optional[list[dict]]:
         """
@@ -163,14 +175,7 @@ class GitHubClient:
             "state": "open",
             "per_page": 100
         }
-        
-        response = requests.get(url, headers=self.headers, params=params)
-        
-        if response.status_code == 200:
-            return response.json()
-        else:
-            logger.error(f"Failed to fetch pull requests: {response.status_code} - {response.text}")
-            return None
+        return self.get_json_response(url, params=params)
         
     def mark_pr_ready(self, pr_number: int) -> bool:
         """
@@ -324,14 +329,7 @@ class GitHubClient:
             Данные issue или None при ошибке
         """
         url = f"{self.base_url}/repos/{self.owner}/{self.repo}/issues/{issue_number}"
-        
-        response = requests.get(url, headers=self.headers)
-        
-        if response.status_code == 200:
-            return response.json()
-        else:
-            logger.error(f"Failed to fetch issue #{issue_number}: {response.status_code} - {response.text}")
-            return None
+        return self.get_json_response(url)
         
     def get_pr(self, pr_number: int) -> Optional[dict]:
         """
@@ -344,14 +342,7 @@ class GitHubClient:
             Данные pull request или None при ошибке
         """
         url = f"{self.base_url}/repos/{self.owner}/{self.repo}/pulls/{pr_number}"
-        
-        response = requests.get(url, headers=self.headers)
-        
-        if response.status_code == 200:
-            return response.json()
-        else:
-            logger.error(f"Failed to fetch PR #{pr_number}: {response.status_code} - {response.text}")
-            return None
+        return self.get_json_response(url)
         
     def close_pr_linked_issue(self, pr_number: int, pr_data: Optional[dict]) -> list[int]:
         """
@@ -364,7 +355,9 @@ class GitHubClient:
                 return []
         
         issue = pr_data.get('issue_url')
-        issue_data = requests.get(issue, headers=self.headers).json()
+        issue_data = self.get_json_response(issue)
+        if not issue_data:
+            return []
         body = issue_data.get('body', '')
         patterns = [
             r'(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+#(\d+)',  # Closes #123
@@ -384,8 +377,54 @@ class GitHubClient:
             self.close_issue(isn)
 
     
+    def list_commits_in_pr(self, pr_number: int) -> Optional[list[dict]]:
+        """
+        Получает список коммитов в pull request
         
+        Args:
+            pr_number: номер pull request
+        
+        Returns:
+            Список коммитов или None при ошибке
+        """
+        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/pulls/{pr_number}/commits"
+        all_commits = []
+        page_number = 1
+        while True:
+            params = {
+                "per_page": 100,
+                "page": page_number
+            }
+            commits_page = self.get_json_response(url, params=params)
+            if not commits_page:
+                break
+            all_commits.extend(commits_page)
+            if len(commits_page) < 100:
+                break
+            page_number += 1
+
+        return self.get_json_response(url)
+    
+    def get_last_commit_date(self, pr_number: int) -> Optional[datetime]:
+        """
+        Получает последний коммит в pull request
+        
+        Args:
+            pr_number: номер pull request
+        
+        Returns:
+            Данные последнего коммита или None при ошибке
+        """
+        commits = self.list_commits_in_pr(pr_number)
+        if commits:
+            dt = commits[-1].get('commit', {}).get('author', {}).get('date')
+            if dt:
+                return datetime.fromisoformat(dt.replace('Z', '+00:00'))
+
+        return None
+
 if __name__ == "__main__":
     gh_client = GitHubClient()
-    pr = gh_client.list_repository_issues(state="all")
-    print(pr)
+    last_commit_date = gh_client.get_last_commit_date(pr_number=388)
+    print(f"Last commit date: {last_commit_date}")
+    
