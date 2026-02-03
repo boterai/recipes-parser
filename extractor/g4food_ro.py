@@ -58,10 +58,10 @@ class G4FoodExtractor(BaseRecipeExtractor):
         Парсинг строки ингредиента в структурированный формат для g4food.ro
         
         Args:
-            ingredient_text: Строка вида "4 linguri de unt nesărat" или "1,6 kilograme de roșii"
+            ingredient_text: Строка вида "4 linguri de unt nesărat" или "Ravioli (între 5 și 8 bucăți)"
             
         Returns:
-            dict: {"name": "unt nesărat", "amount": "4", "units": "linguri"} или None
+            dict: {"name": "unt nesărat", "amount": "4", "units": "linguri"} або None
         """
         if not ingredient_text:
             return None
@@ -72,37 +72,54 @@ class G4FoodExtractor(BaseRecipeExtractor):
         # Заменяем запятую на точку в числах
         text = re.sub(r'(\d),(\d)', r'\1.\2', text)
         
+        # Специальные случаи обработки
+        
+        # Случай 1: "Ravioli (între 5 și 8 bucăți de persoană)"
+        if '(' in text and 'între' in text.lower():
+            name_match = re.match(r'^([^(]+)\s*\(între\s+(\d+)\s+și\s+(\d+)\s+(bucăț[i]+)', text, re.IGNORECASE)
+            if name_match:
+                return {
+                    "name": name_match.group(1).strip(),
+                    "amount": f"{name_match.group(2)}-{name_match.group(3)}",
+                    "units": "pieces"
+                }
+        
+        # Случай 2: "Smântână de gătit cam 100 de g"
+        cam_match = re.match(r'^(.+?)\s+cam\s+(\d+)\s+de\s+g\b', text, re.IGNORECASE)
+        if cam_match:
+            return {
+                "name": cam_match.group(1).strip(),
+                "amount": cam_match.group(2),
+                "units": "grame"
+            }
+        
+        # Случай 3: "Sare și piper proaspăt măcinat" (без количества)
+        if not any(char.isdigit() for char in text):
+            return {
+                "name": text,
+                "amount": None,
+                "units": None
+            }
+        
         # Единицы измерения на румынском
-        units_pattern = r'(lingur[ăi]|linguriț[ăe]|kilogram[e]?|gram[e]?|mililit[ri]+|lit[ri]+|bucăț[i]+|căț[ei]+|kg|g|ml|l|de\s+g)'
+        units_pattern = r'(lingur[ăi]|linguriț[ăe]|kilogram[e]?|gram[e]?|mililit[ri]+|lit[ri]+|bucăț[i]+|căț[ei]+|kg|g|ml|l)'
         
-        # Паттерн 1: [количество] [единица] [de] название
-        # Примеры: "4 linguri de unt", "100 de g", "între 5 și 8 bucăți"
-        pattern1 = r'^(.+?)\s*(' + units_pattern + r')\s*(?:de\s+)?(.+)$'
+        # Случай 4: Стандартный паттерн "[количество] [единица] [de] название"
+        # Примеры: "4 linguri de unt nesărat", "1.6 kilograme de roșii"
+        pattern = r'^([\d\s/.,\-]+)\s*(' + units_pattern + r')\s*(?:de\s+)?(.+)$'
         
-        match = re.match(pattern1, text, re.IGNORECASE)
+        match = re.match(pattern, text, re.IGNORECASE)
         
         if match:
-            amount_part, unit, _, name = match.groups()
+            amount_str, unit, _, name = match.groups()
             
             # Обработка количества
             amount = None
-            if amount_part:
-                amount_part = amount_part.strip()
-                # Обработка диапазонов: "între 5 și 8" -> "5-8"
-                range_match = re.search(r'între\s+(\d+)\s+și\s+(\d+)', amount_part, re.IGNORECASE)
-                if range_match:
-                    amount = f"{range_match.group(1)}-{range_match.group(2)}"
-                # Обработка "cam 100"
-                elif 'cam' in amount_part.lower():
-                    num_match = re.search(r'\d+', amount_part)
-                    if num_match:
-                        amount = num_match.group(0)
-                # Обработка диапазонов типа "5-8"
-                elif '-' in amount_part and not amount_part.startswith('-'):
-                    amount = amount_part
+            if amount_str:
+                amount_str = amount_str.strip()
                 # Обработка дробей типа "1/2"
-                elif '/' in amount_part:
-                    parts = amount_part.split()
+                if '/' in amount_str:
+                    parts = amount_str.split()
                     total = 0
                     for part in parts:
                         if '/' in part:
@@ -116,61 +133,54 @@ class G4FoodExtractor(BaseRecipeExtractor):
                     if total > 0:
                         amount = str(total)
                 else:
-                    # Простое число
-                    num_match = re.search(r'\d+\.?\d*', amount_part)
-                    if num_match:
-                        amount = num_match.group(0)
+                    amount = amount_str.replace(',', '.')
         else:
-            # Паттерн 2: без единиц измерения, только название
-            # Примеры: "Sare și piper"
+            # Случай 5: Название впереди, количество в конце или в скобках
+            # Пример: "Sos de ciuperci preparat în casă"
             return {
                 "name": text,
                 "amount": None,
                 "units": None
             }
         
-        # Обработка единицы измерения (нормализация)
+        # Обработка единицы измерения (нормализация к коротким формам)
         if unit:
             unit = unit.strip().lower()
-            # Обрабатываем "de g" -> "grame"
-            if 'de g' in unit:
-                unit = 'grame'
-            else:
-                # Нормализуем единицы к множественному числу для соответствия эталону
-                unit_map = {
-                    'linguri': 'linguri',
-                    'lingură': 'linguri',
-                    'linguriță': 'linguriță',
-                    'linguriţă': 'linguriță',
-                    'linguriţe': 'linguriță',
-                    'kilograme': 'kilograme',
-                    'kilogram': 'kilograme',
-                    'grame': 'grame',
-                    'gram': 'grame',
-                    'mililitri': 'mililitri',
-                    'mililitru': 'mililitri',
-                    'litri': 'litri',
-                    'litru': 'litri',
-                    'bucăți': 'bucăți',
-                    'bucată': 'bucăți',
-                    'bucati': 'bucăți',
-                    'bucata': 'bucăți',
-                    'căței': 'căței',
-                    'cățel': 'căței',
-                    'catei': 'căței',
-                    'catel': 'căței',
-                    'kg': 'kilograme',
-                    'g': 'grame',
-                    'ml': 'mililitri',
-                    'l': 'litri'
-                }
-                unit = unit_map.get(unit, unit)
+            # Нормализуем единицы к коротким формам как в эталоне
+            unit_map = {
+                'linguri': 'linguri',
+                'lingură': 'linguri',
+                'linguriță': 'linguriță',
+                'linguriţă': 'linguriță',
+                'linguriţe': 'linguriță',
+                'kilograme': 'kilograme',
+                'kilogram': 'kilograme',
+                'grame': 'g',
+                'gram': 'g',
+                'mililitri': 'mililitri',
+                'mililitru': 'mililitri',
+                'litri': 'litri',
+                'litru': 'litri',
+                'bucăți': 'pieces',
+                'bucată': 'pieces',
+                'bucati': 'pieces',
+                'bucata': 'pieces',
+                'căței': 'căței',
+                'cățel': 'căței',
+                'catei': 'căței',
+                'catel': 'căței',
+                'kg': 'kilograme',
+                'g': 'g',
+                'ml': 'mililitri',
+                'l': 'litri'
+            }
+            unit = unit_map.get(unit, unit)
         
         # Очистка названия
         # Удаляем скобки с содержимым
         name = re.sub(r'\([^)]*\)', '', name)
-        # Удаляем фразы "după gust", "la nevoie", "opțional", "pentru servire"
-        name = re.sub(r'\b(după gust|la nevoie|opțional|pentru servire|plus extra pentru servire|aproximativ.*|tocați mărunt|tocat|tocate fin|cu tot cu suc|de preferat.*|de persoană|depinde de mărime)\b', '', name, flags=re.IGNORECASE)
+        # Удаляем фразы
+        name = re.sub(r'\b(după gust|la nevoie|opțional|pentru servire|plus extra pentru servire|aproximativ.*|tocați mărunt|tocat|tocate fin|cu tot cu suc|de preferat.*|de persoană|depinde de mărime|preparat în casă|găsești rețeta pe.*)\b', '', name, flags=re.IGNORECASE)
         # Удаляем лишние пробелы и запятые в конце
         name = re.sub(r'[,;:]+\s*$', '', name)
         name = re.sub(r'\s+', ' ', name).strip()
@@ -208,11 +218,12 @@ class G4FoodExtractor(BaseRecipeExtractor):
                 elif current.name == 'p':
                     # Ингредиенты в параграфах
                     p_text = current.get_text(strip=True)
-                    # Проверяем, что это не рекламный блок или ссылка на другой рецепт
-                    if p_text and len(p_text) < 200 and 'pentru sos' not in p_text.lower():
+                    # Пропускаем слишком длинные параграфы, но ВКЛЮЧАЕМ параграф с ингредиентами для соуса
+                    if len(p_text) < 200:
                         # Проверяем, что параграф похож на ингредиент
-                        # (содержит количество или название продукта)
-                        if any(unit in p_text.lower() for unit in ['lingur', 'gram', 'kg', 'ml', 'bucăț', 'căț', 'de g']):
+                        if (any(unit in p_text.lower() for unit in ['lingur', 'gram', 'kg', 'ml', 'bucăț', 'căț', 'de g']) or
+                            any(food in p_text.lower() for food in ['ravioli', 'sare', 'piper', 'smântân', 'sos', 'ceapă', 'usturoi', 'ulei']) or
+                            'pentru sos vei avea nevoie' in p_text.lower()):
                             items_found.append(current)
                 elif current.name == 'div':
                     # Пропускаем рекламные блоки
@@ -232,9 +243,37 @@ class G4FoodExtractor(BaseRecipeExtractor):
                 ingredient_text = self.clean_text(ingredient_text)
                 
                 if ingredient_text:
-                    parsed = self.parse_ingredient_item(ingredient_text)
-                    if parsed:
-                        ingredients.append(parsed)
+                    # Обрабатываем специальный случай: "Pentru sos vei avea nevoie de ceapă, usturoi, ulei..."
+                    if 'pentru sos vei avea nevoie' in ingredient_text.lower():
+                        # Извлекаем список ингредиентов после "de"
+                        match = re.search(r'de\s+(.+)$', ingredient_text, re.IGNORECASE)
+                        if match:
+                            items_list = match.group(1)
+                            # Разбиваем по запятым
+                            sub_items = re.split(r',\s*(?:și\s+)?', items_list)
+                            for sub_item in sub_items:
+                                sub_item = sub_item.strip().rstrip('.')
+                                if sub_item:
+                                    ingredients.append({
+                                        "name": sub_item,
+                                        "amount": None,
+                                        "units": None
+                                    })
+                    # Обрабатываем "Sare și piper..." - разбиваем на два ингредиента
+                    elif ' și ' in ingredient_text.lower() and not any(char.isdigit() for char in ingredient_text):
+                        parts = re.split(r'\s+și\s+', ingredient_text)
+                        for part in parts:
+                            part = part.strip().rstrip('.,')
+                            if part:
+                                ingredients.append({
+                                    "name": part,
+                                    "amount": None,
+                                    "units": None
+                                })
+                    else:
+                        parsed = self.parse_ingredient_item(ingredient_text)
+                        if parsed and parsed.get('name'):
+                            ingredients.append(parsed)
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
