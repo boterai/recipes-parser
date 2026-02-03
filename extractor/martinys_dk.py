@@ -83,7 +83,8 @@ class MartinysDkExtractor(BaseRecipeExtractor):
         
         # Паттерн для извлечения: количество, единица, название
         # Примеры: "400 g hakket kød", "2 spsk. olivenolie", "1 hokkaido græskar", "salt"
-        pattern = r'^([\d\s/.,½¼¾⅓⅔]+)?\s*(g|kg|ml|dl|l|spsk\.|tsk\.|stk\.|fed|stort?|store|bakke)?\s*(.+)$'
+        # Важно: единица измерения должна быть либо в конце слова (с точкой), либо отдельным словом
+        pattern = r'^([\d\s/.,½¼¾⅓⅔]+)?\s*(g(?:\s|$)|kg(?:\s|$)|ml(?:\s|$)|dl(?:\s|$)|l(?:\s|$)|spsk\.|tsk\.|stk\.|fed|stort?|store|bakke)?\s*(.+)$'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -183,6 +184,54 @@ class MartinysDkExtractor(BaseRecipeExtractor):
                         "amount": parsed["amount"],
                         "units": parsed["unit"]
                     })
+        else:
+            # Альтернативный формат: ингредиенты в параграфе, разделенные <br>
+            # Ищем параграф с "INGREDIENSER"
+            paragraphs = ingredients_section.find_all('p')
+            for p in paragraphs:
+                # Получаем HTML содержимое параграфа
+                html_content = str(p)
+                
+                # Проверяем, содержит ли параграф "INGREDIENSER"
+                if 'INGREDIENSER' not in html_content:
+                    continue
+                
+                # Разбиваем по <br> тегам
+                parts = html_content.split('<br/>')
+                
+                # Флаг, что мы в секции ингредиентов
+                in_ingredients = False
+                
+                for part in parts:
+                    # Удаляем HTML теги
+                    text = re.sub(r'<[^>]+>', '', part).strip()
+                    
+                    # Начало секции ингредиентов
+                    if 'INGREDIENSER' in text:
+                        in_ingredients = True
+                        continue
+                    
+                    # Конец секции ингредиентов (начало инструкций)
+                    if in_ingredients and any(keyword in text for keyword in ['Start med', 'Tænd ovnen', 'Lav nu', 'Skræl', 'Pil og hak']):
+                        break
+                    
+                    # Пропускаем заголовки разделов
+                    if text.isupper() and len(text) < 30:
+                        continue
+                    
+                    # Пропускаем информацию о времени и порциях
+                    if 'Forberedelse' in text or 'personer' in text or 'til' in text.lower() and len(text) < 50:
+                        continue
+                    
+                    # Парсим ингредиент, если мы в секции ингредиентов
+                    if in_ingredients and text and len(text) > 2:
+                        parsed = self.parse_ingredient_item(text)
+                        if parsed:
+                            ingredients.append({
+                                "name": parsed["name"],
+                                "amount": parsed["amount"],
+                                "units": parsed["unit"]
+                            })
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
@@ -209,6 +258,39 @@ class MartinysDkExtractor(BaseRecipeExtractor):
                 
                 if text and len(text) > 10:
                     instructions.append(text)
+        else:
+            # Альтернативный формат: инструкции в параграфе, разделенные <br>
+            paragraphs = ingredients_section.find_all('p')
+            for p in paragraphs:
+                html_content = str(p)
+                
+                # Проверяем, содержит ли параграф инструкции
+                if 'INGREDIENSER' not in html_content:
+                    continue
+                
+                # Разбиваем по <br> тегам
+                parts = html_content.split('<br/>')
+                
+                # Флаг, что мы в секции инструкций
+                in_instructions = False
+                
+                for part in parts:
+                    # Удаляем HTML теги
+                    text = re.sub(r'<[^>]+>', '', part).strip()
+                    
+                    # Начало инструкций (после ингредиентов)
+                    if any(keyword in text for keyword in ['Start med', 'Tænd ovnen', 'Lav nu', 'Skræl kartofler', 'Pil og hak']):
+                        in_instructions = True
+                    
+                    # Пропускаем заголовки разделов (написаны большими буквами)
+                    if text.isupper() and len(text) < 30:
+                        continue
+                    
+                    # Собираем инструкции
+                    if in_instructions and text and len(text) > 10:
+                        # Очищаем текст
+                        text = self.clean_text(text)
+                        instructions.append(text)
         
         return ' '.join(instructions) if instructions else None
     
