@@ -205,12 +205,20 @@ class RicetteLidlChExtractor(BaseRecipeExtractor):
         ol = self.soup.find('ol', class_=re.compile(r'list-decimal'))
         
         if ol:
-            # Извлекаем все параграфы (шаги)
+            # Вариант 1: Инструкции в параграфах <p>
             steps = ol.find_all('p', class_=re.compile(r'font-body'))
             
             if steps:
                 # Объединяем все шаги в одну строку
                 instructions_text = ' '.join([self.clean_text(step.get_text()) for step in steps])
+                return instructions_text if instructions_text else None
+            
+            # Вариант 2: Инструкции в элементах списка <li>
+            lis = ol.find_all('li', recursive=False)
+            
+            if lis:
+                # Извлекаем текст из каждого <li>
+                instructions_text = ' '.join([self.clean_text(li.get_text()) for li in lis])
                 return instructions_text if instructions_text else None
         
         return None
@@ -271,16 +279,44 @@ class RicetteLidlChExtractor(BaseRecipeExtractor):
     
     def extract_prep_time(self) -> Optional[str]:
         """Извлечение времени подготовки"""
-        # Для этого сайта время подготовки и приготовления часто объединены
+        # Ищем элемент с data-testid="recipe-info-badge-preparation"
+        prep_badge = self.soup.find(attrs={'data-testid': 'recipe-info-badge-preparation'})
+        if prep_badge:
+            # Извлекаем текст и ищем паттерн времени
+            text = prep_badge.get_text(strip=True)
+            # Паттерн: "PreparazionePreparazione15 min"
+            time_match = re.search(r'(\d+\s*(?:h|min|ore|minuti)(?:\s*\d+\s*(?:min|minuti))?)', text, re.I)
+            if time_match:
+                return self.clean_text(time_match.group(1))
+        
         return None
     
     def extract_cook_time(self) -> Optional[str]:
         """Извлечение времени приготовления"""
+        # Ищем элемент с data-testid="recipe-info-badge-cooking"
+        cook_badge = self.soup.find(attrs={'data-testid': 'recipe-info-badge-cooking'})
+        if cook_badge:
+            # Извлекаем текст и ищем паттерн времени
+            text = cook_badge.get_text(strip=True)
+            # Паттерн: "CotturaCottura15 min"
+            time_match = re.search(r'(\d+\s*(?:h|min|ore|minuti)(?:\s*\d+\s*(?:min|minuti))?)', text, re.I)
+            if time_match:
+                return self.clean_text(time_match.group(1))
+        
+        # Fallback: используем общий метод
         return self.extract_time_field('cook_time')
     
     def extract_total_time(self) -> Optional[str]:
         """Извлечение общего времени"""
-        # На этом сайте обычно указывается общее время
+        # Ищем элемент с data-testid="recipe-info-badge-total" (если есть)
+        total_badge = self.soup.find(attrs={'data-testid': 'recipe-info-badge-total'})
+        if total_badge:
+            text = total_badge.get_text(strip=True)
+            time_match = re.search(r'(\d+\s*(?:h|min|ore|minuti)(?:\s*\d+\s*(?:min|minuti))?)', text, re.I)
+            if time_match:
+                return self.clean_text(time_match.group(1))
+        
+        # Fallback: используем общий метод
         return self.extract_time_field('total_time')
     
     def extract_notes(self) -> Optional[str]:
