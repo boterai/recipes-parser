@@ -81,18 +81,54 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
         """Извлечение ингредиентов"""
         ingredients = []
         
-        # Ищем заголовок "Ingredienti Necessari" или "Ingredienti"
-        h2_headers = self.soup.find_all('h2')
+        # Ищем заголовок "Ingredienti Necessari" или "Ingredienti" в h2 или h3
         ingredients_section = None
-        
-        for h2 in h2_headers:
-            h2_text = h2.get_text(strip=True)
-            if re.search(r'Ingredienti', h2_text, re.I):
-                ingredients_section = h2
+        for tag in ['h2', 'h3']:
+            headers = self.soup.find_all(tag)
+            for header in headers:
+                header_text = header.get_text(strip=True)
+                if re.search(r'Ingredienti', header_text, re.I):
+                    ingredients_section = header
+                    break
+            if ingredients_section:
                 break
         
         if ingredients_section:
-            # Берем следующий параграф после заголовка
+            # Сначала проверяем, есть ли список <ul> после заголовка
+            next_ul = ingredients_section.find_next('ul')
+            
+            # Проверяем, что ul находится близко к заголовку (не дальше 2 элементов)
+            if next_ul:
+                # Извлекаем все <li> элементы из всех <ul> блоков, пока не встретим следующий заголовок
+                current = ingredients_section.find_next_sibling()
+                while current:
+                    # Останавливаемся на следующем заголовке
+                    if current.name in ['h2', 'h3', 'h4']:
+                        break
+                    
+                    # Если это ul, обрабатываем его элементы
+                    if current.name == 'ul':
+                        for li in current.find_all('li'):
+                            ingredient_text = li.get_text(strip=True)
+                            ingredient_text = self.clean_text_italian(ingredient_text)
+                            if ingredient_text:
+                                parsed = self.parse_ingredient_italian(ingredient_text)
+                                if parsed and parsed.get('name') and len(parsed.get('name', '')) > 1:
+                                    ingredients.append(parsed)
+                    # Если это параграф с "Per", может быть группа ингредиентов
+                    elif current.name == 'p':
+                        p_text = current.get_text(strip=True)
+                        # Пропускаем пустые параграфы и те, что не начинаются с "Per"
+                        if p_text and re.match(r'^Per\s+', p_text, re.I):
+                            # Это может быть заголовок группы, продолжаем
+                            pass
+                    
+                    current = current.find_next_sibling()
+                
+                if ingredients:
+                    return json.dumps(ingredients, ensure_ascii=False)
+            
+            # Если нет списка, ищем параграф с текстом
             next_p = ingredients_section.find_next('p')
             if next_p:
                 text = next_p.get_text(strip=True)
@@ -257,20 +293,29 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
             amount_str, unit, name = match.groups()
             
             # Проверяем, не является ли это просто названием без количества
-            if not amount_str and not unit:
-                # Это просто название
-                name = text
-                # Убираем "q.b" и подобные пометки
-                name = re.sub(r'\s*q\.b\.?\s*$', '', name, flags=re.I)
-                name = name.strip()
-                # Пропускаем пустые названия и слишком длинные строки
-                if not name or len(name) < 2 or len(name) > 50:
-                    return None
-                return {
-                    "name": name,
-                    "amount": None,
-                    "units": None
-                }
+            if not amount_str:
+                # Если нет количества и "unit" не является известной единицей измерения,
+                # то это просто название
+                known_units = ['g', 'kg', 'ml', 'l', 'cucchiai', 'cucchiaio', 'cucchiaini', 'cucchiaino',
+                              'tazza', 'tazze', 'bicchiere', 'bicchieri', 'pizzico', 'rametto', 'spicchio',
+                              'foglio', 'fogli', 'cespo', 'rotolo', 'uovo', 'sbattuto', 'tritato']
+                
+                if not unit or unit.lower() not in known_units:
+                    # Это просто название (весь текст)
+                    name = text
+                    # Убираем "q.b" и подобные пометки
+                    name = re.sub(r'\s*q\.b\.?\s*$', '', name, flags=re.I)
+                    # Убираем "a piacere"
+                    name = re.sub(r'\s+a\s+piacere\s*$', '', name, flags=re.I)
+                    name = name.strip()
+                    # Пропускаем пустые названия и слишком длинные строки
+                    if not name or len(name) < 2 or len(name) > 60:
+                        return None
+                    return {
+                        "name": name,
+                        "amount": None,
+                        "units": None
+                    }
             
             # Обработка количества
             amount = None
@@ -290,10 +335,12 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
             name = re.sub(r'\s*q\.b\.?\s*$', '', name, flags=re.I)
             # Убираем описания типа "per spennellare"
             name = re.sub(r'\s+per\s+.*$', '', name, flags=re.I)
+            # Убираем "a piacere"
+            name = re.sub(r'\s+a\s+piacere\s*$', '', name, flags=re.I)
             name = re.sub(r'\s+', ' ', name).strip()
             
             # Пропускаем пустые названия и слишком длинные строки
-            if not name or len(name) < 2 or len(name) > 50:
+            if not name or len(name) < 2 or len(name) > 60:
                 return None
             
             return {
@@ -314,23 +361,24 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
         # Создаем краткое резюме основных шагов из разных секций
         steps = []
         
-        # Ищем все параграфы между заголовками, которые описывают процесс приготовления
-        h2_headers = self.soup.find_all('h2')
+        # Ищем все параграфы между заголовками h2 и h3, которые описывают процесс приготовления
+        all_headers = self.soup.find_all(['h2', 'h3'])
         
-        for h2 in h2_headers:
-            h2_text = h2.get_text(strip=True)
+        for header in all_headers:
+            header_text = header.get_text(strip=True)
             # Пропускаем секцию с ингредиентами
-            if re.search(r'Ingredienti', h2_text, re.I):
+            if re.search(r'Ingredienti', header_text, re.I):
                 continue
             
             # Ищем секции приготовления
-            if re.search(r'Preparazione|Cottura|Assemblaggio', h2_text, re.I):
+            if re.search(r'Preparazione|Cottura|Assemblaggio', header_text, re.I):
                 # Берем параграф после заголовка
-                next_p = h2.find_next('p')
+                next_p = header.find_next('p')
                 if next_p:
                     step_text = next_p.get_text(separator=' ', strip=True)
+                    step_text = self.clean_text_italian(step_text)
                     # Извлекаем ключевые действия из длинного текста
-                    # Берем первое и последнее предложение как краткое резюме
+                    # Берем первое предложение как краткое резюме
                     sentences = re.split(r'[.!?]\s+', step_text)
                     if sentences:
                         # Берем первое предложение
@@ -445,17 +493,17 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
-        # Ищем секцию с советами
-        h2_headers = self.soup.find_all('h2')
+        # Ищем секцию с советами в h2 или h3
+        all_headers = self.soup.find_all(['h2', 'h3'])
         
-        for h2 in h2_headers:
-            h2_text = h2.get_text(strip=True)
-            if re.search(r'Consigli|Suggerimenti|Note|Varianti', h2_text, re.I):
+        for header in all_headers:
+            header_text = header.get_text(strip=True)
+            if re.search(r'Consigli|Suggerimenti|Note|Varianti', header_text, re.I):
                 # Берем параграф после заголовка
-                next_p = h2.find_next('p')
+                next_p = header.find_next('p')
                 if next_p:
                     notes_text = next_p.get_text(separator=' ', strip=True)
-                    notes_text = self.clean_text(notes_text)
+                    notes_text = self.clean_text_italian(notes_text)
                     # Берем первые несколько предложений
                     sentences = re.split(r'[.!?]\s+', notes_text)
                     if len(sentences) > 2:
