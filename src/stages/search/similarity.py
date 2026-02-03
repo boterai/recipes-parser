@@ -196,7 +196,6 @@ class SimilaritySearcher:
             ids = list(vec_map)
 
             if not ids or ids == [self.last_id]:
-                self.last_id = None
                 logger.info("No more ids to process, stopping.")
                 break
 
@@ -245,7 +244,7 @@ class SimilaritySearcher:
 
             if self.params.max_recipes is not None and processed >= self.params.max_recipes:
                 break
-        self.last_id = None  # обработка завершена
+
         return build_clusters_from_dsu(self.dsu, self.params.min_cluster_size)
             
     
@@ -430,18 +429,20 @@ if __name__ == "__main__":
     while True:
         ss = SimilaritySearcher(params=ClusterParams(
                     limit=30,
-                    score_threshold=0.95,
+                    score_threshold=0.93,
                     scroll_batch=1000,
+                    union_top_k=7,
                     query_batch=128
-                ), build_type="image") # "image", "full", "ingredients"
+                ), build_type="full") # "image", "full", "ingredients"
         try:
             ss.load_dsu_state()
+            last_id = ss.last_id # получаем last id после загрузки состояния (такая штука работает только опираясь на тот факт, что каждй вновь доавбленный рецепт имеет id не меньше уже векторизованных рецептов, иначе рецепты могут быть пропущены)
             clusters = asyncio.run(ss.build_clusters_async())
             ss.save_dsu_state()
             print(f"Total clusters found: {len(clusters)}")
             print("Last processed ID:", ss.last_id)
             ss.save_clusters_to_file(clusters)
-            if ss.last_id is None:
+            if last_id == ss.last_id: # конец обработки тк id не поменялся, значи новых значений нет
                 logger.info("Processing complete.")
                 break
         except Exception as e:

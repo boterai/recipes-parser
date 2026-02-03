@@ -25,7 +25,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 async def create_clusters(score_thresold: float, build_type: Literal["image", "full", "ingredients"]) -> tuple[list[list[int]], dict[int, list[int]]]:
-    last_id = None
+    last_error_id = None
     consecutive_same_count = 0
     while True:
         ss = SimilaritySearcher(params=ClusterParams(
@@ -40,21 +40,22 @@ async def create_clusters(score_thresold: float, build_type: Literal["image", "f
             return ss.load_clusters_from_file(), ss.get_image_clusters_mapping()
         try:
             ss.load_dsu_state()
+            last_id = ss.last_id # получаем last id после загрузки состояния (такая штука работает только опираясь на тот факт, что каждй вновь доавбленный рецепт имеет id не меньше уже векторизованных рецептов, иначе рецепты могут быть пропущены)
             clusters = await ss.build_clusters_async()
             ss.save_dsu_state()
             print(f"Total clusters found: {len(clusters)}")
             print("Last processed ID:", ss.last_id)
             ss.save_clusters_to_file(clusters)
-            if ss.last_id is None:
+            if ss.last_id == last_id:
                 logger.info("Processing complete.")
                 break
 
         except Exception as e:
-            if last_id == ss.last_id:
+            if last_error_id == ss.last_id:
                 consecutive_same_count += 1
             else:
                 consecutive_same_count = 0
-                last_id = ss.last_id
+                last_error_id = ss.last_id
 
             logger.error(f"Error during cluster building: {e}")
             ss.save_dsu_state()
