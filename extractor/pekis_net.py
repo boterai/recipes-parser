@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 import json
 import re
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Any
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
@@ -96,21 +96,20 @@ class PekisNetExtractor(BaseRecipeExtractor):
     
     def extract_description(self) -> Optional[str]:
         """Извлечение описания рецепта"""
-        # Приоритет 1: HTML .field--name-body - первый параграф без заголовков
+        # Приоритет 1: HTML .field--name-body - найти первый содержательный параграф
         body_field = self.soup.find('div', class_='field--name-body')
         if body_field:
-            # Ищем первый параграф (пропускаем заголовки h2, h3)
+            # Ищем первый параграф с достаточным содержанием (пропускаем заголовки h2, h3)
             paragraphs = body_field.find_all('p')
-            if paragraphs:
-                # Берем третий параграф (обычно он содержит краткое описание)
-                # или первый, если параграфов мало
-                p_index = min(2, len(paragraphs) - 1)  # индекс 2 = 3-й параграф
-                text = self.clean_text(paragraphs[p_index].get_text())
-                # Обрезаем до первой точки + следующее предложение для краткости
-                sentences = text.split('.')
-                if len(sentences) >= 2:
-                    return sentences[0].strip() + '.'
-                return text
+            for p in paragraphs:
+                text = self.clean_text(p.get_text())
+                # Ищем параграф длиной хотя бы 50 символов
+                if text and len(text) >= 50:
+                    # Обрезаем до первого предложения для краткости
+                    sentences = text.split('.')
+                    if sentences:
+                        return sentences[0].strip() + '.'
+                    return text
         
         # Приоритет 2: JSON-LD description (обычно слишком длинное)
         recipe_data = self._get_json_ld_recipe()
@@ -128,7 +127,7 @@ class PekisNetExtractor(BaseRecipeExtractor):
         
         return None
     
-    def parse_ingredient_text(self, ingredient_text: str) -> Dict[str, any]:
+    def parse_ingredient_text(self, ingredient_text: str) -> Dict[str, Any]:
         """
         Парсинг строки ингредиента в структурированный формат
         
@@ -294,8 +293,20 @@ class PekisNetExtractor(BaseRecipeExtractor):
     
     def extract_category(self) -> Optional[str]:
         """Извлечение категории"""
-        # Для pekis.net всегда возвращаем "Main Course" так как это основные блюда
-        # JSON-LD содержит слишком специфичные категории на словенском
+        # Приоритет 1: JSON-LD recipeCategory
+        recipe_data = self._get_json_ld_recipe()
+        if recipe_data and 'recipeCategory' in recipe_data:
+            category = recipe_data['recipeCategory']
+            # Если категория на словенском, пытаемся сопоставить с общими категориями
+            # Для базовой реализации возвращаем "Main Course" как основную категорию
+            # В будущем можно добавить словарь переводов категорий
+            if isinstance(category, str):
+                # Словенские категории обычно длинные описательные фразы
+                # Для простоты используем общую категорию
+                pass
+        
+        # По умолчанию возвращаем "Main Course" для рецептов основных блюд
+        # Можно расширить, добавив анализ ключевых слов для определения типа блюда
         return "Main Course"
     
     def _parse_iso_duration(self, duration: str) -> Optional[str]:
@@ -446,10 +457,10 @@ class PekisNetExtractor(BaseRecipeExtractor):
                 tags = []
                 for tag in keywords.split(','):
                     tag = tag.strip()
-                    # Берем последние слова из длинных фраз
+                    # Упрощаем длинные фразы, беря последние значимые слова
                     words = tag.split()
                     if len(words) > 3:
-                        # Берем последние 2-3 слова
+                        # Берем последние 2 слова для краткости
                         tag = ' '.join(words[-2:])
                     tags.append(tag)
                 
