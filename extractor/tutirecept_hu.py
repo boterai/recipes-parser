@@ -110,6 +110,9 @@ class TutireceptHuExtractor(BaseRecipeExtractor):
         # Чистим текст
         text = self.clean_text(ingredient_text)
         
+        # Удаляем префиксы типа "kb." (körülbelül/approximately) перед обработкой
+        text = re.sub(r'^(kb\.?|körülbelül)\s+', '', text, flags=re.IGNORECASE)
+        
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "50 dkg háztartási keksz", "2 dl tej", "1 csipet só"
         # Венгерские единицы измерения: dkg (dekagram), dl (deciliter), db (darab/piece), 
@@ -149,8 +152,8 @@ class TutireceptHuExtractor(BaseRecipeExtractor):
         # Очистка названия
         name = name.strip()
         
-        # Удаляем фразы "ízlés szerint" (to taste), "kb." (approximately), etc
-        name = re.sub(r'\b(ízlés szerint|kb\.?|körülbelül|opcionális)\b', '', name, flags=re.IGNORECASE)
+        # Удаляем фразы "ízlés szerint" (to taste), "opcionális" (optional), etc
+        name = re.sub(r'\b(ízlés szerint|opcionális)\b', '', name, flags=re.IGNORECASE)
         name = re.sub(r'\s+', ' ', name).strip()
         
         if not name or len(name) < 2:
