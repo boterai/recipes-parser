@@ -225,10 +225,10 @@ class KuchniaFaktPlExtractor(BaseRecipeExtractor):
                                     continue
                                 # Проверяем, является ли это инструкцией
                                 # Инструкции обычно начинаются с глаголов: Wsypujemy, Dodajemy, Do, Na koniec, Wlewamy, и т.д.
-                                instruction_starts = ['Wsyp', 'Dodaj', 'Wymiesz', 'Wlej', 'Wrzuc', 'Wkład', 
+                                instruction_starts = ['Wsyp', 'Dodaj', 'Wymiesz', 'Wlej', 'Wlewamy', 'Wrzuc', 'Wkład', 
                                                      'Do kieliszka', 'Do miski', 'Do garnka', 'Drinka', 'Na koniec',
                                                      'Jeśli', 'Wyrobi', 'Owiń', 'Po tym', 'Podziel', 'Złóż',
-                                                     'Kiedy', 'Gdy', 'Kontynuuj', 'Oprósz', 'Przekład']
+                                                     'Kiedy', 'Gdy', 'Kontynuuj', 'Oprósz', 'Przekład', 'Do dodatkowej']
                                 if any(sentence.startswith(start) for start in instruction_starts):
                                     # Добавляем точку в конце, если её нет
                                     if not sentence.endswith('.'):
