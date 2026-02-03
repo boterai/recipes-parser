@@ -268,6 +268,28 @@ class BiancorossogiapponeExtractor(BaseRecipeExtractor):
                     if steps:
                         break
         
+        # Если все еще не нашли, ищем параграфы с ключевыми глаголами приготовления
+        # Это для рецептов без явного заголовка "PROCEDIMENTO"
+        if not steps:
+            instruction_verbs = ['versare', 'mettere', 'aggiungere', 'chiudere', 'cuocere', 
+                               'bollire', 'filtrare', 'affettare', 'rosolare', 'tagliare',
+                               'scolare', 'versarci', 'guarnire']
+            
+            # Собираем параграфы с инструкциями
+            all_paragraphs = self.soup.find_all('p')
+            for p in all_paragraphs:
+                text = self.clean_text(p.get_text())
+                
+                # Проверяем, что параграф содержит глаголы приготовления и достаточно длинный
+                if text and len(text) > 50:
+                    # Проверяем наличие глаголов приготовления
+                    if any(verb in text.lower() for verb in instruction_verbs):
+                        # Пропускаем параграфы с заголовками или meta-информацией
+                        if not any(skip in text for skip in ['ramen-ya', 'Giappone', 'anni', 'favoriti', 
+                                                             'ricordo', 'esperienza', 'semplice', 'immaginiate',
+                                                             'condimento che potete preparare']):
+                            steps.append(text)
+        
         return ' '.join(steps) if steps else None
     
     def extract_category(self) -> Optional[str]:
