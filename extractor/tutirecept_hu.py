@@ -116,8 +116,8 @@ class TutireceptHuExtractor(BaseRecipeExtractor):
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "50 dkg háztartási keksz", "2 dl tej", "1 csipet só"
         # Венгерские единицы измерения: dkg (dekagram), dl (deciliter), db (darab/piece), 
-        # evőkanál (tablespoon), csomag (package), csipet (pinch), perc (minute)
-        pattern = r'^([\d.,]+)?\s*(dkg|dl|db|g|kg|ml|l|evőkanál|teáskanál|csomag|csipet|perc|minutes?)?\s*(.+)'
+        # evőkanál (tablespoon), csomag (package), csipet (pinch)
+        pattern = r'^([\d.,]+)?\s*(dkg|dl|db|g|kg|ml|l|evőkanál|teáskanál|csomag|csipet)?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -407,7 +407,6 @@ class TutireceptHuExtractor(BaseRecipeExtractor):
 
 
 def main():
-    import os
     # Обрабатываем папку preprocessed/tutirecept_hu
     project_root = Path(__file__).parent.parent
     recipes_dir = project_root / "preprocessed" / "tutirecept_hu"
