@@ -213,17 +213,17 @@ class TlDelachieveExtractor(BaseRecipeExtractor):
         ingredients = []
         
         # Ищем все списки ингредиентов (могут быть несколько рецептов на странице)
-        # Ищем маркер "Kinakailangang ingredients:"
         content_div = self.soup.find('div', id='mvp-post-content')
         if not content_div:
             return None
         
-        # Ищем все <ul> списки, которые идут после маркеров ингредиентов
+        # Стратегия 1: Ищем маркеры ингредиентов типа "Kinakailangang ingredients:" или "Ang recipe ay kabilang ang:"
         for elem in content_div.find_all(['em', 'p', 'ul']):
-            text = elem.get_text()
+            text = elem.get_text().lower()
             
             # Проверяем, является ли это маркером ингредиентов
-            if elem.name in ['em', 'p'] and 'ingredient' in text.lower():
+            # Ищем слова: ingredient, kabilang (includes), kinakailangan (required)
+            if elem.name in ['em', 'p'] and any(word in text for word in ['ingredient', 'kabilang ang', 'kinakailangan']):
                 # Следующий элемент должен быть списком
                 next_sibling = elem.find_next_sibling()
                 while next_sibling and next_sibling.name != 'ul':
@@ -238,6 +238,19 @@ class TlDelachieveExtractor(BaseRecipeExtractor):
                             for parsed in parsed_list:
                                 if parsed and parsed['name']:
                                     ingredients.append(parsed)
+        
+        # Стратегия 2: Если не нашли через маркеры, ищем первый <ul> список в начале статьи
+        # (обычно ингредиенты идут в начале)
+        if not ingredients:
+            first_ul = content_div.find('ul')
+            if first_ul:
+                for li in first_ul.find_all('li'):
+                    ingredient_text = li.get_text(strip=True)
+                    parsed_list = self.parse_ingredient_text(ingredient_text)
+                    if parsed_list:
+                        for parsed in parsed_list:
+                            if parsed and parsed['name']:
+                                ingredients.append(parsed)
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
@@ -377,11 +390,28 @@ class TlDelachieveExtractor(BaseRecipeExtractor):
             cook_nums = re.findall(r'\d+', cook)
             
             if prep_nums and cook_nums:
-                # Берем максимальные значения, если есть диапазон
-                prep_max = max([int(n) for n in prep_nums])
-                cook_max = max([int(n) for n in cook_nums])
-                total = prep_max + cook_max
-                return f"{total} minutes"
+                # Проверяем, есть ли диапазон в prep_time
+                if len(prep_nums) > 1:
+                    # Есть диапазон (например, "60-90 minutes")
+                    prep_min = int(prep_nums[0])
+                    prep_max = int(prep_nums[1])
+                else:
+                    prep_min = prep_max = int(prep_nums[0])
+                
+                # Проверяем диапазон в cook_time
+                if len(cook_nums) > 1:
+                    cook_min = int(cook_nums[0])
+                    cook_max = int(cook_nums[1])
+                else:
+                    cook_min = cook_max = int(cook_nums[0])
+                
+                total_min = prep_min + cook_min
+                total_max = prep_max + cook_max
+                
+                if total_min == total_max:
+                    return f"{total_max} minutes"
+                else:
+                    return f"{total_min}-{total_max} minutes"
         
         return None
     
