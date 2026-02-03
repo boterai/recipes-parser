@@ -154,10 +154,13 @@ class PontosnewsGrExtractor(BaseRecipeExtractor):
         """Извлечение шагов приготовления"""
         steps = []
         
-        # Ищем в content-inner div (специфично для pontosnews.gr)
+        # Ищем в различных div контейнерах (зависит от версии сайта)
         content_div = self.soup.find('div', class_='content-inner')
         if not content_div:
             content_div = self.soup.find('div', class_='jeg_inner_content')
+        if not content_div:
+            # Для старого формата ищем div с классом preparation
+            content_div = self.soup.find('div', class_='preparation')
         
         if content_div:
             # Ищем ordered list (ol) для инструкций
@@ -217,6 +220,9 @@ class PontosnewsGrExtractor(BaseRecipeExtractor):
         content_div = self.soup.find('div', class_='content-inner')
         if not content_div:
             content_div = self.soup.find('div', class_='jeg_inner_content')
+        if not content_div:
+            # Для старого формата ищем div с классом preparation
+            content_div = self.soup.find('div', class_='preparation')
         
         if content_div:
             # Ищем параграфы после списка инструкций
@@ -224,16 +230,21 @@ class PontosnewsGrExtractor(BaseRecipeExtractor):
             for p in paragraphs:
                 text = self.clean_text(p.get_text())
                 # Фильтруем пустые параграфы и рекламу
-                if text and len(text) > 5 and 'Καλή σας όρεξη' in text:
-                    return text
-                # Также ищем другие типичные фразы для заметок
-                if text and len(text) > 10 and not any(word in text.lower() for word in ['advertisement', 'διαφήμιση']):
-                    # Проверяем, что это не список ингредиентов
-                    if 'γρ.' not in text and 'κ.σ.' not in text:
-                        # Если параграф находится после ol списка, это может быть заметка
-                        prev_sibling = p.find_previous_sibling()
-                        if prev_sibling and prev_sibling.name == 'ol':
-                            return text
+                if text and len(text) > 5:
+                    # Пропускаем параграфы с ссылками на сайт
+                    if 'Pontos-News.Gr' in text or 'pontos-news.gr' in text:
+                        continue
+                    # Ищем типичные фразы для заметок
+                    if 'Καλή σας όρεξη' in text or 'καλή όρεξη' in text.lower():
+                        return text
+                    # Также ищем другие типичные фразы для заметок
+                    if text and len(text) > 10 and not any(word in text.lower() for word in ['advertisement', 'διαφήμιση']):
+                        # Проверяем, что это не список ингредиентов
+                        if 'γρ.' not in text and 'κ.σ.' not in text:
+                            # Если параграф находится после ol списка, это может быть заметка
+                            prev_sibling = p.find_previous_sibling()
+                            if prev_sibling and prev_sibling.name == 'ol':
+                                return text
         
         return None
     
