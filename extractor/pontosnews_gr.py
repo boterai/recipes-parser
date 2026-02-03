@@ -52,7 +52,7 @@ class PontosnewsGrExtractor(BaseRecipeExtractor):
         """Извлечение ингредиентов"""
         ingredients = []
         
-        # Ищем div с классом "ingredients" (специфично для pontosnews.gr)
+        # Вариант 1: Ищем div с классом "ingredients" (старый формат)
         ingredients_div = self.soup.find('div', class_='ingredients')
         if ingredients_div:
             # Ищем ul список внутри
@@ -70,6 +70,59 @@ class PontosnewsGrExtractor(BaseRecipeExtractor):
                         parsed = self.parse_ingredient(ingredient_text)
                         if parsed:
                             ingredients.append(parsed)
+        
+        # Вариант 2: Ищем параграф с "ΥΛΙΚΑ" и таблицу после него (новый формат)
+        if not ingredients:
+            # Ищем все параграфы с текстом "ΥΛΙΚΑ"
+            for p in self.soup.find_all('p'):
+                strong = p.find('strong')
+                if strong and 'ΥΛΙΚΑ' in strong.get_text():
+                    # Нашли заголовок, ищем таблицу после него
+                    table = p.find_next('table')
+                    if table:
+                        # Извлекаем строки таблицы
+                        rows = table.find_all('tr')
+                        for row in rows:
+                            td = row.find('td')
+                            if td:
+                                ingredient_text = td.get_text(separator=' ', strip=True)
+                                ingredient_text = self.clean_text(ingredient_text)
+                                
+                                if ingredient_text:
+                                    # Парсим в структурированный формат
+                                    parsed = self.parse_ingredient(ingredient_text)
+                                    if parsed:
+                                        ingredients.append(parsed)
+                        break  # Нашли и обработали таблицу, выходим
+        
+        # Вариант 3: Если ингредиенты не найдены, пытаемся извлечь из инструкций
+        # (для случаев, когда ингредиенты упоминаются только в тексте инструкций)
+        if not ingredients:
+            # Получаем текст инструкций
+            instructions_text = self.extract_instructions()
+            if instructions_text:
+                # Список общих греческих ингредиентов для распознавания
+                common_ingredients = [
+                    'μαργαρίνη', 'κρεμμύδι', 'μανιτάρια', 'τόνο', 'τόνος', 'σκόρδο', 
+                    'κρασί', 'λεμόνι', 'γάλα', 'μαϊντανό', 'μαϊντανός', 'λαζάνια', 
+                    'νερό', 'αλάτι', 'πιπέρι', 'ζάχαρη', 'αλεύρι', 'βούτυρο', 'ελαιόλαδο',
+                    'ντομάτα', 'πατάτα', 'κρέας', 'ψάρι', 'κοτόπουλο', 'αυγό', 'τυρί'
+                ]
+                
+                found_ingredients = []
+                instructions_lower = instructions_text.lower()
+                
+                for ingredient in common_ingredients:
+                    # Ищем ингредиент в тексте инструкций
+                    if ingredient in instructions_lower:
+                        # Добавляем только если еще не добавили
+                        if ingredient not in found_ingredients:
+                            found_ingredients.append(ingredient)
+                            ingredients.append({
+                                "name": ingredient,
+                                "amount": None,
+                                "units": None
+                            })
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
