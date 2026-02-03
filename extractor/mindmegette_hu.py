@@ -125,19 +125,26 @@ class MindmegetteExtractor(BaseRecipeExtractor):
         text = self.clean_text(ingredient_text)
         
         # Паттерн: "количество единица название" или "количество название" или "название"
-        # Примеры: "2 fej Vöröshagyma", "Olaj", "1 tk Pirospaprika"
-        pattern = r'^(\d+(?:[.,]\d+)?)\s*([a-záéíóöőúüű]+\.?)?\s*(.+)$'
+        # Примеры: "2 fej Vöröshagyma", "Olaj", "1 tk Pirospaprika", "1/2 tk só"
+        # Поддерживаем дроби: 1/2, 0,75 и т.д.
+        pattern = r'^(\d+(?:[.,/]\d+)?)\s*([a-záéíóöőúüű]+\.?)?\s*(.+)$'
         match = re.match(pattern, text, re.IGNORECASE)
         
         if match:
             amount_str, unit, name = match.groups()
             
-            # Конвертируем количество
+            # Конвертируем количество (включая дроби)
             amount = None
             if amount_str:
                 try:
-                    amount = int(amount_str) if '.' not in amount_str and ',' not in amount_str else float(amount_str.replace(',', '.'))
-                except ValueError:
+                    if '/' in amount_str:
+                        # Обработка дробей типа "1/2"
+                        parts = amount_str.split('/')
+                        if len(parts) == 2:
+                            amount = float(parts[0]) / float(parts[1])
+                    else:
+                        amount = int(amount_str) if '.' not in amount_str and ',' not in amount_str else float(amount_str.replace(',', '.'))
+                except (ValueError, ZeroDivisionError):
                     amount = None
             
             # Очистка названия - переводим в нижний регистр
@@ -161,46 +168,60 @@ class MindmegetteExtractor(BaseRecipeExtractor):
         """Извлечение ингредиентов из HTML структуры"""
         ingredients = []
         
-        # Ищем контейнер с ингредиентами
+        # Вариант 1: Ищем контейнер с ингредиентами (для Recipe страниц)
         ing_wrapper = self.soup.find('div', class_='ingredients')
-        if not ing_wrapper:
-            return None
-        
-        # Находим все элементы ингредиентов
-        ing_items = ing_wrapper.find_all('div', class_='ingredients-meta')
-        
-        for item in ing_items:
-            amount = None
-            unit = None
-            name = None
+        if ing_wrapper:
+            # Находим все элементы ингредиентов
+            ing_items = ing_wrapper.find_all('div', class_='ingredients-meta')
             
-            # Ищем элементы внутри
-            for child in item.children:
-                if child.name == 'strong':
-                    # Количество
-                    amount_text = child.get_text().strip()
-                    try:
-                        amount = int(amount_text) if '.' not in amount_text and ',' not in amount_text else float(amount_text.replace(',', '.'))
-                    except ValueError:
-                        amount = None
-                elif child.name == 'a':
-                    # Название ингредиента
-                    name = self.clean_text(child.get_text()).lower()
-                elif child.string and child.string.strip():
-                    # Единица измерения (текстовый узел между strong и a)
-                    unit_text = child.string.strip()
-                    if unit_text:
-                        unit = unit_text
+            for item in ing_items:
+                amount = None
+                unit = None
+                name = None
+                
+                # Ищем элементы внутри
+                for child in item.children:
+                    if child.name == 'strong':
+                        # Количество
+                        amount_text = child.get_text().strip()
+                        try:
+                            amount = int(amount_text) if '.' not in amount_text and ',' not in amount_text else float(amount_text.replace(',', '.'))
+                        except ValueError:
+                            amount = None
+                    elif child.name == 'a':
+                        # Название ингредиента
+                        name = self.clean_text(child.get_text()).lower()
+                    elif child.string and child.string.strip():
+                        # Единица измерения (текстовый узел между strong и a)
+                        unit_text = child.string.strip()
+                        if unit_text:
+                            unit = unit_text
+                
+                # Если название найдено, добавляем ингредиент
+                if name:
+                    ingredients.append({
+                        "name": name,
+                        "units": unit,
+                        "amount": amount
+                    })
             
-            # Если название найдено, добавляем ингредиент
-            if name:
-                ingredients.append({
-                    "name": name,
-                    "units": unit,
-                    "amount": amount
-                })
+            return ingredients if ingredients else None
         
-        return ingredients if ingredients else None
+        # Вариант 2: Ищем список после заголовка "Hozzávalók:" (для NewsArticle страниц)
+        h2_hozzavalok = self.soup.find('h2', string=lambda t: t and 'Hozzávalók' in t)
+        if h2_hozzavalok:
+            # Ищем ul после h2
+            ul = h2_hozzavalok.find_next_sibling('ul')
+            if ul:
+                for li in ul.find_all('li'):
+                    ing_text = self.clean_text(li.get_text())
+                    if ing_text:
+                        parsed = self.parse_ingredient_text(ing_text)
+                        ingredients.append(parsed)
+                
+                return ingredients if ingredients else None
+        
+        return None
     
     def extract_ingredients(self) -> Optional[str]:
         """Извлечение ингредиентов в структурированном формате"""
@@ -240,6 +261,21 @@ class MindmegetteExtractor(BaseRecipeExtractor):
             if steps:
                 # Объединяем все шаги в одну строку
                 return ' '.join(steps)
+        
+        # Если не нашли в JSON-LD, ищем в HTML после заголовка "Elkészítés:"
+        h2_elkeszites = self.soup.find('h2', string=lambda t: t and 'Elkészítés' in t)
+        if h2_elkeszites:
+            # Ищем ol или p после h2
+            ol = h2_elkeszites.find_next_sibling('ol')
+            if ol:
+                steps = []
+                for li in ol.find_all('li'):
+                    step_text = self.clean_text(li.get_text())
+                    if step_text:
+                        steps.append(step_text)
+                
+                if steps:
+                    return ' '.join(steps)
         
         return None
     
