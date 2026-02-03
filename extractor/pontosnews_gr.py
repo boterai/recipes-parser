@@ -239,44 +239,56 @@ class PontosnewsGrExtractor(BaseRecipeExtractor):
     
     def extract_tags(self) -> Optional[str]:
         """Извлечение тегов"""
-        # Ищем теги в метаданных или специальных секциях
-        # На pontosnews.gr теги могут быть в JSON-LD или других местах
+        tags = []
         
-        # Проверяем JSON-LD schema
-        json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
-        for script in json_ld_scripts:
-            try:
-                data = json.loads(script.string)
-                
-                # Ищем теги в разных форматах
-                if isinstance(data, dict):
-                    # Проверяем @graph
-                    if '@graph' in data:
-                        for item in data['@graph']:
-                            if 'keywords' in item:
-                                keywords = item['keywords']
-                                if isinstance(keywords, str):
-                                    return keywords
-                                elif isinstance(keywords, list):
-                                    return ', '.join(keywords)
+        # Ищем поле с тегами рецепта (специфично для pontosnews.gr)
+        # Класс может быть field-recipe-tags или field field-name-field-recipe-tags
+        tags_field = self.soup.find('div', class_=re.compile(r'field.*recipe.*tags'))
+        if tags_field:
+            # Ищем все ссылки внутри поля тегов
+            tag_links = tags_field.find_all('a')
+            for link in tag_links:
+                tag_text = self.clean_text(link.get_text())
+                if tag_text:
+                    tags.append(tag_text)
+        
+        # Если не нашли теги в специальном поле, проверяем JSON-LD
+        if not tags:
+            json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
+            for script in json_ld_scripts:
+                try:
+                    data = json.loads(script.string)
                     
-                    # Проверяем напрямую
-                    if 'keywords' in data:
-                        keywords = data['keywords']
-                        if isinstance(keywords, str):
-                            return keywords
-                        elif isinstance(keywords, list):
-                            return ', '.join(keywords)
-                            
-            except (json.JSONDecodeError, KeyError):
-                continue
+                    # Ищем теги в разных форматах
+                    if isinstance(data, dict):
+                        # Проверяем @graph
+                        if '@graph' in data:
+                            for item in data['@graph']:
+                                if 'keywords' in item:
+                                    keywords = item['keywords']
+                                    if isinstance(keywords, str):
+                                        return keywords
+                                    elif isinstance(keywords, list):
+                                        return ', '.join(keywords)
+                        
+                        # Проверяем напрямую
+                        if 'keywords' in data:
+                            keywords = data['keywords']
+                            if isinstance(keywords, str):
+                                return keywords
+                            elif isinstance(keywords, list):
+                                return ', '.join(keywords)
+                                
+                except (json.JSONDecodeError, KeyError):
+                    continue
         
-        # Ищем meta keywords
-        meta_keywords = self.soup.find('meta', {'name': 'keywords'})
-        if meta_keywords and meta_keywords.get('content'):
-            return self.clean_text(meta_keywords['content'])
+        # Если не нашли, ищем meta keywords
+        if not tags:
+            meta_keywords = self.soup.find('meta', {'name': 'keywords'})
+            if meta_keywords and meta_keywords.get('content'):
+                return self.clean_text(meta_keywords['content'])
         
-        return None
+        return ', '.join(tags) if tags else None
     
     def extract_image_urls(self) -> Optional[str]:
         """Извлечение URL изображений"""
@@ -337,12 +349,13 @@ class PontosnewsGrExtractor(BaseRecipeExtractor):
             except (json.JSONDecodeError, KeyError):
                 continue
         
-        # Убираем дубликаты, сохраняя порядок
+        # Убираем дубликаты, сохраняя порядок, и фильтруем аватары
         if urls:
             seen = set()
             unique_urls = []
             for url in urls:
-                if url and url not in seen:
+                # Фильтруем аватары gravatar и другие служебные изображения
+                if url and url not in seen and 'gravatar.com' not in url:
                     seen.add(url)
                     unique_urls.append(url)
             return ','.join(unique_urls) if unique_urls else None
