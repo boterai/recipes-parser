@@ -215,8 +215,18 @@ class DomacicaComExtractor(BaseRecipeExtractor):
             for item in ingredient_items:
                 ingredient_text = self.clean_text(item.get_text())
                 if ingredient_text:
-                    parsed = self.parse_ingredient(ingredient_text)
-                    ingredients_list.append(parsed)
+                    # Проверяем, есть ли запятая в тексте (может означать несколько ингредиентов)
+                    # Но только если это не числовая запятая (например "1,5")
+                    # И только если нет количества в начале
+                    if ',' in ingredient_text and not re.match(r'^\d', ingredient_text):
+                        # Разделяем по запятой и обрабатываем каждый ингредиент отдельно
+                        parts = [p.strip() for p in ingredient_text.split(',') if p.strip()]
+                        for part in parts:
+                            parsed = self.parse_ingredient(part)
+                            ingredients_list.append(parsed)
+                    else:
+                        parsed = self.parse_ingredient(ingredient_text)
+                        ingredients_list.append(parsed)
         
         if not ingredients_list:
             return None
