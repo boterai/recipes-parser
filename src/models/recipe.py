@@ -66,7 +66,7 @@ class Recipe(BaseModel):
         for item in self.ingredients_with_amounts:
             name = item.get("name", "").strip().lower()
             amount = item.get("amount", None)
-            unit = item.get("unit", "").strip().lower() if item.get("unit") else None
+            unit = item.get("unit", "").strip().lower() if isinstance(item.get("unit"), str) else None
             normalised_ingredients.append({
                 "name": name,
                 "amount": self.amount_to_float(amount),

@@ -20,7 +20,7 @@ LanguageCodes = {
     "en": ["en", "eng", "english", "en-GB", "en-US"],
     "ru": ["ru", "rus", "russian", "ru-RU"],
     "de": ["de", "ger", "german", "de-DE"],
-    "fr": ["fr", "fre", "french", "fr-FR"],
+    "fr": ["fr", "fre", "french", "fr-FR", "fr-CA"],
     "es": ["es", "spa", "spanish", "es-ES"],
     "it": ["it", "ita", "italian", "it-IT"],
     "tr": ["tr", "tur", "turkish", "tr-TR"],
@@ -157,7 +157,7 @@ def validate_and_normalize_language(language: str) -> Optional[str]:
     
     # Язык не найден
     logger.error(f"Язык '{language}' не поддерживается")
-    return None
+    return lang_lower
 
 COOKIE_KEYWORDS = [
         # English
