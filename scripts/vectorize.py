@@ -12,8 +12,6 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.common.embedding import get_embedding_function, get_siglip_embedding_function
 from src.stages.search.vectorise import RecipeVectorizer
-from src.models.recipe import Recipe
-from src.stages.search.similarity import SimilaritySearcher, ClusterParams, build_clusters_from_dsu
 from src.stages.search.vectorise import RecipeVectorizer
 from src.models.image import ImageORM, download_image_async
 from src.stages.translate import Translator
@@ -95,4 +93,4 @@ def translate_all_recipes(target_language: str = "en", translate_batch_size: int
 
 if __name__ == '__main__':
     #asyncio.run(vectorise_all_images())
-    vectorise_all_recipes() # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)
+    asyncio.run(vectorise_all_recipes()) # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)

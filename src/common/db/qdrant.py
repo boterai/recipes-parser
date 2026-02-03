@@ -631,3 +631,66 @@ class QdrantRecipeManager:
         return resp
 
 
+    def migrate_full_collection(self,new_collection_name: str,batch_size: int = 100,limit: int = 1000) -> int:
+        """
+        Мигрирует данные из старой mv коллекции в новую с обновленной структурой
+        
+        Args:
+            new_collection_name: Имя новой коллекции
+            dims: Размерность векторов
+            batch_size: Размер батча для копирования
+        
+        Returns:
+            Количество перенесенных точек
+        """
+        if not self.client:
+            raise QdrantNotConnectedError()
+        
+        old_collection = "recipes_full"
+                
+        # Копируем данные батчами
+        migrated_count = 0
+        offset = 3000
+        
+        while True:
+            records, offset = self.client.scroll(
+                collection_name=old_collection,
+                limit=batch_size,
+                offset=offset,
+                with_vectors=True,
+                with_payload=True
+            )
+            
+            if not records:
+                break
+            
+            # Копируем векторы в новую коллекцию
+            new_points = []
+            for record in records:
+                vector = record.vector.get("dense") if isinstance(record.vector, dict) else record.vector
+                
+                new_points.append(PointStruct(
+                    id=record.id,
+                    vector={"dense": vector},
+                    payload=record.payload
+                ))
+            
+            if new_points:
+                self.client.upsert(
+                    collection_name=new_collection_name,
+                    points=new_points,
+                    wait=True
+                )
+                migrated_count += len(new_points)
+                logger.info(f"✓ Мигрировано {migrated_count} точек...")
+
+                if migrated_count >= limit:
+                    logger.info(f"✓ Достигнут лимит миграции: {migrated_count} точек")
+                    break
+            
+            if offset is None:
+                break
+        
+        logger.info(f"✓ Миграция завершена: {migrated_count} точек")
+        
+        return migrated_count
