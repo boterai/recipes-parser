@@ -27,6 +27,8 @@ logger = logging.getLogger(__name__)
 async def create_clusters(score_thresold: float, build_type: Literal["image", "full", "ingredients"]) -> tuple[list[list[int]], dict[int, list[int]]]:
     last_error_id = None
     consecutive_same_count = 0
+    recalculate_mapping = True # пересчет маппинга изображений к кластерам (только в том случае, если что-то добавилось)
+    first_loaded_last_id = None
     while True:
         ss = SimilaritySearcher(params=ClusterParams(
                     limit=30,
@@ -40,6 +42,8 @@ async def create_clusters(score_thresold: float, build_type: Literal["image", "f
             return ss.load_clusters_from_file(), ss.get_image_clusters_mapping()
         try:
             ss.load_dsu_state()
+            if first_loaded_last_id is None:
+                first_loaded_last_id = ss.last_id
             last_id = ss.last_id # получаем last id после загрузки состояния (такая штука работает только опираясь на тот факт, что каждй вновь доавбленный рецепт имеет id не меньше уже векторизованных рецептов, иначе рецепты могут быть пропущены)
             clusters = await ss.build_clusters_async()
             ss.save_dsu_state()
@@ -48,6 +52,8 @@ async def create_clusters(score_thresold: float, build_type: Literal["image", "f
             ss.save_clusters_to_file(clusters)
             if ss.last_id == last_id:
                 logger.info("Processing complete.")
+                if ss.last_id == first_loaded_last_id:
+                    recalculate_mapping = False
                 break
 
         except Exception as e:
@@ -65,7 +71,7 @@ async def create_clusters(score_thresold: float, build_type: Literal["image", "f
             continue
 
     final_clusters = build_clusters_from_dsu(ss.dsu, min_cluster_size=2)
-    ss.save_clusters_to_file(final_clusters)
+    ss.save_clusters_to_file(final_clusters, recalculate_mapping=recalculate_mapping)
     return ss.load_clusters_from_file(), ss.get_image_clusters_mapping() # загружаем из файла, чтобы отдать уже правильные кластеры и создать маппинг, если это изображения
 
 def save_clusters_to_history(clusters: list[list[int]], filename: str):
@@ -143,7 +149,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--score_threshold",
         type=float,
-        default=0.94,
+        default=0.95,
         help="Score threshold for clustering (default: 0.95)"
     )
     parser.add_argument(
