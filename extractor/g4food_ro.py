@@ -58,7 +58,7 @@ class G4FoodExtractor(BaseRecipeExtractor):
         Парсинг строки ингредиента в структурированный формат для g4food.ro
         
         Args:
-            ingredient_text: Строка вида "4 linguri de unt nesărat" или "Ravioli (între 5 și 8 bucăți)"
+            ingredient_text: Строка вида "4 linguri de unt nesărat" или "250 de gr de ciuperci"
             
         Returns:
             dict: {"name": "unt nesărat", "amount": "4", "units": "linguri"} або None
@@ -84,16 +84,62 @@ class G4FoodExtractor(BaseRecipeExtractor):
                     "units": "pieces"
                 }
         
-        # Случай 2: "Smântână de gătit cam 100 de g"
+        # Случай 2: "250 de gr de ciuperci" или "1 de gr de ceva"
+        de_gr_match = re.match(r'^(\d+\.?\d*)\s+de\s+(gr|g)\s+de\s+(.+)$', text, re.IGNORECASE)
+        if de_gr_match:
+            name = de_gr_match.group(3).strip()
+            # Clean up parenthetical descriptions
+            name = re.sub(r'\s*\([^)]*\)', '', name)
+            name = re.sub(r'[,;:\.]+\s*$', '', name).strip()
+            return {
+                "name": name,
+                "amount": int(float(de_gr_match.group(1))),
+                "units": "gr"
+            }
+        
+        # Случай 3: "Smântână de gătit cam 100 de g"
         cam_match = re.match(r'^(.+?)\s+cam\s+(\d+)\s+de\s+g\b', text, re.IGNORECASE)
         if cam_match:
             return {
                 "name": cam_match.group(1).strip(),
                 "amount": cam_match.group(2),
-                "units": "grame"
+                "units": "g"
             }
         
-        # Случай 3: "Sare și piper proaspăt măcinat" (без количества)
+        # Случай 4: "Câteva linguri de ulei" (количество словами)
+        cateva_match = re.match(r'^(câteva|câțiva)\s+(lingur[ăi]|linguriț[ăe])\s+de\s+(.+)$', text, re.IGNORECASE)
+        if cateva_match:
+            return {
+                "name": cateva_match.group(3).strip(),
+                "amount": None,
+                "units": "linguri" if 'lingur' in cateva_match.group(2).lower() else "linguriță"
+            }
+        
+        # Случай 5: "1 cățel de usturoi sau pudră" (количество + единица + де + название)
+        # ВАЖНО: Должен идти ПЕРЕД simple_qty_match!
+        catel_match = re.match(r'^(\d+\.?\d*)\s+(cățel|căței)\s+de\s+(.+)$', text, re.IGNORECASE)
+        if catel_match:
+            name = catel_match.group(3).strip()
+            # Clean up the name
+            name = re.sub(r'\b(după gust|sau pudră.*|la nevoie|opțional)\b', '', name, flags=re.IGNORECASE)
+            name = re.sub(r'[,;:\.]+\s*$', '', name).strip()
+            return {
+                "name": name,
+                "amount": int(float(catel_match.group(1))),
+                "units": "cățel"
+            }
+        
+        # Случай 6: "1 ceapă tocată mărunt" (количество + название + описание)
+        simple_qty_match = re.match(r'^(\d+\.?\d*)\s+([a-zăîâșțĂÎÂȘȚ]+)\s+(.+)$', text, re.IGNORECASE)
+        if simple_qty_match and not re.search(r'\b(lingur|gram|kg|ml|căț|bucăț)\b', simple_qty_match.group(2), re.IGNORECASE):
+            # Это паттерн "1 ceapă tocată mărunt"
+            return {
+                "name": simple_qty_match.group(2).strip(),
+                "amount": int(float(simple_qty_match.group(1))),
+                "units": "unit"
+            }
+        
+        # Случай 6: "Sare și piper proaspăt măcinat" (без количества)
         if not any(char.isdigit() for char in text):
             return {
                 "name": text,
@@ -104,7 +150,7 @@ class G4FoodExtractor(BaseRecipeExtractor):
         # Единицы измерения на румынском
         units_pattern = r'(lingur[ăi]|linguriț[ăe]|kilogram[e]?|gram[e]?|mililit[ri]+|lit[ri]+|bucăț[i]+|căț[ei]+|kg|g|ml|l)'
         
-        # Случай 4: Стандартный паттерн "[количество] [единица] [de] название"
+        # Случай 7: Стандартный паттерн "[количество] [единица] [de] название"
         # Примеры: "4 linguri de unt nesărat", "1.6 kilograme de roșii"
         pattern = r'^([\d\s/.,\-]+)\s*(' + units_pattern + r')\s*(?:de\s+)?(.+)$'
         
@@ -143,10 +189,10 @@ class G4FoodExtractor(BaseRecipeExtractor):
                 "units": None
             }
         
-        # Обработка единицы измерения (нормализация к коротким формам)
+        # Обработка единицы измерения (нормализация)
         if unit:
             unit = unit.strip().lower()
-            # Нормализуем единицы к коротким формам как в эталоне
+            # Нормализуем единицы к формату эталона
             unit_map = {
                 'linguri': 'linguri',
                 'lingură': 'linguri',
@@ -155,8 +201,8 @@ class G4FoodExtractor(BaseRecipeExtractor):
                 'linguriţe': 'linguriță',
                 'kilograme': 'kilograme',
                 'kilogram': 'kilograme',
-                'grame': 'g',
-                'gram': 'g',
+                'grame': 'gr',
+                'gram': 'gr',
                 'mililitri': 'mililitri',
                 'mililitru': 'mililitri',
                 'litri': 'litri',
@@ -165,12 +211,12 @@ class G4FoodExtractor(BaseRecipeExtractor):
                 'bucată': 'pieces',
                 'bucati': 'pieces',
                 'bucata': 'pieces',
-                'căței': 'căței',
-                'cățel': 'căței',
-                'catei': 'căței',
-                'catel': 'căței',
+                'căței': 'cățel',
+                'cățel': 'cățel',
+                'catei': 'cățel',
+                'catel': 'cățel',
                 'kg': 'kilograme',
-                'g': 'g',
+                'g': 'gr',
                 'ml': 'mililitri',
                 'l': 'litri'
             }
@@ -198,11 +244,11 @@ class G4FoodExtractor(BaseRecipeExtractor):
         """Извлечение ингредиентов"""
         ingredients = []
         
-        # Ищем заголовок с ингредиентами
+        # Ищем заголовок с ингредиентами (h2 или h3)
         ingredients_heading = None
-        for h2 in self.soup.find_all('h2'):
-            if 'ingredient' in h2.get_text().lower():
-                ingredients_heading = h2
+        for heading in self.soup.find_all(['h2', 'h3']):
+            if 'ingredient' in heading.get_text().lower():
+                ingredients_heading = heading
                 break
         
         if ingredients_heading:
@@ -281,12 +327,12 @@ class G4FoodExtractor(BaseRecipeExtractor):
         """Извлечение шагов приготовления"""
         steps = []
         
-        # Ищем заголовок с инструкциями
+        # Ищем заголовок с инструкциями (h2 или h3)
         instructions_heading = None
-        for h2 in self.soup.find_all('h2'):
-            h2_text = h2.get_text().lower()
-            if 'mod de preparare' in h2_text or 'preparare' in h2_text or 'instruc' in h2_text:
-                instructions_heading = h2
+        for heading in self.soup.find_all(['h2', 'h3']):
+            heading_text = heading.get_text().lower()
+            if 'mod de preparare' in heading_text or 'preparare' in heading_text or 'instruc' in heading_text:
+                instructions_heading = heading
                 break
         
         if instructions_heading:
