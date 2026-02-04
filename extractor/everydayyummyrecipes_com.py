@@ -95,14 +95,18 @@ class EverydayYummyRecipesExtractor(BaseRecipeExtractor):
         if recipe_data and 'name' in recipe_data:
             name = self.clean_text(recipe_data['name'])
             # Убираем распространенные суффиксы из названия
-            name = re.sub(r'\s+(Recipe|Easy|Quick|Simple|Perfect|Best|Homemade)[\s:–-]*.*$', '', name, flags=re.IGNORECASE)
+            # Убираем всё после тире/двоеточия, если там есть дополнительные слова
+            name = re.sub(r'\s*[–—:-]\s*(Recipe|Easy|Quick|Simple|Perfect|Best|Homemade|Ready|The|A).*$', '', name, flags=re.IGNORECASE)
+            # Убираем слово "Recipe" в конце
+            name = re.sub(r'\s+Recipe\s*$', '', name, flags=re.IGNORECASE)
             return name
         
         # Fallback: ищем в HTML
         recipe_name = self.soup.find('h2', class_='wprm-recipe-name')
         if recipe_name:
             name = self.clean_text(recipe_name.get_text())
-            name = re.sub(r'\s+(Recipe|Easy|Quick|Simple|Perfect|Best|Homemade)[\s:–-]*.*$', '', name, flags=re.IGNORECASE)
+            name = re.sub(r'\s*[–—:-]\s*(Recipe|Easy|Quick|Simple|Perfect|Best|Homemade|Ready|The|A).*$', '', name, flags=re.IGNORECASE)
+            name = re.sub(r'\s+Recipe\s*$', '', name, flags=re.IGNORECASE)
             return name
         
         return None
@@ -126,30 +130,40 @@ class EverydayYummyRecipesExtractor(BaseRecipeExtractor):
         Парсинг строки ингредиента в структурированный формат
         
         Args:
-            ingredient_text: Строка вида "1 cup unsalted butter, cold"
+            ingredient_text: Строка вида "1 cup unsalted butter, cold" or "1 ¼  cups   (175g) all-purpose flour ((or gluten-free))"
             
         Returns:
-            dict: {"name": "unsalted butter", "amount": "1", "unit": "cup"}
+            dict: {"name": "unsalted butter", "amount": "1", "units": "cup"}
         """
         if not ingredient_text:
             return None
         
-        # Чистим текст
-        text = self.clean_text(ingredient_text)
+        # Удаляем все в скобках (включая вложенные) ПЕРЕД очисткой
+        # Многократно применяем regex пока есть что удалять
+        text = ingredient_text
+        while '(' in text:
+            new_text = re.sub(r'\([^()]*\)', '', text)
+            if new_text == text:  # Если ничего не изменилось, выходим
+                break
+            text = new_text
         
-        # Заменяем Unicode дроби на десятичные числа
+        # Чистим текст
+        text = self.clean_text(text)
+        
+        # Заменяем Unicode дроби на их дробное представление для парсинга
         fraction_map = {
-            '½': '0.5', '¼': '0.25', '¾': '0.75',
-            '⅓': '0.33', '⅔': '0.67', '⅛': '0.125',
-            '⅜': '0.375', '⅝': '0.625', '⅞': '0.875',
-            '⅕': '0.2', '⅖': '0.4', '⅗': '0.6', '⅘': '0.8'
+            '½': ' 1/2', '¼': ' 1/4', '¾': ' 3/4',
+            '⅓': ' 1/3', '⅔': ' 2/3', '⅛': ' 1/8',
+            '⅜': ' 3/8', '⅝': ' 5/8', '⅞': ' 7/8',
+            '⅕': ' 1/5', '⅖': ' 2/5', '⅗': ' 3/5', '⅘': ' 4/5',
+            '⅙': ' 1/6', '⅚': ' 5/6'
         }
         
-        for fraction, decimal in fraction_map.items():
-            text = text.replace(fraction, decimal)
+        for fraction, replacement in fraction_map.items():
+            text = text.replace(fraction, replacement)
         
         # Паттерн для извлечения количества, единицы и названия
-        # Примеры: "1 cup flour", "2 tablespoons butter", "1/2 teaspoon salt"
+        # Примеры: "1 cup flour", "2 tablespoons butter", "1 1/2 teaspoon salt"
         pattern = r'^([\d\s/.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|lb|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|large|medium|small)?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
@@ -159,7 +173,7 @@ class EverydayYummyRecipesExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "unit": None
+                "units": None
             }
         
         amount_str, unit, name = match.groups()
@@ -178,9 +192,12 @@ class EverydayYummyRecipesExtractor(BaseRecipeExtractor):
                         total += float(num) / float(denom)
                     else:
                         total += float(part)
+                # Форматируем: целое число без .0, дробное - как есть
                 amount = str(total) if total != int(total) else str(int(total))
             else:
-                amount = amount_str.replace(',', '.')
+                # Простое число
+                amount_float = float(amount_str.replace(',', '.'))
+                amount = str(amount_float) if amount_float != int(amount_float) else str(int(amount_float))
         
         # Обработка единицы измерения
         if unit:
@@ -189,10 +206,8 @@ class EverydayYummyRecipesExtractor(BaseRecipeExtractor):
             unit_map = {
                 'tablespoon': 'tbsp',
                 'tablespoons': 'tbsp',
-                'tbsp': 'tbsp',
                 'teaspoon': 'tsp',
                 'teaspoons': 'tsp',
-                'tsp': 'tsp',
                 'pound': 'lb',
                 'pounds': 'lb',
                 'ounce': 'oz',
@@ -206,21 +221,24 @@ class EverydayYummyRecipesExtractor(BaseRecipeExtractor):
                 'liter': 'l',
                 'liters': 'l',
             }
-            # Plural forms to singular
-            if unit.endswith('s') and unit not in ['cups']:
-                singular = unit[:-1]
-                if singular in ['cup', 'inch', 'slice', 'clove', 'bunch', 'sprig', 'piece', 'head']:
-                    unit = singular + 's'
             
-            # Map to standard forms
-            unit = unit_map.get(unit, unit)
+            # Сохраняем plural для cups, inches и т.д.
+            if unit not in unit_map:
+                # Не меняем cups, inches, slices и т.д.
+                pass
+            else:
+                unit = unit_map[unit]
+            
+            # Special case: если unit is "large", "medium", "small" - это часть названия
+            if unit in ['large', 'medium', 'small']:
+                name = unit + ' ' + name
+                unit = None
         
         # Очистка названия
-        # Удаляем дополнительные описания после запятой, скобок
-        name = re.sub(r'\([^)]*\)', '', name)
-        name = re.sub(r',.*$', '', name)  # Убираем всё после запятой (например, "butter, cold" -> "butter")
-        # Удаляем фразы "to taste", "as needed", "optional"
-        name = re.sub(r'\b(to taste|as needed|or more|if needed|optional|for garnish|chopped|diced|minced|sliced|peeled|divided)\b', '', name, flags=re.IGNORECASE)
+        # Удаляем фразы "to taste", "as needed", "optional", etc.
+        name = re.sub(r'\b(to taste|as needed|or more|if needed|optional|for garnish|chopped|diced|minced|sliced|peeled|divided|cold|softened|room temperature)\b', '', name, flags=re.IGNORECASE)
+        # Удаляем дополнительные описания после запятой
+        name = re.sub(r',.*$', '', name)
         # Удаляем лишние пробелы
         name = re.sub(r'\s+', ' ', name).strip()
         
