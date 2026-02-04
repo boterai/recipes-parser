@@ -1,5 +1,5 @@
 """
-Экстрактор данных рецептов для сайта leukerecepten.nl
+Recipe data extractor for leukerecepten.nl website
 """
 
 import sys
@@ -13,23 +13,23 @@ from extractor.base import BaseRecipeExtractor, process_directory
 
 
 class LeukereceptenExtractor(BaseRecipeExtractor):
-    """Экстрактор для leukerecepten.nl"""
+    """Extractor for leukerecepten.nl"""
     
     @staticmethod
     def parse_iso_duration(duration: str) -> Optional[str]:
         """
-        Конвертирует ISO 8601 duration в минуты
+        Convert ISO 8601 duration to minutes
         
         Args:
-            duration: строка вида "PT20M" или "PT1H30M" или "PT0H25M"
+            duration: string like "PT20M" or "PT1H30M" or "PT0H25M"
             
         Returns:
-            Время в формате "X minutes" или "X hour Y minutes"
+            Time in format "X minutes" or "X hour Y minutes"
         """
         if not duration or not duration.startswith('PT'):
             return None
         
-        duration = duration[2:]  # Убираем "PT"
+        duration = duration[2:]  # Remove "PT"
         
         hours = 0
         minutes = 0
@@ -55,8 +55,8 @@ class LeukereceptenExtractor(BaseRecipeExtractor):
         return None
     
     def extract_json_ld_recipe(self) -> Optional[dict]:
-        """Извлечение Recipe из JSON-LD"""
-        # Сначала пробуем стандартным способом
+        """Extract Recipe from JSON-LD"""
+        # First try standard method
         scripts = self.soup.find_all('script', type='application/ld+json')
         
         for script in scripts:
@@ -96,18 +96,18 @@ class LeukereceptenExtractor(BaseRecipeExtractor):
             json_end = match.rfind('}') + 1
             json_content = match[json_start:json_end]
             
-            # Очищаем и парсим
+            # Clean and parse
             try:
-                # Используем более простой подход - извлекаем нужные поля напрямую
-                # вместо полного парсинга JSON
+                # Use a simpler approach - extract needed fields directly
+                # instead of full JSON parsing
                 return self._parse_recipe_from_html()
-            except:
+            except Exception:
                 continue
         
         return None
     
     def _parse_recipe_from_html(self) -> Optional[dict]:
-        """Извлечение полей рецепта напрямую из HTML"""
+        """Extract recipe fields directly from HTML"""
         html_content = str(self.soup)
         
         result = {}
@@ -606,10 +606,10 @@ class LeukereceptenExtractor(BaseRecipeExtractor):
     
     def extract_all(self) -> dict:
         """
-        Извлечение всех данных рецепта
+        Extract all recipe data
         
         Returns:
-            Словарь с данными рецепта
+            Dictionary with recipe data
         """
         return {
             "dish_name": self.extract_dish_name(),
@@ -628,14 +628,14 @@ class LeukereceptenExtractor(BaseRecipeExtractor):
 
 def main():
     import os
-    # По умолчанию обрабатываем папку preprocessed/leukerecepten_nl
+    # By default process folder preprocessed/leukerecepten_nl
     preprocessed_dir = os.path.join("preprocessed", "leukerecepten_nl")
     if os.path.exists(preprocessed_dir) and os.path.isdir(preprocessed_dir):
         process_directory(LeukereceptenExtractor, str(preprocessed_dir))
         return
     
-    print(f"Директория не найдена: {preprocessed_dir}")
-    print("Использование: python leukerecepten_nl.py")
+    print(f"Directory not found: {preprocessed_dir}")
+    print("Usage: python leukerecepten_nl.py")
 
 
 if __name__ == "__main__":
