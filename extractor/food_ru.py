@@ -14,8 +14,9 @@ from extractor.base import BaseRecipeExtractor, process_directory
 
 # Константы для фильтрации и ограничений
 MAX_CATEGORY_TITLE_LENGTH = 30  # Максимальная длина названия для определения категории
-CATEGORY_EXCLUDED_KEYWORDS = ['минут', 'партнерск', 'вкус', 'в «']  # Слова, исключающие тег из категорий
-TAG_EXCLUDED_KEYWORDS = ['перекрёсток', 'пятёрочка', 'партнерск', 'в «']  # Слова для фильтрации служебных тегов
+COMMON_EXCLUDED_KEYWORDS = ['партнерск', 'в «']  # Общие слова для исключения из категорий и тегов
+CATEGORY_EXCLUDED_KEYWORDS = COMMON_EXCLUDED_KEYWORDS + ['минут', 'вкус']  # Слова, исключающие тег из категорий
+TAG_EXCLUDED_KEYWORDS = COMMON_EXCLUDED_KEYWORDS + ['перекрёсток', 'пятёрочка']  # Слова для фильтрации служебных тегов
 MIN_FILTERED_TAGS_THRESHOLD = 3  # Минимальное количество тегов после фильтрации
 MAX_TAGS_LIMIT = 10  # Максимальное количество тегов для возврата
 FOOD_RU_BASE_URL = "https://food.ru"  # Базовый URL сайта для формирования полных URL изображений
@@ -229,14 +230,14 @@ class FoodRuExtractor(BaseRecipeExtractor):
         
         # Проверяем поле dishes
         dishes = self._recipe_data.get('dishes', [])
-        if dishes and isinstance(dishes, list) and len(dishes) > 0:
+        if dishes and isinstance(dishes, list):
             if isinstance(dishes[0], dict):
                 return dishes[0].get('title', None)
             return str(dishes[0])
         
         # Проверяем breadcrumbs (самый надежный источник категории)
         breadcrumbs = self._recipe_data.get('breadcrumbs', [])
-        if breadcrumbs and isinstance(breadcrumbs, list) and len(breadcrumbs) > 0:
+        if breadcrumbs and isinstance(breadcrumbs, list):
             # Берем последний элемент (самая специфичная категория)
             last_crumb = breadcrumbs[-1]
             if isinstance(last_crumb, dict):
