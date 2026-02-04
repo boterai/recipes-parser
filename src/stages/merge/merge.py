@@ -22,6 +22,7 @@ if __name__ == "__main__":
 
 from src.models.page import Recipe
 from src.models.merged_recipe import MergedRecipe
+from src.models.image import Image
 from src.common.gpt.client import GPTClient
 from src.common.db.clickhouse import ClickHouseManager
 from src.repositories.page import PageRepository
@@ -687,21 +688,17 @@ class ClusterVariationGenerator:
         
         return variations
     
-    async def add_image_to_merged_recipe(self, merged_recipe_id: int, add_best_image: bool = False) -> None:
+    async def add_image_to_merged_recipe(self, merged_recipe: MergedRecipe, add_best_image: bool = False) -> bool:
         """
             Добавляет валидные изображения к MergedRecipe по его ID
             Args:
                 merged_recipe_id: ID MergedRecipe
         
         """
-        merged_recipe = self.merge_repository.get_by_id_with_images(merged_recipe_id)
-        if not merged_recipe:
-            logger.error(f"MergedRecipe с ID {merged_recipe_id} не найден")
-            return
-        merged_recipe = merged_recipe.to_pydantic()
+        
         images = self.image_repository.get_by_page_ids(merged_recipe.page_ids)
         if not images:
-            logger.warning(f"Изображения для MergedRecipe ID {merged_recipe_id} не найдены")
+            logger.warning(f"Изображения для MergedRecipe ID {merged_recipe.id} не найдены")
             return
         
         urls = [img.image_url for img in images if img.image_url]
@@ -709,10 +706,11 @@ class ClusterVariationGenerator:
         image_validator = self.merger.validate_images_for_recipe if not add_best_image else self.merger.select_best_images_for_recipe
         valid_urls = await image_validator(merged_recipe, urls)
         if not valid_urls:
-            logger.warning(f"Нет валидных изображений для MergedRecipe ID {merged_recipe_id}")
-            return
+            logger.warning(f"Нет валидных изображений для MergedRecipe ID {merged_recipe.id}")
+            return False
         valid_images_id = [img.id for img in images if img.image_url in valid_urls]
-        self.merge_repository.add_images_to_recipe(merged_recipe_id, valid_images_id)
+        self.merge_repository.add_images_to_recipe(merged_recipe.id, valid_images_id)
+        return True
     
     async def _generate_single_variation_gpt(
         self,
@@ -854,7 +852,7 @@ Requirements:
                 ingredients=result.get('ingredients_with_amounts', []),
                 instructions=result.get('instructions', ''),
                 tags=result.get('tags', []),
-                cooking_time=str(result.get('cook_time') or base.cook_time or ''),
+                cook_time=str(result.get('cook_time') or base.cook_time or ''),
                 prep_time=str(result.get('prep_time') or base.prep_time or ''),
                 merge_comments=f"variation #{variation_index}; {result.get('source_notes', '')}",
                 language=base.language or "unknown",
@@ -877,7 +875,6 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     generator = ClusterVariationGenerator()
     generator.image_repository
-    asyncio.run(generator.add_image_to_merged_recipe(merged_recipe_id=863, add_best_image=True))
 
     async def example():
         generator = ClusterVariationGenerator()

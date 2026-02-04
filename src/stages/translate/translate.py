@@ -1,7 +1,5 @@
 import sys
-import time
 import json
-import random
 from pathlib import Path
 from typing import  Optional
 import logging
@@ -111,10 +109,8 @@ class Translator:
         # Обрабатываем только непереведенные ID батчами
         for i in range(0, len(untranslated_ids), batch_size):
             batch_ids = untranslated_ids[i:i + batch_size]
-            
-            with self.page_repository.get_session() as session:
-                # Получаем страницы по списку ID
-                pages = session.query(PageORM).filter(PageORM.id.in_(batch_ids)).order_by(PageORM.id.asc()).all()
+
+            pages: list[PageORM] = self.page_repository.get_recipes(page_ids=batch_ids, order_by_id=True)
 
             if pages:
                 pages_data = [page.to_pydantic() for page in pages]
@@ -134,31 +130,15 @@ class Translator:
         last_processed_id = start_from_id - 1 if start_from_id > 0 else 0
         
         while True:
-            with self.page_repository.get_session() as session:
-                query = session.query(PageORM).filter(PageORM.is_recipe == True, 
-                                                     PageORM.ingredients != None, 
-                                                     PageORM.dish_name != None,
-                                                     PageORM.instructions != None, 
-                                                     PageORM.id > last_processed_id)
-                
-                if site_id:
-                    query = query.filter(PageORM.site_id == site_id)
-
-                query = query.order_by(PageORM.id.asc()).limit(batch_size)
-                pages_orm = query.all()
+            pages_orm: list[PageORM] = self.page_repository.get_for_translation(last_processed_id=last_processed_id, site_id=site_id, limit=batch_size)
+        
+            if not pages_orm:
+                logger.info("Все страницы переведены!")
+                break
             
-                if not pages_orm:
-                    logger.info("Все страницы переведены!")
-                    break
-                
-                pages_data = [page.to_pydantic() for page in pages_orm]
-                await self._process_batch(pages_data)
-                last_processed_id = pages_data[-1].id
-                
-                # Если получили меньше страниц чем batch_size, значит это последний батч
-                if len(pages_data) < batch_size:
-                    logger.info("Это был последний батч. Все страницы обработаны!")
-                    break
+            pages_data = [page.to_pydantic() for page in pages_orm]
+            await self._process_batch(pages_data)
+            last_processed_id = pages_data[-1].id
     
     async def _process_batch(self, pages_data: list[Page]):
         """
@@ -279,12 +259,12 @@ IMPORTANT:
             logger.error(f"Ошибка при переводе страницы ID={recipe.page_id}: {e}")
             return None
 
-    async def translate_all(self, site_ids: Optional[list[int]] = None, batch_size: int = 10):
+    async def translate_all(self, site_ids: Optional[list[int]] = None, batch_size: int = 10, last_site_id: Optional[int] = None):
         """
         Основной метод для перевода всех страниц с рецептами
         """        
         if site_ids is None:
-            site_ids = self.page_repository.get_recipe_sites()
+            site_ids = self.page_repository.get_recipe_sites(min_site_id=last_site_id)
             if not site_ids:
                 logger.error("Не удалось получить список site_id с рецептами")
                 return

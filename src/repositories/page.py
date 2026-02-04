@@ -44,6 +44,23 @@ class PageRepository(BaseRepository[PageORM]):
             ).first()
         finally:
             session.close()
+
+    def get_for_translation(self, last_processed_id: int, site_id: Optional[int]=None, limit: int = 100) -> List[PageORM]:
+        session = self.get_session()
+        try:
+            query = session.query(PageORM).filter(PageORM.is_recipe == True, 
+                                                        PageORM.ingredients != None, 
+                                                        PageORM.dish_name != None,
+                                                        PageORM.instructions != None, 
+                                                        PageORM.id > last_processed_id)
+                    
+            if site_id:
+                query = query.filter(PageORM.site_id == site_id)
+
+            query = query.order_by(PageORM.id.asc()).limit(limit)
+            return query.all()
+        finally:
+            session.close()
     
     def get_by_site(self, site_id: int, limit: Optional[int] = None, confidence_score: Optional[int] = None,
                     offset: Optional[int] = None) -> List[PageORM]:
@@ -75,7 +92,7 @@ class PageRepository(BaseRepository[PageORM]):
             session.close()
     
     def get_recipes(self, site_id: Optional[int] = None, language: Optional[str] = None, 
-                    limit: Optional[int] = None, random_order: bool = False,
+                    limit: Optional[int] = None, random_order: bool = False, order_by_id: bool = False,
                     page_ids: Optional[list[int]] = None) -> List[PageORM]:
         """
         Получить страницы с рецептами
@@ -106,6 +123,8 @@ class PageRepository(BaseRepository[PageORM]):
             # Сортировка
             if random_order:
                 query = query.order_by(func.random())  # Случайный порядок
+            elif order_by_id:
+                query = query.order_by(PageORM.id.asc())  # По id
             else:
                 query = query.order_by(PageORM.confidence_score.desc())  # По уверенности
             
@@ -433,7 +452,7 @@ class PageRepository(BaseRepository[PageORM]):
         finally:
             session.close()
 
-    def get_recipe_sites(self) -> List[int]:
+    def get_recipe_sites(self, min_site_id: Optional[int] = None) -> List[int]:
         """
         Получить список уникальных site_id, для которых есть страницы с рецептами
         
@@ -442,12 +461,17 @@ class PageRepository(BaseRepository[PageORM]):
         """
         session = self.get_session()
         try:
-            site_ids = session.query(PageORM.site_id).filter(
+            query = session.query(PageORM.site_id).filter(
                 PageORM.is_recipe == True,
                 PageORM.ingredients != None,
                 PageORM.dish_name != None,
                 PageORM.instructions != None
-            ).distinct().all()
+            )
+
+            if min_site_id is not None:
+                query = query.filter(PageORM.site_id >= min_site_id)
+            
+            site_ids = query.distinct().order_by(PageORM.site_id.asc()).all()
             site_ids = [sid[0] for sid in site_ids]
             return site_ids
         finally:

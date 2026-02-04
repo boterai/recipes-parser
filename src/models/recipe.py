@@ -2,7 +2,7 @@ from typing import Optional
 from pydantic import BaseModel, model_validator
 import json
 import logging
-
+from utils.normalization import normalize_ingredients_list
 
 class Recipe(BaseModel):
     """Recipe entity with fields optimized for similarity search.
@@ -36,7 +36,7 @@ class Recipe(BaseModel):
     @model_validator(mode='after')
     def auto_normalise(self) -> 'Recipe':
         """Автоматическая нормализация после создания объекта"""
-        self.normalise_ingredients_with_amounts()
+        self.ingredients_with_amounts = normalize_ingredients_list(self.ingredients_with_amounts or [])
         if self.ingredients_with_amounts and not self.ingredients:
             self.ingredients = [item["name"] for item in self.ingredients_with_amounts]
         return self
@@ -50,29 +50,6 @@ class Recipe(BaseModel):
                 "tags": self.tags_to_str(),
                 "meta": self.get_meta_str() or ""
             }
-    
-    def amount_to_float(self, amount) -> Optional[float]:
-        """Преобразует количество в float, если возможно"""
-        try:
-            return float(amount)
-        except (ValueError, TypeError):
-            return None
-    
-    def normalise_ingredients_with_amounts(self):
-        """Нормализует ingredients_with_amounts, приводя имена к нижнему регистру и корректя типы"""
-        if not self.ingredients_with_amounts:
-            return
-        normalised_ingredients = []
-        for item in self.ingredients_with_amounts:
-            name = item.get("name", "").strip().lower()
-            amount = item.get("amount", None)
-            unit = item.get("unit", "").strip().lower() if isinstance(item.get("unit"), str) else None
-            normalised_ingredients.append({
-                "name": name,
-                "amount": self.amount_to_float(amount),
-                "unit": unit
-            })
-        self.ingredients_with_amounts = normalised_ingredients
     
     def ingredient_to_str(self, separator: str = ", ") -> str:
         """Возвращает ингредиенты в виде строки"""

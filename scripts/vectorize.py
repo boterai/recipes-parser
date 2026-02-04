@@ -92,5 +92,5 @@ def translate_all_recipes(target_language: str = "en", translate_batch_size: int
     asyncio.run(translator.translate_all(batch_size=translate_batch_size))
 
 if __name__ == '__main__':
-    #asyncio.run(vectorise_all_images())
-    asyncio.run(vectorise_all_recipes()) # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)
+    asyncio.run(vectorise_all_images())
+    #vectorise_all_recipes() # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)

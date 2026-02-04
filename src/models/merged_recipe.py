@@ -10,6 +10,7 @@ from sqlalchemy.orm import relationship
 from src.models.base import Base
 import hashlib
 import logging
+from utils.normalization import normalize_ingredients_list
 
 logger = logging.getLogger(__name__)
 
@@ -152,9 +153,10 @@ class MergedRecipe(BaseModel):
             
             self.pages_csv = pages_csv
             self.pages_hash_sha256 = pages_hash
-        
+
+        self.ingredients = normalize_ingredients_list(self.ingredients or [])
+
         return self
-    page_ids: Optional[list[int]] = Field(default_factory=list)
     
     class Config:
         from_attributes = True

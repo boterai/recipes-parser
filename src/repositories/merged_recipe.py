@@ -35,6 +35,39 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
             if result:
                 session.expunge(result)
             return result
+        
+
+    def get_all_without_images(self, last_id: Optional[int] = None, limit: Optional[int] = None, language: str = "en") -> List[MergedRecipeORM]:
+
+        """
+        получить все объединенные рецепты без связанных изображений
+        Args:
+            limit: Максимальное количество записей для возврата
+            language: Язык рецептов (по умолчанию "en")
+        """
+
+        session = self.get_session()
+        try:
+            # LEFT JOIN с merged_recipe_images и фильтр где image_id IS NULL
+            query = session.query(MergedRecipeORM)\
+                .options(joinedload(MergedRecipeORM.images))\
+                .where(MergedRecipeORM.language == language)\
+                .outerjoin(merged_recipe_images, MergedRecipeORM.id == merged_recipe_images.c.merged_recipe_id)\
+                .filter(merged_recipe_images.c.image_id == None)
+            
+            if last_id is not None:
+                query = query.filter(MergedRecipeORM.id > last_id)
+            
+            if limit is not None:
+                query = query.order_by(MergedRecipeORM.id.asc()).limit(limit)
+            
+            results = query.all()
+            # Отвязываем объекты от сессии, чтобы они были доступны после закрытия
+            for result in results:
+                session.expunge(result)
+            return results
+        finally:
+            session.close()
     
     def create_merged_recipe(
         self,

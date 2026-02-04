@@ -8,6 +8,7 @@ import json
 import random
 # Добавление корневой директории в PYTHONPATH
 sys.path.insert(0, str(Path(__file__).parent.parent))
+from utils.normalization import normalize_ingredients_list
 
 from src.stages.search.similarity import SimilaritySearcher, ClusterParams, build_clusters_from_dsu
 from src.stages.merge.merge import ClusterVariationGenerator
@@ -37,9 +38,9 @@ async def create_clusters(score_thresold: float, build_type: Literal["image", "f
                     query_batch=128
                 ), build_type=build_type) # "image", "full", "ingredients"
         
-        if os.path.exists(ss.clusters_filename):
-            logger.info("Загружаем кластеры из файла...")
-            return ss.load_clusters_from_file(), ss.get_image_clusters_mapping()
+        #if os.path.exists(ss.clusters_filename):
+        #    logger.info("Загружаем кластеры из файла...")
+        #    return ss.load_clusters_from_file(), ss.get_image_clusters_mapping()
         try:
             ss.load_dsu_state()
             if first_loaded_last_id is None:
@@ -150,19 +151,18 @@ def view_recipes(merge_recipe_id: int = 534):
 if __name__ == "__main__":
     from dotenv import load_dotenv # загружаем для доступа к .env переменным
     load_dotenv()
-
     parser = argparse.ArgumentParser(description="Cluster recipes based on similarity.")
     parser.add_argument(
         "--score_threshold",
         type=float,
-        default=0.92,
+        default=0.96,
         help="Score threshold for clustering (default: 0.95)"
     )
     parser.add_argument(
         "--build_type",
         type=str,
         choices=["image", "full", "ingredients"],
-        default="full",
+        default="ingredients",
         help="Type of build for clustering (default: full)"
     )
     args = parser.parse_args()
