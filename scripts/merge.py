@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.stages.search.similarity import SimilaritySearcher, ClusterParams, build_clusters_from_dsu
 from src.stages.merge.merge import ClusterVariationGenerator
 from src.repositories.merged_recipe import MergedRecipeRepository
-from typing import Literal
+from typing import Literal, Optional
 # Базовая настройка только для консоли
 logging.basicConfig(
     level=logging.INFO,
@@ -91,7 +91,8 @@ async def run_merge_with_same_lang(score_thresold: float,
                     validate_gpt: bool = True, 
                     save_to_db: bool = True, 
                     max_merged_recipes: int = 4, 
-                    merge_from_olap: bool = True):
+                    merge_from_olap: bool = True, 
+                    limit: Optional[int] = None):
     
     cluster_processing_history = os.path.join("history", f"unprocessed_clusters_{build_type}_{score_thresold}.json")
     existing_clusters = load_clusters_from_history(cluster_processing_history)
@@ -108,7 +109,7 @@ async def run_merge_with_same_lang(score_thresold: float,
         logger.info(f"Осталось {len(clusters)} кластеров для обработки после фильтрации истории.")
 
     merge_function = merger.create_variations_from_olap if merge_from_olap else merger.create_variations_with_same_lang
-
+    total = 0
     for cluster in clusters:
         if len(cluster) < 2:
             continue  # пропускаем одиночки
@@ -127,6 +128,11 @@ async def run_merge_with_same_lang(score_thresold: float,
                 )
             if merged_recipe:
                 logger.info(f"Created {len(merged_recipe)} variations.")
+                total += len(merged_recipe)
+            
+            if limit and total >= limit:
+                logger.info(f"Reached limit of {limit} merged recipes, stopping.")
+                break
 
             # сохраняем на каждой итерации чтобы неп отерять прогресс
             existing_clusters.append(cluster)
@@ -149,7 +155,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--score_threshold",
         type=float,
-        default=0.95,
+        default=0.92,
         help="Score threshold for clustering (default: 0.95)"
     )
     parser.add_argument(
@@ -161,4 +167,4 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    asyncio.run(run_merge_with_same_lang(args.score_threshold, args.build_type))
+    asyncio.run(run_merge_with_same_lang(args.score_threshold, args.build_type, limit=150))

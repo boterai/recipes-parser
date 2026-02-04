@@ -114,12 +114,9 @@ class ConservativeRecipeMerger:
         overlap = len(n1 & n2) / len(n1 | n2)
         return 1 - overlap
     
-    def _select_best_base(self, recipes: list[Recipe], top_k: int = 3) -> Recipe:
+    def _select_best_base(self, recipes: list[Recipe]) -> Recipe:
         """
         Эвристический выбор лучшего базового рецепта
-        
-        Выбирает случайный рецепт из топ-K лучших по качеству.
-        Это обеспечивает разнообразие при повторных вызовах.
         
         Критерии (в порядке приоритета):
         1. Количество ингредиентов (больше = лучше)
@@ -130,10 +127,9 @@ class ConservativeRecipeMerger:
         
         Args:
             recipes: Список рецептов
-            top_k: Из скольких лучших выбирать случайный (по умолчанию 3)
             
         Returns:
-            Случайный рецепт из топ-K лучших
+            Лучший рецепт для использования в качестве базы
         """
         def score(r: Recipe) -> tuple:
             ing_count = len(r.ingredients) if r.ingredients else 0
@@ -151,11 +147,8 @@ class ConservativeRecipeMerger:
         # Сортируем по скору (лучшие в начале)
         sorted_recipes = sorted(recipes, key=score, reverse=True)
         
-        # Берём топ-K (или меньше если рецептов мало)
-        top_candidates = sorted_recipes[:min(top_k, len(sorted_recipes))]
-        
         # Выбираем случайный из топ-K
-        return random.choice(top_candidates)
+        return sorted_recipes[0]
     
     async def validate_with_gpt(
         self,
@@ -307,6 +300,125 @@ Validate these {len(image_urls)} images. Do they show this dish or similar?"""
             logger.error(f"GPT Vision validation failed: {e}")
             # При ошибке возвращаем все изображения (fail-open)
             return image_urls
+
+    async def select_best_images_for_recipe(
+        self,
+        recipe: MergedRecipe,
+        image_urls: list[str],
+        max_images: int = 3
+    ) -> list[str]:
+        """
+        Выбирает лучшее изображение (или группу визуально связанных изображений) для рецепта.
+        
+        Возвращает несколько изображений ТОЛЬКО если они выглядят как фото одного блюда 
+        с разных ракурсов (например, целиком + в разрезе + крупный план).
+        НЕ возвращает смесь разных фотографий разных блюд.
+        
+        Args:
+            recipe: Merged рецепт для проверки
+            image_urls: Список URL изображений-кандидатов
+            max_images: Максимальное количество изображений для возврата
+            
+        Returns:
+            Список URL лучших изображений (1-max_images штук)
+        """
+        if not image_urls:
+            return []
+        
+        if len(image_urls) == 1:
+            return image_urls
+        
+        # Берём ключевые ингредиенты для контекста
+        key_ingredients = [
+            ing.get('name', '') 
+            for ing in (recipe.ingredients or [])[:5]
+            if ing.get('name')
+        ]
+        
+        system_prompt = """You are a professional food photographer selecting the BEST image(s) to represent a recipe.
+
+TASK: From the provided images, select the BEST representation of the dish.
+
+SELECTION CRITERIA (in order of importance):
+1. VISUAL APPEAL - appetizing, well-lit, good composition
+2. DISH ACCURACY - clearly shows the finished dish as described
+3. INGREDIENT VISIBILITY - key ingredients are visible or recognizable
+4. PHOTO QUALITY - sharp, well-focused, good colors (not over/under-exposed)
+5. PRESENTATION - plated nicely, appropriate serving style
+
+MULTIPLE IMAGES RULE:
+Return MORE THAN ONE image ONLY if they are clearly photos of THE SAME DISH from different angles:
+- Same plate/bowl photographed from above + side view ✓
+- Whole dish + close-up of the same dish ✓  
+- Full portion + slice/bite showing inside ✓
+
+DO NOT return multiple images if:
+- They show DIFFERENT dishes (even if same recipe type)
+- Different plating/presentation styles
+- Clearly from different photo sessions
+- Mix of professional and amateur photos
+
+Return JSON:
+{
+  "selected_indices": [0],  // or [0, 2] if they're same dish from different angles
+  "best_index": 0,  // the single BEST image
+  "reasoning": "Brief explanation of why this image best represents the dish",
+  "is_same_dish_series": false  // true only if multiple images show literally the same dish
+}"""
+
+        user_prompt = f"""Recipe: {recipe.dish_name}
+Key ingredients: {', '.join(key_ingredients)}
+Description: {(recipe.description or '')[:200]}
+
+Select the BEST image(s) from these {len(image_urls)} options to represent this recipe.
+Remember: multiple images ONLY if they're clearly the same dish photographed from different angles."""
+
+        try:
+            result = await self.gpt_client.async_request_with_images(
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                image_urls=image_urls[:10],  # Лимит на количество изображений для GPT
+                temperature=0.1,
+                max_tokens=500
+            )
+            
+            if not result or not isinstance(result, dict):
+                logger.warning("Invalid GPT response for image selection, returning first image")
+                return [image_urls[0]]
+            
+            selected_indices = result.get('selected_indices', [])
+            best_index = result.get('best_index', 0)
+            is_same_dish = result.get('is_same_dish_series', False)
+            reasoning = result.get('reasoning', 'N/A')
+            
+            logger.info(f"Image selection for '{recipe.dish_name}': "
+                       f"best={best_index}, selected={selected_indices}, "
+                       f"same_dish_series={is_same_dish}, reason: {reasoning}")
+            
+            # Если несколько изображений, но это НЕ серия одного блюда - берём только лучшее
+            if len(selected_indices) > 1 and not is_same_dish:
+                logger.info(f"Multiple images selected but not same dish series, using only best (index={best_index})")
+                selected_indices = [best_index]
+            
+            # Валидируем индексы
+            valid_indices = [i for i in selected_indices if 0 <= i < len(image_urls)]
+            
+            if not valid_indices:
+                # Fallback на best_index
+                if 0 <= best_index < len(image_urls):
+                    valid_indices = [best_index]
+                else:
+                    valid_indices = [0]
+            
+            # Ограничиваем количество
+            valid_indices = valid_indices[:max_images]
+            
+            return [image_urls[i] for i in valid_indices]
+            
+        except Exception as e:
+            logger.error(f"GPT Vision image selection failed: {e}")
+            # При ошибке возвращаем первое изображение
+            return [image_urls[0]] if image_urls else []
 
 class ClusterVariationGenerator:
     """Генератор вариаций из кластера рецептов"""
@@ -499,6 +611,7 @@ class ClusterVariationGenerator:
         
         variations = []
         used_combinations = set()  # Отслеживаем использованные комбинации
+        used_base_ids = set()  # Отслеживаем использованные базовые рецепты
         max_attempts = max_variations * 3  # Лимит попыток избежать бесконечного цикла
         attempts = 0
         
@@ -507,8 +620,17 @@ class ClusterVariationGenerator:
         while len(tasks) < max_variations and attempts < max_attempts:
             attempts += 1
             
-            # Каждую итерацию выбираем новый базовый рецепт из топ-K лучших
-            base = self.merger._select_best_base(recipes, top_k=max_variations+1)
+            # Выбираем новый уникальный базовый рецепт для каждой вариации
+            # Исключаем уже использованные базовые рецепты
+            available_for_base = [r for r in recipes if r.page_id not in used_base_ids]
+            
+            if not available_for_base:
+                logger.warning("Все рецепты уже использованы в качестве базовых, сбрасываем список")
+                used_base_ids.clear()
+                available_for_base = recipes
+            
+            base = self.merger._select_best_base(available_for_base)
+            used_base_ids.add(base.page_id)
             logger.info(f"Итерация {attempts}: выбран базовый рецепт: {base.dish_name} (page_id={base.page_id})")
             
             # Остальные рецепты (без базового)
@@ -565,7 +687,7 @@ class ClusterVariationGenerator:
         
         return variations
     
-    async def add_image_to_merged_recipe(self, merged_recipe_id: int) -> None:
+    async def add_image_to_merged_recipe(self, merged_recipe_id: int, add_best_image: bool = False) -> None:
         """
             Добавляет валидные изображения к MergedRecipe по его ID
             Args:
@@ -583,7 +705,9 @@ class ClusterVariationGenerator:
             return
         
         urls = [img.image_url for img in images if img.image_url]
-        valid_urls = await self.merger.validate_images_for_recipe(merged_recipe, urls)
+
+        image_validator = self.merger.validate_images_for_recipe if not add_best_image else self.merger.select_best_images_for_recipe
+        valid_urls = await image_validator(merged_recipe, urls)
         if not valid_urls:
             logger.warning(f"Нет валидных изображений для MergedRecipe ID {merged_recipe_id}")
             return
@@ -753,7 +877,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     generator = ClusterVariationGenerator()
     generator.image_repository
-    asyncio.run(generator.add_image_to_merged_recipe(merged_recipe_id=429))
+    asyncio.run(generator.add_image_to_merged_recipe(merged_recipe_id=863, add_best_image=True))
 
     async def example():
         generator = ClusterVariationGenerator()
