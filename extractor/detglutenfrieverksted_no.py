@@ -134,8 +134,9 @@ class DetGlutenfrieVerkstedExtractor(BaseRecipeExtractor):
         name_clean = re.sub(r'\([^)]*\)', '', name)
         # Удаляем фразы вроде "fra Det Glutenfrie Verksted"
         name_clean = re.sub(r'\bfra\s+Det\s+Glutenfrie\s+Verksted\b', '', name_clean, flags=re.IGNORECASE)
-        # НЕ удаляем "eller" варианты - они важны!
-        # name_clean = re.sub(r'\beller\s+\w+.*$', '', name_clean, flags=re.IGNORECASE)
+        # Для вариантов с "eller" (или), удаляем измерения во второй части
+        # Например: "vaniljepulver eller 1 ts vaniljeekstrakt" -> "vaniljepulver eller vaniljeekstrakt"
+        name_clean = re.sub(r'\beller\s+\d+\s*(?:g|ml|ts|ss|dl|l|kg)\s+', 'eller ', name_clean, flags=re.IGNORECASE)
         # Удаляем дополнительные описания типа ", romtemperert"
         name_clean = re.sub(r',\s*romtemperert', '', name_clean, flags=re.IGNORECASE)
         # Удаляем лишние пробелы
@@ -322,12 +323,11 @@ class DetGlutenfrieVerkstedExtractor(BaseRecipeExtractor):
     def extract_prep_time(self) -> Optional[str]:
         """Извлечение времени подготовки"""
         # Ищем в тексте инструкций упоминания о времени подготовки
-        instructions_text = ""
-        
-        # Собираем весь текст из инструкций
+        # Обычно это связано с разогревом духовки, подготовкой ингредиентов
         for p in self.soup.find_all('p'):
             text = p.get_text()
-            if 'forvarm' in text.lower() or 'varm' in text.lower() or 'klargjør' in text.lower():
+            # Ищем фразы о разогреве духовки или подготовке
+            if any(word in text.lower() for word in ['forvarm', 'varm', 'varmes opp']):
                 time_val = self.extract_time_from_text(text, 'prep')
                 if time_val:
                     return time_val
@@ -337,12 +337,39 @@ class DetGlutenfrieVerkstedExtractor(BaseRecipeExtractor):
     def extract_cook_time(self) -> Optional[str]:
         """Извлечение времени приготовления"""
         # Ищем в тексте инструкций упоминания о времени готовки/выпекания
+        # Обычно это steking (baking), koking (cooking)
+        
+        # Ищем конкретную фразу "stek i" с временем
         for p in self.soup.find_all('p'):
             text = p.get_text()
-            if any(word in text.lower() for word in ['stek', 'kok', 'bak', 'tilbered']):
-                time_val = self.extract_time_from_text(text, 'cook')
-                if time_val:
-                    return time_val
+            # Специфично ищем фразу вида "stek i ca. 20 minutter"
+            stek_match = re.search(r'stek\s+i\s+(?:ca\.?\s+)?(\d+)\s*minut', text, re.IGNORECASE)
+            if stek_match:
+                time_val = int(stek_match.group(1))
+                return f"{time_val} minutes"
+            
+            # Альтернативно "bak i ... minutter"
+            bak_match = re.search(r'bak\s+i\s+(?:ca\.?\s+)?(\d+)\s*minut', text, re.IGNORECASE)
+            if bak_match:
+                time_val = int(bak_match.group(1))
+                return f"{time_val} minutes"
+        
+        # Если не нашли специфичную фразу, используем общий поиск
+        times_found = []
+        for p in self.soup.find_all('p'):
+            text = p.get_text()
+            if any(word in text.lower() for word in ['stek', 'bak', 'kok', 'tilbered']):
+                matches = re.findall(r'(?:i\s+)?(?:ca\.?\s+)?(\d+)\s*minut', text, re.IGNORECASE)
+                for match in matches:
+                    times_found.append(int(match))
+        
+        # Берем наибольшее значение (обычно это основное время готовки)
+        # Игнорируем очень короткие времена (< 5 минут), т.к. это могут быть промежуточные шаги
+        # И очень длинные (> 45 минут), т.к. это может быть время разогрева духовки
+        cook_times = [t for t in times_found if 5 <= t <= 45]
+        if cook_times:
+            max_time = max(cook_times)
+            return f"{max_time} minutes"
         
         return None
     
