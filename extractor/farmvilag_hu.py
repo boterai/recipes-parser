@@ -132,9 +132,9 @@ class FarmvilagExtractor(BaseRecipeExtractor):
         for fraction, decimal in fraction_map.items():
             text = text.replace(fraction, decimal)
         
-        # Паттерн для извлечения количества, единицы и названия
-        # Примеры: "500 g liszt", "1 teáskanál só", "350 ml vajtej"
-        pattern = r'^([\d\s/.,]+)?\s*(g|kg|ml|l|dkg|dl|teáskanál|evőkanál|csipet|darab|csepp|gerezd|gramm|liter|milliliter|kilogramm|db|tk|ek)?\s*(.+)'
+        # Паттерн для извлечения количества (включая диапазоны), единицы и названия
+        # Примеры: "500 g liszt", "1 teáskanál só", "350-400 ml vajtej"
+        pattern = r'^([\d\s/.,\-]+)?\s*(g|kg|ml|l|dkg|dl|teáskanál|evőkanál|csipet|darab|csepp|gerezd|gramm|liter|milliliter|kilogramm|db|tk|ek)?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -152,6 +152,13 @@ class FarmvilagExtractor(BaseRecipeExtractor):
         amount = None
         if amount_str:
             amount_str = amount_str.strip()
+            # Обработка диапазонов типа "350-400"
+            if '-' in amount_str and not amount_str.startswith('-'):
+                # Берем первое значение из диапазона
+                parts = amount_str.split('-')
+                if parts and parts[0].strip():
+                    amount_str = parts[0].strip()
+            
             # Обработка дробей типа "1/2" или "1 1/2"
             if '/' in amount_str:
                 parts = amount_str.split()
@@ -267,6 +274,15 @@ class FarmvilagExtractor(BaseRecipeExtractor):
         Args:
             time_type: Тип времени ('prep', 'cook', 'total')
         """
+        # Сначала пытаемся найти в заголовке страницы
+        title = self.soup.find('title')
+        if title:
+            title_text = title.get_text()
+            # Ищем "40 perc alatt" или подобные паттерны
+            match = re.search(r'(\d+)\s*perc\s+alatt', title_text, re.IGNORECASE)
+            if match and time_type == 'total':
+                return f"{match.group(1)} minutes"
+        
         entry_content = self.soup.find('div', class_='entry-content')
         if not entry_content:
             return None
@@ -281,6 +297,7 @@ class FarmvilagExtractor(BaseRecipeExtractor):
                 r'sütési?\s+idő[:\s]+(\d+(?:-\d+)?)\s*(perc|óra|minutes?|hours?)',
                 r'főzési?\s+idő[:\s]+(\d+(?:-\d+)?)\s*(perc|óra|minutes?|hours?)',
                 r'cook(?:ing)?\s+time[:\s]+(\d+(?:-\d+)?)\s*(perc|óra|minutes?|hours?)',
+                r'süsd?\s+(?:kb\.?\s*)?(\d+(?:-\d+)?)\s*(perc|óra|minutes?|hours?)',
             ],
             'total': [
                 r'összes\s+idő[:\s]+(\d+(?:-\d+)?)\s*(perc|óra|minutes?|hours?)',
