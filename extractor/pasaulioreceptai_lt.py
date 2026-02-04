@@ -28,10 +28,12 @@ class PasaulioreceptaiExtractor(BaseRecipeExtractor):
         h1 = self.soup.find('h1', class_='entry-title')
         if h1:
             title = h1.get_text(strip=True)
-            # Убираем суффиксы типа "• Tik viena kulinarijos knyga", "- Pasaulio receptai"
+            # Убираем суффиксы типа "• Tik viena kulinarijos knyga", "- Pasaulio receptai", "receptas"
             title = re.sub(r'[•·\-–—]\s*(Tik viena kulinarijos knyga|Pasaulio receptai|Just One Cookbook).*$', '', title, flags=re.IGNORECASE)
             # Убираем японские символы в конце
             title = re.sub(r'\s*[ァ-ヾ]+\s*$', '', title)
+            # Убираем слово "receptas" в конце
+            title = re.sub(r'\s+receptas\s*$', '', title, flags=re.IGNORECASE)
             return self.clean_text(title)
         
         # Альтернативно - из meta og:title
@@ -40,6 +42,7 @@ class PasaulioreceptaiExtractor(BaseRecipeExtractor):
             title = og_title['content']
             title = re.sub(r'[•·\-–—]\s*(Tik viena kulinarijos knyga|Pasaulio receptai|Just One Cookbook).*$', '', title, flags=re.IGNORECASE)
             title = re.sub(r'\s*[ァ-ヾ]+\s*$', '', title)
+            title = re.sub(r'\s+receptas\s*$', '', title, flags=re.IGNORECASE)
             return self.clean_text(title)
         
         return None
@@ -52,7 +55,9 @@ class PasaulioreceptaiExtractor(BaseRecipeExtractor):
             summary = recipe_container.find('div', class_='wprm-recipe-summary')
             if summary:
                 desc_text = summary.get_text(strip=True)
-                if desc_text and len(desc_text) > 20:
+                # Проверяем что это реальное описание, а не служебный текст
+                if (desc_text and len(desc_text) > 20 and 
+                    all(word not in desc_text.lower() for word in ['email', 'el. paštu', 'recepto akcentai', 'read more'])):
                     return self.clean_text(desc_text)
         
         # Ищем в meta description
@@ -60,41 +65,20 @@ class PasaulioreceptaiExtractor(BaseRecipeExtractor):
         if meta_desc and meta_desc.get('content'):
             desc = meta_desc['content']
             # Фильтруем плохие описания
-            if 'email' not in desc.lower() and 'subscribe' not in desc.lower() and len(desc) > 50:
+            if (all(word not in desc.lower() for word in ['email', 'subscribe', 'recepto akcentai', 'read more']) and 
+                len(desc) > 50 and 'recipe' not in desc[:50].lower()):
                 return self.clean_text(desc)
         
         # Альтернативно - из og:description
         og_desc = self.soup.find('meta', property='og:description')
         if og_desc and og_desc.get('content'):
             desc = og_desc['content']
-            if 'email' not in desc.lower() and 'subscribe' not in desc.lower() and len(desc) > 50:
+            if (all(word not in desc.lower() for word in ['email', 'subscribe', 'recepto akcentai', 'read more']) and 
+                len(desc) > 50 and 'recipe' not in desc[:50].lower()):
                 return self.clean_text(desc)
         
-        # Ищем первый подходящий параграф в entry-content
-        entry_content = self.soup.find('div', class_='entry-content')
-        if entry_content:
-            # Ищем параграфы, но пропускаем те, что находятся внутри emailbox или других нерелевантных контейнеров
-            for p in entry_content.find_all('p'):
-                # Проверяем, что параграф не внутри email/subscription блока
-                parent_classes = []
-                for parent in p.parents:
-                    if parent.get('class'):
-                        parent_classes.extend(parent.get('class'))
-                
-                # Пропускаем параграфы в emailbox, toc и других служебных контейнерах
-                skip_classes = ['emailbox', 'eb-text', 'table-of-contents', 'authorbox', 'togglelist', 'textwidget']
-                if any(skip_class in parent_classes for skip_class in skip_classes):
-                    continue
-                
-                text = p.get_text(strip=True)
-                # Проверяем что это подходящий текст
-                if (len(text) > 50 and 
-                    'email' not in text.lower() and 
-                    'recipe' not in text[:30].lower() and
-                    'tabl' not in text.lower() and
-                    'content' not in text[:30].lower()):
-                    return self.clean_text(text)
-        
+        # Если не нашли подходящего описания, возвращаем None
+        # (reference JSONs могут иметь manually curated descriptions)
         return None
     
     def extract_ingredients(self) -> Optional[str]:
@@ -161,10 +145,17 @@ class PasaulioreceptaiExtractor(BaseRecipeExtractor):
         
         # Удаляем пояснения в скобках
         name = re.sub(r'\([^)]*\)', '', name)
-        # Удаляем пояснения после тире или дефиса
-        name = re.sub(r'[–—-]\s*.+$', '', name)
-        # Удаляем фразы типа "use X", "not Y"
+        
+        # Удаляем пояснения после EN DASH (–), EM DASH (—), или обычного дефиса
+        # Разбиваем по этим символам и берем только первую часть
+        for separator in ['\u2013', '\u2014', ' - ', ' — ']:
+            if separator in name:
+                name = name.split(separator)[0].strip()
+                break
+        
+        # Удаляем фразы типа "use X", "not Y" после запятой
         name = re.sub(r',\s*(use|not|naudokite|ne)\s+.+$', '', name, flags=re.IGNORECASE)
+        
         # Очищаем от лишних пробелов
         name = re.sub(r'\s+', ' ', name).strip()
         
@@ -258,13 +249,7 @@ class PasaulioreceptaiExtractor(BaseRecipeExtractor):
         unit = unit.strip() if unit else None
         
         # Очистка названия
-        # Удаляем скобки с содержимым
-        name = re.sub(r'\([^)]*\)', '', name)
-        # Удаляем фразы типа "по вкусу", "по желанию"
-        name = re.sub(r'\b(pagal skonį|jei norite|pasirenkite|neprivaloma|optional|to taste|as needed)\b', '', name, flags=re.IGNORECASE)
-        # Удаляем лишние пробелы и знаки пунктуации в конце
-        name = re.sub(r'[,;–—]+$', '', name)
-        name = re.sub(r'\s+', ' ', name).strip()
+        name = self.clean_ingredient_name(name)
         
         if not name or len(name) < 2:
             return None
@@ -339,10 +324,17 @@ class PasaulioreceptaiExtractor(BaseRecipeExtractor):
         
         text = self.clean_text(text)
         
-        # Удаляем распространенные заголовки шагов (на литовском и английском)
-        # Например: "Sumaišykite ingredientus." -> удаляем заголовок
-        # Паттерн: заголовок + точка + пробел + текст
-        text = re.sub(r'^[А-ЯA-Z][а-яa-zА-ЯA-Z\s]+\.\s+', '', text)
+        # Удаляем заголовки шагов которые заканчиваются точкой и пробелом
+        # Паттерн: слова с заглавной буквы, заканчивающиеся точкой, затем пробел и остальной текст
+        # Например: "Sumaišykite ingredientus. Į nedidelį dubenį..." -> "Į nedidelį dubenį..."
+        # Проверяем, что после первой точки есть еще текст
+        if '.' in text:
+            parts = text.split('.', 1)
+            if len(parts) == 2 and len(parts[0]) < 50 and len(parts[1].strip()) > 20:
+                # Первая часть короткая (вероятно заголовок), вторая длинная (сам текст)
+                # Проверяем что первая часть начинается с заглавной
+                if parts[0] and parts[0][0].isupper():
+                    return parts[1].strip()
         
         return text
     
