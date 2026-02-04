@@ -222,11 +222,8 @@ class EverydayYummyRecipesExtractor(BaseRecipeExtractor):
                 'liters': 'l',
             }
             
-            # Сохраняем plural для cups, inches и т.д.
-            if unit not in unit_map:
-                # Не меняем cups, inches, slices и т.д.
-                pass
-            else:
+            # Map to standard forms
+            if unit in unit_map:
                 unit = unit_map[unit]
             
             # Special case: если unit is "large", "medium", "small" - это часть названия
