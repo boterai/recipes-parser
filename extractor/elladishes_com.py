@@ -1,5 +1,17 @@
 """
 Экстрактор данных рецептов для сайта elladishes.com
+
+Особенности сайта:
+- Использует JSON-LD structured data для рецептов (Schema.org Recipe)
+- Формат времени: ISO 8601 (PT15M, PT1H30M)
+- Ингредиенты могут содержать "and" в количестве (1 and 1/2 cups)
+- Изображения доступны в нескольких размерах в JSON-LD
+- Теги/keywords хранятся в JSON-LD
+- Заметки могут быть в секции tasty-recipes-notes
+
+Стратегия парсинга:
+1. Приоритет - JSON-LD structured data (наиболее надежный источник)
+2. Fallback - HTML разметка и meta-теги
 """
 
 import sys
