@@ -231,20 +231,24 @@ class FoodRuExtractor(BaseRecipeExtractor):
         # Проверяем поле dishes
         dishes = self._recipe_data.get('dishes', [])
         if dishes and isinstance(dishes, list):
-            if isinstance(dishes[0], dict):
-                return dishes[0].get('title', None)
-            return str(dishes[0])
+            # Безопасный доступ к первому элементу
+            if len(dishes) > 0:
+                if isinstance(dishes[0], dict):
+                    return dishes[0].get('title', None)
+                return str(dishes[0])
         
         # Проверяем breadcrumbs (самый надежный источник категории)
         breadcrumbs = self._recipe_data.get('breadcrumbs', [])
         if breadcrumbs and isinstance(breadcrumbs, list):
-            # Берем последний элемент (самая специфичная категория)
-            last_crumb = breadcrumbs[-1]
-            if isinstance(last_crumb, dict):
-                title = last_crumb.get('title', '')
-                if title:
-                    # Первая буква заглавная
-                    return title.capitalize()
+            # Безопасный доступ к последнему элементу
+            if len(breadcrumbs) > 0:
+                # Берем последний элемент (самая специфичная категория)
+                last_crumb = breadcrumbs[-1]
+                if isinstance(last_crumb, dict):
+                    title = last_crumb.get('title', '')
+                    if title:
+                        # Первая буква заглавная
+                        return title.capitalize()
         
         # Fallback: проверяем tags на предмет категорий
         tags = self._recipe_data.get('tags', [])
