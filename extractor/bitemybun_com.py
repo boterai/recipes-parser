@@ -171,7 +171,7 @@ class BitemybunExtractor(BaseRecipeExtractor):
         if prep_time:
             time_text = self.clean_text(prep_time.get_text())
             if time_text:
-                # Убираем лишние слова типа "zapisnik"
+                # Убираем лишние слова типа "zapisnik" (присутствует в некоторых HTML)
                 time_text = re.sub(r'zapisnik|minutes?', '', time_text, flags=re.I).strip()
                 return f"{time_text} minutes"
         
@@ -184,7 +184,7 @@ class BitemybunExtractor(BaseRecipeExtractor):
         if cook_time:
             time_text = self.clean_text(cook_time.get_text())
             if time_text:
-                # Убираем лишние слова
+                # Убираем лишние слова (присутствует в некоторых HTML)
                 time_text = re.sub(r'zapisnik|minutes?', '', time_text, flags=re.I).strip()
                 return f"{time_text} minutes"
         
@@ -197,7 +197,7 @@ class BitemybunExtractor(BaseRecipeExtractor):
         if total_time:
             time_text = self.clean_text(total_time.get_text())
             if time_text:
-                # Убираем лишние слова
+                # Убираем лишние слова (присутствует в некоторых HTML)
                 time_text = re.sub(r'zapisnik|minutes?', '', time_text, flags=re.I).strip()
                 return f"{time_text} minutes"
         
@@ -298,7 +298,8 @@ class BitemybunExtractor(BaseRecipeExtractor):
                                 elif isinstance(keywords_text, list):
                                     tags_list = [str(tag).strip().lower() for tag in keywords_text if tag]
                             
-                            # Добавляем cuisine как тег (переводим на хорватский если это японская кухня)
+                            # Добавляем cuisine как тег
+                            # Japanese → "japanska kuhinja", остальные → lowercase
                             if 'recipeCuisine' in item:
                                 cuisine = item['recipeCuisine']
                                 if isinstance(cuisine, list):
