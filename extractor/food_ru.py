@@ -14,11 +14,11 @@ from extractor.base import BaseRecipeExtractor, process_directory
 
 # Константы для фильтрации и ограничений
 MAX_CATEGORY_TITLE_LENGTH = 30  # Максимальная длина названия для определения категории
-CATEGORY_EXCLUDED_KEYWORDS = ['минут', 'партнерск', 'вкус']  # Слова, исключающие тег из категорий
+CATEGORY_EXCLUDED_KEYWORDS = ['минут', 'партнерск', 'вкус', 'в «']  # Слова, исключающие тег из категорий
 TAG_EXCLUDED_KEYWORDS = ['перекрёсток', 'пятёрочка', 'партнерск', 'в «']  # Слова для фильтрации служебных тегов
 MIN_FILTERED_TAGS_THRESHOLD = 3  # Минимальное количество тегов после фильтрации
 MAX_TAGS_LIMIT = 10  # Максимальное количество тегов для возврата
-FOOD_RU_BASE_URL = "https://food.ru/"  # Базовый URL сайта для формирования полных URL изображений
+FOOD_RU_BASE_URL = "https://food.ru"  # Базовый URL сайта для формирования полных URL изображений
 
 
 class FoodRuExtractor(BaseRecipeExtractor):
@@ -53,7 +53,7 @@ class FoodRuExtractor(BaseRecipeExtractor):
                     self._recipe_data = val
                     break
                     
-        except Exception as e:
+        except (json.JSONDecodeError, KeyError, AttributeError) as e:
             print(f"Ошибка при загрузке данных рецепта: {e}")
             self._recipe_data = None
     
@@ -99,7 +99,9 @@ class FoodRuExtractor(BaseRecipeExtractor):
             return ""
         
         if not image_path.startswith('http'):
-            return FOOD_RU_BASE_URL + image_path
+            # Убираем начальный слеш из image_path если есть
+            path = image_path.lstrip('/')
+            return f"{FOOD_RU_BASE_URL}/{path}"
         
         return image_path
     
@@ -234,7 +236,7 @@ class FoodRuExtractor(BaseRecipeExtractor):
         
         # Проверяем breadcrumbs (самый надежный источник категории)
         breadcrumbs = self._recipe_data.get('breadcrumbs', [])
-        if breadcrumbs and isinstance(breadcrumbs, list):
+        if breadcrumbs and isinstance(breadcrumbs, list) and len(breadcrumbs) > 0:
             # Берем последний элемент (самая специфичная категория)
             last_crumb = breadcrumbs[-1]
             if isinstance(last_crumb, dict):
@@ -251,7 +253,7 @@ class FoodRuExtractor(BaseRecipeExtractor):
                 if isinstance(tag, dict):
                     title = tag.get('title', '')
                     # Простая эвристика: короткие теги часто являются категориями
-                    if title and len(title) < MAX_CATEGORY_TITLE_LENGTH and not title.startswith('в «'):
+                    if title and len(title) < MAX_CATEGORY_TITLE_LENGTH:
                         # Проверяем, что это не временной тег или служебный
                         if not any(word in title.lower() for word in CATEGORY_EXCLUDED_KEYWORDS):
                             # Возвращаем первый подходящий
