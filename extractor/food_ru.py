@@ -12,6 +12,14 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
 
 
+# Константы для фильтрации и ограничений
+MAX_CATEGORY_TITLE_LENGTH = 30  # Максимальная длина названия для определения категории
+CATEGORY_EXCLUDED_KEYWORDS = ['минут', 'партнерск', 'вкус']  # Слова, исключающие тег из категорий
+TAG_EXCLUDED_KEYWORDS = ['перекр', 'пятёрочк', 'партнерск', 'в «']  # Слова для фильтрации служебных тегов
+MIN_FILTERED_TAGS_THRESHOLD = 3  # Минимальное количество тегов после фильтрации
+MAX_TAGS_LIMIT = 10  # Максимальное количество тегов для возврата
+
+
 class FoodRuExtractor(BaseRecipeExtractor):
     """Экстрактор для food.ru"""
     
@@ -223,9 +231,9 @@ class FoodRuExtractor(BaseRecipeExtractor):
                 if isinstance(tag, dict):
                     title = tag.get('title', '')
                     # Простая эвристика: короткие теги часто являются категориями
-                    if title and len(title) < 30 and not title.startswith('в «'):
+                    if title and len(title) < MAX_CATEGORY_TITLE_LENGTH and not title.startswith('в «'):
                         # Проверяем, что это не временной тег или служебный
-                        if not any(word in title.lower() for word in ['минут', 'партнерск', 'вкус']):
+                        if not any(word in title.lower() for word in CATEGORY_EXCLUDED_KEYWORDS):
                             # Возвращаем первый подходящий
                             return title.capitalize()
         
@@ -300,14 +308,14 @@ class FoodRuExtractor(BaseRecipeExtractor):
                 # Фильтруем теги (убираем партнерские проекты)
                 filtered_tags = [t for t in tag_titles if not any(
                     keyword in t.lower() 
-                    for keyword in ['перекр', 'пятёрочк', 'партнерск', 'в «']
+                    for keyword in TAG_EXCLUDED_KEYWORDS
                 )]
                 
                 # Если после фильтрации осталось мало тегов, возвращаем все
-                if len(filtered_tags) < 3:
+                if len(filtered_tags) < MIN_FILTERED_TAGS_THRESHOLD:
                     filtered_tags = tag_titles
                 
-                return ', '.join(filtered_tags[:10])  # Ограничиваем количество тегов
+                return ', '.join(filtered_tags[:MAX_TAGS_LIMIT])
         
         return None
     
