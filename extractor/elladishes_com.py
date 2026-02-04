@@ -27,6 +27,57 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class ElladishesExtractor(BaseRecipeExtractor):
     """Экстрактор для elladishes.com"""
     
+    # Константы для парсинга ингредиентов
+    FRACTION_MAP = {
+        '½': '1/2', '¼': '1/4', '¾': '3/4',
+        '⅓': '1/3', '⅔': '2/3', '⅛': '1/8',
+        '⅜': '3/8', '⅝': '5/8', '⅞': '7/8',
+        '⅕': '1/5', '⅖': '2/5', '⅗': '3/5', '⅘': '4/5'
+    }
+    
+    UNIT_PATTERNS = [
+        'cups?', 'tablespoons?', 'teaspoons?', 'tbsps?', 'tsps?',
+        'pounds?', 'ounces?', 'lbs?', 'oz', 'grams?', 'kilograms?',
+        'g', 'kg', 'milliliters?', 'liters?', 'ml', 'pinch(?:es)?',
+        'dash(?:es)?', 'packages?', 'cans?', 'jars?', 'bottles?',
+        'inch(?:es)?', 'slices?', 'cloves?', 'bunches?', 'sprigs?',
+        'whole', 'halves?', 'quarters?', 'pieces?', 'head', 'heads',
+        'tsp', 'tbsp'
+    ]
+    
+    @staticmethod
+    def _parse_amount_string(amount_str: str) -> float:
+        """
+        Парсинг строки с количеством, включая дроби
+        
+        Args:
+            amount_str: Строка вида "1", "1/2", "1 1/2"
+            
+        Returns:
+            Числовое значение количества
+        """
+        if not amount_str:
+            return 0
+        
+        amount_str = amount_str.strip()
+        
+        # Обработка дробей типа "1/2" или "1 1/2"
+        if '/' in amount_str:
+            parts = amount_str.split()
+            total = 0
+            for part in parts:
+                if '/' in part:
+                    num, denom = part.split('/')
+                    total += float(num) / float(denom)
+                else:
+                    total += float(part)
+            return total
+        else:
+            try:
+                return float(amount_str.replace(',', '.'))
+            except ValueError:
+                return 0
+    
     def _get_recipe_json_ld(self) -> Optional[dict]:
         """Извлечение JSON-LD данных рецепта"""
         json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
@@ -155,20 +206,15 @@ class ElladishesExtractor(BaseRecipeExtractor):
         text = re.sub(r'(\d+)\s+and\s+(\d)', r'\1 \2', text)
         
         # Заменяем Unicode дроби на числа
-        fraction_map = {
-            '½': '1/2', '¼': '1/4', '¾': '3/4',
-            '⅓': '1/3', '⅔': '2/3', '⅛': '1/8',
-            '⅜': '3/8', '⅝': '5/8', '⅞': '7/8',
-            '⅕': '1/5', '⅖': '2/5', '⅗': '3/5', '⅘': '4/5'
-        }
-        
-        for fraction, decimal in fraction_map.items():
+        for fraction, decimal in self.FRACTION_MAP.items():
             text = text.replace(fraction, decimal)
         
+        # Строим паттерн из списка единиц измерения
+        unit_pattern = '|'.join(self.UNIT_PATTERNS)
+        
         # Паттерн для извлечения количества, единицы и названия
-        # Примеры: "1 cup flour", "2 tablespoons butter", "1/2 teaspoon salt"
         # Важно: unit должен быть обязательным для правильного парсинга
-        pattern = r'^([\d\s/.,]+)\s+(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|tsp|tbsp)\s+(.+)'
+        pattern = rf'^([\d\s/.,]+)\s+({unit_pattern})\s+(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -176,26 +222,8 @@ class ElladishesExtractor(BaseRecipeExtractor):
             # Паттерн совпал - есть количество, единица и название
             amount_str, unit, name = match.groups()
             
-            # Обработка количества
-            amount = 0
-            if amount_str:
-                amount_str = amount_str.strip()
-                # Обработка дробей типа "1/2" или "1 1/2"
-                if '/' in amount_str:
-                    parts = amount_str.split()
-                    total = 0
-                    for part in parts:
-                        if '/' in part:
-                            num, denom = part.split('/')
-                            total += float(num) / float(denom)
-                        else:
-                            total += float(part)
-                    amount = total
-                else:
-                    try:
-                        amount = float(amount_str.replace(',', '.'))
-                    except ValueError:
-                        amount = 0
+            # Обработка количества с помощью вспомогательного метода
+            amount = self._parse_amount_string(amount_str)
             
             # Обработка единицы измерения
             unit = unit.strip() if unit else None
@@ -208,26 +236,8 @@ class ElladishesExtractor(BaseRecipeExtractor):
             if simple_match:
                 amount_str, name = simple_match.groups()
                 
-                # Обработка количества
-                amount = 0
-                if amount_str:
-                    amount_str = amount_str.strip()
-                    # Обработка дробей типа "1/2" или "1 1/2"
-                    if '/' in amount_str:
-                        parts = amount_str.split()
-                        total = 0
-                        for part in parts:
-                            if '/' in part:
-                                num, denom = part.split('/')
-                                total += float(num) / float(denom)
-                            else:
-                                total += float(part)
-                        amount = total
-                    else:
-                        try:
-                            amount = float(amount_str.replace(',', '.'))
-                        except ValueError:
-                            amount = 0
+                # Обработка количества с помощью вспомогательного метода
+                amount = self._parse_amount_string(amount_str)
                 
                 # Единица измерения - по умолчанию "pieces" для элементов без явной единицы
                 unit = "pieces"
