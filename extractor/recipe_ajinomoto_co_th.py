@@ -53,21 +53,27 @@ class RecipeAjinomotoCoThExtractor(BaseRecipeExtractor):
     
     def extract_description(self) -> Optional[str]:
         """Извлечение описания рецепта"""
-        # Из JSON-LD
-        if self.json_ld_data and 'description' in self.json_ld_data:
-            desc = self.json_ld_data['description']
-            if desc and desc != self.extract_dish_name():  # Избегаем дубликатов
-                return self.clean_text(desc)
+        dish_name = self.extract_dish_name()
         
-        # Из meta description
+        # Из meta description (приоритет - обычно более развернутое)
         meta_desc = self.soup.find('meta', {'name': 'description'})
         if meta_desc and meta_desc.get('content'):
-            return self.clean_text(meta_desc['content'])
+            desc = self.clean_text(meta_desc['content'])
+            if desc and desc != dish_name:
+                return desc
         
         # Из og:description
         og_desc = self.soup.find('meta', property='og:description')
         if og_desc and og_desc.get('content'):
-            return self.clean_text(og_desc['content'])
+            desc = self.clean_text(og_desc['content'])
+            if desc and desc != dish_name:
+                return desc
+        
+        # Из JSON-LD (последний приоритет, часто дублирует название)
+        if self.json_ld_data and 'description' in self.json_ld_data:
+            desc = self.json_ld_data['description']
+            if desc and desc != dish_name:
+                return self.clean_text(desc)
         
         return None
     
@@ -142,14 +148,32 @@ class RecipeAjinomotoCoThExtractor(BaseRecipeExtractor):
             JSON-строка со списком ингредиентов
         """
         ingredients = []
+        ingredients_text_set = set()  # Для избежания дубликатов
         
-        # Извлекаем из JSON-LD
+        # Стратегия 1: Извлекаем из JSON-LD (обычно неполный список)
         if self.json_ld_data and 'recipeIngredient' in self.json_ld_data:
             raw_ingredients = self.json_ld_data['recipeIngredient']
             
             for ingredient_str in raw_ingredients:
                 parsed = self.parse_ingredient_string(ingredient_str)
-                ingredients.append(parsed)
+                # Добавляем только если еще не было
+                if parsed['name'] not in ingredients_text_set:
+                    ingredients.append(parsed)
+                    ingredients_text_set.add(parsed['name'])
+        
+        # Стратегия 2: Ищем в HTML <p> тегах (часто полный список)
+        # Паттерн: текст с числом и единицей измерения
+        p_tags = self.soup.find_all('p')
+        for p in p_tags:
+            text = p.get_text(strip=True)
+            # Проверяем, соответствует ли паттерну ингредиента
+            # (текст + число + тайская единица измерения)
+            if re.search(r'.+\s+\d+(?:\s+\d+/\d+)?\s+(กรัม|มิลลิลิตร|ช้อนชา|ช้อนโต๊ะ|เม็ด|ลิตร)', text):
+                parsed = self.parse_ingredient_string(text)
+                # Добавляем только если еще не было
+                if parsed['name'] not in ingredients_text_set:
+                    ingredients.append(parsed)
+                    ingredients_text_set.add(parsed['name'])
         
         if ingredients:
             # Возвращаем как JSON-строку
