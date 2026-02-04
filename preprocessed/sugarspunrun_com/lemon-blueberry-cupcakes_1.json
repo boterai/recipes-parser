@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lemon Blueberry Cupcakes",
+    "description": "Perfect for spring or summer, lemon blueberry cupcakes are a bright and sunny sweet treat! My recipe is designed to stay soft and moist even when refrigerated.",
+    "ingredients": "[{\"name\": \"all-purpose flour\", \"units\": \"cups\", \"amount\": \"1 ½\"}, {\"name\": \"granulated sugar\", \"units\": \"cups\", \"amount\": \"¾\"}, {\"name\": \"cornstarch\", \"units\": \"Tablespoons\", \"amount\": \"2\"}, {\"name\": \"baking powder\", \"units\": \"teaspoon\", \"amount\": \"1\"}, {\"name\": \"baking soda\", \"units\": \"teaspoon\", \"amount\": \"¼\"}, {\"name\": \"table salt\", \"units\": \"teaspoon\", \"amount\": \"½\"}, {\"name\": \"neutral cooking oil\", \"units\": \"cup\", \"amount\": \"½\"}, {\"name\": \"buttermilk\", \"units\": \"cup\", \"amount\": \"⅓\"}, {\"name\": \"lemon zest\", \"units\": \"Tablespoons\", \"amount\": \"2\"}, {\"name\": \"lemon juice\", \"units\": \"Tablespoons\", \"amount\": \"2\"}, {\"name\": \"large eggs\", \"units\": null, \"amount\": \"2\"}, {\"name\": \"vanilla extract\", \"units\": \"teaspoon\", \"amount\": \"¼\"}, {\"name\": \"fresh blueberries\", \"units\": \"cup\", \"amount\": \"1\"}]",
+    "instructions": "Preheat oven to 350F (175C) and line a 12-count muffin tin with paper liners. In a large bowl, whisk together flour, sugar, cornstarch, baking powder, baking soda, and salt. Use an electric mixer and slowly drizzle oil into mixture, mixing on low speed to combine. In a separate bowl, whisk together buttermilk, lemon zest, lemon juice, eggs, and vanilla. Slowly drizzle the wet mixture into the dry, stirring until completely combined. Add blueberries and gently fold into the batter. Divide batter evenly into prepared muffin tin. Bake for 20-22 minutes, until cupcakes are baked through. Allow to cool before frosting.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "22 minutes",
+    "total_time": "37 minutes",
+    "notes": "Store at room temperature for up to several hours but otherwise keep refrigerated in an airtight container for up to 4 days.",
+    "tags": "cupcakes, dessert, lemon, blueberry"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "cannelés au café",
+    "description": "Recette de cannelés au café savoureux et moelleux",
+    "ingredients": "[{\"name\": \"café soluble\", \"units\": \"cuillères à soupe\", \"amount\": 2}, {\"name\": \"extrait de café\", \"units\": \"cuillères à soupe\", \"amount\": 2}, {\"name\": \"ricotta\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"oeufs\", \"units\": null, \"amount\": 4}, {\"name\": \"sucre roux\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"farine avec poudre levante\", \"units\": \"g\", \"amount\": 230}, {\"name\": \"sel\", \"units\": \"pincée\", \"amount\": 1}]",
+    "instructions": "Dans le bol de votre robot, fouetter les œufs avec le sucre à vitesse 3. Dès que le mélange mousse, installer le batteur plat et incorporer la ricotta. Mélanger l'ensemble jusqu'à ce que le mélange soit lisse. Ajouter lors le café soluble et l'extrait de café. Baisser la vitesse à 2. Incorporer progressivement la farine et le sel. Mêler jusqu'à ce que la pâte soit homogène. Répartir dans des moules à cannelés et enfourner 30 minutes à 210°C. Laisser refroidir complètement avant de démouler. Placer au frais avant de servir.",
+    "category": "Dessert",
+    "prep_time": "10 minutes",
+    "cook_time": "30 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "cannelés,café,dessert"
+}

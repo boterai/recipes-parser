@@ -1,0 +1,12 @@
+{
+    "dish_name": "Japonijos troškinta „Kabocha“ moliūgų troškinys",
+    "description": "Populiarus japonų patiekalas, pagamintas iš Kabocha moliūgo, troškinto su dashi, sojos padažu ir prieskoniais.",
+    "ingredients": "[{\"name\": \"Kabocha moliūgai\", \"units\": null, \"amount\": null}, {\"name\": \"Dashi\", \"units\": null, \"amount\": null}, {\"name\": \"Sake\", \"units\": null, \"amount\": null}, {\"name\": \"Cukrus\", \"units\": null, \"amount\": null}, {\"name\": \"Sojos padažas\", \"units\": null, \"amount\": null}, {\"name\": \"Druska\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Supjaustyti Kabocha aštriu peiliu į lygiaverčius gabaliukus. 2. Vieno sluoksnio gabalėliai puode, odos pusėje žemyn. 3. Įpilkite Dashi, sojos padažo ir švelniai sujunkite puodą, kad sumaišytumėte prieskonius. 4. Užvirkite, tada sumažinkite šilumą ir troškinkite 20–30 minučių, kol suminkštės. 5. Nuimkite nuo ugnies, uždenkite dangčiu ir leiskite sėdėti maždaug 30 minučių, kol atvės.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Galima pritaikyti vegetariškai/veganai naudojant Vegan Dashi. Patiekti su imbieru, jei pageidaujama.",
+    "tags": "japonų virtuvė, troškinys, daržovės"
+}

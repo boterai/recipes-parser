@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ravioli cu ciuperci",
+    "description": "Ravioli stuffed with mushrooms and served with a cheese sauce.",
+    "ingredients": "[{\"name\": \"foi de paste pentru ravioli\", \"units\": \"pieces\", \"amount\": 4}, {\"name\": \"ciuperci champignon\", \"units\": \"pieces\", \"amount\": 6}, {\"name\": \"ceapa mica\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"usturoi\", \"units\": \"cloves\", \"amount\": 2}, {\"name\": \"ou\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"pesmet\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"parmezan ras\", \"units\": \"grams\", \"amount\": 120}, {\"name\": \"mozzarella\", \"units\": \"grams\", \"amount\": 140}, {\"name\": \"patrunjel tocat\", \"units\": null, \"amount\": null}, {\"name\": \"ulei masline\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"lapte\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"unt\", \"units\": \"slice\", \"amount\": 1}, {\"name\": \"faina\", \"units\": \"teaspoon\", \"amount\": 1}]",
+    "instructions": "Uleiul de masline se incinge intr-o cratita. Se caleste ceapa si usturoiul, tocate marunt. Cand ceapa are culoarea aurie se adauga ciupercile, tocate marunt. Se pune un varf de lingurita de sare pentru ca ciupercile sa lase apa si se tine pe foc pana scade complet. Se racesc ciupercile si se amesteca oul, pesmetul, parmezanul si mozzarella. Se condimenteaza cu piper, se gusta de sare, se adauga patrunjelul tocat. Se pune o foaie de ravioli si, cu lingurita, se pune din loc in loc compozitie de ravioli. Se uda o a doua foaie de ravioli, pentru a se lipi de prima, si se pune peste foaia cu compozitie. Se taie cu rola de taiat prajituri sau cu cutitul de pizza. Se preseaza cele doua foi pentru a se lipi, in cazul in care nu s-au lipit cand le-am taiat. Se pregateste sosul de branza pentru ravioli: se topeste untul intr-o tigaie, se inglobeaza o lingura de faina si se adauga imediat laptele cald. Se mai tine 1 minut pe foc, sa se ingroase un pic sosul. Se ia de pe foc si se adauga mozzarela si parmezanul. Se amesteca pana cand se obtine un sos omogen. Ravioli se fierb 5 minute in apa sarata. Se scurg si se servesc cu sosul de branza.",
+    "category": "Paste",
+    "prep_time": null,
+    "cook_time": "5 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "ravioli,mushrooms,cheese sauce,pasta"
+}

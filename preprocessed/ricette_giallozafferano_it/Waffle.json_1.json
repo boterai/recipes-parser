@@ -1,0 +1,12 @@
+{
+    "dish_name": "Waffle",
+    "description": "Deliziosi waffle ideali da gustare a colazione o per il brunch con vari topping.",
+    "ingredients": "[{\"name\": \"Latte intero\", \"units\": \"g\", \"amount\": 320}, {\"name\": \"Farina 00\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"Burro\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"Uova\", \"units\": \"medie\", \"amount\": 4}, {\"name\": \"Zucchero\", \"units\": \"g\", \"amount\": 60}, {\"name\": \"Lievito in polvere per dolci\", \"units\": \"g\", \"amount\": 13}, {\"name\": \"Sale fino\", \"units\": \"g\", \"amount\": 3}, {\"name\": \"Burro\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Burro\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"Sciroppo di acero\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"Mirtilli\", \"units\": \"q.b.\", \"amount\": null}]",
+    "instructions": "Per preparare i waffle come prima cosa sciogliete il burro e lasciatelo intiepidire. Poi versate in una ciotola la farina, il lievito, il sale e lo zucchero. Mescolate con una frusta, poi aggiungete anche il latte e le uova. Mescolate bene con la frusta, poi unite il burro fuso e mescolate ancora sino ad ottenere una pastella liscia e omogenea. Scaldate bene la macchina per waffle, poi versate un mestolino di composto all'interno. Non versatene troppo, fate in modo che l'intera base sia coperta da uno strato abbastanza sottile. Richiudete la macchina e cuocete i waffle a media potenza. Cuocete per 2-3 minuti circa e, non appena saranno ben dorati, trasferite i waffle su un vassoio aiutandovi con una spatolina. Proseguite così sino a terminare l'impasto; con queste dosi otterrete 10 waffle. A questo punto potete dividerli a metà con un coltello, per separarli. Sistematene un paio in un piatto da portata. Guarnite con un cubetto di burro e dei mirtilli, poi irrorate con lo sciroppo d'acero. I vostri waffle sono pronti per essere gustati!",
+    "category": "Dolci",
+    "prep_time": "10 minutes",
+    "cook_time": "15 minutes",
+    "total_time": null,
+    "notes": "I waffle senza sciroppo d’acero si possono conservare in frigorifero, chiusi in contenitore ermetico per massimo 2 giorni; scaldateli prima di servirli. La cottura deve essere molto veloce, se si dovesse prolungare troppo i waffle potrebbero diventare duri e secchi.",
+    "tags": "waffle, dolci, colazione, brunch"
+}

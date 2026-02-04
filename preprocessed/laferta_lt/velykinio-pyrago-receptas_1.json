@@ -1,0 +1,12 @@
+{
+    "dish_name": "Velykinis pyragas",
+    "description": "Tradiciškas ir mėgstamas patiekalas, kuris paprastai ruošiamas šventiniu laikotarpiu.",
+    "ingredients": "[{\"name\": \"miltų\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"cukraus\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"sviesto\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"kiaušiniai\", \"units\": \"pcs\", \"amount\": 4}, {\"name\": \"pieno\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"kepimo miltelių\", \"units\": \"pakelis\", \"amount\": 1}, {\"name\": \"vanilės ekstrakto\", \"units\": \"šaukštelis\", \"amount\": 1}, {\"name\": \"druskos\", \"units\": null, \"amount\": \"žiupsnelis\"}, {\"name\": \"džiovinti vaisiai ar riešutai\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Pradėkite nuo orkaitės įkaitinimo iki 180°C. 2. Dideliame dubenyje išsukite sviestą su cukrumi, kol masė taps šviesi ir puri. 3. Po vieną įmuškite kiaušinius, kiekvieną kartą gerai išmaišydami. 4. Įpilkite vanilės ekstraktą ir pieną, vėl gerai išmaišykite. 5. Kitame dubenyje sumaišykite miltus, kepimo miltelius ir druską. 6. Pridėkite miltų mišinį prie sviesto masės ir gerai išmaišykite, kol masė taps vientisa. 7. Jei norite, pridėkite džiovintų vaisių ar riešutų ir vėl išmaišykite. 8. Supilkite tešlą į kepimo formą, išklotą kepimo popieriumi. 9. Kepkite pyragą orkaitėje apie 45-50 minučių, kol jis taps auksinės spalvos ir pro vidurį įkišus medinį pagaliuką jis išlips sausas. 10. Leiskite pyragui atvėsti prieš pjaustant.",
+    "category": "Dessert",
+    "prep_time": "30 minutes",
+    "cook_time": "45-50 minutes",
+    "total_time": "1 hour 30 minutes",
+    "notes": "Galite eksperimentuoti su ingredientais, pavyzdžiui, pridėti citrinos žievelės arba cinamono. Būkite atsargūs, kad pyragas neperkeptų.",
+    "tags": "pyragas, Velykinis, desertas"
+}

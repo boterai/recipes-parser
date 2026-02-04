@@ -1,0 +1,12 @@
+{
+    "dish_name": "Najboljši kruh",
+    "description": "Okusen in opojno dišeč kruh, narejen iz mešanice polnozrnate, ostre in mehke moke.",
+    "ingredients": "[{\"name\": \"moka\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"suhi kvas\", \"units\": \"vrečka\", \"amount\": 1}, {\"name\": \"sol\", \"units\": \"žlički\", \"amount\": 2}, {\"name\": \"olja\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"mlačna voda\", \"units\": \"dl\", \"amount\": 3}]",
+    "instructions": "V posodo presejemo moko in ji primešamo kvas ter sol. Prilijemo vodo in olje, nato pa vse skupaj z robotom mešamo na najvišji hitrosti 5 minut. Ko je testo zgneteno, posodo pokrijemo in pustimo, da testo vzhaja na toplem mestu toliko časa, da naraste na dvojno količino. Vzhajano testo z rokami na hitro pregnetemo in ga položimo na pekač, posut z malo ostre moke. Pustimo, da še enkrat vzhaja. Preden damo kruh v pečico, ga lahko na vrhu malo zarežemo. Pečemo ga 45 minut na 180 stopinjah Celzija.",
+    "category": null,
+    "prep_time": "45 minutes",
+    "cook_time": "45 minutes",
+    "total_time": "1 hour 30 minutes",
+    "notes": null,
+    "tags": null
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Wheat Germ Pancakes",
+    "description": "Wheat germ pancakes are a nutritious breakfast option that incorporates wheat germ for added health benefits.",
+    "ingredients": "[{\"name\": \"whole wheat flour\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"wheat germ\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"baking powder\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"eggs\", \"units\": null, \"amount\": 2}, {\"name\": \"milk\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"vegetable oil\", \"units\": \"tablespoons\", \"amount\": 2}]",
+    "instructions": "1. In a large bowl, combine whole wheat flour, wheat germ, baking powder, and salt. 2. In another bowl, whisk together eggs, milk, and vegetable oil. 3. Pour the wet ingredients into the dry ingredients and stir until just combined. 4. Heat a lightly oiled griddle or frying pan over medium-high heat. Pour or scoop the batter onto the griddle, using approximately 1/4 cup for each pancake. Cook until bubbles form and the edges are dry, about 2 to 3 minutes, then flip and cook until browned on the other side. 5. Serve hot with your favorite toppings.",
+    "category": "Breakfast",
+    "prep_time": null,
+    "cook_time": "30 minutes",
+    "total_time": null,
+    "notes": "For a dairy-free version, use almond or oat milk. Flax eggs can replace chicken eggs for a vegan option.",
+    "tags": "pancakes, breakfast, healthy, wheat germ"
+}

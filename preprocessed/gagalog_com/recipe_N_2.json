@@ -1,0 +1,12 @@
+{
+    "dish_name": "シュークリーム",
+    "description": "美味しいシュークリーム作り方・レシピを、パティシエの技術と科学的根拠に基づいて詳しく解説します。",
+    "ingredients": "[{\"name\": \"薄力粉\", \"units\": \"g\", \"amount\": 60}, {\"name\": \"無塩バター\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"水\", \"units\": \"ml\", \"amount\": 125}, {\"name\": \"塩\", \"units\": \"g\", \"amount\": 1}, {\"name\": \"全卵\", \"units\": \"個\", \"amount\": 2}, {\"name\": \"牛乳\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"卵黄\", \"units\": \"個\", \"amount\": 3}, {\"name\": \"砂糖\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"薄力粉\", \"units\": \"g\", \"amount\": 20}, {\"name\": \"バニラエッセンス\", \"units\": null, \"amount\": null}]",
+    "instructions": "手順1：バターと水を沸騰させる。手順2：小麦粉を加える。手順3：卵を加える。成形と焼成：絞り方のポイント、焼成温度と時間を守る。カスタードクリームの作り方を含む。",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "失敗しないための重要なポイントや応用レシピとアレンジが含まれています。",
+    "tags": "シュークリーム, デザート, お菓子"
+}

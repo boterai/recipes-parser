@@ -1,0 +1,12 @@
+{
+    "dish_name": "Irlantilainen soodaleipä",
+    "description": "Perinteinen irlantilainen leipä, joka säilyy mehevänä pari päivää.",
+    "ingredients": "[{\"name\": \"vehnäjauhoja\", \"units\": \"dl\", \"amount\": 3}, {\"name\": \"grahamjauhoja\", \"units\": \"dl\", \"amount\": 3}, {\"name\": \"ruokasoodaa\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"suolaa\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"piimää\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"maitoa\", \"units\": \"dl\", \"amount\": 1}]",
+    "instructions": "Sekoita kulhossa kuivat aineet. Lisää joukkoon piimä ja maito ja sekoita tasaiseksi. Kumoa taikina leivinpaperoidulle uunipellille ja muotoile jauhojen avulla pyöreä leipä. Viillä terävällä veitsellä ristiviilto leivän pintaan. Paista 200-asteisessa uunissa 30–40 minuuttia tai, kunnes leipä kumisee sitä koputettaessa.",
+    "category": "Leivät ja sämpylät",
+    "prep_time": null,
+    "cook_time": "30–40 minutes",
+    "total_time": null,
+    "notes": "Irlantilaiset murtavat leivän neljään osaan viiltojen mukaan ja leikkaavat neljännesleivät edelleen viipaleiksi.",
+    "tags": "sokeriton, kananmunaton, vähärasvainen"
+}

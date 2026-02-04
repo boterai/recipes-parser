@@ -1,0 +1,12 @@
+{
+    "dish_name": "Oeufs Suzette",
+    "description": "A dish served to George V, involving baked potatoes filled with a creamy potato mixture, ham, poached eggs, and cheese.",
+    "ingredients": "[{\"name\": \"baking potatoes\", \"units\": \"medium\", \"amount\": 4}, {\"name\": \"butter\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"milk\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"double cream\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"salt\", \"units\": null, \"amount\": \"big pinch\"}, {\"name\": \"ham\", \"units\": \"thin slices\", \"amount\": 8}, {\"name\": \"eggs\", \"units\": \"poached\", \"amount\": 4}, {\"name\": \"Gruyere or Comte cheese\", \"units\": null, \"amount\": \"handful\"}, {\"name\": \"green salad\", \"units\": \"to serve\", \"amount\": null}]",
+    "instructions": "1. Preheat the oven to 220C/425F/gas mark 7. 2. Bake the potatoes for an hour until the skins are deep brown and crisp. When cool enough to handle, slice off the tops and scoop the soft flesh out into a bowl. Add the butter, milk, cream and salt to the bowl and mix well together. 3. Heat the grill to high. 4. Line the inside of each potato shell with two slices of ham, then spoon the potato mixture back into the shells, leaving a good 5cm gap at the top of each. Add the poached eggs, top with the cheese, then brown under the fierce grill and top with black pepper. 5. Serve with a crisp green salad.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "60 minutes",
+    "total_time": null,
+    "notes": "The original recipe contains bechamel sauce, but with all the butter and cream involved it’s an embellishment too far.",
+    "tags": null
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Patatesli Çıtır Kolay Börek",
+    "description": "Hem pratik hazırlanışı hem de lezzetiyle pek çok kişinin favorisidir.",
+    "ingredients": "[{\"name\": \"yufka\", \"units\": \"adet\", \"amount\": 5}, {\"name\": \"tereyağı\", \"units\": \"gr\", \"amount\": 200}, {\"name\": \"patates\", \"units\": \"adet\", \"amount\": 4}, {\"name\": \"tuz\", \"units\": \"çay kaşığı\", \"amount\": 1}, {\"name\": \"pul biber\", \"units\": \"çay kaşığı\", \"amount\": 1}, {\"name\": \"karabiber\", \"units\": \"çay kaşığı\", \"amount\": 0.5}, {\"name\": \"yumurta sarısı\", \"units\": \"adet\", \"amount\": 2}, {\"name\": \"susam\", \"units\": null, \"amount\": null}]",
+    "instructions": "Haşlanmış patatesleri uygun bir kaba alalım. Üzerine baharatlarını ekleyip püre kıvamına gelinceye kadar ezelim. Yufkaları üst üste dizip aralarına eritilmiş tereyağını sürelim. Mutfak aparatı ile yufkaların üzerine bastırıp keselim. Yufkaların üzerine iç harcını ekleyip katlayarak şekil verelim. Şekil verdiğimiz börekleri yağlı kağıt serili fırın tepsisine dizelim. Üzerine bir fırça ile yumurta sarısı sürüp susam serpelim. Önceden ısıtılmış 180 derece fırında pişirelim.",
+    "category": "Hamur İşleri",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Hazırladığınız börekleri dondurarak daha sonra kolayca pişirebilirsiniz.",
+    "tags": "Patatesli, Börek, Hamur İşleri"
+}

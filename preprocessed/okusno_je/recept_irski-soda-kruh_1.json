@@ -1,0 +1,12 @@
+{
+    "dish_name": "Irski soda kruh",
+    "description": "Irski kruh je zelo sočen, rahel in hitro narejen, saj namesto kvasa uporabimo sodo bikarbono.",
+    "ingredients": "[{\"name\": \"gladke moke\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"polnozrnate moke\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"ovsenih kosmičev\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"soli\", \"units\": \"žličke\", \"amount\": 1.5}, {\"name\": \"sode bikarbone\", \"units\": \"žličke\", \"amount\": 1.5}, {\"name\": \"pinjenca\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"melase\", \"units\": \"žlici\", \"amount\": 2}]",
+    "instructions": "Pečico segrejemo na 230 stopinj Celzija. Nizek pekač obložimo s papirjem za peko. V skledo dodamo obe vrsti moke, ovsene kosmiče, sol in sodo bikarbono. Sestavine dobro premešamo, nato pa v skledo prilijemo pinjenec in melaso, če jo bomo uporabili. Premešamo, da moka vpije tekočino, testo pa nato še z rokami nežno in hitro pregnetemo. Če se nam zdi potrebno, dodamo še malo moke, a ne pretiravamo: bolj lepljivo testo, bolj sočen kruh. Testo stresemo v pekač in ga oblikujemo v približno 5 centimetrov visok hlebec. Z nožem ga po vrhu križno zarežemo približno 1 cm globoko. Pekač potisnemo v ogreto pečico. Hlebec pečemo 15 minut, potem pa temperaturo znižamo na 200 stopinj Celzija in kruh pečemo še 20-25 minut. Pečen je, ko votlo zadoni, če po spodnji strani potrkamo s členki. Pečen kruh preložimo na rešetko in pustimo, da se ohladi do mlačnega.",
+    "category": null,
+    "prep_time": "15 minutes",
+    "cook_time": "40 minutes",
+    "total_time": "55 minutes",
+    "notes": "Namesto pinjenca lahko uporabimo tekoči jogurt ali mleko, ki smo mu dodali žličko limoninega soka. Melasa je stranski proizvod pri proizvodnji sladkorja in se pogosto uporablja pri peki, saj podaljšuje trajnost kruha in kolačev.",
+    "tags": null
+}

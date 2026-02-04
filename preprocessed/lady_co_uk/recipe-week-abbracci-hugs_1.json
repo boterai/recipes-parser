@@ -1,0 +1,12 @@
+{
+    "dish_name": "ABBRACCI 'Hugs'",
+    "description": "A simple recipe for buttery and crumbly biscuits shaped like two-colour rings that 'hug' each other.",
+    "ingredients": "[{\"name\": \"unsalted butter\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"icing sugar\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"vanilla paste\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"medium egg\", \"units\": \"unit\", \"amount\": 1}, {\"name\": \"double-zero or plain flour\", \"units\": \"g\", \"amount\": 190}, {\"name\": \"baking powder\", \"units\": \"tsp\", \"amount\": 0.25}, {\"name\": \"cornflour\", \"units\": \"g\", \"amount\": 15}, {\"name\": \"unsweetened cocoa powder\", \"units\": \"g\", \"amount\": 15}]",
+    "instructions": "1. Preheat the oven to 180C/350F/gas mark 4. 2. Beat butter, icing sugar, vanilla, and salt until pale and fluffy. Gradually add beaten egg. 3. Sift flour and baking powder into the mixture and combine. 4. Divide dough, add cornflour to one and cocoa to the other, knead separately. Chill for at least an hour. 5. Roll into small balls, shape into rings, chill again for 30 minutes. 6. Bake for 18-20 minutes until light brown. Cool on a wire rack.",
+    "category": "Dessert",
+    "prep_time": "25 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "45 minutes",
+    "notes": "Keeps for up to a week in an airtight container.",
+    "tags": "biscuits, Italian, dessert"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Szaftos Krumplis-Sajtos Bunda",
+    "description": "A krumplis-sajtos bunda egy védőpajzs, ami garantálja, hogy a sertéshús minden falatja nedvességet és ízt sugároz.",
+    "ingredients": "[{\"name\": \"Sertéskaraj\", \"units\": \"kg\", \"amount\": \"1\"}, {\"name\": \"Krumpli\", \"units\": \"db\", \"amount\": \"2\"}, {\"name\": \"Sajt\", \"units\": \"g\", \"amount\": \"200\"}, {\"name\": \"Tojás\", \"units\": \"db\", \"amount\": \"2\"}, {\"name\": \"Liszt\", \"units\": \"evőkanál\", \"amount\": \"2\"}, {\"name\": \"Só\", \"units\": null, \"amount\": null}, {\"name\": \"Bors\", \"units\": null, \"amount\": null}, {\"name\": \"Mustár\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. A sertéshúst sózzuk, borsozzuk, majd a krumplit reszeljük le. 2. A reszelt krumplit keverjük össze a sajttal, tojással, liszttel, sóval és borssal. 3. A bundát kenjük a karajra, majd süssük 180 °C-on 30-35 percig.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "A bunda nem csak a húst védi, hanem egy fantasztikus köretként is funkcionál.",
+    "tags": "sertéshús, bunda, főétel"
+}

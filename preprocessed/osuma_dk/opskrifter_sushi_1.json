@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sushi",
+    "description": "Nem guide til hjemmelavet sushi med frisk laks, agurk og avocado.",
+    "ingredients": "[{\"name\": \"sushi ris\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"vand\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"riseddike\", \"units\": \"spsk\", \"amount\": 5}, {\"name\": \"sukker\", \"units\": \"spsk\", \"amount\": 2}, {\"name\": \"salt\", \"units\": \"tsk\", \"amount\": 1}, {\"name\": \"nori-blade\", \"units\": \"stk\", \"amount\": 4}, {\"name\": \"frisk laks\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"agurk\", \"units\": \"stk\", \"amount\": 1}, {\"name\": \"avocado\", \"units\": \"stk\", \"amount\": 1}, {\"name\": \"sesamfrø\", \"units\": null, \"amount\": null}, {\"name\": \"soyasauce\", \"units\": null, \"amount\": null}, {\"name\": \"wasabi\", \"units\": null, \"amount\": null}, {\"name\": \"syltede ingefærskiver\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Skyl risen grundigt under koldt vand. 2. Kog risen i vand. 3. Lav sushi-eddike. 4. Bland risen med eddiken. 5. Forbered arbejdspladsen. 6. Læg nori-bladet. 7. Fordel risen. 8. Læg fyldet på. 9. Rul sushien. 10. Forsegl kanten. 11. Skær sushien.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Brug ferske råvarer og hold fingrene fugtige for at undgå klæbrighed.",
+    "tags": "sushi, japansk, hjemmelavet, aftensmad"
+}

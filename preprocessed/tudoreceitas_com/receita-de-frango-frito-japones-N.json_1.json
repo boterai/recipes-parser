@@ -1,0 +1,12 @@
+{
+    "dish_name": "Frango frito japonês",
+    "description": "Uma receita muito popular da culinária japonesa, onde pedaços de frango são marinados e fritos até ficarem crocantes.",
+    "ingredients": "[{\"name\": \"Peito de frango\", \"units\": \"unidade\", \"amount\": 1}, {\"name\": \"Farinha de grão de bico\", \"units\": \"xícara\", \"amount\": 1}, {\"name\": \"Shoyu\", \"units\": \"xícara\", \"amount\": 1}, {\"name\": \"Saquê\", \"units\": \"taça\", \"amount\": 1}, {\"name\": \"Gengibre em pó\", \"units\": \"colher de café\", \"amount\": 1}, {\"name\": \"Pasta de alho\", \"units\": \"pitada\", \"amount\": 1}, {\"name\": \"Sal\", \"units\": \"pitada\", \"amount\": 1}, {\"name\": \"Pimenta do reino\", \"units\": \"pitada\", \"amount\": 1}, {\"name\": \"Óleo para fritar\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Prepare todos os ingredientes. 2. Corte o peito de frango em cubos e coloque em uma tigela. 3. Prepare a marinada com shoyu, saquê, pasta de alho e gengibre em pó. Misture bem. 4. Adicione a marinada ao frango e deixe marinar por 1 hora na geladeira. 5. Prepare a farinha de grão de bico para revestir o frango. 6. Passe os pedaços de frango pela farinha. 7. Reserve os pedaços de frango. 8. Aqueça o óleo e frite o frango até dourar. 9. Remova o excesso de gordura com papel toalha. 10. Sirva polvilhado com gergelim e acompanhe com molho teriyaki.",
+    "category": "Prato principal",
+    "prep_time": "1 hour",
+    "cook_time": "30 minutes",
+    "total_time": "1 hour 30 minutes",
+    "notes": "A marinada pode ser deixada por mais tempo para um sabor mais intenso.",
+    "tags": "frango, japonês, frito, receita"
+}

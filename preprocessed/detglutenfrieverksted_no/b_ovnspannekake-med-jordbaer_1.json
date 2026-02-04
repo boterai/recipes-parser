@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ovnspannekake med jordbær",
+    "description": "Ovnspannekake smaker like godt som vanlige pannekaker og er superenkelt å lage!",
+    "ingredients": "[{\"name\": \"Rismel fullkorn\", \"units\": \"g\", \"amount\": 25}, {\"name\": \"Fin Bakst\", \"units\": \"g\", \"amount\": 60}, {\"name\": \"vaniljepulver eller vaniljeekstrakt\", \"units\": \"ts\", \"amount\": 0.5}, {\"name\": \"salt\", \"units\": \"ts\", \"amount\": 0.5}, {\"name\": \"egg\", \"units\": null, \"amount\": 3}, {\"name\": \"sukker\", \"units\": \"g\", \"amount\": 10}, {\"name\": \"melk eller plantebasert\", \"units\": \"g\", \"amount\": 160}, {\"name\": \"smør\", \"units\": \"ss\", \"amount\": 2}]",
+    "instructions": "1. Forvarm ovnen til 220°C. Plasser en ovnsrist på nest nederste rille, og sett en stekepanne av støpejern (eller en annen ovnsfast stekepanne) på risten mens ovnen varmes opp i ca. 30 minutter. Det er viktig at både ovnen og stekepannen er ordentlig varmet opp. 2. Når ovnen er varm, har du alle ingrediensene utenom smør i en blender eller foodprosessor. Kjør til alt er godt blandet, 30-60 sek. Røren vil være tynn. Alternativt blander du sammen Rismel, Fin Bakst, salt (og vaniljepulver hvis du bruker det) i en bakebolle. I en annen bolle visper du sammen egg og sukker til det er lyst og luftig. Hell deretter sakte i melken (og vaniljeekstrakt hvis du bruker det), mens du fortsetter å vispe til alt er godt blandet. Tilsett de tørre ingrediensene gradvis i eggeblandingen mens du visper til du har en klumpefri røre. 3. Ha 2 ss smør i den varme stekepannen og la den stå i ovnen i ca. 1 minutt til smøret har smeltet og brunet litt. 4. Når smøret er smeltet, tar du forsiktig stekepannen ut av ovnen og heller røren oppi. 5. Sett stekepannen rett tilbake i ovnen og stek i ca. 20 minutter, til pannekaken er luftig og gyllenbrun. Det er viktig å ikke åpne ovnsdøren under stekingen! 6. Ta stekepannen ut av ovnen, ha på ønsket topping og server pannekaken med en gang. Du kan servere den direkte fra pannen, eller legge den over på et serveringsfat.",
+    "category": null,
+    "prep_time": "30 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "50 minutes",
+    "notes": "Serveres med alt du ønsker av topping som frukt, bær, syltetøy, melis, lønnesirup, pisket krem eller vaniljeis.",
+    "tags": null
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Grinch Cupcakes",
+    "description": "Easy, Festive & Fun Treats for All Ages",
+    "ingredients": "[{\"name\": \"all-purpose flour\", \"units\": \"cups\", \"amount\": \"1 ¼\"}, {\"name\": \"granulated sugar\", \"units\": \"cup\", \"amount\": \"1\"}, {\"name\": \"vegetable oil\", \"units\": \"cup\", \"amount\": \"¼\"}, {\"name\": \"large eggs\", \"units\": \"pieces\", \"amount\": \"2\"}, {\"name\": \"pure vanilla extract\", \"units\": \"tsp\", \"amount\": \"2\"}, {\"name\": \"peppermint extract\", \"units\": \"tsp\", \"amount\": \"¼\"}, {\"name\": \"full-fat sour cream\", \"units\": \"cup\", \"amount\": \"¼\"}, {\"name\": \"milk\", \"units\": \"cup\", \"amount\": \"⅔\"}, {\"name\": \"Electric Green gel food coloring\", \"units\": null, \"amount\": null}, {\"name\": \"unsalted butter\", \"units\": \"cups\", \"amount\": \"2\"}, {\"name\": \"powdered sugar\", \"units\": \"cups\", \"amount\": \"8\"}, {\"name\": \"vanilla extract\", \"units\": \"tbsp\", \"amount\": \"1\"}, {\"name\": \"Red, black, and white gel food coloring\", \"units\": null, \"amount\": null}, {\"name\": \"Yellow M&Ms\", \"units\": null, \"amount\": null}, {\"name\": \"lime green cupcake liners\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Preheat oven to 350°F (175°C). Line a muffin tin with festive liners. In a large bowl, whisk sugar, oil, eggs, and extracts until smooth. Stir in sour cream. In a separate bowl, sift flour, baking powder, and salt. Fill liners ⅔ full. Bake 14–16 minutes until a toothpick comes out clean. Let cool completely. 2. Beat cold butter until fluffy (~5 mins). Gradually add powdered sugar, vanilla, and a pinch of salt. Split frosting into four parts: Green: 90% of the batch (tint with electric green + a dab of yellow). Red, Black, White: Small portions for details. 3. Fit a piping bag with a Wilton 233 grass tip. Starting at the base, pipe upward strokes to create wild, grassy hair. Use a round tip (Wilton 1A) to pipe a red swirl on top. Add a white pompom and trim with white frosting. Press halved yellow M&Ms for eyes. Pipe black pupils and eyebrows.",
+    "category": "Dessert",
+    "prep_time": "45 minutes",
+    "cook_time": "16 minutes",
+    "total_time": "1 hour 1 minute",
+    "notes": "Frosted Grinch cupcakes can safely sit out at room temperature for 2-3 days if stored in an airtight container. For longer storage, refrigerate them (without decorations) for up to 5 days.",
+    "tags": "Christmas, Cupcakes, Dessert, Festive"
+}

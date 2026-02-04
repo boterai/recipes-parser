@@ -1,0 +1,12 @@
+{
+    "dish_name": "cannelés au nougat",
+    "description": null,
+    "ingredients": "[{\"name\": \"oeufs\", \"units\": null, \"amount\": 3}, {\"name\": \"farine\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"rhum\", \"units\": \"bouchons\", \"amount\": 2}, {\"name\": \"lait\", \"units\": \"l\", \"amount\": 0.5}, {\"name\": \"beurre\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"nougat\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"sucre\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"sucre vanillé\", \"units\": \"sachet\", \"amount\": 1}]",
+    "instructions": "Mettre dans une casserole le nougat, le lait et le beurre, porter le lait à ébullition et bien remuer au fouet pour dissoudre le nougat. A part, battre les oeufs avec la farine, ajouter les sucres et le rhum. Verser dessus le mélange au nougat et laisser reposer une nuit. Le jour J, mettre au four à 220°.",
+    "category": null,
+    "prep_time": "10 minutes",
+    "cook_time": "20 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Křehké plněné rohlíčky",
+    "description": "Recept na jednoduché rohlíčky zvládne každá kuchařinka.",
+    "ingredients": "[{\"name\": \"Vejce\", \"units\": \"ks\", \"amount\": 1}, {\"name\": \"Mléko\", \"units\": \"lžic\", \"amount\": 8}, {\"name\": \"Droždí\", \"units\": \"kostka\", \"amount\": 1}, {\"name\": \"Polohrubá mouka\", \"units\": \"dkg\", \"amount\": 50}, {\"name\": \"Tuk na pečení\", \"units\": \"dkg\", \"amount\": 25}, {\"name\": \"Cukr moučka\", \"units\": null, \"amount\": null}, {\"name\": \"Tvarohová nádivka\", \"units\": null, \"amount\": null}]",
+    "instructions": "Na vál si nasypeme mouku, ve které uděláme důlek. Rozdrobíme do něj droždí, přidáme změklý tuk na pečení, vejce a mléko. Vypracujeme těsto, které rozdělíme na 6 dílů. Z každého dílu vyválíme placku, kterou rádýlkem rozdělíme na osminy. Do každé osminy dáme trochu tvarohové nádivky a stočíme do rohlíčku. Klademe na plech vyložený pečícím papírem. Křehké plněné rohlíčky dáme péct. Pečeme v elektrické troubě na 180 °C asi 20 - 25 minut. Ještě horké křehké rohlíčky obalíme v moučkovém cukru.",
+    "category": null,
+    "prep_time": "75 minutes",
+    "cook_time": "20-25 minutes",
+    "total_time": "75 minutes",
+    "notes": "Doporučuje se přidat sůl do těsta pro lepší chuť.",
+    "tags": "rohlíčky, pečení, dezert"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Grybu sriuba",
+    "description": "Grybu sriuba yra tradicinis lietuviškas patiekalas, kuris puikiai tinka šaltoms dienoms.",
+    "ingredients": "[{\"name\": \"šviežių grybų\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"svogūno\", \"units\": \"vidutinio dydžio\", \"amount\": 1}, {\"name\": \"morkų\", \"units\": \"vidutinio dydžio\", \"amount\": 2}, {\"name\": \"bulvių\", \"units\": null, \"amount\": 2}, {\"name\": \"daržovių sultinio\", \"units\": \"litras\", \"amount\": 1}, {\"name\": \"grietinėlės\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"druskos\", \"units\": null, \"amount\": null}, {\"name\": \"pipirų\", \"units\": null, \"amount\": null}, {\"name\": \"šviežių petražolių\", \"units\": null, \"amount\": null}]",
+    "instructions": "Nuvalykite grybus ir supjaustykite juos smulkiais gabalėliais. Supjaustykite svogūną ir morkas. Įkaitinkite didelę keptuvę su šiek tiek aliejaus, tada pridėkite svogūnus ir morkas. Kepkite, kol svogūnai taps permatomi. Pridėkite grybus ir kepkite dar 5-7 minutes, kol jie suminkštės. Supjaustykite bulves kubeliais ir pridėkite jas į keptuvę. Tada supilkite daržovių sultinį ir užvirkite. Virti sriubą apie 15-20 minučių, kol bulvės taps minkštos. Įpilkite grietinėlės ir gerai išmaišykite. Pagardinkite druska ir pipirais pagal skonį. Patiekite sriubą šiltą, apibarstytą šviežiomis petražolėmis.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "40 minutes",
+    "total_time": "40 minutes",
+    "notes": "Grybu sriuba yra labai universali, todėl galite eksperimentuoti su ingredientais. Pavyzdžiui, galite pridėti kitų daržovių, tokių kaip salierai ar paprika, kad suteiktumėte sriubai daugiau skonio. Be to, jei norite, kad sriuba būtų turtingesnė, galite naudoti laukinių grybų mišinį. Taip pat rekomenduojame patiekti su šviežia duona arba skrebučiais.",
+    "tags": null
+}

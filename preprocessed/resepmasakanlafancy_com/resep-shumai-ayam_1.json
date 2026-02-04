@@ -1,0 +1,12 @@
+{
+    "dish_name": "Shumai Ayam",
+    "description": "Resep Shumai Ayam ala La Fancy yang menggoda dengan tekstur lembut dan rasa gurih.",
+    "ingredients": "[{\"name\": \"wortel\", \"units\": \"buah\", \"amount\": 1}, {\"name\": \"kulit shumai\", \"units\": \"lembar\", \"amount\": 20}, {\"name\": \"garam laut La Fancy\", \"units\": \"sdt\", \"amount\": 1}, {\"name\": \"ayam cincang\", \"units\": \"gram\", \"amount\": 300}, {\"name\": \"bawang pre\", \"units\": \"gram\", \"amount\": 75}, {\"name\": \"minyak wijen\", \"units\": \"sdt\", \"amount\": 1}, {\"name\": \"merica hitam La Fancy\", \"units\": \"sdt\", \"amount\": 0.5}, {\"name\": \"jahe La Fancy\", \"units\": \"sdt\", \"amount\": 0.5}, {\"name\": \"gula\", \"units\": \"sdm\", \"amount\": 1}, {\"name\": \"es batu\", \"units\": \"gram\", \"amount\": 20}, {\"name\": \"tepung kentang\", \"units\": \"gram\", \"amount\": 10}, {\"name\": \"onion powder La Fancy\", \"units\": \"sdt\", \"amount\": 1}, {\"name\": \"garlic powder La Fancy\", \"units\": \"sdt\", \"amount\": 1}]",
+    "instructions": "Siapkan semua bahan. Pastikan semua rempah sudah terukur dengan tepat agar rasa tidak berlebihan. Cincang kasar wortel dan daun pre. Campurkan semua bahan isian ke dalam food processor. Haluskan hingga isinya tercampur rata dan membentuk adonan lembut, namun masih bertekstur. Ambil satu lembar kulit shumai, isi dengan satu sendok makan adonan. Lipat dan bentuk hingga menyerupai mangkuk kecil. Letakkan cincangan wortel di atas permukaan shumai untuk hiasan. Kukus shumai selama 10 menit dalam kukusan yang sudah dipanaskan sebelumnya. Sajikan shumai selagi hangat bersama saus sambal, kecap asin, atau saus cuka pedas.",
+    "category": "Resep Masakan Cina",
+    "prep_time": null,
+    "cook_time": "10 minutes",
+    "total_time": null,
+    "notes": "Tambahkan es batu ke dalam adonan untuk menjaga suhu adonan tetap dingin. Gunakan daging ayam dengan sedikit lemak untuk hasil yang juicy. Jangan kukus terlalu lama agar kulit tidak keras.",
+    "tags": "Shumai, Dimsum, Masakan Cina, Resep Ayam"
+}

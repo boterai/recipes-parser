@@ -1,0 +1,12 @@
+{
+    "dish_name": "palačinky",
+    "description": "Základní recept na jednoduché palačinky, které si můžeme připravit na sladko i na slano.",
+    "ingredients": "[{\"name\": \"Sůl\", \"units\": \"špetka\", \"amount\": \"1\"}, {\"name\": \"Vejce\", \"units\": \"ks\", \"amount\": \"2\"}, {\"name\": \"Mléko\", \"units\": \"ml\", \"amount\": \"400\"}, {\"name\": \"Hladká mouka\", \"units\": \"g\", \"amount\": \"200\"}, {\"name\": \"Olej na smažení\", \"units\": null, \"amount\": null}]",
+    "instructions": "Hladkou mouku rozmixujeme se špetkou soli, mlékem a dvěma vejci tak, aby vznikla správně husté těsto na palačinky. Na pánev s rozpáleným olejem vlijeme přibližně jednu malou naběračku těsta a rozlijeme po pánvi. Opékáme asi půl minuty a pak ji otočíme. Palačinku smažíme z obou stran dozlatova. Na hotové palačinky naneseme, co nám chutná.",
+    "category": "Moučníky",
+    "prep_time": "20 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Na jednu porci počítám 2 palačinky. Recepty vystačí přibližně na 8-10 palačinek v závislosti na velikosti pánve a tloušťce palačinek.",
+    "tags": "palačinky, dezert, recept"
+}

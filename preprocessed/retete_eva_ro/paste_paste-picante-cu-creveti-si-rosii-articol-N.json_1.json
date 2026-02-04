@@ -1,0 +1,12 @@
+{
+    "dish_name": "Paste picante cu creveți și roșii",
+    "description": "Această rețetă simplă de spaghete cu creveți a fost încercată probabil de cei mai mulți iubitori de paste. Dar pentru un plus de noutate, o poți transforma într-o masă picantă, absolut delicioasă.",
+    "ingredients": "[{\"name\": \"spaghete\", \"units\": \"g\", \"amount\": 125}, {\"name\": \"broccoli\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"roșii cherry\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"creveți mari de apă rece\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"ulei de măsline\", \"units\": \"lingură\", \"amount\": 1}, {\"name\": \"fulgi de chilli\", \"units\": \"linguriță\", \"amount\": 0.5}, {\"name\": \"sare de mare\", \"units\": null, \"amount\": null}, {\"name\": \"piper negru măcinat\", \"units\": null, \"amount\": null}, {\"name\": \"felii de lămâie\", \"units\": null, \"amount\": null}]",
+    "instructions": "Umple pe jumătate cu apă o cratiță nonaderentă și lasă să dea în clocot. Adaugă pastele și lasă-le să fiarbă timp de 8 minute, amestecând din când în când. Adaugă floretele de broccoli în apă și mai lasă la fiert două minute. Scurge pastele și broccoli de apă și clătește-le cu apă rece într-o sită. Pune pastele și broccoli în cratiță, adaugă roșiile, creveții, uleiul, fulgii de chilli și asezonează. Lasă pe foc timp de 2-3 minute, amestecând cu două spatule de lemn, până când pastele sunt acoperite cu condimentele din cratiță, iar creveții și roșiile sunt fierbinți. Servește imediat.",
+    "category": "Paste",
+    "prep_time": null,
+    "cook_time": "10 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "paste, creveți, picant"
+}

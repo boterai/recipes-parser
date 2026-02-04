@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lamen de copa-lombo de porco",
+    "description": null,
+    "ingredients": "[{\"name\": \"copa-lombo de porco\", \"units\": \"g\", \"amount\": 600}, {\"name\": \"udon\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"broto de feijão\", \"units\": \"g\", \"amount\": 160}, {\"name\": \"mini ervilha cozida\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"ovos de gema mole\", \"units\": null, \"amount\": 4}, {\"name\": \"água\", \"units\": \"litros\", \"amount\": 2}, {\"name\": \"shoyu\", \"units\": \"xícara\", \"amount\": 1}, {\"name\": \"melado de cana\", \"units\": \"colheres de sopa\", \"amount\": 2}, {\"name\": \"sal\", \"units\": null, \"amount\": null}, {\"name\": \"pimenta-do-reino\", \"units\": null, \"amount\": null}, {\"name\": \"cenoura\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"cebola\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"aipo\", \"units\": \"g\", \"amount\": 70}, {\"name\": \"gengibre\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"pimenta dedo de moça\", \"units\": null, \"amount\": 1}, {\"name\": \"cebolinha\", \"units\": \"molho\", \"amount\": 1}, {\"name\": \"alho\", \"units\": \"dentes\", \"amount\": 2}, {\"name\": \"azeite\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Faça cortes na gordura da copa lombo, tempere com sal e pimenta do reino. Leve para a grelha. 2. Corte o gengibre em fatias, a dedo de moça ao meio e o alho quebrado com o lado da faca. Leve para a brasa numa assadeira com os legumes do caldo e regue com azeite e uma pitada de sal. 3. Passe os vegetais tostados para uma panela, adicione o porco, cubra com água e tampe. Cozinhe o caldo por pelo menos 20 minutos (quanto mais tempo, melhor). 4. Misture o shoyo com o melado e afunde os ovos neles. Reserve. Separe a parte verde da branca da cebolinha, fatie a verde e reserve; tempere com azeite e sal a parte branca, a ervilha e o broto de feijão. Leve para a brasa numa perfurada. 5. Fatie o copa-lombo, pincele com o marinado de shoyo com melado e volte para a grelha para caramelizar. 6. Passe o udon no caldo quente com a ajuda de uma peneira e corte o porco em fatias finas. Monte o lamen com a massa, talo da cebolinha, ervilhas, broto, porco, ovo marinado no shoyo cortado ao meio, caldo fumegante e cebolinha verde sobre o porco.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "1h30min",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}
