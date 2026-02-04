@@ -15,9 +15,10 @@ from extractor.base import BaseRecipeExtractor, process_directory
 # Константы для фильтрации и ограничений
 MAX_CATEGORY_TITLE_LENGTH = 30  # Максимальная длина названия для определения категории
 CATEGORY_EXCLUDED_KEYWORDS = ['минут', 'партнерск', 'вкус']  # Слова, исключающие тег из категорий
-TAG_EXCLUDED_KEYWORDS = ['перекр', 'пятёрочк', 'партнерск', 'в «']  # Слова для фильтрации служебных тегов
+TAG_EXCLUDED_KEYWORDS = ['перекрёсток', 'пятёрочка', 'партнерск', 'в «']  # Слова для фильтрации служебных тегов
 MIN_FILTERED_TAGS_THRESHOLD = 3  # Минимальное количество тегов после фильтрации
 MAX_TAGS_LIMIT = 10  # Максимальное количество тегов для возврата
+FOOD_RU_BASE_URL = "https://food.ru/"  # Базовый URL сайта для формирования полных URL изображений
 
 
 class FoodRuExtractor(BaseRecipeExtractor):
@@ -82,6 +83,25 @@ class FoodRuExtractor(BaseRecipeExtractor):
             return ' '.join(texts)
         
         return ''
+    
+    @staticmethod
+    def _normalize_image_url(image_path: str) -> str:
+        """
+        Формирует полный URL изображения
+        
+        Args:
+            image_path: Относительный или абсолютный путь к изображению
+            
+        Returns:
+            Полный URL изображения
+        """
+        if not image_path:
+            return ""
+        
+        if not image_path.startswith('http'):
+            return FOOD_RU_BASE_URL + image_path
+        
+        return image_path
     
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
@@ -325,47 +345,39 @@ class FoodRuExtractor(BaseRecipeExtractor):
             return None
         
         image_urls = []
-        base_url = "https://food.ru/"
         
         # Добавляем обложку
         cover = self._recipe_data.get('cover', {})
         if cover and 'image_path' in cover:
             image_path = cover['image_path']
             if image_path:
-                # Формируем полный URL
-                if not image_path.startswith('http'):
-                    image_path = base_url + image_path
-                image_urls.append(image_path)
+                url = self._normalize_image_url(image_path)
+                if url:
+                    image_urls.append(url)
         
         # Добавляем изображения из preparation
         preparation = self._recipe_data.get('preparation', [])
         for step in preparation:
             if 'image_path' in step and step['image_path']:
-                image_path = step['image_path']
-                if not image_path.startswith('http'):
-                    image_path = base_url + image_path
-                if image_path not in image_urls:
-                    image_urls.append(image_path)
+                url = self._normalize_image_url(step['image_path'])
+                if url and url not in image_urls:
+                    image_urls.append(url)
         
         # Добавляем изображения из cooking
         cooking = self._recipe_data.get('cooking', [])
         for step in cooking:
             if 'image_path' in step and step['image_path']:
-                image_path = step['image_path']
-                if not image_path.startswith('http'):
-                    image_path = base_url + image_path
-                if image_path not in image_urls:
-                    image_urls.append(image_path)
+                url = self._normalize_image_url(step['image_path'])
+                if url and url not in image_urls:
+                    image_urls.append(url)
         
         # Добавляем изображения из impression
         impression = self._recipe_data.get('impression', [])
         for step in impression:
             if 'image_path' in step and step['image_path']:
-                image_path = step['image_path']
-                if not image_path.startswith('http'):
-                    image_path = base_url + image_path
-                if image_path not in image_urls:
-                    image_urls.append(image_path)
+                url = self._normalize_image_url(step['image_path'])
+                if url and url not in image_urls:
+                    image_urls.append(url)
         
         if image_urls:
             return ','.join(image_urls)
