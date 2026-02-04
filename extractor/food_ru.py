@@ -15,7 +15,7 @@ from extractor.base import BaseRecipeExtractor, process_directory
 # Константы для фильтрации и ограничений
 MAX_CATEGORY_TITLE_LENGTH = 30  # Максимальная длина названия для определения категории
 COMMON_EXCLUDED_KEYWORDS = ['партнерск', 'в «']  # Общие слова для исключения из категорий и тегов
-CATEGORY_EXCLUDED_KEYWORDS = COMMON_EXCLUDED_KEYWORDS + ['минут', 'вкус']  # Слова, исключающие тег из категорий
+NON_CATEGORY_KEYWORDS = COMMON_EXCLUDED_KEYWORDS + ['минут', 'вкус']  # Слова, указывающие что тег не является категорией
 TAG_EXCLUDED_KEYWORDS = COMMON_EXCLUDED_KEYWORDS + ['перекрёсток', 'пятёрочка']  # Слова для фильтрации служебных тегов
 MIN_FILTERED_TAGS_THRESHOLD = 3  # Минимальное количество тегов после фильтрации
 MAX_TAGS_LIMIT = 10  # Максимальное количество тегов для возврата
@@ -260,7 +260,7 @@ class FoodRuExtractor(BaseRecipeExtractor):
                     # Простая эвристика: короткие теги часто являются категориями
                     if title and len(title) < MAX_CATEGORY_TITLE_LENGTH:
                         # Проверяем, что это не временной тег или служебный
-                        if not any(word in title.lower() for word in CATEGORY_EXCLUDED_KEYWORDS):
+                        if not any(word in title.lower() for word in NON_CATEGORY_KEYWORDS):
                             # Возвращаем первый подходящий
                             return title.capitalize()
         
