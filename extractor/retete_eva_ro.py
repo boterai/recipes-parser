@@ -151,18 +151,40 @@ class ReteteEvaRoExtractor(BaseRecipeExtractor):
                         if parsed:
                             ingredients.append(parsed)
         else:
-            # Try to get from p tag
+            # Try to get from p tag (alternative format)
             p_tag = ingredients_div.find('p')
             if p_tag:
                 text = p_tag.get_text().strip()
-                # Split by multiple spaces or line breaks
-                parts = re.split(r'\s{2,}|\n', text)
-                for part in parts:
-                    part = part.strip()
-                    if part and not part.lower().startswith('compozitie'):
-                        parsed = self.parse_ingredient_text(part)
-                        if parsed:
-                            ingredients.append(parsed)
+                
+                # Check if ingredients are separated by newlines
+                if '\n' in text:
+                    # Split by newlines (each line is an ingredient)
+                    parts = text.split('\n')
+                    for part in parts:
+                        part = part.strip()
+                        if part:
+                            parsed = self.parse_ingredient_text(part)
+                            if parsed:
+                                ingredients.append(parsed)
+                else:
+                    # Ingredients are run together without newlines
+                    # Remove section labels like "Compozitie ravioli:", "Sos ravioli:"
+                    text = re.sub(r'[A-Z][a-z]+\s+[a-z]+:\s*', '', text)
+                    
+                    # Split by pattern:
+                    # 1. Space + digit + space + letter (new ingredient with amount)
+                    # 2. letter + digit + letter (handles "2linguri" without space)
+                    # But not if digit is after dash (range like "6-7")
+                    pattern = r'(?:(?<![0-9-])\s+(?=\d+\s+[a-zA-Z])|(?<=[a-z])(?=\d+[a-z]))'
+                    
+                    parts = re.split(pattern, text)
+                    
+                    for part in parts:
+                        part = part.strip()
+                        if part:
+                            parsed = self.parse_ingredient_text(part)
+                            if parsed:
+                                ingredients.append(parsed)
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
