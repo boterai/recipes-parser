@@ -312,6 +312,7 @@ class PasaulioreceptaiExtractor(BaseRecipeExtractor):
                                 steps.append(step_text)
         
         # Добавляем нумерацию если её нет
+        # Проверяем первый шаг - если у него нет номера, добавляем ко всем
         if steps and not re.match(r'^\d+\.', steps[0]):
             steps = [f"{idx}. {step}" for idx, step in enumerate(steps, 1)]
         
@@ -438,7 +439,7 @@ class PasaulioreceptaiExtractor(BaseRecipeExtractor):
             duration: строка вида "PT20M" или "PT1H30M"
             
         Returns:
-            Время в читаемом формате, например "90 minutes"
+            Время в читаемом формате, например "1 hour 30 minutes" или "90 minutes"
         """
         if not duration or not duration.startswith('PT'):
             return None
@@ -458,15 +459,16 @@ class PasaulioreceptaiExtractor(BaseRecipeExtractor):
         if min_match:
             minutes = int(min_match.group(1))
         
-        # Форматируем результат
-        if hours > 0 and minutes > 0:
-            return f"{hours} hours {minutes} minutes"
-        elif hours > 0:
-            return f"{hours} hours"
-        elif minutes > 0:
-            return f"{minutes} minutes"
+        # Форматируем результат с правильной грамматикой
+        parts = []
+        if hours > 0:
+            hour_word = "hour" if hours == 1 else "hours"
+            parts.append(f"{hours} {hour_word}")
+        if minutes > 0:
+            minute_word = "minute" if minutes == 1 else "minutes"
+            parts.append(f"{minutes} {minute_word}")
         
-        return None
+        return ' '.join(parts) if parts else None
     
     def extract_prep_time(self) -> Optional[str]:
         """Извлечение времени подготовки"""
