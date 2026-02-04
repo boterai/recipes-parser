@@ -438,7 +438,6 @@ class ElladishesExtractor(BaseRecipeExtractor):
 
 def main():
     """Основная функция для обработки директории с HTML файлами"""
-    import os
     from pathlib import Path
     
     # Путь к preprocessed директории относительно корня репозитория
