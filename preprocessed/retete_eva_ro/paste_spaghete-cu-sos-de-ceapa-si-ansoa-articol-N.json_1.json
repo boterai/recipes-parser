@@ -1,0 +1,12 @@
+{
+    "dish_name": "Spaghete cu sos de ceapă şi anşoa",
+    "description": "Pastele pot fi preparate în felurite combinaţii şi toate sunt foarte gustoase. Încearcă şi această variantă cu sos de ceapă şi anşoa!",
+    "ingredients": "[{\"name\": \"spaghetti\", \"units\": \"gr\", \"amount\": 250}, {\"name\": \"cepe mari\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"anşoa în ulei\", \"units\": \"pieces\", \"amount\": 5}, {\"name\": \"căţei de usturoi\", \"units\": \"pieces\", \"amount\": 3}, {\"name\": \"fulgi chili\", \"units\": \"gr\", \"amount\": 15}, {\"name\": \"ulei măsline\", \"units\": \"linguri\", \"amount\": 5}, {\"name\": \"legătură de pătrunjel\", \"units\": \"pieces\", \"amount\": 0.25}, {\"name\": \"frunze de busuioc\", \"units\": \"pieces\", \"amount\": 4}, {\"name\": \"sare\", \"units\": null, \"amount\": null}, {\"name\": \"piper\", \"units\": null, \"amount\": null}]",
+    "instructions": "Taie ceapa în felii subţiri. Încinge uleiul într-o tigaie şi adaugă ceapa, pe care o căleşti la foc mediu, amestecând des până când se înmoaie. Lasă focul mic şi mai lasă puţin ceapa să se caramelizeze. Pune spaghetele la fiert în multă apă cu sare şi fierbe-le conform instrucţiunilor de pe pachet. Scurge bine peştele de ulei, apoi toacă-l mărunt. Când ceapa are o culoare maronie-aurie, adaugă usturoiul tăiat felii şi lasă încă un minut să se călească. Presară fulgii de chili, adaugă anşoa şi amestecă timp de două minute, până când carnea devine o pastă în ulei, apoi poţi să stingi focul. Scurge spaghetele de apă, însă păstrează jumătate de cană din apa în care au fiert. Adaugă acum pastele peste sosul de ceapă, apoi pătrunjelul şi busuiocul tăiate mărunt şi presară sare şi piper după gust. Toarnă apa în care au fiert pastele şi amestecă bine. La final, presară parmezan deasupra.",
+    "category": "Paste",
+    "prep_time": "40 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Græskartærte",
+    "description": "Græskartærte er en populær og lækker dessert, der er perfekt til efteråret.",
+    "ingredients": "[{\"name\": \"mel\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"smør\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"sukker\", \"units\": \"spsk\", \"amount\": 1}, {\"name\": \"æg\", \"units\": \"stk\", \"amount\": 1}, {\"name\": \"hokkaido græskar\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"æg\", \"units\": \"stk\", \"amount\": 2}, {\"name\": \"fløde\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"sukker\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"kanel\", \"units\": \"tsk\", \"amount\": 1}, {\"name\": \"vaniljesukker\", \"units\": \"tsk\", \"amount\": 1}]",
+    "instructions": "Forvarm ovnen til 180 grader. Bland mel, smør og sukker til tærtebunden. Tilsæt ægget og ælt dejen sammen. Tryk dejen ud i en tærteform og prik bunden med en gaffel. Bag tærtebunden i ovnen i ca. 15 minutter, indtil den bliver let gylden. Mens bunden bager, blend græskartern, æg, fløde, sukker, kanel og vaniljesukker til en cremet masse. Hæld fyldet over den bagte tærtebund og bag græskartærten i ovnen i yderligere 25-30 minutter, indtil fyldet sætter sig. Server din hjemmelavede græskartærte lune eller kold med en klat flødeskum.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Græskartærte kan varieres på mange måder. Prøv at tilføje nødder, appelsinskal eller ingefær for at give din tærte ekstra smag og tekstur.",
+    "tags": "græskartærte, dessert, efterår"
+}

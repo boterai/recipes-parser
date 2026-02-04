@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lasagna Stuffed Chicken Breasts",
+    "description": "Lasagna Stuffed Chicken is all the flavors you love from lasagna stuffed inside a tender chicken breast and smothered with sauce and melted cheese for the ultimate comfort food.",
+    "ingredients": "[{\"name\": \"boneless skinless chicken breast\", \"units\": \"large\", \"amount\": 2}, {\"name\": \"whole milk ricotta cheese\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"egg\", \"units\": \"large\", \"amount\": 1}, {\"name\": \"Italian seasoning\", \"units\": \"teaspoons\", \"amount\": 3}, {\"name\": \"minced garlic\", \"units\": \"cloves\", \"amount\": 2}, {\"name\": \"salt\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"shredded mozzarella cheese\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"marinara sauce\", \"units\": \"cup\", \"amount\": 1}]",
+    "instructions": "Preheat the oven to 400°F (204°C). Lightly grease a baking dish. Butterfly the chicken breasts lengthwise, cutting almost all the way through so it opens like a book. Place the chicken into the prepared baking dish. In a small mixing bowl, combine ricotta cheese, egg, 2 teaspoons Italian seasoning, minced garlic, salt, and 1 cup shredded mozzarella cheese. Stir until well mixed. Spoon about ¼ cup marinara sauce onto one side of each butterflied chicken breast. Spread the ricotta mixture evenly over the sauce. Fold the chicken breasts closed over the filling. Pour the remaining marinara sauce evenly over the chicken. Sprinkle with the remaining mozzarella cheese and Italian seasoning. Bake uncovered for 25 to 30 minutes, or until the chicken reaches an internal temperature of 165°F (74°C). Remove from the oven and let rest for 5 minutes. Serve hot, seasoning with additional salt and pepper if desired.",
+    "category": "Main Dish",
+    "prep_time": "5 minutes",
+    "cook_time": "25 minutes",
+    "total_time": "30 minutes",
+    "notes": "This recipe can easily be doubled or tripled.",
+    "tags": "Lasagna, Chicken, Comfort Food"
+}

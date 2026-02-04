@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pasta carbonara",
+    "description": "Deze spaghetti carbonara is een échte Italiaanse klassieker. Met eieren, pecorino, pancetta en een flinke draai zwarte peper krijg je die romige saus zónder room.",
+    "ingredients": "[{\"name\": \"spaghetti\", \"units\": \"gr\", \"amount\": 400}, {\"name\": \"gerookte spekblokjes of reepjes\", \"units\": \"gr\", \"amount\": 200}, {\"name\": \"verse peterselie\", \"units\": null, \"amount\": null}, {\"name\": \"Parmezaanse kaas\", \"units\": \"gr\", \"amount\": 100}, {\"name\": \"eieren\", \"units\": null, \"amount\": 3}, {\"name\": \"peper en zout\", \"units\": null, \"amount\": \"snuf\"}]",
+    "instructions": "Doe de spekblokjes in een pan en bak ze mooi krokant. Laat ze uitlekken op een keukenpapiertje. Zet ondertussen een grote pan water met een snufje zout op het vuur en als het water kookt voeg je de spaghetti toe. Kook de spaghetti in ongeveer 10 min al dente. Vang een kopje pastawater op na het afgieten. Doe de pasta terug in de pan en voeg de gebakken spekjes toe en schep er doorheen. Kluts ondertussen de eieren in een kom en voeg de geraspte Parmezaanse kaas toe. Giet langzaam het eiermengsel bij de spaghetti met spekjes en roer direct door. Proef of de pasta carbonara nog een snufje peper en/of zout kan gebruiken. Garneer eventueel met een beetje kaas en peterselie.",
+    "category": "Main Course",
+    "prep_time": "25 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "35 minutes",
+    "notes": "Voor een vegetarische variant kun je vegetarische spekjes gebruiken of ze vervangen door champignons of gezouten cashewnoten.",
+    "tags": "pasta, carbonara, Italiaans, hoofdgerecht"
+}

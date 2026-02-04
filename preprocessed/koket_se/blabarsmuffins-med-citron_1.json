@@ -1,0 +1,12 @@
+{
+    "dish_name": "Blåbärsmuffins med citron",
+    "description": "Mer som en bulle, men i muffinsform. Gör antingen 15 stora à la amerikanska muffins eller 30 mindre.",
+    "ingredients": "[{\"name\": \"jäst\", \"units\": \"g\", \"amount\": 30}, {\"name\": \"smör\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"mjölk\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"strösocker\", \"units\": \"dl\", \"amount\": 0.5}, {\"name\": \"salt\", \"units\": \"tsp\", \"amount\": 0.5}, {\"name\": \"citron\", \"units\": \"unit\", \"amount\": 0.5}, {\"name\": \"ägg\", \"units\": \"unit\", \"amount\": 1}, {\"name\": \"vetemjöl\", \"units\": \"dl\", \"amount\": 4.5}, {\"name\": \"blåbärssylt\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"florsocker\", \"units\": \"dl\", \"amount\": 0.5}, {\"name\": \"ägg\", \"units\": \"unit\", \"amount\": 1}]",
+    "instructions": "Värm ugnen till 200°. Smula jästen i en bunke. Smöret och rör ner mjölken. Värm till fingervarmt. Rör ut jästen och arbeta därefter in resten av ingredienserna, utom sylt och florsocker. Jäs övertäckt 30 minuter. Arbeta upp degen, dela den och fyll bullformar. Gör ett hål och klicka i sylt. Jäs 20 minuter. Pensla med uppvispat ägg och grädda cirka 15 minuter. Sikta florsocker över.",
+    "category": "Bakverk",
+    "prep_time": "30 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "45 minutes",
+    "notes": null,
+    "tags": "muffins, blåbär, citron, bakverk"
+}

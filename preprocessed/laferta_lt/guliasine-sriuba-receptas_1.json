@@ -1,0 +1,12 @@
+{
+    "dish_name": "Guliašinė sriuba",
+    "description": "Guliašinė sriuba yra ne tik skanus, bet ir labai maistingas patiekalas, puikiai tinkantis šaltoms dienoms.",
+    "ingredients": "[{\"name\": \"jautiena\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"svogūnas\", \"units\": \"vnt.\", \"amount\": 1}, {\"name\": \"morkos\", \"units\": \"vnt.\", \"amount\": 2}, {\"name\": \"bulvės\", \"units\": \"vnt.\", \"amount\": 2}, {\"name\": \"raudona paprika\", \"units\": \"vnt.\", \"amount\": 1}, {\"name\": \"česnakas\", \"units\": \"skiltelės\", \"amount\": 2}, {\"name\": \"vanduo\", \"units\": \"l\", \"amount\": 1}, {\"name\": \"druska\", \"units\": null, \"amount\": null}, {\"name\": \"pipirai\", \"units\": null, \"amount\": null}, {\"name\": \"žolelės\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Supjaustykite jautieną mažais gabalėliais ir nuplaukite po šaltu vandeniu. 2. Supjaustykite svogūną smulkiai ir kepkite jį didelėje puode su šiek tiek aliejaus, kol jis taps auksinės spalvos. 3. Į puodą su svogūnais pridėkite jautieną ir kepkite, kol mėsa apskrus. 4. Supjaustykite morkas, bulves ir paprikas. Pridėkite jas į puodą ir gerai išmaišykite. 5. Įpilkite litrą vandens ir užvirkite. Sumažinkite ugnį ir leiskite sriubai virti apie 1 valandą, kol mėsa taps minkšta. 6. Į sriubą pridėkite smulkintą česnaką, druską, pipirus ir prieskonius pagal skonį. Virkite dar keliolika minučių.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "90 minutes",
+    "total_time": "90 minutes",
+    "notes": "Naudokite šviežias daržoves, kad gautumėte geriausią skonį. Pabandykite pridėti šiek tiek raudono vyno, kad sriuba būtų dar aromatingesnė.",
+    "tags": "sriuba, guliašinė, receptas"
+}

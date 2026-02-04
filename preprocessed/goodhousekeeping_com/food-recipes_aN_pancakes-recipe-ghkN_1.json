@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pancakes",
+    "description": "Best Ever Homemade Pancake Recipe",
+    "ingredients": "[{\"name\": \"all-purpose flour\", \"units\": \"cups\", \"amount\": \"1 1/4\"}, {\"name\": \"sugar\", \"units\": \"Tbsp.\", \"amount\": \"1\"}, {\"name\": \"baking powder\", \"units\": \"tsp.\", \"amount\": \"2 1/2\"}, {\"name\": \"baking soda\", \"units\": \"tsp.\", \"amount\": \"1/4\"}, {\"name\": \"kosher salt\", \"units\": \"tsp.\", \"amount\": \"1/4\"}, {\"name\": \"milk\", \"units\": \"cup\", \"amount\": \"1\"}, {\"name\": \"large egg\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"canola oil (or unsalted butter, melted and cooled)\", \"units\": \"Tbsp.\", \"amount\": \"1\"}]",
+    "instructions": "1. In large bowl, whisk together flour, sugar, baking powder, baking soda and salt. Make well in center. 2. In medium bowl or liquid measuring cup, whisk together milk, egg and oil until smooth. Pour into well in flour mixture and slowly whisk to combine. Using rubber spatula, stir until mostly smooth (some small lumps are OK). 3. Heat large nonstick skillet or griddle on medium until a drop of water sizzles. In batches, add scant 1/4-cupfuls of batter to skillet and cook until surface is bubbly and edges are set, 2 to 3 minutes. With wide spatula, gently flip and cook until underside is golden brown, 1 to 2 minutes more. Repeat with remaining batter. Serve right away or keep warm on baking sheet in 225°F oven.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "20 mins",
+    "total_time": "20 mins",
+    "notes": "This recipe has been updated in 2025. An earlier version called for different ingredient amounts.",
+    "tags": null
+}

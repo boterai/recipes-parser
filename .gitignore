@@ -25,4 +25,6 @@ parser_issue.md
 /images/
 /recipe_clusters/
 /history/
-/capcha/preprocessed/**/*_extracted.json
+/capcha/
+/preprocessed/
+/wm_img/

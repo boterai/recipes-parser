@@ -1,0 +1,12 @@
+{
+    "dish_name": "Basque Cheesecake",
+    "description": "Basque Cheesecake may look bold and dramatic, but it’s one of the easiest cheesecakes you can bake at home. With no crust and simple ingredients, it relies on high heat to create its signature dark top while keeping the center creamy and custardy.",
+    "ingredients": "[{\"name\": \"cream cheese\", \"units\": \"lb\", \"amount\": \"1\"}, {\"name\": \"granulated sugar\", \"units\": \"cup\", \"amount\": \"½\"}, {\"name\": \"large eggs\", \"units\": \"pieces\", \"amount\": \"3\"}, {\"name\": \"heavy whipping cream\", \"units\": \"cup\", \"amount\": \"1\"}, {\"name\": \"cake flour\", \"units\": \"Tbsp\", \"amount\": \"2\"}, {\"name\": \"cornstarch\", \"units\": \"tsp\", \"amount\": \"2\"}, {\"name\": \"lemon juice\", \"units\": \"Tbsp\", \"amount\": \"1\"}, {\"name\": \"kosher salt\", \"units\": \"tsp\", \"amount\": \"⅛\"}, {\"name\": \"vanilla extract\", \"units\": null, \"amount\": null}]",
+    "instructions": "Preheat the oven for at least 30 minutes. Line a deep 6-inch round cake pan with parchment paper. Blend the cream cheese and sugar until smooth. Whisk the eggs in a separate bowl, then gradually add them to the cream cheese mixture. Add remaining ingredients in order, mixing well. Pour the batter into the prepared pan and bake at high heat for 30–35 minutes until the top is deeply browned. Let cool completely before serving.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "30-35 minutes",
+    "total_time": "2-3 hours",
+    "notes": "For a firmer texture, bake slightly longer and chill for several hours before serving. Use room-temperature ingredients for a smooth batter.",
+    "tags": "cheesecake, dessert, Basque, easy, baking"
+}

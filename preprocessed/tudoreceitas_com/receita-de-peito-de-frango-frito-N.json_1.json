@@ -1,0 +1,12 @@
+{
+    "dish_name": "Peito de frango frito",
+    "description": "Prepare uma deliciosa receita de Peito de frango frito, uma preparação muito popular em todo o mundo.",
+    "ingredients": "[{\"name\": \"peito de frango\", \"units\": \"gramas\", \"amount\": 800}, {\"name\": \"ovos\", \"units\": \"unidade\", \"amount\": 1}, {\"name\": \"mostarda\", \"units\": \"colher de sopa\", \"amount\": 1}, {\"name\": \"molho de soja\", \"units\": \"colher de sopa\", \"amount\": 1}, {\"name\": \"orégano\", \"units\": \"colher de chá\", \"amount\": 1}, {\"name\": \"pimentão doce\", \"units\": \"colher de chá\", \"amount\": 1}, {\"name\": \"cominho\", \"units\": \"colher de chá\", \"amount\": 1}, {\"name\": \"pasta de alho\", \"units\": \"colher de sopa\", \"amount\": 1}, {\"name\": \"farinha\", \"units\": \"gramas\", \"amount\": 150}, {\"name\": \"azeite de oliva\", \"units\": \"copo\", \"amount\": 1}, {\"name\": \"sal\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Prepare os temperos: mostarda, molho de soja, orégano, cominho, páprica doce e, se quiser, também um pouco de páprica picante. 2. Prepare a pasta de alho. 3. Limpe os peitos de frango e corte em pedaços. 4. Misture o frango com os temperos. 5. Deixe marinar por 1 hora ou mais. 6. Passe os pedaços de frango pela farinha. 7. Frite os pedaços de frango até dourar. 8. Retire e coloque em papel toalha para absorver o excesso de óleo. 9. Sirva.",
+    "category": "Main Course",
+    "prep_time": "1 hour",
+    "cook_time": "30 minutes",
+    "total_time": "1h 30m",
+    "notes": "Recomenda-se marinar o frango por pelo menos 1 hora para mais sabor.",
+    "tags": "frango, frito, receita fácil"
+}

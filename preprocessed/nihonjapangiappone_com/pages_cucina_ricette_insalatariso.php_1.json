@@ -1,0 +1,12 @@
+{
+    "dish_name": "Insalata di riso",
+    "description": "Insalata di riso nello stile giapponese",
+    "ingredients": "[{\"name\": \"riso cotto al vapore\", \"units\": \"gr\", \"amount\": 600}, {\"name\": \"germogli di soia\", \"units\": \"gr\", \"amount\": 500}, {\"name\": \"sedano\", \"units\": \"gambi\", \"amount\": 2}, {\"name\": \"peperoni verdi\", \"units\": \"pezzi\", \"amount\": 0.5}, {\"name\": \"cavolfiore o cavolo siciliano\", \"units\": \"gr\", \"amount\": 400}, {\"name\": \"gamberi cotti sgusciati\", \"units\": \"gr\", \"amount\": 500}, {\"name\": \"olio extravergine\", \"units\": \"cucchiai\", \"amount\": 4}, {\"name\": \"salsa di soia\", \"units\": \"cucchiai\", \"amount\": 2}, {\"name\": \"cipolline\", \"units\": \"pezzi\", \"amount\": 4}]",
+    "instructions": "Mescolate il riso cotto, i germogli, il sedano, i peperoni verdi, i cavoletti di Bruxelles e i gamberi. Mettete in frigo per 20/30 minuti e al momento di servire unite olio, aceto (pochissimo), salsa di soia e cipolline tritate. Decorate con fettine di limone e prezzemolo.",
+    "category": null,
+    "prep_time": "30 minutes",
+    "cook_time": null,
+    "total_time": "30 minutes",
+    "notes": "Vino consigliato: bianco secco. Oppure tè verde giapponese.",
+    "tags": null
+}

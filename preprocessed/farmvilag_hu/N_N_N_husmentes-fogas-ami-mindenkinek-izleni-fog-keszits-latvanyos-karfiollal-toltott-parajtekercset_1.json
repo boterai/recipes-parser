@@ -1,0 +1,12 @@
+{
+    "dish_name": "Karfiollal töltött parajtekercs",
+    "description": "Látványos, húsmentes főfogás, amely karfiollal és spenóttal készül.",
+    "ingredients": "[{\"name\": \"friss vagy fagyasztott paraj/spenót\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"tojás\", \"units\": \"large\", \"amount\": 4}, {\"name\": \"finomra őrölt teljes kiőrlésű liszt\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"só\", \"units\": null, \"amount\": null}, {\"name\": \"frissen őrölt bors\", \"units\": null, \"amount\": null}, {\"name\": \"szerecsendió\", \"units\": null, \"amount\": \"a taste\"}, {\"name\": \"karfiol\", \"units\": \"large head\", \"amount\": 1}, {\"name\": \"krémsajt\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"reszelt kemény sajt\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"fokhagyma\", \"units\": \"clove\", \"amount\": 1}, {\"name\": \"friss petrezselyem vagy metélőhagyma\", \"units\": null, \"amount\": null}, {\"name\": \"olívaolaj\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"fűszerek (kurkuma, római kömény, só, bors)\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. A spenótot alaposan ki kell nyomkodni. 2. Keverd össze a spenótot a tojások sárgájával, liszttel, sóval, borssal és szerecsendióval. 3. Verd fel a tojásfehérjét, és óvatosan forgasd bele a spenótos masszába. 4. Süsd a masszát 180°C-on 10-12 percig. 5. Készítsd el a karfiolt, pürésítsd, és keverd össze a krémsajttal, reszelt sajttal és fűszerekkel. 6. Töltsd meg a spenót lapot a karfiolos töltelékkel, és tekerd fel. 7. Süsd 180°C-on további 15-20 percig.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "A töltelék ízesítése fontos, mert a spenót alap viszonylag semleges.",
+    "tags": "vegetáriánus, húsmentes, karfiol, spenót"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "אסאדו",
+    "description": "מדריך לצלייה מושלמת של אסאדו עם טיפים מקצועיים.",
+    "ingredients": "[{\"name\": \"אסאדו\", \"units\": null, \"amount\": null}, {\"name\": \"שמן זית\", \"units\": null, \"amount\": null}, {\"name\": \"שום\", \"units\": \"שיניים\", \"amount\": \"5\"}, {\"name\": \"מלח\", \"units\": null, \"amount\": null}, {\"name\": \"סויה\", \"units\": \"כף\", \"amount\": \"1\"}, {\"name\": \"טאריאקי\", \"units\": \"כף\", \"amount\": \"1\"}, {\"name\": \"דבש\", \"units\": \"כף\", \"amount\": \"1\"}, {\"name\": \"תפוח אדמה\", \"units\": null, \"amount\": null}, {\"name\": \"בטטה\", \"units\": null, \"amount\": null}, {\"name\": \"גזר\", \"units\": null, \"amount\": null}, {\"name\": \"בצל\", \"units\": null, \"amount\": null}, {\"name\": \"תימין\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. לצרוב את האסאדו מכל הכיוונים עם שמן זית. 2. להכין מרינדה עם רוטב ברביקיו, סויה, טאריאקי ודבש. 3. למרוח את המרינדה על האסאדו ולשמור במקרר ללילה. 4. לשים את האסאדו בתבנית עם תפוחי אדמה, בטטה, גזר ובצל. 5. לעטוף בנייר אפייה ונייר כסף ולתנור לפחות 3 שעות.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "4 hours",
+    "total_time": "4 hours 15 minutes",
+    "notes": "מומלץ לתת לבשר לנוח 20 דקות לאחר הצלייה.",
+    "tags": "אסאדו, בשר, צלייה, מתכון"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Avižiniai blynai | Oatmeal Pancakes",
+    "description": "Blynai su avižiniais dribsniais. Labai skanūs, skalsūs, rupesnės tekstūros nei įprastų miltų blynai.",
+    "ingredients": "[{\"name\": \"miltų\", \"units\": \"g\", \"amount\": 65}, {\"name\": \"stambių avižinių dribsnių\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"cukraus\", \"units\": \"šaukštas\", \"amount\": 1}, {\"name\": \"kepimo miltelių\", \"units\": \"šaukštelis\", \"amount\": 1}, {\"name\": \"sodos\", \"units\": \"šaukštelis\", \"amount\": 0.5}, {\"name\": \"druskos\", \"units\": \"šaukštelis\", \"amount\": 0.5}, {\"name\": \"kefyro ar pasukų\", \"units\": \"ml\", \"amount\": 175}, {\"name\": \"vanilės ekstrakto\", \"units\": \"šaukštelis\", \"amount\": 1}, {\"name\": \"saulėgrąžų aliejaus\", \"units\": \"šaukštai\", \"amount\": 2}, {\"name\": \"didelis kiaušinis\", \"units\": null, \"amount\": 1}]",
+    "instructions": "Avižinius dribsnius ir miltus sumalkite virtuviniu kombainu, kol avižinių dribsnių konsistencija bus panaši į rupius miltus. Dubenyje sumaišykite visus sausus produktus. Kitame dubenyje išplakite kefyrą, vanilę, aliejų ir kiaušinį. Viską supilkite į sausų produktų mišinį ir išmaišykite. Nepermaišykite. Kepkite blynus karštoje keptuvėje su trupučiu aliejaus, kol gražiai paruduos. Tiekite su klevų sirupu ar medumi.",
+    "category": "Breakfast",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Tešlą į keptuvę dėjau 60 ml matavimo puodeliu. Iš šio kiekio gaunasi 8 blynai.",
+    "tags": "Avižiniai dribsniai, Blynai, Breakfast, Oatmeal, Pancakes"
+}

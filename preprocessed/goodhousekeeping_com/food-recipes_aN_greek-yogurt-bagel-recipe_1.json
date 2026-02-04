@@ -1,0 +1,12 @@
+{
+    "dish_name": "Greek Yogurt Bagel",
+    "description": "No knead bagels made with Greek yogurt, requiring no yeast and no rising time.",
+    "ingredients": "[{\"name\": \"self-rising flour\", \"units\": \"cup\", \"amount\": \"1\"}, {\"name\": \"plain Greek yogurt\", \"units\": \"cup\", \"amount\": \"1\"}, {\"name\": \"large egg\", \"units\": \"beaten\", \"amount\": \"1\"}, {\"name\": \"everything bagel seasoning\", \"units\": \"Tbsp.\", \"amount\": \"1.5\"}]",
+    "instructions": "1. Heat oven to 350°F. Line baking sheet with parchment paper. 2. In medium bowl, stir together flour and yogurt until combined and dough starts to form (it will be very sticky). Turn out dough onto lightly floured work surface. 3. Knead 2 minutes, adding more flour as necessary, until dough is soft and only slightly sticky. Divide into 4 equal pieces and roll each into 11/4-inch-thick log (about 8 inches long); pinch ends of each log together to form bagels. Transfer to prepared baking sheet. 4. Brush tops of bagels with egg and sprinkle with everything bagel seasoning. Bake until golden brown, 28 to 35 minutes. Serve while still warm.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "28 to 35 minutes",
+    "total_time": "45 minutes",
+    "notes": null,
+    "tags": null
+}

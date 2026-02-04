@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lemon Meltaway Cookies",
+    "description": "Bright and citrusy lemon meltaway cookies will truly melt in your mouth! My recipe is simple yet so flavorful. Just seven ingredients!",
+    "ingredients": "[{\"name\": \"unsalted butter\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"granulated sugar\", \"units\": \"cup\", \"amount\": 0.75}, {\"name\": \"fresh lemon zest\", \"units\": \"Tablespoons\", \"amount\": 2}, {\"name\": \"all-purpose flour\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"cornstarch\", \"units\": \"Tablespoons\", \"amount\": 2}, {\"name\": \"salt\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"powdered sugar\", \"units\": \"cups\", \"amount\": 1.75}, {\"name\": \"fresh-squeezed lemon juice\", \"units\": \"Tablespoons\", \"amount\": 2}, {\"name\": \"lemon zest for garnish\", \"units\": \"optional\", \"amount\": null}]",
+    "instructions": "Preheat oven to 350F (175C). Line a baking sheet with parchment paper and set aside. In a large mixing bowl, combine butter, sugar, and lemon zest and use an electric mixer to cream until light and fluffy. In a separate, medium sized bowl, whisk together flour, cornstarch, and salt. Gradually add dry ingredients to wet, stirring until completely combined. Scoop dough into 1 Tablespoon-sized balls, rolling gently between your palms to create a smooth ball. Place on baking sheet, spacing cookies at least 2 inches apart. Transfer to center rack of 350F (175C) oven and bake for 8-10 minutes. When cookies are finished baking, immediately use a clean, flat surface to lightly flatten the surface of each cookie (a measuring cup or glass works well). Allow cookies to cool completely before adding lemon icing. In a small mixing bowl, whisk together powdered sugar and lemon juice until completely combined and smooth. Mixture should be slightly thick and, when the whisk is lifted, should ribbon back into the bowl and hold its shape for several seconds before dissolving back into the bowl. If your icing is too thick, add more lemon juice. If it’s too thin, add more sugar. Spoon a small amount of glaze onto the completely cooled cookie, and use the back of the spoon to spread evenly over the top. If desired, garnish with lemon zest. Allow cookies to sit until glaze is firm before enjoying.",
+    "category": "Dessert",
+    "prep_time": "25 minutes",
+    "cook_time": "8 minutes",
+    "total_time": "33 minutes",
+    "notes": "Store in an airtight container at room temperature for up to 5 days.",
+    "tags": "cookies, dessert, lemon"
+}

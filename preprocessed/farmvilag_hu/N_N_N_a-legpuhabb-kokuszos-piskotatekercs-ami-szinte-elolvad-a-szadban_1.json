@@ -1,0 +1,12 @@
+{
+    "dish_name": "kókuszos piskótatekercs",
+    "description": "A legpuhább kókuszos piskótatekercs, ami szinte elolvad a szádban.",
+    "ingredients": "[{\"name\": \"liszt\", \"units\": null, \"amount\": null}, {\"name\": \"extra keményítő\", \"units\": null, \"amount\": null}, {\"name\": \"tojás\", \"units\": null, \"amount\": null}, {\"name\": \"mascarponés kókuszos krém\", \"units\": null, \"amount\": null}, {\"name\": \"kókusztej vagy kókusztejszín\", \"units\": null, \"amount\": null}, {\"name\": \"kókuszreszelék\", \"units\": null, \"amount\": null}, {\"name\": \"méz vagy juharszirup\", \"units\": null, \"amount\": null}]",
+    "instructions": "Lépésről lépésre bejárjuk az utat a tökéletes állag eléréséhez, feltárva azokat a kulcsfontosságú, apró trükköket, amelyek megkülönböztetik a „jó” tekercset a „mesés” tekercstől.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "25 minutes",
+    "notes": "A sütési idő is létfontosságú. A piskótát magas hőmérsékleten, de nagyon rövid ideig kell sütni.",
+    "tags": "dessert, coconut, roll"
+}

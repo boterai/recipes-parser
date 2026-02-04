@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kersen Tiramisu",
+    "description": "Een lichte, fruitige variant met mascarpone, kersen en espresso. Perfect dessert voor elk feest.",
+    "ingredients": "[{\"name\": \"Lange vingers\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"Koude espresso\", \"units\": \"kopje\", \"amount\": 1}, {\"name\": \"Amaretto\", \"units\": \"el\", \"amount\": 3}, {\"name\": \"Mascarpone\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"Kwark (20% vet)\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"Slagroom\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"Slagroomversteviger\", \"units\": \"zakje\", \"amount\": 1}, {\"name\": \"Suiker\", \"units\": \"g\", \"amount\": 70}, {\"name\": \"Kersen op siroop, uitgelekt\", \"units\": \"pot (of blik)\", \"amount\": 1}]",
+    "instructions": "1. Bekleed de bodem van je schaal met lange vingers. 2. Meng de koude espresso met de amaretto en giet dit mengsel over de lange vingers. 3. Laat de kersen uitlekken en verdeel de helft over de lange vingers. 4. Klop de slagroom stijf met de slagroomversteviger en zet in de koelkast. 5. Meng in een andere kom de mascarpone en kwark tot een glad geheel en roer de suiker erdoor. 6. Spatel de stijfgeslagen room door het mascarpone-kwark mengsel. 7. Verdeel een derde van de romige massa over de laag met kersen en lange vingers. 8. Leg een nieuwe laag lange vingers bovenop en besprenkel met het resterende espresso-amaretto mengsel. 9. Verdeel de rest van de kersen over deze laag lange vingers. 10. Schep de rest van de romige massa over de tweede laag kersen en strijk glad. 11. Bestrooi met cacaopoeder en garneer met de apart gehouden kersen.",
+    "category": "Dessert",
+    "prep_time": "25 minutes",
+    "cook_time": null,
+    "total_time": "3 hours",
+    "notes": "Zorg ervoor dat alle ingrediënten koud zijn voor de beste textuur. Je kunt de kersen vervangen door ander seizoensfruit. Bewaar de tiramisu niet langer dan 3 dagen in de koelkast en dek goed af om uitdrogen te voorkomen.",
+    "tags": "tiramisu, dessert, kersen, mascarpone, espresso"
+}

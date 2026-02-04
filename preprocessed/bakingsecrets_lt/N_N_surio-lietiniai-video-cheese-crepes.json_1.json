@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sūrio lietiniai",
+    "description": "Nesaldūs sūrio lietiniai. Receptas su VIDEO.",
+    "ingredients": "[{\"name\": \"kiaušiniai\", \"units\": \"vidutiniai\", \"amount\": 2}, {\"name\": \"saulėgrąžų aliejaus\", \"units\": \"šaukštai\", \"amount\": 2}, {\"name\": \"pieno\", \"units\": \"ml\", \"amount\": 375}, {\"name\": \"Svogūnų laiškų\", \"units\": \"pagal skonį\", \"amount\": null}, {\"name\": \"Krapų\", \"units\": \"pagal skonį\", \"amount\": null}, {\"name\": \"Čederio sūrio\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"miltų\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"kepimo miltelių\", \"units\": \"šaukštelis\", \"amount\": 1}, {\"name\": \"druskos\", \"units\": \"truputis\", \"amount\": null}]",
+    "instructions": "Dubenyje išplakite kiaušinius, aliejų, pieną, sūrį ir prieskonius. Miltus sumaišykite su kepimo milteliais ir druska. Įmaišykite į tešlą. Keptuvę įkaitinkite, ištepkite aliejumi. Pilkite tešlos ir kepkite lietinius, kol gražiai apskrus. Valgykite šiltus.",
+    "category": "Blynai",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Valgykite šiltus ir iš karto. Galima pašildyti mikrobangų krosnelėje, jei atvės.",
+    "tags": "Cheese, Crepes, Breakfast, VIDEO receptai"
+}

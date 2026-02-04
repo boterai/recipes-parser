@@ -1,0 +1,12 @@
+{
+    "dish_name": "Thai grøn karry",
+    "description": "En autentisk og nem at lave grøn karry med kylling, grøntsager og kokosmælk.",
+    "ingredients": "[{\"name\": \"kyllingebryst eller kyllingelår\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"grøn karrypasta\", \"units\": \"spsk\", \"amount\": 3}, {\"name\": \"kokosmælk\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"kokosmælk ekstra eller grøntsagsbouillon\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"neutral olie\", \"units\": \"spsk\", \"amount\": 2}, {\"name\": \"fiskesauce\", \"units\": \"spsk\", \"amount\": 2}, {\"name\": \"palmesukker eller brunt sukker\", \"units\": \"spsk\", \"amount\": 1}, {\"name\": \"kaffir limeblade\", \"units\": null, \"amount\": 3}, {\"name\": \"thai auberginer eller almindelig aubergine\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"bambusskud\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"rød peberfrugt\", \"units\": null, \"amount\": 1}, {\"name\": \"grønne thailandske chilier\", \"units\": null, \"amount\": 2}, {\"name\": \"hvidløg\", \"units\": \"fed\", \"amount\": 2}, {\"name\": \"frisk thai basilikum\", \"units\": \"stor håndfuld\", \"amount\": 1}, {\"name\": \"lime\", \"units\": null, \"amount\": 2}, {\"name\": \"rød chili\", \"units\": null, \"amount\": 1}, {\"name\": \"dampet jasminris\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Skær kyllingen i mundrette stykker. Skær auberginerne i tern og læg dem i koldt vand med lidt salt. Klargør alle grøntsagerne. 2. Varm olie i en wok, tilsæt karrypasta og steg i 1-2 minutter. 3. Tilsæt kokosmælk og lad det simre. 4. Tilsæt kylling og steg i 3-4 minutter. 5. Tilsæt resten af kokosmælken og fiskesauce, smag til. 6. Tilsæt grøntsager og lad det simre i 8-10 minutter. 7. Sluk for varmen, tilsæt basilikum og chili. 8. Server med jasminris.",
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "30 minutes",
+    "notes": "Brug fed kokosmælk for bedre smag. Balancer smagene mellem sødme, salt og syre.",
+    "tags": "Thai, karry, kylling, kokosmælk"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Chawanmushi",
+    "description": "Zuppa solida di uova con Ginkgo",
+    "ingredients": "[{\"name\": \"uova\", \"units\": null, \"amount\": 2}, {\"name\": \"acqua\", \"units\": \"cc\", \"amount\": 30}, {\"name\": \"sale\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"shoyu\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"mirin\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"sake\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"funghi shiitake\", \"units\": null, \"amount\": 4}, {\"name\": \"bacca di ginnan\", \"units\": null, \"amount\": null}, {\"name\": \"kamaboko\", \"units\": null, \"amount\": null}]",
+    "instructions": "Togliete la pelle ed il grasso al pollo e mettetelo a bagno nel sake. Tagliate il gambo agli shitake e dividiamoli in 4 spicchi. In caso di funghi secchi teneteli un po' a bagno in acqua tiepida. Versate in un contenitore 30cc di acqua, un cucchiaino di sakè, un cucchiaino di mirin, un cucchiaino di sale, un cucchiaino di salsa di soia e mescolate il tutto fino a che il sale non sia completamente sciolto. In una ciotola a parte sbattete le uova e poi versateci dentro il composto precedentemente preparato miscelandolo bene. Preparate le ciotole da utilizzare mettendo sul fondo il kamaboko, qualche bacca di ginnnan, un fungo shitake, un pezzo di pollo imbevuto nel sake o un gamberetto. Versate il composto preparato, filtrandolo con un colino nelle ciotole, fino a riempirle per tre quarti della loro misura. Se avete un cestello per la cottura a vapore sistemateci le tazze dentro, altrimenti dovrete crearne uno con una pentola dal fondo alto. Mettete nella pentola uno straccio e qualche foglio di carta assorbente poi le vostre ciotole ed riempite la pentola con 2 o 3 centimetri di acqua. Coprite la pentola con un coperchio, lasciando uno spiraglio per la fuoriuscita del vapore. Mettete la pentola sul fuoco, portate l’acqua ad ebollizione ed appena bolle fate cuocere per circa 12 minuti. Per verificare che il composto sia cotto, infilate nella ciotola, uno stecchino o uno spaghetto e verificate che si sia solidificato e che non presenti parti liquide.",
+    "category": null,
+    "prep_time": "30 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "45 minutes",
+    "notes": null,
+    "tags": null
+}

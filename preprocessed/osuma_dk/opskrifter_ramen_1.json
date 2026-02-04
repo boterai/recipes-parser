@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ramen",
+    "description": "Japansk nudelsuppe med dyb umami smag.",
+    "ingredients": "[{\"name\": \"hønsebouillon\", \"units\": \"liter\", \"amount\": 1.5}, {\"name\": \"hvidløg\", \"units\": \"fed\", \"amount\": 2}, {\"name\": \"frisk ingefær\", \"units\": \"g\", \"amount\": 20}, {\"name\": \"soyasauce\", \"units\": \"spsk\", \"amount\": 3}, {\"name\": \"miso-paste\", \"units\": \"spsk\", \"amount\": 2}, {\"name\": \"sesamolie\", \"units\": \"spsk\", \"amount\": 1}, {\"name\": \"mirin\", \"units\": \"spsk\", \"amount\": 2}, {\"name\": \"kombu-tang\", \"units\": \"stykke\", \"amount\": 1}, {\"name\": \"forårsløg\", \"units\": \"stk\", \"amount\": 2}, {\"name\": \"ramen-nudler\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"kyllingebrystfilet\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"æg\", \"units\": \"stk\", \"amount\": 4}, {\"name\": \"friske svampe\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"neutral olie\", \"units\": \"spsk\", \"amount\": 1}, {\"name\": \"sesamfrø\", \"units\": \"spsk\", \"amount\": 1}, {\"name\": \"babyspinat eller pak choi\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"nori-tang\", \"units\": null, \"amount\": null}, {\"name\": \"chiliolie eller sambal oelek\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Kog vand i en lille gryde. Læg æggene forsigtigt i og kog i præcis 6-7 minutter for bløde, cremet blomme. Hæld det kogende vand fra og skyl æggene straks under koldt vand. Lad dem køle helt af, pil dem og skær dem i halve. Sæt dem til side. 2. Varm sesamolien i en stor gryde ved medium varme. Tilsæt hvidløg og ingefær og steg i 1-2 minutter. 3. Hæld hønsebouillonen i gryden sammen med de hvide dele af forårsløgene og kombu-tangen. Bring det i kog og lad det simre i 10-15 minutter. 4. Rør miso-pasten ud i en lille skål med lidt af den varme bouillon. Hæld miso-blandingen tilbage i gryden. 5. Skær kyllingen i tynde skiver. Varm olie på en pande og steg kyllingen i 4-5 minutter. 6. Rens svampene og skær dem i skiver. Steg dem på samme pande i 3-4 minutter. 7. Kog nudlerne efter anvisningen på pakken. 8. Fordel nudlerne i skåle, hæld bouillonen over, og fordel kylling, svampe og grøntsager. 9. Læg æg i hver skål og pynt med forårsløg, sesamfrø og chiliolie.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Ramen kan tilpasses efter humør og ingredienser. Brug friske nudler for bedste resultat.",
+    "tags": "ramen, nudelsuppe, japansk, hovedret"
+}

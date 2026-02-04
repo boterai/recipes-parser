@@ -1,0 +1,12 @@
+{
+    "dish_name": "Erwtensoep",
+    "description": "Dit is een makkelijke basisrecept voor Hollandse erwtensoep (ofwel snert) met rookworst, prei en schouderkarbonade.",
+    "ingredients": "[{\"name\": \"spliterwten\", \"units\": \"gr\", \"amount\": 500}, {\"name\": \"prei\", \"units\": null, \"amount\": 1}, {\"name\": \"water\", \"units\": \"liter\", \"amount\": 2}, {\"name\": \"runderbouillonblokjes\", \"units\": null, \"amount\": 2}, {\"name\": \"knolselderij\", \"units\": \"gr\", \"amount\": 250}, {\"name\": \"winterpeen\", \"units\": null, \"amount\": 1}, {\"name\": \"aardappel\", \"units\": \"gr\", \"amount\": 250}, {\"name\": \"rookworst\", \"units\": \"gr\", \"amount\": 275}, {\"name\": \"schouder karbonade\", \"units\": \"gr\", \"amount\": 300}, {\"name\": \"laurierblaadje\", \"units\": null, \"amount\": 1}, {\"name\": \"selderij\", \"units\": \"gr\", \"amount\": 25}, {\"name\": \"ui\", \"units\": null, \"amount\": 1}]",
+    "instructions": "Breng 2 liter water met de bouillonblokjes, spliterwten en laurierblad aan de kook. Voeg de schouder karbonade in zijn heel toe. Laat dit ongeveer 1 uur zachtjes koken, roer af en toe door. Schil ondertussen de wortel, aardappel en de knolselderij en snijd deze in blokjes van ca 1 cm. Snijd de prei in ringen en was deze goed. Pel de ui en snijd deze in fijne stukjes. Hak ook de selderij grof. Na ongeveer 1 uur koken zul je merken dat de de spliterwten uit elkaar te vallen beginnen te vallen en er een groene massa ontstaat. Sommige spliterwten koken eerder of later stuk dan andere. Roer een paar keer goed door om dit te versnellen. Haal de schouder karbonades uit de pan, snijd in stukjes en voeg samen met de gesneden groenten en aardappel toe aan de soep. Laat de soep nog ongeveer ½ uur zachtjes doorkoken tot de groenten en aardappel gaar is en wat geslonken is. Snijd de rookworst in schijfjes en roer deze de laatste paar minuten door de erwtensoep en warm goed door. Breng de erwtensoep eventueel op smaak met nog een beetje extra peper en zout.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "1 hour",
+    "total_time": "1 hour 30 minutes",
+    "notes": "De soep is vaak de volgende dag dikker van structuur en nog lekkerder. Bewaar de soep goed afgesloten in de koelkast. Je kunt erwtensoep heel goed invriezen. Doe dit in afgesloten bakjes, dan blijft het maximaal 3 maanden goed.",
+    "tags": "soep, Hollandse recepten, glutenvrij"
+}

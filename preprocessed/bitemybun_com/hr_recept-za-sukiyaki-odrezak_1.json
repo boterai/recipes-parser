@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sukiyaki",
+    "description": "Sukiyaki odrezak je jelo koje se priprema dinstanjem masne govedine, rezanaca i povrća u slatkom umaku.",
+    "ingredients": "[{\"name\": \"čvrsti tofu\", \"units\": \"block\", \"amount\": \"½\"}, {\"name\": \"shiitake gljive\", \"units\": \"oz\", \"amount\": \"5\"}, {\"name\": \"enoki gljive\", \"units\": \"package\", \"amount\": \"1\"}, {\"name\": \"napa kupus\", \"units\": \"cups\", \"amount\": \"2\"}, {\"name\": \"tong ho\", \"units\": \"cups\", \"amount\": \"2\"}, {\"name\": \"scallions\", \"units\": \"pieces\", \"amount\": \"2\"}, {\"name\": \"sušeni rezanci od vermikela\", \"units\": \"bundle\", \"amount\": \"1\"}, {\"name\": \"biljno ulje\", \"units\": \"tablespoon\", \"amount\": \"1\"}, {\"name\": \"tanko narezana masna govedina\", \"units\": \"oz\", \"amount\": \"12\"}, {\"name\": \"dashi dionica\", \"units\": \"cups\", \"amount\": \"2\"}, {\"name\": \"riža na pari\", \"units\": \"cups\", \"amount\": \"2\"}, {\"name\": \"žumanjci\", \"units\": null, \"amount\": \"2\"}]",
+    "instructions": "Pripremite sve sastojke za sukiyaki, uključujući kriške tofua, shiitake gljive, enoki gljive, napa kupus, tong ho i mladi luk. Odložiti na tanjur. Namočite sušene vermicelli rezance u vodi 10 minuta. Zagrijte biljno ulje u tavi. Na ulju pržite bijele dijelove mladog luka 10 minuta. Zelene dijelove mladog luka sitno nasjeckajte i ostavite sa strane. U tavu s mladim lukom dodajte narezanu govedinu. Pržite govedinu 10 sekundi i dodajte malo sukiyaki umaka. Pržiti meso dok ne počne smeđiti; trebao bi još uvijek biti blago ružičast. Izvadite iz lonca i ostavite sa strane. Dodajte još sukiyaki umaka i temeljca. Pustite da prokuha. Dodajte tofu, gljive, napa kupus i tong ho u lonac u dijelovima. Vermicelli rezance ocijediti i dodati u lonac. Pokrijte lonac i zakuhajte. Pirjajte dok se sastojci ne skuhaju (5-7 minuta). Uklonite poklopac i vratite govedinu u lonac. Pospite nasjeckanim mladim lukom i uživajte uz rižu i žumanjak (po želji).",
+    "category": "Main Course",
+    "prep_time": "20 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "40 minutes",
+    "notes": "Ako radite sukiyaki odrezak kod kuće, važno je pripremiti sve sastojke i pripremiti ih za upotrebu prije nego počnete kuhati. Najbolje meso za ovaj recept je govedina. Najbolje je upotrijebiti masni goveđi komad kao što je ribica, filet mignon ili pečenica kako bi ostao vlažan i aromatičan dok kuhate.",
+    "tags": "sukiyaki, beef, japanese, main course"
+}

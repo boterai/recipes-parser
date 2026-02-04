@@ -1,0 +1,12 @@
+{
+    "dish_name": "Warishita umak",
+    "description": "Warishita umak izvrstan je za umakanje sukiyaki jela. Lako ga je napraviti!",
+    "ingredients": "[{\"name\": \"sake\", \"units\": \"žlica\", \"amount\": 2}, {\"name\": \"Umak od soje\", \"units\": \"kup\", \"amount\": 0.25}, {\"name\": \"mirin\", \"units\": \"kup\", \"amount\": 0.25}, {\"name\": \"smeđi šećer\", \"units\": \"žlica\", \"amount\": 1}]",
+    "instructions": "Uzmite veliki lonac. Na srednjoj vatri dodajte mirin, sake, sojin umak i smeđi šećer uz miješanje. Zakuhajte i još miješajte. Kad se sve otopi, isključite vatru. Sada možete preliti warishita umak preko kuhanog mesa i povrća.",
+    "category": "Main Course",
+    "prep_time": "5 minutes",
+    "cook_time": "5 minutes",
+    "total_time": "10 minutes",
+    "notes": null,
+    "tags": "sukiyaki, umak, japanska kuhinja"
+}
