@@ -224,14 +224,18 @@ class BakerRecipesExtractor(BaseRecipeExtractor):
             
             # Отмечаем, что нашли ингредиенты (по характерным единицам измерения)
             if not found_ingredients and font.get('size') == '2':
-                if 'Plain gelatin' in text or ('tb' in text and 'ts' in text):
+                # Проверяем наличие характерных единиц измерения
+                has_units = any(unit in text for unit in ['tb', 'ts', 'c ', ' c'])
+                if has_units:
                     found_ingredients = True
                     continue
             
             # После ингредиентов ищем инструкции
             if found_ingredients and font.get('size') == '2':
                 # Проверяем, что это инструкции (содержит глаголы действия и достаточно длинный текст)
-                if len(text) > 100 and any(verb in text for verb in ['Mix', 'Beat', 'Add', 'Stir', 'Cook', 'Pour', 'Bake', 'Fold', 'Remove', 'Chill']):
+                common_verbs = ['Mix', 'Beat', 'Add', 'Stir', 'Cook', 'Pour', 'Bake', 'Fold', 'Remove', 'Chill', 
+                               'Cream', 'Blend', 'Combine', 'Place', 'Preheat', 'Whisk', 'Heat']
+                if len(text) > 100 and any(verb in text for verb in common_verbs):
                     instructions_font = font
                     break
         
