@@ -17,6 +17,7 @@ from collections.abc import AsyncIterator
 from qdrant_client.models import (
     Distance, VectorParams, PointStruct)
 import os
+from config.config import config
 
 logger = logging.getLogger(__name__)
 
@@ -61,13 +62,13 @@ class QdrantRecipeManager:
         """
         if not QdrantRecipeManager._initialized:
             self.collection_prefix = collection_prefix
-            self.full_collection = "full"
-            self.mv_collection = "mv"
-            self.images_collection = "images"
+            self.full_collection = config.QDRANT_FULL_COLLECTION
+            self.mv_collection = config.QDRANT_MV_COLLECTION
+            self.images_collection = config.QDRANT_IMAGES_COLLECTION
             self.collections = {
-                "full": f"{collection_prefix}_full",
-                "mv": f"{collection_prefix}_mv",
-                "images": f"{collection_prefix}_images_1152",
+                self.full_collection: f"{collection_prefix}_{self.full_collection}",
+                self.mv_collection: f"{collection_prefix}_{self.mv_collection}",
+                self.images_collection: f"{collection_prefix}_{self.images_collection}_1152",
             }
             self.connected = False
             
@@ -236,14 +237,14 @@ class QdrantRecipeManager:
                     continue
 
                 match col_type:
-                    case "full":
+                    case self.full_collection:
                         vectors_config = {
                             "dense": VectorParams(
                                 size=dims,
                                 distance=Distance.COSINE
                             )
                         }
-                    case "mv":
+                    case self.mv_collection:
                         vectors_config = {
                             "ingredients": VectorParams(
                                 size=dims,
@@ -266,7 +267,7 @@ class QdrantRecipeManager:
                                 distance=Distance.COSINE,
                             )
                         }
-                    case "images":
+                    case self.images_collection:
                         vectors_config = {
                             "image": VectorParams(
                                 size=image_dims,  # размер длz изображений
@@ -423,11 +424,8 @@ class QdrantRecipeManager:
         for batch_num, batch in enumerate(batched(pages, batch_size), 1):
             try:
                 # Обрабатываем каждую коллекцию
-                for col_type, collection_name in self.collections.items():
-                    if col_type == "full":
-                        self._add_to_full_collection(batch, collection_name, embedding_function, batch_num)
-                    elif col_type == "mv": # TODO: подумать нужна ли вообще мультивекторная коллекция при наличии full
-                        self._add_to_multivector_collection(batch, collection_name, embedding_function, batch_num)
+                self._add_to_full_collection(batch, self.collections[self.full_collection], embedding_function, batch_num)
+                self._add_to_multivector_collection(batch, self.collections[self.mv_collection], embedding_function, batch_num)
                 
                 added_count += len(batch)
                 logger.info(f"✓ Батч {batch_num} завершен: всего {added_count} рецептов")
@@ -552,9 +550,9 @@ class QdrantRecipeManager:
             
     async def async_iter_points_with_vectors(
             self, 
-            collection_name: str = "full", 
-            batch_size: int = 1000, 
-            using: str = "dense",
+            collection_name: str, 
+            batch_size: int, 
+            using: str,
             last_point_id: int = None,
             scroll_timeout: int = 120) -> AsyncIterator[list[int]]:
         """

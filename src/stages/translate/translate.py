@@ -180,7 +180,7 @@ class Translator:
                 elif result:
                     translated_recipes.append(result)
         # Шаг 2: Сохраняем весь переведенный батч в БД одной транзакцией
-        if self.olap_db.insert_recipes_batch(translated_recipes, table_name=self.olap_table) == len(translated_recipes):
+        if self.olap_db.insert_recipes_batch(translated_recipes) == len(translated_recipes):
             logger.info(f"✓ Батч из {len(translated_recipes)} переведенных страниц успешно сохранен в ClickHouse")
         else:
             logger.warning("⚠ Частичная ошибка при сохранении батча")

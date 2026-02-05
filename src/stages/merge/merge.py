@@ -74,6 +74,9 @@ class ConservativeRecipeMerger:
         return intersection / union
     
     def calculate_max_combinations(self, n: int, k: int, max_variations: int) -> int:
+        """
+        Вычисление максимального количества комбинаций для объединения рецептов
+        """
         if n < 2:
             return 0
         max_possible_combinations = math.comb(n, k) if k <= n else 0
@@ -465,60 +468,8 @@ class ClusterVariationGenerator:
                 return None
             variation.gpt_validated = True
         return variation
-
-    async def create_variations_with_same_lang(
-            self,
-            cluster: list[int],
-            validate_gpt: bool = True,
-            save_to_db: bool = False,
-            max_variations: int = 3,
-            max_merged_recipes: int = 3,
-            image_ids: Optional[list[int]] = None
-    ) -> list[MergedRecipe]:
-        """
-        Создает вариации рецептов используя данных из mysql pages по языковым группам
-        """
-        merged_recipes = []
-        # Загружаем рецепты
-        recipes = self.page_repository.get_recipes(page_ids=cluster)
-        if not recipes or len(recipes) < 1:
-            logger.warning(f"Не найдены рецепты для кластера: {cluster}")
-            return []
-        
-        recipes = [r.to_pydantic().to_recipe() for r in recipes]
-
-        # Группируем по языкам
-        lang_groups: dict[str: list[Recipe]] = {}
-        for r in recipes:
-            lang = r.language or "unknown"
-            if lang not in lang_groups:
-                lang_groups[lang] = []
-            lang_groups[lang].append(r)
-
-        # Создаём вариации для каждой языковой группы
-        for lang, lang_recipes in lang_groups.items():
-            max_combinations = self.merger.calculate_max_combinations( 
-                n=len(lang_recipes),
-                k=min(max_merged_recipes, len(lang_recipes)),
-                max_variations=max_variations
-            )
-            if max_combinations == 0:
-                logger.info(f"Недостаточно рецептов для создания вариаций на языке '{lang}'")
-                continue
-
-            variations = await self.create_variations_from_cluster(
-                recipes=lang_recipes,
-                validate_gpt=validate_gpt,
-                save_to_db=save_to_db,
-                max_variations=max_combinations,
-                max_merged_recipes=max_merged_recipes,
-                image_ids=image_ids,
-                target_language=lang
-            )
-            merged_recipes.extend(variations)
-        return merged_recipes
     
-    async def create_variations_from_olap(
+    async def create_variations(
         self,
         cluster: list[int],
         validate_gpt: bool = True,
@@ -539,7 +490,7 @@ class ClusterVariationGenerator:
         merged = self.merge_repository.get_by_page_ids(cluster)
         if merged:
             logger.info(f"Использован кэшированный GPT merge для {cluster}")
-            return merged.to_pydantic()
+            return [merged.to_pydantic(get_images=False)]
         
         # Загружаем рецепты
         recipes = self.olap_db.get_recipes_by_ids(cluster)
@@ -552,19 +503,11 @@ class ClusterVariationGenerator:
                 recipe.fill_ingredients_with_amounts(self.page_repository)
             recipe.language  = recipe_language  # OLAP только с английскими рецептами
 
-        max_combinations = self.merger.calculate_max_combinations( 
-            n=len(recipes),
-            k=min(max_merged_recipes, len(recipes)),
-            max_variations=max_variations
-        )
-        if max_combinations == 0:
-            return None
-
         return await self.create_variations_from_cluster(
             recipes=recipes,
             validate_gpt=validate_gpt,
             save_to_db=save_to_db,
-            max_variations=max_combinations,
+            max_variations=max_variations,
             max_merged_recipes=max_merged_recipes,
             image_ids=image_ids,
             target_language=recipe_language
@@ -873,8 +816,6 @@ if __name__ == "__main__":
     import random
     import asyncio
     logging.basicConfig(level=logging.INFO)
-    generator = ClusterVariationGenerator()
-    generator.image_repository
 
     async def example():
         generator = ClusterVariationGenerator()
@@ -894,7 +835,7 @@ if __name__ == "__main__":
         random.shuffle(cluster)
         
         max_variations = min(1, max(3, len(cluster) / 4))
-        variations = await generator.create_variations_from_olap(
+        variations = await generator.create_variations(
             cluster=cluster,
             validate_gpt=True,
             save_to_db=True,

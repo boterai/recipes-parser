@@ -10,6 +10,7 @@ import asyncio
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from config.config import config
 from src.common.embedding import get_embedding_function, get_siglip_embedding_function
 from src.stages.search.vectorise import RecipeVectorizer
 from src.stages.search.vectorise import RecipeVectorizer
@@ -23,21 +24,25 @@ logging.basicConfig(
     handlers=[logging.StreamHandler()]
 )
 
-def vectorise_all_recipes(translate: bool = True, target_language: str = "en", translate_batch_size: int = 9):
+def vectorise_all_recipes(translate: bool = True, target_language: str = config.TARGET_LANGUAGE, translate_batch_size: int = config.TRANSLATE_BATCH_SIZE):
+    if target_language is None:
+        target_language = config.TARGET_LANGUAGE
+
+    if translate and translate_batch_size is None:
+        translate_batch_size = config.TRANSLATE_BATCH_SIZE
+
     if translate:
         translate_all_recipes(target_language=target_language, translate_batch_size=translate_batch_size)
-
-    batch_size = 15 # примерный размер батча для векторизации и добавления в Qdrant при котором не происходит timeout
     rv = RecipeVectorizer()
 
-    embed_func, dims = get_embedding_function(batch_size=batch_size)
+    embed_func, dims = get_embedding_function(batch_size=config.VECTORIZE_BATCH_SIZE)
     rv.vectorise_all_recipes(
         embedding_function=embed_func,
-        batch_size=batch_size,
+        batch_size=config.VECTORIZE_BATCH_SIZE,
         dims=dims)
 
 
-async def validate_and_save_image(image_url: str, save_dir: str = "images", use_proxy: bool = True) -> str | None:
+async def validate_and_save_image(image_url: str, save_dir: str = None, use_proxy: bool = True) -> str | None:
     """
     Проверяет валидность URL, скачивает изображение и сохраняет локально.
     
@@ -49,6 +54,8 @@ async def validate_and_save_image(image_url: str, save_dir: str = "images", use_
     Returns:
         Путь к сохраненному файлу или None при ошибке
     """
+    if not save_dir:
+        save_dir = config.IMAGE_DOWNLOAD_DIR
     try:
         # Скачиваем изображение как PIL.Image
         img = await download_image_async(image_url, use_proxy=use_proxy)
@@ -83,14 +90,17 @@ async def validate_and_save_image(image_url: str, save_dir: str = "images", use_
 async def vectorise_all_images():
     rv = RecipeVectorizer()
     embed_function, dims = get_siglip_embedding_function(
-        batch_size=16
+        batch_size=config.VECTORIZE_BATCH_SIZE_IMAGES
     )
     await rv.vectorise_images_async(embed_function=embed_function, image_dims=dims)
 
-def translate_all_recipes(target_language: str = "en", translate_batch_size: int = 10):
+def translate_all_recipes(target_language: str, translate_batch_size: int):
     translator = Translator(target_language=target_language)
     asyncio.run(translator.translate_all(batch_size=translate_batch_size))
 
 if __name__ == '__main__':
+    import dotenv
+    dotenv.load_dotenv()
+
     asyncio.run(vectorise_all_images())
-    #vectorise_all_recipes() # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)
+    #vectorise_all_recipes(translate=False) # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)

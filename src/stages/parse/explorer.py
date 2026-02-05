@@ -22,7 +22,7 @@ if __name__ == "__main__":
     import sys
     sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-import config.config as config
+from config.config import config
 from src.stages.extract.recipe_extractor import RecipeExtractor
 from src.stages.analyse.analyse import RecipeAnalyzer
 from src.repositories.site import SiteRepository
@@ -56,7 +56,7 @@ class SiteExplorer:
             max_no_recipe_pages: Максимальное количество страниц без рецепта подряд (None = без ограничений). Если указано прерывает исследвоание сайта при достижении лимита
         """
         self.debug_mode = debug_mode
-        self.debug_port = debug_port if debug_port is not None else config.CHROME_DEBUG_PORT
+        self.debug_port = debug_port if debug_port is not None else config.PARSER_DEFAULT_CHROME_PORT
         self.driver = driver
         self.recipe_regex = None
         self.request_count = 0  # Счетчик запросов для адаптивных пауз
@@ -97,7 +97,7 @@ class SiteExplorer:
         self.exploration_queue: List[tuple] = []  # Очередь URL для исследования: [(url, depth), ...]
         
         # Файлы для сохранения
-        self.save_dir = os.path.join(config.PARSED_DIR, self.site.name,"exploration")
+        self.save_dir = os.path.join(config.PARSER_DIR, self.site.name,"exploration")
         os.makedirs(self.save_dir, exist_ok=True)
         
         self.state_file = os.path.join(self.save_dir, "exploration_state.json")
@@ -214,8 +214,8 @@ class SiteExplorer:
         
         try:
             self.driver = webdriver.Chrome(options=chrome_options)
-            self.driver.implicitly_wait(config.IMPLICIT_WAIT)
-            self.driver.set_page_load_timeout(config.PAGE_LOAD_TIMEOUT)
+            self.driver.implicitly_wait(config.PARSER_DEFAULT_IMPLICIT_WAIT)
+            self.driver.set_page_load_timeout(config.PARSER_DEFAULT_PAGE_LOAD_TIMEOUT)
             
             # Проверяем что подключение работает
             try:

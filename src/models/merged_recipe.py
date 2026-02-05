@@ -66,8 +66,11 @@ class MergedRecipeORM(Base):
     def __repr__(self):
         return f"<MergedRecipeORM(id={self.id}, dish='{self.dish_name}'>"
     
-    def to_pydantic(self) -> 'MergedRecipe':
-        """Конвертировать ORM объект в Pydantic модель"""
+    def to_pydantic(self, get_images: bool=True) -> 'MergedRecipe':
+        """Конвертировать ORM объект в Pydantic модель
+            Args:
+                get_images: флаг, указывающий нужно ли извлекать связанные image_ids (по умолчанию True)
+        """
         # Парсим page_ids из pages_csv
         page_ids = []
         if self.pages_csv:
@@ -77,11 +80,12 @@ class MergedRecipeORM(Base):
                 page_ids = []
         
         # Извлекаем image_ids из relationship
-        try:
-            image_ids = [img.id for img in self.images] if self.images else []
-        except Exception as e:
-            logger.error(f"Error extracting image_ids from MergedRecipeORM id={self.id}: {e}")
-            image_ids = []
+        image_ids = []
+        if get_images:
+            try:
+                image_ids = [img.id for img in self.images] if self.images else []
+            except Exception as e:
+                logger.error(f"Error extracting image_ids from MergedRecipeORM id={self.id}: {e}")
         
         return MergedRecipe(
             id=self.id,

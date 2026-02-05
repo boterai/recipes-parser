@@ -429,11 +429,11 @@ if __name__ == "__main__":
     while True:
         ss = SimilaritySearcher(params=ClusterParams(
                     limit=30,
-                    score_threshold=0.96,
+                    score_threshold=0.95,
                     scroll_batch=1000,
                     union_top_k=7,
                     query_batch=128
-                ), build_type="ingredients") # "image", "full", "ingredients"
+                ), build_type="image") # "image", "full", "ingredients"
         try:
             ss.load_dsu_state()
             last_id = ss.last_id # получаем last id после загрузки состояния (такая штука работает только опираясь на тот факт, что каждй вновь доавбленный рецепт имеет id не меньше уже векторизованных рецептов, иначе рецепты могут быть пропущены)
