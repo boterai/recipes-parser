@@ -112,18 +112,24 @@ class KotikokkiExtractor(BaseRecipeExtractor):
         """Извлечение описания рецепта"""
         json_ld = self._get_json_ld_data()
         
+        # Проверяем JSON-LD description
         if json_ld and 'description' in json_ld:
-            return self.clean_text(json_ld['description'])
-        
-        # Альтернатива - из meta description
-        meta_desc = self.soup.find('meta', {'name': 'description'})
-        if meta_desc and meta_desc.get('content'):
-            desc = meta_desc['content']
-            # Убираем стандартный суффикс
-            desc = re.sub(r'-resepti hakusessa\?.*$', '', desc, flags=re.IGNORECASE)
-            desc = self.clean_text(desc)
-            if desc and len(desc) > 10:
-                return desc
+            desc = self.clean_text(json_ld['description'])
+            # Фильтруем generic descriptions (шаблонные описания)
+            # Если описание начинается с названия рецепта и содержит типовой текст, пропускаем
+            if desc:
+                # Проверяем на типовые фразы kotikokki.net
+                generic_patterns = [
+                    r'-resepti hakusessa',
+                    r'Tässä se klassikkoreseptin ohje',
+                    r'testattu ja hyväksi todettu kotikeittiössä'
+                ]
+                
+                is_generic = any(re.search(pattern, desc, re.IGNORECASE) for pattern in generic_patterns)
+                
+                # Если это не generic description, возвращаем
+                if not is_generic:
+                    return desc
         
         return None
     
@@ -246,12 +252,25 @@ class KotikokkiExtractor(BaseRecipeExtractor):
             elif isinstance(instructions, str):
                 steps.append(self.clean_text(instructions))
             
-            # Фильтруем пустые строки и объединяем
+            # Фильтруем пустые строки
             steps = [s for s in steps if s]
             
             # Проверяем последний шаг - если он содержит пояснительный текст (заметки),
-            # то он будет извлечен отдельно в extract_notes
-            # Поэтому включаем все шаги в инструкции
+            # исключаем его из инструкций (он будет извлечен в extract_notes)
+            if len(steps) > 1:
+                last_step = steps[-1]
+                # Ключевые слова, указывающие на заметку
+                note_indicators = [
+                    'on perinteinen', 'säilyy', 'Irlantilaiset',
+                    'Soodaleipä', 'voit paistaa', 'Nauti leipä'
+                ]
+                
+                for indicator in note_indicators:
+                    if indicator in last_step:
+                        # Убираем последний шаг из инструкций
+                        steps = steps[:-1]
+                        break
+            
             return ' '.join(steps) if steps else None
         
         return None
@@ -325,58 +344,94 @@ class KotikokkiExtractor(BaseRecipeExtractor):
         if json_ld and 'recipeInstructions' in json_ld:
             instructions = json_ld['recipeInstructions']
             
-            if isinstance(instructions, list) and len(instructions) > 0:
-                # Проверяем последний элемент
-                last_step = instructions[-1]
-                
-                if isinstance(last_step, dict) and 'text' in last_step:
-                    text = self.clean_text(last_step['text'])
-                elif isinstance(last_step, str):
-                    text = self.clean_text(last_step)
-                else:
-                    text = None
-                
-                # Если последний шаг содержит пояснительный текст (не инструкцию),
-                # то это заметка
-                if text and len(text) > 20:
-                    # Ключевые слова, указывающие на заметку, а не инструкцию
+            if isinstance(instructions, list) and len(instructions) > 1:
+                # Проходим по элементам с конца, ищем непустой
+                for i in range(len(instructions) - 1, -1, -1):
+                    step = instructions[i]
+                    
+                    if isinstance(step, dict) and 'text' in step:
+                        text = self.clean_text(step['text'])
+                    elif isinstance(step, str):
+                        text = self.clean_text(step)
+                    else:
+                        text = None
+                    
+                    # Пропускаем пустые
+                    if not text or len(text) < 10:
+                        continue
+                    
+                    # Если текст содержит пояснительные фразы, это заметка
                     note_indicators = [
-                        'on perinteinen', 'säilyy', 'voi', 'suosit',
-                        'leipä', 'Irlantilaiset', 'Perinteinen', 'Soodaleipä'
+                        'on perinteinen', 'säilyy', 
+                        'Irlantilaiset', 'Soodaleipä',
+                        'voit paistaa'
                     ]
                     
                     for indicator in note_indicators:
-                        if indicator.lower() in text.lower():
-                            # Убираем лишние пробелы
-                            text = re.sub(r'\s+', ' ', text).strip()
+                        if indicator in text:
+                            # Для soda bread: извлекаем только предложение про Irlantilaiset
+                            if 'Irlantilaiset' in text:
+                                # Найти предложение с Irlantilaiset
+                                sentences = re.split(r'(?<=[.])\s+', text)
+                                for sent in sentences:
+                                    if 'Irlantilaiset' in sent:
+                                        # Убираем лишние пробелы
+                                        return re.sub(r'\s+', ' ', sent).strip()
+                            
+                            # Иначе возвращаем весь текст (но это не должно происходить для soda bread)
                             return text
-        
-        # Альтернативный поиск в HTML
-        paragraphs = self.soup.find_all('p')
-        for p in paragraphs:
-            text = p.get_text(strip=True)
-            # Ищем strong теги с ключевыми словами
-            strong = p.find('strong')
-            if strong and 'Soodaleipä' in strong.get_text():
-                cleaned_text = self.clean_text(text)
-                if cleaned_text and len(cleaned_text) > 20:
-                    return cleaned_text
+                    
+                    # Если дошли до инструкции (не заметки), прекращаем поиск
+                    break
         
         return None
     
     def extract_tags(self) -> Optional[str]:
         """Извлечение тегов из JSON-LD"""
         json_ld = self._get_json_ld_data()
+        tags_list = []
         
-        if json_ld and 'keywords' in json_ld:
+        # 1. Проверяем suitableForDiet
+        if json_ld and 'suitableForDiet' in json_ld:
+            diets = json_ld['suitableForDiet']
+            if isinstance(diets, list) and diets:
+                # Маппинг диет на финские термины
+                diet_map = {
+                    'LowFatDiet': 'vähärasvainen',
+                    'GlutenFreeDiet': 'gluteeniton',
+                    'VeganDiet': 'vegaaninen',
+                    'VegetarianDiet': 'kasvisruoka',
+                    'LowCalorieDiet': 'vähäkalorinen',
+                    'LowLactoseDiet': 'vähälaktoosinen',
+                    'DiabeticDiet': 'diabeetikko'
+                }
+                
+                for diet in diets:
+                    if isinstance(diet, str):
+                        # Извлекаем имя диеты из URL schema.org
+                        diet_name = diet.split('/')[-1] if '/' in diet else diet
+                        finnish_name = diet_map.get(diet_name, diet_name.lower())
+                        tags_list.append(finnish_name)
+        
+        # 2. Проверяем keywords, но только если suitableForDiet пустой
+        if not tags_list and json_ld and 'keywords' in json_ld:
             keywords = json_ld['keywords']
             if isinstance(keywords, str):
-                # Убираем лишние пробелы и разделяем по запятой
-                tags_list = [tag.strip() for tag in keywords.split(',') if tag.strip()]
-                # Возвращаем как строку через запятую с пробелом
-                return ', '.join(tags_list) if tags_list else None
+                # Убираем # символы и лишние пробелы
+                keywords = keywords.replace('#', '')
+                # Разделяем по запятой
+                kw_list = [tag.strip() for tag in keywords.split(',') if tag.strip()]
+                
+                # Фильтруем generic keywords
+                generic = {'broileri', 'kana', 'bbq-kastike'}
+                kw_list = [kw for kw in kw_list if kw.lower() not in generic]
+                
+                # Если остались осмысленные keywords, используем их
+                if kw_list:
+                    tags_list = kw_list
         
-        return None
+        # Возвращаем как строку через запятую с пробелом
+        return ', '.join(tags_list) if tags_list else None
     
     def extract_image_urls(self) -> Optional[str]:
         """Извлечение URL изображений"""
