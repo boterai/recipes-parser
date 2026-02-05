@@ -233,7 +233,7 @@ class AnkarsrumExtractor(BaseRecipeExtractor):
         if instructions:
             # Ищем паттерны типа "levätä 30 minuuttia" или "vähintään 30 minuuttia"
             # Это обычно время подготовки/отдыха теста
-            prep_pattern = r'(?:lev\u00e4t\u00e4|levät\u00e4|lev\u00e4t\u00e4)\s+.*?(\d+)\s*min'
+            prep_pattern = r'(?:lev\u00e4t\u00e4)\s+.*?(\d+)\s*min'
             matches = re.findall(prep_pattern, instructions, re.IGNORECASE)
             if matches:
                 # Берем максимальное значение (обычно самое длинное время отдыха)
@@ -307,10 +307,14 @@ class AnkarsrumExtractor(BaseRecipeExtractor):
         
         if prep_time and cook_time:
             # Извлекаем числа из строк
-            prep_num = int(re.search(r'\d+', prep_time).group())
-            cook_num = int(re.search(r'\d+', cook_time).group())
-            total = prep_num + cook_num
-            return f"{total} minutes"
+            prep_match = re.search(r'\d+', prep_time)
+            cook_match = re.search(r'\d+', cook_time)
+            
+            if prep_match and cook_match:
+                prep_num = int(prep_match.group())
+                cook_num = int(cook_match.group())
+                total = prep_num + cook_num
+                return f"{total} minutes"
         
         return None
     
