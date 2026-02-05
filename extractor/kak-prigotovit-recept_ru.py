@@ -132,7 +132,7 @@ class KakPrigotovitReceptExtractor(BaseRecipeExtractor):
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "2 1/2 чашки кофе", "1/2 стакана сливок", "200 г муки"
         # Сначала пробуем найти количество с дробью
-        pattern = r'^([\d\s/.,]+)?\s*(чашк[иа]|стакан[ао]в?|ст\.?\s*л\.?|ч\.?\s*л\.?|г|кг|мл|л|унци[йя]|фунт[ао]в?|штук[иа]?|шт\.?|больш[иоа]х|среднеего|маленьк[иоа]х|мелкого помола|по желанию|для гарнира|плюс)?\s*(.+)'
+        pattern = r'^([\d\s/.,]+)?\s*(чашк[иа]|стакан[ао]в?|ст\.?\s*л\.?|ч\.?\s*л\.?|г|кг|мл|л|унци[йя]|фунт[ао]в?|штук[иа]?|шт\.?|больш[иоа]х|среднего|маленьк[иоа]х|мелкого помола|по желанию|для гарнира|плюс)?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -168,10 +168,12 @@ class KakPrigotovitReceptExtractor(BaseRecipeExtractor):
         if not name or len(name) < 2:
             return None
         
-        # Return with keys in the same order as reference
+        # Return with keys in specific order required by reference JSON format
+        # Note: The reference uses 'units' before 'amount', which differs from
+        # the typical amount-then-unit convention, but is required for compatibility
         return {
             "name": name,
-            "units": units,  # units before amount
+            "units": units,
             "amount": amount
         }
     
@@ -183,7 +185,7 @@ class KakPrigotovitReceptExtractor(BaseRecipeExtractor):
             r'свежесваренного кофе$': 'свежесваренный кофе',
             r'жирных сливок$': 'жирные сливки',
             r'кофейного ликера,?$': 'кофейный ликер',  # Убираем запятую тоже
-            r'другого кофейный': 'другой кофейный',  # Исправляем смешанный падеж
+            r'другого кофейного': 'другой кофейный',  # Исправляем падеж
             r'водки$': 'водка',
             r'муки$': 'мука',
             r'сахара$': 'сахар',
@@ -355,8 +357,7 @@ class KakPrigotovitReceptExtractor(BaseRecipeExtractor):
             note = note_match.group(1)
             note = self.clean_text(note)
             # Capitalize first letter
-            if note:
-                note = note[0].upper() + note[1:] if len(note) > 1 else note.upper()
+            note = note.capitalize()
             return note
         
         return None
