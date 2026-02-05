@@ -97,9 +97,11 @@ class LafertaExtractor(BaseRecipeExtractor):
                     # Попытка 2: только часы с десятичной дробью (1,5 valandos)
                     hour_decimal_match = re.search(r'(\d+)[,.](\d+)\s*valand', text, re.IGNORECASE)
                     if hour_decimal_match:
-                        hours = int(hour_decimal_match.group(1))
-                        decimal = int(hour_decimal_match.group(2))
-                        total_minutes = hours * 60 + int(decimal * 60 / 10)
+                        hours_str = hour_decimal_match.group(1)
+                        decimal_str = hour_decimal_match.group(2)
+                        # Преобразуем в десятичное число и затем в минуты
+                        total_hours = float(f"{hours_str}.{decimal_str}")
+                        total_minutes = int(total_hours * 60)
                         meta['cook_time'] = f"{total_minutes} minutes"
                         meta['total_time'] = f"{total_minutes} minutes"
                         continue
