@@ -301,26 +301,35 @@ class MevashelеtExtractor(BaseRecipeExtractor):
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок"""
-        # В данном сайте заметки могут быть в конце описания после рецепта
-        # Или в комментариях в ингредиентах (в скобках)
+        # В данном сайте заметки могут быть в описании с ключевыми словами
+        # "החלפתי" (I replaced), "הערה" (note), "טיפ" (tip)
         
-        # Ищем текст после рецепта
+        # Ищем в описании
         content_div = self.soup.find('div', class_='the_content')
         if not content_div:
             return None
         
-        # Получаем весь текст
-        full_text = content_div.get_text(separator=' ', strip=True)
-        
-        # Ищем паттерн "החלפתי" или другие примечания
-        if 'החלפתי' in full_text:
-            # Извлекаем текст после рецепта
-            parts = full_text.split('אופן ההכנה')
-            if len(parts) > 1:
-                after_recipe = parts[1]
-                # Ищем предложения с "החלפתי", "הערה", "טיפ"
-                notes_pattern = r'(?:החלפתי|הערה|טיפ)[^.]*\.'
-                match = re.search(notes_pattern, after_recipe)
+        # Получаем первый параграф (description)
+        first_p = content_div.find('p')
+        if first_p:
+            desc_text = first_p.get_text(separator=' ', strip=True)
+            
+            # Ищем предложения с ключевыми словами
+            if 'החלפתי' in desc_text:
+                # Находим предложение с "החלפתי"
+                sentences = desc_text.split('.')
+                for sentence in sentences:
+                    if 'החלפתי' in sentence:
+                        note = sentence.strip()
+                        # Добавляем точку если её нет
+                        if not note.endswith('.'):
+                            note += '.'
+                        return self.clean_text(note)
+            
+            # Ищем другие паттерны примечаний
+            note_patterns = [r'(?:הערה|טיפ|שימו לב)[^.]*\.']
+            for pattern in note_patterns:
+                match = re.search(pattern, desc_text)
                 if match:
                     return self.clean_text(match.group(0))
         
