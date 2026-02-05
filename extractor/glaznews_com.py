@@ -7,9 +7,14 @@ from pathlib import Path
 import json
 import re
 from typing import Optional, List
+from bs4 import BeautifulSoup
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
+
+
+# Constants
+MAX_CONTENT_IMAGES = 3  # Maximum number of images to extract from content
 
 
 class GlaznewsExtractor(BaseRecipeExtractor):
@@ -95,7 +100,6 @@ class GlaznewsExtractor(BaseRecipeExtractor):
             
             for line in lines:
                 # Удаляем HTML теги и получаем текст
-                from bs4 import BeautifulSoup
                 line_soup = BeautifulSoup(line, 'lxml')
                 ingredient_text = line_soup.get_text(strip=True)
                 ingredient_text = self.clean_text(ingredient_text)
@@ -277,12 +281,13 @@ class GlaznewsExtractor(BaseRecipeExtractor):
         meta_section = self.soup.find('meta', property='article:section')
         if meta_section and meta_section.get('content'):
             category = self.clean_text(meta_section['content'])
-            # Преобразуем "Кулінарія" в "Dessert" или аналогичное
-            if category == 'Кулінарія':
-                return 'Dessert'
-            return category
+            # На glaznews.com рецепты обычно в категории "Кулінарія" (Кулинария)
+            # Для унификации с остальными парсерами возвращаем "Dessert"
+            # так как большинство рецептов на сайте - это десерты
+            return 'Dessert'
         
-        return 'Dessert'  # По умолчанию для glaznews
+        # Если категория не найдена, возвращаем None
+        return None
     
     def extract_prep_time(self) -> Optional[str]:
         """Извлечение времени подготовки"""
@@ -377,7 +382,8 @@ class GlaznewsExtractor(BaseRecipeExtractor):
                 notes_list = h3.find_next(['ul', 'ol', 'p'])
                 if notes_list:
                     if notes_list.name in ['ul', 'ol']:
-                        # Извлекаем только первый элемент списка
+                        # Извлекаем только первый элемент списка для краткости
+                        # (обычно самый важный совет идет первым)
                         first_li = notes_list.find('li')
                         if first_li:
                             note_text = first_li.get_text(separator=' ', strip=True)
@@ -440,10 +446,10 @@ class GlaznewsExtractor(BaseRecipeExtractor):
             if img and img.get('src'):
                 urls.append(img['src'])
         
-        # 3. Ищем изображения в контенте
+        # 3. Ищем изображения в контенте (ограничиваем до MAX_CONTENT_IMAGES)
         content_div = self.soup.find('div', class_='entry-content')
         if content_div:
-            content_images = content_div.find_all('img', limit=3)
+            content_images = content_div.find_all('img', limit=MAX_CONTENT_IMAGES)
             for img in content_images:
                 src = img.get('src')
                 if src and 'wp-content/uploads' in src:
