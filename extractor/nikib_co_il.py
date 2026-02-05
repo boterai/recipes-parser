@@ -76,8 +76,8 @@ class NikibExtractor(BaseRecipeExtractor):
             # Разделяем по <br> тегам
             # Используем str.split на HTML строке
             html_str = str(p_tag)
-            # Разделяем по <br> и <br/> тегам (с любыми атрибутами)
-            parts_html = re.split(r'<br\s+[^>]*/?>', html_str)
+            # Разделяем по <br> и <br/> тегам (с любыми атрибутами или без)
+            parts_html = re.split(r'<br\s*[^>]*/?>', html_str)
             
             for part_html in parts_html:
                 # Парсим каждую часть как HTML чтобы извлечь текст
