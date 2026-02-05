@@ -391,30 +391,40 @@ class SugarSpunRunExtractor(BaseRecipeExtractor):
                     text = span.get_text(strip=True)
                     text = self.clean_text(text)
                     if text and len(text) > 20:  # Минимальная длина для значимого текста
-                        # Упрощаем текст - берем только ключевые фразы
-                        # Убираем детальные объяснения в скобках
-                        text = re.sub(r'\([^)]+\)\s*\.?', '', text)
-                        # Убираем фразы начинающиеся с "Note that"
-                        text = re.sub(r'\s*Note that[^.]+\.', '', text, flags=re.IGNORECASE)
-                        # Убираем детальные объяснения "You do not need..."
-                        text = re.sub(r'\s*You do not need[^.]+\.', '', text, flags=re.IGNORECASE)
-                        # Нормализуем пробелы
-                        text = re.sub(r'\s+', ' ', text).strip()
-                        
-                        # Упрощаем некоторые фразы
-                        text = re.sub(r'I prefer to use fresh .+ but in a pinch frozen .+ will work instead\.?\s*', 
-                                      lambda m: m.group(0).split(' but ')[0].replace('I prefer to use fresh', 'can be fresh or frozen.').replace('.', '') + '.', 
-                                      text, flags=re.IGNORECASE)
-                        
-                        if text:
-                            paragraphs.append(text)
+                        paragraphs.append(text)
                 
-                # Объединяем параграфы
+                if not paragraphs:
+                    return None
+                
+                # Объединяем и упрощаем текст
                 result = ' '.join(paragraphs)
                 
-                # Финальная очистка
+                # Преобразуем "I prefer to use fresh X but in a pinch frozen X will work" -> "X can be fresh or frozen"
+                result = re.sub(
+                    r'I prefer to use fresh (\w+) but in a pinch frozen \1 will work instead\.',
+                    r'\1 can be fresh or frozen.',
+                    result,
+                    flags=re.IGNORECASE
+                )
+                
+                # Удаляем детальные пояснения
+                result = re.sub(r'\s*You do not need[^.]+\.', '', result, flags=re.IGNORECASE)
+                result = re.sub(r'\s*Note that[^.]+\.', '', result, flags=re.IGNORECASE)
+                result = re.sub(r'\s*\([^)]+\)', '', result)  # Удаляем все скобки с содержимым
+                result = re.sub(r'[()]+', '', result)  # Удаляем оставшиеся скобки
+                
+                # Нормализуем пробелы и точки
                 result = re.sub(r'\s+', ' ', result).strip()
-                result = re.sub(r'\.\s*\.', '.', result)  # Удаляем двойные точки
+                result = re.sub(r'\s+([.,;!?])', r'\1', result)  # Убираем пробелы перед знаками препинания
+                result = re.sub(r'\.\s*\.', '.', result)
+                
+                # Добавляем точку в конце если её нет
+                if result and not result.endswith('.'):
+                    result += '.'
+                
+                # Если первая буква строчная, делаем заглавной
+                if result and result[0].islower():
+                    result = result[0].upper() + result[1:]
                 
                 return result if result else None
         
@@ -430,28 +440,37 @@ class SugarSpunRunExtractor(BaseRecipeExtractor):
         if json_ld and 'keywords' in json_ld:
             keywords = json_ld['keywords']
             if isinstance(keywords, str):
-                # Разделяем по пробелам и запятым, чтобы получить отдельные слова
-                words = re.split(r'[\s,]+', keywords.lower())
-                tags.extend([w.strip() for w in words if w.strip()])
+                # Разделяем по пробелам, чтобы получить отдельные слова
+                words = keywords.lower().split()
+                tags.extend([w.strip() for w in words if w.strip() and len(w.strip()) > 2])
             elif isinstance(keywords, list):
                 for kw in keywords:
-                    words = re.split(r'[\s,]+', str(kw).lower())
-                    tags.extend([w.strip() for w in words if w.strip()])
+                    words = str(kw).lower().split()
+                    tags.extend([w.strip() for w in words if w.strip() and len(w.strip()) > 2])
         
-        # Можно добавить категорию в теги
+        # Добавляем категорию в теги
         if json_ld and 'recipeCategory' in json_ld:
             category = json_ld['recipeCategory']
             if isinstance(category, list):
                 for c in category:
-                    tags.append(c.strip().lower())
+                    # Разделяем категории по запятым (например "Cookies, Dessert")
+                    parts = str(c).split(',')
+                    for part in parts:
+                        tag = part.strip().lower()
+                        if tag and len(tag) > 2:
+                            tags.append(tag)
             elif isinstance(category, str):
-                tags.append(category.strip().lower())
+                parts = category.split(',')
+                for part in parts:
+                    tag = part.strip().lower()
+                    if tag and len(tag) > 2:
+                        tags.append(tag)
         
         # Удаляем дубликаты, сохраняя порядок
         seen = set()
         unique_tags = []
         for tag in tags:
-            if tag and tag not in seen and len(tag) > 2:
+            if tag and tag not in seen:
                 seen.add(tag)
                 unique_tags.append(tag)
         
