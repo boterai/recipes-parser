@@ -26,7 +26,7 @@ class MorsblogExtractor(BaseRecipeExtractor):
             # Ищем ключевые слова блюда
             
             # Убираем префиксы
-            title = re.sub(r'^(Den Bedste|Guide til at lave laekre|Guide til at lave|En Sund og Laekker)\s+', '', title, flags=re.IGNORECASE)
+            title = re.sub(r'^(Den Bedste|Guide til at lave laekre|Guide til at lave lækre|Guide til at lave|En Sund og Laekker|En Sund og Lækker|lækre|laekre)\s+', '', title, flags=re.IGNORECASE)
             # Убираем суффиксы
             title = re.sub(r'\s+(Opskrift|Guide).*$', '', title, flags=re.IGNORECASE)
             # Убираем двоеточие и всё после
@@ -120,8 +120,9 @@ class MorsblogExtractor(BaseRecipeExtractor):
         
         if match2:
             amount, rest = match2.groups()
-            # Проверяем, начинается ли rest с единицы измерения
-            rest_parts = rest.split(None, 1)
+            # Убираем описания после запятой для анализа
+            rest_clean = re.sub(r',.*$', '', rest).strip()
+            rest_parts = rest_clean.split(None, 1)
             unit = None
             name = rest
             
@@ -133,22 +134,34 @@ class MorsblogExtractor(BaseRecipeExtractor):
                     name = rest_parts[1] if len(rest_parts) > 1 else first_word
                 # Специальная обработка для ингредиентов без явной единицы (как "æg", "salt", "peber")
                 # Если название - это обычный ингредиент без единицы, подразумеваем "stk"
-                elif first_word in ['æg', 'aeblinger', 'citroner', 'appelsiner', 'løg', 'hvidløg']:
+                elif first_word in ['æg', 'aeblinger', 'citroner', 'appelsiner', 'løg', 'hvidløg', 'rødløg']:
                     unit = 'stk'
                     name = rest
-                # Если это описательное слово (store, lille и т.д.), оставляем в названии
+                # Если это описательное слово (store, lille и т.д.), проверяем второе слово
                 elif first_word in ['store', 'lille', 'små', 'mellemstore', 'hele', 'frisk', 'friske']:
                     # Проверяем следующее слово
                     if len(rest_parts) > 1:
-                        second_word = rest_parts[1] if len(rest_parts) > 1 else ''
-                        # Если второе слово - это продукт без единицы
-                        if second_word in ['gulerødder', 'æg', 'kartofler', 'løg']:
-                            unit = 'stk' if second_word != 'gulerødder' else 'large'
+                        second_word = rest_parts[1]
+                        # Если второе слово - это продукт, который идёт поштучно
+                        if second_word in ['gulerødder', 'løg', 'citroner', 'appelsiner']:
+                            # "store gulerødder" -> units: "large" (размер)
+                            if first_word == 'store':
+                                unit = 'large'
+                            else:
+                                unit = 'stykker'
+                            name = rest
+                        elif second_word in ['kartofler', 'bagekartofler']:
+                            # "store bagekartofler" -> units: "stykker" (количество)
+                            unit = 'stykker'
                             name = rest
                         else:
                             name = rest
                     else:
                         name = rest
+                # Если слово - это типичный продукт поштучно
+                elif any(rest_clean.endswith(word) for word in ['kartofler', 'bagekartofler', 'æbler', 'pærer', 'løg', 'rødløg']):
+                    unit = 'stykker'
+                    name = rest
                 else:
                     # Это часть названия, не единица
                     name = rest
@@ -395,10 +408,10 @@ class MorsblogExtractor(BaseRecipeExtractor):
         if not article:
             return None
         
+        notes_text = []
+        
         # Ищем заголовки с "Variationer"
         note_headers = article.find_all('h2', string=re.compile(r'Variationer', re.IGNORECASE))
-        
-        notes_text = []
         
         for header in note_headers:
             # Берём следующий параграф
@@ -411,6 +424,17 @@ class MorsblogExtractor(BaseRecipeExtractor):
                     notes_text.append(first_sentence)
                 elif text:
                     notes_text.append(text)
+        
+        # Если не нашли вариации, ищем секцию "Nyde" (наслаждение)
+        if not notes_text:
+            nyde_headers = article.find_all('h2', string=re.compile(r'Nyde', re.IGNORECASE))
+            for header in nyde_headers:
+                next_p = header.find_next_sibling('p')
+                if next_p:
+                    text = self.clean_text(next_p.get_text())
+                    # Берём полный текст для этой секции
+                    if text:
+                        notes_text.append(text)
         
         if notes_text:
             # Возвращаем первый найденный совет
