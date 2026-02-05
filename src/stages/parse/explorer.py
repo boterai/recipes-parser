@@ -42,7 +42,7 @@ class SiteExplorer:
     def __init__(self, base_url: str, debug_mode: bool = True, recipe_pattern: str = None,
                  max_errors: int = 3, max_urls_per_pattern: int = None, debug_port: int = None,
                  driver: webdriver.Chrome = None, custom_logger: logging.Logger = None, 
-                 max_no_recipe_pages: Optional[int] = None):
+                 max_no_recipe_pages: Optional[int] = None, proxy: str = None):
         """
         Args:
             base_url: Базовый URL сайта
@@ -54,9 +54,11 @@ class SiteExplorer:
             driver: Переданный экземпляр webdriver.Chrome (если None, создается новый)
             custom_logger: Пользовательский логгер (если None, используется стандартный)
             max_no_recipe_pages: Максимальное количество страниц без рецепта подряд (None = без ограничений). Если указано прерывает исследвоание сайта при достижении лимита
+            proxy: Прокси сервер (формат: host:port или http://host:port). Если None, берется из config.PROXY
         """
         self.debug_mode = debug_mode
         self.debug_port = debug_port if debug_port is not None else config.PARSER_DEFAULT_CHROME_PORT
+        self.proxy = proxy or config.PARSER_PROXY  # Берем из параметра или из конфига
         self.driver = driver
         self.recipe_regex = None
         self.request_count = 0  # Счетчик запросов для адаптивных пауз
@@ -193,6 +195,15 @@ class SiteExplorer:
                 f"localhost:{self.debug_port}"
             )
             self.logger.info(f"Подключение к Chrome на порту {self.debug_port}")
+            
+            # Предупреждение о прокси в debug режиме
+            if self.proxy:
+                self.logger.warning(
+                    f"⚠️ В debug режиме прокси должен быть настроен при запуске Chrome:\n"
+                    f"  google-chrome --remote-debugging-port={self.debug_port} "
+                    f"--proxy-server={self.proxy.replace('http://', '').replace('https://', '')} "
+                    f"--user-data-dir=/tmp/chrome-debug_{self.debug_port}"
+                )
         else:
             chrome_options.add_argument("--start-maximized")
             chrome_options.add_argument("--disable-blink-features=AutomationControlled")
@@ -1117,6 +1128,7 @@ class SiteExplorer:
         """Закрытие браузера и БД"""
         if self.driver and not self.debug_mode:
             self.driver.quit()
+        
         self.site_repository.close()
         self.page_repository.close()
         self.logger.info("Готово")

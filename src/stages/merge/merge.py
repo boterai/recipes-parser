@@ -489,7 +489,7 @@ class ClusterVariationGenerator:
         # проверка на то, что вариация уже создана и возвращение из бд
         merged = self.merge_repository.get_by_page_ids(cluster)
         if merged:
-            logger.info(f"Использован кэшированный GPT merge для {cluster}")
+            logger.info(f"Для этого кластера уже создан рецепт {cluster}")
             return [merged.to_pydantic(get_images=False)]
         
         # Загружаем рецепты
@@ -556,7 +556,7 @@ class ClusterVariationGenerator:
         variations = []
         used_combinations = set()  # Отслеживаем использованные комбинации
         used_base_ids = set()  # Отслеживаем использованные базовые рецепты
-        max_attempts = max_variations * 3  # Лимит попыток избежать бесконечного цикла
+        max_attempts = max_variations * 2  # Лимит попыток избежать бесконечного цикла
         attempts = 0
         
         tasks = []

@@ -100,7 +100,7 @@ async def execute_cluster_batch(tasks: list, clusters_in_batch: list[list[int]])
             for merged_recipes in completed_tasks:
                 if merged_recipes and not isinstance(merged_recipes, Exception):
                     logger.info(f"Created {len(merged_recipes)} variations.")
-                success_clusters.append(clusters_in_batch[i])
+            success_clusters.append(clusters_in_batch[i])
     return success_clusters
     
 
@@ -125,7 +125,6 @@ async def run_merge(score_thresold: float,
         processed_set = {tuple(sorted(cluster)) for cluster in existing_clusters}
         clusters = [cluster for cluster in clusters if tuple(sorted(cluster)) not in processed_set]
         logger.info(f"Осталось {len(clusters)} кластеров для обработки после фильтрации истории.")
-
     total = 0
     used_batch_size = 0
     tasks = []

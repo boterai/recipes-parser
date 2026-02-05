@@ -84,6 +84,7 @@ class Config:
     PARSER_DEFAULT_CRAWL_DEPTH: int = int(os.getenv('PARSER_DEFAULT_CRAWL_DEPTH', '4'))
     PARSER_DEFAULT_IMPLICIT_WAIT: int = int(os.getenv('PARSER_DEFAULT_IMPLICIT_WAIT', '10'))
     PARSER_DEFAULT_PAGE_LOAD_TIMEOUT: int = int(os.getenv('PARSER_DEFAULT_PAGE_LOAD_TIMEOUT', '30'))
+    PARSER_PROXY: Optional[str] = os.getenv('PARSER_PROXY', None)
     
 # единый экземпляр конфигурации
 config = Config()
