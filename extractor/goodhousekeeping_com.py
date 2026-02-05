@@ -152,9 +152,9 @@ class GoodHousekeepingExtractor(BaseRecipeExtractor):
             text = text.replace(fraction, replacement)
         
         # Паттерн для извлечения количества, единицы и названия
-        # Примеры: "1 c. flour", "2 tbsp. butter", "1/2 tsp. salt", "1 1/4 cups flour"
+        # Примеры: "1 c. flour", "2 tbsp. butter", "1/2 tsp. salt", "1 1/4 cups flour", "1 large egg"
         # Порядок важен: сначала проверяем полные слова, потом сокращения с точками
-        pattern = r'^([\d\s/]+)?\s*(cups?|tablespoons?|teaspoons?|pounds?|ounces?|grams?|kilograms?|milliliters?|liters?|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|heads?|c\.|tbsps?\.?|tsps?\.?|lbs?\.?|oz\.?|g\.?|kg\.?|ml\.?)\s*(.+)'
+        pattern = r'^([\d\s/]+)?\s*(cups?|tablespoons?|teaspoons?|pounds?|ounces?|grams?|kilograms?|milliliters?|liters?|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|heads?|c\.|tbsps?\.?|tsps?\.?|lbs?\.?|oz\.?|g\.?|kg\.?|ml\.?)?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -163,10 +163,18 @@ class GoodHousekeepingExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "unit": None
+                "units": None
             }
         
         amount_str, unit, name = match.groups()
+        
+        # Если нет ни количества, ни единицы, значит весь текст - это название
+        if not amount_str and not unit:
+            return {
+                "name": text,
+                "amount": None,
+                "units": None
+            }
         
         # Обработка количества
         amount = None
@@ -208,29 +216,38 @@ class GoodHousekeepingExtractor(BaseRecipeExtractor):
         if unit:
             unit = unit.strip().rstrip('.')
             # Нормализация сокращений - сохраняем оригинальный формат из reference
-            unit_map = {
-                'c': 'cup',
-                'cups': 'cups',  # Множественное число остается
-                'cup': 'cup',
-                'tbsp': 'Tbsp.',
-                'tbsps': 'Tbsp.',
-                'tablespoon': 'Tbsp.',
-                'tablespoons': 'Tbsp.',
-                'tsp': 'tsp.',
-                'tsps': 'tsp.',
-                'teaspoon': 'tsp.',
-                'teaspoons': 'tsp.',
-                'oz': 'oz.',
-                'lb': 'lb.',
-                'lbs': 'lb.',
-                'pound': 'lb.',
-                'pounds': 'lb.',
-                'g': 'g',
-                'kg': 'kg',
-                'ml': 'ml',
-                'l': 'l'
-            }
-            unit = unit_map.get(unit.lower(), unit)
+            # Для c., cups/cup смотрим на количество
+            if unit.lower() in ['c', 'cup', 'cups']:
+                # Проверяем количество - если больше 1, используем множественное число
+                try:
+                    if amount_str:
+                        amt_val = float(amount_str.replace(' ', '').replace('/', '.')) if '/' not in amount_str else eval(amount_str.replace(' ', '+'))
+                        unit = 'cups' if amt_val > 1 else 'cup'
+                    else:
+                        unit = 'cup'
+                except:
+                    unit = 'cup'
+            else:
+                unit_map = {
+                    'tbsp': 'Tbsp.',
+                    'tbsps': 'Tbsp.',
+                    'tablespoon': 'Tbsp.',
+                    'tablespoons': 'Tbsp.',
+                    'tsp': 'tsp.',
+                    'tsps': 'tsp.',
+                    'teaspoon': 'tsp.',
+                    'teaspoons': 'tsp.',
+                    'oz': 'oz.',
+                    'lb': 'lb.',
+                    'lbs': 'lb.',
+                    'pound': 'lb.',
+                    'pounds': 'lb.',
+                    'g': 'g',
+                    'kg': 'kg',
+                    'ml': 'ml',
+                    'l': 'l'
+                }
+                unit = unit_map.get(unit.lower(), unit)
         
         # Очистка названия
         # Не удаляем скобки - они могут содержать важную информацию
