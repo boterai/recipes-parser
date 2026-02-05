@@ -15,6 +15,20 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class GagalogExtractor(BaseRecipeExtractor):
     """Экстрактор для gagalog.com"""
     
+    # Статический маппинг дробей для переиспользования
+    FRACTION_MAP = {
+        '½': '0.5', '¼': '0.25', '¾': '0.75',
+        '⅓': '0.33', '⅔': '0.67', '⅛': '0.125',
+        '⅜': '0.375', '⅝': '0.625', '⅞': '0.875',
+        '⅕': '0.2', '⅖': '0.4', '⅗': '0.6', '⅘': '0.8'
+    }
+    
+    # Предкомпилированный паттерн для парсинга ингредиентов
+    INGREDIENT_PATTERN = re.compile(
+        r'^([\d\s/.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads)?\s*(.+)',
+        re.IGNORECASE
+    )
+    
     def _get_json_ld_data(self) -> Optional[dict]:
         """Извлечение данных JSON-LD из страницы"""
         json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
@@ -169,22 +183,12 @@ class GagalogExtractor(BaseRecipeExtractor):
         if not text:
             return None
         
-        # Заменяем Unicode дроби на числа
-        fraction_map = {
-            '½': '0.5', '¼': '0.25', '¾': '0.75',
-            '⅓': '0.33', '⅔': '0.67', '⅛': '0.125',
-            '⅜': '0.375', '⅝': '0.625', '⅞': '0.875',
-            '⅕': '0.2', '⅖': '0.4', '⅗': '0.6', '⅘': '0.8'
-        }
-        
-        for fraction, decimal in fraction_map.items():
+        # Заменяем Unicode дроби на числа используя class-level constant
+        for fraction, decimal in self.FRACTION_MAP.items():
             text = text.replace(fraction, decimal)
         
-        # Паттерн для извлечения количества, единицы и названия
-        # Поддерживаем различные единицы измерения
-        pattern = r'^([\d\s/.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads)?\s*(.+)'
-        
-        match = re.match(pattern, text, re.IGNORECASE)
+        # Используем предкомпилированный паттерн
+        match = self.INGREDIENT_PATTERN.match(text)
         
         if not match:
             # Если паттерн не совпал, возвращаем только название
@@ -307,7 +311,8 @@ class GagalogExtractor(BaseRecipeExtractor):
                             # HowToSection с подшагами
                             for substep in step['itemListElement']:
                                 if isinstance(substep, dict) and 'text' in substep:
-                                    steps.append(f"{len(steps) + 1}. {substep['text']}")
+                                    step_num = len(steps) + 1
+                                    steps.append(f"{step_num}. {substep['text']}")
                     elif isinstance(step, str):
                         steps.append(f"{idx}. {step}")
             elif isinstance(instructions, str):
@@ -384,7 +389,7 @@ class GagalogExtractor(BaseRecipeExtractor):
         if breadcrumbs:
             links = breadcrumbs.find_all('a')
             if len(links) > 1:
-                # Берем предпоследнюю категорию (последняя часто сам рецепт)
+                # Берем последнюю категорию из breadcrumbs
                 return self.clean_text(links[-1].get_text())
         
         return None
