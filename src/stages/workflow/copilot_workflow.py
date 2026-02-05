@@ -243,4 +243,4 @@ class CopilotWorkflow:
 
 if __name__ == "__main__":
     workflow = CopilotWorkflow()
-    workflow.create_issues_for_parsers()
+    workflow.check_review_requested_prs()
