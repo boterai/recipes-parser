@@ -82,20 +82,39 @@ class HindiFoodvivaExtractor(BaseRecipeExtractor):
     
     def extract_description(self) -> Optional[str]:
         """Извлечение описания рецепта"""
+        # Ищем в meta description или og:description
+        meta_desc = self.soup.find('meta', {'name': 'description'})
+        if meta_desc and meta_desc.get('content'):
+            desc = self.clean_text(meta_desc['content'])
+            # Берем только первое предложение (до первой точки или перевода строки)
+            if desc:
+                # Ищем первую точку с учетом что после нее может быть пробел
+                match = re.search(r'^([^।\.]+[।\.])', desc)
+                if match:
+                    return self.clean_text(match.group(1))
+                return desc
+        
+        # Альтернативно - из og:description
+        og_desc = self.soup.find('meta', property='og:description')
+        if og_desc and og_desc.get('content'):
+            desc = self.clean_text(og_desc['content'])
+            # Берем только первое предложение
+            if desc:
+                match = re.search(r'^([^।\.]+[।\.])', desc)
+                if match:
+                    return self.clean_text(match.group(1))
+                return desc
+        
         # Ищем в div с id="css_fv_recipe_desc" и itemprop="description"
         desc_elem = self.soup.find('div', id='css_fv_recipe_desc')
         if desc_elem:
-            return self.clean_text(desc_elem.get_text())
-        
-        # Альтернативно - из meta description
-        meta_desc = self.soup.find('meta', {'name': 'description'})
-        if meta_desc and meta_desc.get('content'):
-            return self.clean_text(meta_desc['content'])
-        
-        # Или из og:description
-        og_desc = self.soup.find('meta', property='og:description')
-        if og_desc and og_desc.get('content'):
-            return self.clean_text(og_desc['content'])
+            desc = self.clean_text(desc_elem.get_text())
+            # Берем только первое предложение
+            if desc:
+                match = re.search(r'^([^।\.]+[।\.])', desc)
+                if match:
+                    return self.clean_text(match.group(1))
+                return desc
         
         return None
     
@@ -144,7 +163,7 @@ class HindiFoodvivaExtractor(BaseRecipeExtractor):
         fraction_map = {
             '½': '1/2', '¼': '1/4', '¾': '3/4',
             '⅓': '1/3', '⅔': '2/3', '⅛': '1/8',
-            '⅜': '3/8', '⅝': '5/8', 'Ⅸ': '7/8',
+            '⅜': '3/8', '⅝': '5/8', '⅞': '7/8',
             '⅕': '1/5', '⅖': '2/5', '⅗': '3/5', '⅘': '4/5'
         }
         
@@ -153,7 +172,7 @@ class HindiFoodvivaExtractor(BaseRecipeExtractor):
         
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "3/4 कप रवा", "1 टीस्पून राई", "2 हरी मिर्च"
-        # Единицы измерения на хинди
+        # Единицы измерения: поддерживаем Hindi, English и Russian (смешанный контент на сайте)
         units_pattern = r'(?:कप|टीस्पून|टेबलस्पून|ग्राम|किलोग्राम|मिलीलीटर|लीटर|चुटकी|टहनिया|मध्यम|बड़ा|छोटा|इंच|कलियाँ|pieces|шт\.|большой|средний|स्वादानुसार)'
         
         # Паттерн: количество + единица + название
