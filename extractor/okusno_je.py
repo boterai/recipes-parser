@@ -7,6 +7,7 @@ from pathlib import Path
 import json
 import re
 from typing import Optional
+from bs4 import BeautifulSoup
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
@@ -14,6 +15,16 @@ from extractor.base import BaseRecipeExtractor, process_directory
 
 class OkusnoJeExtractor(BaseRecipeExtractor):
     """Экстрактор для okusno.je"""
+    
+    # Минимальная длина для заметки
+    MIN_NOTE_LENGTH = 20
+    
+    # Поддерживаемые единицы измерения
+    SUPPORTED_UNITS = (
+        'g', 'kg', 'ml', 'l', 'dl', 'žličke', 'žlički', 'žlica', 'žlice',
+        'vrečka', 'vrečke', 'cm', 'mm', 'kos', 'kosi', 'list', 'listi',
+        'šop', 'šopi'
+    )
     
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
@@ -122,7 +133,7 @@ class OkusnoJeExtractor(BaseRecipeExtractor):
             text: Строка вида "250 g gladke moke"
             
         Returns:
-            dict: {"name": "gladke moke", "amount": "250", "unit": "g"}
+            dict: {"name": "gladke moke", "amount": "250", "units": "g"}
         """
         if not text:
             return None
@@ -130,13 +141,14 @@ class OkusnoJeExtractor(BaseRecipeExtractor):
         text = self.clean_text(text)
         
         # Паттерн для извлечения количества, единицы и названия
-        # Примеры: "250 g gladke moke", "1.5 žličke soli"
-        pattern = r'^([\d\s/.,]+)?\s*(g|kg|ml|l|dl|žličke|žlički|žlica|žlice|vrečka|vrečke|cm|mm|kos|kosi|list|listi|šop|šopi)?(.+)$'
+        # Используем поддерживаемые единицы измерения
+        units_pattern = '|'.join(self.SUPPORTED_UNITS)
+        pattern = rf'^([\d\s/.,]+)?\s*({units_pattern})?(.+)$'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
         if not match:
-            return {"name": text, "amount": None, "unit": None}
+            return {"name": text, "amount": None, "units": None}
         
         amount_str, unit, name = match.groups()
         
@@ -153,8 +165,8 @@ class OkusnoJeExtractor(BaseRecipeExtractor):
         
         return {
             "name": name,
-            "units": unit,
-            "amount": amount
+            "amount": amount,
+            "units": unit
         }
     
     def extract_instructions(self) -> Optional[str]:
@@ -170,20 +182,17 @@ class OkusnoJeExtractor(BaseRecipeExtractor):
                     instructions = data['recipeInstructions']
                     if isinstance(instructions, str):
                         # Может содержать HTML теги, очищаем
-                        from bs4 import BeautifulSoup
                         text_soup = BeautifulSoup(instructions, 'lxml')
                         return self.clean_text(text_soup.get_text(separator=' ', strip=True))
                     elif isinstance(instructions, list):
                         for step in instructions:
                             if isinstance(step, dict) and 'text' in step:
                                 # Очищаем от HTML тегов
-                                from bs4 import BeautifulSoup
                                 text_soup = BeautifulSoup(step['text'], 'lxml')
                                 step_text = self.clean_text(text_soup.get_text(separator=' ', strip=True))
                                 steps.append(step_text)
                             elif isinstance(step, str):
                                 # Очищаем от HTML тегов
-                                from bs4 import BeautifulSoup
                                 text_soup = BeautifulSoup(step, 'lxml')
                                 step_text = self.clean_text(text_soup.get_text(separator=' ', strip=True))
                                 steps.append(step_text)
@@ -421,7 +430,7 @@ class OkusnoJeExtractor(BaseRecipeExtractor):
         if italic_p:
             # Берем последний найденный
             notes_text = self.clean_text(italic_p[-1].get_text(separator=' ', strip=True))
-            if notes_text and len(notes_text) > 20:  # Минимальная длина для заметки
+            if notes_text and len(notes_text) > self.MIN_NOTE_LENGTH:
                 return notes_text
         
         return None
