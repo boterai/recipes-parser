@@ -15,6 +15,19 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class LanaRecipesExtractor(BaseRecipeExtractor):
     """Экстрактор для lanarecipes.com"""
     
+    # Стоп-слова для фильтрации тегов
+    TAG_STOPWORDS = {'recipe', 'recipes', 'easy', 'homemade'}
+    
+    # Единицы измерения для парсинга ингредиентов
+    UNITS_PATTERN = (
+        r'cups?|cup|tablespoons?|teaspoons?|tbsps?|tsps?|tbsp|tsp|'
+        r'pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|'
+        r'milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|'
+        r'packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|'
+        r'cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|'
+        r'head|heads|unit'
+    )
+    
     @staticmethod
     def parse_iso_duration(duration: str) -> Optional[str]:
         """
@@ -24,7 +37,7 @@ class LanaRecipesExtractor(BaseRecipeExtractor):
             duration: строка вида "PT20M" или "PT1H30M"
             
         Returns:
-            Время в формате "X minutes" или "X hours Y minutes"
+            Время в формате "X minutes" (например, "90 minutes")
         """
         if not duration or not duration.startswith('PT'):
             return None
@@ -142,7 +155,7 @@ class LanaRecipesExtractor(BaseRecipeExtractor):
             text = text.replace(fraction, decimal)
         
         # Паттерн для извлечения количества, единицы и названия
-        pattern = r'^([\d\s/.,]+)?\s*(cups?|cup|tablespoons?|teaspoons?|tbsps?|tsps?|tbsp|tsp|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|unit)?\s*(.+)'
+        pattern = rf'^([\d\s/.,]+)?\s*({self.UNITS_PATTERN})?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -236,10 +249,11 @@ class LanaRecipesExtractor(BaseRecipeExtractor):
         if recipe_data and 'keywords' in recipe_data:
             keywords = recipe_data['keywords']
             if isinstance(keywords, list):
-                # Ищем категории (обычно с большой буквы: Dessert, Breakfast, etc.)
-                categories = [k for k in keywords if k and k[0].isupper() and k.lower() in ['dessert', 'breakfast', 'lunch', 'dinner', 'appetizer', 'snack', 'main course']]
-                if categories:
-                    return categories[0]
+                # Ищем категории (обычно категории начинаются с большой буквы)
+                valid_categories = {'dessert', 'breakfast', 'lunch', 'dinner', 'appetizer', 'snack', 'main course'}
+                for k in keywords:
+                    if k.lower() in valid_categories:
+                        return k
         
         # Проверяем articleSection в @graph
         json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
@@ -350,11 +364,10 @@ class LanaRecipesExtractor(BaseRecipeExtractor):
             if isinstance(keywords, list) and keywords:
                 # Фильтруем стоп-слова
                 filtered_tags = []
-                stopwords = {'recipe', 'recipes', 'easy', 'homemade'}
                 
                 for tag in keywords:
                     tag_lower = tag.lower()
-                    if tag_lower not in stopwords and len(tag_lower) >= 3:
+                    if tag_lower not in self.TAG_STOPWORDS and len(tag_lower) >= 3:
                         filtered_tags.append(tag_lower)
                 
                 return ', '.join(filtered_tags) if filtered_tags else None
@@ -362,8 +375,7 @@ class LanaRecipesExtractor(BaseRecipeExtractor):
             # Если keywords - это строка с запятыми
             elif isinstance(keywords, str):
                 tags = [tag.strip().lower() for tag in keywords.split(',')]
-                stopwords = {'recipe', 'recipes', 'easy', 'homemade'}
-                filtered_tags = [tag for tag in tags if tag not in stopwords and len(tag) >= 3]
+                filtered_tags = [tag for tag in tags if tag not in self.TAG_STOPWORDS and len(tag) >= 3]
                 return ', '.join(filtered_tags) if filtered_tags else None
         
         # Если не нашли в Recipe, ищем в Article
@@ -378,11 +390,10 @@ class LanaRecipesExtractor(BaseRecipeExtractor):
                             if isinstance(keywords, list) and keywords:
                                 # Фильтруем стоп-слова
                                 filtered_tags = []
-                                stopwords = {'recipe', 'recipes', 'easy', 'homemade'}
                                 
                                 for tag in keywords:
                                     tag_lower = tag.lower()
-                                    if tag_lower not in stopwords and len(tag_lower) >= 3:
+                                    if tag_lower not in self.TAG_STOPWORDS and len(tag_lower) >= 3:
                                         filtered_tags.append(tag_lower)
                                 
                                 return ', '.join(filtered_tags) if filtered_tags else None
