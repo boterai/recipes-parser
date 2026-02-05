@@ -72,8 +72,8 @@ class BakingTasteExtractor(BaseRecipeExtractor):
         name = re.sub(r'\s*\([^)]*\)\s*$', '', name)
         # Убираем " Ever" в конце
         name = re.sub(r'\s+Ever\s*$', '', name, flags=re.IGNORECASE)
-        # Убираем типичные суффиксы после названия рецепта
-        name = re.sub(r'\s+(You.ll|You Will|You.re Going To Love)\s+.*$', '', name, flags=re.IGNORECASE)
+        # Убираем типичные суффиксы после названия рецепта (с учетом разных апострофов)
+        name = re.sub(r'\s+(You[\'\'\`]ll|You Will|You[\'\'\`]re Going To Love)\s+.*$', '', name, flags=re.IGNORECASE)
         
         return name
     
@@ -145,10 +145,10 @@ class BakingTasteExtractor(BaseRecipeExtractor):
             return text
         
         fraction_map = {
-            '½': 0.5, '¼': 0.25, '¾': 0.75,
-            '⅓': 0.33, '⅔': 0.67, '⅛': 0.125,
-            '⅜': 0.375, '⅝': 0.625, '⅞': 0.875,
-            '⅕': 0.2, '⅖': 0.4, '⅗': 0.6, '⅘': 0.8
+            '½': 1/2, '¼': 1/4, '¾': 3/4,
+            '⅓': 1/3, '⅔': 2/3, '⅛': 1/8,
+            '⅜': 3/8, '⅝': 5/8, '⅞': 7/8,
+            '⅕': 1/5, '⅖': 2/5, '⅗': 3/5, '⅘': 4/5
         }
         
         # Обработка смешанных чисел (например, "1 ¾")
@@ -178,11 +178,13 @@ class BakingTasteExtractor(BaseRecipeExtractor):
             
             if isinstance(instructions, list):
                 for idx, step in enumerate(instructions, 1):
+                    step_text = None
                     if isinstance(step, dict) and 'text' in step:
                         step_text = self.clean_text(step['text'])
-                        steps.append(f"{idx}. {step_text}")
                     elif isinstance(step, str):
                         step_text = self.clean_text(step)
+                    
+                    if step_text:
                         steps.append(f"{idx}. {step_text}")
             elif isinstance(instructions, str):
                 steps.append(self.clean_text(instructions))
