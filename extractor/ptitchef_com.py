@@ -77,6 +77,8 @@ class PtitchefExtractor(BaseRecipeExtractor):
             # Приводим к нижнему регистру и убираем финальные знаки препинания
             if name:
                 name = name.lower().rstrip('.')
+                # Заменяем & на et
+                name = name.replace(' & ', ' et ')
             return name
         
         # Альтернативно - из h1
@@ -85,6 +87,7 @@ class PtitchefExtractor(BaseRecipeExtractor):
             name = self.clean_text(h1.get_text())
             if name:
                 name = name.lower().rstrip('.')
+                name = name.replace(' & ', ' et ')
             return name
         
         # Или из meta og:title
@@ -96,6 +99,7 @@ class PtitchefExtractor(BaseRecipeExtractor):
             name = self.clean_text(title)
             if name:
                 name = name.lower().rstrip('.')
+                name = name.replace(' & ', ' et ')
             return name
         
         return None
@@ -159,7 +163,7 @@ class PtitchefExtractor(BaseRecipeExtractor):
         # Примеры: "100 g de beurre", "150g de farine", "1/2 l de lait", "4 oeufs", "2 cuillère à soupe de rhum", "2 cuillères à soupe d'extrait de café"
         
         # Попытка 1: количество + "sachet/bouchon/pincée..." + "de/d'" + название
-        match = re.match(r'^(\d+(?:[.,/]\d+)?)\s*(sachets?|bouchons?|pincées?)\s+(?:de|d[\''])\s+(.+)$', ingredient_text, re.IGNORECASE)
+        match = re.match(r"^(\d+(?:[.,/]\d+)?)\s*(sachets?|bouchons?|pincées?)\s+(?:de\s+|d')(.+)$", ingredient_text, re.IGNORECASE)
         if match:
             amount_str, unit, name = match.groups()
             amount = self._parse_amount(amount_str)
@@ -170,7 +174,7 @@ class PtitchefExtractor(BaseRecipeExtractor):
             }
         
         # Попытка 2: количество + сложная единица типа "cuillère à soupe" + "de/d'" + название
-        match = re.match(r'^(\d+(?:[.,/]\d+)?)\s+((?:cuillères?|cuillère)\s+à\s+\w+)\s+(?:de|d[\''])\s+(.+)$', ingredient_text, re.IGNORECASE)
+        match = re.match(r"^(\d+(?:[.,/]\d+)?)\s+((?:cuillères?|cuillère)\s+à\s+\w+)\s+(?:de\s+|d')(.+)$", ingredient_text, re.IGNORECASE)
         if match:
             amount_str, unit, name = match.groups()
             amount = self._parse_amount(amount_str)
@@ -182,7 +186,7 @@ class PtitchefExtractor(BaseRecipeExtractor):
         
         # Попытка 3: количество (без пробела или с пробелом) + единица + "de/d'" + название
         # Примеры: "150g de farine", "100 g de beurre", "1/2 l de lait"
-        match = re.match(r'^(\d+(?:[.,/]\d+)?)\s*([a-zA-Zé]+)\s+(?:de|d[\''])\s+(.+)$', ingredient_text)
+        match = re.match(r"^(\d+(?:[.,/]\d+)?)\s*([a-zA-Zé]+)\s+(?:de\s+|d')(.+)$", ingredient_text)
         if match:
             amount_str, unit, name = match.groups()
             amount = self._parse_amount(amount_str)
@@ -292,10 +296,10 @@ class PtitchefExtractor(BaseRecipeExtractor):
         
         # Исправляем отсутствующие пробелы после точек и запятых
         if result:
-            # Добавляем пробел после точки, если его нет
-            result = re.sub(r'\.(?=[A-ZА-ЯЁ])', '. ', result)
-            # Добавляем пробел после запятой, если его нет
-            result = re.sub(r',(?=[A-ZА-ЯЁ])', ', ', result)
+            # Добавляем пробел после точки, если следует буква и пробела нет
+            result = re.sub(r'\.([A-ZА-ЯЁ])', r'. \1', result)
+            # Добавляем пробел после запятой, если следует буква и пробела нет
+            result = re.sub(r',([a-zA-Zа-яА-ЯёЁ])', r', \1', result)
         
         return result
     
