@@ -7,6 +7,7 @@ from pathlib import Path
 import json
 import re
 from typing import Optional
+from bs4 import BeautifulSoup
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
@@ -53,36 +54,50 @@ class NikibExtractor(BaseRecipeExtractor):
             return None
         
         # Извлекаем параграфы с ингредиентами
+        # Вариант 1: параграфы с data-start атрибутом
         p_tags = ingredients_div.find_all('p', attrs={'data-start': True})
+        
+        # Вариант 2: обычные параграфы (если нет data-start)
+        if not p_tags:
+            p_tags = ingredients_div.find_all('p')
         
         if not p_tags:
             return None
         
-        # Берем первый параграф (основной список ингредиентов)
+        # Берем параграф с ингредиентами
         # Ингредиенты разделены тегами <br>
-        if len(p_tags) > 0:
-            p_tag = p_tags[0]
+        for p_tag in p_tags:
+            # Проверяем, есть ли ингредиенты в этом параграфе
+            # Пропускаем параграфы с заголовками
+            text_preview = p_tag.get_text()[:50]
+            if 'מרכיבים' in text_preview or '✿' in text_preview:
+                continue
             
-            # Получаем текстовые фрагменты между br тегами
-            parts = []
-            for content in p_tag.children:
-                if content.name == 'br':
-                    continue
-                if hasattr(content, 'string') and content.string:
-                    parts.append(content.string)
-                elif isinstance(content, str):
-                    parts.append(content)
+            # Разделяем по <br> тегам
+            # Используем str.split на HTML строке
+            html_str = str(p_tag)
+            # Разделяем по <br> и <br/> тегам (с любыми атрибутами)
+            parts_html = re.split(r'<br\s+[^>]*/?>', html_str)
             
-            # Парсим каждый ингредиент
-            for part in parts:
-                line = self.clean_text(part)
-                if not line or len(line) < 2:
+            for part_html in parts_html:
+                # Парсим каждую часть как HTML чтобы извлечь текст
+                part_soup = BeautifulSoup(part_html, 'lxml')
+                # Получаем чистый текст (объединяя текст из всех тегов)
+                line = part_soup.get_text()
+                line = self.clean_text(line)
+                
+                # Пропускаем пустые строки и теги (<p>, </p>)
+                if not line or len(line) < 2 or line.startswith('<'):
                     continue
                 
                 # Парсим ингредиент
                 parsed = self.parse_ingredient(line)
                 if parsed:
                     ingredients.append(parsed)
+            
+            # Если нашли ингредиенты в этом параграфе, прекращаем поиск
+            if ingredients:
+                break
         
         return ingredients if ingredients else None
     
@@ -112,11 +127,23 @@ class NikibExtractor(BaseRecipeExtractor):
         for fraction, decimal in fraction_map.items():
             text = text.replace(fraction, decimal)
         
+        # Обработка обычных дробей типа "1/4"
+        # Заменяем на десятичные
+        fraction_pattern = r'(\d+)/(\d+)'
+        def replace_fraction(match):
+            num = float(match.group(1))
+            denom = float(match.group(2))
+            return str(num / denom)
+        
+        text = re.sub(fraction_pattern, replace_fraction, text)
+        
         # Паттерн для извлечения количества в начале строки
         # Примеры: "2 כוסות מים", "כוס אורז", "½ כפית מלח"
         
         # Словарь единиц измерения (иврит) - сортируем по длине (длинные первыми)
         units_map = {
+            'כפיות שטוחות': 'teaspoons',  # level teaspoons
+            'כפות גדושות': 'heaped tablespoons',  # heaped tablespoons
             'כוסות': 'cups',
             'כפיות': 'teaspoons',
             'כפות': 'tablespoons',
@@ -191,8 +218,7 @@ class NikibExtractor(BaseRecipeExtractor):
         """Извлечение шагов приготовления"""
         steps = []
         
-        # Ищем параграфы с нумерованными шагами
-        # Шаги начинаются с "1.", "2.", и т.д.
+        # Вариант 1: Ищем параграфы с нумерованными шагами с data-start
         all_p = self.soup.find_all('p', attrs={'data-start': True})
         
         for p in all_p:
@@ -200,6 +226,18 @@ class NikibExtractor(BaseRecipeExtractor):
             # Проверяем, начинается ли текст с номера
             if re.match(r'^\d+\.', text):
                 steps.append(text)
+        
+        # Вариант 2: Если не нашли с data-start, ищем обычные p в recipe div
+        if not steps:
+            recipe_div = self.soup.find('div', id='recipe')
+            if recipe_div:
+                all_p = recipe_div.find_all('p')
+                
+                for p in all_p:
+                    text = self.clean_text(p.get_text())
+                    # Проверяем, начинается ли текст с номера
+                    if re.match(r'^\d+\.', text):
+                        steps.append(text)
         
         # Сортируем шаги по номеру
         def get_step_number(step_text):
@@ -267,7 +305,15 @@ class NikibExtractor(BaseRecipeExtractor):
         # Ищем маленькие времена в начале инструкций (обычно prep)
         
         instructions_text = ""
+        
+        # Вариант 1: с data-start
         all_p = self.soup.find_all('p', attrs={'data-start': True})
+        
+        # Вариант 2: обычные p в recipe div
+        if not all_p:
+            recipe_div = self.soup.find('div', id='recipe')
+            if recipe_div:
+                all_p = recipe_div.find_all('p')
         
         # Берем только первые несколько шагов
         step_count = 0
@@ -300,7 +346,16 @@ class NikibExtractor(BaseRecipeExtractor):
         
         # Ищем в инструкциях упоминания времени
         instructions_text = ""
+        
+        # Вариант 1: с data-start
         all_p = self.soup.find_all('p', attrs={'data-start': True})
+        
+        # Вариант 2: обычные p в recipe div
+        if not all_p:
+            recipe_div = self.soup.find('div', id='recipe')
+            if recipe_div:
+                all_p = recipe_div.find_all('p')
+        
         for p in all_p:
             text = p.get_text()
             if re.match(r'^\d+\.', text):  # Это шаг инструкции
@@ -347,7 +402,16 @@ class NikibExtractor(BaseRecipeExtractor):
         
         # Попробуем найти все упоминания времени и взять сумму
         instructions_text = ""
+        
+        # Вариант 1: с data-start
         all_p = self.soup.find_all('p', attrs={'data-start': True})
+        
+        # Вариант 2: обычные p в recipe div
+        if not all_p:
+            recipe_div = self.soup.find('div', id='recipe')
+            if recipe_div:
+                all_p = recipe_div.find_all('p')
+        
         for p in all_p:
             text = p.get_text()
             if re.match(r'^\d+\.', text):  # Это шаг инструкции
@@ -417,6 +481,20 @@ class NikibExtractor(BaseRecipeExtractor):
                         tip_text = self.clean_text(li.get_text())
                         if tip_text:
                             notes.append(tip_text)
+        
+        # Альтернативный вариант: ищем в recipe div параграфы с советами
+        if not notes:
+            recipe_div = self.soup.find('div', id='recipe')
+            if recipe_div:
+                # Ищем параграфы после инструкций, которые начинаются с определенных слов
+                all_p = recipe_div.find_all('p')
+                for p in all_p:
+                    text = self.clean_text(p.get_text())
+                    # Советы часто начинаются с "כדאי", "אפשר", "מומלץ"
+                    if text and any(keyword in text[:20] for keyword in ['כדאי', 'אפשר', 'מומלץ', 'ניתן']):
+                        # Проверяем, что это не инструкция
+                        if not re.match(r'^\d+\.', text):
+                            notes.append(text)
         
         return ' '.join(notes) if notes else None
     
