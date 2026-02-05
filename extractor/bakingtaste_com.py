@@ -72,8 +72,9 @@ class BakingTasteExtractor(BaseRecipeExtractor):
         name = re.sub(r'\s*\([^)]*\)\s*$', '', name)
         # Убираем " Ever" в конце
         name = re.sub(r'\s+Ever\s*$', '', name, flags=re.IGNORECASE)
-        # Убираем типичные суффиксы после названия рецепта (с учетом разных апострофов)
-        name = re.sub(r'\s+(You[\'\'\`]ll|You Will|You[\'\'\`]re Going To Love)\s+.*$', '', name, flags=re.IGNORECASE)
+        # Убираем типичные суффиксы после названия рецепта
+        # Поддерживаем разные типы апострофов: ' (U+0027), ' (U+2019), ` (U+0060)
+        name = re.sub(r'\s+(You[\'\u2019\`]ll|You Will|You[\'\u2019\`]re Going To Love)\s+.*$', '', name, flags=re.IGNORECASE)
         
         return name
     
