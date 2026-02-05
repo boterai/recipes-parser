@@ -286,18 +286,16 @@ class SweetAndBitterExtractor(BaseRecipeExtractor):
                 return self.clean_text(text)
         
         # Если отдельных блоков нет, ищем в инструкциях предложения с "Προσοχή"
-        # Но только если это последнее предложение или отдельная строка
         instructions = self.extract_instructions()
         if instructions:
-            # Разбиваем на предложения
-            sentences = re.split(r'(?<=[.!])\s+', instructions)
-            
-            for sentence in sentences:
-                # Ищем предложения, которые начинаются с "Προσοχή" или содержат его в начале
-                if sentence.strip().startswith('Προσοχή'):
-                    # Убираем "Προσοχή!" в начале
-                    note = re.sub(r'^Προσοχή!\s*', '', sentence.strip())
-                    return self.clean_text(note) if note else None
+            # Ищем "Προσοχή!" и берем следующее предложение
+            # Паттерн: "Προσοχή! Текст заметки."
+            match = re.search(r'Προσοχή!\s*([^.!]+[.!])', instructions)
+            if match:
+                note = match.group(1).strip()
+                # Убираем завершающую точку/восклицательный знак для чистоты
+                note = re.sub(r'[.!]+$', '', note)
+                return self.clean_text(note) if note else None
         
         return None
     
