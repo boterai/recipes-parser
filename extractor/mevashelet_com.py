@@ -1,5 +1,5 @@
 """
-Экстрактор данных рецептов для сайта mevashelet.com
+Recipe data extractor for mevashelet.com website
 """
 
 import sys
@@ -12,11 +12,11 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
 
 
-class MevashelеtExtractor(BaseRecipeExtractor):
-    """Экстрактор для mevashelet.com"""
+class MevashelatExtractor(BaseRecipeExtractor):
+    """Extractor for mevashelet.com"""
     
     def extract_dish_name(self) -> Optional[str]:
-        """Извлечение названия блюда"""
+        """Extract dish name"""
         # Ищем в meta теге og:title
         og_title = self.soup.find('meta', property='og:title')
         if og_title and og_title.get('content'):
@@ -41,7 +41,7 @@ class MevashelеtExtractor(BaseRecipeExtractor):
         return None
     
     def extract_description(self) -> Optional[str]:
-        """Извлечение описания рецепта"""
+        """Extract recipe description"""
         # Ищем в мета-теге og:description
         og_desc = self.soup.find('meta', property='og:description')
         if og_desc and og_desc.get('content'):
@@ -62,31 +62,31 @@ class MevashelеtExtractor(BaseRecipeExtractor):
     
     def parse_ingredient_line(self, line: str) -> Optional[dict]:
         """
-        Парсинг строки ингредиента в структурированный формат
+        Parse ingredient line into structured format
         
         Args:
-            line: Строка вида "3 חלבונים" или "1/2 כוס סוכר"
+            line: Line like "3 חלבונים" or "1/2 כוס סוכר"
             
         Returns:
-            dict: {"name": "חלבונים", "amount": 3, "units": None} или None
+            dict: {"name": "חלבונים", "amount": 3, "units": None} or None
         """
         if not line:
             return None
         
         line = self.clean_text(line)
         
-        # Пропускаем заголовки секций (содержат двоеточие в конце)
-        if line.endswith(':') or line.startswith('ל'):  # "לרוטב", "למילוי" и т.д.
+        # Skip section headers (contain colon at the end)
+        if line.endswith(':') or line.startswith('ל'):  # "לרוטב", "למילוי" etc.
             return None
         
-        # Паттерн для извлечения количества, единицы и названия
-        # Примеры: "3 חלבונים", "1/2 כוס סוכר", "125 גרם אוכמניות"
+        # Pattern for extracting amount, unit and name
+        # Examples: "3 חלבונים", "1/2 כוס סוכר", "125 גרם orכמניות"
         
-        # Сначала пробуем с единицами измерения
-        # Список возможных единиц на иврите (используем (?:...) для non-capturing group)
+        # First try with units
+        # List of possible Hebrew units (using (?:...) for non-capturing group)
         units_pattern = r'(?:כוס|כפות|כפית|כפיות|גרם|ק"ג|ליטר|מ"ל|יחידות|פרוסות|שן|שיניים|ג\'|מ"ג|ק"ג)'
         
-        # Паттерн: [число/дробь] [единица] [название]
+        # Pattern: [number/fraction] [unit] [name]
         pattern_with_unit = rf'^([\d\s/.,½¼¾⅓⅔⅛⅜⅝⅞]+)\s*({units_pattern})\s+(.+)$'
         match = re.match(pattern_with_unit, line, re.IGNORECASE)
         
@@ -95,13 +95,13 @@ class MevashelеtExtractor(BaseRecipeExtractor):
             if len(groups) == 3:
                 amount_str, unit, name = groups
             else:
-                # Если по какой-то причине групп больше, берем первые 3
+                # If for some reason there are more groups, take first 3
                 amount_str, unit, name = groups[0], groups[1], groups[2]
             
-            # Обработка количества
+            # Process amount
             amount = self._parse_amount(amount_str)
             
-            # Очистка названия от комментариев в скобках
+            # Clean name from comments in parentheses
             name = re.sub(r'\([^)]*\)', '', name)
             name = self.clean_text(name)
             
@@ -111,17 +111,17 @@ class MevashelеtExtractor(BaseRecipeExtractor):
                 "amount": amount
             }
         
-        # Паттерн без единиц: [число] [название]
+        # Паттерн without units: [number] [name]
         pattern_no_unit = r'^([\d\s/.,½¼¾⅓⅔⅛⅜⅝⅞]+)\s+(.+)$'
         match = re.match(pattern_no_unit, line, re.IGNORECASE)
         
         if match:
             amount_str, name = match.groups()
             
-            # Обработка количества
+            # Process amount
             amount = self._parse_amount(amount_str)
             
-            # Очистка названия от комментариев в скобках
+            # Clean name from comments in parentheses
             name = re.sub(r'\([^)]*\)', '', name)
             name = self.clean_text(name)
             
@@ -131,7 +131,7 @@ class MevashelеtExtractor(BaseRecipeExtractor):
                 "amount": amount
             }
         
-        # Если не удалось распарсить, возвращаем просто название
+        # Если не удалось распарсить, возвращаем просто name
         return {
             "name": line,
             "units": None,
@@ -139,7 +139,7 @@ class MevashelеtExtractor(BaseRecipeExtractor):
         }
     
     def _parse_amount(self, amount_str: str) -> Optional[float]:
-        """Парсинг количества из строки"""
+        """Parse amount from string"""
         if not amount_str:
             return None
         
@@ -156,7 +156,7 @@ class MevashelеtExtractor(BaseRecipeExtractor):
         for fraction, decimal in fraction_map.items():
             amount_str = amount_str.replace(fraction, decimal)
         
-        # Обработка дробей типа "1/2" или "1 1/2"
+        # Обработка дробей типа "1/2" or "1 1/2"
         if '/' in amount_str:
             parts = amount_str.split()
             total = 0.0
@@ -168,14 +168,14 @@ class MevashelеtExtractor(BaseRecipeExtractor):
                     total += float(part)
             return total
         
-        # Простое число
+        # Простое number
         try:
             return float(amount_str.replace(',', '.'))
         except ValueError:
             return None
     
     def extract_ingredients(self) -> Optional[str]:
-        """Извлечение ингредиентов"""
+        """Extract ingredients"""
         ingredients = []
         
         # Ищем контент-div
@@ -186,9 +186,9 @@ class MevashelеtExtractor(BaseRecipeExtractor):
         # Получаем HTML контента
         html_content = str(content_div)
         
-        # Ищем секцию с ингредиентами между "המצרכים" и "אופן ההכנה"
+        # Ищем секцию с ингредиентами между "המצרכים" и "orפן ההכנה"
         # Используем регулярное выражение для извлечения (поддержка <strong> и <b>)
-        ingredients_pattern = r'<(?:strong|b)>המצרכים</(?:strong|b)>:(.*?)<(?:strong|b)>אופן ההכנה'
+        ingredients_pattern = r'<(?:strong|b)>המצרכים</(?:strong|b)>:(.*?)<(?:strong|b)>orפן ההכנה'
         match = re.search(ingredients_pattern, html_content, re.DOTALL | re.IGNORECASE)
         
         if match:
@@ -205,14 +205,14 @@ class MevashelеtExtractor(BaseRecipeExtractor):
                 if line_text and len(line_text) > 2:
                     parsed = self.parse_ingredient_line(line_text)
                     if parsed and parsed.get('name'):
-                        # Пропускаем строки-заголовки подсекций (начинаются с 'ל' или заканчиваются ':')
+                        # Пропускаем строки-заголовки подсекций (начинаются с 'ל' or заканчиваются ':')
                         if not (line_text.startswith('ל') and line_text.endswith(':')):
                             ingredients.append(parsed)
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
     def extract_instructions(self) -> Optional[str]:
-        """Извлечение шагов приготовления"""
+        """Extract cooking instructions"""
         # Ищем контент-div
         content_div = self.soup.find('div', class_='the_content')
         if not content_div:
@@ -221,8 +221,8 @@ class MevashelеtExtractor(BaseRecipeExtractor):
         # Получаем HTML контента
         html_content = str(content_div)
         
-        # Ищем секцию с инструкциями после "אופן ההכנה"
-        instructions_pattern = r'<(?:strong|b)>אופן ההכנה</(?:strong|b)>:(.*?)</p>'
+        # Ищем секцию с инструкциями после "orפן ההכנה"
+        instructions_pattern = r'<(?:strong|b)>orפן ההכנה</(?:strong|b)>:(.*?)</p>'
         match = re.search(instructions_pattern, html_content, re.DOTALL | re.IGNORECASE)
         
         if match:
@@ -245,7 +245,7 @@ class MevashelеtExtractor(BaseRecipeExtractor):
         return None
     
     def extract_category(self) -> Optional[str]:
-        """Извлечение категории"""
+        """Extract category"""
         # Ищем категории в postmeta
         category_li = self.soup.find('li', class_='category')
         if category_li:
@@ -254,7 +254,7 @@ class MevashelеtExtractor(BaseRecipeExtractor):
             if links:
                 # Ищем категорию, которая не является тегом праздника
                 # Предпочитаем категорию типа блюда (последняя перед праздниками)
-                # Праздники обычно: חגים, פסח, ראש השנה и т.д.
+                # Праздники обычно: חגים, פסח, ראש השנה etc.
                 holiday_tags = ['חגים', 'פסח', 'ראש השנה', 'חנוכה', 'פורים']
                 for link in reversed(links):
                     cat_text = self.clean_text(link.get_text())
@@ -266,7 +266,7 @@ class MevashelеtExtractor(BaseRecipeExtractor):
         return None
     
     def extract_cook_time(self) -> Optional[str]:
-        """Извлечение времени приготовления из текста рецепта"""
+        """Extract cooking time from recipe text"""
         # Ищем в инструкциях упоминания времени
         instructions = self.extract_instructions()
         if not instructions:
@@ -300,7 +300,7 @@ class MevashelеtExtractor(BaseRecipeExtractor):
         return None
     
     def extract_notes(self) -> Optional[str]:
-        """Извлечение заметок"""
+        """Extract notes"""
         # В данном сайте заметки могут быть в описании с ключевыми словами
         # "החלפתי" (I replaced), "הערה" (note), "טיפ" (tip)
         
@@ -336,7 +336,7 @@ class MevashelеtExtractor(BaseRecipeExtractor):
         return None
     
     def extract_tags(self) -> Optional[str]:
-        """Извлечение тегов"""
+        """Extract tags"""
         tags = []
         
         # Ищем категории - они могут служить как теги
@@ -351,7 +351,7 @@ class MevashelеtExtractor(BaseRecipeExtractor):
         return ', '.join(tags) if tags else None
     
     def extract_image_urls(self) -> Optional[str]:
-        """Извлечение URL изображений"""
+        """Extract image URLs"""
         urls = []
         
         # 1. Ищем в мета-тегах
@@ -382,10 +382,10 @@ class MevashelеtExtractor(BaseRecipeExtractor):
     
     def extract_all(self) -> dict:
         """
-        Извлечение всех данных рецепта
+        Extract all recipe data
         
         Returns:
-            Словарь с данными рецепта
+            Dictionary with recipe data
         """
         return {
             "dish_name": self.extract_dish_name(),
@@ -403,18 +403,18 @@ class MevashelеtExtractor(BaseRecipeExtractor):
 
 
 def main():
-    """Точка входа для обработки директории с HTML-файлами"""
+    """Entry point for processing directory with HTML files"""
     import os
     
-    # Обрабатываем папку preprocessed/mevashelet_com
+    # Process preprocessed/mevashelet_com directory
     preprocessed_dir = os.path.join("preprocessed", "mevashelet_com")
     
     if os.path.exists(preprocessed_dir) and os.path.isdir(preprocessed_dir):
-        process_directory(MevashelеtExtractor, preprocessed_dir)
+        process_directory(MevashelatExtractor, preprocessed_dir)
         return
     
-    print(f"Директория не найдена: {preprocessed_dir}")
-    print("Использование: python mevashelet_com.py")
+    print(f"Directory not found: {preprocessed_dir}")
+    print("Usage: python mevashelet_com.py")
 
 
 if __name__ == "__main__":
