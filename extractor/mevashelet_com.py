@@ -65,28 +65,28 @@ class MevashelatExtractor(BaseRecipeExtractor):
         Parse ingredient line into structured format
         
         Args:
-            line: Line like "3 חלבונים" or "1/2 כוס סוכר"
+            line: Строка вида "3 חלבונים" или "1/2 כוס סוכר"
             
         Returns:
-            dict: {"name": "חלבונים", "amount": 3, "units": None} or None
+            dict: {"name": "חלבונים", "amount": 3, "units": None} или None
         """
         if not line:
             return None
         
         line = self.clean_text(line)
         
-        # Skip section headers (contain colon at the end)
-        if line.endswith(':') or line.startswith('ל'):  # "לרוטב", "למילוי" etc.
+        # Пропускаем заголовки секций (содержат двоеточие в конце)
+        if line.endswith(':') or line.startswith('ל'):  # "לרוטב", "למילוי" и т.д.
             return None
         
-        # Pattern for extracting amount, unit and name
-        # Examples: "3 חלבונים", "1/2 כוס סוכר", "125 גרם orכמניות"
+        # Паттерн для извлечения количества, единицы и названия
+        # Примеры: "3 חלבונים", "1/2 כוס סוכר", "125 גרם אוכמניות"
         
-        # First try with units
-        # List of possible Hebrew units (using (?:...) for non-capturing group)
+        # Сначала пробуем с единицами измерения
+        # Список возможных единиц на иврите (используем (?:...) для non-capturing group)
         units_pattern = r'(?:כוס|כפות|כפית|כפיות|גרם|ק"ג|ליטר|מ"ל|יחידות|פרוסות|שן|שיניים|ג\'|מ"ג|ק"ג)'
         
-        # Pattern: [number/fraction] [unit] [name]
+        # Паттерн: [число/дробь] [единица] [название]
         pattern_with_unit = rf'^([\d\s/.,½¼¾⅓⅔⅛⅜⅝⅞]+)\s*({units_pattern})\s+(.+)$'
         match = re.match(pattern_with_unit, line, re.IGNORECASE)
         
@@ -95,13 +95,13 @@ class MevashelatExtractor(BaseRecipeExtractor):
             if len(groups) == 3:
                 amount_str, unit, name = groups
             else:
-                # If for some reason there are more groups, take first 3
+                # Если по какой-то причине групп больше, берем первые 3
                 amount_str, unit, name = groups[0], groups[1], groups[2]
             
-            # Process amount
+            # Обработка количества
             amount = self._parse_amount(amount_str)
             
-            # Clean name from comments in parentheses
+            # Очистка названия от комментариев в скобках
             name = re.sub(r'\([^)]*\)', '', name)
             name = self.clean_text(name)
             
@@ -111,17 +111,17 @@ class MevashelatExtractor(BaseRecipeExtractor):
                 "amount": amount
             }
         
-        # Паттерн without units: [number] [name]
+        # Паттерн без единиц: [число] [название]
         pattern_no_unit = r'^([\d\s/.,½¼¾⅓⅔⅛⅜⅝⅞]+)\s+(.+)$'
         match = re.match(pattern_no_unit, line, re.IGNORECASE)
         
         if match:
             amount_str, name = match.groups()
             
-            # Process amount
+            # Обработка количества
             amount = self._parse_amount(amount_str)
             
-            # Clean name from comments in parentheses
+            # Очистка названия от комментариев в скобках
             name = re.sub(r'\([^)]*\)', '', name)
             name = self.clean_text(name)
             
@@ -131,7 +131,7 @@ class MevashelatExtractor(BaseRecipeExtractor):
                 "amount": amount
             }
         
-        # Если не удалось распарсить, возвращаем просто name
+        # Если не удалось распарсить, возвращаем просто название
         return {
             "name": line,
             "units": None,
@@ -156,7 +156,7 @@ class MevashelatExtractor(BaseRecipeExtractor):
         for fraction, decimal in fraction_map.items():
             amount_str = amount_str.replace(fraction, decimal)
         
-        # Обработка дробей типа "1/2" or "1 1/2"
+        # Обработка дробей типа "1/2" или "1 1/2"
         if '/' in amount_str:
             parts = amount_str.split()
             total = 0.0
@@ -168,7 +168,7 @@ class MevashelatExtractor(BaseRecipeExtractor):
                     total += float(part)
             return total
         
-        # Простое number
+        # Простое число
         try:
             return float(amount_str.replace(',', '.'))
         except ValueError:
@@ -186,9 +186,9 @@ class MevashelatExtractor(BaseRecipeExtractor):
         # Получаем HTML контента
         html_content = str(content_div)
         
-        # Ищем секцию с ингредиентами между "המצרכים" и "orפן ההכנה"
+        # Ищем секцию с ингредиентами между "המצרכים" и "אופן ההכנה"
         # Используем регулярное выражение для извлечения (поддержка <strong> и <b>)
-        ingredients_pattern = r'<(?:strong|b)>המצרכים</(?:strong|b)>:(.*?)<(?:strong|b)>orפן ההכנה'
+        ingredients_pattern = r'<(?:strong|b)>המצרכים</(?:strong|b)>:(.*?)<(?:strong|b)>אופן ההכנה'
         match = re.search(ingredients_pattern, html_content, re.DOTALL | re.IGNORECASE)
         
         if match:
@@ -205,7 +205,7 @@ class MevashelatExtractor(BaseRecipeExtractor):
                 if line_text and len(line_text) > 2:
                     parsed = self.parse_ingredient_line(line_text)
                     if parsed and parsed.get('name'):
-                        # Пропускаем строки-заголовки подсекций (начинаются с 'ל' or заканчиваются ':')
+                        # Пропускаем строки-заголовки подсекций (начинаются с 'ל' или заканчиваются ':')
                         if not (line_text.startswith('ל') and line_text.endswith(':')):
                             ingredients.append(parsed)
         
@@ -221,8 +221,8 @@ class MevashelatExtractor(BaseRecipeExtractor):
         # Получаем HTML контента
         html_content = str(content_div)
         
-        # Ищем секцию с инструкциями после "orפן ההכנה"
-        instructions_pattern = r'<(?:strong|b)>orפן ההכנה</(?:strong|b)>:(.*?)</p>'
+        # Ищем секцию с инструкциями после "אופן ההכנה"
+        instructions_pattern = r'<(?:strong|b)>אופן ההכנה</(?:strong|b)>:(.*?)</p>'
         match = re.search(instructions_pattern, html_content, re.DOTALL | re.IGNORECASE)
         
         if match:
@@ -254,7 +254,7 @@ class MevashelatExtractor(BaseRecipeExtractor):
             if links:
                 # Ищем категорию, которая не является тегом праздника
                 # Предпочитаем категорию типа блюда (последняя перед праздниками)
-                # Праздники обычно: חגים, פסח, ראש השנה etc.
+                # Праздники обычно: חגים, פסח, ראש השנה и т.д.
                 holiday_tags = ['חגים', 'פסח', 'ראש השנה', 'חנוכה', 'פורים']
                 for link in reversed(links):
                     cat_text = self.clean_text(link.get_text())
@@ -406,15 +406,15 @@ def main():
     """Entry point for processing directory with HTML files"""
     import os
     
-    # Process preprocessed/mevashelet_com directory
+    # Обрабатываем папку preprocessed/mevashelet_com
     preprocessed_dir = os.path.join("preprocessed", "mevashelet_com")
     
     if os.path.exists(preprocessed_dir) and os.path.isdir(preprocessed_dir):
         process_directory(MevashelatExtractor, preprocessed_dir)
         return
     
-    print(f"Directory not found: {preprocessed_dir}")
-    print("Usage: python mevashelet_com.py")
+    print(f"Директория не найдена: {preprocessed_dir}")
+    print("Использование: python mevashelet_com.py")
 
 
 if __name__ == "__main__":
