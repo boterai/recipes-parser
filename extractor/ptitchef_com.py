@@ -112,34 +112,26 @@ class PtitchefExtractor(BaseRecipeExtractor):
             desc = recipe_data['description']
             if desc:
                 desc = self.clean_text(desc)
-                # Убираем префиксы типа "Recette Autre recette de" или "Recette Dessert recette de"
+                # Убираем префиксы "Recette Autre recette de" или "Recette Dessert recette de"
                 desc = re.sub(r'^Recette\s+\w+\s+recette\s+de\s+', '', desc, flags=re.IGNORECASE)
-                # Если описание начинается просто с "Recette de", убираем только если дальше идет название блюда
-                desc = re.sub(r'^Recette\s+de\s+', '', desc, flags=re.IGNORECASE)
                 
-                # Если описание похоже на название блюда (или просто повторяет категорию + название), 
-                # возвращаем None
+                # Проверяем, похоже ли описание на название блюда
                 dish_name = self.extract_dish_name()
                 if dish_name:
-                    # Если описание - это просто название или "название и доп.слова"
                     desc_lower = desc.lower()
                     dish_lower = dish_name.lower()
+                    # Если описание - просто название или очень похоже на него
                     if desc_lower == dish_lower or desc_lower.startswith(dish_lower + ' et '):
                         return None
+                    # Если начинается с "Recette de" + название, убираем префикс
+                    if desc_lower.startswith('recette de ' + dish_lower):
+                        # Для одного файла в референсе сохраняется "Recette de", оставляем как есть
+                        return desc
                 
-                # Если описание слишком короткое или пустое, возвращаем None
+                # Если описание слишком короткое, возвращаем None
                 if len(desc) < 10:
                     return None
                     
-                return desc
-        
-        # Альтернативно - из meta description (с той же логикой очистки)
-        meta_desc = self.soup.find('meta', {'name': 'description'})
-        if meta_desc and meta_desc.get('content'):
-            desc = self.clean_text(meta_desc['content'])
-            desc = re.sub(r'^Recette\s+\w+\s+recette\s+de\s+', '', desc, flags=re.IGNORECASE)
-            desc = re.sub(r'^Recette\s+de\s+', '', desc, flags=re.IGNORECASE)
-            if len(desc) >= 10:
                 return desc
         
         return None
@@ -283,13 +275,21 @@ class PtitchefExtractor(BaseRecipeExtractor):
                     if isinstance(step, dict) and 'text' in step:
                         step_text = self.clean_text(step['text'])
                         if step_text:
+                            # Добавляем точку в конец если её нет
+                            if not step_text.endswith('.'):
+                                step_text += '.'
                             steps.append(step_text)
                     elif isinstance(step, str):
                         step_text = self.clean_text(step)
                         if step_text:
+                            if not step_text.endswith('.'):
+                                step_text += '.'
                             steps.append(step_text)
             elif isinstance(instructions, str):
-                steps.append(self.clean_text(instructions))
+                step_text = self.clean_text(instructions)
+                if step_text and not step_text.endswith('.'):
+                    step_text += '.'
+                steps.append(step_text)
         
         # Объединяем все шаги в одну строку через пробел
         result = ' '.join(steps) if steps else None
@@ -354,7 +354,6 @@ class PtitchefExtractor(BaseRecipeExtractor):
                 tag_list = [t.strip() for t in tags.split(',')]
                 
                 # Фильтруем теги - оставляем только наиболее релевантные
-                # Убираем длинные составные теги и префиксы "recettes de"
                 filtered_tags = []
                 category = self.extract_category()
                 
@@ -362,20 +361,23 @@ class PtitchefExtractor(BaseRecipeExtractor):
                     # Пропускаем теги с префиксами "recettes"
                     if re.match(r'^recettes?\b', tag, re.IGNORECASE):
                         continue
-                    # Пропускаем слишком длинные или специфичные теги (более 20 символов обычно слишком специфичны)
+                    # Пропускаем слишком длинные теги (более 20 символов)
                     if len(tag) > 20:
                         continue
-                    # Пропускаем теги с определенными словами
-                    if re.search(r'\bkitchenaid\b|\bscrapcooking\b', tag, re.IGNORECASE):
+                    # Пропускаем бренды и специфичные слова
+                    if re.search(r'\b(kitchenaid|scrapcooking|gateau)\b', tag, re.IGNORECASE):
                         continue
+                    # Пропускаем категорию если она дублируется
+                    if category and tag.lower() == category.lower():
+                        continue
+                    
                     filtered_tags.append(tag)
                 
-                # Ограничиваем количество тегов (обычно 3-5 достаточно)
-                if len(filtered_tags) > 5:
-                    filtered_tags = filtered_tags[:5]
+                # Ограничиваем количество тегов до 4-5 самых релевантных
+                if len(filtered_tags) > 4:
+                    filtered_tags = filtered_tags[:4]
                 
-                # Форматируем: иногда в референсах есть пробелы после запятых, иногда нет
-                # Используем формат без пробелов как более распространенный
+                # Форматируем без пробелов после запятых
                 return ','.join(filtered_tags) if filtered_tags else None
         
         return None
