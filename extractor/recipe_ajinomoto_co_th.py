@@ -221,20 +221,38 @@ class RecipeAjinomotoCoThExtractor(BaseRecipeExtractor):
         
         # Альтернативно ищем в HTML
         if not instructions:
-            # Ищем списки с инструкциями
-            instruction_lists = self.soup.find_all('ol')
-            for ol in instruction_lists:
-                items = ol.find_all('li')
+            # Ищем списки с инструкциями (как ol, так и ul)
+            instruction_lists = self.soup.find_all(['ol', 'ul'])
+            for lst in instruction_lists:
+                items = lst.find_all('li', recursive=False)
                 if items:
+                    # Проверяем, похожи ли элементы на инструкции
+                    # (начинаются с числа или содержат кулинарные глаголы)
+                    potential_instructions = []
                     for item in items:
                         text = self.clean_text(item.get_text())
                         if text:
-                            instructions.append(text)
-                    break  # Берем только первый список
+                            # Проверяем, начинается ли с номера шага (1., 2., и т.д.)
+                            if re.match(r'^\d+\.', text):
+                                potential_instructions.append(text)
+                            # Или содержит тайские кулинарные глаголы
+                            elif any(verb in text for verb in ['ต้ม', 'ตั้ง', 'ตัก', 'ใส่', 'ผัด', 'หั่น', 'คน', 'เติม']):
+                                potential_instructions.append(text)
+                    
+                    # Если нашли хотя бы 2 инструкции, считаем это списком инструкций
+                    if len(potential_instructions) >= 2:
+                        instructions = potential_instructions
+                        break  # Берем только первый подходящий список
         
         if instructions:
             # Объединяем шаги в одну строку
-            return ' '.join(f"{i+1}. {instr}" for i, instr in enumerate(instructions))
+            # Проверяем, есть ли уже нумерация в первой инструкции
+            if instructions and re.match(r'^\d+\.', instructions[0]):
+                # Уже есть нумерация, просто объединяем
+                return ' '.join(instructions)
+            else:
+                # Добавляем нумерацию
+                return ' '.join(f"{i+1}. {instr}" for i, instr in enumerate(instructions))
         
         return None
     
