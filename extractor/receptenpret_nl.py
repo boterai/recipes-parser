@@ -191,15 +191,43 @@ class ReceptenpretNlExtractor(BaseRecipeExtractor):
     
     def extract_ingredients(self, recipe_data: Optional[dict] = None) -> Optional[str]:
         """Извлечение ингредиентов в структурированном формате"""
-        if not recipe_data or 'recipeIngredient' not in recipe_data:
-            return None
-        
         ingredients_list = []
         
-        for ingredient_str in recipe_data['recipeIngredient']:
-            parsed = self.parse_ingredient_string(ingredient_str)
-            if parsed and parsed.get('name'):
-                ingredients_list.append(parsed)
+        # Сначала пробуем из JSON-LD
+        if recipe_data and 'recipeIngredient' in recipe_data:
+            for ingredient_str in recipe_data['recipeIngredient']:
+                parsed = self.parse_ingredient_string(ingredient_str)
+                if parsed and parsed.get('name'):
+                    ingredients_list.append(parsed)
+            
+            if ingredients_list:
+                return json.dumps(ingredients_list, ensure_ascii=False)
+        
+        # Fallback: ищем в HTML под заголовком "Ingrediënten"
+        # Ищем заголовок с текстом "Ingrediënten"
+        for heading in self.soup.find_all(['h2', 'h3']):
+            heading_text = heading.get_text(strip=True)
+            if 'ingrediënt' in heading_text.lower():
+                # Ищем следующий <ul> список после заголовка
+                next_element = heading.find_next_sibling()
+                while next_element:
+                    if next_element.name == 'ul':
+                        # Нашли список ингредиентов
+                        for li in next_element.find_all('li'):
+                            ingredient_text = self.clean_text(li.get_text(strip=True))
+                            if ingredient_text:
+                                # Парсим ингредиент
+                                parsed = self.parse_ingredient_string(ingredient_text)
+                                if parsed and parsed.get('name'):
+                                    ingredients_list.append(parsed)
+                        break
+                    elif next_element.name in ['h2', 'h3', 'h4']:
+                        # Дошли до следующего заголовка - прекращаем поиск
+                        break
+                    next_element = next_element.find_next_sibling()
+                
+                if ingredients_list:
+                    break
         
         if ingredients_list:
             return json.dumps(ingredients_list, ensure_ascii=False)
@@ -208,35 +236,64 @@ class ReceptenpretNlExtractor(BaseRecipeExtractor):
     
     def extract_instructions(self, recipe_data: Optional[dict] = None) -> Optional[str]:
         """Извлечение инструкций приготовления"""
-        if not recipe_data or 'recipeInstructions' not in recipe_data:
-            return None
-        
         instructions_list = []
-        instructions = recipe_data['recipeInstructions']
         
-        if isinstance(instructions, list):
-            for step in instructions:
-                if isinstance(step, dict):
-                    # HowToStep с полем text или name
-                    text = step.get('text') or step.get('name')
-                    if text:
-                        instructions_list.append(self.clean_text(text))
-                elif isinstance(step, str):
-                    instructions_list.append(self.clean_text(step))
-        elif isinstance(instructions, str):
-            instructions_list.append(self.clean_text(instructions))
+        # Сначала пробуем из JSON-LD
+        if recipe_data and 'recipeInstructions' in recipe_data:
+            instructions = recipe_data['recipeInstructions']
+            
+            if isinstance(instructions, list):
+                for step in instructions:
+                    if isinstance(step, dict):
+                        # HowToStep с полем text или name
+                        text = step.get('text') or step.get('name')
+                        if text:
+                            instructions_list.append(self.clean_text(text))
+                    elif isinstance(step, str):
+                        instructions_list.append(self.clean_text(step))
+            elif isinstance(instructions, str):
+                instructions_list.append(self.clean_text(instructions))
+            
+            if instructions_list:
+                # Форматируем с номерами шагов если их нет
+                formatted_steps = []
+                for idx, step in enumerate(instructions_list, 1):
+                    # Проверяем, есть ли уже номер в начале
+                    if not re.match(r'^(Stap\s+)?\d+[\.:)]', step, re.IGNORECASE):
+                        formatted_steps.append(f"Stap {idx}: {step}")
+                    else:
+                        formatted_steps.append(step)
+                
+                return ' '.join(formatted_steps)
+        
+        # Fallback: ищем в HTML под заголовком "Bereiding"
+        # Ищем заголовок с текстом "Bereiding"
+        for heading in self.soup.find_all(['h2', 'h3']):
+            heading_text = heading.get_text(strip=True)
+            if 'bereiding' in heading_text.lower():
+                # Ищем все подзаголовки h3 с "Stap" после основного заголовка
+                current = heading.find_next_sibling()
+                while current:
+                    if current.name == 'h3':
+                        step_heading = self.clean_text(current.get_text(strip=True))
+                        # Проверяем, начинается ли с "Stap"
+                        if step_heading.lower().startswith('stap'):
+                            # Ищем следующий параграф с текстом шага
+                            next_p = current.find_next_sibling('p')
+                            if next_p:
+                                step_text = self.clean_text(next_p.get_text(strip=True))
+                                # Комбинируем заголовок и текст
+                                instructions_list.append(f"{step_heading}")
+                    elif current.name == 'h2':
+                        # Дошли до следующего основного заголовка - прекращаем
+                        break
+                    current = current.find_next_sibling()
+                
+                if instructions_list:
+                    break
         
         if instructions_list:
-            # Форматируем с номерами шагов если их нет
-            formatted_steps = []
-            for idx, step in enumerate(instructions_list, 1):
-                # Проверяем, есть ли уже номер в начале
-                if not re.match(r'^(Stap\s+)?\d+[\.:)]', step, re.IGNORECASE):
-                    formatted_steps.append(f"Stap {idx}: {step}")
-                else:
-                    formatted_steps.append(step)
-            
-            return ' '.join(formatted_steps)
+            return ' '.join(instructions_list)
         
         return None
     
