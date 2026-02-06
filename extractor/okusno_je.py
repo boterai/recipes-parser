@@ -23,7 +23,7 @@ class OkusnoJeExtractor(BaseRecipeExtractor):
     SUPPORTED_UNITS = (
         'g', 'kg', 'ml', 'l', 'dl', 'žličke', 'žlički', 'žlica', 'žlice',
         'vrečka', 'vrečke', 'cm', 'mm', 'kos', 'kosi', 'list', 'listi',
-        'šop', 'šopi'
+        'šop', 'šopi', 'dag', 'jajce', 'žlička'
     )
     
     def extract_dish_name(self) -> Optional[str]:
@@ -123,7 +123,59 @@ class OkusnoJeExtractor(BaseRecipeExtractor):
                 }
                 ingredients.append(ingredient)
         
+        # Если structured HTML не помог, ищем в div.contextual
+        if not ingredients:
+            ingredients = self._extract_ingredients_from_contextual()
+            if ingredients:
+                return json.dumps(ingredients, ensure_ascii=False)
+        
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
+    
+    def _extract_ingredients_from_contextual(self) -> list:
+        """Извлечение ингредиентов из div.contextual (для страниц без JSON-LD)"""
+        ingredients = []
+        
+        # Ищем div с классом contextual
+        contextual_divs = self.soup.find_all('div', class_='contextual')
+        
+        for div in contextual_divs:
+            # Ищем параграфы или блоки с ингредиентами
+            # Обычно есть заголовок "Sestavine:" или список ингредиентов
+            text = div.get_text()
+            
+            # Проверяем, содержит ли div ингредиенты
+            if 'Sestavine:' in text or any(unit in text for unit in ['dag', 'dl', 'žličk', 'g ', 'ml ']):
+                # Извлекаем все строки
+                paragraphs = div.find_all('p')
+                
+                for p in paragraphs:
+                    p_text = p.get_text()
+                    
+                    # Проверяем, есть ли в параграфе маркеры ингредиентов
+                    if 'Sestavine:' in p_text or '♦' in p_text:
+                        # Разбиваем текст по <br> или переносам строк
+                        html_content = str(p)
+                        lines = re.split(r'<br\s*/?>', html_content)
+                        
+                        for line in lines:
+                            # Очищаем от HTML тегов
+                            clean_line = BeautifulSoup(line, 'lxml').get_text(strip=True)
+                            clean_line = self.clean_text(clean_line)
+                            
+                            # Пропускаем заголовки и пустые строки
+                            if not clean_line or clean_line.startswith('♦') or 'Sestavine:' in clean_line:
+                                continue
+                            
+                            # Пропускаем строки, которые явно не являются ингредиентами
+                            if clean_line.startswith('Najljubši') or clean_line.startswith('Model za'):
+                                continue
+                            
+                            # Парсим ингредиент
+                            parsed = self.parse_ingredient_from_text(clean_line)
+                            if parsed and parsed.get('name'):
+                                ingredients.append(parsed)
+        
+        return ingredients
     
     def parse_ingredient_from_text(self, text: str) -> Optional[dict]:
         """
@@ -214,7 +266,47 @@ class OkusnoJeExtractor(BaseRecipeExtractor):
                 if step_text:
                     steps.append(step_text)
         
+        # Если structured HTML не помог, ищем в div.contextual
+        if not steps:
+            instructions = self._extract_instructions_from_contextual()
+            if instructions:
+                return instructions
+        
         return ' '.join(steps) if steps else None
+    
+    def _extract_instructions_from_contextual(self) -> Optional[str]:
+        """Извлечение инструкций из div.contextual (для страниц без JSON-LD)"""
+        instructions_parts = []
+        
+        # Ищем div с классом contextual
+        contextual_divs = self.soup.find_all('div', class_='contextual')
+        
+        for div in contextual_divs:
+            # Ищем параграфы с инструкциями
+            paragraphs = div.find_all('p')
+            
+            for p in paragraphs:
+                p_text = self.clean_text(p.get_text(separator=' ', strip=True))
+                
+                # Пропускаем параграфы с ингредиентами или заголовками
+                if not p_text:
+                    continue
+                if 'Sestavine:' in p_text:
+                    continue
+                if p_text.startswith('♦'):
+                    continue
+                if 'Model za toast' in p_text or 'Najljubši' in p_text:
+                    continue
+                
+                # Проверяем, похож ли текст на инструкцию (глаголы в начале, описание процесса)
+                instruction_markers = ['zmešamo', 'dodamo', 'premešamo', 'pustimo', 'pečemo', 
+                                       'segrejemo', 'obložimo', 'stresemo', 'oblikujemo',
+                                       'Kvas', 'V vodi', 'Preostalo', 'Pečico', 'zdrobimo']
+                
+                if any(marker in p_text for marker in instruction_markers):
+                    instructions_parts.append(p_text)
+        
+        return ' '.join(instructions_parts) if instructions_parts else None
     
     def extract_prep_time(self) -> Optional[str]:
         """Извлечение времени подготовки"""
