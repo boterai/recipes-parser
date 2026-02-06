@@ -182,7 +182,5 @@ def view_recipes(merge_recipe_id: int = 534):
     logger.info(f"Image URLs: {img_urls}")   
 
 if __name__ == "__main__":
-    from dotenv import load_dotenv # загружаем для доступа к .env переменным
-    load_dotenv()
     # "image", "full", "ingredients"
     asyncio.run(run_merge(0.92, "full"))

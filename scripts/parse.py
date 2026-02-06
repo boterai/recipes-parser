@@ -15,6 +15,7 @@ from typing import Optional
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.stages.parse.parse import RecipeParserRunner
+from config.config import config
 
 # Создаем директорию для логов
 LOGS_DIR = Path(__file__).parent.parent / "logs"
@@ -283,7 +284,7 @@ if __name__ == "__main__":
         '--max_urls',
         type=int,
         default=10_000,
-        help='Максимальное количество просмотренных URL для каждого модуля'
+        help='Максимальное количество просмотренных URL для каждого модуля, включая те, что не содержат рецептов (по умолчанию: 10 000)'
     )
     
     args = parser.parse_args()
