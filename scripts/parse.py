@@ -254,7 +254,7 @@ if __name__ == "__main__":
     parser.add_argument(
         '--parallel',
         action='store_true',
-        default=True,
+        default=False,
         help='Запустить в нескольких потоках'
     )
     parser.add_argument(
@@ -291,4 +291,4 @@ if __name__ == "__main__":
     if args.parallel:
         run_parallel(ports=args.ports,  modules=None, max_recipes_per_module=args.max_recipes_per_module, max_urls=args.max_urls)
     else:
-        main(args.modules[0], args.ports[0])
+        main("allrecipes_com", args.ports[0])

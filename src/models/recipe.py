@@ -37,9 +37,14 @@ class Recipe(BaseModel):
     def auto_normalise(self) -> 'Recipe':
         """Автоматическая нормализация после создания объекта"""
         self.ingredients_with_amounts = normalize_ingredients_list(self.ingredients_with_amounts or [])
-        if self.ingredients_with_amounts and not self.ingredients:
-            self.ingredients = [item["name"] for item in self.ingredients_with_amounts]
+        if self.ingredients_with_amounts and not self.ingredients   :
+            self.ingredients = [item["name"] for item in self.ingredients_with_amounts if item.get("name", "").strip()]
         return self
+
+    def update_ingredients_from_ing_w_amounts(self):
+        """Обновляет поле ingredients на основе ingredients_with_amounts, если оно заполнено"""
+        if self.ingredients_with_amounts:
+            self.ingredients = [item["name"] for item in self.ingredients_with_amounts if item.get("name", "").strip()]
 
     def get_multivector_data(self, max_instruction_length: int = 400) -> dict:
         """Подготавливает данные для мульти-векторного эмбеддинга"""

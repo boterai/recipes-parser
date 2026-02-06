@@ -77,7 +77,7 @@ class Config:
     SIMILARITY_TOP_K: int = int(os.getenv('SIMILARITY_TOP_K', '5'))
 
     # настройки парсера
-    PARSER_DIR: str = os.getenv('PARSER_DIR', 'parsers')
+    PARSER_DIR: str = os.getenv('PARSER_DIR', 'parsed')
     PARSER_PREPROCESSED_FOLDER: str = os.getenv('PARSER_PREPROCESSED_FOLDER', 'preprocessed')
     PARSER_DEFAULT_CHROME_PORT: int = int(os.getenv('PARSER_DEFAULT_CHROME_PORT', '9222'))
     PARSER_DEFAULT_MAX_PAGES_PER_SITE: int = int(os.getenv('PARSER_DEFAULT_MAX_PAGES_PER_SITE', '300'))

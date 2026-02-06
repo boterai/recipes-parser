@@ -361,6 +361,32 @@ class PageRepository(BaseRepository[PageORM]):
             return 0
         finally:
             session.close()
+
+    def update_page_language_by_site(self, site_id: int, language: str) -> int:
+        """
+        Обновить язык для всех страниц определенного сайта
+        
+        Args:
+            site_id: ID сайта
+            language: Новый язык для всех страниц сайта
+            
+        Returns:
+            Количество обновленных страниц
+        """
+        session = self.get_session()
+        try:
+            updated_count = session.query(PageORM).filter(
+                PageORM.site_id == site_id
+            ).update({PageORM.language: language})
+            session.commit()
+            logger.info(f"✓ Обновлен язык на '{language}' для {updated_count} страниц сайта ID={site_id}")
+            return updated_count
+        except Exception as e:
+            session.rollback()
+            logger.error(f"Ошибка обновления языка для сайта {site_id}: {e}")
+            return 0
+        finally:
+            session.close()
     
     def bulk_update(self, pages: List[PageORM]) -> int:
         """

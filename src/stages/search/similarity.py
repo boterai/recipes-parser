@@ -429,7 +429,7 @@ if __name__ == "__main__":
     while True:
         ss = SimilaritySearcher(params=ClusterParams(
                     limit=30,
-                    score_threshold=0.95,
+                    score_threshold=0.94,
                     scroll_batch=1000,
                     union_top_k=7,
                     query_batch=128

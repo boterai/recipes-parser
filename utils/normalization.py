@@ -167,6 +167,8 @@ def normalize_ingredient(ingredient: dict) -> dict:
     
     # Убираем лишние пробелы и знаки препинания в начале/конце
     name = name.strip(' .,;:-–—')
+    if name == '':
+        return {}
     
     # Очистка единицы: убираем точку в конце, если это не часть единицы (например, ст.л.)
     if unit:
@@ -189,4 +191,4 @@ def normalize_ingredients_list(ingredients: list[dict]) -> list[dict]:
     """
     if not ingredients:
         return ingredients
-    return [normalize_ingredient(ing) for ing in ingredients]
+    return [norm for ing in ingredients if (norm := normalize_ingredient(ing)) and norm ]

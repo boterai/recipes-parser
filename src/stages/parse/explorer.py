@@ -358,10 +358,7 @@ class SiteExplorer:
         if (self.site.language is None or self.site.language != language) and language != 'unknown':
             self.site.language = language
             try:
-                site = self.site_repository.get_by_id(self.site.id)
-                site.language = language
-                if self.site_repository.update(site) is not None:
-                    self.logger.error("Ошибка обновления языка сайта в БД")
+                self.site_repository.update_language(site_id=self.site.id, language=language)
             except Exception as e:
                 self.logger.error(f"Ошибка обновления языка сайта в БД: {e}")
         
@@ -955,7 +952,7 @@ class SiteExplorer:
             pattern = self.get_url_pattern(current_url)
             
             # Проверка, нужно ли посещать
-            if not self.should_explore_url(current_url) and urls_explored > 0 and not check_pages_with_extractor:
+            if self.should_explore_url(current_url) is False and urls_explored > 0 and not check_pages_with_extractor:
                 continue
             
             try:

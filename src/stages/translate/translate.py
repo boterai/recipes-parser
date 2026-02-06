@@ -15,6 +15,9 @@ from src.models.page import Page, PageORM
 from src.models.page import Recipe
 from utils.languages import LanguageCodes, validate_and_normalize_language
 from src.repositories.page import PageRepository
+from src.repositories.site import SiteRepository
+from src.models.site import Site
+from config.config import config
 
 # Настройка логирования
 logging.basicConfig(
@@ -41,11 +44,14 @@ class Translator:
         self.target_language = normalized_lang
         self.lang_variations = LanguageCodes.get(normalized_lang)
         self.lang_variations = {lang.lower() for lang in self.lang_variations}
+        self.translate_model = config.GPT_MODEL_TRANSLATE
     
         self.olap_db = ClickHouseManager()
         self.page_repository = PageRepository()
+        self.site_repository = SiteRepository()
+
+        self.site_language_map = {} # кэш для хранения языков сайтов, чтобы не дергать БД каждый раз
         
-        self.olap_table = f"recipe_{self.target_language}"
         # Инициализация GPT клиента
         self.gpt_client = GPTClient()
 
@@ -56,6 +62,28 @@ class Translator:
             logger.error("Не удалось подключиться к ClickHouse")
             raise RuntimeError("ClickHouse connection failed")
         
+    async def validate_site_language(self, site: Site) -> Site:
+        test_page = self.page_repository.get_recipes(site_id=site.id, limit=1, random_order=True)
+        if not test_page:
+            logger.warning(f"Нет доступных страниц для проверки языка на site_id={site.id}")
+            return site
+        
+        test_page = test_page[0]
+        
+        test_page_str = test_page.to_pydantic().to_recipe().get_full_recipe_str() if test_page else None
+        if not test_page_str:
+            logger.warning(f"Нет доступных страниц для проверки языка на site_id={site.id}")
+            return site
+        
+        page_real_language = validate_and_normalize_language(await self.detect_text_language(test_page_str))
+
+        if page_real_language != site.language:
+            logger.warning(f"Обнаруженный язык страниц ({page_real_language}) не совпадает с заявленным языком сайта ({site.language}) для site_id={site.id}. Обновляем язык сайта в базе данных.")
+            self.site_repository.update_language(site_id=site.id, language=page_real_language)
+            site.language = page_real_language
+            self.site_language_map[site.id] = page_real_language
+        return site
+        
     async def translate_and_save_batch(self, site_id: int = None, batch_size: int = 100, start_from_id: Optional[int] = None):
         """
         Переводит пакет страниц с рецептами для заданного site_id
@@ -65,6 +93,17 @@ class Translator:
             batch_size: Размер пакета для обработки
             start_from_id: ID страницы, с которой начать обработку (для продолжения)
         """
+        skip_site_validation = False
+        site = self.site_repository.get_by_id(site_id)
+        if not site:
+            logger.error(f"Сайт с ID={site_id} не найден в базе данных")
+            return
+        site = site.to_pydantic()
+        if not site.language:
+            site = await self.validate_site_language(site)
+            skip_site_validation = True
+        self.site_language_map[site_id] = site.language.lower() # предполагаем, что изначально инфомация верная, будем корректировать при обнаружении реального языка страниц
+
         # Если указан start_from_id, работаем в режиме последовательной обработки
         if start_from_id is not None:
             await self._sequential_translate(site_id, batch_size, start_from_id)
@@ -74,12 +113,14 @@ class Translator:
         logger.info(f"Получение списка непереведенных страниц для site_id={site_id}...")
         
         # Получаем все ID из ClickHouse (уже переведенные)
-        translated_ids = set(self.olap_db.get_page_ids_by_site(site_id=site_id, table_name=self.olap_table))
+        translated_ids = set(self.olap_db.get_page_ids_by_site(site_id=site_id))
         logger.info(f"Найдено {len(translated_ids)} переведенных страниц в ClickHouse")
         
         # Если нет переведенных страниц, переходим к последовательному режиму
         if len(translated_ids) == 0:
             logger.info("Нет переведенных страниц. Переход к последовательному режиму обработки...")
+            if not skip_site_validation:
+                site = await self.validate_site_language(site) 
             await self._sequential_translate(site_id, batch_size, start_from_id=0)
             return
         
@@ -107,6 +148,7 @@ class Translator:
             return
         
         # Обрабатываем только непереведенные ID батчами
+        force_translate = site.language.lower() not in self.lang_variations
         for i in range(0, len(untranslated_ids), batch_size):
             batch_ids = untranslated_ids[i:i + batch_size]
 
@@ -115,7 +157,7 @@ class Translator:
             if pages:
                 pages_data = [page.to_pydantic() for page in pages]
                 logger.info(f"Обработка батча {i // batch_size + 1}/{(len(untranslated_ids) + batch_size - 1) // batch_size}")
-                await self._process_batch(pages_data)
+                await self._process_batch(pages_data, force_translate=force_translate)
     
     async def _sequential_translate(self, site_id: int, batch_size: int, start_from_id: int):
         """
@@ -128,7 +170,8 @@ class Translator:
         """
         logger.info(f"Режим последовательной обработки начиная с ID={start_from_id}")
         last_processed_id = start_from_id - 1 if start_from_id > 0 else 0
-        
+        site_language = self.site_language_map.get(site_id)
+        force_translate = site_language not in self.lang_variations if site_language else True
         while True:
             pages_orm: list[PageORM] = self.page_repository.get_for_translation(last_processed_id=last_processed_id, site_id=site_id, limit=batch_size)
         
@@ -137,10 +180,10 @@ class Translator:
                 break
             
             pages_data = [page.to_pydantic() for page in pages_orm]
-            await self._process_batch(pages_data)
+            await self._process_batch(pages_data, force_translate=force_translate)
             last_processed_id = pages_data[-1].id
     
-    async def _process_batch(self, pages_data: list[Page]):
+    async def _process_batch(self, pages_data: list[Page], force_translate: bool = False):
         """
         Вспомогательный метод для обработки батча страниц
         
@@ -158,7 +201,7 @@ class Translator:
                 
                 logger.info(f"[{i}/{len(pages_data)}] Перевод страницы ID={recipe.page_id}: {recipe.dish_name}")
                 
-                if page_data.language.lower() in self.lang_variations and page_data.site_id != 36:
+                if page_data.language.lower() in self.lang_variations and force_translate is False and page_data.site_id != 36:
 
                     translated_recipe = recipe
                     translated_recipe.list_fields_to_lower()
@@ -226,7 +269,7 @@ IMPORTANT:
             response = await self.gpt_client.async_request(
                 system_prompt=system_prompt,
                 user_prompt=user_prompt,
-                model="gpt-3.5-turbo",
+                model=self.translate_model,
                 temperature=0.3,
                 max_tokens=3000,
                 response_schema=self.translation_schema
@@ -247,6 +290,7 @@ IMPORTANT:
             final_recipe.update(translation)
             
             translated_recipe = Recipe(**final_recipe)
+            translated_recipe.update_ingredients_from_ing_w_amounts() # обновляем ingredients на основе ingredients_with_amounts, если оно заполнено
             translated_recipe.list_fields_to_lower() # преобразуем все переведнные названия к нижнесу регистру
             
             logger.info(f"Страница ID={translated_recipe.page_id} успешно переведена")
@@ -258,6 +302,76 @@ IMPORTANT:
         except Exception as e:
             logger.error(f"Ошибка при переводе страницы ID={recipe.page_id}: {e}")
             return None
+
+    async def detect_text_language(self, text: str) -> str:
+        """
+        Определяет язык текста используя GPT
+        
+        Args:
+            text: Текст для проверки
+        
+        Returns:
+            Короткий код языка (например: 'en', 'ru', 'fr'). 
+            Если текст на целевом языке, возвращает self.target_language
+        """
+        try:
+            # Системный промпт для определения языка
+            system_prompt = """You are a language detection expert. Your task is to detect the language of the given text and return a short language code.
+
+IMPORTANT:
+1. Analyze the text carefully and detect its language
+2. Return ONLY valid JSON in the format: {{"language": "en"}} 
+3. Use ISO 639-1 language codes (2-letter codes): en, ru, fr, de, es, it, pl, pt, nl, ja, ko, zh, etc.
+4. Do not include any markdown formatting, explanations, or extra text
+5. Return ONLY the JSON object with the language code"""
+
+            user_prompt = f"Text to analyze:\n{text}"
+            
+            # Схема ответа
+            response_schema = {
+                "type": "object",
+                "properties": {
+                    "language": {"type": "string"}
+                },
+                "required": ["language"]
+            }
+            
+            # Отправляем запрос к GPT
+            response = await self.gpt_client.async_request(
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                model=self.translate_model,
+                temperature=0.1,
+                max_tokens=10,
+                response_schema=response_schema
+            )
+            
+            # Парсим ответ от GPT
+            if isinstance(response, dict):
+                result = response
+            elif isinstance(response, str):
+                result = json.loads(response)
+            else:
+                logger.error(f"Неожиданный формат ответа от GPT: {type(response)}")
+                return self.target_language
+            
+            # Получаем язык и нормализуем
+            detected_language = result.get("language", "").lower()
+            
+            # Проверяем, является ли это целевым языком
+            if detected_language in self.lang_variations or detected_language == self.target_language:
+                logger.info(f"Обнаружен целевой язык: {self.target_language}")
+                return self.target_language
+            
+            logger.info(f"Обнаружен язык: {detected_language}")
+            return detected_language
+            
+        except json.JSONDecodeError as e:
+            logger.error(f"Ошибка парсинга JSON ответа от GPT: {e}")
+            return self.target_language
+        except Exception as e:
+            logger.error(f"Ошибка при определении языка текста: {e}")
+            return self.target_language
 
     async def translate_all(self, site_ids: Optional[list[int]] = None, batch_size: int = 10, last_site_id: Optional[int] = None):
         """

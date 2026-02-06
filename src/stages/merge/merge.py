@@ -778,7 +778,7 @@ Requirements:
                 user_prompt=user_prompt,
                 temperature=0.4,  # немного выше для разнообразия между вариациями
                 max_tokens=2500,
-                timeout=90,
+                request_timeout=90,
                 model=GPT_MODEL_MERGE,
                 response_schema=self.merged_recipe_schema
             )

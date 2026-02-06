@@ -193,3 +193,25 @@ class SiteRepository(BaseRepository[SiteORM]):
 
             extractors = [site.name for site in results]
             return extractors
+        
+    def update_language(self, site_id: int, language: str) -> bool:
+        """
+        Обновить язык сайта
+        
+        Args:
+            site_id: ID сайта
+        """
+        session = self.get_session()
+        try:
+            site = session.query(SiteORM).filter(SiteORM.id == site_id).first()
+            if site:
+                site.language = language
+                session.commit()
+                return True
+            return False
+        except Exception as e:
+            session.rollback()
+            logger.error(f"Ошибка обновления языка для сайта {site_id}: {e}")
+            return False
+        finally:
+            session.close()

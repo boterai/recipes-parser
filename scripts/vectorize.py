@@ -101,6 +101,7 @@ def translate_all_recipes(target_language: str, translate_batch_size: int):
 if __name__ == '__main__':
     import dotenv
     dotenv.load_dotenv()
-
-    asyncio.run(vectorise_all_images())
-    #vectorise_all_recipes(translate=False) # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)
+    #translate_all_recipes("en", 10)
+    vectorise_all_recipes()
+    #asyncio.run(vectorise_all_images())
+    #translate_all_recipes("en", 1) # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)

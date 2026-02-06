@@ -134,7 +134,7 @@ def convert_language_name_to_code(language_name: str) -> Optional[str]:
     logger.warning(f"Не удалось конвертировать название '{language_name}' в код языка")
     return None
 
-def validate_and_normalize_language(language: str) -> Optional[str]:
+def validate_and_normalize_language(language: str) -> str:
     """
     Проверяет язык в ключах и значениях вариаций, возвращает нормализованный код
     
@@ -157,7 +157,7 @@ def validate_and_normalize_language(language: str) -> Optional[str]:
             return main_code
     
     # Язык не найден
-    logger.error(f"Язык '{language}' не поддерживается")
+    logger.error(f"Язык '{language}' не поддерживается, возвращаем исходное значение")
     return lang_lower
 
 COOKIE_KEYWORDS = [
