@@ -101,6 +101,23 @@ class LanaRecipesExtractor(BaseRecipeExtractor):
         recipe_data = self.get_recipe_data()
         if recipe_data and 'name' in recipe_data:
             return self.clean_text(recipe_data['name'])
+        
+        # Fallback: extract from meta tags
+        og_title = self.soup.find('meta', property='og:title')
+        if og_title and og_title.get('content'):
+            title = og_title['content']
+            # Remove suffixes like " - Easy Cooking, Endless Joy"
+            title = re.sub(r'\s*[-–—]\s*.+$', '', title)
+            return self.clean_text(title)
+        
+        # Fallback: extract from title tag
+        title_tag = self.soup.find('title')
+        if title_tag:
+            title = title_tag.get_text()
+            # Remove suffixes
+            title = re.sub(r'\s*[-–—]\s*.+$', '', title)
+            return self.clean_text(title)
+        
         return None
     
     def extract_description(self) -> Optional[str]:
@@ -114,17 +131,201 @@ class LanaRecipesExtractor(BaseRecipeExtractor):
         """Извлечение ингредиентов"""
         recipe_data = self.get_recipe_data()
         
-        if not recipe_data or 'recipeIngredient' not in recipe_data:
-            return None
+        if recipe_data and 'recipeIngredient' in recipe_data:
+            ingredients_list = []
+            for ingredient_text in recipe_data['recipeIngredient']:
+                # Парсим каждый ингредиент
+                parsed = self.parse_ingredient(ingredient_text)
+                if parsed:
+                    ingredients_list.append(parsed)
+            
+            if ingredients_list:
+                return json.dumps(ingredients_list, ensure_ascii=False)
         
+        # Fallback: extract from HTML content
+        # Look for list items containing ingredient information
         ingredients_list = []
-        for ingredient_text in recipe_data['recipeIngredient']:
-            # Парсим каждый ингредиент
-            parsed = self.parse_ingredient(ingredient_text)
-            if parsed:
-                ingredients_list.append(parsed)
+        
+        # First, try to extract from instruction steps that mention ingredients with quantities
+        ingredients_list = self.extract_ingredients_from_instructions()
+        
+        # If no detailed ingredients found, try to extract names from paragraphs
+        if not ingredients_list:
+            for p in self.soup.find_all('p'):
+                text = p.get_text()
+                # Look for paragraphs mentioning "ingredients:" or "you'll need"
+                if re.search(r'(ingredients?:|you\'ll need|basic ingredients?)', text, re.I):
+                    # Extract ingredient names from the text
+                    ingredient_names = self.extract_ingredient_names_from_text(text)
+                    for name in ingredient_names:
+                        ingredients_list.append({
+                            "name": name,
+                            "units": None,
+                            "amount": None
+                        })
+                    break
+        
+        # If still no ingredients, try to find ingredients in list items with quantities
+        if not ingredients_list:
+            for list_elem in self.soup.find_all(['ol', 'ul'], class_=re.compile(r'wp-block-list', re.I)):
+                # Check if this list contains ingredients (not instructions)
+                first_li = list_elem.find('li')
+                if first_li:
+                    first_text = first_li.get_text()
+                    # Skip if it looks like an instruction (starts with bold action word)
+                    if re.search(r'<strong>(?:Mix|Whisk|Cook|Heat|Pour|Combine|Stir|Add|Bake|Serve)', str(first_li), re.I):
+                        continue
+                
+                for li in list_elem.find_all('li'):
+                    text = li.get_text()
+                    # Look for patterns like "1 cup of flour", "2 eggs", etc.
+                    if re.search(r'\d+.*(?:cup|tablespoon|teaspoon|gram|egg|milk|flour|oil|salt|powder)', text, re.I):
+                        parsed = self.parse_ingredient_from_text(text)
+                        if parsed:
+                            ingredients_list.append(parsed)
+                
+                if ingredients_list:
+                    break
         
         return json.dumps(ingredients_list, ensure_ascii=False) if ingredients_list else None
+    
+    def extract_ingredients_from_instructions(self) -> list:
+        """Extract ingredients mentioned in instruction steps with quantities"""
+        ingredients_map = {}
+        
+        # Find instruction list items
+        for list_elem in self.soup.find_all(['ol', 'ul'], class_=re.compile(r'wp-block-list', re.I)):
+            for li in list_elem.find_all('li'):
+                text = li.get_text()
+                
+                # Look for ingredient mentions with quantities in instructions
+                # Pattern: "1 cup of whole wheat flour", "1/2 cup of wheat germ", "two eggs", "2 tablespoons of oil"
+                patterns = [
+                    r'(\d+(?:\s*/\s*\d+)?)\s+(cups?|tablespoons?|teaspoons?|tbsps?|tsps?)\s+(?:of\s+)?([a-z\s]+?)(?:[,.]|\s+and\s)',
+                    r'(a|one|two|three|four|five)\s+(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pinch(?:es)?)\s+(?:of\s+)?([a-z\s]+?)(?:[,.]|\s+and\s)',
+                    r'(\d+(?:\s*/\s*\d+)?)\s+(cups?)\s+(?:of\s+)?([a-z\s]+)',
+                    r'(two|one)\s+(eggs?)',
+                ]
+                
+                for pattern in patterns:
+                    matches = re.finditer(pattern, text, re.I)
+                    for match in matches:
+                        if len(match.groups()) == 3:
+                            amount_str, unit, name = match.groups()
+                        elif len(match.groups()) == 2:
+                            amount_str, name = match.groups()
+                            unit = None
+                        else:
+                            continue
+                        
+                        # Convert word numbers to digits
+                        word_to_num = {'a': 1, 'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5}
+                        amount = word_to_num.get(amount_str.lower(), amount_str)
+                        
+                        # Handle fractions
+                        if isinstance(amount, str) and '/' in amount:
+                            parts = amount.split('/')
+                            if len(parts) == 2:
+                                try:
+                                    amount = float(parts[0]) / float(parts[1])
+                                except:
+                                    pass
+                        
+                        # Clean up name
+                        name = name.strip().lower()
+                        name = re.sub(r'\s+', ' ', name)
+                        
+                        # Filter out non-ingredient phrases
+                        if any(skip in name for skip in ['for each', 'per serving', 'if needed', 'as needed']):
+                            continue
+                        
+                        # Store or update ingredient
+                        if name and len(name) > 2:
+                            # Use name as key to avoid duplicates
+                            if name not in ingredients_map:
+                                ingredients_map[name] = {
+                                    "name": name,
+                                    "units": unit.lower() if unit else None,
+                                    "amount": amount
+                                }
+        
+        return list(ingredients_map.values())
+    
+    def parse_ingredient_from_text(self, text: str) -> Optional[dict]:
+        """Extract ingredient from descriptive text like '1 cup of whole wheat flour'"""
+        text = self.clean_text(text)
+        
+        # Pattern to match quantity + unit + ingredient
+        # Example: "1 cup of whole wheat flour" or "1/2 cup of wheat germ"
+        pattern = r'([\d\s/.,½¼¾⅓⅔⅛⅜⅝⅞]+)\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|tbsp|tsp|pinch(?:es)?|pounds?|ounces?|lbs?|oz|grams?|g|kg)?\s*(?:of\s+)?(.+?)(?:\.|,|$)'
+        
+        match = re.search(pattern, text, re.I)
+        if match:
+            amount_str, unit, name = match.groups()
+            
+            # Clean up amount
+            amount = None
+            if amount_str:
+                amount_str = amount_str.strip()
+                # Handle fractions
+                for fraction, decimal in {'½': '0.5', '¼': '0.25', '¾': '0.75', '⅓': '0.33', '⅔': '0.67'}.items():
+                    amount_str = amount_str.replace(fraction, decimal)
+                
+                if '/' in amount_str:
+                    parts = amount_str.split()
+                    total = 0
+                    for part in parts:
+                        if '/' in part:
+                            num, denom = part.split('/')
+                            total += float(num) / float(denom)
+                        else:
+                            total += float(part)
+                    amount = total
+                else:
+                    try:
+                        amount = float(amount_str.replace(',', '.'))
+                    except ValueError:
+                        amount = None
+            
+            # Clean up name
+            if name:
+                name = re.sub(r'\([^)]*\)', '', name)
+                name = re.sub(r'\b(to taste|as needed|or more|if needed|optional)\b', '', name, flags=re.IGNORECASE)
+                name = name.strip(' ,;.')
+            
+            if name and len(name) > 1:
+                return {
+                    "name": name.lower(),
+                    "units": unit.lower() if unit else None,
+                    "amount": amount
+                }
+        
+        return None
+    
+    def extract_ingredient_names_from_text(self, text: str) -> list:
+        """Extract ingredient names from a sentence like 'whole wheat flour, wheat germ, eggs, milk, and oil'"""
+        # Find the part after "ingredients:" or "you'll need"
+        match = re.search(r'(?:ingredients?:|you\'ll need|basic ingredients?)[:\s]+(.+?)(?:\.|For|$)', text, re.I | re.DOTALL)
+        if not match:
+            return []
+        
+        ingredient_text = match.group(1)
+        
+        # Split by commas and "and"
+        # Example: "whole wheat flour, wheat germ, eggs, milk, and a touch of oil"
+        parts = re.split(r',\s*(?:and\s+)?|,?\s+and\s+', ingredient_text)
+        
+        ingredients = []
+        for part in parts:
+            # Clean up
+            part = re.sub(r'^(a\s+)?(?:touch\s+of\s+|some\s+)?', '', part, flags=re.I)
+            part = re.sub(r'\([^)]*\)', '', part)
+            part = part.strip(' ,;.')
+            
+            if part and len(part) > 2:
+                ingredients.append(part.lower())
+        
+        return ingredients
     
     def parse_ingredient(self, ingredient_text: str) -> Optional[dict]:
         """
@@ -208,31 +409,61 @@ class LanaRecipesExtractor(BaseRecipeExtractor):
         """Извлечение шагов приготовления"""
         recipe_data = self.get_recipe_data()
         
-        if not recipe_data or 'recipeInstructions' not in recipe_data:
-            return None
+        if recipe_data and 'recipeInstructions' in recipe_data:
+            instructions = recipe_data['recipeInstructions']
+            steps = []
+            
+            if isinstance(instructions, list):
+                for idx, step in enumerate(instructions, 1):
+                    if isinstance(step, dict) and 'text' in step:
+                        step_text = self.clean_text(step['text'])
+                        # Если текст уже начинается с шага (напр. "1. Heat..."), используем как есть
+                        if re.match(r'^\d+\.', step_text):
+                            steps.append(step_text)
+                        else:
+                            steps.append(f"{idx}. {step_text}")
+                    elif isinstance(step, str):
+                        step_text = self.clean_text(step)
+                        if re.match(r'^\d+\.', step_text):
+                            steps.append(step_text)
+                        else:
+                            steps.append(f"{idx}. {step_text}")
+            elif isinstance(instructions, str):
+                steps.append(self.clean_text(instructions))
+            
+            if steps:
+                return ' '.join(steps)
         
-        instructions = recipe_data['recipeInstructions']
+        # Fallback: extract from HTML content
         steps = []
         
-        if isinstance(instructions, list):
-            for idx, step in enumerate(instructions, 1):
-                if isinstance(step, dict) and 'text' in step:
-                    step_text = self.clean_text(step['text'])
-                    # Если текст уже начинается с шага (напр. "1. Heat..."), используем как есть
-                    if re.match(r'^\d+\.', step_text):
+        # Try to find instructions in ordered/unordered lists
+        for list_elem in self.soup.find_all(['ol', 'ul'], class_=re.compile(r'wp-block-list', re.I)):
+            found_instructions = False
+            for li in list_elem.find_all('li'):
+                text = li.get_text()
+                # Check if this looks like an instruction (starts with bold action word or contains cooking verbs)
+                if re.search(r'<strong>[A-Z]|(?:Mix|Whisk|Cook|Heat|Pour|Combine|Stir|Add|Bake|Serve)', str(li), re.I):
+                    found_instructions = True
+                    # Remove the bold tags and get clean text
+                    step_text = self.clean_text(text)
+                    if step_text and len(step_text) > 10:
                         steps.append(step_text)
-                    else:
-                        steps.append(f"{idx}. {step_text}")
-                elif isinstance(step, str):
-                    step_text = self.clean_text(step)
-                    if re.match(r'^\d+\.', step_text):
-                        steps.append(step_text)
-                    else:
-                        steps.append(f"{idx}. {step_text}")
-        elif isinstance(instructions, str):
-            steps.append(self.clean_text(instructions))
+            
+            if found_instructions:
+                break
         
-        return ' '.join(steps) if steps else None
+        # If we found steps, number them if they're not already numbered
+        if steps:
+            numbered_steps = []
+            for idx, step in enumerate(steps, 1):
+                if re.match(r'^\d+\.', step):
+                    numbered_steps.append(step)
+                else:
+                    numbered_steps.append(f"{idx}. {step}")
+            return ' '.join(numbered_steps)
+        
+        return None
     
     def extract_category(self) -> Optional[str]:
         """Извлечение категории"""
