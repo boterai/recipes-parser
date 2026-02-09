@@ -36,11 +36,25 @@ class TradicionalnireceptiExtractor(BaseRecipeExtractor):
             # 3. Убираем префиксы типа "NAJMEKŠE", "NAJLAKŠI", etc.
             text = re.sub(r'^(NAJMEKŠE|NAJLAKŠI|NAJBOLJI|NAJUKUSNIJI)\s+', '', text, flags=re.IGNORECASE)
             
-            # 4. Берем первые 1-3 слова как название (обычно название рецепта короткое)
+            # 4. Извлекаем ключевое слово
+            # Ищем название рецепта - обычно это существительное
+            # Примеры: "kiflice na svetu" -> "kiflice", "ČIZKEJK NA NAJLAKŠI NAČIN" -> "ČIZKEJK"
+            # Убираем предлоги и берем первое значимое слово или словосочетание
             words = text.split()
-            if len(words) > 3:
-                # Если больше 3 слов, берем только первые 1-2 важных
-                text = ' '.join(words[:2]) if words[0].lower() not in ['na', 'sa', 'od', 'u'] else words[0]
+            
+            # Если первое слово не предлог, берем его (может быть с прилагательным)
+            if words and words[0].lower() not in ['na', 'sa', 'od', 'u', 'za']:
+                # Если второе слово тоже не предлог, берем два слова
+                if len(words) > 1 and words[1].lower() not in ['na', 'sa', 'od', 'u', 'za']:
+                    text = ' '.join(words[:2])
+                else:
+                    text = words[0]
+            elif len(words) > 1:
+                # Первое слово - предлог, ищем следующее значимое
+                for i in range(1, len(words)):
+                    if words[i].lower() not in ['na', 'sa', 'od', 'u', 'za']:
+                        text = words[i]
+                        break
             
             return self.clean_text(text)
         
@@ -169,18 +183,51 @@ class TradicionalnireceptiExtractor(BaseRecipeExtractor):
         }
     
     def extract_ingredients(self) -> Optional[str]:
-        """Извлечение ингредиентов"""
+        """Извлечение ингредиентов - поддержка как <p>, так и <li> тегов"""
         ingredients = []
         
-        # Ищем все параграфы в entry-content
+        # Ищем все параграфы и списки в entry-content
         entry_content = self.soup.find('div', class_='entry-content')
         if not entry_content:
             return None
         
+        # Сначала пробуем найти в параграфах (как в cizkejk и pamuk kiflice)
         paragraphs = entry_content.find_all('p')
         
-        # Флаг - нашли ли секцию с ингредиентами
+        for p in paragraphs:
+            text = p.get_text(strip=True)
+            
+            # Ищем параграф с "Sastojci" который содержит <br> (список ингредиентов)
+            if re.match(r'Sastojci', text, re.IGNORECASE) and '<br' in str(p):
+                # Это параграф с ингредиентами
+                html_content = str(p)
+                parts = re.split(r'<br\s*/?>', html_content)
+                
+                for part in parts:
+                    clean = re.sub(r'<[^>]+>', '', part).strip()
+                    
+                    # Пропускаем заголовок "Sastojci..."
+                    if re.match(r'^Sastojci', clean, re.IGNORECASE):
+                        continue
+                    
+                    # Пропускаем пустые строки
+                    if not clean or len(clean) < 3:
+                        continue
+                    
+                    # Парсим ингредиент
+                    ingredient = self.parse_ingredient_line(clean)
+                    if ingredient and ingredient['name']:
+                        # Проверяем что это похоже на ингредиент
+                        if len(ingredient['name']) < 80:
+                            ingredients.append(ingredient)
+                
+                # Если нашли ингредиенты, возвращаем их
+                if ingredients:
+                    return json.dumps(ingredients, ensure_ascii=False)
+        
+        # Если не нашли в одном параграфе, пробуем старый метод (несколько параграфов)
         in_ingredients = False
+        ingredients = []
         
         for p in paragraphs:
             text = p.get_text(strip=True)
@@ -192,69 +239,52 @@ class TradicionalnireceptiExtractor(BaseRecipeExtractor):
             
             # Если мы в секции ингредиентов
             if in_ingredients:
-                # Проверяем, не закончилась ли секция (начало новой секции)
-                if any(keyword in text.lower() for keyword in ['priprema:', 'postupak:', 'način pripreme:', 'fil se sprema', 'se sprema ovako', 'pomešati']):
-                    # Но сначала обрабатываем текст до этого маркера, если он в том же параграфе
+                # Проверяем, не закончилась ли секция
+                if any(keyword in text.lower() for keyword in ['priprema:', 'postupak:', 'način pripreme:', 'fil se sprema', 'se sprema ovako', 'pomešati', 'da bi', 'pravilno', 'nauljena']):
+                    # Обрабатываем текст до этого маркера, если он в том же параграфе
                     if '<br' in str(p):
                         html_content = str(p)
                         parts = re.split(r'<br\s*/?>', html_content)
                         
                         for part in parts:
                             clean = re.sub(r'<[^>]+>', '', part).strip()
-                            
-                            # Пропускаем маркеры начала инструкций
-                            if any(kw in clean.lower() for kw in ['pomešati', 'fil se sprema', 'priprema:', 'postupak:']):
+                            if any(kw in clean.lower() for kw in ['pomešati', 'fil se sprema', 'priprema:', 'postupak:', 'da bi', 'pravilno']):
                                 break
-                            
-                            # Пропускаем пустые строки и заголовки секций
                             if not clean or re.match(r'^(Sastojci|Za\s+\w+):?$', clean, re.IGNORECASE):
                                 continue
-                            
-                            # Парсим ингредиент
                             ingredient = self.parse_ingredient_line(clean)
-                            if ingredient and ingredient['name']:
-                                # Пропускаем строки, которые явно не являются ингредиентами
-                                if len(ingredient['name']) > 3:
-                                    ingredients.append(ingredient)
+                            if ingredient and ingredient['name'] and len(ingredient['name']) > 3:
+                                ingredients.append(ingredient)
                     break
                 
-                # Обрабатываем строки ингредиентов
+                # Обрабатываем строки ингредиентов через <br>
                 if '<br' in str(p):
                     html_content = str(p)
-                    # Разделяем по <br>
                     parts = re.split(r'<br\s*/?>', html_content)
                     
                     for part in parts:
-                        # Убираем HTML теги
                         clean = re.sub(r'<[^>]+>', '', part).strip()
-                        
-                        # Пропускаем пустые строки и заголовки секций
                         if not clean or re.match(r'^(Sastojci|Za\s+\w+):?$', clean, re.IGNORECASE):
                             continue
-                        
-                        # Парсим ингредиент
                         ingredient = self.parse_ingredient_line(clean)
                         if ingredient and ingredient['name']:
-                            # Пропускаем строки, которые явно не являются ингредиентами (слишком длинные или начинаются с определенных слов)
-                            if len(ingredient['name']) > 3 and not re.match(r'^(Za|Po|Sadržaj|Saveti)\s+', ingredient['name'], re.IGNORECASE):
-                                # Также пропускаем слишком длинные строки (больше 100 символов - скорее всего это не ингредиент)
+                            if len(ingredient['name']) > 3 and not re.match(r'^(Za|Po|Sadržaj|Saveti|Da bi)\s+', ingredient['name'], re.IGNORECASE):
                                 if len(ingredient['name']) < 100:
                                     ingredients.append(ingredient)
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
     def extract_instructions(self) -> Optional[str]:
-        """Извлечение шагов приготовления"""
+        """Извлечение шагов приготовления - поддержка <p> и <li> тегов"""
         steps = []
         
-        # Ищем все параграфы в entry-content
+        # Ищем все параграфы и элементы списков в entry-content
         entry_content = self.soup.find('div', class_='entry-content')
         if not entry_content:
             return None
         
+        # Пробуем сначала извлечь из параграфов
         paragraphs = entry_content.find_all('p')
-        
-        # Флаг - нашли ли секцию с инструкциями
         in_instructions = False
         found_ingredients = False
         
@@ -267,18 +297,14 @@ class TradicionalnireceptiExtractor(BaseRecipeExtractor):
                 continue
             
             # Проверяем начало секции инструкций
-            # Инструкции могут начинаться с маркера или просто после ингредиентов
             if found_ingredients and not in_instructions:
-                # Ищем явные маркеры инструкций
                 if any(keyword in text.lower() for keyword in ['priprema:', 'postupak:', 'način pripreme:', 'fil se sprema', 'se sprema ovako']):
                     in_instructions = True
-                    # Если в том же параграфе есть инструкция после двоеточия
                     if ':' in text:
                         remainder = text.split(':', 1)[1].strip()
                         if remainder and len(remainder) > 20:
                             steps.append(self.clean_text(remainder))
                     continue
-                # Если это параграф с инструкцией (начинается с глагола действия)
                 elif any(text.lower().startswith(verb) for verb in ['mikserom', 'pomešati', 'dodavati', 'mutiti', 'staviti', 'ostaviti', 'služiti', 'pržiti', 'sipati']):
                     in_instructions = True
             
@@ -286,19 +312,60 @@ class TradicionalnireceptiExtractor(BaseRecipeExtractor):
             if in_instructions:
                 clean_text = self.clean_text(text)
                 
-                # Пропускаем пустые и очень короткие строки
                 if not clean_text or len(clean_text) < 15:
                     continue
                 
-                # Пропускаем заголовки новых секций и источники
                 if re.match(r'^(Napomena|Serviramo|Savjet|Tip|U videu|Izvor):', clean_text, re.IGNORECASE):
                     break
                 
-                # Пропускаем строки, которые явно не являются инструкциями
                 if not any(clean_text.lower().startswith(word) for word in ['mikserom', 'pomešati', 'dodavati', 'mutiti', 'staviti', 'ostaviti', 'služiti', 'pržiti', 'sipati', 'u veću']) and len(steps) == 0:
                     continue
                 
                 steps.append(clean_text)
+        
+        # Если инструкции не найдены в параграфах, ищем в элементах списков
+        if not steps:
+            all_items = entry_content.find_all(['li', 'ol', 'ul'])
+            
+            for item in all_items:
+                # Если это список, ищем внутри элементы
+                if item.name in ['ol', 'ul']:
+                    list_items = item.find_all('li')
+                    for li in list_items:
+                        text = li.get_text(strip=True)
+                        
+                        # Извлекаем инструкции из элементов списка
+                        # Обычно они содержат глаголы действия
+                        if any(verb in text.lower() for verb in ['sipajte', 'dodajte', 'umutite', 'pomešajte', 'ostavite', 'stavite', 'pečete']):
+                            # Может быть несколько шагов в одном li через <br>
+                            if '<br' in str(li):
+                                parts = re.split(r'<br\s*/?>', str(li))
+                                for part in parts:
+                                    clean = re.sub(r'<[^>]+>', '', part).strip()
+                                    clean = self.clean_text(clean)
+                                    if clean and len(clean) > 20:
+                                        # Пропускаем заголовки
+                                        if not re.match(r'^(Priprema|Sastojci|Za|Saveti)', clean, re.IGNORECASE):
+                                            steps.append(clean)
+                            else:
+                                clean = self.clean_text(text)
+                                if clean and len(clean) > 20:
+                                    steps.append(clean)
+                elif item.name == 'li':
+                    text = item.get_text(strip=True)
+                    if any(verb in text.lower() for verb in ['sipajte', 'dodajte', 'umutite', 'pomešajte', 'ostavite', 'stavite', 'pečete']):
+                        if '<br' in str(item):
+                            parts = re.split(r'<br\s*/?>', str(item))
+                            for part in parts:
+                                clean = re.sub(r'<[^>]+>', '', part).strip()
+                                clean = self.clean_text(clean)
+                                if clean and len(clean) > 20:
+                                    if not re.match(r'^(Priprema|Sastojci|Za|Saveti)', clean, re.IGNORECASE):
+                                        steps.append(clean)
+                        else:
+                            clean = self.clean_text(text)
+                            if clean and len(clean) > 20:
+                                steps.append(clean)
         
         if steps:
             # Нумеруем шаги, если они еще не пронумерованы
