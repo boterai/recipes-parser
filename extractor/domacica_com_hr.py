@@ -155,8 +155,8 @@ class DomacicaComHrExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "amount": amount,
-                "units": unit
+                "units": unit,
+                "amount": amount
             }
         
         # Паттерн для случаев: число + название (без единицы)
@@ -177,15 +177,15 @@ class DomacicaComHrExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "amount": amount,
-                "units": None
+                "units": None,
+                "amount": amount
             }
         
         # Если паттерн не совпал, возвращаем только название
         return {
             "name": text,
-            "amount": None,
-            "units": None
+            "units": None,
+            "amount": None
         }
     
     def extract_ingredients(self) -> Optional[str]:
