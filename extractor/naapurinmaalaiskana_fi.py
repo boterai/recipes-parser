@@ -499,6 +499,8 @@ class NaapurinMaalaisKanaExtractor(BaseRecipeExtractor):
             if notes_section:
                 text = notes_section.get_text(separator=' ', strip=True)
                 text = self.clean_text(text)
+                # Убираем заголовки типа "Vinkit", "Tips", "Notes"
+                text = re.sub(r'^(Vinkit|Tips?|Notes?|Huomio)\s*:?\s*', '', text, flags=re.IGNORECASE)
                 return text if text else None
         
         return None
