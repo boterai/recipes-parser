@@ -527,22 +527,58 @@ class TradicionalnireceptiExtractor(BaseRecipeExtractor):
         if not entry_content:
             return None
         
+        # Ищем заметки в параграфах
         paragraphs = entry_content.find_all('p')
-        
-        # Ищем параграфы с заметками (обычно в конце)
         notes = []
+        
         for p in paragraphs:
             text = p.get_text(strip=True)
-            # Ищем параграфы с ключевыми словами
+            
+            # Проверяем наличие ключевых слов для заметок
             if any(keyword in text.lower() for keyword in ['napomena:', 'savjet:', 'tip:', 'u videu', 'možete pogledati']):
                 clean = self.clean_text(text)
-                # Убираем префикс и двоеточие в конце
                 clean = re.sub(r'^(Napomena|Savjet|Tip):\s*', '', clean, flags=re.IGNORECASE)
-                clean = re.sub(r':$', '', clean)
+                clean = re.sub(r':+$', '', clean)
+                clean = re.sub(r'\.$', '', clean)
                 if clean:
                     notes.append(clean)
+            
+            # Ищем параграфы с советами (например, "Toplo mleko, nikako vrelo")
+            # Эти параграфы часто содержат <br> и несколько советов
+            # НО пропускаем параграф с ингредиентами
+            if '<br' in str(p) and 'sastojci' not in text.lower():
+                if any(word in text.lower() for word in ['toplo mleko', 'pravilno mesenje', 'strpljenje']):
+                    # Разбираем по <br> и берем первые несколько советов
+                    parts = re.split(r'<br\s*/?>', str(p))
+                    for part in parts[:3]:  # Берем первые 3 совета
+                        clean = re.sub(r'<[^>]+>', '', part).strip()
+                        clean = self.clean_text(clean)
+                        # Пропускаем длинные параграфы и заголовки
+                        if clean and 20 < len(clean) < 150:
+                            if not clean.lower().startswith(('načini', 'pamuk kiflice', 'evo nekoliko', 'sastojci')):
+                                notes.append(clean)
         
-        return ' '.join(notes) if notes else None
+        # Также ищем в элементах списка
+        if not notes:
+            list_items = entry_content.find_all('li')
+            for li in list_items:
+                text = li.get_text(strip=True)
+                # Ищем "Послужите" в тексте (обычно в конце инструкций)
+                if 'poslužite' in text.lower() or 'servirajte' in text.lower():
+                    # Извлекаем часть с рекомендацией сервировки
+                    match = re.search(r'poslužite\s+(.*?)(?:\.|$)', text, re.IGNORECASE)
+                    if match:
+                        note = match.group(1).strip()
+                        if note:
+                            notes.append(f"Poslužite {note}")
+        
+        if notes:
+            result = '. '.join(notes)
+            if not result.endswith('.'):
+                result += '.'
+            return result
+        
+        return None
     
     def extract_tags(self) -> Optional[str]:
         """Извлечение тегов"""
