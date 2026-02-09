@@ -230,9 +230,21 @@ class InfotbsExtractor(BaseRecipeExtractor):
         for fraction, decimal in fraction_map.items():
             text = text.replace(fraction, decimal)
         
+        # Список возможных единиц измерения
+        units = (
+            r'cups?|tablespoons?|teaspoons?|tbsps?|tsps?|'
+            r'pounds?|ounces?|lbs?|oz|'
+            r'grams?|kilograms?|g|kg|'
+            r'milliliters?|liters?|ml|liter|'
+            r'pinch(?:es)?|dash(?:es)?|'
+            r'packages?|packs?|cans?|jars?|bottles?|'
+            r'inch(?:es)?|slices?|cloves?|bunches?|sprigs?|'
+            r'whole|halves?|quarters?|pieces?|heads?'
+        )
+        
         # Паттерн для извлечения количества, единицы и названия
-        # Сначала пробуем паттерн с единицами измерения
-        pattern_with_unit = r'^([\d\s/.,]+)?\s*\b(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|liter|pinch(?:es)?|dash(?:es)?|packages?|packs?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|heads?)\b\s*(.+)'
+        # Формат: [количество] [единица] название
+        pattern_with_unit = rf'^([\d\s/.,]+)?\s*\b({units})\b\s*(.+)'
         
         match = re.match(pattern_with_unit, text, re.IGNORECASE)
         
@@ -502,10 +514,11 @@ class InfotbsExtractor(BaseRecipeExtractor):
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
-        # Ищем секции с примечаниями/советами
+        # Ищем секции с примечаниями/советами (более специфичные паттерны)
         notes_patterns = [
-            r'note', r'tip', r'chef.*note', r'cook.*note', 
-            r'editor.*note', r'recipe.*note'
+            r'\bchef.*note\b', r'\bcook.*note\b', 
+            r'\beditor.*note\b', r'\brecipe.*note\b',
+            r'\btip\b', r'\bnote\b'
         ]
         
         for pattern in notes_patterns:
