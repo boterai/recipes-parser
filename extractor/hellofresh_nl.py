@@ -31,15 +31,31 @@ class HelloFreshExtractor(BaseRecipeExtractor):
     
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
-        # Сначала пробуем из JSON-LD
-        recipe_data = self._get_json_ld_recipe()
-        if recipe_data and 'name' in recipe_data:
-            return self.clean_text(recipe_data['name'])
-        
-        # Альтернативно - из H1
+        # Сначала из H1 (обычно короче и без подзаголовка)
         h1 = self.soup.find('h1')
         if h1:
-            return self.clean_text(h1.get_text())
+            name = self.clean_text(h1.get_text())
+            # Удаляем возможные суффиксы
+            name = re.sub(r'\s+(in de|met de|van de)\s+.*(box|pakket).*$', '', name, flags=re.IGNORECASE)
+            return name
+        
+        # Альтернативно - из JSON-LD, но обрезаем подзаголовок
+        recipe_data = self._get_json_ld_recipe()
+        if recipe_data and 'name' in recipe_data:
+            name = recipe_data['name']
+            # Удаляем подзаголовки типа "met frietjes en komkommersalade"
+            # Обычно это идет после второго/третьего слова
+            name = self.clean_text(name)
+            # Простая эвристика: если в названии больше 8 слов, обрезаем
+            words = name.split()
+            if len(words) > 8:
+                # Пробуем найти предлог, который начинает подзаголовок
+                for i, word in enumerate(words):
+                    if word.lower() in ['met', 'in', 'van', 'en', 'op']:
+                        if i > 3:  # Не слишком рано
+                            name = ' '.join(words[:i])
+                            break
+            return name
         
         return None
     
@@ -164,9 +180,15 @@ class HelloFreshExtractor(BaseRecipeExtractor):
         # Shipped ingredients
         ing_items_shipped = self.soup.find_all(attrs={'data-test-id': 'ingredient-item-shipped'})
         for item in ing_items_shipped:
-            text = item.get_text(separator=' ', strip=True)
-            # Удаляем информацию об аллергенах в скобках
-            text = re.sub(r'\(Bevat:.*?\)', '', text, flags=re.IGNORECASE).strip()
+            # Get text and split by separator to avoid allergen info
+            text_parts = item.get_text(separator='|', strip=True).split('|')
+            # First two parts should be amount+unit and name
+            if len(text_parts) >= 2:
+                text = text_parts[0] + ' ' + text_parts[1]
+            else:
+                text = text_parts[0] if text_parts else ''
+            
+            text = text.strip()
             parsed = self.parse_ingredient_string(text, keep_fractions=True)
             if parsed:
                 ingredients.append(parsed)
@@ -174,11 +196,37 @@ class HelloFreshExtractor(BaseRecipeExtractor):
         # Not-shipped ingredients (pantry items)
         ing_items_not_shipped = self.soup.find_all(attrs={'data-test-id': 'ingredient-item-not-shipped'})
         for item in ing_items_not_shipped:
-            text = item.get_text(separator=' ', strip=True)
-            text = re.sub(r'\(Bevat:.*?\)', '', text, flags=re.IGNORECASE).strip()
-            parsed = self.parse_ingredient_string(text, keep_fractions=True)
-            if parsed:
-                ingredients.append(parsed)
+            text_parts = item.get_text(separator='|', strip=True).split('|')
+            if len(text_parts) >= 2:
+                text = text_parts[0] + ' ' + text_parts[1]
+            else:
+                text = text_parts[0] if text_parts else ''
+            
+            text = text.strip()
+            
+            # Специальная обработка для "Peper en zout" - разделяем на два ингредиента
+            if 'peper en zout' in text.lower():
+                # Разделяем на "Peper" и "Zout"
+                amount_unit = text.split()[0] if text.split() else None
+                if amount_unit and amount_unit.lower() == 'naar':
+                    amount_unit = 'naar smaak'
+                elif amount_unit:
+                    amount_unit = None
+                
+                ingredients.append({
+                    "name": "Peper",
+                    "amount": None,
+                    "units": amount_unit
+                })
+                ingredients.append({
+                    "name": "Zout",
+                    "amount": None,
+                    "units": None
+                })
+            else:
+                parsed = self.parse_ingredient_string(text, keep_fractions=True)
+                if parsed:
+                    ingredients.append(parsed)
         
         # Если не нашли в HTML, пробуем из JSON-LD (но делим на 2 для 1 персоны)
         if not ingredients:
@@ -209,25 +257,35 @@ class HelloFreshExtractor(BaseRecipeExtractor):
             if isinstance(instructions, list):
                 for idx, step in enumerate(instructions, 1):
                     if isinstance(step, dict) and 'text' in step:
-                        steps.append(f"{idx}. {step['text']}")
+                        step_text = step['text']
+                        # Очищаем HTML теги если есть
+                        step_text = re.sub(r'<[^>]+>', '', step_text)
+                        step_text = self.clean_text(step_text)
+                        steps.append(f"{idx}. {step_text}")
                     elif isinstance(step, str):
-                        steps.append(f"{idx}. {step}")
+                        step_text = re.sub(r'<[^>]+>', '', step)
+                        step_text = self.clean_text(step_text)
+                        steps.append(f"{idx}. {step_text}")
         
-        return ' '.join(steps) if steps else None
+        if steps:
+            return ' '.join(steps)
+        
+        return None
     
     def extract_category(self) -> Optional[str]:
         """Извлечение категории"""
-        # Проверяем теги на наличие специфичных категорий
-        tag_elements = self.soup.find_all(attrs={'data-test-id': 'item-tag-text'})
-        if tag_elements:
-            tags = [self.clean_text(elem.get_text()).lower() for elem in tag_elements]
-            
-            # Если есть "soup" в тегах или в названии рецепта
-            dish_name = self.extract_dish_name()
-            if dish_name:
-                dish_name_lower = dish_name.lower()
-                if 'soep' in dish_name_lower or 'soup' in dish_name_lower:
-                    return "Soup"
+        # Получаем название рецепта для проверки
+        dish_name_elem = self.soup.find('h1')
+        dish_name = dish_name_elem.get_text().lower() if dish_name_elem else ''
+        
+        # Проверяем название на наличие "soep" или "soup"
+        if 'soep' in dish_name or 'soup' in dish_name:
+            return "Soup"
+        
+        # Также проверяем описание
+        description = self.extract_description()
+        if description and ('soep' in description.lower() or 'soup' in description.lower()):
+            return "Soup"
         
         # По умолчанию возвращаем "Main Course"
         return "Main Course"
@@ -308,36 +366,48 @@ class HelloFreshExtractor(BaseRecipeExtractor):
         return None
     
     def extract_notes(self) -> Optional[str]:
-        """Извлечение заметок (информация об аллергенах и т.д.)"""
+        """Извлечение заметок (health tips, калорийность, и т.д.)"""
         notes = []
         
-        # Ищем элементы с allergen или note в data-test-id
-        note_elements = self.soup.find_all(attrs={'data-test-id': lambda x: x and ('allergen' in x.lower() or 'note' in x.lower() or 'tip' in x.lower()) if x else False})
-        
-        for elem in note_elements:
+        # Ищем элементы em (обычно здесь health tips)
+        em_elements = self.soup.find_all('em')
+        for elem in em_elements:
             text = self.clean_text(elem.get_text())
-            if text and len(text) > 10:  # Минимальная длина для заметки
-                notes.append(text)
+            if text and len(text) > 20 and not text.startswith('{'):
+                # Берем только первое предложение
+                sentences = text.split('. ')
+                if sentences:
+                    first_sentence = sentences[0] + ('.' if not sentences[0].endswith('.') else '')
+                    notes.append(first_sentence)
+                    break
         
-        # Ищем также текст, который может содержать заметки (обычно начинается с "TIP:", "LET OP:" и т.д.)
-        for pattern in ['tip:', 'let op:', 'opmerking:', 'note:', 'weetje:']:
-            elements = self.soup.find_all(string=lambda text: text and pattern in text.lower())
-            for elem in elements:
-                text = self.clean_text(elem.strip())
-                if text and len(text) > 10:
+        # Если не нашли в em, ищем в span
+        if not notes:
+            span_elements = self.soup.find_all('span')
+            for elem in span_elements:
+                text = self.clean_text(elem.get_text())
+                # Ищем характерные фразы
+                if text and any(phrase in text.lower() for phrase in ['gerecht is rijk', 'bevat veel', 'gezond', 'tip:', 'weetje:']):
+                    if len(text) > 20 and len(text) < 300 and not text.startswith('{'):
+                        # Берем только первое предложение
+                        sentences = text.split('. ')
+                        if sentences:
+                            first_sentence = sentences[0] + ('.' if not sentences[0].endswith('.') else '')
+                            notes.append(first_sentence)
+                            break
+        
+        # Ищем элементы с allergen или note в data-test-id
+        if not notes:
+            note_elements = self.soup.find_all(attrs={'data-test-id': lambda x: x and ('allergen' in x.lower() or 'note' in x.lower() or 'tip' in x.lower()) if x else False})
+            
+            for elem in note_elements:
+                text = self.clean_text(elem.get_text())
+                if text and len(text) > 10 and len(text) < 300:
                     notes.append(text)
+                    break
         
         if notes:
-            # Убираем дубликаты
-            unique_notes = []
-            seen = set()
-            for note in notes:
-                note_lower = note.lower()
-                if note_lower not in seen:
-                    seen.add(note_lower)
-                    unique_notes.append(note)
-            
-            return ' '.join(unique_notes[:3])  # Берем первые 3 заметки
+            return notes[0]
         
         # По умолчанию возвращаем стандартное предупреждение об аллергенах
         return "Kan sporen van allergenen bevatten."
