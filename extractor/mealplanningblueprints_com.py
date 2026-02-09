@@ -252,12 +252,12 @@ class MealPlanningBlueprintsExtractor(BaseRecipeExtractor):
                         total += float(num) / float(denom)
                     else:
                         total += float(part)
-                amount = str(total) if not total.is_integer() else str(int(total))
+                amount = str(total) if total % 1 != 0 else str(int(total))
             else:
                 try:
                     val = float(amount_str.replace(',', '.'))
-                    amount = str(val) if not val.is_integer() else str(int(val))
-                except:
+                    amount = str(val) if val % 1 != 0 else str(int(val))
+                except (ValueError, TypeError):
                     amount = amount_str
         
         # Обработка единицы измерения
