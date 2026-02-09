@@ -15,6 +15,20 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class CookingmummyExtractor(BaseRecipeExtractor):
     """Экстрактор для cookingmummy.com"""
     
+    # Карта Unicode дробей для парсинга ингредиентов
+    FRACTION_MAP = {
+        '½': '0.5', '¼': '0.25', '¾': '0.75',
+        '⅓': '0.33', '⅔': '0.67', '⅛': '0.125',
+        '⅜': '0.375', '⅝': '0.625', '⅞': '0.875',
+        '⅕': '0.2', '⅖': '0.4', '⅗': '0.6', '⅘': '0.8'
+    }
+    
+    # Паттерн для парсинга ингредиентов
+    INGREDIENT_PATTERN = re.compile(
+        r'^([\d\s/.,]+)?\s*(tablespoons?|teaspoons?|tbsps?|tsps?|cups?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|kg|milliliters?|liters?|ml|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|pcs?|head|heads)?\s*(.+)',
+        re.IGNORECASE
+    )
+    
     @staticmethod
     def parse_iso_duration(duration: str) -> Optional[str]:
         """
@@ -217,21 +231,11 @@ class CookingmummyExtractor(BaseRecipeExtractor):
         text = self.clean_text(ingredient_text)
         
         # Заменяем Unicode дроби на числа
-        fraction_map = {
-            '½': '0.5', '¼': '0.25', '¾': '0.75',
-            '⅓': '0.33', '⅔': '0.67', '⅛': '0.125',
-            '⅜': '0.375', '⅝': '0.625', '⅞': '0.875',
-            '⅕': '0.2', '⅖': '0.4', '⅗': '0.6', '⅘': '0.8'
-        }
-        
-        for fraction, decimal in fraction_map.items():
+        for fraction, decimal in self.FRACTION_MAP.items():
             text = text.replace(fraction, decimal)
         
-        # Паттерн для извлечения количества, единицы и названия
-        # Важно: более длинные единицы должны идти перед короткими (например, "tablespoons" перед "tbsp")
-        pattern = r'^([\d\s/.,]+)?\s*(tablespoons?|teaspoons?|tbsps?|tsps?|cups?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|kg|milliliters?|liters?|ml|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|pcs?|head|heads)?\s*(.+)'
-        
-        match = re.match(pattern, text, re.IGNORECASE)
+        # Используем предкомпилированный паттерн
+        match = self.INGREDIENT_PATTERN.match(text)
         
         if not match:
             # Если паттерн не совпал, возвращаем только название
@@ -325,9 +329,12 @@ class CookingmummyExtractor(BaseRecipeExtractor):
                 if steps:
                     break
         
-        # Добавляем нумерацию если её нет
-        if steps and not re.match(r'^\d+\.', steps[0]):
-            steps = [f"{idx}. {step}" for idx, step in enumerate(steps, 1)]
+        # Добавляем нумерацию если её нет ни в одном шаге
+        if steps:
+            # Проверяем, есть ли хотя бы один шаг с нумерацией
+            has_numbering = any(re.match(r'^\d+\.', step) for step in steps)
+            if not has_numbering:
+                steps = [f"{idx}. {step}" for idx, step in enumerate(steps, 1)]
         
         return ' '.join(steps) if steps else None
     
