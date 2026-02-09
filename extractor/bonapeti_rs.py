@@ -485,7 +485,7 @@ class BonapetiRsExtractor(BaseRecipeExtractor):
                             total += float(part)
                         except ValueError:
                             pass
-                amount = str(total) if total != int(total) else str(int(total))
+                amount = str(total) if total % 1 != 0 else str(int(total))
             else:
                 amount = amount_str.replace(',', '.')
         
