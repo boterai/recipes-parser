@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 import json
 import re
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Any
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
@@ -14,6 +14,11 @@ from extractor.base import BaseRecipeExtractor, process_directory
 
 class TradicionalnireceptiExtractor(BaseRecipeExtractor):
     """Экстрактор для tradicionalnirecepti.com"""
+    
+    # Константы для ключевых слов
+    INSTRUCTION_END_MARKERS = ['priprema:', 'postupak:', 'način pripreme:', 
+                               'fil se sprema', 'se sprema ovako', 'pomešati', 
+                               'da bi', 'pravilno', 'nauljena']
     
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
@@ -74,7 +79,7 @@ class TradicionalnireceptiExtractor(BaseRecipeExtractor):
         
         return None
     
-    def parse_ingredient_line(self, line: str) -> Optional[Dict[str, any]]:
+    def parse_ingredient_line(self, line: str) -> Optional[Dict[str, Any]]:
         """
         Парсинг строки ингредиента
         Примеры:
@@ -115,7 +120,7 @@ class TradicionalnireceptiExtractor(BaseRecipeExtractor):
                 # Если это целое число, возвращаем как int
                 if amount_num.is_integer():
                     amount_num = int(amount_num)
-            except:
+            except (ValueError, AttributeError):
                 amount_num = amount.replace(',', '.')
             
             return {
@@ -132,7 +137,7 @@ class TradicionalnireceptiExtractor(BaseRecipeExtractor):
                 amount_num = float(amount.replace(',', '.'))
                 if amount_num.is_integer():
                     amount_num = int(amount_num)
-            except:
+            except (ValueError, AttributeError):
                 amount_num = amount.replace(',', '.')
             
             return {
@@ -149,7 +154,7 @@ class TradicionalnireceptiExtractor(BaseRecipeExtractor):
                 amount_num = float(amount.replace(',', '.'))
                 if amount_num.is_integer():
                     amount_num = int(amount_num)
-            except:
+            except (ValueError, AttributeError):
                 amount_num = amount.replace(',', '.')
             
             return {
@@ -166,7 +171,7 @@ class TradicionalnireceptiExtractor(BaseRecipeExtractor):
                 amount_num = float(amount.replace(',', '.'))
                 if amount_num.is_integer():
                     amount_num = int(amount_num)
-            except:
+            except (ValueError, AttributeError):
                 amount_num = amount.replace(',', '.')
             
             return {
@@ -240,7 +245,7 @@ class TradicionalnireceptiExtractor(BaseRecipeExtractor):
             # Если мы в секции ингредиентов
             if in_ingredients:
                 # Проверяем, не закончилась ли секция
-                if any(keyword in text.lower() for keyword in ['priprema:', 'postupak:', 'način pripreme:', 'fil se sprema', 'se sprema ovako', 'pomešati', 'da bi', 'pravilno', 'nauljena']):
+                if any(keyword in text.lower() for keyword in self.INSTRUCTION_END_MARKERS):
                     # Обрабатываем текст до этого маркера, если он в том же параграфе
                     if '<br' in str(p):
                         html_content = str(p)
