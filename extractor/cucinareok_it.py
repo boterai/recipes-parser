@@ -227,7 +227,8 @@ class CucinareokExtractor(BaseRecipeExtractor):
                 'uovo': 'units',
                 'uova': 'units',
                 'unità': 'units',
-                'l': None,  # Удаляем неправильно распознанную букву 'l'
+                'l': 'liters',  # Литры
+                'ml': 'ml',  # Миллилитры
             }
             unit = unit_map.get(unit, unit)
         
@@ -457,10 +458,13 @@ class CucinareokExtractor(BaseRecipeExtractor):
         cook_time = self.extract_cook_time()
         
         if prep_time and cook_time:
-            prep_minutes = int(re.search(r'(\d+)', prep_time).group(1))
-            cook_minutes = int(re.search(r'(\d+)', cook_time).group(1))
-            total_minutes = prep_minutes + cook_minutes
-            return f"{total_minutes} minutes"
+            prep_match = re.search(r'(\d+)', prep_time)
+            cook_match = re.search(r'(\d+)', cook_time)
+            if prep_match and cook_match:
+                prep_minutes = int(prep_match.group(1))
+                cook_minutes = int(cook_match.group(1))
+                total_minutes = prep_minutes + cook_minutes
+                return f"{total_minutes} minutes"
         
         return None
     
