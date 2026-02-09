@@ -179,9 +179,21 @@ class TimenewsCoIdExtractor(BaseRecipeExtractor):
         for fraction, decimal in fraction_map.items():
             text = text.replace(fraction, decimal)
         
+        # Специальная обработка "secukupnya" (достаточно) - это единица измерения без количества
+        if 'secukupnya' in text.lower():
+            # Убираем "secukupnya" из названия
+            name = re.sub(r'\bsecukupnya\b', '', text, flags=re.IGNORECASE).strip()
+            return {
+                "name": name,
+                "amount": None,
+                "unit": "secukupnya"
+            }
+        
         # Паттерн для извлечения количества, единицы и названия
         # Поддержка английских и индонезийских единиц измерения
-        pattern = r'^([\d\s/.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|packs?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|buah|lembar|batang|siung|butir|sendok makan|sendok teh|ekor|secukupnya)?\s*(.+)'
+        # Важно: более длинные единицы должны идти первыми для правильного совпадения
+        # Однобуквенные единицы (g, l) идут в конце
+        pattern = r'^([\d\s/.,]+)?\s*(sendok makan|sendok teh|cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|liters?|milliliters?|kg|ml|pinch(?:es)?|dash(?:es)?|packages?|packs?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|lembar|buah|batang|siung|butir|piring|ekor|liter|gram|g|l)?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -255,15 +267,19 @@ class TimenewsCoIdExtractor(BaseRecipeExtractor):
         if not main_content:
             return None
         
-        # Ищем секцию с ингредиентами по заголовку
-        for heading in main_content.find_all(['h2', 'h3', 'h4']):
+        # Ищем первую секцию с ингредиентами по заголовку (h2)
+        for heading in main_content.find_all(['h2']):
             heading_text = heading.get_text().strip().lower()
             
             # Проверяем, содержит ли заголовок ключевые слова (на индонезийском и английском)
             if any(keyword in heading_text for keyword in ['bahan', 'ingredient', 'materials']):
-                # Собираем все списки после этого заголовка до следующего заголовка
+                # Собираем все списки после этого заголовка до следующего h2
                 current = heading.find_next_sibling()
-                while current and current.name not in ['h2', 'h3', 'h4']:
+                while current:
+                    # Останавливаемся на следующем h2
+                    if current.name == 'h2':
+                        break
+                    
                     if current.name in ['ul', 'ol']:
                         items = current.find_all('li')
                         for item in items:
@@ -273,10 +289,15 @@ class TimenewsCoIdExtractor(BaseRecipeExtractor):
                                 parsed = self.parse_ingredient(ingredient_text)
                                 if parsed and parsed['name']:
                                     ingredients.append(parsed)
+                    
                     current = current.find_next_sibling()
+                    if not current:
+                        break
                 
+                # После обработки первой секции с ингредиентами, выходим
                 if ingredients:
                     break
+        
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
