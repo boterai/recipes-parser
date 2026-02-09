@@ -1,0 +1,12 @@
+{
+    "dish_name": "Soba in Broth",
+    "description": "Japansk nudelsuppe med dashi",
+    "ingredients": "[{\"name\": \"dashi\", \"units\": \"liter\", \"amount\": 1}, {\"name\": \"soy sauce\", \"units\": \"ml\", \"amount\": 60}, {\"name\": \"mirin\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"sukker\", \"units\": \"spsk\", \"amount\": 1}, {\"name\": \"salt\", \"units\": \"tsk\", \"amount\": 1}, {\"name\": \"soba-nudler\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"forårsløg\", \"units\": \"stk\", \"amount\": 2}, {\"name\": \"nori\", \"units\": \"ark\", \"amount\": 1}, {\"name\": \"shichimi togarashi\", \"units\": null, \"amount\": null}, {\"name\": \"tempura-rejer\", \"units\": null, \"amount\": null}, {\"name\": \"tempura-grøntsager\", \"units\": null, \"amount\": null}, {\"name\": \"kamaboko\", \"units\": null, \"amount\": null}, {\"name\": \"kogt æg\", \"units\": null, \"amount\": null}, {\"name\": \"shiitake-svampe\", \"units\": null, \"amount\": null}]",
+    "instructions": "Forbered brothen: Varm dashien op i en stor gryde ved mellem varme. Tilsæt soy sauce, mirin og sukker. Rør rundt til sukkeret er opløst. Smag til med salt og juster sødme/salthed efter behag. Kog nudlerne: Bring en stor gryde saltvand i kog. Tilsæt soba-nudlerne og kog dem i 4-5 minutter eller ifølge pakkens anvisning, til de er al dente. Skyl nudlerne under koldt vand for at stoppe kogningen og fjerne overskydende stivelse. Saml retten: Fordel de kogte soba-nudler i 4 dybe skåle. Hæld den varme broth over nudlerne. Pynt med finthakkede forårsløg og nori-strimler. Server: Server straks med shichimi togarashi ved siden af, så hver person kan krydre sin suppe efter smag.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "5 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

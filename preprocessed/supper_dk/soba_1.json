@@ -1,0 +1,12 @@
+{
+    "dish_name": "Soba nudel suppe",
+    "description": "En varmende, nærende og samtidig elegant suppe, der kombinerer de nøddeagtige boghvede-nudler med en dyb, umami-rig bouillon.",
+    "ingredients": "[{\"name\": \"dashi\", \"units\": \"liter\", \"amount\": 1}, {\"name\": \"sojasauce\", \"units\": \"spsk\", \"amount\": 3}, {\"name\": \"mirin\", \"units\": \"spsk\", \"amount\": 2}, {\"name\": \"sake\", \"units\": \"spsk\", \"amount\": 1}, {\"name\": \"sukker\", \"units\": \"tsk\", \"amount\": 1}, {\"name\": \"misopasta\", \"units\": \"spsk\", \"amount\": 1}, {\"name\": \"soba nudler\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"forårsløg\", \"units\": \"stk\", \"amount\": 2}, {\"name\": \"nori\", \"units\": \"ark\", \"amount\": 1}, {\"name\": \"tempura flager\", \"units\": null, \"amount\": null}, {\"name\": \"shichimi togarashi\", \"units\": null, \"amount\": null}, {\"name\": \"kogt æg\", \"units\": null, \"amount\": null}, {\"name\": \"røget laks\", \"units\": null, \"amount\": null}, {\"name\": \"grillet kylling\", \"units\": null, \"amount\": null}, {\"name\": \"marineret tofu\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Varm dashi op i en gryde. Tilsæt sojasauce, mirin, sake og sukker. Lad det simre i 5 minutter. Smag til og justér sødme og salthed efter behov. Hvis du bruger miso, pisk det ind til sidst.\n2. Kog soba nudlerne efter anvisningerne på pakken (normalt 4-6 minutter). Skyl dem grundigt i koldt vand for at fjerne overskydende stivelse og stop kogningen.\n3. Fordel de kogte nudler i fire skåle. Hæld den varme bouillon over nudlerne.\n4. Pynt med finthakkede forårsløg, nori-strimler og eventuelle andre ønskede toppings som tempura flager eller protein.\n5. Server straks.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "6 minutes",
+    "total_time": null,
+    "notes": "Soba nudler er ikke kun lækre – de er også utrolig nærende. Boghvede indeholder alle otte essentielle aminosyrer, hvilket gør soba til et komplet protein.",
+    "tags": "soup,japanese,noodles,umami"
+}

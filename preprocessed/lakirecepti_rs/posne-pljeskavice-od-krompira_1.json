@@ -1,0 +1,12 @@
+{
+    "dish_name": "Posne pljeskavice od krompira",
+    "description": "Ukusne, veganske pljeskavice od krompira koje se lako prave a još lakše sve pojedu!",
+    "ingredients": "[{\"name\": \"krompir\", \"units\": \"kg\", \"amount\": 1}, {\"name\": \"brašna\", \"units\": \"šolje\", \"amount\": \"3/4\"}, {\"name\": \"šampinjona\", \"units\": \"gr\", \"amount\": 250}, {\"name\": \"crnog luka\", \"units\": \"glavica\", \"amount\": 1}, {\"name\": \"belog luka\", \"units\": \"češnja\", \"amount\": 2}, {\"name\": \"limunovog soka\", \"units\": \"kašike\", \"amount\": 2}, {\"name\": \"sveže mirođije\", \"units\": \"g\", \"amount\": 15}, {\"name\": \"so\", \"units\": null, \"amount\": null}, {\"name\": \"biber\", \"units\": null, \"amount\": null}, {\"name\": \"čili pahuljice\", \"units\": null, \"amount\": null}]",
+    "instructions": "Krompir isecite na kockice, stavite u veliku šerpu i prelijte vodom. Prokuvajte, smanjite vatru i ostavite da se krčka dok se ne skuva skroz (20-30 minuta). Ocedite, začinite solju i biberom, po ukusu, i umutite mikserom da dobijete pire krompir. Ostavite da se ohladi dok pravite punjenje od pečuraka. Iseckajte sitno: crni luk, beli luk, pečurke i mirođiju. Zagrejte 1 kašiku ulja na tiganju i dinstajte crni luk oko 5 minuta. Dodajte beli luk, iscekane pečurke, limunov sok, prstohvat čili pahuljica i začinite solju i biberom. Ostavite na tihoj vatri, povremeno mešajući, oko 15 minuta ili dok pečurke ne omekšaju i većina tečnosti ne ispari. Skinite sa ringle i umešajte iseckanu mirođiju. U činiju sa ugnječenim krompirom, dodajte brašno pa počnite da oblikujete pljeskavice. Uzmite par kašika testa i formirajte krugove. U sredinu jednog kruga dodajte otprilike kašiku mešavine pečurki, a zatim prekrijte drugim krugom krompira i oblikujte okrugle pljeskavice od krompira. Zagrejte malo ulja u tiganju i kada se ulje zagreje, dodajte pljeskavice od krompira i pecite sa svake strane oko 2 minuta ili dok ne porumene.",
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "25 minutes",
+    "total_time": "35 minutes",
+    "notes": "Možete ih praviti sa brašnom bez glutena, sa belim ili integralnim brašnom. Takođe, slobodno koristite neku drugu vrstu pečuraka, ukoliko ih više volite.",
+    "tags": "veganski recepti, posni recepti, zdrava ishrana, večera"
+}

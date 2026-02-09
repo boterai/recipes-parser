@@ -1,0 +1,12 @@
+{
+    "dish_name": "Zdrava pita sa borovnicama",
+    "description": "Preukusna i zdrava pita, koja se veoma lako pravi a prava je poslastica za sve one koji su na ishrani bez glutena.",
+    "ingredients": "[{\"name\": \"svežih borovnica\", \"units\": \"gr\", \"amount\": 300}, {\"name\": \"ovsenog brašna\", \"units\": \"gr\", \"amount\": 350}, {\"name\": \"ovsenog brašna\", \"units\": \"kašike\", \"amount\": 2}, {\"name\": \"šećera\", \"units\": \"gr\", \"amount\": 200}, {\"name\": \"šećera\", \"units\": \"kašike\", \"amount\": 3}, {\"name\": \"putera\", \"units\": \"gr\", \"amount\": 170}, {\"name\": \"limunovog soka\", \"units\": \"kašika\", \"amount\": 1}, {\"name\": \"praška za pecivo\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"so\", \"units\": null, \"amount\": null}, {\"name\": \"cimet\", \"units\": null, \"amount\": null}, {\"name\": \"vanila ekstrakt\", \"units\": null, \"amount\": null}]",
+    "instructions": "U posudi srednje veličine pomešajte borovnice, limunov sok, 3 kašike šećera i 2 kašike ovsenog brašna, dok se ne sjedine. Ostavite po strani. Zagrejte rernu na 180 ° C. Tanko podmažite ili obložite pleh za pečenje (20 x 20cm) i ostavite sa strane. U velikoj posudi umutite brašno, 200 gr šećera, 1 kašičicu mlevenog cimeta, prašak za pecivo i prstohvat soli. Puter rastopite u šerpici, na tihoj vatri, sklonite sa ringle, dodajte ekstrakt vanile, promešajte i sipajte u posudu sa brašnom, pa sve promešajte dok se ne formira mekano testo. Rasporedite polovinu testa u pripremljeni pleh pa utisnite prstima da dobijete ujednacenu koru. Smešu borovnica ravnomerno rasporedite po vrhu kore. Preostalu polovinu testa prstima pospite po borovnicama. Stavite pleh na sredinu rerne i pecite 45-50 minuta dok gornja kora ne pozlati. Izvadite iz rerne i pustite da se ohladi 30 minuta pre nego što izvadite iz pleha i isečete na kvadrate.",
+    "category": "Dessert",
+    "prep_time": "10 minuta",
+    "cook_time": "45 minuta",
+    "total_time": "45 minuta",
+    "notes": "Možete koristiti smrznute borovnice, samo obavezno dodajte još 5 do 10 minuta ukupnom vremenu pečenja.",
+    "tags": "pita bez glutena, pita sa borovnicama, posna večera, posne pite, posni dezerti, posni doručak, posni slatkiši, večera, veganska večera, veganski doručak, vegetarijanska večera, vegetarijanski doručak"
+}

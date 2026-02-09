@@ -1,0 +1,12 @@
+{
+    "dish_name": "Udon Noodle Soup",
+    "description": "Udon noodle soup er japansk komfortmad på sit allerbedste. Denne nærende og varmende suppe kombinerer tykke, bløde udon-nudler med en velsmagende dashi-baseret bouillon og et væld af toppings.",
+    "ingredients": "[{\"name\": \"dashi\", \"units\": \"kopper\", \"amount\": 4}, {\"name\": \"sojasauce\", \"units\": \"spsk\", \"amount\": 3}, {\"name\": \"mirin\", \"units\": \"spsk\", \"amount\": 2}, {\"name\": \"sake\", \"units\": \"spsk\", \"amount\": 1}, {\"name\": \"sukker\", \"units\": \"tsk\", \"amount\": 1}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"udon-nudler\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"kylling\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"shiitake-svampe\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"forårsløg\", \"units\": null, \"amount\": 2}, {\"name\": \"æg\", \"units\": null, \"amount\": 2}, {\"name\": \"spinat eller pak choi\", \"units\": null, \"amount\": null}, {\"name\": \"Nori-tang\", \"units\": null, \"amount\": null}, {\"name\": \"sesam-olie\", \"units\": null, \"amount\": null}]",
+    "instructions": "Forbered bouillonen: Varm dashi i en stor gryde. Tilsæt sojasauce, mirin, sake og sukker. Lad det simre i 5 minutter. Tilbered protein: Hvis du bruger kylling, stek bidderne gyldenbrune i en pande med lidt olie. Sæt til side. Kog nudlerne: Kog udon-nudlerne efter pakkens anvisning, typisk 2-3 minutter for frosne nudler. Skyl med koldt vand og fordel i serveringsskåle. Saml suppen: Tilsæt svampe til bouillonen og kog i 3-4 minutter. Knæk æggene direkte i suppen og lad dem pochiere i 2 minutter. Server: Hæld den varme bouillon over nudlerne. Top med kylling, grøntsager, forårsløg og nori. Dryp med sesam-olie.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Udon noodle soup er utroligt alsidigt, og der findes mange forskellige versioner afhængigt af region og sæson.",
+    "tags": null
+}

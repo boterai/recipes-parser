@@ -1,0 +1,12 @@
+{
+    "dish_name": "Posna pita sa spanaćem",
+    "description": "Evo jednog lakog i brzog recepta za posnu pitu sa spanaćem, idealnu za doručak, užinu ili večeru.",
+    "ingredients": "[{\"name\": \"Frikom lisnato testo\", \"units\": \"paket (500 gr)\", \"amount\": 1}, {\"name\": \"bebi spanać\", \"units\": \"gr\", \"amount\": 150}, {\"name\": \"beli sir\", \"units\": \"gr\", \"amount\": 150}, {\"name\": \"kačkavalj\", \"units\": \"gr\", \"amount\": 100}, {\"name\": \"crni luk\", \"units\": \"glavice\", \"amount\": 0.5}, {\"name\": \"beli luk\", \"units\": \"komad\", \"amount\": 1}, {\"name\": \"so\", \"units\": null, \"amount\": null}, {\"name\": \"biber\", \"units\": null, \"amount\": null}, {\"name\": \"susam\", \"units\": null, \"amount\": null}]",
+    "instructions": "Zagrejte malo ulja u tiganju pa propržite crni luk 5 minuta. Dodajte beli luk i propržite još 1 minut. Dodajte spanać i mešajte dok ne omekša i sva voda ne ispari. Ostavite da se ohladi, a zatim sitno iseckajte i prespite u posudu, posolite i pobiberite prema ukusu pa promešajte. U zasebnoj posudi, izmrvite beli sir i iscekajte čedar sir ili kačkavalj, ukoliko su u listićima ili ih izrendajte, ukoliko su u komadu, pa dodajte spanaću i sve dobro promešajte. 1 tablu lisnatog testa razvijte oklagijom pa isecite krajeve, tako da dobijete pravougaonik. Duž jedne njegove polovine pospite mešavinu koju ste napravili a drugu polovinu tanko premažite uljem. Počevši od dela gde je mešavina urolajte testo. Isecite na 4 manja pravougaonika. Stavite na podmazan pleh i pecite 20-25 minuta u rerni sa ventilatorom na 200C.",
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "40 minutes",
+    "notes": "Za posnu varijantu, koristite posni beli sir i posni čedar sir ili kačkavalj. Moja preporuka su Viofast beli posni sir i Violife cheddar biljni sir.",
+    "tags": "posna pita, spanać, večera, doručak, veganski, vegetarijanski"
+}
