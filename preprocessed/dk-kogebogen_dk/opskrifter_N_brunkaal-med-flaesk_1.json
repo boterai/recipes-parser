@@ -1,0 +1,12 @@
+{
+    "dish_name": "Brunkål med flæsk",
+    "description": "Opskrift på brunkål med flæsk, en klassisk dansk ret.",
+    "ingredients": "[{\"name\": \"Hvidkål\", \"units\": \"gram\", \"amount\": 2000}, {\"name\": \"Sukker\", \"units\": \"gram\", \"amount\": 200}, {\"name\": \"Smør\", \"units\": \"gram\", \"amount\": 30}, {\"name\": \"Salt\", \"units\": null, \"amount\": null}, {\"name\": \"Peber\", \"units\": null, \"amount\": null}, {\"name\": \"Svinebryst. kogestykke med svær. rå\", \"units\": \"gram\", \"amount\": 750}]",
+    "instructions": "Hvidkålen snittes. Sukker smeltes i en gryde ved meget svag varme, når det begynder at brune og er helt smeltet tilsættes smørret. Kålen hældes i gryden og brunes godt i nogle minutter. Herefter lægges det hele stykke flæsk i midten af gryden og kålen pakkes godt op om flæsket og der tilsættes lidt vand. Retten små koger i 2-3 time, spædes evt. med ekstra vand undervejs, gryden må ikke koge tør. Smages til med salt, peber. Serveres med skiver af flæsket og sennep og rugbrød til.",
+    "category": "Hovedretter",
+    "prep_time": null,
+    "cook_time": "2-3 hours",
+    "total_time": null,
+    "notes": "Brunkål kan også serveres med hvide eller brunede kartofler. Retten smager fantastisk på andendagen oven på en frisk skive rugbrød med en klat sennep.",
+    "tags": "Danish, Main Course, Comfort Food"
+}

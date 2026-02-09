@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kokosų pieno ir vištienos sriuba",
+    "description": "Dubenėlis jaukios ir skanios sriubos šildo labiau nei pats šilčiausias pledas, o šiek tiek švelnaus azijietiško poskonio irgi sukuria šilumos efektą.",
+    "ingredients": "[{\"name\": \"citrinžolės stiebas\", \"units\": \"pcs\", \"amount\": 1}, {\"name\": \"smulkintų skiltelių česnako\", \"units\": \"pcs\", \"amount\": 3}, {\"name\": \"susmulkintos šviežios aitriosios paprikos\", \"units\": \"pcs\", \"amount\": 1}, {\"name\": \"šaukštelio tarkuotos šviežios imbiero šaknies\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"šaukštų aliejaus\", \"units\": \"tbsp\", \"amount\": 2}, {\"name\": \"nedidelių morkų\", \"units\": \"pcs\", \"amount\": 2}, {\"name\": \"vid. dydžio saldžiojo svogūno\", \"units\": \"pcs\", \"amount\": 1}, {\"name\": \"kokosų pieno\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"vištienos arba daržovių sultinio\", \"units\": \"ml\", \"amount\": 800}, {\"name\": \"vištienos filė\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"šaukštų žuvies padažo\", \"units\": \"tbsp\", \"amount\": 2}, {\"name\": \"šaukšto austrių padažo\", \"units\": \"tbsp\", \"amount\": 1}, {\"name\": \"žaliosios citrinos sulčių\", \"units\": \"tbsp\", \"amount\": 1}, {\"name\": \"šaukštelio rudojo cukraus\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"druskos\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Citrinžolę pamušite plaktuku. Į keptuvę su aliejumi sudėkite česnakus, citrinžolės stiebą, imbierą bei paprikas ir trumpai apkepkite. 2. Supjaustykite svogūną, morkas ir suberkite į keptuvę. Kepkite, kol daržovės suminkštės. Išimkite citrinžolės stiebą. 3. Sudėkite viską į puodą, supilkite kokosų pieną ir sultinį, virkite apie 10 min. 4. Vištieną supjaustykite plonomis juostelėmis, apkepkite keptuvėje. Apkeptą vištieną sudėkite į sriubą ir virkite 3–4 min. Supilkite žuvies ir austrių padažus, žaliosios citrinos sultis, suberkite cukrų. Viską išmaišykite, paragaukite, jei reikia – pasūdykite, užvirinkite ir nukaiskite. 5. Patiekite su kalendromis ir svogūnų laiškais.",
+    "category": null,
+    "prep_time": "15 minutes",
+    "cook_time": "60 minutes",
+    "total_time": "1 hour 15 minutes",
+    "notes": null,
+    "tags": null
+}

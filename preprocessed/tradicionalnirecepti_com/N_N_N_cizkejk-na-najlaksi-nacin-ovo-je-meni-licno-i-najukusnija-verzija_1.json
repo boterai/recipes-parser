@@ -1,0 +1,12 @@
+{
+    "dish_name": "Čizkejk",
+    "description": "Najlakši način za pripremu čizkejka.",
+    "ingredients": "[{\"name\": \"krem sir\", \"units\": \"g\", \"amount\": 450}, {\"name\": \"pavlaka\", \"units\": \"kom\", \"amount\": 2}, {\"name\": \"šećer\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"ekstrakt vanile\", \"units\": \"kašika\", \"amount\": 1}, {\"name\": \"jaja\", \"units\": \"kom\", \"amount\": 4}, {\"name\": \"sok od limuna\", \"units\": \"kašika\", \"amount\": 1}, {\"name\": \"brašno\", \"units\": \"kašike\", \"amount\": 3}, {\"name\": \"integralni keks\", \"units\": \"g\", \"amount\": 210}, {\"name\": \"otopljen puter\", \"units\": \"g\", \"amount\": 120}]",
+    "instructions": "Pomešati keks i puter. Okrugli kalup premazati puterom, umotati alu folijom i smesu ravnomerno utapkati. Mikserom umutiti sir i pavlaku, dodati šećer i još malo mutiti. Dodavati jedno po jedno jaje, ekstrakt vanile, sok od limuna i brašno. Mutiti par minuta. Smesom preliti podlogu od keksa i staviti da se peče u prethodno zagrejanu rernu na 160 stepeni sat vremena. Ostaviti na sobnoj temperaturi da se prohladi i staviti u frižider da se hladi 4 sata. Služiti sa voćnim prelivom po želji i umućenom slatkom pavlakom.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "60 minutes",
+    "total_time": "4 hours",
+    "notes": "U videu možete pogledati detaljne upute za pripremu čizkejka.",
+    "tags": "čizkejk, desert, kolač"
+}

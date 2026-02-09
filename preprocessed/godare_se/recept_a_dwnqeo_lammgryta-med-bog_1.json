@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lammgryta med bog",
+    "description": "Den perfekta höstgrytan med färsk lammbog, rotfrukter och kantareller. Riven pepparrot ger det lilla extra och kan rivas över i rejäla mängder precis innan servering.",
+    "ingredients": "[{\"name\": \"lammbog\", \"units\": \"kg\", \"amount\": \"1\"}, {\"name\": \"timjan\", \"units\": \"kvist\", \"amount\": \"1\"}, {\"name\": \"lagerblad\", \"units\": null, \"amount\": \"2\"}, {\"name\": \"lammfond\", \"units\": \"l\", \"amount\": \"1\"}, {\"name\": \"potatis\", \"units\": \"g\", \"amount\": \"600\"}, {\"name\": \"morötter\", \"units\": null, \"amount\": \"6\"}, {\"name\": \"kålrot\", \"units\": null, \"amount\": \"0.5\"}, {\"name\": \"purjolök\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"kantareller\", \"units\": \"g\", \"amount\": \"200\"}, {\"name\": \"Smör\", \"units\": null, \"amount\": null}, {\"name\": \"Salt och malen peppar\", \"units\": null, \"amount\": null}, {\"name\": \"Pepparrot\", \"units\": \"färsk\", \"amount\": null}, {\"name\": \"Persilja\", \"units\": null, \"amount\": null}]",
+    "instructions": "Skär köttet i jämna tärningar ca 3 x 3 cm, och krydda med salt och malen peppar. Använd en stor tjockbottnad gryta. Hetta upp en skvätt olja i grytan och bryn köttet väl på hög värme. Tillsätt timjan, lagerblad och fond. Koka upp, lägg på lock och låt köttet puttra i en timme. Skrubba potatisen, men låt skalet sitta kvar om det är tunt. Koka potatisen mjuk. Skala och skär morötter och kålrot i jämna bitar. Rensa och skiva purjolöken. Riv kantarellerna i mindre bitar. Lägg morot och kålrot i grytan med köttet, och låt det puttra vidare en timme eller tills köttet är helt mört och grönsakerna mjuka. Tillsätt purjolök, kantareller och potatis. Låt det hela sjuda i ytterligare 15-20 minuter. Strö över hackad persilja och riven pepparrot vid servering.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "180 minutes",
+    "total_time": null,
+    "notes": "Grytan kan gärna göras dagen innan och värmas upp innan servering. Om du tycker om öl kan du byta ut lite av fonden mot öl.",
+    "tags": "Lamm, Gryta"
+}

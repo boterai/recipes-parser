@@ -1,0 +1,12 @@
+{
+    "dish_name": "스시",
+    "description": "맛있는 스시를 집에서 만드는 방법",
+    "ingredients": "[{\"name\": \"짧은 알갱이 밥\", \"units\": null, \"amount\": null}, {\"name\": \"밥 식초\", \"units\": null, \"amount\": null}, {\"name\": \"설탕\", \"units\": null, \"amount\": null}, {\"name\": \"소금\", \"units\": null, \"amount\": null}, {\"name\": \"신선한 생선 (예: 참치, 연어)\", \"units\": null, \"amount\": null}, {\"name\": \"노리 (김 조각)\", \"units\": null, \"amount\": null}, {\"name\": \"와사비\", \"units\": null, \"amount\": null}, {\"name\": \"간장\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. 쌀을 씻고 물에 담가 30분간 두세요. 2. 밥솥에 쌀과 물을 넣고 조리하세요. 3. 밥이 다 익으면 식초, 설탕, 소금을 섞어주세요. 4. 노리 위에 밥을 올리고 생선과 기타 재료를 얹습니다. 5. 노리를 단단히 말아주세요. 6. 원하는 크기로 자릅니다.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "50 minutes",
+    "notes": "신선한 재료를 사용하면 더 맛있습니다.",
+    "tags": "스시, 일본 요리, 집에서 요리"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Danske frikadeller",
+    "description": "Frikadeller er en vaskeægte dansk klassiker, der har været en favorit i årtier og bliver stadig flittigt lavet i de danske hjem.",
+    "ingredients": "[{\"name\": \"Svinekød, hakket\", \"units\": \"gram\", \"amount\": 500}, {\"name\": \"Æg\", \"units\": \"stk.\", \"amount\": 1}, {\"name\": \"Hvedemel\", \"units\": \"spsk.\", \"amount\": 2}, {\"name\": \"Løg, pillet\", \"units\": \"gram\", \"amount\": 200}, {\"name\": \"Mælk\", \"units\": \"dl.\", \"amount\": 0.5}, {\"name\": \"Salt\", \"units\": \"tsk.\", \"amount\": 1}, {\"name\": \"Peber\", \"units\": \"tsk.\", \"amount\": 1}, {\"name\": \"Bouillonterning, svin\", \"units\": \"stk.\", \"amount\": 1}, {\"name\": \"Kogevand\", \"units\": \"dl.\", \"amount\": 4}, {\"name\": \"Piskefløde\", \"units\": \"dl.\", \"amount\": 1}, {\"name\": \"Kulør\", \"units\": null, \"amount\": null}]",
+    "instructions": "Rør farsen først med salt og mel sejt. der efter1 æg, og det røres godt igennem, tilsæt de finthakkede løg og rør sej igen. tilsæt mælk, så farsen bliver formfast. Dyp en spiseske i varmt vand, og form frikadellerne inden de kommes på panden med let brunet smør. steges ca. 4 min. på hver side, så de har fået en sprød skorpe. Drys mel på panden i det resterende smør, eller giv panden en klat smør hvis der ikke er fedtstof tilbage. Kog panden af med kartoffelvand fra de kogte kartofler (pas på med salt i sovsen hvis kartoffelvandet er meget salt), og kom lidt piskefløde i, giv kulør og smag til med salt og peber.",
+    "category": "Hovedretter",
+    "prep_time": "10 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "40 minutes",
+    "notes": "Hvis man er 2 pers. så frys bagefter halvdelen til en anden næste gang, og nem at gøre sprøde igen (efter optøning).",
+    "tags": "frikadeller, dansk, hovedret"
+}

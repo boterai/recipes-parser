@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pamuk kiflice",
+    "description": "Najmekše kiflice na svetu, koje se tope u ustima.",
+    "ingredients": "[{\"name\": \"brašno\", \"units\": \"g\", \"amount\": 900}, {\"name\": \"suvi kvasac\", \"units\": \"kesica\", \"amount\": 1}, {\"name\": \"jaja\", \"units\": null, \"amount\": 2}, {\"name\": \"toplo mleko\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"ulje\", \"units\": \"ml\", \"amount\": 180}, {\"name\": \"šećer\", \"units\": \"kašika\", \"amount\": 1}, {\"name\": \"so\", \"units\": \"kašičica\", \"amount\": 1}]",
+    "instructions": "1. U veću vanglicu sipajte toplo mleko, pa dodajte ulje, dva belanca, šećer i kesicu suvog kvasca. Sve dobro promešajte. 2. Postepeno umešavajte deo po deo brašna zajedno sa solju. 3. Kada smesa dobije čvršću strukturu, prebacite je na pobrašnjenu radnu površinu i nastavite ručno mesiti. 4. Oblikovano testo prebacite u nauljenu vanglu, prekrijte plastičnom folijom i ostavite da naraste na toplom mestu. 5. Naraslo testo izručite na blago pobrašnjenu podlogu i podelite ga na manje komade. 6. Svaki deo razvijte oklagijom u četvrtasti oblik i po želji filujte nadevom. 7. Nožem ili sekačem napravite blagu mustricu na ivici i urolajte kiflicu.",
+    "category": "Dessert",
+    "prep_time": "90 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Toplo mleko, nikako vrelo. Pravilno mesenje i strpljenje pri dizanju testa su ključni za mekoću kiflica.",
+    "tags": "kiflice, peciva, domaća kuhinja"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Klassieke Indiase curry met linzen, bataat en paksoi",
+    "description": "Curry is een Aziatisch gerecht dat vele variaties kent. Belangrijke ingrediënten zijn specerijen en rode peper.",
+    "ingredients": "[{\"name\": \"Knoflookteen\", \"units\": \"stuk(s)\", \"amount\": \"½\"}, {\"name\": \"Rode peper\", \"units\": \"stuk(s)\", \"amount\": \"¼\"}, {\"name\": \"Kokosmelk\", \"units\": \"ml\", \"amount\": \"50\"}, {\"name\": \"Groene linzen\", \"units\": \"gram\", \"amount\": \"40\"}, {\"name\": \"Kerriepoeder\", \"units\": \"tl\", \"amount\": \"1.5\"}, {\"name\": \"Zoete aardappel\", \"units\": \"gram\", \"amount\": \"250\"}, {\"name\": \"Paksoi\", \"units\": \"stuk(s)\", \"amount\": \"½\"}, {\"name\": \"Sojasaus\", \"units\": \"ml\", \"amount\": \"10\"}, {\"name\": \"Verse koriander\", \"units\": \"takje(s)\", \"amount\": \"4\"}, {\"name\": \"Naturel yoghurt\", \"units\": \"ml\", \"amount\": \"50\"}, {\"name\": \"Zonnebloemolie\", \"units\": \"el\", \"amount\": \"½\"}, {\"name\": \"Peper\", \"units\": null, \"amount\": null}, {\"name\": \"Zout\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Snijd of pers de knoflook fijn. Verwijder de zaadlijsten van de rode peper en snijd de rode peper fijn. Roer de kokosmelk los. 2. Verhit de zonnebloemolie in een wok of hapjespan met deksel en roerbak de knoflook, rode peper, linzen en currykruiden 1 minuut op middellaag vuur. Voeg de kokosmelk en 150 ml water per persoon toe. Breng afgedekt aan de kook en laat 25 - 30 minuten koken op laag vuur. 3. Schil ondertussen de bataat en snijd in blokjes van 1 cm. Voeg de bataat na 10 minuten toe aan de wok of hapjespan en laat nog 15 - 20 minuten koken. 4. Snijd ondertussen de paksoi klein en bewaar de groene bladeren apart van het witte deel. Voeg het witte deel van de paksoi in de laatste 5 minuten toe aan de wok en bak op middelhoog vuur mee. 5. Voeg vervolgens vlak voor het opdienen de groene bladeren van de paksoi en de sojasaus toe en roerbak nog 1 minuut. Breng de curry op smaak met peper en zout. Voeg eventueel extra water toe als de curry te droog wordt. 6. Snijd de koriander grof. Verdeel het gerecht over de borden. Garneer met de verse koriander en de yoghurt.",
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "40 minutes",
+    "notes": "Kan sporen van allergenen bevatten.",
+    "tags": "curry, vegetarisch, Indiaas"
+}

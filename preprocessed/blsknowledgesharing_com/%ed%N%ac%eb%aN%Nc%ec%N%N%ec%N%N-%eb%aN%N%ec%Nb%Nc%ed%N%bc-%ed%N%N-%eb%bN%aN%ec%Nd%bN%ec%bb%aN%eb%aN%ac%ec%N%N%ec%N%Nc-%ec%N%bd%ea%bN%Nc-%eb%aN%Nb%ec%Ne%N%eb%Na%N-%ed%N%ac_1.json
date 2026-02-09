@@ -1,0 +1,12 @@
+{
+    "dish_name": "크로와상",
+    "description": "홈 베이커리에서 쉽게 맛있는 크로와상 만드는 방법",
+    "ingredients": "[{\"name\": \"고운 밀가루\", \"units\": \"컵\", \"amount\": 2.5}, {\"name\": \"먼지소금\", \"units\": \"티스푼\", \"amount\": 2}, {\"name\": \"설탕\", \"units\": \"컵\", \"amount\": 0.25}, {\"name\": \"지방분 찬 우유\", \"units\": \"컵\", \"amount\": 0.75}, {\"name\": \"즉석이스트\", \"units\": \"티스푼\", \"amount\": 1.5}, {\"name\": \"무염 버터(찬), 1/2 인치 조각으로 자름\", \"units\": \"테이블스푼\", \"amount\": 12}, {\"name\": \"찬물\", \"units\": \"테이블스푼\", \"amount\": 1}]",
+    "instructions": "1. 필요한 재료를 준비합니다. 2. 반죽을 밀고 접는 과정을 반복합니다. 3. 반죽을 휴식시킵니다. 4. 크로와상 형태로 성형합니다. 5. 발효 후, 오븐에서 굽습니다.",
+    "category": "Dessert",
+    "prep_time": "30 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "2 hours 50 minutes",
+    "notes": "이 레시피는 초보자에게도 친근한 방법입니다.",
+    "tags": "크로와상, 베이킹, 홈베이커리"
+}

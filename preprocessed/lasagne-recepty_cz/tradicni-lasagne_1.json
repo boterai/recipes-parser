@@ -1,0 +1,12 @@
+{
+    "dish_name": "tradiční lasagne",
+    "description": "Recept na tradiční italské lasagne",
+    "ingredients": "[{\"name\": \"lasagní\", \"units\": \"balíček\", \"amount\": 1}, {\"name\": \"krájených rajčat\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"parmazánu\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"mletého vepřového masa\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"oregano\", \"units\": null, \"amount\": null}, {\"name\": \"plnotučná hořčice\", \"units\": \"lžička\", \"amount\": 1}, {\"name\": \"kečup\", \"units\": \"lžička\", \"amount\": 1}, {\"name\": \"rajský protlak\", \"units\": null, \"amount\": null}, {\"name\": \"sůl\", \"units\": null, \"amount\": null}, {\"name\": \"mletý pepř\", \"units\": null, \"amount\": null}, {\"name\": \"strouhaný muškátový oříšek\", \"units\": null, \"amount\": null}, {\"name\": \"hladké mouky\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"mléka\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"másla\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"sůl\", \"units\": null, \"amount\": null}]",
+    "instructions": "Lasagne připravíme dle návodu na obalu. Připravíme si masové ragú. Mleté vepřové maso osmahneme na pánvi na oleje, přidáme pepř, sůl a oregáno. Poté přidáme rajský protlak, kečup a hořčici. Za občasného přilévání vody dusíme maso doměkka. Připravíme si bešamelovou omáčku. Na másle opražíme mouku a po troškách přiléváme mléko. Směs vymícháme do hustší omáčky. Mléko přidáváme po troškách a čekáme, dokud se všechno neprovaří. Jinak by nám vzniky velké hrudky. Nakonec se omáčka lehce osolí a okoření čerstvě nastrouhaným muškátovým oříškem. Do pekáčku na dno dáme vrstvu lasagní a na ni vrstvu rajčat, dalé vrstva lasagní a vrstva bešamelu a dále vrstva lasagní a vrstva masového ragú. Tento postup opakujeme dokud máme suroviny a místo v pekáčku. Lasagne pečeme v troubě při 180 °C asi 45 minut.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "45 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "italian, lasagne, main course"
+}

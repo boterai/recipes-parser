@@ -1,0 +1,12 @@
+{
+    "dish_name": "Burgonyás ropogós bagett",
+    "description": null,
+    "ingredients": "[{\"name\": \"Liszt\", \"units\": \"g\", \"amount\": 1000}, {\"name\": \"Víz\", \"units\": \"g\", \"amount\": 650}, {\"name\": \"O-Tentic Durum CL durumbúza kovász\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"Easy Potato Yellow\", \"units\": \"g\", \"amount\": 100}]",
+    "instructions": "Dagasszunk tésztát az összetevőkből 3 perc lassú, majd 4 perc gyors fokozaton. Törekedjünk arra, hogy a tészta hőmérséklete a dagasztást követően 28°C legyen. A tésztaérés 60 perc, feladási súlya 350 g legyen. Pihentessük a tésztát 15 percig, majd sodorjuk hosszú, enyhén hegyes formájúra. Kelesszük 40 percig 32°C-on. A rusztikus hatás érdekében szórjuk meg liszttel és ejtsünk vágásokat a tésztadarabok közepén. Végül süssük 230°C-os sütőben 15-18 percig.",
+    "category": null,
+    "prep_time": "15 minutes",
+    "cook_time": "15-18 minutes",
+    "total_time": "60 minutes",
+    "notes": null,
+    "tags": null
+}

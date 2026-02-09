@@ -1,0 +1,12 @@
+{
+    "dish_name": "Polpettone Ripieno di Formaggio con Purè di Patate e Pancetta",
+    "description": "Un sostanzioso polpettone con uno strato di cremoso purè di patate, gratinato con formaggio cheddar e croccante pancetta - puro piacere confortante per tutta la famiglia.",
+    "ingredients": "[{\"name\": \"carne macinata di manzo\", \"units\": \"g\", \"amount\": 450}, {\"name\": \"carne macinata di maiale\", \"units\": \"g\", \"amount\": 225}, {\"name\": \"cipolla piccola, tritata finemente\", \"units\": \"unit\", \"amount\": 1}, {\"name\": \"pangrattato\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"latte\", \"units\": \"ml\", \"amount\": 120}, {\"name\": \"uovo grande\", \"units\": \"unit\", \"amount\": 1}, {\"name\": \"salsa Worcestershire\", \"units\": \"ml\", \"amount\": 15}, {\"name\": \"sale\", \"units\": \"g\", \"amount\": 10}, {\"name\": \"pepe\", \"units\": \"g\", \"amount\": 5}, {\"name\": \"aglio in polvere\", \"units\": \"g\", \"amount\": 5}, {\"name\": \"purè di patate\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"formaggio Cheddar grattugiato\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"pancetta cotta, sbriciolata\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"cipollotti, tritati\", \"units\": \"g\", \"amount\": 30}]",
+    "instructions": "1. Scalda il forno a 190°C e ungi una teglia da 23 x 33 cm. 2. In una ciotola capiente mescola bene la carne di manzo, quella di maiale, la cipolla, il pangrattato, il latte, l'uovo, la salsa Worcestershire, il sale, il pepe e l'aglio in polvere. 3. Premi l'impasto di carne nella teglia distribuendolo uniformemente. Copri con uno strato uniforme di purè di patate. 4. Spargi sopra il purè il formaggio Cheddar grattugiato, la pancetta sbriciolata e i cipollotti tritati. 5. Cuoci nel forno già caldo per 35-40 minuti, fino a quando il formaggio si è sciolto e dorato leggermente e la carne è ben cotta. 6. Lascia riposare la pietanza per qualche minuto prima di tagliarla e servirla, così i sapori si mescolano meglio.",
+    "category": "Secondi Piatti",
+    "prep_time": "20 minutes",
+    "cook_time": "40 minutes",
+    "total_time": "60 minutes",
+    "notes": "Questo sformato di polpettone unisce carne speziata, purè cremoso e una croccante copertura di formaggio e pancetta. Per un sapore migliore usa sempre ingredienti freschi. Il breve riposo dopo la cottura è fondamentale per esaltare tutti i sapori. Questo piatto è perfetto per cene in famiglia e può essere preparato in anticipo.",
+    "tags": "comfort food, polpettone, purè di patate, cena familiare"
+}

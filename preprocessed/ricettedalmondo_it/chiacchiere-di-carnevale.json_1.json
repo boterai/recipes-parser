@@ -1,0 +1,12 @@
+{
+    "dish_name": "Chiacchiere di Carnevale",
+    "description": "Le chiacchiere di Carnevale sono un dolce tipico del periodo delle maschere, croccanti e friabili.",
+    "ingredients": "[{\"name\": \"farina 00\", \"units\": \"gr\", \"amount\": 500}, {\"name\": \"zucchero a velo\", \"units\": \"gr\", \"amount\": 140}, {\"name\": \"uova\", \"units\": \"intere\", \"amount\": 3}, {\"name\": \"albume d'uovo\", \"units\": null, \"amount\": 1}, {\"name\": \"olio di semi\", \"units\": \"cucchiai\", \"amount\": 4}, {\"name\": \"vanillina\", \"units\": \"bustina\", \"amount\": 1}, {\"name\": \"sale\", \"units\": null, \"amount\": null}, {\"name\": \"arancia\", \"units\": null, \"amount\": 1}, {\"name\": \"Strega\", \"units\": \"ml\", \"amount\": 60}, {\"name\": \"olio di semi\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"zucchero a velo\", \"units\": \"q.b.\", \"amount\": null}]",
+    "instructions": "1. Versate la farina insieme allo zucchero a velo, un pizzico di sale e la buccia grattugiata dell'arancia in una ciotola. 2. Unite le uova, l'olio e lo Strega ed iniziate a lavorare il tutto. 3. Aggiungete l'albume a neve e formate un panetto, avvolgetelo nella pellicola e lasciatelo riposare a temperatura ambiente per mezz'ora. 4. Stendete la pasta in una sfoglia molto sottile e ritagliate dei rettangoli. 5. Friggete le chiacchiere in olio caldo a 175°C. 6. Trasferitele su un piatto con carta assorbente e lasciatele raffreddare. 7. Servitele con zucchero a velo.",
+    "category": "Dolci",
+    "prep_time": "40 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "70 minutes",
+    "notes": "Per ottenere chiacchiere perfette, è importante stendere la pasta sottilissima e friggere a temperatura corretta.",
+    "tags": "dolci, carnevale, chiacchiere"
+}

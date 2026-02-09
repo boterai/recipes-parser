@@ -1,0 +1,12 @@
+{
+    "dish_name": "Irish Soda Bread Scones",
+    "description": "These homemade Irish Soda Bread Scones are crafted with just five basic pantry staples to feature a crackly, crispy crust and a rustic, country-style look, but still remain airy and soft on the inside.",
+    "ingredients": "[{\"name\": \"all-purpose flour\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"sea salt\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"granulated sugar\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"baking soda\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"buttermilk\", \"units\": \"cup\", \"amount\": 1}]",
+    "instructions": "1. Adjust your oven rack to the lower-third position and preheat the oven to 410°F (210°C). Line a large baking tray or a half-sheet pan with parchment paper and set aside. 2. In a large bowl, whisk together the flour, sugar, salt, and baking soda. Using a silicone spatula, stir in the buttermilk just until a shaggy, slightly sticky dough forms. Do not over-mix or knead the dough. 3. Generously flour your work surface. Turn the dough out and lightly dust the top with flour. Shape the dough into a ball and press it into an 8-inch (20cm) disc, approximately 1 inch thick. 4. Use a 2.5-inch scone cutter to stamp out rounds. Place them on the prepared baking tray. 5. Bake for 12–15 minutes until golden brown. Remove from the oven and cool for a few minutes before serving.",
+    "category": "scones",
+    "prep_time": "10 minutes",
+    "cook_time": "12 minutes",
+    "total_time": "22 minutes",
+    "notes": "For buttermilk substitute, mix 1 cup of full-fat milk with 1 tablespoon of white vinegar or lemon juice. Let it sit for 10–15 minutes until curdled. Feel free to add up to 1/2 cup of your favorite additions (raisins, currants, caraway seeds, chopped nuts, or chocolate chips).",
+    "tags": "Irish, scones, baking, bread"
+}

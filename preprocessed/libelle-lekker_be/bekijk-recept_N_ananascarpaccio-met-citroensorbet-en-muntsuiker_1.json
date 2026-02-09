@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ananascarpaccio met citroensorbet en muntsuiker",
+    "description": "Zomers dessertje met ananas, citroensorbet en muntsuiker.",
+    "ingredients": "[{\"name\": \"ananas\", \"units\": \"stuk\", \"amount\": 1}, {\"name\": \"citroensorbet\", \"units\": \"bolletjes\", \"amount\": 4}, {\"name\": \"rietsuiker\", \"units\": \"el\", \"amount\": 4}, {\"name\": \"verse munt\", \"units\": null, \"amount\": \"handje\"}]",
+    "instructions": "1. Schil de ananas en snij 'm in flinterdunne plakken. Snij de plakjes eventueel een beetje bij. Verdeel ze over vier borden. 2. Doe de rietsuiker in een vijzel. Haal de blaadjes munt van de steeltjes en doe ze ook in de vijzel. Stamp tot de suiker mooi groen kleurt. 3. Bestrooi de plakjes ananas met wat muntsuiker. Schik in het midden een bolletje ijs en strooi ook daar wat muntsuiker over. Werk af met een plukje munt.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "Europees,Dessert,Zoet"
+}

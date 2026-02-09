@@ -1,0 +1,12 @@
+{
+    "dish_name": "Vacherin met kokos en mango",
+    "description": "Feestelijk en glutenvrij dessert",
+    "ingredients": "[{\"name\": \"eiwitten\", \"units\": null, \"amount\": 6}, {\"name\": \"suiker\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"kokospoeder\", \"units\": \"g\", \"amount\": 60}, {\"name\": \"mascarpone\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"poedersuiker\", \"units\": \"g\", \"amount\": 60}, {\"name\": \"slagroom\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"mango's (rijpe)\", \"units\": null, \"amount\": 2}]",
+    "instructions": "1. Verwarm de oven voor op 150°C. Teken met potlood 3 rechthoeken van 20 x 8 cm op een vel bakpapier en leg het op de bakplaat. 2. Klop de eiwitten met de mixer tot zachte pieken. Doe er lepel per lepel de suiker bij en blijf kloppen. De meringue wordt dik en glanzend. Spatel er dan het kokospoeder door. 3. Doe het mengsel in een spuitzak met een gladde spuitmond van 1 cm diameter. Vul de rechthoeken door in de breedte reepjes vlak naast elkaar te spuiten. Bestrooi met extra kokospoeder. Bak de meringues 1 uur en 20 minuten in de voorverwarmde oven. Laat ze in de oven afkoelen, met de deur op een kier. 4. Meng mascarpone en poedersuiker. Klop de slagroom lobbig en spatel ‘m door de mascarpone. Schil de mango en snij ‘m in plakjes. 5. Leg een plak meringue op het werkvlak, bestrijk met mascarponecrème en leg er plakjes mango op. Leg er een tweede plak meringue op met daarop mascarponecrème. Bedek met de derde plak meringue. Serveer meteen.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "80 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "Europees,Dessert,Zoet"
+}

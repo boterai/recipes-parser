@@ -1,0 +1,12 @@
+{
+    "dish_name": "Stromboli Facile con Pollo Pancetta e Salsa Ranch",
+    "description": "Impasto per pizza dorato avvolto intorno a pollo tenero, pancetta croccante e cremosa salsa ranch. Perfetto per cena o giorni di partita!",
+    "ingredients": "[{\"name\": \"pasta per pizza\", \"units\": \"chilo\", \"amount\": \"1\"}, {\"name\": \"salsa ranch\", \"units\": \"tazza\", \"amount\": \"1/2\"}, {\"name\": \"formaggio mozzarella grattugiato\", \"units\": \"tazza\", \"amount\": \"1\"}, {\"name\": \"pancetta sbriciolata\", \"units\": \"tazza\", \"amount\": \"1/2\"}, {\"name\": \"pollo cotto a dadini\", \"units\": \"tazza\", \"amount\": \"1\"}, {\"name\": \"cipolla rossa\", \"units\": \"tazza\", \"amount\": \"1/4\"}, {\"name\": \"uovo\", \"units\": \"pezzo\", \"amount\": \"1\"}, {\"name\": \"prezzemolo fresco\", \"units\": \"tazza\", \"amount\": \"1/4\"}]",
+    "instructions": "1. Scalda il forno a 190°C. Metti la carta da forno su una teglia. 2. Copri il piano di lavoro con un po' di farina e stendi l'impasto della pizza in forma rettangolare. 3. Spalma la salsa ranch sull'impasto, lasciando un bordo di circa un centimetro. Distribuisci sopra la mozzarella, la pancetta, il pollo e la cipolla rossa. 4. Partendo dal lato lungo, arrotola l'impasto stretto come un rotolo dolce. Premi bene i bordi e le giunture per sigillare tutto dentro. 5. Metti il rotolo sulla teglia con la giuntura verso il basso. Spennella la parte superiore con l'uovo sbattuto e fai alcuni piccoli tagli sulla superficie per far uscire il vapore. 6. Inforna per 25-30 minuti fino a doratura. Lascialo riposare per 5 minuti, poi aggiungi prezzemolo fresco e taglialo a fette per servire.",
+    "category": "Secondi Piatti",
+    "prep_time": "20 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "50 minutes",
+    "notes": "Ottimo da preparare in anticipo - assemblalo e mettilo in frigo, poi cuocilo quando serve. Servilo con extra salsa ranch o marinara per intingere. Gli avanzi si conservano bene in frigo fino a 3 giorni.",
+    "tags": "Stromboli, Pollo, Pancetta, Salsa Ranch"
+}

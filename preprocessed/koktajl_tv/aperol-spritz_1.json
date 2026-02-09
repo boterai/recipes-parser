@@ -1,0 +1,12 @@
+{
+    "dish_name": "Aperol Spritz",
+    "description": "Aperol Spritz to jeden z najpopularniejszych drinków ostatnich lat. Idealny drink na lato, orzeźwiający, wytrawny, włoski.",
+    "ingredients": "[{\"name\": \"Woda gazowana\", \"units\": \"ml\", \"amount\": 20.0}, {\"name\": \"Prosecco\", \"units\": \"ml\", \"amount\": 80.0}, {\"name\": \"Aperol\", \"units\": \"ml\", \"amount\": 30.0}]",
+    "instructions": "Do kieliszka wypełnionego lodem wrzuć kilka plastrów pomarańczy, wlej aperol, wodę gazowaną i uzupełnij prosecco. Całość zamieszaj.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

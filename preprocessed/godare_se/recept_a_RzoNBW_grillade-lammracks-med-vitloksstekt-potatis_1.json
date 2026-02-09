@@ -1,0 +1,12 @@
+{
+    "dish_name": "Grillade lammracks med vitlöksstekt potatis",
+    "description": "Stjärnkocken Thomas Sjögren visar hur du lagar saftiga lammracks med goda tillbehör.",
+    "ingredients": "[{\"name\": \"lammracks\", \"units\": \"kg\", \"amount\": 1}, {\"name\": \"rosmarin\", \"units\": \"kvistar\", \"amount\": 3}, {\"name\": \"vitlöksklyftor\", \"units\": null, \"amount\": 2}, {\"name\": \"smör\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"Flingsalt\", \"units\": null, \"amount\": null}, {\"name\": \"potatis\", \"units\": \"g\", \"amount\": 600}, {\"name\": \"rapsolja\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"vitlöksklyftor\", \"units\": null, \"amount\": 4}, {\"name\": \"Svartpeppar\", \"units\": null, \"amount\": null}, {\"name\": \"cocktailtomater\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"apelsin\", \"units\": null, \"amount\": 1}, {\"name\": \"olivolja\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"rosmarin\", \"units\": \"kvistar\", \"amount\": 2}, {\"name\": \"grekisk yoghurt\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"Svartpeppar\", \"units\": null, \"amount\": null}]",
+    "instructions": "Putsa bort hinnor från lammracksen och krydda med salt. Smält smör med vitlök i en kastrull och pensla lammet med hjälp av rosmarinkvistarna som pensel. Grilla lammracksen hela tills de fått fin färg. Baka lammet i ugnen på 100 grader tills det nått en innertemperatur på 52 grader. Låt lammet vila ca 25-30 minuter. Skär köttet i skivor och pensla vitlökssmöret med hjälp av rosmarinen och grilla skivorna igen innan servering. Toppa med flingsalt. Koka potatisen med skalet på i saltat vatten. Häll av potatisen och låt den svalna, gärna i kyl. Värm en panna med rapsolja och lägg i potatisen, stek gyllene på ena sida och vänd sedan potatisen. Lägg i vitlök, rosmarin och smör i stekpannan tillsammans med potatisen. Stek ca 3 minuter till och krydda med svartpeppar och flingsalt vid servering. Lägg tomaterna i en ugnsform med rosmarin, olivolja, salt & zest samt saft från apelsin. Rosta i ugnen på 250 grader ca 15 minuter. Blanda yoghurt med salt och olivolja.",
+    "category": "Main Course",
+    "prep_time": "90 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Kryssa fettkappan på lammracksen med tunna snitt med en kniv så smälter fettet lättare och ger köttet mer smak.",
+    "tags": "Grillat, Lamm"
+}

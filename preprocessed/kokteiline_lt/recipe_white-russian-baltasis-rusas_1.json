@@ -1,0 +1,12 @@
+{
+    "dish_name": "White Russian (Baltasis Rusas)",
+    "description": "Klasikinis, saldus kokteilis.",
+    "ingredients": "[{\"name\": \"Degtinė\", \"units\": \"ml\", \"amount\": 60}, {\"name\": \"Kavos likeris\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"Grietinėlė\", \"units\": \"ml\", \"amount\": 30}]",
+    "instructions": "Plačią žemą taurę pripildykite ledo kubeliais, supilkite degtinę ir kavos likerį. Išmaišykite. Grietinėlę lengvai suplakite ir atsargiai užpilkite ant kokteilio viršaus. Kokteilį galite papuošti ant viršaus sutarkuodami šiek tiek muskato riešuto.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

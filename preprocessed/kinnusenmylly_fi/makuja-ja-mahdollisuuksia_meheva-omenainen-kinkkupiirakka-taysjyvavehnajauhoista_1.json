@@ -1,0 +1,12 @@
+{
+    "dish_name": "Mehevä, omenainen kinkkupiirakka",
+    "description": "Tämä mehevä kinkkupiirakka on leivottu 100% täysjyvävehnäjauhoon. Taikinaan lisätty rahka tuo mehevyyttä ja myös raikastaa tuhtia täysjyvää.",
+    "ingredients": "[{\"name\": \"maustamatonta rahkaa\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"kananmuna\", \"units\": \"pcs\", \"amount\": 1}, {\"name\": \"suola\", \"units\": \"tl\", \"amount\": 0.5}, {\"name\": \"leivinjauhetta\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"Kinnusen Myllyn täysjyvävehnänjauhoa\", \"units\": \"dl\", \"amount\": 2.5}, {\"name\": \"maustamatonta rahkaa\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"kananmunaa\", \"units\": \"pcs\", \"amount\": 2}, {\"name\": \"sinappia\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"suola\", \"units\": null, \"amount\": null}, {\"name\": \"pippuria\", \"units\": null, \"amount\": null}, {\"name\": \"rosmariinia tai timjamia\", \"units\": null, \"amount\": null}, {\"name\": \"voi\", \"units\": null, \"amount\": null}, {\"name\": \"keskikokoinen sipuli\", \"units\": \"pcs\", \"amount\": 1}, {\"name\": \"pieni omena\", \"units\": \"pcs\", \"amount\": 1}, {\"name\": \"rosmariinia\", \"units\": null, \"amount\": null}, {\"name\": \"kinkkuleikkelettä\", \"units\": \"pkt\", \"amount\": 1}, {\"name\": \"juustoraastetta\", \"units\": null, \"amount\": null}]",
+    "instructions": "Tee taikina: Sekoita ensin rahka, kananmuna ja mausteet. Lisää jauhot ja leivinjauhe ja sekoita. Taputtele taikina voideltuun piirakkavuokaan (n. 28cm). Laita taikina jääkaappiin odottamaan täytettä. Laita uuni lämpenemään 200 asteeeseen. Valmistele täytteet: Sekoita kulhossa rahka, kananmuna, sinappi ja kaikki mausteet. Laita sivuun odottamaan. Paloittele sipuli ja omena. Kuullota pannulla ensin hieman sipuleita ja sitten lisää omenapalat ja rosmariini mukaan. Kokoa piirakka: Laita ensin omena-sipuliseos piirakan päälle, sitten munarahkatäyte. Pyörittele kinkkuleikkeet rulliksi ja asettele ympyrään piirakan päälle. Painele hieman leikkeleitä piirakan keskiosasta munaseoksen alle. Lopuksi ripottele juustoraasteet piirakan päälle. Paista 200C asteessa noin 30 minuuttia.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "30 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

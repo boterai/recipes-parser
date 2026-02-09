@@ -1,0 +1,12 @@
+{
+    "dish_name": "Rusztikus kovászos bagett",
+    "description": null,
+    "ingredients": "[{\"name\": \"Liszt\", \"units\": \"g\", \"amount\": 1000}, {\"name\": \"Víz\", \"units\": \"g\", \"amount\": 700}, {\"name\": \"Só\", \"units\": \"g\", \"amount\": 20}, {\"name\": \"O-Tentic Origin\", \"units\": \"g\", \"amount\": 40}]",
+    "instructions": "Dagasszunk tésztát az összetevőkből 2 perc lassú, majd 7 perc gyors fokozaton. Törekedjünk arra, hogy a tészta hőmérséklete a dagasztást követően 28°C legyen. A tésztaérés 40 perc, feladási súlya 300 g legyen. Pihentessük a tésztát 20 percig, majd sodorjuk hosszú, enyhén hegyes formájúra. Kelesszük 45 percig 32°C-on. A rusztikus hatás érdekében szórjuk meg liszttel és ejtsünk vágásokat a tésztadarabok közepén. Végül süssük 230°C-os sütőben 20 percig, az utolsó 5 percben nyitott levegőszabályozó mellett.",
+    "category": null,
+    "prep_time": "20 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "45 minutes",
+    "notes": null,
+    "tags": null
+}

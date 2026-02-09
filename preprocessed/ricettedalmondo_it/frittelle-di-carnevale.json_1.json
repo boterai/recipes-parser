@@ -1,0 +1,12 @@
+{
+    "dish_name": "Frittelle di Carnevale",
+    "description": "Le frittelle di Carnevale sono dei dolci fritti tipici del periodo di Carnevale, semplici e sfiziose, preparate con una pastella che viene fritta a cucchiaiate.",
+    "ingredients": "[{\"name\": \"farina 00\", \"units\": \"gr\", \"amount\": 200}, {\"name\": \"zucchero\", \"units\": \"gr\", \"amount\": 50}, {\"name\": \"latte\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"uovo\", \"units\": \"intero\", \"amount\": 1}, {\"name\": \"uvetta\", \"units\": \"gr\", \"amount\": 80}, {\"name\": \"arancia\", \"units\": \"unit\", \"amount\": 1}, {\"name\": \"lievito di birra\", \"units\": \"gr\", \"amount\": 8}, {\"name\": \"Brandy\", \"units\": \"bicchiere\", \"amount\": 0.5}, {\"name\": \"olio di semi\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"zucchero a velo\", \"units\": \"q.b.\", \"amount\": null}]",
+    "instructions": "Ammollare l'uvetta. Preparare la pastella. Unire l'uvetta. Friggere le frittelle in olio caldo. Servire.",
+    "category": "Dolci di Carnevale",
+    "prep_time": "15 minutes",
+    "cook_time": "90 minutes",
+    "total_time": "105 minutes",
+    "notes": "Se non amate il Rum, potete utilizzare anche il rum o lo Strega come liquore aromatico.",
+    "tags": "Frittelle, Carnevale, Dolci"
+}

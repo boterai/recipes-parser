@@ -1,0 +1,12 @@
+{
+    "dish_name": "Perunapiirakat",
+    "description": "Perunapiirakat muistuttavat, miten simppeleista raaka-aineista valmistat helposti hyvää.",
+    "ingredients": "[{\"name\": \"vesi\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"Kinnusen Myllyn luomuvehnäjauhoja\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"Kinnusen Myllyn luomuruisjauhoja\", \"units\": \"dl\", \"amount\": 4}, {\"name\": \"suola\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"Voita\", \"units\": null, \"amount\": null}, {\"name\": \"Perunamuusia\", \"units\": null, \"amount\": null}]",
+    "instructions": "Sekoita vesi, suola ja vehnäjauhot. Lisää ruisjauhot ja vaivaa taikinaa. Jaa taikina kahteen osaan ja rullaa pitkoiksi. Pyöritä molemmista pitkoista n. 8 palloa. Litistä ja kauli piirakkakuoriksi. Lisää 1–2 rkl perunamuusia jokaiseen piirakkaan ja rypytä reunat.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Jos piirakoiden rypyttäminen huolestuttaa, tässä mummin opettamat perusniksit.",
+    "tags": null
+}

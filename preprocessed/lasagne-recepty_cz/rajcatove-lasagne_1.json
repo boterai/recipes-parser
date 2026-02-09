@@ -1,0 +1,12 @@
+{
+    "dish_name": "Rajčatové lasagne",
+    "description": "Recept na rajčatové lasagne se šunkou",
+    "ingredients": "[{\"name\": \"lasagní\", \"units\": \"balíček\", \"amount\": 1}, {\"name\": \"krájených rajčat\", \"units\": \"konzerva\", \"amount\": 1}, {\"name\": \"cibule\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"rajčata\", \"units\": null, \"amount\": 3}, {\"name\": \"goudy\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"šunky\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"eidamu\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"polévkové zeleniny\", \"units\": \"svazek\", \"amount\": 1}, {\"name\": \"muškátový oříšek\", \"units\": null, \"amount\": null}, {\"name\": \"oleje\", \"units\": \"lžíce\", \"amount\": 2}, {\"name\": \"hladké mouky\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"másla\", \"units\": \"g\", \"amount\": 60}, {\"name\": \"česneku\", \"units\": \"stružek\", \"amount\": 1}, {\"name\": \"mléka\", \"units\": \"ml\", \"amount\": 750}, {\"name\": \"sůl\", \"units\": null, \"amount\": null}, {\"name\": \"pepř\", \"units\": null, \"amount\": null}]",
+    "instructions": "Rajčata z konzervy scedíme a nakrájíme na menší kousky. Cibuli a česnek i kořenovou zeleninu nakrájíme nadrobno. Rajčata omyjeme, 2 -3 nakrájíme na plátky a zbytek spaříme, oloupeme, zbavíme dužniny a nakrájíme na kostky. Sýry nastrouháme a goudu smícháme s 200 gramy eidamu. Zapékací misku nebo formu vymažeme. Lasagne připravíme podle návodu na obalu. Na pánvi rozpálíme olej a cibuli s česnekem osmažíme. Vmícháme pokrájená rajčata a kořenovou zeleniny a společně vše dusíme, než vznikne hustá omáčka. Tu podle chuti osolíme a opepříme. Na másle osmahneme mouku a za stálého míchání do ní přiléváme mléko. Pak ji provaříme a podle chuti osolíme a opepříme a dokořeníme strouhaným muškátovým oříškem. Předehřejeme troubu na 190 °C. Do formy vložíme plátky lasagní, pokryjeme plátky šunky, sýrem a střídavě vrstvy zaléváme oběma omáčkami. Zakryjeme vrstvou lasagní a postup opakujeme, dokud nevyčerpáme všechny suroviny. Formu vložíme do trouby a zapékáme 20 - 30 minut. Nakonec lasagne obložíme plátky rajčat, posypeme je zbylými 20 gramy eidamu a zapékáme dalších 10 minut.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "30 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "lasagne, rajčatové, italské"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "가지볶음",
+    "description": "간편하고 맛있는 가지볶음 레시피로 5분 이내에 완성할 수 있습니다.",
+    "ingredients": "[{\"name\": \"가지\", \"units\": null, \"amount\": null}, {\"name\": \"양파\", \"units\": null, \"amount\": null}, {\"name\": \"마늘\", \"units\": null, \"amount\": null}, {\"name\": \"고춧가루\", \"units\": null, \"amount\": null}, {\"name\": \"설탕\", \"units\": null, \"amount\": null}, {\"name\": \"간장\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. 가지를 얇게 썰고 양파와 마늘은 다집니다.\n2. 열한 팬에 기름을 두르고 다진 마늘을 넣고 향이 날 때까지 볶습니다.\n3. 다진 양파와 가지를 더하고 부드러워질 때까지 볶습니다.\n4. 고춧가루와 설탕, 간장을 넣고 맛을 내주기 위해 혼합합니다.\n5. 가지를 계속 볶으면서 모든 재료가 잘 어우러져 소스가 절인 상태가 되면 요리가 완성됩니다.",
+    "category": "Main Course",
+    "prep_time": "5 minutes",
+    "cook_time": "5 minutes",
+    "total_time": "10 minutes",
+    "notes": "신선한 가지를 선택하는 것이 맛있는 볶음을 만드는 핵심입니다.",
+    "tags": "가지볶음, 간단한 요리, 5분 요리"
+}

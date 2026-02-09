@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gorąca czekolada z whisky",
+    "description": "Przepis na gorącą czekoladę z whisky i popcornem karmelowym.",
+    "ingredients": "[{\"name\": \"mleko\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"kakao\", \"units\": \"łyżeczka\", \"amount\": 1}, {\"name\": \"gorzką czekoladę\", \"units\": \"gram\", \"amount\": 250}, {\"name\": \"brązowy cukier\", \"units\": \"łyżka\", \"amount\": 1}, {\"name\": \"cynamon\", \"units\": null, \"amount\": null}, {\"name\": \"sól\", \"units\": null, \"amount\": null}, {\"name\": \"whisky\", \"units\": \"ml\", \"amount\": 50}]",
+    "instructions": "Do rondelka wlewam mleko i wrzucam wszystkie przyprawy oprócz whisky. Na wolnym ogniu mieszając czekam aż wszystko się dokładnie rozpuści. Podgrzewam do uzyskania odpowiedniej temperatury - czekolada musi być gorąca. Do kubka wlewam 50 ml whisky i dodaję gorącą czekoladę. Dekoracja z popcornu polanego karmelem i posypanego cynamonem.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Użycie torfowego single malta raczej sobie odpuście i zachowajcie na kolejne przepisy.",
+    "tags": "deserowe drinki, whisky, drinki kobiece, czekolada, rozgrzewający, popcorn"
+}

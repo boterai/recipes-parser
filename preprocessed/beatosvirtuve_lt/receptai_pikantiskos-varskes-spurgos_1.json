@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pikantiškos varškės spurgos",
+    "description": "Sūrios varškės spurgos, tinkamos kaip puikus užkandis.",
+    "ingredients": "[{\"name\": \"varškė\", \"units\": \"g\", \"amount\": 360}, {\"name\": \"kiaušiniai\", \"units\": \"pcs\", \"amount\": 2}, {\"name\": \"kmynai\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"česnakinė druska\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"švieži čiobreliai\", \"units\": null, \"amount\": null}, {\"name\": \"juodieji pipirai\", \"units\": null, \"amount\": null}, {\"name\": \"tarkuotas kietasis sūris\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"kaparėliai\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"alyvuogių aliejus\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"miltai\", \"units\": \"g\", \"amount\": 80}, {\"name\": \"kepimo milteliai\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"aliejaus spurgoms virti\", \"units\": null, \"amount\": null}, {\"name\": \"tarkuoto kietojo sūrio\", \"units\": null, \"amount\": null}, {\"name\": \"aitriųjų paprikų skiedrelių\", \"units\": null, \"amount\": null}]",
+    "instructions": "Kaparėlius trumpai pakepinkite alyvuogių aliejuje, kad išgaruotų drėgmė ir jie taptų lengvai traškūs. Kol jie kepa, dubenyje ištrinkite varškę su kiaušiniais, kmynais, česnakine druska, čiobreliais ir trupučiu juodųjų pipirų. Įmaišykite tarkuotą kietąjį sūrį, tada – kaparėlius. Miltus sumaišykite su kepimo milteliais ir suberkite į varškės masę. Sumaišykite minkštą tešlą. Jei reikia, miltų galima dėti truputį daugiau. Rankas patepkite aliejumi, formuokite nedideles spurgas ir virkite gerai įkaitintame aliejuje, kol gražiai apskrus ir taps auksinės spalvos. Išgriebkite ant popierinio rankšluosčio. Patiekite apibarstę tarkuotu sūriu ir, jei norisi, trupučiu aitriųjų paprikų.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

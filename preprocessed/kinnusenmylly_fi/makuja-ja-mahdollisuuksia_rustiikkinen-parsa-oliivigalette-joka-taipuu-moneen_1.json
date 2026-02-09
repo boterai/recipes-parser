@@ -1,0 +1,12 @@
+{
+    "dish_name": "Rustiikkinen parsa-oliivigalette",
+    "description": "Ruokahävikkiä vähentävä galette, jossa täytteenä parsaa ja oliiveja.",
+    "ingredients": "[{\"name\": \"täysjyvävehnäjauhoja\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"ohrajauhoja\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"suolaa\", \"units\": \"tl\", \"amount\": 0.5}, {\"name\": \"margariinia\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"vettä\", \"units\": \"dl\", \"amount\": 0.5}, {\"name\": \"parsaa\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"kivettömiä oliiveja\", \"units\": \"dl\", \"amount\": 1.5}, {\"name\": \"sipuli\", \"units\": null, \"amount\": 1}, {\"name\": \"ranskankermaa\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"juustoraastetta\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"suolaa\", \"units\": null, \"amount\": null}, {\"name\": \"pippuria\", \"units\": null, \"amount\": null}]",
+    "instructions": "Nypi jauhot ja suola pehmeän margariinin sekaan. Lisää vesi ja sekoita tasaiseksi. Kumoa taikina leivinpaperin päälle ja kaulitse se pyöreäksi levyksi. Nosta pellille. Pese parsat ja leikkaa niiden tyvestä kovat osat pois. Paloittele sipuli ja oliivit. Sekoita pilkottu sipuli ja oliivit, suola ja pippuri ranskankerman joukkoon. Levitä täyte piirakkapohjan päälle, mutta jätä reunoille tilaa. Ripottele juustoraaste ranskankerman päälle. Asettele kokonaiset parsat pitkittäin täytteen pinnalle ja käännä pohjan reunat sisään päin. Paista uunissa 200 asteessa 30 minuuttia.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "30 minutes",
+    "total_time": null,
+    "notes": "Voit korvata parsan ja oliivit muilla raaka-aineilla, mitä sinulta on jäänyt yli.",
+    "tags": "galette, ruoka, resepti"
+}

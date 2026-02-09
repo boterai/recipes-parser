@@ -1,0 +1,12 @@
+{
+    "dish_name": "Špenátové lasagne",
+    "description": "Recept na špenátové lasagne s špenátovou a tvarohovou náplní.",
+    "ingredients": "[{\"name\": \"lasagní\", \"units\": \"balíček\", \"amount\": \"1\"}, {\"name\": \"sůl\", \"units\": null, \"amount\": null}, {\"name\": \"mletý černý pepř\", \"units\": null, \"amount\": null}, {\"name\": \"olivový olej\", \"units\": null, \"amount\": null}, {\"name\": \"parmazán nebo eidam\", \"units\": null, \"amount\": null}, {\"name\": \"máslo\", \"units\": null, \"amount\": null}, {\"name\": \"mražený listový špenát\", \"units\": \"g\", \"amount\": \"400\"}, {\"name\": \"smetana\", \"units\": \"g\", \"amount\": \"50\"}, {\"name\": \"česnek\", \"units\": \"stroužky\", \"amount\": \"2\"}, {\"name\": \"polotučný tvaroh\", \"units\": \"g\", \"amount\": \"250\"}, {\"name\": \"parmazán\", \"units\": \"g\", \"amount\": \"50\"}, {\"name\": \"smetana\", \"units\": \"g\", \"amount\": \"100\"}, {\"name\": \"vejce\", \"units\": \"ks\", \"amount\": \"2\"}]",
+    "instructions": "Nejprve najdeme vhodnou obdélníkovou pečící formu vymažeme máslem a na dno vložíme plátky lasagní. Lasagne nepředvařujeme, pokud to není výslovně uvedeno na obalu. Poté si připravíme špenátovou náplň. Mražený špenát necháme trochu rozmrazit a poté ho krátce podusíme na olivovém oleji. Přidáme prolisovaný česnek, případně smetanu a dochutíme pepřem a solí. Tvarohovou náplň připravíme rozšleháním tvarohu, parmazánu, vejce a smetany. Místo tvarohu můžeme použít i ricottu. Troubu vyhřejeme na 200 °C. Na vrstvu lasagní roztíráme vždy část špenátové náplně a na ni část tvarohové náplně a přikryjeme další vrstvou lasagní. Takto pokračujeme, dokud máme ingredience a místo v pekáčku. Vrchní vrstvou by měl být špenát. Podle chuti tuto vrstvu můžeme posypat strouhaným parmazánem nebo pokud nemáme parmazán, tak můžeme použít eidam. Pro zjemnění navrch přidáme ještě pár kousků másla. Špenátové lasagne zapékáme asi 40 minut.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "40 minutes",
+    "total_time": null,
+    "notes": "Místo tvarohu můžeme použít i ricottu.",
+    "tags": "lasagne, špenát, italská kuchyně"
+}

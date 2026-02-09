@@ -1,0 +1,12 @@
+{
+    "dish_name": "White Russian",
+    "description": "Deserowy koktajl z wódką, likierem kawowym oraz śmietanką.",
+    "ingredients": "[{\"name\": \"wódka\", \"units\": \"ml\", \"amount\": 40}, {\"name\": \"likier kawowy\", \"units\": \"ml\", \"amount\": 25}, {\"name\": \"śmietanka kremówki\", \"units\": \"ml\", \"amount\": 20}]",
+    "instructions": "Do szklanki wypełnionej lodem wlewamy likier kawowy. Następnie powoli po łyżce dodajemy wódkę aby utworzyć drugą warstwę koktajlu. Na koniec powoli dodajemy śmietankę. Opcjonalnie, możemy zamieszać naszego 'bialego ruska'. Dekorujemy stratą czekoladą lub posypką z gałki muszkatołowej.",
+    "category": "Drink",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Wybierz ulubioną wódkę i śmietankę. Można pić na dwa sposoby: zamieszać lub budować warstwy.",
+    "tags": "deserowe drinki, likier kawowy, kawowe drinki, słodkie drinki, drinki z wódki"
+}

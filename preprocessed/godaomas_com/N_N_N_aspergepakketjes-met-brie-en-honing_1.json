@@ -1,0 +1,12 @@
+{
+    "dish_name": "Aspergepakketjes met brie en honing",
+    "description": "Deze aspergepakketjes met brie en honing zijn het bewijs dat eenvoud en verfijning perfect samen kunnen gaan.",
+    "ingredients": "[{\"name\": \"groene asperges\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"brie\", \"units\": \"g\", \"amount\": 120}, {\"name\": \"vloeibare honing\", \"units\": \"eetlepels\", \"amount\": 2}, {\"name\": \"olijfolie\", \"units\": \"eetlepel\", \"amount\": 1}, {\"name\": \"Zout\", \"units\": null, \"amount\": null}, {\"name\": \"Versgemalen zwarte peper\", \"units\": null, \"amount\": null}, {\"name\": \"Bakpapier of aluminiumfolie\", \"units\": null, \"amount\": null}]",
+    "instructions": "Verwarm de oven voor op 200 graden Celsius. Was de asperges en snijd indien nodig een klein stukje van de houtachtige onderkant af. Leg twee stukken bakpapier of aluminiumfolie klaar. Verdeel de asperges in twee gelijke porties en leg ze in het midden van het papier. Besprenkel de asperges met olijfolie en breng op smaak met een snufje zout en zwarte peper. Zorg dat de asperges gelijkmatig bedekt zijn. Verdeel de plakken brie over de asperges. De kaas mag deels over de asperges heen liggen, zodat deze tijdens het bakken mooi smelt. Vouw de pakketjes stevig dicht, zodat de warmte en smaken binnen blijven, maar laat bovenin net genoeg ruimte voor de kaas om te smelten zonder eruit te lopen. Leg de pakketjes op een bakplaat en bak ze 12 tot 15 minuten in de oven. De asperges moeten beetgaar zijn en de brie volledig zacht en romig. Haal de pakketjes voorzichtig uit de oven en open ze deels. Druppel direct de honing over de warme asperges en brie, zodat deze licht smelt en zich verdeelt.",
+    "category": "Bijgerecht",
+    "prep_time": "10 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "ca. 25 minutes",
+    "notes": "Dit gerecht is het lekkerst direct na bereiding. Indien nodig kunnen restjes maximaal één dag afgedekt in de koelkast worden bewaard en voorzichtig opnieuw worden opgewarmd in de oven.",
+    "tags": "asperges, brie, honing, vegetarisch, bijgerecht"
+}

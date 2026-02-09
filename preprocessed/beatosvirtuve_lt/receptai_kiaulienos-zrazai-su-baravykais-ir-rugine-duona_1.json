@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kiaulienos zrazai su baravykais ir rugine duona",
+    "description": "Sodraus skonio, turtingi ir lietuviški zrazai su džiovintais baravykais ir ruginė duona.",
+    "ingredients": "[{\"name\": \"kiaulienos nugarinės\", \"units\": \"g\", \"amount\": 800}, {\"name\": \"svogūnų\", \"units\": null, \"amount\": 2}, {\"name\": \"riebesnės rūkytos šoninės arba lašinukų\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"džiovintų baravykų\", \"units\": \"geros saujos\", \"amount\": null}, {\"name\": \"balzaminio acto\", \"units\": \"šaukšto\", \"amount\": 1}, {\"name\": \"petražolių\", \"units\": null, \"amount\": null}, {\"name\": \"ruginės duonos\", \"units\": \"riekių\", \"amount\": 2}, {\"name\": \"druskos\", \"units\": null, \"amount\": null}, {\"name\": \"pipirų\", \"units\": null, \"amount\": null}]",
+    "instructions": "Kiaulieną supjaustome maždaug centimetro storio kepsniais, juos išmušame ir išploniname. Kiekvieną gabaliuką pasūdome ir pabarstome šviežiai grūstais. Ruošiame įdarą. Baravykus užpilame karštu vandeniu ir leidžiame jiems išmirkti. Smulkiai supjaustome šoninę ir paspirginame, kad išleistų riebalus. Į keptuvę beriame smulkiai supjaustytus svogūnus ir lėtai kepiname apie 20 minučių. Smulkiai supjaustome išmirkusius baravykus ir krečiame kepti prie svogūnų. Nuo baravykų likusį skystį pilame ant svogūnų, jei norisi, įpilame ir balzaminio acto, ir leidžiame viskam pasitroškinti, kad nugaruotų maždaug pusė skysčio. Duoną susmulkiname iki trupinėlių. Sumaišome juos su keptuvės turiniu, pasūdome, beriame pipirų ir smulkintų petražolių. Palaukiame, kol šiek tiek atvės. Ant išmuštos mėsos dedame šaukštą įdaro ir susukame. Glaudžiai surikiuojame vieną zrazą šalia kito ir kepame orkaitėje apie 45 minutes, kol gražiai apskrus viršus.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "45 minutes",
+    "total_time": null,
+    "notes": "Prie jų fantastiškai tiks avižinių bei perlinių kruopų ir grybų košė, orkaitėje keptos bulvės arba bulvių ir raugintų kopūstų apkepas.",
+    "tags": "Mėsos suktinukai, Su grybais, Zrazai"
+}

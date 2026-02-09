@@ -1,0 +1,12 @@
+{
+    "dish_name": "Balandėliai su žuvimi",
+    "description": "Gal kiek neįprastas ir kopūstas (savojinis), ir įdaras, tačiau balandėliai su žuvimi yra tikrai verti dėmesio.",
+    "ingredients": "[{\"name\": \"savojinių kopūstų lapų\", \"units\": null, \"amount\": \"10–12\"}, {\"name\": \"lašišos filė\", \"units\": \"g\", \"amount\": \"500\"}, {\"name\": \"apvirtų ryžių\", \"units\": \"ml\", \"amount\": \"50\"}, {\"name\": \"smulkintų krapų\", \"units\": \"šaukštų\", \"amount\": \"2\"}, {\"name\": \"svogūnėlių\", \"units\": \"valgomųjų\", \"amount\": \"2\"}, {\"name\": \"citrinos sulčių\", \"units\": \"šaukštų\", \"amount\": \"1–2\"}, {\"name\": \"tarkuotos citrinos žievelės\", \"units\": null, \"amount\": \"žiupsnelio\"}, {\"name\": \"aliejaus\", \"units\": null, \"amount\": \"šlakelio\"}, {\"name\": \"baltojo vyno\", \"units\": \"ml\", \"amount\": \"100\"}, {\"name\": \"druskos\", \"units\": null, \"amount\": \"žiupsnelio\"}]",
+    "instructions": "Kopūstus paruoškite taip, kaip tradicinių balandėlių recepte. Pagaminkite įdarą: lašišos filė sukapokite peiliu. Svogūnėlius labai smulkiai supjaustykite. Žuvį, svogūnus, krapus, apvirtus ryžius, citrinos žievelę sumaišykite. Pašlakstykite citrinos sultimis ir pasūdykite. Suvyniokite balandėlius. Į kepimo formą įpilkite vyno, vandens ir šaukite į orkaitę maždaug 40 min.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "60 minutes",
+    "total_time": "90 minutes",
+    "notes": "Gardžių atradimų.",
+    "tags": "žuvies, balandėliai, receptas"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Philly cheesesteak",
+    "description": "Philly cheesesteak je sendvič z velmi tenkých plátků ribeye steaku, karamelizované cibule a sýru provolone.",
+    "ingredients": "[{\"name\": \"steak ribeye\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"mořská sůl\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"černý pepř\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"sladká cibule\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"sýr provolone\", \"units\": \"slices\", \"amount\": 8}, {\"name\": \"bagetky\", \"units\": \"pieces\", \"amount\": 4}, {\"name\": \"máslo\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"česnek\", \"units\": \"clove\", \"amount\": 1}, {\"name\": \"majonéza\", \"units\": \"tablespoons\", \"amount\": \"2-4\"}]",
+    "instructions": "Bagetky rozkrojte do 3/4 zoubkovaným nožem. Nakrájejte cibuli na kostičky a hovězí maso na tenké plátky. V malé misce smíchejte 2 lžíce másla s 1 prolisovaným stroužkem česneku. Česnekové máslo rozetřete na řezné strany bagetek. Opečte je na velké pánvi nebo roštu na středním ohni dozlatova a pak je dejte stranou. Na pánev přidejte 1 lžíci oleje a osmahněte na něm cibuli nakrájenou na kostičky, dokud nezkaramelizuje, pak ji přendejte do mísy. Zvyšte teplotu a přidejte další lžíci oleje. Rozložte velmi tenké plátky steaku v rovnoměrné vrstvě. Nechte pár minut opékat, poté obraťte a dochuťte solí a pepřem. Smažte, dokud není steak zcela propečený, a pak k masu vmíchejte zkaramelizovanou cibuli. Rozdělte maso s cibulí na 4 rovnoměrné porce a každou z nich doplňte 2 plátky sýru a vypněte oheň, aby se sýr roztavil a maso se nepřipálilo. Na opečenou stranu každé bagetky naneste tenkou vrstvu majonézy a poté na ně rozdělte maso. Podávejte teplé.",
+    "category": "Hlavní jídla",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "sendvič, hovězí, americká kuchyně"
+}

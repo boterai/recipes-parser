@@ -1,0 +1,12 @@
+{
+    "dish_name": "Börek",
+    "description": "Perfecte snacks met een Turkse twist!",
+    "ingredients": "[{\"name\": \"gehakt\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"ui\", \"units\": \"middelgrote\", \"amount\": 1}, {\"name\": \"knoflook\", \"units\": \"teentjes\", \"amount\": 2}, {\"name\": \"verse peterselie\", \"units\": \"el\", \"amount\": 2}, {\"name\": \"paprikapoeder\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"Zout\", \"units\": null, \"amount\": null}, {\"name\": \"peper\", \"units\": null, \"amount\": null}, {\"name\": \"bladerdeeg\", \"units\": \"pak\", \"amount\": 1}, {\"name\": \"ei\", \"units\": null, \"amount\": 1}, {\"name\": \"olijfolie\", \"units\": \"el\", \"amount\": 1}]",
+    "instructions": "Stap 1: Maak de vulling. Bak het gehakt. Voeg ui en knoflook toe. Kruid de vulling. Stap 2: Bereid het bladerdeeg. Rol het deeg uit. Snijd vierkanten. Stap 3: Vul en vouw de Börek. Schep de vulling. Vouw en sluit. Bestrijk met ei. Stap 4: Bak de Börek. Bak in de oven.",
+    "category": "Snack",
+    "prep_time": "20 minutes",
+    "cook_time": "25 minutes",
+    "total_time": "45 minutes",
+    "notes": "Serveer warm met een frisse yoghurtsaus of een salade. Bewaar restjes in de koelkast in een luchtdichte doos.",
+    "tags": "Börek, Snack, Turkse keuken"
+}

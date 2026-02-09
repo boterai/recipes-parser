@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tropinis Miražas",
+    "description": "Tropinis miražas – egzotiškas, gaivus ir vasariškai vaisinis kokteilis su „Dilmah“ juodosios arbatos eliksyru, šeivamedžio likeriu, degtine ir citrusinių vaisių sultimis.",
+    "ingredients": "[{\"name\": \"„Dilmah“ juodosios persikų skonio arbatos eliksyras\", \"units\": \"ml\", \"amount\": 20}, {\"name\": \"Šeivamedžio žiedų likeris\", \"units\": \"ml\", \"amount\": 20}, {\"name\": \"Degtinė\", \"units\": \"ml\", \"amount\": 40}, {\"name\": \"Žaliųjų citrinų sultys\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"Greipfrutų sultys\", \"units\": \"ml\", \"amount\": 40}, {\"name\": \"Kvapioji karčioji trauktinė\", \"units\": \"šlakeliai\", \"amount\": 2}]",
+    "instructions": "Supilkite visus ingredientus į kokteilinę ir gerai suplakite. Išplaktą gėrimą supilkite į stiklinę taurę ant smulkinto ledo. Papuoškite gėrimą avietėmis ir valgomaisiais žiedais.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

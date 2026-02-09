@@ -1,0 +1,12 @@
+{
+    "dish_name": "Traditional Irish Soda Bread",
+    "description": "A simple homemade bread made from 4 ingredients that requires no kneading.",
+    "ingredients": "[{\"name\": \"all-purpose flour\", \"units\": \"cups\", \"amount\": \"3 and 1/2\"}, {\"name\": \"sea salt\", \"units\": \"teaspoon\", \"amount\": \"1\"}, {\"name\": \"baking soda\", \"units\": \"teaspoon\", \"amount\": \"1\"}, {\"name\": \"buttermilk\", \"units\": \"cups\", \"amount\": \"1 and 3/4\"}, {\"name\": \"water\", \"units\": \"cup\", \"amount\": \"1\"}]",
+    "instructions": "1. Preheat the oven to 446°F (230°C) and line a baking sheet with parchment paper. 2. Whisk flour, salt, and baking soda together in a large mixing bowl. 3. Stir in buttermilk until a shaggy dough forms. 4. Flour your hands and work surface, then shape the dough into a ball. 5. Transfer to the baking sheet and score the top. 6. Bake for 10 minutes at 446°F, then reduce to 375°F (190°C) and bake for another 25-35 minutes until golden brown.",
+    "category": "Quick Bread",
+    "prep_time": "5 minutes",
+    "cook_time": "40 minutes",
+    "total_time": "45 minutes",
+    "notes": "For a whole wheat option, substitute white flour with whole wheat flour. Store leftovers in an airtight container for up to 48 hours.",
+    "tags": "Irish, bread, soda bread, quick bread"
+}

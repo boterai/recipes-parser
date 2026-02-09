@@ -1,0 +1,12 @@
+{
+    "dish_name": "Stevige linzen-groentesoep met gedroogde pruimen",
+    "description": "Een stevige linzen-groentesoep met de zoete smaak van gedroogde pruimen.",
+    "ingredients": "[{\"name\": \"Ui\", \"units\": \"stuk(s)\", \"amount\": \"½\"}, {\"name\": \"Rode peper\", \"units\": \"stuk(s)\", \"amount\": \"½\"}, {\"name\": \"Peen\", \"units\": \"stuk(s)\", \"amount\": \"1\"}, {\"name\": \"Courgette\", \"units\": \"stuk(s)\", \"amount\": \"½\"}, {\"name\": \"HAK linzen\", \"units\": \"stuk(s)\", \"amount\": \"½\"}, {\"name\": \"Gedroogde pruimen\", \"units\": \"stuk(s)\", \"amount\": \"5\"}, {\"name\": \"Verse bladpeterselie\", \"units\": \"takje(s)\", \"amount\": \"2\"}, {\"name\": \"Groentebouillon\", \"units\": \"ml\", \"amount\": \"400\"}, {\"name\": \"Olijfolie\", \"units\": \"el\", \"amount\": \"1\"}, {\"name\": \"Peper\", \"units\": null, \"amount\": null}, {\"name\": \"Zout\", \"units\": null, \"amount\": null}, {\"name\": \"Meerzadenbaguette\", \"units\": \"stuk(s)\", \"amount\": \"1\"}]",
+    "instructions": "1. Verwarm de oven voor op 200 graden. Kook water en bereid de groentebouillon door het benodigde aantal bouillonblokjes op te lossen in kokend water. 2. Pel de ui en snijd fijn. Snijd de rode peper doormidden, verwijder de zaadlijsten en snijd fijn. Was de peen grondig en snijd in dunne plakken. Snijd de courgette in dunne halve plakken. 3. Verhit de olijfolie in een soeppan of pan met dikke bodem en fruit de ui en de rode peper 1 minuut. Voeg de peen toe en bak 1 minuut mee. Voeg de linzen en courgetteplakken toe en schenk de groentebouillon erover. Breng afgedekt aan de kook en kook in 15 minuten gaar. 4. Snijd ondertussen de gedroogde pruimen klein. Spoel de bladpeterselie af en hak fijn. Bak het pittenbroodje 7 minuten in de voorverwarmde oven. 5. Haal de pan van het vuur en pureer de soep met een staafmixer. Roer de gedroogde pruimen en het grootste deel van de bladpeterselie door de soep en breng op smaak met peper en zout. Zet de pan terug op laag vuur en laat nog 2 minuten afgedekt garen. 6. Verdeel de soep over de kommen en garneer met de achtergehouden bladpeterselie. Serveer met het pittenbroodje.",
+    "category": "Soup",
+    "prep_time": "10 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "25 minutes",
+    "notes": "Dit gerecht is rijk aan vitamines en mineralen.",
+    "tags": "linzen, soep, groenten, vegetarisch"
+}

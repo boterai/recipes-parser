@@ -1,0 +1,12 @@
+{
+    "dish_name": "タジン",
+    "description": "モロッコの伝統的な料理で、肉や野菜をスパイスと共に煮込んだ料理。",
+    "ingredients": "[{\"name\": \"羊肉\", \"units\": null, \"amount\": null}, {\"name\": \"鶏肉\", \"units\": null, \"amount\": null}, {\"name\": \"牛肉\", \"units\": null, \"amount\": null}, {\"name\": \"魚\", \"units\": null, \"amount\": null}, {\"name\": \"タマネギ\", \"units\": null, \"amount\": null}, {\"name\": \"トマト\", \"units\": null, \"amount\": null}, {\"name\": \"ニンジン\", \"units\": null, \"amount\": null}, {\"name\": \"ズッキーニ\", \"units\": null, \"amount\": null}, {\"name\": \"オリーブオイル\", \"units\": null, \"amount\": null}, {\"name\": \"クミン\", \"units\": null, \"amount\": null}, {\"name\": \"コリアンダー\", \"units\": null, \"amount\": null}, {\"name\": \"シナモン\", \"units\": null, \"amount\": null}, {\"name\": \"パプリカ\", \"units\": null, \"amount\": null}, {\"name\": \"ターメリック\", \"units\": null, \"amount\": null}, {\"name\": \"ドライフルーツ\", \"units\": null, \"amount\": null}]",
+    "instructions": "ステップ1: 準備 - 材料を切り、スパイスを計量します。タジン鍋にオリーブオイルを熱し、タマネギを炒めて香りを引き出します。ステップ2: 煮込み - 肉や野菜を加え、スパイスをふりかけます。水やブロスを少量加え、蓋をして弱火でじっくりと煮込みます。ステップ3: 盛り付け - 煮込みが終わったら、タジンをそのままテーブルに出し、パンやクスクスと一緒に楽しむのが一般的です。",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "タジンは家族や友人と共に楽しむ料理で、特別な行事や祭りの際に提供されることが多いです。",
+    "tags": "モロッコ料理, タジン, 伝統料理"
+}

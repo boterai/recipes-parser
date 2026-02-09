@@ -1,0 +1,12 @@
+{
+    "dish_name": "Chocoladetaart zonder bloem en gluten",
+    "description": null,
+    "ingredients": "[{\"name\": \"pure chocolade\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"boter\", \"units\": \"g\", \"amount\": 225}, {\"name\": \"suiker\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"eieren\", \"units\": null, \"amount\": 5}, {\"name\": \"maïszetmeel\", \"units\": \"g\", \"amount\": 20}, {\"name\": \"cacaopoeder\", \"units\": \"g\", \"amount\": 15}, {\"name\": \"bakpoeder\", \"units\": \"el\", \"amount\": 1}, {\"name\": \"zout\", \"units\": null, \"amount\": \"snuifje\"}, {\"name\": \"boter\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Beboter de bakvorm of leg er bakpapier op. Verwarm de oven voor op 175°C. 2. Smelt de chocolade met de boter au bain­marie. 3. Klop de eieren en de suiker tot een dikke, witte massa. Klop er de gesmol­ten chocolade door. Zeef het maïszetmeel, cacaopoe­der, bakpoeder en het zout boven de kom en spatel ze door het beslag. Giet het beslag in de vorm. 4. Bak de taart 35 minuten in de voorverwarmde oven. Laat een kwartiertje afkoelen in de vorm alvorens te ontvormen. 5. Laat de taart volledig afkoelen op een rooster en bestuif ze net voor het ser­veren royaal met cacaopoe­der. Lekker met vanilleijs en chocoladesaus.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "35 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "Europees, Dessert, Zoet, Gebak"
+}

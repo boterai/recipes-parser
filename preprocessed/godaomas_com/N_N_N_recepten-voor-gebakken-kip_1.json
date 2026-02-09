@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gebakken Kip",
+    "description": "Het Ultieme Recept voor Perfect Krokante Kip!",
+    "ingredients": "[{\"name\": \"kippenvleugels\", \"units\": \"kg\", \"amount\": \"1\"}, {\"name\": \"chilipoeder\", \"units\": \"tl\", \"amount\": \"1\"}, {\"name\": \"knoflookpoeder\", \"units\": \"tl\", \"amount\": \"1\"}, {\"name\": \"paprikapoeder\", \"units\": \"tl\", \"amount\": \"1\"}, {\"name\": \"Zout\", \"units\": null, \"amount\": null}, {\"name\": \"peper\", \"units\": null, \"amount\": null}, {\"name\": \"paneermeel\", \"units\": \"g\", \"amount\": \"100\"}, {\"name\": \"eieren\", \"units\": null, \"amount\": \"2\"}, {\"name\": \"plantaardige olie\", \"units\": \"ml\", \"amount\": \"200\"}, {\"name\": \"honing\", \"units\": \"el\", \"amount\": \"2\"}]",
+    "instructions": "Stap 1: Bereid de kip voor. Doe de kippenvleugels in een grote kom. Voeg chilipoeder, knoflookpoeder, paprikapoeder, zout en peper toe. Meng goed zodat alle vleugels gelijkmatig gekruid zijn. Doe het paneermeel in een aparte kom en de losgeklopte eieren in een andere. Haal elke vleugel eerst door het ei en daarna door het paneermeel, zodat ze volledig bedekt zijn. Stap 2: Bak de kip. Verhit de olie in een diepe pan op middelhoog vuur. Zorg dat de olie heet is, maar niet te heet om aanbranden te voorkomen. Doe de kippenvleugels voorzichtig in de olie en bak ze in porties. Laat ze 5-6 minuten per kant bakken tot ze goudbruin en knapperig zijn. Haal de kip uit de olie en laat uitlekken op keukenpapier om overtollig vet te verwijderen. Stap 3: Glazuur (optioneel). Verwarm de honing in een kleine pan en bestrijk de kippenvleugels ermee voor een zoet-glazuur effect.",
+    "category": "Main Course",
+    "prep_time": "15 minuten",
+    "cook_time": "30 minuten",
+    "total_time": "45 minuten",
+    "notes": "Super krokant: De perfecte combinatie van een krokante buitenkant en sappige binnenkant. Makkelijk te maken: Slechts een paar eenvoudige stappen voor een heerlijk resultaat. Veelzijdig: Pas de kruiden aan naar eigen smaak of voeg een glazuur toe voor extra smaak. Comfort food: Perfect voor een feestje, diner of gewoon een snackmoment.",
+    "tags": "kip, gebakken, recept, hoofdgerecht"
+}

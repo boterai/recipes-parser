@@ -1,0 +1,12 @@
+{
+    "dish_name": "FRENCH MARTINI",
+    "description": "Aviečių, ananasų ir degtinės derinys. Lengvas, vaisinis gėrimas.",
+    "ingredients": "[{\"name\": \"Degtinė\", \"units\": \"ml\", \"amount\": 60}, {\"name\": \"Aviečių likeris\", \"units\": \"ml\", \"amount\": 15}, {\"name\": \"Ananasų sultys\", \"units\": \"ml\", \"amount\": 45}, {\"name\": \"Ananaso skiltelė\", \"units\": null, \"amount\": null}]",
+    "instructions": "Supilkite visus ingredientus į kokteilinę su ledu ir gerai suplakite. Išplaktą gėrimą nukoškite į atvėsintą stiklinę taurę. Papuoškite taurę ananaso skiltele.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

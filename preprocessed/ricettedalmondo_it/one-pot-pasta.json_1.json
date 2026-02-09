@@ -1,0 +1,12 @@
+{
+    "dish_name": "One Pot Pasta",
+    "description": "La one pot pasta è un primo piatto a base di pasta cotto tutto in una sola pentola.",
+    "ingredients": "[{\"name\": \"spaghetti\", \"units\": \"gr\", \"amount\": 200}, {\"name\": \"acqua\", \"units\": \"gr\", \"amount\": 600}, {\"name\": \"pomodorini\", \"units\": \"gr\", \"amount\": 200}, {\"name\": \"cipolla\", \"units\": null, \"amount\": 1}, {\"name\": \"origano\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"sale\", \"units\": \"cucchiaini\", \"amount\": 2}, {\"name\": \"basilico\", \"units\": \"qualche foglia\", \"amount\": null}]",
+    "instructions": "Per preparare la one pot pasta iniziate ad affettare finemente la cipolla e tagliate a metà i pomodorini. Riunite in una sola pentola la pasta, i pomodorini, la cipolla, l'origano, il sale, le foglie di basilico ed aggiungete l'acqua. Mettete la pentola sul fuoco e portate l'acqua a bollore. Dal bollore contate il tempo di cottura della pasta, mescolate ogni tanto e fate cuocere in base al tempo richiesto dalla pasta. A fine cottura vedrete che l'acqua di cottura verrà completamente assorbita dalla pasta. Servire la vostra one pot pasta ben calda.",
+    "category": "Primo Piatto",
+    "prep_time": "5 minutes",
+    "cook_time": "6 minutes",
+    "total_time": null,
+    "notes": "La proporzione tra pasta e acqua è perfettamente 1 a 3.",
+    "tags": "one pot pasta, pasta, primo piatto"
+}

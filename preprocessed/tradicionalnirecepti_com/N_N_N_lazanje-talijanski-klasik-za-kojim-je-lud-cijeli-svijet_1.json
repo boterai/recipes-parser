@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lazanje",
+    "description": "Klasični talijanski recept za lazanje sa bogatim slojevima bešamel sosa i mljevenog mesa.",
+    "ingredients": "[{\"name\": \"Maslac za prženje\", \"units\": null, \"amount\": null}, {\"name\": \"Žuti luk\", \"units\": \"komad\", \"amount\": 1}, {\"name\": \"Češnje bijelog luka\", \"units\": \"komada\", \"amount\": 4}, {\"name\": \"Mrkva\", \"units\": \"komada\", \"amount\": 2}, {\"name\": \"Stabljike celera\", \"units\": \"komada\", \"amount\": 2}, {\"name\": \"Paradajz pire\", \"units\": \"supene kašike\", \"amount\": 2}, {\"name\": \"So\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"Biber\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"Paprika\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"Majčina dušica\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"Origano\", \"units\": \"kašičica\", \"amount\": 1}, {\"name\": \"Mljevena govedina\", \"units\": \"g\", \"amount\": \"700-800\"}, {\"name\": \"Pasirani/sitno zgnječeni paradajz\", \"units\": \"g\", \"amount\": 800}, {\"name\": \"Kocka mesne juhe\", \"units\": \"komad\", \"amount\": 1}, {\"name\": \"Svježi listovi bosiljka\", \"units\": null, \"amount\": null}, {\"name\": \"Maslac\", \"units\": \"g\", \"amount\": 75}, {\"name\": \"Pšenično brašno\", \"units\": \"dl\", \"amount\": 0.75}, {\"name\": \"Mlijeko\", \"units\": \"L\", \"amount\": 1}, {\"name\": \"So\", \"units\": null, \"amount\": null}, {\"name\": \"Biber\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Sitno nasjeckajte povrće. 2. Pržite povrće u maslacu. 3. Dodajte paradajz pire i začine. 4. Dodajte mljeveno meso i pržite. 5. Dodajte pasirani paradajz i temeljac. 6. Pripremite bešamel sos. 7. Složite lazanje i pecite na 200 stepeni 40-45 minuta.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "40-45 minutes",
+    "total_time": null,
+    "notes": "Poslužite uz omiljenu salatu.",
+    "tags": "lazanje,talijanska kuhinja,glavno jelo"
+}

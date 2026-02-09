@@ -1,0 +1,12 @@
+{
+    "dish_name": "Puikioji grybų sriuba",
+    "description": "Fantastiška sriuba, pagaminta iš įvairių miško grybų.",
+    "ingredients": "[{\"name\": \"įvairių miško grybų\", \"units\": null, \"amount\": null}, {\"name\": \"1 didelio svogūno galvos\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"kelių riekelių šaltai rūkytos kiaulienos šoninės\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"sviesto kepimui\", \"units\": null, \"amount\": null}, {\"name\": \"šaukšto alyvuogių aliejaus\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"1-1,5 l vandens\", \"units\": \"liters\", \"amount\": 1.5}, {\"name\": \"2-3 bulvių\", \"units\": \"pieces\", \"amount\": 3}, {\"name\": \"druskos\", \"units\": null, \"amount\": null}, {\"name\": \"pipirų\", \"units\": null, \"amount\": null}, {\"name\": \"4-5 šaukštų grietinėlės\", \"units\": \"tablespoons\", \"amount\": 5}, {\"name\": \"kelių petražolių šakelių\", \"units\": null, \"amount\": null}]",
+    "instructions": "Į puodą, kuriame virsite sriubą, dedame porą šaukštų sviesto ir šaukštą alyvuogių aliejaus. Į lydytą sviestą su aliejumi beriame susmulkintus svogūnus ir maišant pakepiname, kol svogūnas suminkštės. Gabalėliais suraikytą šoninę suverčiame į keptuvę su apkepintais svogūnais ir maišant dar pakepiname. Smulkiai supjaustome grybus ir sudedame juos į kepinamus svogūnus su šonine. Grybus šiek tiek pakepinę, pilame šalto vandens. Kol vanduo užvirs, nulupame bulves ir įpjaustome į sriubą. Paskaniname druska, pipirais, sumažiname ugnį ir verdame toliau apie 45 minutes. Kai atsiranda putų – nugriebiame jas šaukštu. Paragaujame – jei trūksta druskos – pasūdome. Sriubai išvirus, įpilame į ją grietinėlės bei pabarstome smulkintomis petražolėmis.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "45 minutes",
+    "total_time": null,
+    "notes": "Sriubos nepadauginkite, nors ji labai skani.",
+    "tags": "grybų sriuba, miško grybai, soti sriuba"
+}
