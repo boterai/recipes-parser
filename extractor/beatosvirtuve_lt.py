@@ -92,11 +92,7 @@ class BeatosvirtuveLtExtractor(BaseRecipeExtractor):
         if not ingredient_text:
             return None
         
-        text = self.clean_text(ingredient_text)
-        
-        # Паттерн для извлечения количества, единицы и названия
-        # Примеры: "800 g kiaulienos", "2 svogūnų", "1 šaukšto balzaminio acto"
-        # Ищем число (может быть с дробной частью), затем опциональную единицу, затем название
+        text = self.clean_text(ingredient_text).strip()
         
         # Словарь для преобразования литовских единиц в стандартные английские
         unit_mapping = {
@@ -121,10 +117,12 @@ class BeatosvirtuveLtExtractor(BaseRecipeExtractor):
             'vnt.': 'pcs',
         }
         
-        # Попытка извлечь количество в начале строки
-        # Паттерн: число (может быть с дробью типа 0.5 или 1-1,5) + опциональная единица
-        pattern = r'^([\d,./-]+)\s*([a-zščžąęėįųū]+\.?)?\s*(.+)$'
-        match = re.match(pattern, text, re.IGNORECASE)
+        # Убираем текст в скобках для упрощения парсинга
+        text_without_parens = re.sub(r'\([^)]*\)', '', text).strip()
+        
+        # Паттерн: "количество единица название" (например, "800 g kiaulienos nugarinės")
+        pattern = r'^([\d,./-]+)\s*([a-zščžąęėįųū]+\.?)?\s+(.+)$'
+        match = re.match(pattern, text_without_parens, re.IGNORECASE)
         
         if match:
             amount_str, unit, name = match.groups()
@@ -132,13 +130,11 @@ class BeatosvirtuveLtExtractor(BaseRecipeExtractor):
             # Обработка количества
             amount = None
             if amount_str:
-                # Нормализуем: заменяем запятую на точку, обрабатываем диапазоны
                 amount_str = amount_str.strip()
-                # Если это диапазон (например, "1-1.5" или "2-3"), берем среднее или максимум
+                # Если это диапазон (например, "1-1.5" или "2-3"), берем максимум
                 if '-' in amount_str:
                     parts = amount_str.split('-')
                     try:
-                        # Берем максимальное значение из диапазона
                         amount = max([float(p.replace(',', '.')) for p in parts])
                     except ValueError:
                         amount = amount_str
@@ -152,10 +148,17 @@ class BeatosvirtuveLtExtractor(BaseRecipeExtractor):
             unit_normalized = None
             if unit:
                 unit = unit.strip().lower()
-                unit_normalized = unit_mapping.get(unit, unit)
+                # Проверяем, не является ли "единица" частью названия ингредиента
+                # Например, в "2 svogūnų" слово "svogūnų" - это название, а не единица
+                if unit not in unit_mapping and len(unit) > 3:
+                    # Это скорее всего часть названия
+                    name = unit + ' ' + name if name else unit
+                    unit = None
+                else:
+                    unit_normalized = unit_mapping.get(unit, unit)
             
-            # Очистка названия
-            name = name.strip() if name else text
+            # Очистка названия - убираем лишние пробелы
+            name = re.sub(r'\s+', ' ', name).strip() if name else text_without_parens
             
             return {
                 "name": name,
