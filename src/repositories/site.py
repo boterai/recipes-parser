@@ -42,6 +42,13 @@ class SiteRepository(BaseRepository[SiteORM]):
             return session.query(SiteORM).filter(
                 SiteORM.name == name
             ).first()
+        
+    def get_by_site_names(self, site_names: list[str]) -> list[SiteORM]:
+        """Получить сайты по списку имен"""
+        with self.get_session() as session:
+            return session.query(SiteORM).filter(
+                SiteORM.name.in_(site_names)
+            ).all()
     
     def create_or_get(self, site_data: Site) -> SiteORM:
         """

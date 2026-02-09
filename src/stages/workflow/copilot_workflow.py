@@ -53,23 +53,25 @@ class CopilotWorkflow:
         
     def create_issues_for_parsers(self, issue_prefix: str = ISSUE_PREFIX):
         """Создает GitHub issues с промптами для создания парсеров на основе preprocessed данных."""
-        prompts = self.prompt_generator.generate_all_prompts()
+        current_issues = self.github_client.list_repository_issues(state="all")
+        existing_titles = {issue['title'] for issue in current_issues} if current_issues else set()
+
+        preprocessed_sites = self.prompt_generator.scan_preprocessed_folders()
+        present_extractors = self.prompt_generator.scan_extractor_folder()
+        site_names = [i for i in preprocessed_sites if issue_prefix + i not in existing_titles and i not in present_extractors] 
+
+        if not site_names:
+            logger.info("Нет новых модулей для создания issues.")
+            return
+
+        prompts = self.prompt_generator.generate_prompts_for_sites(site_names)
         if not prompts:
             logger.info("Нет промптов для создания issues.")
             return
         
-        current_issues = self.github_client.list_repository_issues(state="all")
-        existing_titles = {issue['title'] for issue in current_issues} if current_issues else set()
-        # создаем только новые issues
-        new_modules = [i for i in prompts if issue_prefix + i not in existing_titles] 
+        logger.info(f"Создание {len(site_names)} новых issues для парсеров...")
 
-        if not new_modules:
-            logger.info("Нет новых модулей для создания issues.")
-            return
-
-        logger.info(f"Создание {len(new_modules)} новых issues для парсеров...")
-
-        for module_name in new_modules:
+        for module_name in site_names:
             title = issue_prefix + module_name
             issue = self.github_client.create_issue_from_dict(
                 title=title,
@@ -243,4 +245,4 @@ class CopilotWorkflow:
 
 if __name__ == "__main__":
     workflow = CopilotWorkflow()
-    workflow.check_review_requested_prs()
+    workflow.create_issues_for_parsers()
