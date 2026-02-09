@@ -5,7 +5,7 @@
 import logging
 from typing import Optional, List
 from sqlalchemy import and_, func
-
+from sqlalchemy.exc import IntegrityError  
 from src.repositories.base import BaseRepository
 from src.models.page import PageORM, Page
 from src.models.image import ImageORM
@@ -260,7 +260,7 @@ class PageRepository(BaseRepository[PageORM]):
                 existing = session.query(PageORM).filter(PageORM.id == page_orm.id).first()
             else: # иначе по URL
                 existing = session.query(PageORM).filter(PageORM.url == page_orm.url).first()
-
+                
             if existing:
                 # Обновляем существующую страницу
                 # Обновляем поля страницы
@@ -308,7 +308,14 @@ class PageRepository(BaseRepository[PageORM]):
                 
                 logger.debug(f"✓ Создана страница ID={page_orm.id} с {len(image_urls)} изображениями: {page_orm.url}")
                 return page_orm
-                
+        except IntegrityError as ie:
+            session.rollback()
+            logger.error(f"Ошибка целостности данных при сохранении страницы: {ie}")
+            if "Duplicate entry" in str(ie) and  "for key 'images.unique_image_url_hash'" in str(ie):
+                logger.error("Попытка сохранить дублирующееся изображение. Пробуем обновить/сохранить страницу без привязки к изображению")
+                page = page_orm.to_pydantic() if isinstance(page_orm, PageORM) else page_orm
+                return self.create_or_update(page)
+            return None
         except Exception as e:
             session.rollback()
             logger.error(f"Ошибка обновления страницы с изображениями: {e}")

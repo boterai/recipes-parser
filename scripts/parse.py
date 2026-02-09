@@ -78,7 +78,7 @@ def setup_thread_logger(module_name: str, port: int) -> logging.Logger:
 
 
 def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_depth: int = 4, 
-                      max_no_recipe_pages: Optional[int] = 30):
+                      max_no_recipe_pages: Optional[int] = 30) -> tuple[bool, bool]:
     """
     Запуск парсера в отдельном потоке с собственным логгером
     
@@ -88,6 +88,9 @@ def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_dep
         max_urls: Максимальное количество URL
         max_depth: Максимальная глубина обхода
         max_no_recipe_pages: Максимальное количество страниц без рецептов перед остановкой
+
+    Returns:
+        tuple[bool, bool]: (успех парсинга, фатальная ли это ошибка)
     """
     # Создаем отдельный логгер для этого потока
     thread_logger = setup_thread_logger(module_name, port)
@@ -101,7 +104,7 @@ def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_dep
     try:
         parser = RecipeParserRunner(extractor_dir="extractor")
         
-        parser.run_parser(
+        return parser.run_parser(
             module_name=module_name, 
             port=port, 
             max_urls=max_urls, 
@@ -109,11 +112,9 @@ def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_dep
             custom_logger=thread_logger,
             max_no_recipe_pages=max_no_recipe_pages
         )
-        
-        thread_logger.info(f"✓ Парсинг {module_name} завершен успешно")
-        
     except Exception as e:
         thread_logger.error(f"✗ Ошибка при парсинге {module_name}: {e}", exc_info=True)
+        return False, False
     
     finally:
         # Закрываем handlers
@@ -204,24 +205,28 @@ def run_parallel(ports: list[int], modules: Optional[list[str]] = None, max_urls
     
         # Обрабатываем завершенные задачи и запускаем новые на освободившихся портах
         while futures:
-            # Ждем завершения хотя бы одной задачи
-            as_completed(futures.keys())
-            
+            # Ждем завершения хотя бы одной задачи            
             for future in as_completed(futures.keys()):
                 module, port = futures.pop(future)
                 
-                try:
-                    future.result()
+                success, is_fatal = future.result()
+
+                if success:
                     with results["lock"]:
                         results["success"] += 1
                         success_count = results["success"]
                     logger.info(f"✓ Завершен [{success_count}/{len(modules)}]: {module}:{port}")
-                except Exception as e:
+                else:
                     with results["lock"]:
                         results["failed"] += 1
                         failed_count = results["failed"]
-                    logger.error(f"✗ Ошибка [{failed_count}]: {module}:{port} - {e}")
+                    logger.error(f"✗ Неудача [{failed_count}/{len(modules)}]: {module}:{port}")
                 
+                if is_fatal:
+                    logger.error(f"Фатальная ошибка при парсинге {module} на порту {port}. Больше не подключаемся к этому порту.")
+                    module_queue.put(module)  # возвращаем модуль в очередь, чтобы попытаться запустить его на другом порту
+                    continue  # не возвращаем порт в очередь, просто пропускаем этот модуль в будущем
+
                 # Порт освободился → возвращаем в очередь
                 free_ports.put(port)
                 
@@ -255,7 +260,7 @@ if __name__ == "__main__":
     parser.add_argument(
         '--parallel',
         action='store_true',
-        default=False,
+        default= True,
         help='Запустить в нескольких потоках'
     )
     parser.add_argument(
