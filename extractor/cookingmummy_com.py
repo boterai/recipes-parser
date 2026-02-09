@@ -24,8 +24,9 @@ class CookingmummyExtractor(BaseRecipeExtractor):
     }
     
     # Паттерн для парсинга ингредиентов
+    # Включаем Unicode дроби в числовую часть
     INGREDIENT_PATTERN = re.compile(
-        r'^([\d\s/.,]+)?\s*(tablespoons?|teaspoons?|tbsps?|tsps?|cups?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|kg|milliliters?|liters?|ml|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|pcs?|head|heads)?\s*(.+)',
+        r'^([\d\s/.,½¼¾⅓⅔⅛⅜⅝⅞⅕⅖⅗⅘]+)?\s*(tablespoons?|teaspoons?|tbsps?|tsps?|cups?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|kg|milliliters?|liters?|ml|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|pcs?|head|heads)?\s*(.+)',
         re.IGNORECASE
     )
     
@@ -230,10 +231,6 @@ class CookingmummyExtractor(BaseRecipeExtractor):
         # Чистим текст
         text = self.clean_text(ingredient_text)
         
-        # Заменяем Unicode дроби на числа
-        for fraction, decimal in self.FRACTION_MAP.items():
-            text = text.replace(fraction, decimal)
-        
         # Используем предкомпилированный паттерн
         match = self.INGREDIENT_PATTERN.match(text)
         
@@ -251,19 +248,43 @@ class CookingmummyExtractor(BaseRecipeExtractor):
         amount = None
         if amount_str:
             amount_str = amount_str.strip()
-            # Обработка дробей типа "1/2" или "1 1/2"
+            
+            # Заменяем Unicode дроби на десятичные числа с пробелом перед
+            # Например "1½" -> "1 0.5", чтобы потом правильно распарсить
+            for fraction, decimal in self.FRACTION_MAP.items():
+                if fraction in amount_str:
+                    # Проверяем, идет ли дробь сразу после цифры
+                    amount_str = re.sub(r'(\d)' + re.escape(fraction), r'\1 ' + decimal, amount_str)
+                    # Заменяем оставшиеся дроби
+                    amount_str = amount_str.replace(fraction, decimal)
+            
+            # Обработка обычных дробей типа "1/2" или "1 1/2"
             if '/' in amount_str:
                 parts = amount_str.split()
                 total = 0
                 for part in parts:
                     if '/' in part:
-                        num, denom = part.split('/')
-                        total += float(num) / float(denom)
+                        try:
+                            num, denom = part.split('/')
+                            total += float(num) / float(denom)
+                        except (ValueError, ZeroDivisionError):
+                            pass
                     else:
-                        total += float(part)
-                amount = str(total)
+                        try:
+                            total += float(part.replace(',', '.'))
+                        except ValueError:
+                            pass
+                amount = str(total) if total > 0 else None
             else:
-                amount = amount_str.replace(',', '.')
+                # Суммируем все числа (для случаев типа "1 0.5" после замены дробей)
+                parts = amount_str.split()
+                total = 0
+                for part in parts:
+                    try:
+                        total += float(part.replace(',', '.'))
+                    except ValueError:
+                        pass
+                amount = str(total) if total > 0 else None
         
         # Обработка единицы измерения
         unit = unit.strip() if unit else None
