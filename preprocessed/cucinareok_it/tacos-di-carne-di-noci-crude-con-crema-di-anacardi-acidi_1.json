@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tacos di carne di noci crude con crema di anacardi acidi",
+    "description": "Tacos vegetariani crudi con carne di noci e crema di anacardi.",
+    "ingredients": "[{\"name\": \"Anacardi\", \"units\": \"tazza\", \"amount\": \"1/2\"}, {\"name\": \"Acqua\", \"units\": \"tazza\", \"amount\": \"1/4\"}, {\"name\": \"Aceto di mele\", \"units\": \"cucchiaino\", \"amount\": \"1\"}, {\"name\": \"Sale\", \"units\": \"cucchiaino\", \"amount\": \"1/4\"}, {\"name\": \"Noci\", \"units\": \"tazze\", \"amount\": \"1 1/2\"}, {\"name\": \"Salsa di soia\", \"units\": \"cucchiai\", \"amount\": \"2\"}, {\"name\": \"Pomodori essiccati al sole\", \"units\": \"tazza\", \"amount\": \"1/4\"}, {\"name\": \"Peperoncino in polvere\", \"units\": \"cucchiaino\", \"amount\": \"1\"}, {\"name\": \"Cumino\", \"units\": \"cucchiaino\", \"amount\": \"1\"}, {\"name\": \"Cayena\", \"units\": null, \"amount\": \"Dash\"}, {\"name\": \"Aglio\", \"units\": \"spicchio\", \"amount\": \"1\"}, {\"name\": \"Pomodorini\", \"units\": \"pinta\", \"amount\": \"1\"}, {\"name\": \"Cipolla gialla\", \"units\": \"grande\", \"amount\": \"1/4\"}, {\"name\": \"Succo di lime\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"Jalapeño\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"Coriandolo\", \"units\": \"cucchiai\", \"amount\": \"2\"}, {\"name\": \"Tortillas di mais\", \"units\": \"piccole\", \"amount\": \"8\"}, {\"name\": \"Guacamole\", \"units\": \"tazza\", \"amount\": \"1\"}]",
+    "instructions": "Innanzitutto, prepara la panna acida. In un robot da cucina, mescolare gli anacardi con 1/4 tazza di acqua, aceto di mele e sale. Se si desidera una consistenza più fine, aggiungere uno o due cucchiai di acqua. Mettilo da parte fino al momento dell’uso. Sciacquare il robot da cucina. Metti le noci, la salsa di soia, i pomodori secchi, le spezie e l’aglio tritato nel robot da cucina e mescola fino a quando non ha una consistenza di carne sbriciolata e macinata. Fai attenzione a non mescolarlo a lungo o otterrai un burro di noci molto raro e gustoso. Condire con sale e pepe nero e metterlo da parte fino al momento dell’uso. In una piccola ciotola, mescolare tutti gli ingredienti per il becco di gallo e condire con sale a piacere. Tostare le tortillas a fuoco basso. Dividi la carne di noce tra le tortillas. Massa con guacamole e crema di anacardi acerrimi. Servire con un pick sul lato.",
+    "category": "Main Course",
+    "prep_time": "null",
+    "cook_time": "null",
+    "total_time": "null",
+    "notes": null,
+    "tags": "vegetariano, crudo, tacos, noci"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Polpettone di zuppa di cipolle Lipton",
+    "description": "Un classico polpettone a base di carne macinata e zuppa di cipolle Lipton, un piatto confortante e amato dalla famiglia.",
+    "ingredients": "[{\"name\": \"carne macinata\", \"units\": \"pounds\", \"amount\": 2}, {\"name\": \"zuppa di cipolle Lipton\", \"units\": \"pack\", \"amount\": 1}, {\"name\": \"pangrattato fresco\", \"units\": \"cups\", \"amount\": 1.5}, {\"name\": \"acqua\", \"units\": \"cups\", \"amount\": 0.75}, {\"name\": \"uova\", \"units\": \"units\", \"amount\": 2}, {\"name\": \"salsa di pomodoro\", \"units\": \"cups\", \"amount\": 0.5}, {\"name\": \"salsa Worcestershire\", \"units\": \"teaspoon\", \"amount\": 1}]",
+    "instructions": "1. Raccogli tutti gli ingredienti. 2. Preriscalda il forno a 350 gradi Fahrenheit. 3. Unisci tutti gli ingredienti tranne il ketchup in una ciotola capiente e mescola. 4. Spruzza la padella con spray da cucina. 5. Forma la miscela di polpettone in una teglia. 6. Metti la salsa di pomodoro sopra il polpettone. 7. Cuocere per un'ora o fino a quando la carne è completamente cotta. 8. Lasciare riposare per 10 minuti prima di servire.",
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "60 minutes",
+    "total_time": "70 minutes",
+    "notes": "Puoi usare carne macinata magra, aggiungendo più liquido se necessario. Sperimenta con diverse miscele di zuppa di cipolle per variare il sapore.",
+    "tags": "polpettone, carne, comfort food, ricetta americana"
+}

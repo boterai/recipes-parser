@@ -1,0 +1,12 @@
+{
+    "dish_name": "Torta di Granchio",
+    "description": "Una deliziosa e semplice ricetta per la torta di granchio del Maryland.",
+    "ingredients": "[{\"name\": \"Carne di granchio\", \"units\": \"chilo\", \"amount\": 1}, {\"name\": \"Pane di panko essiccato\", \"units\": \"cucchiai\", \"amount\": 3}, {\"name\": \"Prezzemolo tritato fresco\", \"units\": \"cucchiaini\", \"amount\": 2}, {\"name\": \"Uovo grande\", \"units\": \"unit\", \"amount\": 1}, {\"name\": \"Old Bay Seasoning\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"Senape macinata essiccata\", \"units\": \"cucchiaino\", \"amount\": 0.5}, {\"name\": \"Maionese\", \"units\": \"cucchiai\", \"amount\": 2}]",
+    "instructions": "Unisci pangrattato, prezzemolo tritato fresco, carne di granchio e condimento Old Bay in una ciotola media. Mescolare fino a quando gli ingredienti non sono ben incorporati. Non mescolare troppo. Metti l’uovo, la maionese e la senape in una piccola ciotola e batti insieme. Combina gli ingredienti di entrambe le ciotole. Mescolare bene senza mescolare troppo. Metti il composto in frigorifero e lascialo raffreddare per 30 minuti. Nel frattempo, ingrassare una teglia o una teglia. Togliere dal frigorifero. Preriscaldare il forno o grigliare a 450 gradi Fahrenheit. Forma la tua miscela di granchio in torte e mettile sulla teglia. Cuocere sulla griglia o sulla griglia centrale per 10-15 minuti o fino a quando le torte di granchio sono dorate.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "35 minutes",
+    "notes": "Non mescolare eccessivamente gli ingredienti. Usa carne di granchio fresca per ottenere i migliori risultati.",
+    "tags": "granchio, torta, ricetta americana"
+}

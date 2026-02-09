@@ -1,0 +1,12 @@
+{
+    "dish_name": "Biscotti di farina d'avena senza zucchero di canna",
+    "description": "Deliziosi biscotti di farina d'avena leggeri e soffici, senza zucchero di canna.",
+    "ingredients": "[{\"name\": \"Farina d'avena vecchio stile\", \"units\": \"tazze\", \"amount\": 3}, {\"name\": \"Zucchero bianco\", \"units\": \"tazza\", \"amount\": 1}, {\"name\": \"Burro senza sale\", \"units\": \"barretta\", \"amount\": 1}, {\"name\": \"Uova\", \"units\": null, \"amount\": 2}, {\"name\": \"Bicarbonato di sodio\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"Sale\", \"units\": \"cucchiaino\", \"amount\": 0.5}, {\"name\": \"Cannella\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"Estratto di vaniglia\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"Burro a temperatura ambiente\", \"units\": \"tazza\", \"amount\": 0.5}, {\"name\": \"Uvetta o gocce di cioccolato\", \"units\": \"tazza\", \"amount\": 1}]",
+    "instructions": "1. Preriscalda il forno a 350 gradi Fahrenheit. 2. Mescola la farina, il bicarbonato di sodio, il sale, la farina d’avena e la cannella in una ciotola media. 3. In un'altra ciotola, sbatti il burro, lo zucchero e l'accorciamento fino a ottenere una miscela leggera e soffice. 4. Aggiungi le uova una alla volta, mescolando bene. 5. Mescola gli ingredienti secchi con la miscela di burro fino a ottenere un impasto. 6. Piega le gocce di cioccolato o l'uvetta nell'impasto. 7. Forma delle palline di impasto e mettile su una teglia. 8. Cuoci in forno per circa 10 minuti fino a doratura. 9. Lascia raffreddare prima di servire.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "25 minutes",
+    "notes": "Puoi aggiungere noci o altri ingredienti a piacere. Conserva i biscotti in un contenitore ermetico.",
+    "tags": "biscotti, avena, dessert, senza zucchero"
+}
