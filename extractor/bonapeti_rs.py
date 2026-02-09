@@ -12,6 +12,19 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
 
 
+# Serbian units pattern for ingredient parsing (non-capturing group)
+SERBIAN_UNITS_PATTERN = (
+    r'(?:g|gr|grama|kg|kilograma|ml|mililitara|l|litara|dl|decilitara|'
+    r'kašika|kašike|kašičica|kašičice|'
+    r'čaša|čaše|šolja|šolje|'
+    r'komad|komada|kom|'
+    r'pakovanje|paket|kesica|kesice|'
+    r'glavica|glavice|čen|čena|'
+    r'prstohvat|štipka|'
+    r'cup|cups|tbsp|tsp|tablespoon|teaspoon|pound|lb|oz|ounce)'
+)
+
+
 class BonapetiRsExtractor(BaseRecipeExtractor):
     """Экстрактор для bonapeti.rs"""
     
@@ -407,7 +420,7 @@ class BonapetiRsExtractor(BaseRecipeExtractor):
         
         return None
     
-    def parse_ingredient(self, ingredient_text: str) -> Optional[Dict[str, any]]:
+    def parse_ingredient(self, ingredient_text: str) -> Optional[Dict]:
         """
         Парсинг строки ингредиента в структурированный формат
         
@@ -435,17 +448,7 @@ class BonapetiRsExtractor(BaseRecipeExtractor):
         
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "200 g brašna", "2 jaja", "1 kašičica soli", "1/2 šolje mleka"
-        # Единицы измерения на сербском
-        units_pattern = r'(g|gr|grama|kg|kilograma|ml|mililitara|l|litara|dl|decilitara|' \
-                       r'kašika|kašike|kašičica|kašičice|' \
-                       r'čaša|čaše|šolja|šolje|' \
-                       r'komad|komada|kom|' \
-                       r'pakovanje|paket|kesica|kesice|' \
-                       r'glavica|glavice|čen|čena|' \
-                       r'prstohvat|štipka|' \
-                       r'cup|cups|tbsp|tsp|tablespoon|teaspoon|pound|lb|oz|ounce)'
-        
-        pattern = r'^([\d\s/.,\-]+)?\s*(' + units_pattern + r')?\s*(.+)'
+        pattern = r'^([\d\s/.,\-]+)?\s*(' + SERBIAN_UNITS_PATTERN + r')?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -457,7 +460,7 @@ class BonapetiRsExtractor(BaseRecipeExtractor):
                 "unit": None
             }
         
-        amount_str, unit, _, name = match.groups()
+        amount_str, unit, name = match.groups()
         
         # Обработка количества
         amount = None
@@ -469,10 +472,19 @@ class BonapetiRsExtractor(BaseRecipeExtractor):
                 total = 0
                 for part in parts:
                     if '/' in part:
-                        num, denom = part.split('/')
-                        total += float(num) / float(denom)
+                        fraction_parts = part.split('/')
+                        if len(fraction_parts) == 2:
+                            try:
+                                num, denom = fraction_parts
+                                total += float(num) / float(denom)
+                            except (ValueError, ZeroDivisionError):
+                                # Skip malformed fractions
+                                pass
                     else:
-                        total += float(part)
+                        try:
+                            total += float(part)
+                        except ValueError:
+                            pass
                 amount = str(total) if total != int(total) else str(int(total))
             else:
                 amount = amount_str.replace(',', '.')
