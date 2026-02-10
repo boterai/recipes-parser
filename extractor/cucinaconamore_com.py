@@ -137,6 +137,9 @@ class CucinaConAmoreExtractor(BaseRecipeExtractor):
         
         text = self.clean_text(ingredient_text)
         
+        # Удаляем содержимое в скобках (например, "(per spennellare)")
+        text = re.sub(r'\([^)]*\)', '', text).strip()
+        
         # Известные единицы измерения (короткие - г, мл и т.д.)
         metric_units = {
             'g', 'kg', 'ml', 'l', 'cl', 'dl', 'oz', 'lb'
@@ -155,7 +158,7 @@ class CucinaConAmoreExtractor(BaseRecipeExtractor):
         # Паттерн для извлечения количества и единицы измерения
         # Примеры: "450g di carne", "120ml di latte", "1 cipolla"
         pattern_with_unit = r'^([\d/.,]+)\s*([a-zA-Z]+)\s+(?:di\s+)?(.+)'
-        pattern_count = r'^([\d/.,]+)\s+(.+)'
+        pattern_count = r'^([\d/.,]+)\s+(.+?)(?:,.*)?$'  # Убираем запятые и все после
         
         match = re.match(pattern_with_unit, text, re.IGNORECASE)
         
@@ -171,7 +174,8 @@ class CucinaConAmoreExtractor(BaseRecipeExtractor):
             if potential_unit.lower() in all_units:
                 # Это настоящая единица измерения
                 unit = potential_unit
-                name = potential_name
+                # Убираем запятые и все после них из названия
+                name = re.sub(r',.*$', '', potential_name).strip()
                 is_metric = potential_unit.lower() in metric_units
             else:
                 # Это не единица измерения, а часть названия
@@ -179,7 +183,8 @@ class CucinaConAmoreExtractor(BaseRecipeExtractor):
                 match2 = re.match(pattern_count, text)
                 if match2:
                     amount_str, name = match2.groups()
-                    unit = "unit"
+                    name = name.strip()
+                    unit = "unit"  # Используем "unit" для штучных товаров
                     is_metric = True  # unit ведет себя как метрическая единица
             
             # Обработка количества
@@ -212,6 +217,32 @@ class CucinaConAmoreExtractor(BaseRecipeExtractor):
                 else:
                     # Для текстовых единиц оставляем как строку
                     amount = amount_str
+        else:
+            # Паттерн с unit не совпал, пробуем паттерн подсчета
+            match2 = re.match(pattern_count, text)
+            if match2:
+                amount_str, name = match2.groups()
+                name = name.strip()
+                unit = "unit"
+                
+                # Обработка количества для unit (всегда numeric)
+                amount_str = amount_str.strip()
+                if '/' in amount_str:
+                    parts = amount_str.split('/')
+                    if len(parts) == 2:
+                        try:
+                            amount = float(parts[0]) / float(parts[1])
+                        except ValueError:
+                            amount = None
+                else:
+                    try:
+                        clean_amount = amount_str.replace(',', '.')
+                        if '.' in clean_amount:
+                            amount = float(clean_amount)
+                        else:
+                            amount = int(clean_amount)
+                    except ValueError:
+                        amount = None
         
         # Очистка названия
         name = name.strip() if name else text
