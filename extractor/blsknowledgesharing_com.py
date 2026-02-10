@@ -29,7 +29,7 @@ class BlsknowledgesharingExtractor(BaseRecipeExtractor):
             question_text = question.get_text()
             
             # Ищем первое упоминание блюда в кавычках
-            match = re.search(r'["\']([^"\']+)["\']', question_text)
+            match = re.search(r'["\'\u201c\u201d]([^"\'\u201c\u201d]+)["\'\u201c\u201d]', question_text)
             if match:
                 dish = match.group(1)
                 # Удаляем лишние кавычки
@@ -45,8 +45,13 @@ class BlsknowledgesharingExtractor(BaseRecipeExtractor):
             match = re.match(r'^([^|–\-]+)', title)
             if match:
                 title = match.group(1)
-            # Удаляем кавычки и лишние пробелы
-            title = re.sub(r'["\']', '', title)
+            # Удаляем кавычки
+            title = re.sub(r'["\'\u201c\u201d]', '', title)
+            # Удаляем описательные фразы и временные метки
+            title = re.sub(r'맛있는\s+', '', title)
+            title = re.sub(r'\d+분\s+내\s+완성!\s*', '', title)  # "5분 내 완성!"
+            title = re.sub(r'\s*황금\s+레시피\s*$', '', title)  # "황금 레시피"
+            title = re.sub(r'\s*레시피\s*$', '', title)  # "레시피"
             title = re.sub(r'\s*을\s*집에서.*', '', title)
             title = re.sub(r'\s*를\s*집에서.*', '', title)
             title = re.sub(r'\s*-\s*지식공유.*$', '', title)
@@ -200,16 +205,38 @@ class BlsknowledgesharingExtractor(BaseRecipeExtractor):
             
             question_text = question.get_text()
             
-            # Проверяем, содержит ли вопрос упоминание о способе приготовления
-            # Но НЕ о ингредиентах (чтобы не путать с ingredients)
-            if ('조리법' in question_text or '만드는 방법' in question_text) and '재료' not in question_text:
+            # Проверяем, содержит ли вопрос упоминание о способе приготовления/рецепте
+            # Приоритет для "단순 조리법" (простой рецепт)
+            if '단순 조리법' in question_text or ('조리법' in question_text and '재료' not in question_text):
                 answer_text = answer.get_text()
                 
                 # Очищаем текст от заголовков типа "A. 🌟단순 조리법🌟"
                 answer_text = re.sub(r'^A\.\s*🌟[^🌟]*🌟\s*', '', answer_text)
                 answer_text = self.clean_text(answer_text)
                 
-                if answer_text and len(answer_text) > 10:
+                # Не возвращаем, если это просто список ингредиентов (слишком короткий или начинается со списка)
+                if answer_text and len(answer_text) > 20 and not answer_text.startswith('–'):
+                    return answer_text
+        
+        # Второй проход - пробуем другие варианты, если не нашли "단순 조리법"
+        for faq_item in faq_items:
+            question = faq_item.find('h3', class_='chatgin-question')
+            answer = faq_item.find('p', class_='chatgin-answer')
+            
+            if not question or not answer:
+                continue
+            
+            question_text = question.get_text()
+            
+            # Ищем вопросы про приготовление, но не про ингредиенты
+            if ('만드는 방법' in question_text or '만들기' in question_text) and '재료' not in question_text:
+                answer_text = answer.get_text()
+                
+                # Очищаем текст от заголовков
+                answer_text = re.sub(r'^A\.\s*🌟[^🌟]*🌟\s*', '', answer_text)
+                answer_text = self.clean_text(answer_text)
+                
+                if answer_text and len(answer_text) > 20 and not answer_text.startswith('–'):
                     return answer_text
         
         return None
@@ -317,7 +344,18 @@ class BlsknowledgesharingExtractor(BaseRecipeExtractor):
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок/советов"""
-        # Ищем секцию FAQ/Q&A с заметками или советами
+        # Сначала ищем в основном контенте простые советы
+        paragraphs = self.soup.find_all('p')
+        for p in paragraphs:
+            text = p.get_text()
+            # Ищем короткие предложения с советами о свежих ингредиентах или рецепте
+            if ('신선한' in text and ('재료' in text or '것이' in text) and len(text) < 100 and '신선한 재료를 사용하면' in text) or \
+               ('레시피는' in text and ('친근한' in text or '초보자' in text) and len(text) < 100):
+                text = self.clean_text(text)
+                if text:
+                    return text
+        
+        # Если не нашли в основном контенте, ищем секцию FAQ/Q&A с заметками или советами
         faq_items = self.soup.find_all('div', class_='faq-item')
         
         for faq_item in faq_items:
@@ -328,27 +366,17 @@ class BlsknowledgesharingExtractor(BaseRecipeExtractor):
                 continue
             
             question_text = question.get_text()
+            answer_text = answer.get_text()
             
-            # Проверяем, содержит ли вопрос упоминание о советах/팁/주의
-            if '팁' in question_text or '주의' in question_text or '조언' in question_text or '노트' in question_text:
-                answer_text = answer.get_text()
+            # Проверяем, содержит ли вопрос упоминание о советах/팁/주의 но НЕ о ингредиентах
+            if ('팁' in question_text or '주의' in question_text or '조언' in question_text) and '재료' not in question_text:
                 answer_text = re.sub(r'^A\.\s*🌟[^🌟]*🌟\s*', '', answer_text)
+                answer_text = re.sub(r'🌟', '', answer_text)  # Удаляем все звездочки
                 answer_text = self.clean_text(answer_text)
                 
-                if answer_text and len(answer_text) > 10:
+                # Не возвращаем ответы, которые начинаются со списка (скорее всего это ингредиенты)
+                if answer_text and len(answer_text) > 10 and not answer_text.startswith('–'):
                     return answer_text
-        
-        # Альтернативно - ищем в основном контенте
-        # Проверяем параграфы с подсказками
-        paragraphs = self.soup.find_all('p')
-        for p in paragraphs:
-            text = p.get_text()
-            # Ищем короткие предложения с советами о свежих ингредиентах
-            if ('신선한' in text and '재료' in text and len(text) < 100) or \
-               ('레시피는' in text and ('친근한' in text or '쉬' in text) and len(text) < 100):
-                text = self.clean_text(text)
-                if text:
-                    return text
         
         return None
     
