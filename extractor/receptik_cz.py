@@ -40,7 +40,30 @@ class ReceptikCzExtractor(BaseRecipeExtractor):
     
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
-        # Сначала пробуем из h2 с классом wp-block-heading
+        # Сначала пробуем из meta og:title (обычно самый чистый вариант)
+        og_title = self.soup.find('meta', property='og:title')
+        if og_title and og_title.get('content'):
+            title = og_title['content']
+            # Убираем суффиксы типа " - Receptik.cz" и " – recept..."
+            title = re.sub(r'\s*-\s*Receptik\.cz\s*$', '', title, flags=re.IGNORECASE)
+            title = re.sub(r'\s*–\s*recept.*$', '', title, flags=re.IGNORECASE)
+            title = re.sub(r'^recept\s+na\s+', '', title, flags=re.IGNORECASE)
+            clean_name = self.clean_text(title)
+            if len(clean_name) > 3 and len(clean_name) < 100:
+                return clean_name
+        
+        # Если не нашли в og:title, пробуем из JSON-LD
+        json_ld = self._get_json_ld_data()
+        if json_ld and 'headline' in json_ld:
+            headline = json_ld['headline']
+            # Очищаем от "Recept na" и суффиксов
+            clean_name = re.sub(r'^recept\s+na\s+', '', headline, flags=re.IGNORECASE)
+            clean_name = re.sub(r'\s*–\s*recept.*$', '', clean_name, flags=re.IGNORECASE)
+            clean_name = self.clean_text(clean_name)
+            if len(clean_name) > 3 and len(clean_name) < 100:
+                return clean_name
+        
+        # В последнюю очередь пробуем из h2 с классом wp-block-heading
         h2_headings = self.soup.find_all('h2', class_='wp-block-heading')
         for h2 in h2_headings:
             text = h2.get_text(strip=True)
@@ -55,37 +78,43 @@ class ReceptikCzExtractor(BaseRecipeExtractor):
                 if len(clean_name) > 3 and len(clean_name) < 100:
                     return clean_name
         
-        # Если не нашли в h2, пробуем из JSON-LD
-        json_ld = self._get_json_ld_data()
-        if json_ld and 'headline' in json_ld:
-            headline = json_ld['headline']
-            # Очищаем от "Recept na"
-            clean_name = re.sub(r'^recept\s+na\s+', '', headline, flags=re.IGNORECASE)
-            clean_name = re.sub(r'\s*–\s*recept\s*$', '', clean_name, flags=re.IGNORECASE)
-            clean_name = self.clean_text(clean_name)
-            if len(clean_name) > 3:
-                return clean_name
-        
-        # Альтернатива - из meta og:title
-        og_title = self.soup.find('meta', property='og:title')
-        if og_title and og_title.get('content'):
-            title = og_title['content']
-            # Убираем суффиксы типа " - Receptik.cz"
-            title = re.sub(r'\s*-\s*Receptik\.cz\s*$', '', title, flags=re.IGNORECASE)
-            title = re.sub(r'^recept\s+na\s+', '', title, flags=re.IGNORECASE)
-            return self.clean_text(title)
-        
         return None
     
     def extract_description(self) -> Optional[str]:
         """Извлечение описания рецепта"""
-        # Ищем в meta og:description
+        # Получаем название блюда для поиска
+        dish_name = self.extract_dish_name()
+        
+        # Сначала проверяем параграфы - ищем "Recept na [название] – ..."
+        # Это специфичный паттерн для receptik.cz
+        paragraphs = self.soup.find_all('p')
+        for p in paragraphs[:15]:  # Проверяем первые 15 параграфов
+            text = p.get_text(strip=True)
+            if not text or len(text) < 40:
+                continue
+            
+            # Проверяем, начинается ли с "Recept na" и содержит ли тире
+            if text.lower().startswith('recept na') and '–' in text:
+                # Проверяем, что это про наше блюдо
+                if dish_name:
+                    # Берем первые 5 символов каждого слова (основа слова) для сравнения
+                    # чтобы обойти склонения в чешском языке
+                    dish_words = dish_name.lower().split()
+                    text_lower = text.lower()
+                    # Ищем хотя бы одно слово длиной > 4 символов, чья основа есть в тексте
+                    for word in dish_words:
+                        if len(word) > 4:
+                            # Берем первые 5-6 символов как основу
+                            stem = word[:min(6, len(word))]
+                            if stem in text_lower:
+                                return self.clean_text(text)
+                else:
+                    return self.clean_text(text)
+        
+        # Затем ищем в meta og:description
         og_desc = self.soup.find('meta', property='og:description')
         if og_desc and og_desc.get('content'):
             desc_text = og_desc['content']
-            
-            # Получаем название блюда для поиска
-            dish_name = self.extract_dish_name()
             
             # Разбиваем на предложения
             sentences = []
@@ -104,7 +133,11 @@ class ReceptikCzExtractor(BaseRecipeExtractor):
                     sentence_lower = sentence.lower()
                     # Проверяем, начинается ли предложение с названия блюда и содержит "je"
                     if sentence_lower.startswith(dish_first_word) and ' je ' in sentence_lower:
-                        return self.clean_text(sentence)
+                        # Добавляем точку в конце если её нет
+                        result = self.clean_text(sentence)
+                        if not result.endswith('.'):
+                            result += '.'
+                        return result
             
             # Если не нашли точное совпадение, ищем предложение с "–" (тире), которое указывает на описание
             for sentence in sentences:
@@ -112,14 +145,20 @@ class ReceptikCzExtractor(BaseRecipeExtractor):
                     # Берем часть после тире
                     parts = sentence.split('–', 1)
                     if len(parts) > 1 and len(parts[1].strip()) > 30:
-                        return self.clean_text(parts[1].strip())
+                        result = self.clean_text(parts[1].strip())
+                        if not result.endswith('.'):
+                            result += '.'
+                        return result
             
-            # Если ничего не нашли, берем первое предложение с "je" и достаточной длиной
+            # Если ничего не нашли, ищем любое предложение с "je" и достаточной длиной
             for sentence in sentences:
                 if ' je ' in sentence.lower() and len(sentence) > 40:
-                    return self.clean_text(sentence)
+                    result = self.clean_text(sentence)
+                    if not result.endswith('.'):
+                        result += '.'
+                    return result
             
-            # В крайнем случае возвращаем полное описание
+            # В крайнем случае возвращаем og:description полностью
             return self.clean_text(desc_text)
         
         # Альтернатива - из meta description
@@ -256,7 +295,10 @@ class ReceptikCzExtractor(BaseRecipeExtractor):
         # Ищем все ul.wp-block-list на странице
         ingredient_lists = self.soup.find_all('ul', class_='wp-block-list')
         
-        # Обрабатываем списки, проверяя, являются ли они списками ингредиентов
+        # Обрабатываем списки, собирая ингредиенты пока они похожи на ингредиенты
+        lists_processed = 0
+        first_list_size = 0
+        
         for ul in ingredient_lists:
             items = ul.find_all('li')
             
@@ -266,28 +308,28 @@ class ReceptikCzExtractor(BaseRecipeExtractor):
             # Проверяем первый элемент - если он похож на ингредиент, обрабатываем весь список
             first_item_text = items[0].get_text(strip=True)
             
-            # Ингредиенты обычно:
-            # 1. Начинаются с числа или
-            # 2. Короткие (< 100 символов) или
-            # 3. Не содержат вопросительных знаков
+            # Стоп-условия:
+            # 1. Элемент слишком длинный (>150 символов)
+            # 2. Содержит вопросительный знак (FAQ)
+            # 3. Это одноэлементный список (обычно описание)
+            # 4. Средняя длина элементов >100 символов
             
-            # Если первый элемент слишком длинный или содержит "?", это не список ингредиентов
             if len(first_item_text) > 150 or '?' in first_item_text:
-                continue
+                break  # Дальше идут не ингредиенты
             
-            # Если это одноэлементный список, проверяем, не является ли он описанием
             if len(items) == 1:
                 # Одноэлементные списки обычно не ингредиенты
-                continue
+                break
             
             # Проверяем средний размер элементов в списке
             avg_length = sum(len(li.get_text(strip=True)) for li in items) / len(items)
             
             # Ингредиенты обычно короткие (< 80 символов в среднем)
             if avg_length > 100:
-                break  # Дальше списки уже не ингредиенты
+                break  # Дальше идут описания
             
             # Обрабатываем список как ингредиенты
+            list_ingredients = []
             for li in items:
                 ingredient_text = li.get_text(separator=' ', strip=True)
                 ingredient_text = self.clean_text(ingredient_text)
@@ -295,13 +337,24 @@ class ReceptikCzExtractor(BaseRecipeExtractor):
                 if ingredient_text:
                     parsed = self.parse_ingredient(ingredient_text)
                     if parsed:
-                        ingredients.append(parsed)
+                        list_ingredients.append(parsed)
             
-            # Ограничиваем количество списков
-            if len(ingredients) > 15:  # Обычно в рецепте не больше 20 ингредиентов
-                # Если уже собрали достаточно, проверяем следующий список
-                # Если он тоже похож на ингредиенты, добавляем, иначе останавливаемся
-                pass
+            # Добавляем ингредиенты из этого списка
+            ingredients.extend(list_ingredients)
+            lists_processed += 1
+            
+            # Запоминаем размер первого списка
+            if lists_processed == 1:
+                first_list_size = len(list_ingredients)
+            
+            # Останавливаемся если:
+            # - Первый список большой (>= 10 ингредиентов) - значит это полный рецепт
+            # - Или обработали уже 2 списка
+            # - Или набрали больше 22 ингредиентов
+            if (lists_processed == 1 and first_list_size >= 10) or \
+               lists_processed >= 2 or \
+               len(ingredients) > 22:
+                break
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
@@ -330,7 +383,10 @@ class ReceptikCzExtractor(BaseRecipeExtractor):
         if json_ld and 'articleSection' in json_ld:
             sections = json_ld['articleSection']
             if isinstance(sections, list):
-                # Берем первую категорию (обычно это основная категория блюда)
+                # Приоритет: "Hlavní jídla" (основные блюда) > другие категории
+                if "Hlavní jídla" in sections:
+                    return "Hlavní jídla"
+                # Берем первую категорию если "Hlavní jídla" нет
                 return sections[0] if sections else None
             return str(sections)
         
