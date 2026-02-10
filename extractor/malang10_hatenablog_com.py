@@ -23,21 +23,46 @@ class Malang10HatenablogComExtractor(BaseRecipeExtractor):
             title = entry_title.get_text(strip=True)
             # Убираем суффиксы типа " - the cooking kitchen"
             title = re.sub(r'\s*[-–]\s*.*$', '', title)
-            # Извлекаем только часть после двоеточия или последнего "で作る"
-            # Примеры: "スロークッカーで作るビーフシチュー：..." -> "ビーフシチュー"
-            # "ワンパン鶏肉と野菜" -> "ワンパン鶏肉と野菜"
+            # Извлекаем только часть до двоеточия или "の"
+            # Примеры: 
+            # "スロークッカーで作るビーフシチュー：..." -> "ビーフシチュー"
+            # "ワンパン鶏肉と野菜の旨味：..." -> "ワンパン鶏肉と野菜"
+            # "エキゾチックなモロッコのタジン：..." -> "タジン"
             
-            # Если есть "で作る", извлекаем название блюда после него
+            # Сначала пробуем паттерн "で作る[название]"
             match = re.search(r'で作る(.+?)(?:[：:]|$)', title)
             if match:
                 dish = match.group(1).strip()
-                # Убираем часть после двоеточия, если есть
-                dish = re.split(r'[：:]', dish)[0].strip()
                 return self.clean_text(dish)
             
-            # Иначе просто убираем часть после двоеточия
-            dish = re.split(r'[：:]', title)[0].strip()
-            return self.clean_text(dish)
+            # Извлекаем часть до двоеточия
+            parts = re.split(r'[：:]', title)
+            if parts:
+                dish_part = parts[0].strip()
+                
+                # Убираем описательные префиксы типа "エキゾチックな", "シンプルで"
+                # и оставляем только главное название
+                # Примеры: "エキゾチックなモロッコのタジン" -> "タジン"
+                #          "ワンパン鶏肉と野菜の旨味" -> "ワンパン鶏肉と野菜"
+                
+                # Если есть "の" в конце с описанием, убираем это описание
+                match_no = re.match(r'(.+?)の(?:旨味|風味|魅力|美味しさ|作り方|レシピ)$', dish_part)
+                if match_no:
+                    dish = match_no.group(1).strip()
+                    return self.clean_text(dish)
+                
+                # Убираем префиксные прилагательные перед "の"
+                match_prefix = re.match(r'(?:エキゾチックな|伝統的な|本格的な|簡単な|美味しい)(.+)', dish_part)
+                if match_prefix:
+                    dish = match_prefix.group(1).strip()
+                    # Еще раз проверяем на "の[страна]の[блюдо]"
+                    match_country = re.match(r'.+の(.+)$', dish)
+                    if match_country:
+                        final_dish = match_country.group(1).strip()
+                        return self.clean_text(final_dish)
+                    return self.clean_text(dish)
+                
+                return self.clean_text(dish_part)
         
         # Альтернативно - из meta тега og:title
         og_title = self.soup.find('meta', property='og:title')
@@ -48,11 +73,15 @@ class Malang10HatenablogComExtractor(BaseRecipeExtractor):
             match = re.search(r'で作る(.+?)(?:[：:]|$)', title)
             if match:
                 dish = match.group(1).strip()
-                dish = re.split(r'[：:]', dish)[0].strip()
                 return self.clean_text(dish)
             
-            dish = re.split(r'[：:]', title)[0].strip()
-            return self.clean_text(dish)
+            parts = re.split(r'[：:]', title)
+            if parts:
+                dish_part = parts[0].strip()
+                match_no = re.match(r'(.+?)の(?:旨味|風味|魅力|美味しさ|作り方|レシピ)$', dish_part)
+                if match_no:
+                    return self.clean_text(match_no.group(1).strip())
+                return self.clean_text(dish_part)
         
         return None
     
@@ -95,6 +124,7 @@ class Malang10HatenablogComExtractor(BaseRecipeExtractor):
         - "玉ねぎ 1個" -> {"name": "玉ねぎ", "amount": 1, "units": "個"}
         - "塩・黒胡椒 適量" -> {"name": "塩・黒胡椒", "amount": None, "units": "適量"}
         - "牛肉（肩ロース）500g" -> {"name": "牛肉", "amount": 500, "units": "g"}
+        - "鶏もも肉：500g" -> {"name": "鶏もも肉", "amount": 500, "units": "g"}
         """
         text = self.clean_text(text)
         if not text:
@@ -102,6 +132,9 @@ class Malang10HatenablogComExtractor(BaseRecipeExtractor):
         
         # Сначала удаляем скобки с описаниями (например, "（みじん切り）")
         text_clean = re.sub(r'[（(][^）)]*[）)]', '', text).strip()
+        
+        # Убираем японское двоеточие "：" в начале или после названия
+        text_clean = re.sub(r'[:：]\s*', ' ', text_clean).strip()
         
         # Паттерн для парсинга: название, количество, единица
         # Поддержка форматов: "牛肉 500g", "玉ねぎ 1個", "大さじ2", "適量"
@@ -118,15 +151,18 @@ class Malang10HatenablogComExtractor(BaseRecipeExtractor):
                 name, amount, units = match2.groups()
             else:
                 # Возвращаем только название
+                # Убираем trailing двоеточия и пробелы
+                clean_name = text_clean.rstrip('：: ')
                 return {
-                    "name": text_clean,
+                    "name": clean_name if clean_name else text_clean,
                     "amount": None,
                     "units": None
                 }
         else:
             name, amount, units = match.groups()
         
-        name = self.clean_text(name)
+        # Очищаем имя от trailing двоеточий и пробелов
+        name = self.clean_text(name).rstrip('：: ')
         
         # Обработка количества
         if amount and amount not in ['適量', '少々', 'お好み']:
@@ -162,8 +198,12 @@ class Malang10HatenablogComExtractor(BaseRecipeExtractor):
             # Альтернативный поиск
             ingredients_header = self.soup.find('h2', string=re.compile(r'材料'))
         
+        if not ingredients_header:
+            # Еще один вариант: "タジンの材料" или подобное
+            ingredients_header = self.soup.find('h2', id=re.compile(r'材料'))
+        
         if ingredients_header:
-            # Ищем следующий ul после заголовка
+            # Вариант 1: Прямой <ul> после заголовка
             ul = ingredients_header.find_next_sibling('ul')
             if ul:
                 items = ul.find_all('li', recursive=False)
@@ -172,6 +212,33 @@ class Malang10HatenablogComExtractor(BaseRecipeExtractor):
                     parsed = self.parse_ingredient_text(ingredient_text)
                     if parsed:
                         ingredients.append(parsed)
+            
+            # Вариант 2: Ингредиенты в subsections с <h3>
+            if not ingredients:
+                current = ingredients_header.find_next_sibling()
+                while current and current.name != 'h2':
+                    if current.name == 'h3':
+                        # Подсекция с ингредиентами
+                        next_elem = current.find_next_sibling()
+                        if next_elem and next_elem.name == 'p':
+                            # Текст ингредиентов в параграфе
+                            text = next_elem.get_text(strip=True)
+                            # Разбиваем по запятым или точкам с запятой
+                            parts = re.split(r'[、,;]', text)
+                            for part in parts:
+                                parsed = self.parse_ingredient_text(part.strip())
+                                if parsed and parsed['name']:
+                                    ingredients.append(parsed)
+                    elif current.name == 'ul':
+                        # Список ингредиентов
+                        items = current.find_all('li', recursive=False)
+                        for item in items:
+                            ingredient_text = item.get_text(separator=' ', strip=True)
+                            parsed = self.parse_ingredient_text(ingredient_text)
+                            if parsed:
+                                ingredients.append(parsed)
+                    
+                    current = current.find_next_sibling()
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
@@ -185,14 +252,16 @@ class Malang10HatenablogComExtractor(BaseRecipeExtractor):
             # Альтернативный поиск
             instructions_header = self.soup.find('h2', string=re.compile(r'作り方'))
         
+        if not instructions_header:
+            # Ищем также "調理法" (метод приготовления)
+            instructions_header = self.soup.find('h2', id=re.compile(r'調理法'))
+        
         if instructions_header:
-            # Ищем следующий ol после заголовка
+            # Вариант 1: Инструкции в виде <ol>
             ol = instructions_header.find_next_sibling('ol')
             if ol:
-                # Получаем все li на верхнем уровне
                 items = ol.find_all('li', recursive=False)
                 for idx, item in enumerate(items, 1):
-                    # Извлекаем текст, включая вложенные списки
                     step_text = item.get_text(separator=' ', strip=True)
                     step_text = self.clean_text(step_text)
                     
@@ -202,6 +271,38 @@ class Malang10HatenablogComExtractor(BaseRecipeExtractor):
                             steps.append(f"{idx}. {step_text}")
                         else:
                             steps.append(step_text)
+            
+            # Вариант 2: Инструкции в виде <h3> + <p>
+            if not steps:
+                current = instructions_header.find_next_sibling()
+                step_num = 0
+                
+                while current and current.name != 'h2':
+                    if current.name == 'h3':
+                        # Это заголовок шага
+                        step_title = current.get_text(strip=True)
+                        step_num += 1
+                        
+                        # Ищем следующий <p> с описанием шага
+                        next_p = current.find_next_sibling('p')
+                        if next_p:
+                            step_desc = next_p.get_text(separator=' ', strip=True)
+                            step_desc = self.clean_text(step_desc)
+                            
+                            # Извлекаем номер и название из заголовка, если есть
+                            # Примеры: "1. 下準備", "ステップ1: 準備"
+                            step_match = re.match(r'(?:ステップ)?(\d+)[.:：]\s*(.+)', step_title)
+                            if step_match:
+                                step_name = step_match.group(2).strip()
+                                step_text = f"{step_num}. {step_name}: {step_desc}"
+                            else:
+                                # Убираем номер из заголовка, если он там есть
+                                step_title_clean = re.sub(r'^\d+[.:：]\s*', '', step_title)
+                                step_text = f"{step_num}. {step_title_clean}: {step_desc}"
+                            
+                            steps.append(step_text)
+                    
+                    current = current.find_next_sibling()
         
         return ' '.join(steps) if steps else None
     
