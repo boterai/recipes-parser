@@ -102,6 +102,32 @@ async def execute_cluster_batch(tasks: list, clusters_in_batch: list[list[int]])
                     logger.info(f"Created {len(merged_recipes)} variations.")
             success_clusters.append(clusters_in_batch[i])
     return success_clusters
+
+
+async def run_merge_expand_base_recipe(score_thresold: float, 
+                    build_type: Literal["image", "full", "ingredients"],
+                    max_variations: int = 3,
+                    validate_gpt: bool = True,
+                    save_to_db: bool = True
+                    ):
+    cluster_processing_history = os.path.join(config.MERGE_HISTORY_FOLDER, f"unprocessed_clusters_{build_type}_{score_thresold}.json")
+    existing_clusters = load_clusters_from_history(cluster_processing_history)
+
+    merger = ClusterVariationGenerator(score_threshold=score_thresold, clusters_build_type=build_type)
+    clusters, cluster_mapping = await create_clusters(score_thresold, build_type)
+    if build_type == "image":
+        cluster_mapping = cluster_mapping.get("page_to_image", {})
+
+    if existing_clusters:
+        logger.info(f"Загружено {len(existing_clusters)} кластеров из истории, всего кластеров {len(clusters)}, пропускаем уже обработанные...")
+        processed_set = {tuple(sorted(cluster)) for cluster in existing_clusters}
+        clusters = [cluster for cluster in clusters if tuple(sorted(cluster)) not in processed_set]
+        logger.info(f"Осталось {len(clusters)} кластеров для обработки после фильтрации истории.")
+    total = 0
+    used_batch_size = 0
+    tasks = []
+    clusters_in_current_batch = []
+    
     
 
 async def run_merge(score_thresold: float, 

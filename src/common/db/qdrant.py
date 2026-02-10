@@ -554,7 +554,7 @@ class QdrantRecipeManager:
             batch_size: int, 
             using: str,
             last_point_id: int = None,
-            scroll_timeout: int = 120) -> AsyncIterator[list[int]]:
+            scroll_timeout: int = 120) -> AsyncIterator[dict[int, list[float]]]:
         """
         Асинхронный итератор по всем точкам в коллекции, возвращающий батчи векторов.
         Args:
@@ -628,7 +628,100 @@ class QdrantRecipeManager:
         resp = await self.async_client.query_batch_points(collection_name=collection, requests=requests)
         return resp
 
+    async def async_get_vector(
+        self,
+        point_id: int,
+        collection_name: str,
+        using: str,
+    ) -> Optional[list[float]]:
+        """
+        Асинхронно получает вектор точки по ID.
+        
+        Args:
+            point_id: ID точки в коллекции
+            collection_name: Имя коллекции (без префикса)
+            using: Имя named vector (например: 'dense', 'ingredients', 'image')
+            
+        Returns:
+            Вектор точки или None если не найден
+        """
+        if not self.async_client:
+            raise QdrantNotConnectedError()
 
+        collection = self.collections.get(collection_name)
+        if not collection:
+            logger.error(f"Collection '{collection_name}' not found in collections map")
+            return None
+
+        try:
+            points = await self.async_client.retrieve(
+                collection_name=collection,
+                ids=[point_id],
+                with_vectors=[using],
+                with_payload=False,
+            )
+            
+            if not points:
+                return None
+            
+            point = points[0]
+            # Вектор может быть dict[str, list] или просто list
+            if isinstance(point.vector, dict):
+                return point.vector.get(using)
+            return point.vector
+            
+        except Exception as e:
+            logger.error(f"Error retrieving vector for point {point_id}: {e}")
+            return None
+
+    async def async_get_vectors(
+        self,
+        point_ids: list[int],
+        collection_name: str,
+        using: str,
+    ) -> dict[int, Optional[list[float]]]:
+        """
+        Асинхронно получает векторы для списка ID точек.
+        
+        Args:
+            point_ids: Список ID точек в коллекции
+            collection_name: Имя коллекции (без префикса)
+            using: Имя named vector (например: 'dense', 'ingredients', 'image')
+            
+        Returns:
+            Словарь {point_id: vector} для найденных точек, или None для не найденных
+        """
+        if not self.async_client:
+            raise QdrantNotConnectedError()
+
+        collection = self.collections.get(collection_name)
+        if not collection:
+            logger.error(f"Collection '{collection_name}' not found in collections map")
+            return {}
+
+        try:
+            points = await self.async_client.retrieve(
+                collection_name=collection,
+                ids=point_ids,
+                with_vectors=[using],
+                with_payload=False,
+            )
+            
+            id_to_vector = {}
+            for point in points:
+                pid = int(point.id)
+                if isinstance(point.vector, dict):
+                    id_to_vector[pid] = point.vector.get(using)
+                else:
+                    id_to_vector[pid] = point.vector
+            
+            # Заполняем None для не найденных ID
+            return {pid: id_to_vector.get(pid) for pid in point_ids}
+            
+        except Exception as e:
+            logger.error(f"Error retrieving vectors for points {point_ids}: {e}")
+            return {}
+        
     def migrate_full_collection(self,new_collection_name: str,batch_size: int = 100,limit: int = 1000) -> int:
         """
         Мигрирует данные из старой mv коллекции в новую с обновленной структурой

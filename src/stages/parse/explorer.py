@@ -497,11 +497,11 @@ class SiteExplorer:
                 for i in range(num_scrolls):
                     current_position += scroll_step
                     self.driver.execute_script(f"window.scrollTo(0, {current_position});")
-                    time.sleep(random.uniform(0.3, 0.5))
+                    time.sleep(random.uniform(0.1, 0.5))
                 
                 # Быстрая прокрутка в конец
                 self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                time.sleep(random.uniform(0.3, 0.6))
+                time.sleep(random.uniform(0.1, 0.3))
             else:
                 # Обычная прокрутка
                 num_scrolls = random.randint(3, 5)
@@ -511,10 +511,10 @@ class SiteExplorer:
                 for i in range(num_scrolls):
                     current_position += scroll_step
                     self.driver.execute_script(f"window.scrollTo(0, {current_position});")
-                    time.sleep(random.uniform(0.4, 0.8))
+                    time.sleep(random.uniform(0.2, 0.4))
                 
                 self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                time.sleep(random.uniform(0.5, 1.0))
+                time.sleep(random.uniform(0.25, 0.5))
             
         except Exception as e:
             self.logger.debug(f"Ошибка при прокрутке: {e}")
@@ -1021,11 +1021,11 @@ class SiteExplorer:
                 self.request_count += 1
                 if self.request_count % 10 == 0:
                     # Каждые 10 запросов - более длинная пауза для снижения подозрительности
-                    delay = random.uniform(3, 5)
+                    delay = random.uniform(1, 3)
                     self.logger.info(f"  Длинная пауза после {self.request_count} запросов: {delay:.1f}с")
                 else:
                     # Обычная короткая пауза
-                    delay = random.uniform(0.8, 1.5)
+                    delay = random.uniform(0.5, 1)
                 time.sleep(delay)
                 
                 # Прокрутка для загрузки контента (быстрый режим для ускорения)

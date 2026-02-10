@@ -88,8 +88,9 @@ CREATE TABLE IF NOT EXISTS merged_recipe_images (
 
 CREATE TABLE IF NOT EXISTS merged_recipes (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    pages_hash_sha256 CHAR(64) NOT NULL,     -- SHA2("1,15,23", 256)
-    pages_csv LONGTEXT NOT NULL,              -- "1,15,23" - CSV ID страниц рецептов в кластере
+    pages_hash_sha256 CHAR(64) NOT NULL, -- SHA2("1,15,23", 256)
+    pages_csv LONGTEXT NOT NULL,  -- "1,15,23" - CSV ID страниц рецептов в кластере
+    base_recipe_id INT NOT NULL default 0, -- ID рецепта, который был выбран в качестве базового для кластера
     -- Данные нового рецепта (NULL = отсутствует)
     dish_name VARCHAR(500), -- 100 % обязательное поле
     ingredients JSON, -- 100% обязательное поле
@@ -106,5 +107,7 @@ CREATE TABLE IF NOT EXISTS merged_recipes (
     merge_model VARCHAR(100),
     tags JSON,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE KEY uq_pages_hash (pages_hash_sha256)
+    is_completed BOOLEAN DEFAULT FALSE, -- отмечаем, что рецепт прошёл все этапы валидации и готов к использованию
+    UNIQUE KEY uq_pages_hash_base_recipe (pages_hash_sha256, base_recipe_id),
+    INDEX idx_base_recipe (base_recipe_id)
 ) ENGINE=InnoDB;

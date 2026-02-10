@@ -9,6 +9,8 @@ from typing import Optional, Literal
 import os
 import asyncio
 
+import numpy as np
+
 if __name__ == "__main__":
     import sys
     from pathlib import Path
@@ -66,7 +68,7 @@ def build_clusters_from_dsu(dsu: _DSU, min_cluster_size: int) -> list[list[int]]
 @dataclass()
 class ClusterParams:
     limit: int = 25               # top-K соседей на рецепт
-    score_threshold: float = 0.92 # порог
+    score_threshold: float = 0.94 # порог
     scroll_batch: int = 1000      # чтение ids из Qdrant
     query_batch: int = 64        # сколько векторов в batch query
     min_cluster_size: int = 2     # отбрасывать одиночки
@@ -83,6 +85,14 @@ class ClusterParams:
 
     union_top_k: int = 10        # сколько соседей юнифицировать в DSU
     max_async_tasks: int = 10    # максимальное число одновременных асинхронных задач
+    
+    # Параметры проверки центроида
+    use_centroid_check: bool = True       # использовать проверку центроида при union
+    centroid_threshold: float = 0.9      # минимальная похожесть с центроидом для объединения
+    
+    # Параметры валидации плотности кластеров
+    min_cluster_size_for_validation: int = 5  # валидировать только кластеры >= этого размера
+    density_min_similarity: float = 0.90      # порог похожести для validate_cluster_density
 
 class SimilaritySearcher:
     def __init__(self, params: ClusterParams = None, build_type: Literal["image", "full", "ingredients"] = "full"):
@@ -101,6 +111,9 @@ class SimilaritySearcher:
         self.clusters_filename = os.path.join("recipe_clusters", f"{build_type}_clusters_{self.params.score_threshold}.json")
         self.cluter_image_mapping = os.path.join("recipe_clusters", f"clusters_to_image_ids_{self.params.score_threshold}.json")
         self.build_type = build_type
+        
+        # Центроиды кластеров: root_id -> vector (numpy array)
+        self.cluster_centroids: dict[int, np.ndarray] = {}
 
     @property
     def clickhouse_manager(self): # layz initialization + lazy import
@@ -114,14 +127,19 @@ class SimilaritySearcher:
 
     def save_dsu_state(self) -> None:
         """Сохраняет состояние DSU в файл."""
+        # Конвертируем numpy arrays в списки для JSON
+        centroids_serializable = {
+            str(k): v.tolist() for k, v in self.cluster_centroids.items()
+        }
         state = {
             "parent": self.dsu.parent,
             "rank": self.dsu.rank,
-            "last_id": self.last_id
+            "last_id": self.last_id,
+            "centroids": centroids_serializable
         }
         with open(self.dsu_filename, 'w') as f:
             json.dump(state, f, indent=2)
-        logger.info(f"Saved DSU state to {self.dsu_filename} (last_id={self.last_id})")
+        logger.info(f"Saved DSU state to {self.dsu_filename} (last_id={self.last_id}, centroids={len(self.cluster_centroids)})")
 
     def load_dsu_state(self) -> None:
         """Загружает состояние DSU из файла."""
@@ -136,7 +154,104 @@ class SimilaritySearcher:
         self.dsu.parent = {int(k): int(v) for k, v in state.get("parent", {}).items()}
         self.dsu.rank = {int(k): int(v) for k, v in state.get("rank", {}).items()}
         self.last_id = state.get("last_id")
-        logger.info(f"Loaded DSU state from {self.dsu_filename} (last_id={self.last_id}, nodes={len(self.dsu.parent)})")
+        
+        # Восстанавливаем центроиды
+        centroids_raw = state.get("centroids", {})
+        self.cluster_centroids = {
+            int(k): np.array(v, dtype=np.float32) for k, v in centroids_raw.items()
+        }
+        logger.info(f"Loaded DSU state from {self.dsu_filename} (last_id={self.last_id}, nodes={len(self.dsu.parent)}, centroids={len(self.cluster_centroids)})")
+
+    def _cosine_similarity(self, vec1: np.ndarray, vec2: np.ndarray) -> float:
+        """Вычисляет косинусную похожесть между двумя векторами."""
+        norm1 = np.linalg.norm(vec1)
+        norm2 = np.linalg.norm(vec2)
+        if norm1 == 0 or norm2 == 0:
+            return 0.0
+        return float(np.dot(vec1, vec2) / (norm1 * norm2))
+    
+    def union_with_centroid_check(
+        self,
+        src_id: int,
+        dst_id: int,
+        src_vec: np.ndarray,
+        dst_vec: np.ndarray,
+    ) -> bool:
+        """
+        Объединяет два элемента в DSU с проверкой центроида.
+        
+        Предотвращает "транзитивный дрейф" кластеров, проверяя что новый элемент
+        достаточно близок к центроиду существующего кластера.
+        
+        Args:
+            src_id: ID исходного элемента
+            dst_id: ID целевого элемента  
+            src_vec: Вектор исходного элемента
+            dst_vec: Вектор целевого элемента
+            
+        Returns:
+            True если объединение произошло, False если отклонено
+        """
+        src_root = self.dsu.find(src_id)
+        dst_root = self.dsu.find(dst_id)
+        
+        # Уже в одном кластере
+        if src_root == dst_root:
+            return False
+        
+        # Получаем центроиды кластеров (или сами векторы если кластер новый)
+        src_centroid = self.cluster_centroids.get(src_root, src_vec)
+        dst_centroid = self.cluster_centroids.get(dst_root, dst_vec)
+        
+        # Проверяем похожесть dst с центроидом src кластера
+        sim_dst_to_src_centroid = self._cosine_similarity(dst_vec, src_centroid)
+        
+        # Проверяем похожесть src с центроидом dst кластера  
+        sim_src_to_dst_centroid = self._cosine_similarity(src_vec, dst_centroid)
+        
+        # Оба должны быть достаточно близки к центроидам
+        if sim_dst_to_src_centroid < self.params.centroid_threshold or \
+           sim_src_to_dst_centroid < self.params.centroid_threshold:
+            return False
+        
+        # Выполняем объединение
+        self.dsu.union(src_id, dst_id)
+        
+        # Обновляем центроид объединённого кластера (средний вектор)
+        new_root = self.dsu.find(src_id)
+        
+        # Простое усреднение центроидов (можно улучшить взвешенным средним)
+        new_centroid = (src_centroid + dst_centroid) / 2
+        # Нормализуем для косинусной метрики
+        norm = np.linalg.norm(new_centroid)
+        if norm > 0:
+            new_centroid = new_centroid / norm
+        
+        self.cluster_centroids[new_root] = new_centroid
+        
+        # Удаляем старые центроиды если они отличаются от нового корня
+        if src_root != new_root and src_root in self.cluster_centroids:
+            del self.cluster_centroids[src_root]
+        if dst_root != new_root and dst_root in self.cluster_centroids:
+            del self.cluster_centroids[dst_root]
+        
+        return True
+    
+    def init_centroid(self, point_id: int, vector: np.ndarray) -> None:
+        """
+        Инициализирует центроид для точки (если ещё не в кластере).
+        
+        Args:
+            point_id: ID точки
+            vector: Вектор точки
+        """
+        root = self.dsu.find(point_id)
+        if root not in self.cluster_centroids:
+            vec_np = np.array(vector, dtype=np.float32)
+            norm = np.linalg.norm(vec_np)
+            if norm > 0:
+                vec_np = vec_np / norm
+            self.cluster_centroids[root] = vec_np
 
     async def query_batch_async(self, q:QdrantRecipeManager, vectors: list[float]) -> Optional[list[int]]:
         for attempt in range(3):
@@ -203,6 +318,7 @@ class SimilaritySearcher:
                 vectors = [vec_map[rid] for rid in sub_ids]
                 async with semaphore:
                     batch_hits = await self.query_batch_async(q, vectors)
+
                 return sub_ids, batch_hits
 
             tasks: list[asyncio.Task[tuple[list[int], list[list[int]]]]] = []
@@ -225,9 +341,31 @@ class SimilaritySearcher:
                     if not hits:
                         continue
                     
+                    src_vec = vec_map.get(src_id)
+                    if src_vec is None:
+                        continue
+                    
+                    src_vec_np = np.array(src_vec, dtype=np.float32)
+                    
+                    # Инициализируем центроид для src если используем проверку
+                    if self.params.use_centroid_check:
+                        self.init_centroid(src_id, src_vec_np)
+                    
                     top_hits = hits[:self.params.union_top_k] if self.params.union_top_k else hits
                     for dst_id in top_hits:
-                        if dst_id != src_id:
+                        if dst_id == src_id:
+                            continue
+                        
+                        if self.params.use_centroid_check:
+                            dst_vec = vec_map.get(dst_id)
+                            if dst_vec is not None:
+                                dst_vec_np = np.array(dst_vec, dtype=np.float32)
+                                self.init_centroid(dst_id, dst_vec_np)
+                                self.union_with_centroid_check(int(src_id), dst_id, src_vec_np, dst_vec_np)
+                            else:
+
+                                self.dsu.union(int(src_id), dst_id)
+                        else:
                             self.dsu.union(int(src_id), dst_id)
 
                 processed += len(sub_ids)
@@ -261,7 +399,194 @@ class SimilaritySearcher:
         else:  # full
             self.params.collection_name = "full"
             self.params.using = "dense"
+    
+    async def validate_cluster_density(
+        self, 
+        cluster: list[int], 
+        q: QdrantRecipeManager,
+        min_avg_similarity: float = 0.90
+    ) -> tuple[bool, float, list[int]]:
+        """
+        Проверяет плотность кластера и возвращает скорректированный кластер с удалёнными выбросами.
         
+        Алгоритм:
+        1. Вычисляем центроид кластера
+        2. Удаляем элементы с похожестью к центроиду ниже порога
+        3. Пересчитываем центроид и повторяем до стабилизации
+        
+        Args:
+            cluster: список page_id рецептов в кластере
+            q: QdrantRecipeManager для получения векторов
+            min_avg_similarity: минимальный порог похожести с центроидом (default: 0.90)
+            
+        Returns:
+            tuple[bool, float, list[int]]: (валиден ли кластер, средняя похожесть, скорректированный кластер)
+        """
+        if len(cluster) < 2:
+            return True, 1.0, cluster
+        
+        # Получаем все векторы одним batch-запросом
+        raw_vectors = await q.async_get_vectors(
+            collection_name=self.params.collection_name,
+            point_ids=cluster,
+            using=self.params.using
+        )
+        
+        # Нормализуем векторы и фильтруем None
+        id_to_vec: dict[int, np.ndarray] = {}
+        for page_id, vec in raw_vectors.items():
+            if vec is not None:
+                vec_np = np.array(vec, dtype=np.float32)
+                norm = np.linalg.norm(vec_np)
+                if norm > 0:
+                    vec_np = vec_np / norm
+                id_to_vec[page_id] = vec_np
+        
+        initial_count = len(id_to_vec)
+        
+        if initial_count < 2:
+            logger.warning(f"Not enough vectors ({initial_count}) for cluster density validation")
+            return True, 1.0, cluster
+        
+        # Итеративно удаляем выбросы
+        max_iterations = 10
+        for iteration in range(max_iterations):
+            current_ids = list(id_to_vec.keys())
+            if len(current_ids) < 2:
+                break
+            
+            # Вычисляем центроид
+            vectors = np.array([id_to_vec[pid] for pid in current_ids])
+            centroid = np.mean(vectors, axis=0)
+            centroid_norm = np.linalg.norm(centroid)
+            if centroid_norm > 0:
+                centroid = centroid / centroid_norm
+            
+            # Вычисляем похожесть каждого элемента с центроидом
+            similarities = {
+                pid: float(np.dot(id_to_vec[pid], centroid))
+                for pid in current_ids
+            }
+            
+            # Находим элементы ниже порога
+            outliers = [pid for pid, sim in similarities.items() if sim < min_avg_similarity]
+            
+            if not outliers:
+                # Нет выбросов - кластер стабилен
+                break
+            
+            # Удаляем выбросы
+            for pid in outliers:
+                del id_to_vec[pid]
+            
+            logger.debug(
+                f"Iteration {iteration + 1}: removed {len(outliers)} outliers, "
+                f"remaining {len(id_to_vec)} elements"
+            )
+        
+        # Финальная оценка
+        final_ids = list(id_to_vec.keys())
+        
+        if len(final_ids) < 2:
+            logger.warning(f"Cluster collapsed to {len(final_ids)} elements after density validation")
+            return False, 0.0, final_ids
+        
+        # Вычисляем финальную среднюю попарную похожесть
+        vectors = np.array([id_to_vec[pid] for pid in final_ids])
+        similarity_matrix = np.dot(vectors, vectors.T)
+        n = len(final_ids)
+        upper_indices = np.triu_indices(n, k=1)
+        pairwise_similarities = similarity_matrix[upper_indices]
+        
+        avg_similarity = float(np.mean(pairwise_similarities))
+        min_similarity = float(np.min(pairwise_similarities))
+        
+        removed_count = initial_count - len(final_ids)
+        if removed_count > 0:
+            logger.info(
+                f"Cluster refined: {initial_count} → {len(final_ids)} elements "
+                f"(removed {removed_count}), avg_sim={avg_similarity:.4f}, min_sim={min_similarity:.4f}"
+            )
+        else:
+            logger.debug(
+                f"Cluster OK: {len(final_ids)} elements, avg_sim={avg_similarity:.4f}, min_sim={min_similarity:.4f}"
+            )
+        
+        is_valid = avg_similarity >= min_avg_similarity and len(final_ids) >= 2
+        
+        return is_valid, avg_similarity, final_ids
+    
+    async def refine_clusters(
+        self, 
+        clusters: list[list[int]], 
+        q: QdrantRecipeManager,
+        min_cluster_size_for_validation: int | None = None,
+        min_avg_similarity: float | None = None
+    ) -> list[list[int]]:
+        """
+        Уточняет кластеры, валидируя только большие.
+        
+        Args:
+            clusters: список кластеров для проверки
+            q: QdrantRecipeManager
+            min_cluster_size_for_validation: валидировать только кластеры >= этого размера 
+                                             (default: берётся из self.params)
+            min_avg_similarity: порог похожести для validate_cluster_density
+                               (default: берётся из self.params)
+            
+        Returns:
+            список уточнённых кластеров
+        """
+        # Используем параметры из ClusterParams если не переданы явно
+        if min_cluster_size_for_validation is None:
+            min_cluster_size_for_validation = self.params.min_cluster_size_for_validation
+        if min_avg_similarity is None:
+            min_avg_similarity = self.params.density_min_similarity
+        
+        refined = []
+        skipped = 0
+        validated = 0
+        removed_total = 0
+        
+        for cluster in clusters:
+            # Маленькие кластеры пропускаем без проверки
+            if len(cluster) < min_cluster_size_for_validation:
+                refined.append(cluster)
+                skipped += 1
+                continue
+            
+            # Большие кластеры валидируем
+            validated += 1
+            _, avg_sim, refined_cluster = await self.validate_cluster_density(
+                cluster=cluster,
+                q=q,
+                min_avg_similarity=min_avg_similarity
+            )
+            
+            removed_count = len(cluster) - len(refined_cluster)
+            removed_total += removed_count
+            
+            if len(refined_cluster) >= self.params.min_cluster_size:
+                refined.append(refined_cluster)
+                
+                # Если кластер сильно уменьшился — логируем
+                if removed_count > 0 and len(refined_cluster) < len(cluster) * 0.7:
+                    logger.warning(
+                        f"Cluster significantly reduced: {len(cluster)} → {len(refined_cluster)} "
+                        f"(avg_sim={avg_sim:.4f})"
+                    )
+            else:
+                logger.warning(
+                    f"Cluster dropped after validation: {len(cluster)} → {len(refined_cluster)} "
+                    f"(below min_cluster_size={self.params.min_cluster_size})"
+                )
+        
+        logger.info(
+            f"Cluster refinement complete: {len(clusters)} → {len(refined)} clusters, "
+            f"skipped={skipped}, validated={validated}, removed_elements={removed_total}"
+        )
+        
+        return refined
     
     def load_clusters_from_file(self) -> list[list[int]]:
         """Загружает кластеры из файла в формате JSON."""
@@ -388,7 +713,7 @@ Return ONLY JSON array of IDs representing similar recipes."""
         
         return page_ids_to_image_ids
         
-    def save_clusters_to_file(self, clusters: list[list[int]], recalculate_mapping: bool = False) -> None:
+    def save_clusters_to_file(self, clusters: list[list[int]], recalculate_mapping: bool = False, refine_clusters: bool = False) -> None:
         """Сохраняет текущие кластеры в файл в формате JSON."""
         # конвертируем кластеры из изображений в кластеры по ID рецептов
         if self.build_type == "image":
@@ -420,6 +745,12 @@ Return ONLY JSON array of IDs representing similar recipes."""
                 
             clusters = recipe_clisters
             # поуллчаем 
+        
+        if refine_clusters:
+            q = QdrantRecipeManager(collection_prefix=self.qd_collection_prefix)
+            asyncio.run(q.async_connect(connect_timeout=210))
+            clusters = asyncio.run(self.refine_clusters(clusters=clusters, q=q))
+
         with open(self.clusters_filename, 'w') as f:
             f.write(json.dumps(clusters, indent=2))
         logger.info(f"Saved clusters to file {self.clusters_filename}.")
@@ -429,11 +760,13 @@ if __name__ == "__main__":
     while True:
         ss = SimilaritySearcher(params=ClusterParams(
                     limit=30,
-                    score_threshold=0.94,
-                    scroll_batch=1000,
-                    union_top_k=7,
+                    score_threshold=0.93,
+                    scroll_batch=3500,
+                    centroid_threshold=0.89,
+                    use_centroid_check=True,
+                    union_top_k=20,
                     query_batch=128
-                ), build_type="image") # "image", "full", "ingredients"
+                ), build_type="ingredients") # "image", "full", "ingredients"
         try:
             ss.load_dsu_state()
             last_id = ss.last_id # получаем last id после загрузки состояния (такая штука работает только опираясь на тот факт, что каждй вновь доавбленный рецепт имеет id не меньше уже векторизованных рецептов, иначе рецепты могут быть пропущены)
@@ -450,5 +783,5 @@ if __name__ == "__main__":
             ss.save_dsu_state()
             continue
 
-    final_clusters = build_clusters_from_dsu(ss.dsu, min_cluster_size=2)
-    ss.save_clusters_to_file(final_clusters, recalculate_mapping=True)
+    final_clusters = build_clusters_from_dsu(ss.dsu, min_cluster_size=4)
+    ss.save_clusters_to_file(final_clusters, recalculate_mapping=True, refine_clusters=True)

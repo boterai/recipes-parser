@@ -513,6 +513,8 @@ class ClusterVariationGenerator:
             target_language=recipe_language
             )
     
+    
+
     async def create_variations_from_cluster(
         self,
         recipes: list[Recipe],
