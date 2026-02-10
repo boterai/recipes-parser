@@ -1,0 +1,13 @@
+{
+    "dish_name": "Nasi Goreng Spesial",
+    "description": "Resep nasi goreng spesial yang mudah dan lezat untuk keluarga tercinta",
+    "ingredients": "[{\"name\": \"nasi putih\", \"amount\": \"3\", \"unit\": \"piring\"}, {\"name\": \"telur ayam\", \"amount\": \"2\", \"unit\": \"butir\"}, {\"name\": \"bawang putih\", \"amount\": \"3\", \"unit\": \"siung\"}, {\"name\": \"cabai merah\", \"amount\": \"5\", \"unit\": \"buah\"}, {\"name\": \"kecap manis\", \"amount\": \"2\", \"unit\": \"sendok makan\"}, {\"name\": \"garam\", \"amount\": \"1\", \"unit\": \"sendok teh\"}, {\"name\": \"merica bubuk\", \"amount\": \"0.5\", \"unit\": \"sendok teh\"}, {\"name\": \"minyak goreng\", \"amount\": \"3\", \"unit\": \"sendok makan\"}, {\"name\": \"ayam suwir\", \"amount\": \"100\", \"unit\": \"gram\"}, {\"name\": \"daun bawang\", \"amount\": \"2\", \"unit\": \"batang\"}]",
+    "instructions": "1. Panaskan minyak dalam wajan dengan api sedang 2. Tumis bawang putih dan cabai hingga harum dan layu 3. Masukkan telur, orak-arik hingga setengah matang 4. Tambahkan nasi putih, aduk rata dengan bumbu 5. Masukkan kecap manis, garam, dan merica, aduk hingga merata 6. Tambahkan ayam suwir dan daun bawang, masak hingga matang 7. Sajikan nasi goreng selagi hangat dengan kerupuk",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "35 minutes",
+    "notes": "Gunakan nasi yang sudah dingin atau nasi sisa semalam agar tekstur nasi goreng lebih pulen dan tidak lembek. Jangan terlalu sering mengaduk nasi agar tidak hancur, aduk secukupnya hingga bumbu merata.",
+    "image_urls": "https://timenews.co.id/images/nasi-goreng-1.jpg,https://timenews.co.id/images/nasi-goreng-2.jpg,https://timenews.co.id/images/nasi-goreng-3.jpg",
+    "tags": "nasi goreng, indonesian food, fried rice, makanan indonesia"
+}
