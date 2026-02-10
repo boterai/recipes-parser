@@ -153,7 +153,7 @@ class VmgonlineLtExtractor(BaseRecipeExtractor):
         # Список известных единиц измерения
         known_units = {
             'g', 'ml', 'l', 'kg', 'tbsp', 'tsp', 'pcs', 'vnt', 'vnt.',
-            'šaukštų', 'šaukšto', 'valgomųjų', 'arbatinių', 'puodelių', 'puodelio'
+            'šaukštų', 'šaukšto', 'šaukštelis', 'šaukštas', 'valgomųjų', 'arbatinių', 'puodelių', 'puodelio'
         }
         
         # Сначала пробуем паттерн с текстовым количеством в начале (Žiupsnelio, Šlakelio)
@@ -171,7 +171,7 @@ class VmgonlineLtExtractor(BaseRecipeExtractor):
                 }
         
         # Затем пробуем паттерн с числовым количеством и единицей
-        pattern_with_unit = r'^([\d\s\-–—]+)\s+(\S+)\s+(.+)$'
+        pattern_with_unit = r'^([\d\s\-–—½¼¾⅓⅔.,]+)\s+(\S+)\s+(.+)$'
         match = re.match(pattern_with_unit, text, re.IGNORECASE)
         
         if match:
@@ -179,29 +179,33 @@ class VmgonlineLtExtractor(BaseRecipeExtractor):
             
             # Проверяем, является ли это известной единицей измерения
             if potential_unit.lower() in known_units:
+                # Конвертируем amount в число если возможно
+                amount = self._convert_amount(amount_str)
                 return {
                     "name": name.strip(),
                     "units": potential_unit.strip(),
-                    "amount": amount_str.strip()
+                    "amount": amount
                 }
             else:
                 # Если не известная единица, то это часть названия
+                amount = self._convert_amount(amount_str)
                 return {
                     "name": (potential_unit + ' ' + name).strip(),
                     "units": None,
-                    "amount": amount_str.strip()
+                    "amount": amount
                 }
         
         # Пробуем только число в начале без единицы
-        pattern_number = r'^([\d\s\-–—]+)\s+(.+)$'
+        pattern_number = r'^([\d\s\-–—½¼¾⅓⅔.,]+)\s+(.+)$'
         match = re.match(pattern_number, text)
         
         if match:
             amount_str, name = match.groups()
+            amount = self._convert_amount(amount_str)
             return {
                 "name": name.strip(),
                 "units": None,
-                "amount": amount_str.strip()
+                "amount": amount
             }
         
         # Если ничего не совпало, возвращаем весь текст как название
@@ -210,6 +214,38 @@ class VmgonlineLtExtractor(BaseRecipeExtractor):
             "units": None,
             "amount": None
         }
+    
+    def _convert_amount(self, amount_str: str) -> any:
+        """Конвертирует строку количества в число если возможно"""
+        if not amount_str:
+            return None
+        
+        amount_str = amount_str.strip()
+        
+        # Если содержит диапазон (–, -, —), оставляем как строку
+        if '–' in amount_str or '—' in amount_str:
+            return amount_str
+        
+        # Если содержит дробь (½, ¼, etc), оставляем как строку
+        if any(c in amount_str for c in '½¼¾⅓⅔'):
+            return amount_str
+        
+        # Пробуем конвертировать в float/int
+        try:
+            # Заменяем запятую на точку для десятичных чисел
+            normalized = amount_str.replace(',', '.')
+            
+            # Пробуем float
+            num = float(normalized)
+            
+            # Если это целое число, возвращаем int
+            if num.is_integer():
+                return int(num)
+            
+            return num
+        except (ValueError, AttributeError):
+            # Если не удалось конвертировать, возвращаем строку
+            return amount_str
     
     def extract_ingredients(self) -> Optional[str]:
         """Извлечение ингредиентов"""
