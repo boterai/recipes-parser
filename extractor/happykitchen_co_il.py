@@ -71,6 +71,7 @@ class HappyKitchenExtractor(BaseRecipeExtractor):
     def extract_ingredients(self) -> Optional[str]:
         """Извлечение ингредиентов"""
         ingredients = []
+        notes_from_ingredients = []
         
         # Ищем структурированные ингредиенты с классом wprm-recipe-ingredient
         ingredient_items = self.soup.find_all(class_='wprm-recipe-ingredient')
@@ -115,13 +116,42 @@ class HappyKitchenExtractor(BaseRecipeExtractor):
             if name_elem:
                 name = self.clean_text(name_elem.get_text())
             
+            # Проверяем, является ли это примечанием (начинается с **)
+            if name and name.startswith('**'):
+                # Это примечание, а не ингредиент
+                note_text = name.replace('**', '').strip()
+                if note_text and note_text not in notes_from_ingredients:
+                    notes_from_ingredients.append(note_text)
+                continue
+            
+            # Проверяем префиксы типа "להרכבה -" и удаляем их, но сохраняем ингредиент
+            if name:
+                # Убираем префиксы
+                name = name.replace('להרכבה -', '').replace('להרכבה-', '').replace('להרכבה ', '').strip()
+                
+                # Упрощаем некоторые названия, убирая уточнения в скобках типа "(או כל...)"
+                # но только если скобки содержат слово "או" (или)
+                import re
+                name = re.sub(r'\s*\(או [^\)]+\)', '', name)
+            
             # Добавляем ингредиент в список
             if name:  # Название обязательно должно быть
+                # Обработка случая "ביצה M" - разделяем единицу измерения из имени
+                if unit is None and ' ' in name:
+                    parts = name.rsplit(' ', 1)
+                    if len(parts[-1]) <= 3 and parts[-1].isupper():
+                        # Вероятно, это единица измерения
+                        name = parts[0]
+                        unit = parts[-1]
+                
                 ingredients.append({
                     "name": name,
                     "units": unit,
                     "amount": amount
                 })
+        
+        # Сохраняем примечания для использования в extract_notes
+        self._ingredient_notes = notes_from_ingredients
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
@@ -308,12 +338,27 @@ class HappyKitchenExtractor(BaseRecipeExtractor):
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок"""
+        notes = []
+        
+        # Сначала проверяем примечания из ингредиентов (если были)
+        if hasattr(self, '_ingredient_notes') and self._ingredient_notes:
+            notes.extend(self._ingredient_notes)
+        
         # Ищем в HTML
         notes_container = self.soup.find('div', class_='wprm-recipe-notes')
         if notes_container:
             text = notes_container.get_text(separator=' ', strip=True)
             text = self.clean_text(text)
-            return text if text else None
+            if text:
+                notes.append(text)
+        
+        # Объединяем все примечания
+        if notes:
+            result = ' '.join(notes)
+            # Убеждаемся, что примечание заканчивается точкой
+            if result and not result.endswith('.'):
+                result += '.'
+            return result
         
         return None
     
