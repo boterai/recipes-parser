@@ -315,7 +315,28 @@ class GodaomasExtractor(BaseRecipeExtractor):
     def extract_prep_time(self) -> Optional[str]:
         """Извлечение времени подготовки"""
         # Ищем именно "Voorbereidingstijd" (не "Bereidingstijd")
-        return self.extract_time_from_list(r'voorbereidingstijd')
+        result = self.extract_time_from_list(r'voorbereidingstijd')
+        if result:
+            return result
+        
+        # Дополнительная проверка в параграфах для альтернативного формата
+        entry_content = self.soup.find('div', class_='entry-content')
+        if entry_content:
+            paragraphs = entry_content.find_all('p', limit=5)
+            for p in paragraphs:
+                p_text = p.get_text()
+                # Ищем "Bereidingstijd" (в некоторых рецептах это prep time)
+                # Учитываем emoji и другие символы после числа
+                match = re.search(r'bereidingstijd:\s*(\d+)\s*minuten', p_text, re.I)
+                if match:
+                    # Проверяем, есть ли также "Baktijd" в том же параграфе
+                    has_baktijd = re.search(r'baktijd:', p_text, re.I)
+                    if has_baktijd:
+                        # Если есть и Bereidingstijd и Baktijd, значит Bereidingstijd - это prep
+                        time_num = match.group(1)
+                        return f"{time_num} minutes"
+        
+        return None
     
     def extract_cook_time(self) -> Optional[str]:
         """Извлечение времени приготовления"""
@@ -385,8 +406,6 @@ class GodaomasExtractor(BaseRecipeExtractor):
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
-        notes_parts = []
-        
         entry_content = self.soup.find('div', class_='entry-content')
         if not entry_content:
             return None
@@ -398,9 +417,40 @@ class GodaomasExtractor(BaseRecipeExtractor):
             if next_elem:
                 text = self.clean_text(next_elem.get_text())
                 if text:
-                    return text  # Возвращаем только заметки о хранении
+                    return text
         
-        # Если нет заметок о хранении, ищем другие секции
+        # Ищем секцию "Serveertips en opslag" (serving tips and storage)
+        # Heading может содержать текст внутри тегов strong
+        for heading in entry_content.find_all('h3'):
+            heading_text = self.clean_text(heading.get_text())
+            if re.search(r'Serveertips en opslag', heading_text, re.I):
+                next_elem = heading.find_next_sibling(['p', 'ul', 'ol'])
+                if next_elem:
+                    # Если это список, объединяем нужные элементы
+                    if next_elem.name in ['ul', 'ol']:
+                        notes_items = []
+                        for li in next_elem.find_all('li', recursive=False):  # Только прямые дочерние элементы
+                            li_text = self.clean_text(li.get_text())
+                            # Фильтруем заголовки и пустые строки
+                            if li_text:
+                                # Пропускаем элементы которые являются только заголовками (в жирном шрифте и заканчиваются на ":")
+                                strong_tag = li.find('strong')
+                                # Если весь текст li состоит только из strong и заканчивается на ":", пропускаем
+                                if strong_tag and strong_tag.get_text().strip() == li_text.strip() and li_text.endswith(':'):
+                                    continue
+                                notes_items.append(li_text)
+                                # Ограничиваем до 2 пунктов (один для serving, один для storage)
+                                if len(notes_items) >= 2:
+                                    break
+                        if notes_items:
+                            return ' '.join(notes_items)
+                    else:
+                        text = self.clean_text(next_elem.get_text())
+                        if text:
+                            return text
+                break
+        
+        # Если не найдено, ищем другие секции с заметками
         note_patterns = [
             r'Tips',
             r'Opmerking',
@@ -408,6 +458,7 @@ class GodaomasExtractor(BaseRecipeExtractor):
             r'Serveertips'
         ]
         
+        notes_parts = []
         for pattern in note_patterns:
             heading = entry_content.find('h3', string=re.compile(pattern, re.I))
             if heading:
