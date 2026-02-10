@@ -73,17 +73,7 @@ class CucinaConAmoreExtractor(BaseRecipeExtractor):
     
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
-        # Сначала пробуем извлечь из JSON-LD
-        recipe_data = self._get_recipe_json_ld()
-        if recipe_data:
-            # Проверяем поле name (обычно это "Piatto Sostanzioso")
-            if 'name' in recipe_data:
-                name = recipe_data['name']
-                # Если название слишком общее, берем из title тега
-                if name and len(name) < 30:
-                    pass  # Используем name из JSON-LD
-        
-        # Альтернативно - из meta тега og:title
+        # Извлекаем из meta тега og:title (самый надежный источник для cucinaconamore.com)
         og_title = self.soup.find('meta', property='og:title')
         if og_title and og_title.get('content'):
             title = og_title['content']
@@ -92,7 +82,7 @@ class CucinaConAmoreExtractor(BaseRecipeExtractor):
             title = re.sub(r'\s*-\s*classico cibo confortante.*$', '', title, flags=re.IGNORECASE)
             return self.clean_text(title)
         
-        # Из title тега
+        # Альтернативно - из title тега
         title_tag = self.soup.find('title')
         if title_tag:
             title = title_tag.get_text()
@@ -137,7 +127,10 @@ class CucinaConAmoreExtractor(BaseRecipeExtractor):
         
         text = self.clean_text(ingredient_text)
         
-        # Удаляем содержимое в скобках (например, "(per spennellare)")
+        # Удаляем содержимое в скобках для упрощения парсинга
+        # Примечание: скобки обычно содержат дополнительные детали приготовления
+        # (например, "(per spennellare)" = "для смазывания"), которые не являются
+        # частью основного названия ингредиента
         text = re.sub(r'\([^)]*\)', '', text).strip()
         
         # Известные единицы измерения (короткие - г, мл и т.д.)
@@ -165,7 +158,8 @@ class CucinaConAmoreExtractor(BaseRecipeExtractor):
         amount = None
         unit = None
         name = text
-        is_metric = False
+        # Флаг для определения, нужно ли возвращать количество как число (True) или как строку (False)
+        use_numeric_amount = False
         
         if match:
             amount_str, potential_unit, potential_name = match.groups()
@@ -176,7 +170,7 @@ class CucinaConAmoreExtractor(BaseRecipeExtractor):
                 unit = potential_unit
                 # Убираем запятые и все после них из названия
                 name = re.sub(r',.*$', '', potential_name).strip()
-                is_metric = potential_unit.lower() in metric_units
+                use_numeric_amount = potential_unit.lower() in metric_units
             else:
                 # Это не единица измерения, а часть названия
                 # Используем паттерн для подсчета
@@ -185,14 +179,14 @@ class CucinaConAmoreExtractor(BaseRecipeExtractor):
                     amount_str, name = match2.groups()
                     name = name.strip()
                     unit = "unit"  # Используем "unit" для штучных товаров
-                    is_metric = True  # unit ведет себя как метрическая единица
+                    use_numeric_amount = True  # unit всегда возвращает числовое значение
             
             # Обработка количества
             amount_str = amount_str.strip()
             # Обработка дробей типа "1/2"
             if '/' in amount_str:
-                # Для метрических единиц конвертируем в float
-                if is_metric:
+                # Для числовых значений конвертируем в float
+                if use_numeric_amount:
                     parts = amount_str.split('/')
                     if len(parts) == 2:
                         try:
@@ -203,8 +197,8 @@ class CucinaConAmoreExtractor(BaseRecipeExtractor):
                     # Для текстовых единиц оставляем как строку
                     amount = amount_str
             else:
-                # Для метрических единиц конвертируем в число
-                if is_metric:
+                # Для числовых значений конвертируем в число
+                if use_numeric_amount:
                     try:
                         # Пытаемся преобразовать в число
                         clean_amount = amount_str.replace(',', '.')
