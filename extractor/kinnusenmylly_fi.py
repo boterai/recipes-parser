@@ -15,6 +15,28 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class KinnusenmyllyExtractor(BaseRecipeExtractor):
     """Экстрактор для kinnusenmylly.fi"""
     
+    def _convert_amount(self, amount: Optional[str]) -> Optional[int | float]:
+        """
+        Конвертирует строку количества в число
+        
+        Args:
+            amount: Строка с количеством
+            
+        Returns:
+            int или float, или None если конвертация невозможна
+        """
+        if not amount:
+            return None
+        
+        try:
+            # Если есть точка, возвращаем float
+            if '.' in amount:
+                return float(amount)
+            # Иначе возвращаем int
+            return int(amount)
+        except ValueError:
+            return None
+    
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
         # Ищем в заголовке статьи
@@ -83,12 +105,20 @@ class KinnusenmyllyExtractor(BaseRecipeExtractor):
                             unit = parts[1] if len(parts) > 1 else None
                             # Вычисляем дробь
                             if '/' in fraction:
-                                num, denom = fraction.split('/')
-                                amount = str(float(num) / float(denom))
+                                try:
+                                    num, denom = fraction.split('/')
+                                    if float(denom) != 0:
+                                        amount = str(float(num) / float(denom))
+                                except (ValueError, ZeroDivisionError):
+                                    pass  # Оставляем amount = None
                         else:
                             # Только дробь без единицы
-                            num, denom = amount_text.split('/')
-                            amount = str(float(num) / float(denom))
+                            try:
+                                num, denom = amount_text.split('/')
+                                if float(denom) != 0:
+                                    amount = str(float(num) / float(denom))
+                            except (ValueError, ZeroDivisionError):
+                                pass  # Оставляем amount = None
                     else:
                         # Обычный паттерн: "2 dl", "1 tl", "1" или "2,5 dl"
                         match = re.match(r'^([\d.,]+)\s*([a-zA-Zäöå]+)?', amount_text)
@@ -102,10 +132,12 @@ class KinnusenmyllyExtractor(BaseRecipeExtractor):
                 
                 # Добавляем ингредиент
                 if name:
+                    # Конвертируем amount в правильный тип
+                    amount_value = self._convert_amount(amount)
                     ingredients.append({
                         "name": name,
                         "units": unit,
-                        "amount": float(amount) if amount and '.' in amount else int(amount) if amount and amount.replace('.', '').isdigit() else None
+                        "amount": amount_value
                     })
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
@@ -184,9 +216,22 @@ class KinnusenmyllyExtractor(BaseRecipeExtractor):
     
     def extract_cook_time(self) -> Optional[str]:
         """Извлечение времени приготовления"""
-        # Ищем в тексте инструкций упоминания времени
-        instructions = self.extract_instructions()
-        if instructions:
+        # Ищем упорядоченный список инструкций (избегаем повторного извлечения)
+        numbered_list = self.soup.find('div', class_='numbered--list--wrapper')
+        instructions_text = None
+        
+        if numbered_list:
+            ol = numbered_list.find('ol')
+            if ol:
+                instructions_text = ol.get_text()
+        
+        # Если не нашли, ищем обычный ol
+        if not instructions_text:
+            ol = self.soup.find('ol')
+            if ol:
+                instructions_text = ol.get_text()
+        
+        if instructions_text:
             # Паттерны для финского языка
             patterns = [
                 r'(\d+)\s*minuut(?:tia|in)',
@@ -194,7 +239,7 @@ class KinnusenmyllyExtractor(BaseRecipeExtractor):
             ]
             
             for pattern in patterns:
-                match = re.search(pattern, instructions, re.IGNORECASE)
+                match = re.search(pattern, instructions_text, re.IGNORECASE)
                 if match:
                     number = match.group(1)
                     if 'tunti' in match.group(0):
