@@ -295,66 +295,74 @@ class ReceptikCzExtractor(BaseRecipeExtractor):
         # Ищем все ul.wp-block-list на странице
         ingredient_lists = self.soup.find_all('ul', class_='wp-block-list')
         
-        # Обрабатываем списки, собирая ингредиенты пока они похожи на ингредиенты
-        lists_processed = 0
-        first_list_size = 0
-        
+        # Собираем информацию о списках
+        list_infos = []
         for ul in ingredient_lists:
             items = ul.find_all('li')
-            
             if not items or len(items) == 0:
                 continue
             
-            # Проверяем первый элемент - если он похож на ингредиент, обрабатываем весь список
             first_item_text = items[0].get_text(strip=True)
             
-            # Стоп-условия:
-            # 1. Элемент слишком длинный (>150 символов)
-            # 2. Содержит вопросительный знак (FAQ)
-            # 3. Это одноэлементный список (обычно описание)
-            # 4. Средняя длина элементов >100 символов
-            
+            # Стоп-условия
             if len(first_item_text) > 150 or '?' in first_item_text:
-                break  # Дальше идут не ингредиенты
-            
-            if len(items) == 1:
-                # Одноэлементные списки обычно не ингредиенты
                 break
             
-            # Проверяем средний размер элементов в списке
             avg_length = sum(len(li.get_text(strip=True)) for li in items) / len(items)
             
-            # Ингредиенты обычно короткие (< 80 символов в среднем)
-            if avg_length > 100:
-                break  # Дальше идут описания
+            # Одноэлементные списки проверяем отдельно
+            if len(items) == 1:
+                # Короткий текст - вероятно ингредиент
+                if len(first_item_text) < 60:
+                    list_infos.append({'ul': ul, 'count': 1, 'avg_length': len(first_item_text)})
+                continue
             
-            # Обрабатываем список как ингредиенты
-            list_ingredients = []
-            for li in items:
+            if avg_length > 100:
+                break
+            
+            list_infos.append({'ul': ul, 'count': len(items), 'avg_length': avg_length})
+        
+        # Определяем сколько списков брать
+        # Простая стратегия: специальная обработка для первых 2 списков
+        lists_to_process = 1
+        
+        if len(list_infos) == 0:
+            return None
+        
+        # Если первый список большой (>= 9), проверяем второй
+        if list_infos[0]['count'] >= 9 and len(list_infos) > 1:
+            # Если второй тоже большой (>= 10), берем оба
+            if list_infos[1]['count'] >= 10:
+                lists_to_process = 2
+        # Если первый список небольшой (< 9), собираем пока не наберем достаточно
+        elif list_infos[0]['count'] < 9:
+            cumulative = 0
+            for idx, info in enumerate(list_infos):
+                cumulative += info['count']
+                # Останавливаемся когда:
+                # - Набрали >= 8 ингредиентов
+                # - Или обработали 3 списка (обычно достаточно)
+                if cumulative >= 8 or idx >= 2:
+                    lists_to_process = idx + 1
+                    break
+            # Если ничего не установлено, берем все доступные (но не больше 4)
+            if lists_to_process == 0:
+                lists_to_process = min(len(list_infos), 4)
+        
+        # Ограничиваем максимум
+        lists_to_process = min(lists_to_process, len(list_infos), 4)
+        
+        # Обрабатываем выбранные списки
+        for idx in range(lists_to_process):
+            ul = list_infos[idx]['ul']
+            for li in ul.find_all('li'):
                 ingredient_text = li.get_text(separator=' ', strip=True)
                 ingredient_text = self.clean_text(ingredient_text)
                 
                 if ingredient_text:
                     parsed = self.parse_ingredient(ingredient_text)
                     if parsed:
-                        list_ingredients.append(parsed)
-            
-            # Добавляем ингредиенты из этого списка
-            ingredients.extend(list_ingredients)
-            lists_processed += 1
-            
-            # Запоминаем размер первого списка
-            if lists_processed == 1:
-                first_list_size = len(list_ingredients)
-            
-            # Останавливаемся если:
-            # - Первый список большой (>= 10 ингредиентов) - значит это полный рецепт
-            # - Или обработали уже 2 списка
-            # - Или набрали больше 22 ингредиентов
-            if (lists_processed == 1 and first_list_size >= 10) or \
-               lists_processed >= 2 or \
-               len(ingredients) > 22:
-                break
+                        ingredients.append(parsed)
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
