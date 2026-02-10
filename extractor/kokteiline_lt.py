@@ -15,6 +15,12 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class KokteilineLtExtractor(BaseRecipeExtractor):
     """Экстрактор для kokteiline.lt"""
     
+    # Ключевые слова, которые указывают на инструкции (не ингредиенты)
+    INSTRUCTION_KEYWORDS = [
+        'supilkite', 'nukoškite', 'papuoškite', 'suplakite',
+        'išmaišykite', 'pripildykite', 'sutarkuodami'
+    ]
+    
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
         # Ищем в заголовке страницы
@@ -89,7 +95,8 @@ class KokteilineLtExtractor(BaseRecipeExtractor):
         # Паттерн для извлечения: название + количество + единица
         # Примеры: "Degtinė 60 ml", "Aviečių likeris 15 ml"
         # Формат: <название> <количество> <единица>
-        pattern = r'^(.+?)\s+([\d.,]+)\s+([a-zA-Zčšžąęėįųūė]+)$'
+        # Поддерживает литовские символы: ą, č, ę, ė, į, š, ų, ū, ž
+        pattern = r'^(.+?)\s+([\d.,]+)\s+(\w+)$'
         
         match = re.match(pattern, text)
         
@@ -145,14 +152,11 @@ class KokteilineLtExtractor(BaseRecipeExtractor):
                     ingredients.append(parsed)
         
         # Фильтруем ингредиенты - убираем те, что похожи на инструкции
-        # (содержат слова типа "supilkite", "nukoškite" и т.д.)
-        instruction_keywords = ['supilkite', 'nukoškite', 'papuoškite', 'suplakite', 
-                                'išmaišykite', 'pripildykite', 'sutarkuodami']
-        
+        # (содержат ключевые слова инструкций)
         filtered_ingredients = []
         for ing in ingredients:
             name_lower = ing['name'].lower()
-            is_instruction = any(keyword in name_lower for keyword in instruction_keywords)
+            is_instruction = any(keyword in name_lower for keyword in self.INSTRUCTION_KEYWORDS)
             if not is_instruction:
                 filtered_ingredients.append(ing)
         
