@@ -158,7 +158,7 @@ def run_parallel(ports: list[int], modules: Optional[list[str]] = None, max_urls
     parser = RecipeParserRunner(extractor_dir="extractor")
 
     # получаем модули для парсинга с учетом max_recipes_per_module и сортируя по убыванию количества рецептов
-    site_names = parser.site_repository.get_extractors(max_recipes=max_recipes_per_module, order="asc")
+    site_names = parser.site_repository.get_extractors(max_recipes=max_recipes_per_module, order="desc", min_recipes=100)
 
     if not modules:
         modules = [site_name for site_name in site_names if site_name in parser.available_extractors]

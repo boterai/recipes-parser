@@ -93,7 +93,7 @@ class BranchManager:
                 logger.info(f"Переключились на ветку {branch} после fetch.")
 
             added_files = [f for f in self.get_added_files(current_branch, branch) 
-                        if 'extractor' in f and f.endswith('.py')]
+                        if 'extractor' in f and f.endswith('.py') and 'test' not in f]
             
             if not added_files:
                 logger.info(f"В ветке {branch} нет добавленных файлов парсеров.")
@@ -145,4 +145,4 @@ class BranchManager:
 
 if __name__ == '__main__':
     manager = BranchManager()
-    manager.delete_branch('copilot/create-parser-for-sallysbakingaddiction')
+    manager.check_branch('copilot/add-libelle-lekker-be-parser')

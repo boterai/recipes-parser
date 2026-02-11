@@ -184,7 +184,7 @@ class SimilaritySearcher:
         with open(self.validated_centroids_filename, 'r') as f:
             raw = json.load(f)
         
-        self.validated_centroids = {int(k): int(v) for k, v in raw.items()}
+        self.validated_centroids = {k: int(v) for k, v in raw.items()}
         logger.info(f"Loaded {len(self.validated_centroids)} validated centroids from {self.validated_centroids_filename}")
 
     def _cosine_similarity(self, vec1: np.ndarray, vec2: np.ndarray) -> float:
@@ -705,9 +705,10 @@ class SimilaritySearcher:
         self.validated_centroids.clear()
         
         for cluster in clusters:
+            cluster_key = ','.join(map(str, sorted(cluster)))
             # Маленькие кластеры пропускаем без проверки
             if len(cluster) < min_cluster_size_for_validation:
-                self.validated_centroids[len(refined)] = cluster[0]
+                self.validated_centroids[cluster_key] = cluster[0]
                 refined.append(cluster)
                 skipped += 1
                 continue
@@ -725,7 +726,7 @@ class SimilaritySearcher:
             
             for subcluster, closest_to_centroid in subclusters:
                 if len(subcluster) >= self.params.min_cluster_size:
-                    self.validated_centroids[len(refined)] = closest_to_centroid
+                    self.validated_centroids[cluster_key] = closest_to_centroid
                     refined.append(subcluster)
         
         logger.info(
@@ -752,10 +753,8 @@ class SimilaritySearcher:
         Args:
             clusters: список кластеров для проверки
             q: QdrantRecipeManager
-            min_cluster_size_for_validation: валидировать только кластеры >= этого размера 
-                                             (default: берётся из self.params)
-            min_avg_similarity: порог похожести для validate_cluster_density
-                               (default: берётся из self.params)
+            min_cluster_size_for_validation: валидировать только кластеры >= этого размера (default: берётся из self.params)
+            min_avg_similarity: порог похожести для validate_cluster_density (default: берётся из self.params)
             
         Returns:
             список уточнённых кластеров
@@ -775,10 +774,11 @@ class SimilaritySearcher:
         self.validated_centroids.clear()
         
         for cluster in clusters:
+            cluster_key = ','.join(map(str, sorted(cluster)))
             # Маленькие кластеры пропускаем без проверки
             if len(cluster) < min_cluster_size_for_validation:
                 # Для невалидированных кластеров берём первый элемент как "центроид"
-                self.validated_centroids[len(refined)] = cluster[0]
+                self.validated_centroids[cluster_key] = cluster[0]
                 refined.append(cluster)
                 skipped += 1
                 continue
@@ -796,7 +796,7 @@ class SimilaritySearcher:
             
             if len(refined_cluster) >= self.params.min_cluster_size:
                 # Сохраняем page_id ближайшего к центроиду рецепта (индекс в refined)
-                self.validated_centroids[len(refined)] = closest_to_centroid if closest_to_centroid else refined_cluster[0]
+                self.validated_centroids[cluster_key] = closest_to_centroid if closest_to_centroid else refined_cluster[0]
                 refined.append(refined_cluster)
                 
                 # Если кластер сильно уменьшился — логируем
@@ -828,115 +828,7 @@ class SimilaritySearcher:
         with open(self.clusters_filename, 'r') as f:
             clusters = json.load(f)
         return clusters
-
-    def is_cluster_present(self, cluster: list[int]) -> bool:
-        if self.similarity_repository.find_cluster_by_exact_members(cluster) is None:
-            logger.info(f"Cluster with pages {cluster} is not present in DB.")
-            return False
-        logger.info(f"Cluster with pages {cluster} is already present in DB.")
-        return True
     
-    def ask_chatgpt_about_cluster(self, cluster: list[int]) -> list[int]:
-        """Анализирует кластер рецептов через GPT и возвращает список ID действительно похожих блюд.
-        
-        Args:
-            cluster: список page_id рецептов в кластере
-            
-        Returns:
-            список page_id рецептов, которые GPT определил как одинаковые/похожие блюда
-        """
-        MAX_RECIPES_PER_REQUEST = 15  # Ограничение на размер кластера для одного запроса к GPT
-        
-        recipes: list[Recipe] = self.clickhouse_manager.get_recipes_by_ids(cluster)
-        
-        if not recipes:
-            logger.warning(f"No recipes found for cluster {cluster}")
-            return []
-        
-        # Если кластер слишком большой - берём первые N рецептов или разбиваем на части
-        if len(recipes) > MAX_RECIPES_PER_REQUEST:
-            logger.warning(f"Cluster too large ({len(recipes)} recipes), taking first {MAX_RECIPES_PER_REQUEST}")
-            recipes = recipes[:MAX_RECIPES_PER_REQUEST]
-        
-        # Формируем данные для GPT: только ключевые поля
-        recipes_data = []
-        for recipe in recipes:
-            recipes_data.append({
-                "id": recipe.page_id,
-                "dish_name": recipe.dish_name,
-                "ingredients": recipe.ingredients[:20] if recipe.ingredients else [],  # ограничиваем количество ингредиентов
-                "instructions": recipe.instructions[:500] if recipe.instructions else ""  # обрезаем длинные инструкции
-            })
-        
-        system_prompt = """You are a recipe similarity expert. Your task is to analyze a group of recipes and determine which ones represent the EXACT SAME DISH with only minimal variations.
-
-Compare recipes based on:
-1. Dish name - must refer to the same dish (e.g., "Chocolate Cake" vs "Šokoladinis tortas" are OK, but "Chocolate Cake" vs "Brownie" are different dishes)
-2. Ingredients - core ingredients must be identical. Minor differences in quantities, optional ingredients, or garnish are acceptable, but substituting main ingredients means different dishes
-3. Instructions - cooking method must be essentially the same. Different techniques (baking vs frying, grilling vs roasting) mean different dishes
-
-Be STRICT: Only group recipes that are clearly the same dish. Different dishes (even if similar category) should be excluded.
-
-Examples of SAME dish: "Italian Tiramisu", "Tiramisu Classico", "Classic Tiramisu Recipe"
-Examples of DIFFERENT dishes: "Tiramisu" vs "Panna Cotta", "Grilled Chicken" vs "Fried Chicken", "Beef Stew" vs "Beef Curry"
-
-CRITICAL: Return ONLY valid JSON array of integers, no markdown, no explanation. Example: [1, 5, 23]"""
-
-        user_prompt = f"""Analyze these recipes and return IDs of those that are the SAME or VERY SIMILAR dishes:
-
-{json.dumps(recipes_data, indent=2, ensure_ascii=False)}
-
-Return ONLY JSON array of IDs representing similar recipes."""
-
-        try:
-            result = self.gpt_client.request(
-                system_prompt=system_prompt,
-                user_prompt=user_prompt,
-                temperature=0.1,
-                max_tokens=500,
-                timeout=60
-            )
-            
-            # GPT должен вернуть массив целых чисел
-            if isinstance(result, list):
-                similar_ids = [int(rid) for rid in result if isinstance(rid, (int, str)) and str(rid).isdigit()]
-                logger.info(f"GPT identified {len(similar_ids)}/{len(recipes)} recipes as similar in cluster")
-                return similar_ids
-            else:
-                logger.error(f"Unexpected GPT response format: {type(result)}")
-                return []
-                
-        except Exception as e:
-            logger.error(f"Error calling GPT for cluster analysis: {e}")
-            return []
-        
-    def process_and_save_clusters(self, clusters: list[list[int]]) -> None:
-        """
-        processes loaded clusters, asks GPT to filter them, and saves to DB, skips already saved clusters.
-        """
-        if not clusters:
-            logger.warning("No clusters to process.")
-            return
-        
-        for num, cluster in enumerate(clusters):
-            if self.is_cluster_present(cluster):
-                continue
-            similar_clusters = self.ask_chatgpt_about_cluster(cluster)
-            if set(similar_clusters) != set(cluster):
-                clusters[num] = similar_clusters
-                if self.clusters_filename:
-                    # Обновляем файл кластеров после любого обновления, чтобы не терять прогресс
-                    with open(self.clusters_filename, 'w') as f:
-                        f.write(json.dumps(clusters, indent=2))
-                    logger.info(f"Updated cluster file {self.clusters_filename} after GPT filtering.")
-            
-            if not similar_clusters:
-                logger.info("Skipping empty cluster after GPT filtering.")
-                continue
-            
-            self.similarity_repository.save_cluster_with_members(similar_clusters)
-            logger.info(f"Saved cluster {num + 1}/{len(clusters)} with {len(similar_clusters)} members.")
-
     def get_image_clusters_mapping(self) -> dict[str, dict[str, list[int]]]:
         """Загружает маппинг кластеров рецептов к изображениям из файла."""
         if not os.path.exists(self.cluter_image_mapping):
@@ -1012,18 +904,17 @@ Return ONLY JSON array of IDs representing similar recipes."""
         logger.info(f"Saved clusters to file {self.clusters_filename}.")
 
 if __name__ == "__main__":
-
     while True:
         ss = SimilaritySearcher(params=ClusterParams(
                     limit=30,
-                    score_threshold=0.89,
+                    score_threshold=0.91,
                     scroll_batch=3500,
-                    centroid_threshold=0.91,
+                    centroid_threshold=0.93,
                     min_cluster_size=4,
                     use_centroid_check=True,
                     union_top_k=15,
                     query_batch=128,
-                    density_min_similarity=0.91
+                    density_min_similarity=0.93
                 ), build_type="full") # "image", "full", "ingredients"
         try:
             ss.load_dsu_state()

@@ -60,7 +60,8 @@ class Config:
     IMAGE_DOWNLOAD_DIR: str = os.getenv('IMAGE_DOWNLOAD_DIR', 'images')
     
     # Настройки слияния рецептов
-    MERGE_SIMILARITY_THRESHOLD: float = float(os.getenv('MERGE_SIMILARITY_THRESHOLD', '0.85'))
+    MERGE_SIMILARITY_THRESHOLD: float = float(os.getenv('MERGE_SIMILARITY_THRESHOLD', '0.89'))
+    MERGE_SIMILARITY_BUILD_TYPE: str = os.getenv('MERGE_SIMILARITY_BUILD_TYPE', 'full')
     MERGE_BATCH_SIZE: int = int(os.getenv('MERGE_BATCH_SIZE', '10'))
     MERGE_MAX_RETRIES: int = int(os.getenv('MERGE_MAX_RETRIES', '5'))
     MERGE_MAX_MERGE_RECIPES: int = int(os.getenv('MERGE_MAX_MERGE_RECIPES', '3'))
@@ -71,11 +72,12 @@ class Config:
     MERGE_HISTORY_FOLDER: str = os.getenv('MERGE_HISTORY_FOLDER', 'history')
     
     # Настройки кластеризации по схожести
-    SIMILARITY_SCROLL_BATCH_SIZE: int = int(os.getenv('SIMILARITY_SCROLL_BATCH_SIZE', '1000'))
+    SIMILARITY_SCROLL_BATCH_SIZE: int = int(os.getenv('SIMILARITY_SCROLL_BATCH_SIZE', '3500'))
     SIMILARITY_QUERY_BATCH_SIZE: int = int(os.getenv('SIMILARITY_QUERY_BATCH_SIZE', '128'))
     SIMILARITY_LIMIT: int = int(os.getenv('SIMILARITY_LIMIT', '30'))
-    SIMILARITY_TOP_K: int = int(os.getenv('SIMILARITY_TOP_K', '5'))
-
+    SIMILARITY_UNION_TOP_K: int = int(os.getenv('SIMILARITY_UNION_TOP_K', '15'))
+    SIMILARITY_MIN_CLUSTER_SIZE_FOR_VALIDATION: int = int(os.getenv('SIMILARITY_MIN_CLUSTER_SIZE_FOR_VALIDATION', '5'))
+    SIMILARITY_MIN_CLUSTER_SIZE: int = int(os.getenv('SIMILARITY_MIN_CLUSTER_SIZE', '4'))
     # настройки парсера
     PARSER_DIR: str = os.getenv('PARSER_DIR', 'parsed')
     PARSER_PREPROCESSED_FOLDER: str = os.getenv('PARSER_PREPROCESSED_FOLDER', 'preprocessed')
