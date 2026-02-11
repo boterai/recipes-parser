@@ -247,6 +247,153 @@ class VmgonlineLtExtractor(BaseRecipeExtractor):
             # Если не удалось конвертировать, возвращаем строку
             return amount_str
     
+    def _extract_ingredients_from_html(self) -> Optional[str]:
+        """Извлечение ингредиентов из HTML текста (fallback)"""
+        text = self.soup.get_text()
+        
+        # Паттерны для поиска начала секции ингредиентов
+        patterns = [
+            r'Įdarytiems grybams pagaminti reikia:',
+            r'Kokosų ir vištienos sriubai paruošti reikia:',
+            r'pagaminti reikia:',
+            r'paruošti reikia:',
+            r'Reikės:',
+            r'reikia:'
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, text, re.IGNORECASE)
+            if match:
+                # Найдем текст после этого паттерна
+                start_idx = match.end()
+                
+                # Найдем конец списка ингредиентов (обычно начинается с заглавной буквы инструкции)
+                # Ищем первое предложение, которое начинается с глагола в повелительном наклонении
+                remaining_text = text[start_idx:start_idx+1500]
+                
+                # Ищем конец ингредиентов - обычно это первое предложение с глаголом
+                # Типичные начала инструкций: Išskobkite, Kepkite, Sudėkite, Supilkite, Citrinžolę
+                instruction_pattern = r'(?<!\d\s)([A-ZĄČĘĖĮŠŲŪŽ][a-ząčęėįšųūž]+(?:kite|inkite|ykite|okite|ėkite))'
+                inst_match = re.search(instruction_pattern, remaining_text)
+                
+                if inst_match:
+                    ingredient_text = remaining_text[:inst_match.start()].strip()
+                else:
+                    # Если не нашли, берем первые 500 символов
+                    ingredient_text = remaining_text[:500].strip()
+                
+                # Парсим ингредиенты из текста
+                ingredients = self._parse_ingredient_list_from_text(ingredient_text)
+                
+                if ingredients:
+                    return json.dumps(ingredients, ensure_ascii=False)
+        
+        return None
+    
+    def _parse_ingredient_list_from_text(self, text: str) -> list:
+        """Парсинг списка ингредиентов из сплошного текста"""
+        ingredients = []
+        
+        # Заменяем неразрывные пробелы на переносы строк для разделения
+        text = text.replace('\xa0', '\n').replace('\u00a0', '\n')
+        
+        # Разделяем по переносам строк (если есть)
+        lines = [line.strip() for line in text.split('\n') if line.strip()]
+        
+        # Если получилось разделить на строки, обрабатываем каждую
+        if len(lines) > 1:
+            for line in lines:
+                parsed = self.parse_ingredient(line)
+                if parsed and parsed.get('name') and len(parsed.get('name', '')) > 1:
+                    ingredients.append(parsed)
+        else:
+            # Если разделения не произошло, текст слит воедино
+            # Вставляем пробелы перед числами, которые идут сразу после букв
+            text = re.sub(r'([a-ząčęėįšųūž])(\d)', r'\1 \2', text)
+            
+            # Разделяем по паттерну: число (или число-диапазон) + пробел + текст
+            parts = re.split(r'(?=\d+(?:\s*[-–—]\s*\d+)?\s+[a-ząčęėįšųūž])', text)
+            
+            for part in parts:
+                part = part.strip()
+                if not part or len(part) < 3:
+                    continue
+                
+                # Парсим ингредиент
+                parsed = self.parse_ingredient(part)
+                if parsed and parsed.get('name') and len(parsed.get('name', '')) > 1:
+                    ingredients.append(parsed)
+        
+        return ingredients
+    
+    def _extract_instructions_from_html(self) -> Optional[str]:
+        """Извлечение инструкций из HTML текста (fallback)"""
+        text = self.soup.get_text()
+        
+        # Сначала ищем нумерованные инструкции (1. 2. 3. и т.д.)
+        numbered_pattern = r'(\d+\.\s+[A-ZĄČĘĖĮŠŲŪŽ][^.]+\.)'
+        numbered_matches = re.findall(numbered_pattern, text, re.DOTALL)
+        
+        if numbered_matches and len(numbered_matches) >= 2:
+            # Нашли нумерованные инструкции
+            # Объединяем их и очищаем
+            instructions_text = ' '.join(numbered_matches)
+            
+            # Убираем нумерацию (опционально, в зависимости от требований)
+            # instructions_text = re.sub(r'^\d+\.\s+', '', instructions_text, flags=re.MULTILINE)
+            
+            # Очищаем от лишнего
+            end_patterns = [
+                r'Gardžių atradimų',
+                r'Žymės:',
+                r'peržiūros',
+                r'Susiję įrašai'
+            ]
+            
+            for end_pattern in end_patterns:
+                end_match = re.search(end_pattern, instructions_text)
+                if end_match:
+                    instructions_text = instructions_text[:end_match.start()]
+            
+            instructions_text = self.clean_text(instructions_text)
+            return instructions_text if instructions_text else None
+        
+        # Если нумерованных не нашли, ищем паттерны для ненумерованных инструкций
+        instruction_patterns = [
+            r'Išskobkite pievagrybių kepurėles',
+            r'Citrinžolę pamuškite',
+            r'(?:^|\n)([A-ZĄČĘĖĮŠŲŪŽ][a-ząčęėįšųūž]+(?:kite|inkite|ykite|okite|ėkite))'
+        ]
+        
+        for pattern in instruction_patterns:
+            match = re.search(pattern, text)
+            if match:
+                start_idx = match.start()
+                
+                # Берем текст от начала инструкций
+                remaining_text = text[start_idx:start_idx+2000]
+                
+                # Ищем конец инструкций
+                end_patterns = [
+                    r'Gardžių atradimų',
+                    r'Žymės:',
+                    r'peržiūros',
+                    r'Susiję įrašai'
+                ]
+                
+                end_idx = len(remaining_text)
+                for end_pattern in end_patterns:
+                    end_match = re.search(end_pattern, remaining_text)
+                    if end_match:
+                        end_idx = min(end_idx, end_match.start())
+                
+                instructions_text = remaining_text[:end_idx].strip()
+                instructions_text = self.clean_text(instructions_text)
+                
+                return instructions_text if instructions_text else None
+        
+        return None
+    
     def extract_ingredients(self) -> Optional[str]:
         """Извлечение ингредиентов"""
         recipe_data = self._get_recipe_json_ld()
@@ -264,7 +411,8 @@ class VmgonlineLtExtractor(BaseRecipeExtractor):
                 
                 return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
         
-        return None
+        # Fallback: извлечение из HTML текста
+        return self._extract_ingredients_from_html()
     
     def extract_instructions(self) -> Optional[str]:
         """Извлечение шагов приготовления"""
@@ -287,7 +435,8 @@ class VmgonlineLtExtractor(BaseRecipeExtractor):
             elif isinstance(instructions, str):
                 return self.clean_text(instructions)
         
-        return None
+        # Fallback: извлечение из HTML текста
+        return self._extract_instructions_from_html()
     
     def extract_category(self) -> Optional[str]:
         """Извлечение категории"""
