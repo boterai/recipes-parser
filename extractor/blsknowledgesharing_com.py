@@ -182,12 +182,155 @@ class BlsknowledgesharingExtractor(BaseRecipeExtractor):
         
         return json.dumps(ingredients, ensure_ascii=False)
     
+    def extract_ingredients_from_table(self) -> Optional[str]:
+        """Извлечение ингредиентов из таблицы"""
+        ingredients = []
+        
+        # Ищем таблицы с заголовком о ингредиентах
+        tables = self.soup.find_all('table', class_='chatgin-table')
+        
+        for table in tables:
+            caption = table.find('caption')
+            if not caption:
+                continue
+            
+            caption_text = caption.get_text()
+            # Проверяем, что таблица содержит ингредиенты (не сравнительная таблица)
+            if '재료' not in caption_text or '비교' in caption_text or '맛' in caption_text:
+                continue
+            
+            # Находим заголовки колонок
+            thead = table.find('thead')
+            if not thead:
+                continue
+            
+            headers = [th.get_text().strip() for th in thead.find_all('th')]
+            
+            # Проверяем, что таблица имеет правильные колонки (재료, 수량, 단위)
+            # Если в заголовках есть "맛" или "난이도", это сравнительная таблица
+            if any(word in ' '.join(headers) for word in ['맛', '난이도', '시간']):
+                continue
+            
+            # Ищем индексы колонок (재료, 수량, 단위)
+            name_idx = None
+            amount_idx = None
+            unit_idx = None
+            
+            for i, header in enumerate(headers):
+                if '재료' in header:
+                    name_idx = i
+                elif '수량' in header:
+                    amount_idx = i
+                elif '단위' in header:
+                    unit_idx = i
+            
+            # Извлекаем данные из таблицы только если есть колонки 수량 и 단위
+            if amount_idx is None or unit_idx is None:
+                continue
+            
+            tbody = table.find('tbody')
+            if not tbody:
+                continue
+            
+            for row in tbody.find_all('tr'):
+                cells = row.find_all(['th', 'td'])
+                if len(cells) < len(headers):
+                    continue
+                
+                ingredient = {}
+                
+                # Извлекаем название
+                if name_idx is not None and name_idx < len(cells):
+                    name = self.clean_text(cells[name_idx].get_text())
+                    ingredient['name'] = name
+                
+                # Извлекаем количество
+                if amount_idx is not None and amount_idx < len(cells):
+                    amount_text = self.clean_text(cells[amount_idx].get_text())
+                    if amount_text:
+                        # Пробуем преобразовать в число
+                        try:
+                            if '/' in amount_text:
+                                # Обрабатываем дроби типа "1/4"
+                                ingredient['amount'] = amount_text
+                            elif '.' in amount_text:
+                                ingredient['amount'] = float(amount_text)
+                            else:
+                                ingredient['amount'] = int(amount_text)
+                        except:
+                            ingredient['amount'] = amount_text
+                    else:
+                        ingredient['amount'] = None
+                else:
+                    ingredient['amount'] = None
+                
+                # Извлекаем единицу измерения
+                if unit_idx is not None and unit_idx < len(cells):
+                    unit = self.clean_text(cells[unit_idx].get_text())
+                    ingredient['units'] = unit if unit else None
+                else:
+                    ingredient['units'] = None
+                
+                if ingredient.get('name'):
+                    ingredients.append(ingredient)
+        
+        if not ingredients:
+            return None
+        
+        return json.dumps(ingredients, ensure_ascii=False)
+    
+    def extract_ingredients_from_text(self) -> Optional[str]:
+        """Извлечение ингредиентов из текста параграфов"""
+        ingredients = []
+        
+        # Ищем параграфы с упоминанием ингредиентов
+        paragraphs = self.soup.find_all('p')
+        
+        for p in paragraphs:
+            text = p.get_text()
+            
+            # Ищем фразы типа "필요한 것은 X, Y, Z뿐입니다"
+            if '필요한 것은' in text and '뿐입니다' in text:
+                # Извлекаем список между "필요한 것은" и "뿐입니다"
+                match = re.search(r'필요한 것은\s+([^.]+?)뿐입니다', text)
+                if match:
+                    ingredient_list = match.group(1)
+                    # Разделяем по запятым и удаляем "и" в конце
+                    ingredient_list = re.sub(r'\s*,\s*$', '', ingredient_list)  # Удаляем конечную запятую
+                    parts = re.split(r',\s+', ingredient_list)
+                    
+                    for part in parts:
+                        part = self.clean_text(part)
+                        if part:
+                            # Удаляем описательные слова перед названием ингредиента
+                            # Например, "신선한 가지" -> "가지" (опционально, оставим как есть для точности)
+                            ingredients.append({
+                                'name': part,
+                                'amount': None,
+                                'units': None
+                            })
+                    
+                    if ingredients:
+                        return json.dumps(ingredients, ensure_ascii=False)
+        
+        return None
+    
     def extract_ingredients(self) -> Optional[str]:
         """Извлечение ингредиентов"""
         # Сначала пробуем извлечь из Q&A секции
         qa_ingredients = self.extract_ingredients_from_qa()
         if qa_ingredients:
             return qa_ingredients
+        
+        # Затем пробуем извлечь из таблицы
+        table_ingredients = self.extract_ingredients_from_table()
+        if table_ingredients:
+            return table_ingredients
+        
+        # Наконец, пробуем извлечь из текста
+        text_ingredients = self.extract_ingredients_from_text()
+        if text_ingredients:
+            return text_ingredients
         
         return None
     
@@ -241,12 +384,54 @@ class BlsknowledgesharingExtractor(BaseRecipeExtractor):
         
         return None
     
+    def extract_instructions_from_list(self) -> Optional[str]:
+        """Извлечение инструкций из упорядоченного списка"""
+        # Ищем заголовки, связанные с инструкциями
+        headers = self.soup.find_all(['h2', 'h3', 'h4'])
+        
+        for header in headers:
+            header_text = header.get_text()
+            
+            # Проверяем, что заголовок связан с инструкциями
+            if '요리 순서' in header_text or '만드는 방법' in header_text or '조리법' in header_text:
+                # Ищем следующий <ol> список после заголовка
+                next_sibling = header.find_next_sibling()
+                
+                # Перебираем следующие элементы
+                while next_sibling:
+                    if next_sibling.name == 'ol':
+                        # Нашли упорядоченный список
+                        steps = []
+                        for li in next_sibling.find_all('li', recursive=False):
+                            step_text = self.clean_text(li.get_text())
+                            if step_text:
+                                steps.append(step_text)
+                        
+                        if steps:
+                            # Объединяем шаги в одну строку с номерами
+                            numbered_steps = [f"{i+1}. {step}" for i, step in enumerate(steps)]
+                            return ' '.join(numbered_steps)
+                    
+                    # Переходим к следующему элементу
+                    next_sibling = next_sibling.find_next_sibling()
+                    
+                    # Прекращаем поиск, если встретили новый заголовок
+                    if next_sibling and next_sibling.name in ['h2', 'h3', 'h4']:
+                        break
+        
+        return None
+    
     def extract_steps(self) -> Optional[str]:
         """Извлечение шагов приготовления"""
         # Сначала пробуем извлечь из Q&A
         qa_steps = self.extract_instructions_from_qa()
         if qa_steps:
             return qa_steps
+        
+        # Затем пробуем извлечь из упорядоченного списка
+        list_steps = self.extract_instructions_from_list()
+        if list_steps:
+            return list_steps
         
         return None
     
