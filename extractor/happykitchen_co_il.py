@@ -76,6 +76,41 @@ class HappyKitchenExtractor(BaseRecipeExtractor):
         # Ищем структурированные ингредиенты с классом wprm-recipe-ingredient
         ingredient_items = self.soup.find_all(class_='wprm-recipe-ingredient')
         
+        # Если WPRM ингредиенты не найдены, ищем альтернативный формат
+        if not ingredient_items:
+            # Ищем заголовок с "החומרים" или "רכיבים"
+            ingredient_header = self.soup.find(['h2', 'h3', 'h4', 'strong'], 
+                                              string=lambda t: t and ('החומרים' in t or 'רכיבים' in t))
+            
+            if ingredient_header:
+                # Берем следующий элемент после заголовка (обычно это параграф со списком)
+                next_elem = ingredient_header.find_next_sibling()
+                if next_elem:
+                    # Получаем текст и разбиваем на строки
+                    text = next_elem.get_text()
+                    lines = [line.strip() for line in text.split('\n') if line.strip()]
+                    
+                    for line in lines:
+                        # Обрабатываем опциональные ингредиенты (начинаются с *)
+                        if line.startswith('*'):
+                            # Убираем * и парсим как обычный ингредиент
+                            line = line.lstrip('* ').strip()
+                            # Убираем комментарий после –
+                            if '–' in line:
+                                line = line.split('–')[0].strip()
+                            elif '-' in line and 'רק אם' in line:
+                                # Другой вариант разделителя
+                                parts = line.split('-')
+                                # Проверяем, что это не диапазон чисел
+                                if len(parts) > 1 and 'רק' in parts[1]:
+                                    line = '-'.join(parts[:-1]).strip()
+                        
+                        # Парсим строку ингредиента
+                        parsed = self._parse_ingredient_line(line)
+                        if parsed:
+                            ingredients.append(parsed)
+        
+        # Если найдены WPRM элементы, используем их
         for item in ingredient_items:
             # Извлекаем структурированные данные
             amount_elem = item.find(class_='wprm-recipe-ingredient-amount')
@@ -154,6 +189,107 @@ class HappyKitchenExtractor(BaseRecipeExtractor):
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
+    def _parse_ingredient_line(self, line: str) -> Optional[dict]:
+        """
+        Парсинг строки ингредиента в формате: "количество единица название"
+        Например: "150 גרם חמאה" -> {name: "חמאה", amount: 150, units: "גרם"}
+        """
+        if not line:
+            return None
+        
+        line = self.clean_text(line)
+        
+        # Паттерн для извлечения: число + единица измерения + название
+        # Поддерживаемые единицы: גרם, כוס, כפית, כפות, מ"ל и т.д.
+        pattern = r'^([\d\-/.,]+)\s+(גרם|כוס|כוסות|כפית|כפות|מ"ל|ליטר|ק"ג|קורט|M)?\s*(.+)$'
+        match = re.match(pattern, line)
+        
+        if match:
+            amount_str, unit, name = match.groups()
+            
+            # Очистка названия - убираем уточнения в скобках в начале
+            # Например: "(3/4 כוס) סוכר" -> "סוכר"
+            name = re.sub(r'^\([^)]+\)\s*', '', name)
+            
+            # Обработка количества
+            amount = None
+            try:
+                # Очистка количества
+                amount_clean = amount_str.strip().replace(',', '.')
+                # Если это диапазон типа "2-3", оставляем как строку
+                if '-' in amount_clean and '/' not in amount_clean:
+                    amount = amount_clean
+                elif '/' in amount_clean:
+                    # Дробь типа "3/4"
+                    parts = amount_clean.split('/')
+                    amount = round(float(parts[0]) / float(parts[1]), 2)
+                else:
+                    amount_num = float(amount_clean)
+                    amount = int(amount_num) if amount_num.is_integer() else amount_num
+            except (ValueError, ZeroDivisionError):
+                amount = amount_str
+            
+            return {
+                "name": name.strip(),
+                "units": unit,
+                "amount": amount
+            }
+        
+        # Если паттерн не совпал, попробуем просто число в начале
+        pattern2 = r'^([\d\-/.,]+)\s+(.+)$'
+        match2 = re.match(pattern2, line)
+        if match2:
+            amount_str, rest = match2.groups()
+            
+            # Очистка rest - убираем уточнения в скобках в начале
+            rest = re.sub(r'^\([^)]+\)\s*', '', rest)
+            
+            # Пытаемся найти единицу измерения в начале остатка
+            parts = rest.split(None, 1)
+            if len(parts) == 2 and parts[0] in ['גרם', 'כוס', 'כוסות', 'כפית', 'כפות', 'מ"ל', 'ליטר', 'ק"ג', 'קורט']:
+                unit = parts[0]
+                name = parts[1]
+            else:
+                unit = None
+                name = rest
+            
+            # Обработка количества
+            amount = None
+            try:
+                amount_clean = amount_str.strip().replace(',', '.')
+                if '-' in amount_clean and '/' not in amount_clean:
+                    amount = amount_clean
+                elif '/' in amount_clean:
+                    parts_frac = amount_clean.split('/')
+                    amount = round(float(parts_frac[0]) / float(parts_frac[1]), 2)
+                else:
+                    amount_num = float(amount_clean)
+                    amount = int(amount_num) if amount_num.is_integer() else amount_num
+            except (ValueError, ZeroDivisionError):
+                amount = amount_str
+            
+            return {
+                "name": name.strip(),
+                "units": unit,
+                "amount": amount
+            }
+        
+        # Если нет числа в начале, проверяем формат "כפית название"
+        parts = line.split(None, 1)
+        if len(parts) == 2 and parts[0] in ['כפית', 'כפות', 'קורט', 'כוס']:
+            return {
+                "name": parts[1].strip(),
+                "units": parts[0],
+                "amount": 1  # Подразумеваем 1
+            }
+        
+        # Если нет числа в начале, возвращаем как есть с null для amount и units
+        return {
+            "name": line,
+            "units": None,
+            "amount": None
+        }
+    
     def extract_instructions(self) -> Optional[str]:
         """Извлечение инструкций приготовления"""
         instructions = []
@@ -208,6 +344,34 @@ class HappyKitchenExtractor(BaseRecipeExtractor):
             text = self.clean_text(text)
             if text:
                 instructions.append(text)
+        
+        # Если WPRM инструкции не найдены, ищем альтернативный формат
+        if not instructions:
+            # Ищем все параграфы после заголовка с ингредиентами
+            # Обычно инструкции идут после списка ингредиентов
+            ingredient_header = self.soup.find(['h2', 'h3', 'h4'], 
+                                              string=lambda t: t and ('החומרים' in t or 'רכיבים' in t))
+            
+            if ingredient_header:
+                # Находим следующие параграфы после раздела ингредиентов
+                current = ingredient_header
+                # Пропускаем раздел ингредиентов (обычно это 1-2 элемента)
+                for _ in range(2):
+                    if current:
+                        current = current.find_next_sibling()
+                
+                # Собираем текст из следующих параграфов
+                para_count = 0
+                while current and para_count < 20:  # Ограничение на количество параграфов
+                    if current.name == 'p':
+                        text = current.get_text().strip()
+                        # Проверяем, что это не заголовок другого рецепта
+                        if text and len(text) > 20 and not current.find('h2') and not current.find('h3'):
+                            # Фильтруем рекламу и шум
+                            if not any(noise in text for noise in ['Store and/or access', 'פרסום', 'ניוזלטר']):
+                                instructions.append(self.clean_text(text))
+                        para_count += 1
+                    current = current.find_next_sibling()
         
         return ' '.join(instructions) if instructions else None
     
