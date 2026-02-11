@@ -1016,15 +1016,15 @@ if __name__ == "__main__":
     while True:
         ss = SimilaritySearcher(params=ClusterParams(
                     limit=30,
-                    score_threshold=0.92,
+                    score_threshold=0.89,
                     scroll_batch=3500,
-                    centroid_threshold=0.92,
+                    centroid_threshold=0.91,
                     min_cluster_size=4,
                     use_centroid_check=True,
-                    union_top_k=20,
+                    union_top_k=15,
                     query_batch=128,
-                    density_min_similarity=0.93
-                ), build_type="ingredients") # "image", "full", "ingredients"
+                    density_min_similarity=0.91
+                ), build_type="full") # "image", "full", "ingredients"
         try:
             ss.load_dsu_state()
             last_id = ss.last_id # получаем last id после загрузки состояния (такая штука работает только опираясь на тот факт, что каждй вновь доавбленный рецепт имеет id не меньше уже векторизованных рецептов, иначе рецепты могут быть пропущены)

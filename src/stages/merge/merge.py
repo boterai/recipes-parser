@@ -22,16 +22,14 @@ if __name__ == "__main__":
 
 from src.models.page import Recipe
 from src.models.merged_recipe import MergedRecipe
-from src.models.image import Image
 from src.common.gpt.client import GPTClient
 from src.common.db.clickhouse import ClickHouseManager
 from src.repositories.page import PageRepository
 from src.repositories.merged_recipe import MergedRecipeRepository
 from src.repositories.image import ImageRepository
+from config.config import config
 
 logger = logging.getLogger(__name__)
-
-GPT_MODEL_MERGE = os.getenv('GPT_MODEL_MERGE', 'gpt-4o-mini')
 
 class ConservativeRecipeMerger:
     """Консервативное объединение рецептов без изменения сути"""
@@ -427,7 +425,7 @@ Remember: multiple images ONLY if they're clearly the same dish photographed fro
 class ClusterVariationGenerator:
     """Генератор вариаций из кластера рецептов"""
     
-    def __init__(self, score_threshold: float = 0.94, clusters_build_type: str = "full"):
+    def __init__(self, score_threshold: float = 0.94, clusters_build_type: str = "full", max_recipes_per_gpt_merge_request: int = 3):
         self.merger = ConservativeRecipeMerger()
         self._olap_db = None
         self.page_repository = PageRepository()
@@ -436,15 +434,439 @@ class ClusterVariationGenerator:
         self.score_threshold = score_threshold
         self.clusters_build_type = clusters_build_type
         self.merged_recipe_schema = json.load(open("src/models/schemas/merged_recipe.json", "r", encoding="utf-8"))
+        self.max_merge_recipes_per_request = max_recipes_per_gpt_merge_request # макс кол-во рецептов для передачи в 1 запросе при генерации вариации через GPT (включая базовый рецепт)
 
     @property
     def olap_db(self) -> ClickHouseManager:
-        """Ленивая инициализация ClickHouse менеджера"""
         if not self._olap_db:
             self._olap_db = ClickHouseManager()
             if not self._olap_db.connect():
-                raise ConnectionError("Не удалось подключиться к ClickHouse OLAP базе")
+                raise ConnectionError("Не удалось подключиться к ClickHouse")
         return self._olap_db
+
+    async def create_canonical_recipe_with_gpt(
+        self, 
+        existing_merged: Optional[MergedRecipe],
+        base_recipe_id: int, 
+        cluster_recipes: list[int], 
+        target_language: Optional[str] = None,
+        save_to_db: bool = True,
+        max_aggregaeted_recipes: int = 5
+    ) -> Optional[MergedRecipe]:
+        """
+        Генерирует каноничный рецепт для кластера через GPT, комбинируя информацию из всех рецептов кластера.
+        Основывается на базовом рецепте (самой середине кластера) и добавляет элементы из других рецептов, 
+        сохраняя суть блюда и не позволяя рецепту "дрейфовать".
+        
+        Алгоритм:
+        1. Изначально выбирается базовый рецепт (самый центр по кластеру - передается извне) и если присутсвует существующий merged рецепт - он используется как основа для расширения, иначе - базовый рецепт.
+        3. Если есть - проверяется какими рецептами он еще не расширен, расширяется оставшимися
+        4. Если расширен всеми - ничего не делается (возвращается существующий)
+        5. Если нет merge - создается новый merge рецепт на основе базового и других рецептов кластера
+        6. После каждого расширения проводится валидация относительно БАЗОВОГО рецепта.
+           Если валидация не пройдена - откат последнего добавления, продолжаем с другими рецептами
+        
+        Args:
+            existing_merged: Существующий MergedRecipe для данного base_recipe_id (если есть)
+            base_recipe_id: page_id базового рецепта (ближайшего к центроиду кластера)
+            cluster_recipes: Список page_id рецептов кластера (включая base_recipe_id)
+            target_language: Целевой язык для генерации
+            save_to_db: Сохранять ли результат в БД
+            max_aggregaeted_recipes: Максимальное количество рецептов из кластера для агрегации в один canonical (включая базовый). Если в кластере больше, будут выбраны рандомные
+            
+        Returns:
+            MergedRecipe или None если не удалось создать
+        """
+        if existing_merged:
+            used_page_ids = set(existing_merged.page_ids or [])
+
+            # Находим неиспользованные рецепты
+            remaining_recipes = [pid for pid in cluster_recipes if pid not in used_page_ids]
+            
+            if not remaining_recipes:
+                logger.info(f"Canonical recipe для base_recipe_id={base_recipe_id} уже полностью расширен")
+                return existing_merged
+            
+            max_aggregaeted_recipes = min(1, max_aggregaeted_recipes - len(remaining_recipes))
+            
+            logger.info(f"Расширяем существующий canonical recipe {existing_merged.id} "
+                       f"добавлением {len(remaining_recipes)} рецептов")
+            
+            # Расширяем существующий merged recipe
+            return await self._expand_canonical_recipe(
+                existing_merged=existing_merged,
+                base_recipe_id=base_recipe_id,
+                new_recipe_ids=remaining_recipes,
+                target_language=target_language,
+                save_to_db=save_to_db,
+                max_aggregaeted_recipes=max_aggregaeted_recipes
+            )
+        
+        # Создаем новый canonical recipe
+        logger.info(f"Создаем новый canonical recipe для base_recipe_id={base_recipe_id}")
+        return await self._create_new_canonical_recipe(
+            base_recipe_id=base_recipe_id,
+            cluster_recipes=cluster_recipes,
+            target_language=target_language,
+            save_to_db=save_to_db,
+            max_aggregaeted_recipes=max_aggregaeted_recipes
+        )
+    
+    async def _create_new_canonical_recipe(
+        self,
+        base_recipe_id: int,
+        cluster_recipes: list[int],
+        target_language: Optional[str] = None,
+        save_to_db: bool = True, 
+        max_aggregaeted_recipes: int = 5
+    ) -> Optional[MergedRecipe]:
+        """Создать новый canonical recipe с нуля"""
+        
+        # Получаем базовый рецепт из ClickHouse
+        base_recipes = self.olap_db.get_recipes_by_ids([base_recipe_id])
+        if not base_recipes:
+            logger.error(f"Базовый рецепт {base_recipe_id} не найден в ClickHouse")
+            return None
+        
+        base_recipe = base_recipes[0]
+        if not base_recipe.ingredients_with_amounts:
+            base_recipe.fill_ingredients_with_amounts(self.page_repository)
+        
+        # Язык из базового рецепта или переданный
+        recipe_language = target_language or base_recipe.language or 'en'
+        base_recipe.language = recipe_language
+        
+        # Начинаем с merged recipe только из базового рецепта
+        current_merged = MergedRecipe(
+            page_ids=[base_recipe_id],
+            base_recipe_id=base_recipe_id,
+            dish_name=base_recipe.dish_name,
+            description=base_recipe.description or '',
+            ingredients=base_recipe.ingredients_with_amounts or [],
+            instructions=base_recipe.instructions or '',
+            tags=base_recipe.tags or [],
+            cook_time=str(base_recipe.cook_time or ''),
+            prep_time=str(base_recipe.prep_time or ''),
+            merge_comments=f"canonical from base {base_recipe_id}",
+            language=recipe_language,
+            cluster_type=self.clusters_build_type,
+            score_threshold=self.score_threshold,
+            gpt_validated=True,
+            merge_model=config.GPT_MODEL_MERGE
+        )
+        
+        # Итеративно добавляем рецепты из кластера batch'ами
+        other_recipe_ids = [pid for pid in cluster_recipes if pid != base_recipe_id]
+        
+        # Batch size = max_merge_recipes_per_request - 1 (1 слот занят canonical/base)
+        batch_size = min(max_aggregaeted_recipes, max(1, self.max_merge_recipes_per_request - 1))
+        aggregated_count = 0
+        
+        for i in range(0, len(other_recipe_ids), batch_size):
+            batch_ids = other_recipe_ids[i:i + batch_size]
+            batch_ids = batch_ids[:min(max_aggregaeted_recipes - aggregated_count, len(batch_ids))]  # Учитываем уже добавленные рецепты
+            if not batch_ids:
+                break
+            
+            # Пробуем расширить batch'ем
+            expanded = await self._try_expand_with_recipes_batch(
+                current_merged=current_merged,
+                base_recipe=base_recipe,
+                new_recipe_ids=batch_ids,
+                target_language=recipe_language
+            )
+            
+            if expanded:
+                current_merged = expanded
+                logger.info(f"✓ Canonical recipe расширен batch'ем {batch_ids}")
+                aggregated_count += len(batch_ids)
+            else:
+                # Fallback: пробуем по одному если batch не прошёл
+                logger.info(f"✗ Batch {batch_ids} не прошёл, пробуем по одному...")
+                for recipe_id in batch_ids:
+                    single_expanded = await self._try_expand_with_recipes_batch(
+                        current_merged=current_merged,
+                        base_recipe=base_recipe,
+                        new_recipe_ids=[recipe_id],
+                        target_language=recipe_language
+                    )
+                    if single_expanded:
+                        current_merged = single_expanded
+                        logger.info(f"✓ Canonical recipe расширен рецептом {recipe_id}")
+                        aggregated_count += 1
+
+                    else:
+                        logger.info(f"✗ Рецепт {recipe_id} не прошел валидацию, пропущен")
+            
+            if aggregated_count >= max_aggregaeted_recipes:
+                logger.info(f"Достигнут лимит агрегации {max_aggregaeted_recipes} рецептов, прекращаем расширение")
+                break
+        
+        # Сохраняем в БД
+        if save_to_db and current_merged:
+            try:
+                saved = self.merge_repository.create_merged_recipe(current_merged)
+                current_merged.id = saved.id
+                logger.info(f"✓ Canonical recipe сохранён, id={saved.id}")
+            except Exception as e:
+                logger.error(f"Ошибка сохранения canonical recipe: {e}")
+        
+        return current_merged
+    
+    async def _expand_canonical_recipe(
+        self,
+        existing_merged: MergedRecipe,
+        base_recipe_id: int,
+        new_recipe_ids: list[int],
+        target_language: Optional[str] = None,
+        save_to_db: bool = True,
+        max_aggregaeted_recipes: int = 5
+    ) -> Optional[MergedRecipe]:
+        """Расширить существующий canonical recipe новыми рецептами (batch по max_merge_recipes_per_request-1)"""
+        
+        # Получаем базовый рецепт для валидации
+        base_recipes = self.olap_db.get_recipes_by_ids([base_recipe_id])
+        if not base_recipes:
+            logger.error(f"Базовый рецепт {base_recipe_id} не найден")
+            return existing_merged
+        
+        base_recipe = base_recipes[0]
+        if not base_recipe.ingredients_with_amounts:
+            base_recipe.fill_ingredients_with_amounts(self.page_repository)
+        
+        recipe_language = target_language or base_recipe.language or 'en'
+        current_merged = existing_merged
+        
+        had_expansions = False
+        # Batch size = max_merge_recipes_per_request - 1 (1 слот занят canonical/base)
+        batch_size = min(max_aggregaeted_recipes, max(1, self.max_merge_recipes_per_request - 1))
+        aggregated_count = 0
+
+        for i in range(0, len(new_recipe_ids), batch_size):
+            batch_ids = new_recipe_ids[i:i + batch_size]
+            batch_ids = batch_ids[:min(max_aggregaeted_recipes - aggregated_count, len(batch_ids))]  # Учитываем уже добавленные рецепты
+            if not batch_ids:
+                break
+
+            expanded = await self._try_expand_with_recipes_batch(
+                current_merged=current_merged,
+                base_recipe=base_recipe,
+                new_recipe_ids=batch_ids,
+                target_language=recipe_language
+            )
+            
+            if expanded:
+                current_merged = expanded
+                had_expansions = True
+                logger.info(f"✓ Canonical recipe расширен batch'ем {batch_ids}")
+                aggregated_count += len(batch_ids)
+            else:
+                # Fallback: пробуем по одному если batch не прошёл
+                logger.info(f"✗ Batch {batch_ids} не прошёл, пробуем по одному...")
+                for recipe_id in batch_ids:
+                    single_expanded = await self._try_expand_with_recipes_batch(
+                        current_merged=current_merged,
+                        base_recipe=base_recipe,
+                        new_recipe_ids=[recipe_id],
+                        target_language=recipe_language
+                    )
+                    if single_expanded:
+                        current_merged = single_expanded
+                        had_expansions = True
+                        logger.info(f"✓ Canonical recipe расширен рецептом {recipe_id}")
+                        aggregated_count += 1
+                    else:
+                        logger.info(f"✗ Рецепт {recipe_id} не прошел валидацию, пропущен")
+
+            if aggregated_count >= max_aggregaeted_recipes:
+                logger.info(f"Достигнут лимит агрегации {max_aggregaeted_recipes} рецептов, прекращаем расширение")
+                break
+        
+        # Обновляем в БД если были изменения
+        if save_to_db and had_expansions:
+            try:
+                updated = self.merge_repository.update_merged_recipe(existing_merged.id, current_merged)
+                if updated:
+                    logger.info(f"✓ Canonical recipe {existing_merged.id} обновлен")
+            except Exception as e:
+                logger.error(f"Ошибка обновления canonical recipe: {e}")
+        
+        return current_merged
+    
+    async def _try_expand_with_recipes_batch(
+        self,
+        current_merged: MergedRecipe,
+        base_recipe: Recipe,
+        new_recipe_ids: list[int],
+        target_language: str
+    ) -> Optional[MergedRecipe]:
+        """
+        Попытка расширить merged recipe добавлением batch рецептов (до max_merge_recipes_per_request-1).
+        Возвращает расширенный рецепт если валидация прошла, иначе None.
+        """
+        # Получаем новые рецепты
+        new_recipes = self.olap_db.get_recipes_by_ids(new_recipe_ids)
+        if not new_recipes:
+            logger.warning(f"Рецепты {new_recipe_ids} не найдены в ClickHouse")
+            return None
+        
+        for recipe in new_recipes:
+            if not recipe.ingredients_with_amounts:
+                recipe.fill_ingredients_with_amounts(self.page_repository)
+        
+        # Генерируем расширенную версию через GPT (batch)
+        expanded = await self._generate_expanded_canonical(
+            current_merged=current_merged,
+            base_recipe=base_recipe,
+            new_recipes=new_recipes,
+            target_language=target_language
+        )
+        
+        if not expanded:
+            return None
+        
+        # Валидация против БАЗОВОГО рецепта
+        is_valid, reason = await self.merger.validate_with_gpt(base_recipe, expanded)
+        
+        if not is_valid:
+            logger.warning(f"Расширение рецептами {new_recipe_ids} не прошло валидацию: {reason}")
+            return None
+        
+        # Обновляем page_ids
+        added_ids = [r.page_id for r in new_recipes if r.page_id not in (expanded.page_ids or [])]
+        expanded.page_ids = (current_merged.page_ids or []) + added_ids
+        
+        expanded.gpt_validated = True
+        return expanded
+    
+    async def _generate_expanded_canonical(
+        self,
+        current_merged: MergedRecipe,
+        base_recipe: Recipe,
+        new_recipes: list[Recipe],
+        target_language: str
+    ) -> Optional[MergedRecipe]:
+        """Генерация расширенного canonical recipe через GPT (batch до max_merge_recipes_per_request-1 рецептов)"""
+        
+        if not new_recipes:
+            return None
+        
+        if target_language:
+            language_instruction = f"Output in {target_language.upper()} language. Translate ALL text including dish name, ingredients, instructions, AND measurement units."
+        else:
+            language_instruction = "Use the SAME language as the canonical recipe"
+        
+        num_sources = len(new_recipes)
+        sources_word = "source recipe" if num_sources == 1 else f"{num_sources} source recipes"
+        
+        system_prompt = f"""Merge CANONICAL recipe with {sources_word} into one DEFINITIVE consensus recipe.
+
+RULES:
+1. {language_instruction}
+2. SOURCE-ONLY: Use ONLY data from provided recipes. NEVER invent ingredients, temperatures, timings, or techniques.
+3. CONSISTENCY: Every ingredient MUST appear in instructions; every instruction ingredient MUST be in the list. If amounts mentioned in steps — they must match the list (or omit amounts: "add flour" is OK).
+4. EXECUTABLE: Steps in logical order, realistic temps/times, proper techniques for each ingredient type.
+5. NO OPTIONALS: No "optional", "alternatively", "to taste". Every ingredient is definitive.
+6. FORMAT: Instructions as "Step 1. Action. Step 2. Action..." — single string, no bullets/linebreaks.
+7. TAGS: Preserve tags that appear in 2+ source recipes. Add new tags only if clearly applicable to final dish.
+
+MERGE LOGIC:
+- 2+ sources have ingredient → include with averaged amount
+- Only 1 source + canonical has 8+ ingredients → skip it
+- Prefer improving instructions/description over adding more ingredients
+- cook_time/prep_time must match actual steps described
+
+Return JSON only:
+{{"dish_name": "name", "description": "2-4 sentences", "ingredients_with_amounts": [{{"name": "x", "amount": 100, "unit": "g"}}], "instructions": "Step 1. ... Step 2. ...", "tags": ["tag1"], "cook_time": "X min" or null, "prep_time": "X min" or null, "enhancement_notes": "changes made"}}"""
+
+        def format_merged(m: MergedRecipe) -> str:
+            ings = m.ingredients or []
+            ing_list = "\n".join([
+                f"  - {ing.get('name', '')}: {ing.get('amount', '')} {ing.get('unit', '')}"
+                for ing in ings[:30]
+            ])
+            return f"""Name: {m.dish_name}
+Description: {m.description or 'N/A'}
+Prep: {m.prep_time or 'N/A'}, Cook: {m.cook_time or 'N/A'}
+Tags: {', '.join(m.tags or [])}
+Ingredients:
+{ing_list}
+Instructions: {(m.instructions or '')[:5000]}"""
+
+        def format_recipe(r: Recipe, label: str) -> str:
+            ings = r.ingredients_with_amounts or []
+            ing_list = "\n".join([
+                f"  - {ing.get('name', '')}: {ing.get('amount', '')} {ing.get('unit', '')}"
+                for ing in ings[:30]
+            ])
+            return f"""{label}:
+Name: {r.dish_name}
+Description: {(r.description or 'N/A')[:500]}
+Prep: {r.prep_time or 'N/A'}, Cook: {r.cook_time or 'N/A'}
+Tags: {', '.join(r.tags or [])}
+Ingredients:
+{ing_list}
+Instructions: {(r.instructions or '')[:5000]}"""
+
+        # Формируем prompt с несколькими source recipes
+        sources_text = "\n\n".join([
+            format_recipe(r, f"SOURCE RECIPE {i+1} (page_id={r.page_id})")
+            for i, r in enumerate(new_recipes)
+        ])
+        
+        user_prompt = f"""BASE RECIPE (the original, must be preserved):
+{format_recipe(base_recipe, 'BASE RECIPE')}
+
+CURRENT CANONICAL RECIPE (our refined version):
+{format_merged(current_merged)}
+
+{sources_text}
+
+TASK: Enhance the CANONICAL recipe with elements from the {num_sources} SOURCE RECIPE(S), but keep it true to the BASE.
+Only add elements that enhance without changing the dish's identity.
+If sources have conflicting info, prefer the most common or reasonable approach."""
+        try:
+            result = await self.merger.gpt_client.async_request(
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                temperature=0.2,  # Низкая температура для консервативности
+                max_tokens=2500,
+                request_timeout=90,
+                model=config.GPT_MODEL_MERGE,
+                response_schema=self.merged_recipe_schema
+            )
+            
+            if not result or not isinstance(result, dict):
+                return None
+            
+            # Формируем merge_comments с информацией о добавленных рецептах
+            added_ids = [str(r.page_id) for r in new_recipes]
+            enhancement_notes = result.get('enhancement_notes', '')
+            merge_comment = f"{current_merged.merge_comments}; +[{','.join(added_ids)}]: {enhancement_notes}"
+            
+            expanded = MergedRecipe(
+                page_ids=current_merged.page_ids,
+                base_recipe_id=current_merged.base_recipe_id,
+                dish_name=result.get('dish_name', current_merged.dish_name),
+                description=result.get('description', current_merged.description),
+                ingredients=result.get('ingredients_with_amounts', current_merged.ingredients),
+                instructions=result.get('instructions', current_merged.instructions),
+                tags=result.get('tags', current_merged.tags),
+                cook_time=str(result.get('cook_time') or current_merged.cook_time or ''),
+                prep_time=str(result.get('prep_time') or current_merged.prep_time or ''),
+                merge_comments=merge_comment,
+                language=current_merged.language,
+                cluster_type=current_merged.cluster_type,
+                score_threshold=current_merged.score_threshold,
+                gpt_validated=False,
+                merge_model=config.GPT_MODEL_MERGE
+            )
+            
+            return expanded
+            
+        except Exception as e:
+            logger.error(f"GPT canonical expansion failed: {e}")
+            return None
     
 
     async def generate_variations(self, base: Recipe, batch_recipes: list[Recipe], variation_index: int,
@@ -513,8 +935,6 @@ class ClusterVariationGenerator:
             target_language=recipe_language
             )
     
-    
-
     async def create_variations_from_cluster(
         self,
         recipes: list[Recipe],
@@ -644,7 +1064,7 @@ class ClusterVariationGenerator:
         images = self.image_repository.get_by_page_ids(merged_recipe.page_ids)
         if not images:
             logger.warning(f"Изображения для MergedRecipe ID {merged_recipe.id} не найдены")
-            return
+            return False
         
         urls = [img.image_url for img in images if img.image_url]
 
@@ -656,7 +1076,7 @@ class ClusterVariationGenerator:
         valid_images_id = [img.id for img in images if img.image_url in valid_urls]
         self.merge_repository.add_images_to_recipe(merged_recipe.id, valid_images_id)
         return True
-    
+
     async def _generate_single_variation_gpt(
         self,
         base: Recipe,
@@ -680,62 +1100,19 @@ class ClusterVariationGenerator:
         else:
             language_instruction = "Use the SAME language as the input recipes (they are all in the same language)"
         
-        system_prompt = f"""You are a professional chef creating a recipe variation.
+        system_prompt = f"""Create ONE executable recipe variation by combining the provided recipes.
 
-TASK: Create ONE EXECUTABLE recipe variation from the provided recipes.
+RULES:
+1. {language_instruction}
+2. SOURCE-ONLY: Use ONLY ingredients/techniques from provided recipes. NEVER invent.
+3. CONSISTENCY: Every ingredient in list MUST appear in instructions and vice versa. Amounts must match.
+4. EXECUTABLE: Logical step order, realistic temps/times.
+5. FORMAT: Instructions as "Step 1. Action. Step 2. Action..." — single string, no bullets/linebreaks.
+6. TAGS: Preserve common tags from source recipes (present in 2+ sources). Add 3-7 lowercase English tags total (e.g. "vegetarian", "italian", "baked").
+7. UNITS in {language_instruction.split()[3] if 'language' in language_instruction.lower() else 'target'} language.
 
-STRICT RULES - DO NOT VIOLATE:
-1. USE ONLY ingredients and techniques from the provided recipes - DO NOT invent new ones
-2. Combine elements from source recipes in a unique way
-3. Output language: {language_instruction}
-4. The recipe must be EXECUTABLE and REALISTIC:
-   - All ingredients must be used in instructions
-   - Cooking times must be realistic
-   - Steps must be in logical order
-5. CONSISTENCY: amounts in instructions MUST match ingredients_with_amounts exactly
-6. Preserve the core dish identity - the result must be the same dish type
-7. INSTRUCTIONS FORMAT - ALWAYS use this exact format:
-   "Step 1. First instruction text. Step 2. Second instruction text. Step 3. ..."
-   - Each step starts with "Step N." (with period after number)
-   - Number of steps can vary (from 2 to 20+) - use as many as needed
-   - All steps in a single string, separated by spaces
-   - No line breaks, no bullet points, no dashes
-   - Keep steps clear and concise
-
-FORBIDDEN:
-- Adding ingredients not present in ANY source recipe
-- Inventing new cooking techniques not mentioned in sources
-- Changing the fundamental nature of the dish
-- Using placeholder or vague instructions
-- Using numbered lists, bullet points, or line breaks in instructions
-
-Return ONLY valid JSON (no markdown):
-{{
-  "dish_name": "name",
-  "description": "description",
-  "ingredients_with_amounts": [
-    {{"name": "ingredient name", "amount": 100, "unit": "g"}},
-    ...
-  ],
-  "instructions": "Step 1. Do this. Step 2. Then do that. Step 3. Continue with... (as many steps as needed)",
-  "tags": ["tag1", "tag2", "tag3"],
-  "cook_time": "X minutes or X hours X minutes" or null,
-  "prep_time": "X minutes or X hours X minutes" or null,
-  "source_notes": "which recipes contributed what (English, for logging)"
-}}
-
-CRITICAL - UNITS MUST BE IN TARGET LANGUAGE:
-- For English: g, kg, ml, l, cup, tbsp, tsp, oz, lb, piece, clove, etc.
-- For Russian: г, кг, мл, л, чашка, ст.л., ч.л., шт, зубчик, etc.
-- NEVER mix languages - if target is English, ALL units must be English
-- Check each ingredient's unit field before outputting
-
-TAGS RULES:
-- Select 3-7 relevant tags that accurately describe the FINAL recipe
-- Tags should reflect: dish type, cuisine, diet restrictions, cooking method, main ingredients
-- Use lowercase English tags (e.g. "vegetarian", "quick", "italian", "baked", "chicken")
-- Only include tags that truly apply to the final combined recipe
-- If source recipes have conflicting tags (e.g. one is "vegan", another has meat), choose based on final recipe"""
+Return JSON only:
+{{"dish_name": "name", "description": "desc", "ingredients_with_amounts": [{{"name": "x", "amount": 100, "unit": "g"}}], "instructions": "Step 1. ... Step 2. ...", "tags": ["tag1"], "cook_time": "X min" or null, "prep_time": "X min" or null, "source_notes": "what came from where"}}"""
 
         # Форматируем рецепты
         def format_recipe(r: Recipe, label: str) -> str:
@@ -781,7 +1158,7 @@ Requirements:
                 temperature=0.4,  # немного выше для разнообразия между вариациями
                 max_tokens=2500,
                 request_timeout=90,
-                model=GPT_MODEL_MERGE,
+                model=config.GPT_MODEL_MERGE,
                 response_schema=self.merged_recipe_schema
             )
             
@@ -804,7 +1181,7 @@ Requirements:
                 cluster_type=self.clusters_build_type,
                 score_threshold=self.score_threshold,
                 gpt_validated=False,
-                merge_model=GPT_MODEL_MERGE
+                merge_model=config.GPT_MODEL_MERGE
             )
             
             return merged

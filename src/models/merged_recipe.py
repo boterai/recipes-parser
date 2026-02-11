@@ -5,7 +5,7 @@
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, model_validator
-from sqlalchemy import Column, String, TIMESTAMP, Text, text, BIGINT, JSON, CHAR, Integer, ForeignKey, Table
+from sqlalchemy import Column, String, TIMESTAMP, Text, text, BIGINT, JSON, CHAR, Integer, ForeignKey, Table, BOOLEAN
 from sqlalchemy.orm import relationship
 from src.models.base import Base
 import hashlib
@@ -33,6 +33,9 @@ class MergedRecipeORM(Base):
     pages_hash_sha256 = Column(CHAR(64), nullable=False, unique=True)
     pages_csv = Column(Text)  # CSV ID страниц: "1,15,23"
     
+    # Базовый рецепт кластера (page_id ближайшего к центроиду)
+    base_recipe_id = Column(BIGINT, nullable=True, index=True)
+    
     # Данные объединенного рецепта
     dish_name = Column(String(500))  # 100% обязательное поле
     ingredients = Column(JSON)  # 100% обязательное поле - список ингредиентов с amounts
@@ -54,6 +57,12 @@ class MergedRecipeORM(Base):
     
     # Метаданные
     created_at = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'))
+
+    # является ли рецепт готовым к выгрузке (для фильтрации в API)
+    is_completed = Column(BOOLEAN, default=False)
+    
+    # количество рецептов в кластере (денормализация для производительности)
+    recipe_count = Column(Integer, default=0)
 
     # Relationship многие-ко-многим через промежуточную таблицу
     images = relationship(
@@ -91,6 +100,7 @@ class MergedRecipeORM(Base):
             id=self.id,
             pages_hash_sha256=self.pages_hash_sha256,
             pages_csv=self.pages_csv,
+            base_recipe_id=self.base_recipe_id,
             dish_name=self.dish_name,
             ingredients=self.ingredients,
             description=self.description,
@@ -106,7 +116,9 @@ class MergedRecipeORM(Base):
             tags=self.tags,
             cluster_type=self.cluster_type,
             gpt_validated=self.gpt_validated,
-            score_threshold=self.score_threshold
+            score_threshold=self.score_threshold,
+            is_completed=self.is_completed,
+            recipe_count=self.recipe_count or 0
         )
 
 
@@ -118,6 +130,9 @@ class MergedRecipe(BaseModel):
     # (автоматически генерируются из page_ids)
     pages_hash_sha256: Optional[str] = None
     pages_csv: Optional[str] = None
+    
+    # Базовый рецепт кластера (page_id ближайшего к центроиду)
+    base_recipe_id: Optional[int] = None
     
     # Данные рецепта
     dish_name: Optional[str] = None
@@ -139,6 +154,12 @@ class MergedRecipe(BaseModel):
     
     # Метаданные
     created_at: Optional[datetime] = None
+
+    # является ли рецепт готовым к выгрузке 
+    is_completed: bool = False
+    
+    # количество рецептов в кластере (автоматически вычисляется из page_ids)
+    recipe_count: int = 0
     
     # Связанные страницы (из pages_csv)
     page_ids: Optional[list[int]] = Field(default_factory=list)
@@ -157,6 +178,10 @@ class MergedRecipe(BaseModel):
             
             self.pages_csv = pages_csv
             self.pages_hash_sha256 = pages_hash
+        
+        # Автоматически вычисляем recipe_count из page_ids
+        if self.page_ids:
+            self.recipe_count = len(self.page_ids)
 
         self.ingredients = normalize_ingredients_list(self.ingredients or [])
 
@@ -186,6 +211,7 @@ class MergedRecipe(BaseModel):
             id=orm_obj.id,
             pages_hash_sha256=orm_obj.pages_hash_sha256,
             pages_csv=orm_obj.pages_csv,
+            base_recipe_id=orm_obj.base_recipe_id,
             dish_name=orm_obj.dish_name,
             ingredients=orm_obj.ingredients,
             description=orm_obj.description,
@@ -201,5 +227,7 @@ class MergedRecipe(BaseModel):
             tags=orm_obj.tags,
             cluster_type=orm_obj.cluster_type,
             gpt_validated=orm_obj.gpt_validated,
-            score_threshold=orm_obj.score_threshold
+            score_threshold=orm_obj.score_threshold,
+            is_completed=orm_obj.is_completed,
+            recipe_count=orm_obj.recipe_count or 0
         )
