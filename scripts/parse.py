@@ -288,13 +288,14 @@ if __name__ == "__main__":
     parser.add_argument(
         '--max_urls',
         type=int,
-        default=10_000,
+        default=7_000,
         help='Максимальное количество просмотренных URL для каждого модуля, включая те, что не содержат рецептов (по умолчанию: 10 000)'
     )
     
     args = parser.parse_args()
     
     if args.parallel:
-        run_parallel(ports=args.ports,  modules=None, max_recipes_per_module=args.max_recipes_per_module, max_urls=args.max_urls)
+        run_parallel(ports=args.ports,  modules=None, max_recipes_per_module=args.max_recipes_per_module, max_urls=args.max_urls,
+                     max_depth=5)
     else:
         main("allrecipes_com", args.ports[0])

@@ -7,6 +7,7 @@ import time
 import json
 import re
 import random
+import socket
 import threading
 from pathlib import Path
 from urllib.parse import urlparse, urljoin
@@ -116,8 +117,6 @@ class SiteExplorer:
         self.max_no_recipe_pages: Optional[int] = max_no_recipe_pages 
         self.no_recipe_page_count: int = 0  # Счетчик страниц без рецепта подряд
 
-        self.cookie_accepted: bool = False  # Флаг принятия кукис
-
     def set_pattern(self, pattern: str):
         self.site.pattern = pattern
         try:
@@ -195,15 +194,6 @@ class SiteExplorer:
                 f"localhost:{self.debug_port}"
             )
             self.logger.info(f"Подключение к Chrome на порту {self.debug_port}")
-            
-            # Предупреждение о прокси в debug режиме
-            if self.proxy:
-                self.logger.warning(
-                    f"⚠️ В debug режиме прокси должен быть настроен при запуске Chrome:\n"
-                    f"  google-chrome --remote-debugging-port={self.debug_port} "
-                    f"--proxy-server={self.proxy.replace('http://', '').replace('https://', '')} "
-                    f"--user-data-dir=/tmp/chrome-debug_{self.debug_port}"
-                )
         else:
             chrome_options.add_argument("--start-maximized")
             chrome_options.add_argument("--disable-blink-features=AutomationControlled")
@@ -255,9 +245,7 @@ class SiteExplorer:
         
         Returns:
             True если Chrome доступен
-        """
-        import socket
-        
+        """        
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(1)
@@ -380,17 +368,18 @@ class SiteExplorer:
         self.no_recipe_page_count = 0 # сброс счетчика страниц без рецепта
         return True
     
-    def should_explore_url(self, url: str) -> bool:
+    def should_explore_url(self, url: str, ignore_visited: bool = False) -> bool:
         """
         Проверка, нужно ли исследовать данный URL
         
         Args:
-            url: URL для проверки            
+            url: URL для проверки     
+            ignore_visited: Если True, игнорирует проверку на посещенные URL (используется для начальной загрузки ссылок)       
         Returns:
             True если URL нужно посетить
         """
         # Пропускаем если уже посещали
-        if url in self.visited_urls:
+        if url in self.visited_urls and ignore_visited is False:
             return False
         
         # Проверка лимита URL на паттерн
@@ -952,7 +941,8 @@ class SiteExplorer:
             pattern = self.get_url_pattern(current_url)
             
             # Проверка, нужно ли посещать
-            if self.should_explore_url(current_url) is False and urls_explored > 0 and not check_pages_with_extractor:
+            ignore_visited = len(queue) <= 5  # В начале обхода игнорируем посещенные URL, чтобы быстрее набрать базу паттернов
+            if self.should_explore_url(current_url, ignore_visited=ignore_visited) is False and urls_explored > 0 and not check_pages_with_extractor:
                 continue
             
             try:
@@ -1069,7 +1059,7 @@ class SiteExplorer:
                 has_recipe_pattern = self.recipe_regex is not None
                 
                 for link_url in new_links:
-                    if self.should_explore_url(link_url) or len(queue) == 0:
+                    if self.should_explore_url(link_url, ignore_visited=len(queue) <= 5): # Всегда добавляем, если очередь маленькая (для старта и чтобы не вылететь на начальном этапе)
                         # Запоминаем источник перехода
                         if link_url not in self.referrer_map:
                             self.referrer_map[link_url] = current_url
