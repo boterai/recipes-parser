@@ -254,7 +254,19 @@ class PageRepository(BaseRepository[PageORM]):
         Returns:
             PageORM объект с загруженными images
         """
+        # Фильтруем валидные URL изображений (убираем невалидные например 'compress')
+        valid_image_urls = [
+            url for url in image_urls 
+            if url and isinstance(url, str) and (url.startswith('http://') or url.startswith('https://'))
+        ]
+        
+        if len(valid_image_urls) < len(image_urls):
+            invalid_urls = [url for url in image_urls if url not in valid_image_urls]
+            logger.warning(f"Отфильтровано {len(invalid_urls)} невалидных URL изображений: {invalid_urls}")
+        
         session = self.get_session()
+        page_pydantic_backup = None  # Для сохранения Pydantic модели в случае ошибки
+        
         try:
             if page_orm.id: # ищем по ID если есть
                 existing = session.query(PageORM).filter(PageORM.id == page_orm.id).first()
@@ -266,21 +278,21 @@ class PageRepository(BaseRepository[PageORM]):
                 # Обновляем поля страницы
                 existing.update_from_page(page_orm)
                 
-                if image_urls:
+                if valid_image_urls:
                     if replace_images:
                         # Заменяем все изображения
                         existing.images.clear()
                         existing.images = [
                             ImageORM(image_url=url)
-                            for url in image_urls
+                            for url in valid_image_urls
                         ]
-                        logger.debug(f"✓ Заменено {len(image_urls)} изображений для страницы ID={existing.id}")
+                        logger.debug(f"✓ Заменено {len(valid_image_urls)} изображений для страницы ID={existing.id}")
                     else:
                         # Добавляем только новые (проверяем дубликаты)
                         existing_urls = {img.image_url for img in existing.images}
                         new_images = [
                             ImageORM(image_url=url)
-                            for url in image_urls
+                            for url in valid_image_urls
                             if url not in existing_urls
                         ]
                         existing.images.extend(new_images)
@@ -295,10 +307,10 @@ class PageRepository(BaseRepository[PageORM]):
                 page_orm = page_orm if isinstance(page_orm, PageORM) else page_orm.to_orm()
 
                 # Добавляем изображения через relationship
-                if image_urls:
+                if valid_image_urls:
                     page_orm.images = [
                         ImageORM(image_url=url) 
-                        for url in image_urls
+                        for url in valid_image_urls
                     ]
                 
                 # Сохраняем в одной транзакции
@@ -306,16 +318,35 @@ class PageRepository(BaseRepository[PageORM]):
                 session.commit()
                 session.refresh(page_orm)
                 
-                logger.debug(f"✓ Создана страница ID={page_orm.id} с {len(image_urls)} изображениями: {page_orm.url}")
+                logger.debug(f"✓ Создана страница ID={page_orm.id} с {len(valid_image_urls)} изображениями: {page_orm.url}")
                 return page_orm
+                
         except IntegrityError as ie:
-            session.rollback()
             logger.error(f"Ошибка целостности данных при сохранении страницы: {ie}")
-            if "Duplicate entry" in str(ie) and  "for key 'images.unique_image_url_hash'" in str(ie):
-                logger.error("Попытка сохранить дублирующееся изображение. Пробуем обновить/сохранить страницу без привязки к изображению")
-                page = page_orm.to_pydantic() if isinstance(page_orm, PageORM) else page_orm
-                return self.create_or_update(page)
+            if isinstance(page_orm, PageORM):
+                try:
+                    page_pydantic_backup = page_orm.to_pydantic_no_images()
+                except Exception as conv_err:
+                    logger.error(f"Не удалось конвертировать PageORM в Pydantic: {conv_err}")
+                    page_pydantic_backup = None
+            else:
+                page_pydantic_backup = page_orm.model_copy(update={'images': []})
+            
+            session.rollback()
+            
+            # Обработка дублирующихся изображений
+            if "Duplicate entry" in str(ie) and "for key 'images.unique_image_url_hash'" in str(ie):
+                logger.warning("Обнаружено дублирующееся изображение. Пробуем сохранить страницу без изображений")
+                
+                if page_pydantic_backup:
+                    try:
+                        return self.create_or_update(page_pydantic_backup)
+                    except Exception as retry_err:
+                        logger.error(f"Не удалось сохранить страницу даже без изображений: {retry_err}")
+                        return None
+            
             return None
+            
         except Exception as e:
             session.rollback()
             logger.error(f"Ошибка обновления страницы с изображениями: {e}")

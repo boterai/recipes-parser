@@ -751,33 +751,36 @@ class ClusterVariationGenerator:
         if not new_recipes:
             return None
         
+        num_sources = len(new_recipes)
+        
         if target_language:
             language_instruction = f"Output in {target_language.upper()} language. Translate ALL text including dish name, ingredients, instructions, AND measurement units."
         else:
             language_instruction = "Use the SAME language as the canonical recipe"
-        
-        num_sources = len(new_recipes)
-        sources_word = "source recipe" if num_sources == 1 else f"{num_sources} source recipes"
-        
-        system_prompt = f"""Merge CANONICAL recipe with {sources_word} into one DEFINITIVE consensus recipe.
+        # TODO подумать как лучше сформулировать для названия, чтобы оно было SEO-оптимизированным, но при этом не бросалось в глаза как сгенерированное
+        system_prompt = f"""Create one SEO-OPTIMIZED, executable recipe from the provided sources.
+
+GOAL: Maximize search visibility while keeping the recipe executable.
 
 RULES:
 1. {language_instruction}
-2. SOURCE-ONLY: Use ONLY data from provided recipes. NEVER invent ingredients, temperatures, timings, or techniques.
-3. CONSISTENCY: Every ingredient MUST appear in instructions; every instruction ingredient MUST be in the list. If amounts mentioned in steps — they must match the list (or omit amounts: "add flour" is OK).
-4. EXECUTABLE: Steps in logical order, realistic temps/times, proper techniques for each ingredient type.
-5. NO OPTIONALS: No "optional", "alternatively", "to taste". Every ingredient is definitive.
-6. FORMAT: Instructions as "Step 1. Action. Step 2. Action..." — single string, no bullets/linebreaks.
-7. TAGS: Preserve tags that appear in 2+ source recipes. Add new tags only if clearly applicable to final dish.
+2. SOURCE-ONLY: Use ONLY data from provided recipes. NEVER invent.
+3. ORIGINAL VOICE: Write as if this is the ONLY recipe. NEVER mention "combined", "merged", "sources", "variations", or "based on multiple recipes".
+4. SEO-RICH dish_name: Include key modifiers (e.g., "Creamy Garlic Butter Shrimp Pasta").
+5. DESCRIPTION: 1-2 sentences. Briefly describe the dish, texture, taste. No filler words.
+6. EXECUTABLE: Logical step order, realistic temps/times, proper techniques.
+7. NO OPTIONALS: No "optional", "alternatively", "to taste". Exact amounts only.
+8. INSTRUCTIONS: Format "Step 1. Action. Step 2. Action..." with technique names, temps, visual cues.
+9. TAGS: 5-10 lowercase (cuisine, diet, method, main ingredient).
+10. CONSISTENCY: Every ingredient in list MUST appear in instructions and vice versa.
 
 MERGE LOGIC:
 - 2+ sources have ingredient → include with averaged amount
-- Only 1 source + canonical has 8+ ingredients → skip it
-- Prefer improving instructions/description over adding more ingredients
-- cook_time/prep_time must match actual steps described
+- Prefer detailed instructions over adding more ingredients
+- cook_time/prep_time must match actual steps
 
 Return JSON only:
-{{"dish_name": "name", "description": "2-4 sentences", "ingredients_with_amounts": [{{"name": "x", "amount": 100, "unit": "g"}}], "instructions": "Step 1. ... Step 2. ...", "tags": ["tag1"], "cook_time": "X min" or null, "prep_time": "X min" or null, "enhancement_notes": "changes made"}}"""
+{{"dish_name": "SEO-rich name", "description": "1-2 concise sentences", "ingredients_with_amounts": [{{"name": "x", "amount": 100, "unit": "g"}}], "instructions": "Step 1. ... Step 2. ...", "tags": ["tag1"], "cook_time": "X min" or null, "prep_time": "X min" or null, "enhancement_notes": "internal: changes made"}}"""
 
         def format_merged(m: MergedRecipe) -> str:
             ings = m.ingredients or []

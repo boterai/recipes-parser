@@ -11,7 +11,7 @@ from src.models.merged_recipe import MergedRecipe
 from src.models.image import ImageORM
 from src.common.db.connection import get_db_connection
 import hashlib
-from sqlalchemy import insert
+from sqlalchemy import insert, func
 from sqlalchemy.orm import joinedload
 
 logger = logging.getLogger(__name__)
@@ -386,6 +386,15 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
             ).first()
         finally:
             session.close()
+
+    def count_pages_with_digit_in_csv(self, digit: int) -> int:
+        """Count pages where pages_csv contains a specific digit."""
+        with self.get_session() as session:
+            pages_csv_wrapped = func.concat(',', MergedRecipeORM.pages_csv, ',')
+            query = session.query(MergedRecipeORM).filter(
+                pages_csv_wrapped.like(f'%,{digit},%')
+            )
+            return query.count()
     
     def get_by_page_ids(self, page_ids: list[int]) -> Optional[MergedRecipeORM]:
         """

@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from typing import Optional, Literal
 import os
 import asyncio
+import aiofiles
 
 import numpy as np
 
@@ -116,7 +117,7 @@ class SimilaritySearcher:
         # Центроиды кластеров: root_id -> vector (numpy array)
         self.cluster_centroids: dict[int, np.ndarray] = {}
         
-        # Центроиды валидированных кластеров: cluster_index -> page_id ближайшего к центроиду рецепта
+        # Центроиды валидированных кластеров: cluster key -> page_id ближайшего к центроиду рецепта
         self.validated_centroids: dict[int, int] = {}
 
     @property
@@ -726,7 +727,8 @@ class SimilaritySearcher:
             
             for subcluster, closest_to_centroid in subclusters:
                 if len(subcluster) >= self.params.min_cluster_size:
-                    self.validated_centroids[cluster_key] = closest_to_centroid
+                    subcluster_key = ','.join(map(str, sorted(subcluster)))
+                    self.validated_centroids[subcluster_key] = closest_to_centroid
                     refined.append(subcluster)
         
         logger.info(
@@ -840,7 +842,7 @@ class SimilaritySearcher:
         
         return page_ids_to_image_ids
         
-    def save_clusters_to_file(
+    async def save_clusters_to_file(
         self, 
         clusters: list[list[int]], 
         recalculate_mapping: bool = False, 
@@ -872,12 +874,12 @@ class SimilaritySearcher:
                     page_ids_to_image_ids['image_to_page'][','.join(map(str, image_ids))] = page_ids
 
                 # сохраняем маппинг кластеров рецептов к изображениям
-                with open(self.cluter_image_mapping, 'w') as f:
-                    f.write(json.dumps(page_ids_to_image_ids, indent=2))
+                async with aiofiles.open(self.cluter_image_mapping, 'w') as f:
+                    await f.write(json.dumps(page_ids_to_image_ids, indent=2))
                 logger.info(f"Saved clusters to image IDs mapping to file {self.cluter_image_mapping}.")
             else:
-                with open(self.cluter_image_mapping, 'r') as f:
-                    page_ids_to_image_ids = json.load(f)
+                async with aiofiles.open(self.cluter_image_mapping, 'r') as f:
+                    page_ids_to_image_ids = json.loads(await f.read())
                 recipe_clisters = []
                 for image_ids in clusters:
                     image_ids = sorted(image_ids)
@@ -890,24 +892,24 @@ class SimilaritySearcher:
         
         if refine_clusters:
             q = QdrantRecipeManager(collection_prefix=self.qd_collection_prefix)
-            asyncio.run(q.async_connect(connect_timeout=210))
+            await q.async_connect(connect_timeout=210)
             
             if refine_mode == "split":
                 # Разбиение на подкластеры — не теряем рецепты
-                clusters = asyncio.run(self.refine_clusters_with_split(clusters=clusters, q=q))
+                clusters = await self.refine_clusters_with_split(clusters=clusters, q=q)
             else:
                 # Удаление выбросов — строгая очистка
-                clusters = asyncio.run(self.refine_clusters(clusters=clusters, q=q))
+                clusters = await self.refine_clusters(clusters=clusters, q=q)
 
-        with open(self.clusters_filename, 'w') as f:
-            f.write(json.dumps(clusters, indent=2))
+        async with aiofiles.open(self.clusters_filename, 'w') as f:
+            await f.write(json.dumps(clusters, indent=2))
         logger.info(f"Saved clusters to file {self.clusters_filename}.")
 
 if __name__ == "__main__":
     while True:
         ss = SimilaritySearcher(params=ClusterParams(
                     limit=30,
-                    score_threshold=0.91,
+                    score_threshold=0.92,
                     scroll_batch=3500,
                     centroid_threshold=0.93,
                     min_cluster_size=4,
@@ -915,7 +917,7 @@ if __name__ == "__main__":
                     union_top_k=15,
                     query_batch=128,
                     density_min_similarity=0.93
-                ), build_type="full") # "image", "full", "ingredients"
+                ), build_type="ingredients") # "image", "full", "ingredients"
         try:
             ss.load_dsu_state()
             last_id = ss.last_id # получаем last id после загрузки состояния (такая штука работает только опираясь на тот факт, что каждй вновь доавбленный рецепт имеет id не меньше уже векторизованных рецептов, иначе рецепты могут быть пропущены)
@@ -923,7 +925,7 @@ if __name__ == "__main__":
             ss.save_dsu_state()
             print(f"Total clusters found: {len(clusters)}")
             print("Last processed ID:", ss.last_id)
-            ss.save_clusters_to_file(clusters)
+            asyncio.run(ss.save_clusters_to_file(clusters))
             if last_id == ss.last_id: # конец обработки тк id не поменялся, значи новых значений нет
                 logger.info("Processing complete.")
                 break
@@ -935,4 +937,4 @@ if __name__ == "__main__":
     final_clusters = build_clusters_from_dsu(ss.dsu, min_cluster_size=4)
     # refine_mode="split" — разбивает на подкластеры без потери рецептов
     # refine_mode="trim" — удаляет выбросы (строже)
-    ss.save_clusters_to_file(final_clusters, recalculate_mapping=True, refine_clusters=True, refine_mode="split")
+    asyncio.run(ss.save_clusters_to_file(final_clusters, recalculate_mapping=True, refine_clusters=True, refine_mode="split"))

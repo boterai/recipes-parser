@@ -60,7 +60,7 @@ class Config:
     IMAGE_DOWNLOAD_DIR: str = os.getenv('IMAGE_DOWNLOAD_DIR', 'images')
     
     # Настройки слияния рецептов
-    MERGE_SIMILARITY_THRESHOLD: float = float(os.getenv('MERGE_SIMILARITY_THRESHOLD', '0.89'))
+    MERGE_SIMILARITY_THRESHOLD: float = float(os.getenv('MERGE_SIMILARITY_THRESHOLD', '0.96'))
     MERGE_SIMILARITY_BUILD_TYPE: str = os.getenv('MERGE_SIMILARITY_BUILD_TYPE', 'full')
     MERGE_BATCH_SIZE: int = int(os.getenv('MERGE_BATCH_SIZE', '10'))
     MERGE_MAX_RETRIES: int = int(os.getenv('MERGE_MAX_RETRIES', '5'))
@@ -70,6 +70,7 @@ class Config:
     MERGE_VALIDATE_GPT: bool = int(os.getenv('MERGE_VALIDATE_GPT', '1').lower()) == 1
     MERGE_SAVE_TO_DB: bool = int(os.getenv('MERGE_SAVE_TO_DB', '1').lower()) == 1
     MERGE_HISTORY_FOLDER: str = os.getenv('MERGE_HISTORY_FOLDER', 'history')
+    MERGE_CENTROID_THRESHOLD_STEP: float = float(os.getenv('MERGE_CENTROID_THRESHOLD_STEP', '0.01'))
     
     # Настройки кластеризации по схожести
     SIMILARITY_SCROLL_BATCH_SIZE: int = int(os.getenv('SIMILARITY_SCROLL_BATCH_SIZE', '3500'))
