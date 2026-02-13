@@ -269,10 +269,10 @@ class CucinareokExtractor(BaseRecipeExtractor):
             
             # Проверяем, содержит ли заголовок ключевое слово инструкций
             if any(keyword in heading_text for keyword in instruction_keywords):
-                # Ищем следующий OL список после этого заголовка
+                # Ищем следующий OL или UL список после этого заголовка
                 current = h.find_next_sibling()
                 while current:
-                    if current.name == 'ol':
+                    if current.name in ['ol', 'ul']:
                         items = current.find_all('li')
                         for idx, item in enumerate(items, 1):
                             step_text = item.get_text(separator=' ', strip=True)
