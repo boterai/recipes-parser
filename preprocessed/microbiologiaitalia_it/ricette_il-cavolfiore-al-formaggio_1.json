@@ -1,0 +1,12 @@
+{
+    "dish_name": "Il Cavolfiore al Formaggio",
+    "description": "Un piatto nutriente e delizioso che combina cavolfiore con una salsa al formaggio.",
+    "ingredients": "[{\"name\": \"cavolfiore\", \"units\": \"medium\", \"amount\": 1}, {\"name\": \"formaggio cheddar\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"panna acida\", \"units\": \"cups\", \"amount\": 0.5}, {\"name\": \"burro\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"farina\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"sale\", \"units\": null, \"amount\": null}, {\"name\": \"pepe\", \"units\": null, \"amount\": null}]",
+    "instructions": "Taglia il cavolfiore in cimette e sbollentalo in acqua salata fino a quando diventa tenero ma non troppo morbido. Scola bene. In una pentola, sciogli il burro a fuoco medio. Aggiungi la farina e mescola fino a ottenere un roux dorato. Gradualmente, aggiungi la panna acida e il formaggio cheddar grattugiato al roux, mescolando costantemente finché la salsa non diventa liscia e cremosa. Condisci con sale e pepe a piacere. Versa la salsa al formaggio sul cavolfiore cotto e servi caldo.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Adatto a vegetariani e può essere personalizzato per restrizioni alimentari specifiche.",
+    "tags": "vegetarian, comfort food, cheese"
+}

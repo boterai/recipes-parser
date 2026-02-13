@@ -1,0 +1,12 @@
+{
+    "dish_name": "Juodasis rusas",
+    "description": "Коктейль на основе водки и кофейного ликера.",
+    "ingredients": "[{\"name\": \"Degtinė\", \"units\": \"ml\", \"amount\": 45}, {\"name\": \"Kavos likeris\", \"units\": \"ml\", \"amount\": 20}, {\"name\": \"Ledo kubeliai\", \"units\": \"pagal skonį\", \"amount\": null}]",
+    "instructions": "Į senovinę stiklinę suberkite ledo kubelius, supilkite degtinę ir kavos likerį. Gautą mišinį gerai išmaišykite baro šaukštu.",
+    "category": "ALKOHOLINIAI GĖRIMAI",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Labai svarbu ruošiant kokteilį, alkoholį pilti ant ledo kubelių.",
+    "tags": null
+}

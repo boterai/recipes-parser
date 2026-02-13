@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gammeldags oksesteg i slow cooker",
+    "description": "Opskrift på en sprød smagfuld og lækker oksesteg tilberedt i slow cookeren.",
+    "ingredients": "[{\"name\": \"oksesteg\", \"units\": \"kg\", \"amount\": \"1.2-1.5\"}, {\"name\": \"kogende vand eller bouillon\", \"units\": \"liter\", \"amount\": \"0.5\"}, {\"name\": \"smør\", \"units\": null, \"amount\": null}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"peber\", \"units\": null, \"amount\": null}, {\"name\": \"perleløg\", \"units\": \"gram\", \"amount\": \"320\"}, {\"name\": \"fløde\", \"units\": \"dl\", \"amount\": \"2.5\"}, {\"name\": \"tyttebærsyltetøj\", \"units\": \"spsk\", \"amount\": \"1-2\"}, {\"name\": \"stegesky\", \"units\": null, \"amount\": null}, {\"name\": \"kulør\", \"units\": null, \"amount\": null}, {\"name\": \"jævning\", \"units\": null, \"amount\": null}, {\"name\": \"salt\", \"units\": null, \"amount\": null}]",
+    "instructions": "Krydr stegen godt med salt og peber på alle sider. Brun stegen i smør på alle sider. Tilsæt perleløg og lad dem svitse lidt med. Når stegen er brunet færdig, så tilsæt kogende vand eller bouillon. Læg låg på slow cookeren og tilbered nu oksestegen 7 timer ved low (niveau 1). Tjek stegen undervejs og især til slut. Befri stegen for snorene og lad stegen trække imens du laver sovsen. Bring stegeskyen i kog. Tilsæt fløde. Jævn sovsen og smag til med tyttebærsyltetøj og salt. Servér grydestegen evt. med kartoffelmos til.",
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "7 hours 30 minutes",
+    "total_time": "7 hours 40 minutes",
+    "notes": "Oksestegen kan også tilberedes i en stegegryde ved svag varme. Du kan også tilberede den i ovnen ved svag varme i et ildfast fad eller i en stegeso/Römertopf.",
+    "tags": "gammeldags oksesteg, oksesteg, slow cooker"
+}

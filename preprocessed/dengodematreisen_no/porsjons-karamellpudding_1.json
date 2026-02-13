@@ -1,0 +1,12 @@
+{
+    "dish_name": "Porsjons karamellpudding",
+    "description": "Enkel porsjons karamellpudding laget med gelatin i stedet for egg.",
+    "ingredients": "[{\"name\": \"soyamelk\", \"units\": \"dl\", \"amount\": 1.5}, {\"name\": \"gelatin\", \"units\": \"plate\", \"amount\": 1}, {\"name\": \"lønnesirup\", \"units\": \"ss\", \"amount\": 1}, {\"name\": \"vaniljeekstrakt\", \"units\": \"ts\", \"amount\": 0.5}]",
+    "instructions": "Legg gelatinplaten i bløt i kaldt friskt vann i 4-5 minutter. Ha soyamelk i en liten tykkbunnet kasserolle, varm opp under omrøring til den ryker (trenger ikke koke!). Ta opp gelatinplaten fra vannet, kryst den lett mellom fingrene for å få ut overskuddsvann, og tilsett i den varme soyamelken. Rør om til gelatinen har løst seg opp. Smak til med lønnesirup i vaniljeekstrakt, rør sammen. Hell over i et fint glass, la avkjøles og sett i kjøleskap 3-4 timer eller natten over.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": "3-4 hours",
+    "notes": "Karamellpuddingen kan toppes med ekstra lønnesirup ved servering.",
+    "tags": "Glutenfri & kornfri, Helse, Melkefri, Paleo, Sukkerfri"
+}

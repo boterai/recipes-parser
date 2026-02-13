@@ -1,0 +1,12 @@
+{
+    "dish_name": "Papadums",
+    "description": "Papadums, disse tynde, sprøde fladbrød, er en uundgåelig del af mange måltider i det indiske køkken og er elsket verden over som en let og smagfuld snack.",
+    "ingredients": "[{\"name\": \"vegetabilsk olie\", \"units\": \"cm\", \"amount\": \"2-4\"}, {\"name\": \"papadums\", \"units\": null, \"amount\": null}, {\"name\": \"mel fra linser (urad dal), kikærter, ris eller kartofler\", \"units\": null, \"amount\": null}, {\"name\": \"krydderier (spidskommen, sort peber, chili, hvidløg)\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Hæld olie i en stegepande og varm den op. 2. Test oliens temperatur med en lille bit af en papadum. 3. Steg papadums én ad gangen i 2-3 sekunder. 4. Tag op og dræn på køkkenrulle. 5. Gentag med de resterende papadums.",
+    "category": "Snack",
+    "prep_time": null,
+    "cook_time": "10-20 seconds",
+    "total_time": null,
+    "notes": "Papadums er bedst, når de serveres straks efter tilberedning. Opbevar dem i en lufttæt beholder for at holde dem sprøde.",
+    "tags": "snack, indisk, papadums"
+}

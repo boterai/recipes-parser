@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kapros-juhtúrós sztrapacska",
+    "description": "Hagyományos recept, amely sok tejföllel tálalva készül.",
+    "ingredients": "[{\"name\": \"burgonya\", \"units\": \"kg\", \"amount\": 1}, {\"name\": \"tojás\", \"units\": \"pcs\", \"amount\": 2}, {\"name\": \"rétesliszt\", \"units\": \"dkg\", \"amount\": 25}, {\"name\": \"liszt\", \"units\": \"dkg\", \"amount\": 25}, {\"name\": \"szalonna\", \"units\": \"dkg\", \"amount\": 15}, {\"name\": \"sertészsír\", \"units\": \"ek.\", \"amount\": 1}, {\"name\": \"juhtúró\", \"units\": \"dkg\", \"amount\": 25}, {\"name\": \"tehéntúró\", \"units\": \"dkg\", \"amount\": 25}, {\"name\": \"tejföl\", \"units\": \"dkg\", \"amount\": 30}, {\"name\": \"szárított kapor\", \"units\": \"ek.\", \"amount\": 1}]",
+    "instructions": "1. A burgonyát megtisztítjuk és kislyukú reszelőn lereszeljük. Ízlés szerint sózzuk, majd beleütjük a tojásokat, valamint hozzáadjuk a kétféle lisztet is. Elkezdjük összedolgozni és egy galuska állagú masszát keverünk belőle. 2. Bő sós vizet forralunk és a tésztát ebbe szaggatjuk. Addig főzzük, amíg a galuskák feljönnek a víz tetejére. Ekkor leszűrjük, a tésztákat hideg vízzel leöblítjük, alaposan lecsepegtetjük és egy zsírral kikent tálba szedjük. 3. A szalonnát apróra kockázzuk, majd egy forró serpenyőbe tesszük a zsírral és megpirítjuk. A szalonnakockákat kiszedjük, majd a visszamaradt zsírba morzsoljuk a juhtúrót és a tehéntúrót. Hozzáadjuk a tejfölt, elkeverjük és összemelegítjük. A kaporral fűszerezzük. 4. A túrós masszát a galuskákhoz adjuk és összeforgatjuk. Megszórjuk a szalonnakockákkal és melegen tálaljuk.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "60 minutes",
+    "total_time": "60 minutes",
+    "notes": "Sok tejföllel az igazi, nagymamám mindig így tálalta.",
+    "tags": "túrós, krumplis ételek, magyaros receptek, közepesen bonyolult ételek"
+}

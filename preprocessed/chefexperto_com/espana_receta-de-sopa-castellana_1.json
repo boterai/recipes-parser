@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sopa Castellana",
+    "description": "Plato tradicional de la cocina española, conocido también como sopa de ajo, que combina sabores profundos con la simplicidad de sus ingredientes.",
+    "ingredients": "[{\"name\": \"Pan\", \"units\": \"slices\", \"amount\": null}, {\"name\": \"Ajo\", \"units\": \"cloves\", \"amount\": null}, {\"name\": \"Caldo de pollo o carne\", \"units\": \"liters\", \"amount\": null}, {\"name\": \"Pimentón\", \"units\": \"teaspoons\", \"amount\": null}, {\"name\": \"Aceite de oliva\", \"units\": \"tablespoons\", \"amount\": null}, {\"name\": \"Huevo\", \"units\": \"units\", \"amount\": null}, {\"name\": \"Jamón serrano\", \"units\": \"grams\", \"amount\": null}]",
+    "instructions": "1. Seleccionar pan duro y ajo. 2. Sofreír el ajo en aceite de oliva. 3. Añadir jamón y pimentón. 4. Incorporar pan y caldo caliente. 5. Cocinar a fuego lento.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Seleccionar ingredientes de calidad es crucial para el éxito del plato.",
+    "tags": "sopa, española, tradicional, reconfortante"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Klassiset pannukakut",
+    "description": "Pannukakut ovat suosittu slaavilainen ruokalaji, joka valmistetaan jokaisessa perheessä omalla tavallaan.",
+    "ingredients": "[{\"name\": \"Kefiiri\", \"units\": \"millilitraa\", \"amount\": 500}, {\"name\": \"Kananmuna\", \"units\": \"asiat\", \"amount\": 1}, {\"name\": \"Kidesokeri\", \"units\": \"lusikallista\", \"amount\": 1}, {\"name\": \"Vanilliini\", \"units\": \"grammaa\", \"amount\": 1}, {\"name\": \"Jauhot\", \"units\": \"grammaa\", \"amount\": 250}, {\"name\": \"Ruokasooda\", \"units\": \"tl\", \"amount\": \"⅓\"}, {\"name\": \"Suola\", \"units\": \"hyppysellinen\", \"amount\": 1}, {\"name\": \"Kasviöljy\", \"units\": \"paistamista varten\", \"amount\": null}]",
+    "instructions": "Riko muna korkeareunaiseen astiaan ja kaada joukkoon vaniljasokeri ja kidesokeri. Kaada huoneenlämpöinen kefir ja sekoita ainekset vispilällä. Lisää vehnäjauhot pienissä kourallisissa ja vaivaa taikinaa liu'uttamalla hitaasti pois lusikasta. Sekoita lopuksi joukkoon sooda ja anna taikinan vetäytyä 10 minuuttia, jotta gluteeni turpoaa. Laita ruokalusikallinen taikinaa paistinpannulle kuumalla kasviöljyllä ja paista kohtalaisella lämmöllä noin 3-4 minuuttia. Sitten käännämme sen ympäri ja odotamme, kunnes toinen puoli peittyy herkullisella kuorella. Tarjoilemme ruusuiset pannukakut ja aloitamme maistamisen.",
+    "category": "Leipomo",
+    "prep_time": "10 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "40 minutes",
+    "notes": null,
+    "tags": "pannukakut, aamiainen, herkullinen"
+}

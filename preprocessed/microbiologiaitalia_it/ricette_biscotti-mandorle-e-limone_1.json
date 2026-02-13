@@ -1,0 +1,12 @@
+{
+    "dish_name": "Biscotti mandorle e limone",
+    "description": "Delicious almond and lemon cookies, perfect for afternoon tea or as a sweet conclusion to a meal.",
+    "ingredients": "[{\"name\": \"farina di mandorle\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"farina 00\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"zucchero semolato\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"burro\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"uovo grande\", \"units\": \"unit\", \"amount\": 1}, {\"name\": \"scorza grattugiata di limoni\", \"units\": \"unit\", \"amount\": 2}, {\"name\": \"lievito per dolci\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"sale\", \"units\": null, \"amount\": null}, {\"name\": \"zucchero a velo\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Pre-riscalda il forno a 180°C e prepara una teglia con carta da forno. 2. In una ciotola grande, mescola la farina di mandorle, la farina 00, lo zucchero, il lievito per dolci e un pizzico di sale. 3. Aggiungi il burro a temperatura ambiente e lavoralo fino a ottenere un composto sabbioso. 4. Aggiungi l'uovo e la scorza di limone, mescola fino a ottenere un impasto omogeneo. 5. Forma delle palline e sistemale sulla teglia. 6. Cuoci per 12-15 minuti fino a doratura. 7. Lascia raffreddare e spolvera con zucchero a velo.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "30 minutes",
+    "notes": "Usa limoni biologici per il massimo sapore. Se l'impasto è troppo morbido, mettilo in frigorifero per 15-20 minuti.",
+    "tags": "cookies, dessert, almond, lemon"
+}

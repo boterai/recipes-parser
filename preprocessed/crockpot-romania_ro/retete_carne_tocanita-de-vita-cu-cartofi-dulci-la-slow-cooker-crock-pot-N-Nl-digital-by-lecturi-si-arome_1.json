@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tocanita de vita cu cartofi dulci",
+    "description": "O tocăniță de vită este alegerea ideală, mai ales că este foarte ușor de preparat cu ajutorul slow cookerului.",
+    "ingredients": "[{\"name\": \"carne de vită\", \"units\": \"grams\", \"amount\": 500}, {\"name\": \"kaiser\", \"units\": \"grams\", \"amount\": 100}, {\"name\": \"cartof dulce\", \"units\": \"large\", \"amount\": 1}, {\"name\": \"ceapă\", \"units\": \"medium\", \"amount\": 2}, {\"name\": \"vin roșu\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"ulei\", \"units\": \"tablespoons\", \"amount\": 5}, {\"name\": \"apă\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"făină albă de grâu\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"pasta de ardei\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"usturoi\", \"units\": \"clove\", \"amount\": 1}, {\"name\": \"cimbru uscat\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"sare\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"piper\", \"units\": \"teaspoon\", \"amount\": 0.25}]",
+    "instructions": "Spală carnea de vită și tamponeaz-o cu prosoape de bucătărie din hârtie. Taie carnea în cuburi de aproximativ 1-2 centimetri. Taie kaiserul cuburi. Curăță ceapa, usturoiul și cartoful dulce. Taie ceapă fideluță și cartoful dulce cuburi de 2-3 centimetri. Încinge într-o tigaie 1 lingură de ulei și pune în ea cuburile de kaiser. Gătește-le 1-2 minute cât să își schimbe culoarea, după care pune-le deoparte. În aceeași tigaie, adaugă iar o lingură de ulei pe care îl încingi bine și gătește cuburile de carne de vită la foc iute cam 2-3 minute, cât să își schimbe culoarea. Amestecă astfel încât să se gătească pe fiecare parte. Lasă carnea deoparte și ocupă-te de legume. În aceeași tigaie, adaugă iar 2 linguri de ulei, încinge-l și adaugă ceapă. Gătește 1 minut după care adaugă cuburile de cartof dulce. Toarnă 150ml de apă, pune capacul și gătește 5 minute. Peste ceapă și cartof dulce adaugă kaiserul și carnea de vită. Presară cele două linguri de făină, amestecă și stinge cu vin roșu. Toarnă această compoziție obținută în slow cookerul Crockpot 4.7L Digital, adaugă pastă de ardei, usturoiul, restul de apă și condimentele. Pune capacul și setează pe modul HIGH și timpul de 5 ore. Poftă bună!",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "5 hours",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

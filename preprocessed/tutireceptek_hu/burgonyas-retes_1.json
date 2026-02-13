@@ -1,0 +1,12 @@
+{
+    "dish_name": "Burgonyás rétes",
+    "description": null,
+    "ingredients": "[{\"name\": \"burgonya\", \"units\": \"dkg\", \"amount\": \"80\"}, {\"name\": \"hagyma\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"fokhagyma\", \"units\": \"gerezd\", \"amount\": \"2-3\"}, {\"name\": \"olaj\", \"units\": \"ek\", \"amount\": \"3\"}, {\"name\": \"petrezselyenzöld\", \"units\": null, \"amount\": null}, {\"name\": \"metélőhagyma\", \"units\": \"csokor\", \"amount\": \"1\"}, {\"name\": \"kakukkfű\", \"units\": null, \"amount\": null}, {\"name\": \"só\", \"units\": null, \"amount\": null}, {\"name\": \"bors\", \"units\": null, \"amount\": null}, {\"name\": \"tojás\", \"units\": \"db\", \"amount\": \"3\"}, {\"name\": \"réteslap\", \"units\": \"csomag\", \"amount\": \"1\"}]",
+    "instructions": "a burgonyát kockára vágva sós vizben megfözőm s a 3/4 részét összetöröm, a többi marad kockákban.A hagymákat olajon kissé megpiritom,hozzá keverem a petrezselymet és kakukkfüvet is.Az egészet összekeverem.2 tojást keverek hozzá s jól összedolgozom.A réteslapot kiteritem a masszát egy csíkban rárakom,ezután óvatosan feltekerem.A maradék tojást felverem és a rétest bekenem vele.200 fokon előmelegitett sütőben kb:20 perc alatt szép pirosra sütöm.Melegen  szeletelem fel.",
+    "category": "Köretek",
+    "prep_time": "60 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "80 minutes",
+    "notes": "szaftos sült húsok,raguk mellé kitünő köret.",
+    "tags": null
+}

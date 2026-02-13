@@ -1,0 +1,12 @@
+{
+    "dish_name": "Paradise appeljam",
+    "description": "Mooie, lekkere en 'handige' jam voor verder gebruik.",
+    "ingredients": "[{\"name\": \"Paradise appels\", \"units\": \"kg\", \"amount\": \"1\"}, {\"name\": \"suiker\", \"units\": \"kg\", \"amount\": \"1\"}, {\"name\": \"citroenzuur\", \"units\": \"theelepel\", \"amount\": \"1/2\"}, {\"name\": \"kaneel\", \"units\": \"theelepels\", \"amount\": \"2\"}]",
+    "instructions": "De gewassen appels worden in porties in een vergiet ondergedompeld in kokend water gedurende 2-3 minuten en onmiddellijk overgebracht naar een bak met koud water. Als alle appels de hardingsprocedure hebben doorstaan, doe ik ze in een grote pan, vul ze met suiker en laat het sap 3-4 uur intrekken. Verwarm vervolgens langzaam aan de kook met een 1/2 glas water, onder voorzichtig roeren. Ik verwijder het schuim. Laat het 3-5 minuten koken, sluit het deksel en laat het 8-10 uur staan. De appels worden in siroop geweekt en worden transparant. Ik herhaal het verwarmen, voeg citroenzuur en kaneel toe en roer voorzichtig. Laat het 3-5 minuten koken en doe het in voorbereide steriele potten met een schroefdop.",
+    "category": "Vruchten- en bessenbereidingen",
+    "prep_time": null,
+    "cook_time": "15 minutes",
+    "total_time": null,
+    "notes": "In de winter gebruik ik deze beauty voor taarten, taarten, ovenschotels, gebak en kwark.",
+    "tags": "jam, fruit, dessert"
+}

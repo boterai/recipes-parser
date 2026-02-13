@@ -1,0 +1,12 @@
+{
+    "dish_name": "POSNE LAZANJE bez mesa",
+    "description": "Recept za posne lazanje bez mesa, idealne za Uskršnji post ili vegansku ishranu.",
+    "ingredients": "[{\"name\": \"posne kore za lazanje\", \"units\": \"grams\", \"amount\": 250}, {\"name\": \"paradajz pire\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"povrće po želji\", \"units\": \"grams\", \"amount\": 250}, {\"name\": \"celer\", \"units\": \"stalk\", \"amount\": 0.5}, {\"name\": \"crni luk\", \"units\": \"head\", \"amount\": 1}, {\"name\": \"beli luk\", \"units\": \"cloves\", \"amount\": 3}, {\"name\": \"voda\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"maslinovo ulje\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"so\", \"units\": null, \"amount\": null}, {\"name\": \"biber\", \"units\": null, \"amount\": null}, {\"name\": \"suvi začin\", \"units\": null, \"amount\": null}, {\"name\": \"bosiljak\", \"units\": null, \"amount\": null}, {\"name\": \"biljno mleko\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"ulje\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"muskatni oraščić\", \"units\": \"pinches\", \"amount\": 2}, {\"name\": \"biljni sir\", \"units\": null, \"amount\": null}]",
+    "instructions": "Sitno iseckajte crni i beli luk i celer sitno, pa propržite na srednjoj vatri i dodajte povrće. Pržite oko dva minuta, pa nalijte paradajz pire, so, suvi začin i vodu. Kuvajte oko 25 minuta, a u međuvremenu dodajte bosiljak po želji i mešajte povremeno. Odvojeno zagrejte ulje i na njemu propržite brašno, pa nalijte toplo biljno mleko i mešajte dok ne dobijete glatku smesu. Zatim začinite i kuvajte na tihoj do srednjoj vatri još desetak minuta, odnosno dok se ne zgusne. Potopite kore za lazanju na 3-2 minuta u vredu vodu, ocedite ih, pa namažite pleh za pečenje uljem i sipajte malo bešamela. Stavite koru, pa preko povrće, pa malo bešamela i tako naizmenično dok ne utrošite materijal. Trebalo bi da završite korom i prelijete ostatkom bešamel sosa. Pecite oko 20 minuta u rerni zagrejanoj na 180 stepeni.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "25 minutes",
+    "total_time": "20 minutes",
+    "notes": "Možete dodati listiće biljnog sira u posnu lazanju.",
+    "tags": "Lazanje, Posna jela, Veganska kuhinja, Recept, Ideje za ručak, Bez mesa, Bez jaja, Bez mleka"
+}

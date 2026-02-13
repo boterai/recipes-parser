@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sukana pita sa sirom",
+    "description": "Sukana pita sa sirom je ukusan i praktičan izbor sa hrskavom teksturom.",
+    "ingredients": "[{\"name\": \"Brašna (tip 400)\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"Punomasnog belog sira (45–55% mm)\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"Mlake vode\", \"units\": \"ml\", \"amount\": 300}, {\"name\": \"Ulja (suncokretovog)\", \"units\": \"ml\", \"amount\": 120}, {\"name\": \"Masti (sobna temp.)\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"Suvog kvasca\", \"units\": \"g\", \"amount\": 6}, {\"name\": \"Jaja (veličina M)\", \"units\": \"kom\", \"amount\": 3}, {\"name\": \"Kisele pavlake (20% mm)\", \"units\": \"ml\", \"amount\": 120}, {\"name\": \"So\", \"units\": \"po ukusu\", \"amount\": null}]",
+    "instructions": "Korak 1: U manjoj činiji razmuti kvasac u 50 ml mlake vode sa prstohvatom šećera. Ostaviti da stoji 5 minuta dok ne zapeni. Korak 2: U velikoj činiji sjedini brašno, malo soli, ulje i mast. Dodaj nadošli kvasac i preostalu vodu (250 ml). Umesi elastično i glatko testo. Pokrij krpom i ostavi da odmori 15 minuta. Korak 3: U drugoj činiji umuti jaja, dodaj izmrvljen sir i pavlaku. Dobro sjedini dok ne dobiješ glatku, srednje gustu masu. Po ukusu dodaj so, ako je potrebno. Korak 4: Testo podeliti na 6-8 jufkica. Svaku jufkicu razviti oklagijom, po potrebi pažljivo rukama dodatno rastegnuti. Ostaviti 1-2 minuta da se blago prosuši pre filovanja. Korak 5: Na svaku koru nanesi deo fila, zatim pažljivo urolaj bez pritiskanja. Slaži u prethodno podmazan pleh – spiralno, u redovima ili kao savijača. Korak 6: Premaži pitu otopljenim maslacem da korica bude hrskavija. Peci u unapred zagrejanoj rerni na 200°C oko 30 minuta.",
+    "category": null,
+    "prep_time": "30 minuta",
+    "cook_time": "30 minuta",
+    "total_time": "60 minuta",
+    "notes": "Umesto sira, možeš koristiti zelje, blitvu, spanać ili fil praviti krompirom.",
+    "tags": "pita, sir, recept"
+}

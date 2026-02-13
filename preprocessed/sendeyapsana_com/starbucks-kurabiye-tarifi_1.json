@@ -1,0 +1,12 @@
+{
+    "dish_name": "Starbucks Kurabiye",
+    "description": "Damla çikolatalı buzluk kurabiyesi, ev yapımı lezzetiyle ve kıyır kıyır dokusuyla dikkat çekiyor.",
+    "ingredients": "[{\"name\": \"tereyağı\", \"units\": \"gram\", \"amount\": 150}, {\"name\": \"yumurta sarısı\", \"units\": \"tane\", \"amount\": 2}, {\"name\": \"pudra şekeri\", \"units\": \"su bardağı\", \"amount\": 1}, {\"name\": \"su\", \"units\": \"yemek kaşığı\", \"amount\": 1}, {\"name\": \"tarçın\", \"units\": \"tatlı kaşığı\", \"amount\": 1}, {\"name\": \"un\", \"units\": \"su bardağı\", \"amount\": 3.5}, {\"name\": \"vanilya\", \"units\": \"paket\", \"amount\": 1}, {\"name\": \"kabartma tozu\", \"units\": \"paket\", \"amount\": 1}, {\"name\": \"damla çikolata\", \"units\": \"su bardağı\", \"amount\": 0.5}, {\"name\": \"ceviz içi\", \"units\": \"su bardağı\", \"amount\": 0.5}]",
+    "instructions": "Oda sıcaklığında 150 gram tereyağı derin bir kaba alalım. 2 tane yumurtanın sarısını ayıralım ve kaba dökelim. 1 su bardağı pudra şekeri dökelim. 1 yemek kaşığı su ve 1 tatlı kaşığı tarçın döküp yoğurmaya başlayalım. 3.5 su bardağı unu azar azar döküp yoğurmaya devam edelim. 1 paket kabartma tozu ve 1 paket vanilya dökelim. Yarım su bardağı damla çikolata ve Yarım su bardağı ceviz içi dökelim. Yumuşak bir kıvam alana kadar yoğuralım. Streç filmi serelim, yoğurduğumuz hamuru üzerine koyalım ve streç filmi etrafına saralım. Köşelerinden tutup videodaki gibi sucuk gibi sıkalım. Sonra derin dondurucuda en az 2 saat bekletelim. Sonra buzdolabından çıkarıp 1 parmak kalınlığında dilimleyelim. Yağlı kağıt serdiğimiz tepsiye dizelim. 180 derece fırında 30 dakika pişirelim.",
+    "category": "Dessert",
+    "prep_time": "2 hours",
+    "cook_time": "30 minutes",
+    "total_time": "2 hours 30 minutes",
+    "notes": "Tereyağını mutlaka oda sıcaklığında kullanın. Damla çikolatayı karışıma en son ekleyin ki parçalanmasın.",
+    "tags": "kurabiye, tatlı, damla çikolata"
+}

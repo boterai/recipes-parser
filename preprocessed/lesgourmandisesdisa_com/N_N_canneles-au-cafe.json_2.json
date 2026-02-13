@@ -1,0 +1,12 @@
+{
+    "dish_name": "CANNELÉS AU CAFÉ",
+    "description": "Des cannelés aromatisés au café avec un extérieur croustillant et un intérieur fondant.",
+    "ingredients": "[{\"name\": \"oeufs entiers\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"jaunes d'oeufs\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"lait\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"beurre fondu\", \"units\": \"g\", \"amount\": 60}, {\"name\": \"sucre\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"farine\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"gousse de vanille\", \"units\": \"pieces\", \"amount\": 1}, {\"name\": \"liqueur de café\", \"units\": \"ml\", \"amount\": 150}, {\"name\": \"rhum brun\", \"units\": \"ml\", \"amount\": 50}]",
+    "instructions": "Blanchir les oeufs (entiers et jaunes) avec le sucre au batteur électrique. Ajouter la farine en continuant à fouetter. Ajouter le beurre fondu, le lait et les graines de vanille et bien battre. Le mélange doit être aussi lisse qu'une pâte à crêpes. Ajouter la liqueur de café et le rhum, et bien mélanger. Couvrir le saladier d'un film alimentaire et réserver au réfrigérateur pendant au moins 24 heures. Au moment d'utiliser la pâte, fouettez-la de nouveau pour la rendre bien homogène. Versez dans des moules à cannelés. Préchauffer votre four à 455 F (235 C), enfourner vos cannelés pendant 5 minutes puis baissez la température du four à 350 F (180 C) et poursuivre la cuisson pendant 40 minutes. Démoulez vos cannelés et dégustez les tièdes ou froids.",
+    "category": "Dessert",
+    "prep_time": "24 hours",
+    "cook_time": "45 minutes",
+    "total_time": "24 hours 45 minutes",
+    "notes": "Utilisez des moules en silicone pour un meilleur résultat.",
+    "tags": "café, cannelé, cannelés au café"
+}

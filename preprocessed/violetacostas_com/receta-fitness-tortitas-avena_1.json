@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tortitas de Avena",
+    "description": "Receta de tortitas de avena saludables y sin azúcar añadido.",
+    "ingredients": "[{\"name\": \"Huevo\", \"units\": null, \"amount\": 1}, {\"name\": \"Claras de Huevo\", \"units\": null, \"amount\": 3}, {\"name\": \"Plátano\", \"units\": null, \"amount\": 1}, {\"name\": \"Yogur natural sin grasas ni azúcares\", \"units\": null, \"amount\": 1}, {\"name\": \"Bebida vegetal\", \"units\": \"taza\", \"amount\": \"3/4\"}, {\"name\": \"Copos de avena\", \"units\": \"gramos\", \"amount\": 150}]",
+    "instructions": "1. Batir todos los ingredientes hasta formar una masa homogénea. 2. Calentar la sartén a fuego medio y añadir un poco de la mezcla. Cocinar durante 45-60 segundos y dar la vuelta. 3. Añadir acompañantes como frutas o frutos secos.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Puedes sustituir el huevo por dos claras adicionales. La bebida vegetal puede ser reemplazada por leche normal si no eres intolerante a la lactosa.",
+    "tags": "saludable, desayuno, tortitas"
+}

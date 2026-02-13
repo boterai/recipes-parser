@@ -1,0 +1,12 @@
+{
+    "dish_name": "Majonézes lencsesaláta",
+    "description": null,
+    "ingredients": "[{\"name\": \"lencse\", \"units\": \"dkg\", \"amount\": 40}, {\"name\": \"kukorica\", \"units\": \"g\", \"amount\": 340}, {\"name\": \"lilahagyma\", \"units\": \"fej\", \"amount\": 1}, {\"name\": \"virsli\", \"units\": \"db\", \"amount\": 3}, {\"name\": \"tejföl\", \"units\": \"g\", \"amount\": 350}, {\"name\": \"majonéz\", \"units\": \"evőkanál\", \"amount\": 6}, {\"name\": \"őrölt fekete bors\", \"units\": \"ízlés szerint\", \"amount\": null}, {\"name\": \"cukor\", \"units\": \"ízlés szerint\", \"amount\": null}, {\"name\": \"mustár\", \"units\": \"evőkanál\", \"amount\": 1}]",
+    "instructions": "A lencsét megfőzzük. A lilahagymát kockára vágjuk. A virsliket felkarikázzuk. Mindent egy tálba teszünk, sóval, borssal, a cukorral és a mustárral ízesítjük, összekeverjük és a hűtőbe tesszük, hogy jobban összeérjenek az ízek.",
+    "category": "Egyszerű ételek",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": "60 minutes",
+    "notes": null,
+    "tags": "saláta, lencse, majonéz"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Bolitas de coco y limón",
+    "description": "Receta de bolitas de coco y limón, perfectas para un momento de relax.",
+    "ingredients": "[{\"name\": \"almendras\", \"units\": \"gramos\", \"amount\": 50}, {\"name\": \"limón\", \"units\": null, \"amount\": 1}, {\"name\": \"coco rallado\", \"units\": \"gramos\", \"amount\": 50}, {\"name\": \"miel\", \"units\": \"cda\", \"amount\": 1}]",
+    "instructions": "1. Triturar las almendras en trozos pequeños. 2. Mezclar todos los ingredientes. 3. Hacer bolitas con la masa. 4. Guardar en la nevera por al menos 2 horas.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Puedes sustituir la miel por mantequilla de cacahuete o crema de almendras sin azúcares añadidos.",
+    "tags": "saludable, dulce, fácil"
+}

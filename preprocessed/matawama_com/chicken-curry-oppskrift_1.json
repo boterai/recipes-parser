@@ -1,0 +1,12 @@
+{
+    "dish_name": "Chicken Curry",
+    "description": "A popular dish with various regional variations, featuring chicken cooked in a spiced curry sauce.",
+    "ingredients": "[{\"name\": \"Kylling\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"Løk\", \"units\": \"stk\", \"amount\": 2}, {\"name\": \"Hvitløksfedd\", \"units\": \"stk\", \"amount\": 4}, {\"name\": \"Ingefær\", \"units\": \"cm\", \"amount\": 2}, {\"name\": \"Gurkemeie\", \"units\": \"ts\", \"amount\": 1}, {\"name\": \"Chilipulver\", \"units\": \"ts\", \"amount\": 1}, {\"name\": \"Garam masala\", \"units\": \"ts\", \"amount\": 1}, {\"name\": \"Tomatpuré\", \"units\": \"ss\", \"amount\": 2}, {\"name\": \"Olje\", \"units\": \"ss\", \"amount\": 2}, {\"name\": \"Salt\", \"units\": null, \"amount\": null}]",
+    "instructions": "Stek løk, hvitløk og ingefær i olje til løken er myk og gyllen. Tilsett kyllingen og stek den til den er gyldenbrun på alle sider. Tilsett gurkemeie, chilipulver og garam masala. Stek i noen minutter. Tilsett tomatpuré og la det koke i et par minutter. Tilsett vann og la retten småkoke i ca. 20-30 minutter til kyllingen er mør. Smak til med salt og server med ris eller naanbrød.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "30 minutes",
+    "total_time": null,
+    "notes": "Serve with rice or naan bread.",
+    "tags": "chicken, curry, main course, indian"
+}

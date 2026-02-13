@@ -1,0 +1,12 @@
+{
+    "dish_name": "כדורי בשר ברוטב עגבניות עם פסטה",
+    "description": "מתכון מנחם של כדורי בשר ברוטב עגבניות עם פסטה מבושלת.",
+    "ingredients": "[{\"name\": \"בשר בקר טחון\", \"units\": \"grams\", \"amount\": 600}, {\"name\": \"בצל לבן קטן\", \"units\": \"unit\", \"amount\": 1}, {\"name\": \"שום טרי\", \"units\": \"cloves\", \"amount\": 4}, {\"name\": \"ביצים\", \"units\": \"unit\", \"amount\": 2}, {\"name\": \"פירורי לחם\", \"units\": \"grams\", \"amount\": 60}, {\"name\": \"פטרוזיליה\", \"units\": \"grams\", \"amount\": 20}, {\"name\": \"מלח\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"פלפל שחור גרוס\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"פפריקה מתוקה\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"כמון טחון\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"שמן זית\", \"units\": \"tablespoons\", \"amount\": 3}, {\"name\": \"פסטה קצרה\", \"units\": \"grams\", \"amount\": 500}, {\"name\": \"עגבניות מרוסקות\", \"units\": \"grams\", \"amount\": 800}, {\"name\": \"רסק עגבניות\", \"units\": \"grams\", \"amount\": 40}, {\"name\": \"סוכר\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"עליי דפנה\", \"units\": \"unit\", \"amount\": 2}, {\"name\": \"מים\", \"units\": \"milliliters\", \"amount\": 900}, {\"name\": \"מלח (לרוטב ולפסטה)\", \"units\": \"grams\", \"amount\": 15}, {\"name\": \"פלפל שחור גרוס (לרוטב)\", \"units\": \"teaspoon\", \"amount\": 0.5}]",
+    "instructions": "1. הכינו תערובת כדורי הבשר על ידי ערבוב כל החומרים בקערה. 2. צרו כדורים בגודל אחיד והניחו במקרר. 3. טגנו את הכדורים בשמן זית עד השחמה. 4. הכינו את הרוטב באותו סיר עם עגבניות מרוסקות ושאר החומרים. 5. החזירו את הכדורים לרוטב ובשלו יחד. 6. בשלו את הפסטה לפי הוראות היצרן. 7. שלבו את הפסטה עם הכדורים והרוטב והגישו.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "75 minutes",
+    "total_time": "105 minutes",
+    "notes": "המתכון כולל טיפים לשיפור הטעמים והמרקם של המנה.",
+    "tags": "meatballs,pasta,tomato sauce"
+}

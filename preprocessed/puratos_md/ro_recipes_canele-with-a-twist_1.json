@@ -1,0 +1,12 @@
+{
+    "dish_name": "Canelé with a twist",
+    "description": "Transformă o rețetă clasică într-un desert surprinzător de elegant și creativ folosind biluțe de cafea distribuite uniform în tot aluatul.",
+    "ingredients": "[{\"name\": \"Tegral Satin Creme Cake Yellow\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"Ouă\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"Gălbenuș de ou\", \"units\": \"g\", \"amount\": 40}, {\"name\": \"Unt 82,5%\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"Lapte\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"Rom\", \"units\": \"ml\", \"amount\": 5}, {\"name\": \"Smoobees Cafea\", \"units\": \"g\", \"amount\": 180}, {\"name\": \"Belcolade Lait\", \"units\": \"g\", \"amount\": 500}]",
+    "instructions": "Se amestecă toate ingredientele, cu excepția Smoobees, la viteză medie timp de 4 min cu ajutorul unei palete. Se adaugă Smoobees și se amestecă timp de 1 minut la viteză mică. Se toarnă aluatul în forme canelé mici (15 gr) sau mari (50 gr) din silicon și se coc la 180°C între 25-30 de minute, în funcție de mărime. Se lasă să se răcească. Se scufundă partea de jos a prăjiturii în ciocolata temperată Belcolade Lait Selection CT.",
+    "category": "Dessert",
+    "prep_time": "null",
+    "cook_time": "30 minutes",
+    "total_time": "null",
+    "notes": "null",
+    "tags": "Canelé, Dessert, Puratos"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ginataang Kalabasa with Pork Luncheon Meat",
+    "description": "A Filipino recipe that adds meatiness to a classic vegetarian dish with cubes of salty luncheon meat.",
+    "ingredients": "[{\"name\": \"Oil\", \"units\": \"tablespoons\", \"amount\": \"2\"}, {\"name\": \"Spam\", \"units\": \"340-gram can\", \"amount\": \"1\"}, {\"name\": \"red onion\", \"units\": \"medium\", \"amount\": \"1\"}, {\"name\": \"shrimp paste (bagoong alamang)\", \"units\": \"tablespoon\", \"amount\": \"1\"}, {\"name\": \"squash (kalabasa)\", \"units\": \"chunk\", \"amount\": \"1/4\"}, {\"name\": \"fresh coconut cream (kakang gata)\", \"units\": \"200-ml pack\", \"amount\": \"1\"}, {\"name\": \"water\", \"units\": \"Cup\", \"amount\": \"1/2\"}, {\"name\": \"long beans (sitaw)\", \"units\": \"bundle\", \"amount\": \"1\"}, {\"name\": \"ground black pepper\", \"units\": \"to taste\", \"amount\": null}]",
+    "instructions": "In a wok over medium heat, heat oil and fry SPAM cubes until browned on all sides. Remove from heat and set aside. In the same wok, saute onion in the remaining oil. Add bagoong alamang and saute until heated through. Add kalabasa, gata, and water. Bring mixture to a boil and then simmer until the kalabasa are just tender. Add sitaw and return SPAM to the wok. Mix to coat and simmer until the sitaw turns a bright green color, the gata has thickened, and the kalabasa cubes are all tender. Season with a little ground pepper to taste. Serve while hot.",
+    "category": "Main Dishes, Side Dishes",
+    "prep_time": "15 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "25 minutes",
+    "notes": null,
+    "tags": "Filipino, vegetarian, luncheon meat, coconut milk"
+}

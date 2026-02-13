@@ -1,0 +1,12 @@
+{
+    "dish_name": "indisk curry",
+    "description": "En autentisk smaksopplevelse fra India som er elsket over hele verden.",
+    "ingredients": "[{\"name\": \"kyllingfilet\", \"units\": \"gram\", \"amount\": 500}, {\"name\": \"store løk\", \"units\": \"stykker\", \"amount\": 2}, {\"name\": \"hvitsløk\", \"units\": \"fedd\", \"amount\": 4}, {\"name\": \"ingefær\", \"units\": \"tommelstor bit\", \"amount\": 1}, {\"name\": \"store tomater\", \"units\": \"stykker\", \"amount\": 2}, {\"name\": \"grønne chili\", \"units\": \"stykker\", \"amount\": 2}, {\"name\": \"gurkemeiepulver\", \"units\": \"ts\", \"amount\": 1}, {\"name\": \"chilipulver\", \"units\": \"ts\", \"amount\": 1}, {\"name\": \"korianderpulver\", \"units\": \"ts\", \"amount\": 1}, {\"name\": \"spisskummenpulver\", \"units\": \"ts\", \"amount\": 0.5}, {\"name\": \"garam masala\", \"units\": \"ts\", \"amount\": 0.5}, {\"name\": \"Salt\", \"units\": \"etter smak\", \"amount\": null}, {\"name\": \"Olje\", \"units\": \"til steking\", \"amount\": null}]",
+    "instructions": "Varm olje i en stor stekepanne og tilsett finhakket løk. Stek løken til den er gyldenbrun. Tilsett knust hvitløk og revet ingefær i pannen. Stek i et minutt til duftene kommer frem. Tilsett hakkede tomater og grønne chili. La det koke i noen minutter til tomatene blir myke. Tilsett kyllingfilet, gurkemeiepulver, chilipulver, korianderpulver, spisskummenpulver og salt. Bland godt og stek i 10-15 minutter til kyllingen er tilberedt. Tilsett garam masala og la curryen koke i noen minutter til sausen tykner. Server den deilige indiske curryen med ris eller naan-brød.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "10-15 minutes",
+    "total_time": null,
+    "notes": "For en vegetarisk versjon, kan du erstatte kylling med grønnsaker som poteter, erter eller blomkål. Justér krydderstyrken etter din smak. Hvis du liker det sterkt, kan du legge til mer chilipulver eller grønne chili.",
+    "tags": "indisk, curry, hovedrett"
+}

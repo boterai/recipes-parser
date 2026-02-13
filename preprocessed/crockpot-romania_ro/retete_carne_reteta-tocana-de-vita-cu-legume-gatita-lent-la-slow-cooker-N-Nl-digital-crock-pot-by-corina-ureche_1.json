@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tocană de vită cu legume",
+    "description": "Această tocană de vită cu legume, gătită lent la Slow Cooker 4.7L Digital Crock-Pot, este alegerea perfectă! Gătirea lentă la crock-pot face ca vita să devină incredibil de fragedă, iar legumele își păstrează toate aromele și nutrienții.",
+    "ingredients": "[{\"name\": \"carne de vită\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"cartofi\", \"units\": \"g\", \"amount\": 350}, {\"name\": \"morcovi\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"păstârnac\", \"units\": \"g\", \"amount\": 110}, {\"name\": \"sos de roșii\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"apă\", \"units\": \"ml\", \"amount\": 150}, {\"name\": \"boia afumată\", \"units\": \"linguriță\", \"amount\": 1}, {\"name\": \"sare\", \"units\": \"linguriță\", \"amount\": 1}, {\"name\": \"piper\", \"units\": \"linguriță\", \"amount\": 0.5}, {\"name\": \"cimbru uscat\", \"units\": \"linguriță\", \"amount\": 1}, {\"name\": \"chimen macinat\", \"units\": \"linguriță\", \"amount\": 0.5}, {\"name\": \"pătrunjel proaspăt\", \"units\": null, \"amount\": null}, {\"name\": \"ardei iute\", \"units\": null, \"amount\": null}]",
+    "instructions": "Pasul 1: Se curăță legumele și se taie rondele și cuburi mari. Carnea de vită se taie cubulețe. Pasul 2: În vasul de la slowcooker se pun cartofii, morcovii și păstârnacul, carnea de vită. Pasul 3: Se adaugă condimentele, sosul de roșii și apa și se amestecă. Pasul 4: Se setează aparatul pe funcția High pentru 4 ore. Pasul 5: În funcție de tipul de carne folosit timpul de gătire poate varia, recomandarea mea fiind de a testa cât este de gătită tocana după 3,5 ore. Ajustați timpul în funcție de nevoie. Pasul 6: La final se adaugă pătrunjelul tocat mărunt și se mai adaugă sare dacă este nevoie, iar în farfurie se așează peste tocană felii de ardei iute.",
+    "category": "Main Course",
+    "prep_time": "4h 20m",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

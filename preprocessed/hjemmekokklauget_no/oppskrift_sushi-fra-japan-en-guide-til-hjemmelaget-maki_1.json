@@ -1,0 +1,12 @@
+{
+    "dish_name": "Hjemmelaget sushi",
+    "description": "En autentisk japansk oppskrift for å lage maki sushi hjemme med fokus på bærekraftige og sunne ingredienser.",
+    "ingredients": "[{\"name\": \"fersk sushi- eller sushikvalitet fisk\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"sushi-ris\", \"units\": \"kopper\", \"amount\": 2}, {\"name\": \"riseddik\", \"units\": \"ss\", \"amount\": 3}, {\"name\": \"sukker\", \"units\": \"ss\", \"amount\": 2}, {\"name\": \"salt\", \"units\": \"ts\", \"amount\": 1}, {\"name\": \"Nori\", \"units\": null, \"amount\": null}, {\"name\": \"Wasabi\", \"units\": null, \"amount\": null}, {\"name\": \"Soyasaus\", \"units\": null, \"amount\": null}, {\"name\": \"agurk\", \"units\": null, \"amount\": null}, {\"name\": \"avokado\", \"units\": null, \"amount\": null}, {\"name\": \"sesamfrø\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Skyll sushi-risen under kaldt vann til vannet er klart. Kok ris etter pakningsanvisningen, og bland deretter med riseddik, sukker, og salt. 2. Skjær fisken i tynne skiver. Pass på å bruke fersk fisk av høy kvalitet beregnet for sushi. 3. Plasser et nori-ark på en bambusmatte. Spre et tynt lag med ris over arket, legg til fisk og valgfrie tilbehør. Rull stramt. 4. Med en skarp kniv, skjær rullen i 6-8 biter. Server med wasabi, soyasaus, og syltet ingefær.",
+    "category": "Fingermat",
+    "prep_time": "30 minutes",
+    "cook_time": "1 hour",
+    "total_time": "1 hour 30 minutes",
+    "notes": "Sørg for at risen er avkjølt til romtemperatur før du begynner å lage sushi. For en vegetarisk variant, bruk tofu eller bare grønnsaker som fyll. Eksperimenter med ulike sauser og tilbehør for å finne din favorittkombinasjon.",
+    "tags": "bærekraftig sjømat, eddikris, ernæring, fiskens-dag, hjemmelaget sushi, japansk mat, rå fisk, sunn oppskrift, Sushi, tang, wasabi"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Torta di Mele",
+    "description": "Un delizioso dessert a base di mele, perfetto per ogni occasione.",
+    "ingredients": "[{\"name\": \"mele\", \"units\": \"pieces\", \"amount\": 4}, {\"name\": \"farina\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"zucchero\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"burro\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"uovo\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"cannella in polvere\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"noce moscata\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"lievito in polvere\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"bicarbonato di sodio\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"sale\", \"units\": \"pinch\", \"amount\": 1}]",
+    "instructions": "Inizia sbucciando e affettando le mele finemente. Mettile da parte. In una ciotola, mescola la farina, lo zucchero, la cannella, la noce moscata, il lievito in polvere, il bicarbonato di sodio e il sale. Aggiungi l’uovo e il burro fuso alla miscela di ingredienti secchi. Mescola bene. Aggiungi le mele affettate alla miscela e assicurati che siano uniformemente distribuite. Versa l’impasto in una teglia imburrata e infarinata. Cuoci in forno preriscaldato a 180°C per circa 40-45 minuti, o fino a quando la torta è dorata e un inserto al centro esce pulito. Lascia raffreddare leggermente prima di servire.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "40-45 minutes",
+    "total_time": null,
+    "notes": "Puoi guarnire con una spolverata di zucchero a velo, se lo desideri.",
+    "tags": "dessert, torta, mele"
+}

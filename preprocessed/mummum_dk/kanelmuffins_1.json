@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kanelmuffins",
+    "description": "Nem opskrift på svampede kanelmuffins med glasur. De bedste cupcakes med kanel, som bliver luftige og på inge måde tørre.",
+    "ingredients": "[{\"name\": \"sukker\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"smør\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"vaniljesukker\", \"units\": \"tsk\", \"amount\": 2}, {\"name\": \"kanel\", \"units\": \"tsk\", \"amount\": 3}, {\"name\": \"natron\", \"units\": \"tsk\", \"amount\": 1.5}, {\"name\": \"hvedemel\", \"units\": \"g\", \"amount\": 170}, {\"name\": \"kærnemælk\", \"units\": \"dl\", \"amount\": 2.5}, {\"name\": \"glasur smør\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"flormelis\", \"units\": \"g\", \"amount\": 225}, {\"name\": \"færdiglavet kaffe\", \"units\": \"spsk\", \"amount\": 3}, {\"name\": \"vaniljesukker\", \"units\": \"tsk\", \"amount\": 1.5}, {\"name\": \"bagekakao\", \"units\": \"spsk\", \"amount\": 1.5}]",
+    "instructions": "Tænd ovnen på 180 grader alm. ovn (over- og undervarme). Smelt smør og bland det herefter med sukker i en skål. Tilsæt kærnemælk, vaniljesukker, kanel og natron. Pisk godt med en elpisker. Tilsæt hvedemel og rør det hele godt sammen. Fordel dejen i muffinsforme. Bag dem i den forvarmede ovn i ca. 20-25 minutter. Du kan tjekke om de er færdige ved at stikke en kødnål, grillspyd eller noget andet tyndt ned i dem. Hvis der ikke kommer ubagt dej med op, så er de færdige. Tag dem ud af ovnen og lad dem køle af. Nu skal glasur laves. I en lille gryde smeltes smør. Tilsæt de resterende ingredienser og lad det samle sig i gryden ved lav varme. Juster til med kaffe eller vand til du har den ønskede konsistens. Fordel glasuren på de små muffins. Lad glasuren sætte sig og lad muffins afkøle. Opbevar muffinsene ved stuetemperatur pakket ind i en plastikpose eller med husholdningsfilm over. De bliver faktisk kun bedre af at få lov til at stå til dagen efter.",
+    "category": "Dessert",
+    "prep_time": "10 minutter",
+    "cook_time": "20 minutter",
+    "total_time": "30 minutter",
+    "notes": "Kaffen i glasuren giver et ekstra spark, men kan erstattes med vand.",
+    "tags": "kanel, muffins, dessert, vegetarisk, efterår, forår, sommer, vinter"
+}

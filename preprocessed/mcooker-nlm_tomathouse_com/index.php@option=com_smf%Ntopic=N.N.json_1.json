@@ -1,0 +1,12 @@
+{
+    "dish_name": "Börek (met vlees en aardappelen)",
+    "description": "Turks gerecht из слоеного теста с мясом и картофелем.",
+    "ingredients": "[{\"name\": \"Meel\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"Water\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"Zout\", \"units\": \"theelepel\", \"amount\": 1}, {\"name\": \"Plantaardige olie\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"Ghee (margarine)\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"Vlees\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"Aardappelen\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"Boog\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"Soja Soum\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"Paprika, gemalen zwart, rode peper, komijn, komijn\", \"units\": \"naar smaak\", \"amount\": null}]",
+    "instructions": "Deeg in water, 30 min. Laten rijzen. Rol het deeg zo dun mogelijk uit, vet in met gesmolten margarine + plantaardige olie, vouw de deegrol 2-3 lagen (meer indien gewenst), elke laag is ingevet. Leg de vulling in het midden, wikkel hem stevig vast. Vouw op een bakplaat zoals je wilt, zoals op de foto, je kunt kleine bagels in porties doen, nou, wat zal je fantasie vertellen. Vet alles in met een margarine-botermengsel en bak 30-40 minuten in de oven.",
+    "category": "Bakkerijproducten",
+    "prep_time": "1 hour",
+    "cook_time": "30-40 minutes",
+    "total_time": null,
+    "notes": "De vulling en vorm hangt af van je fantasie. De meest voorkomende vullingen: fetakaas, kwark, gehakt, groenten en soms bonen.",
+    "tags": "Turks, Bakkerijproducten, Hoofdgerecht"
+}

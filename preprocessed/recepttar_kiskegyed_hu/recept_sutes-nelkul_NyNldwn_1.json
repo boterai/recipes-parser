@@ -1,0 +1,12 @@
+{
+    "dish_name": "Juharszirupos-diós keksztekercs",
+    "description": "Sütés nélküli desszert, amely diós és juharszirupos krémmel készül.",
+    "ingredients": "[{\"name\": \"cukormentes darált keksz\", \"units\": \"dkg\", \"amount\": 50}, {\"name\": \"olvasztott margarin vagy vaj\", \"units\": \"dkg\", \"amount\": 10}, {\"name\": \"cukrozatlan kakaópor\", \"units\": \"ek.\", \"amount\": 3}, {\"name\": \"porcukor\", \"units\": \"ek.\", \"amount\": 4}, {\"name\": \"rumaroma\", \"units\": \"ek.\", \"amount\": 2}, {\"name\": \"vaníliaaroma\", \"units\": \"ek.\", \"amount\": 1}, {\"name\": \"tej\", \"units\": \"amennyit felvesz\", \"amount\": null}, {\"name\": \"vaj\", \"units\": \"dkg\", \"amount\": 20}, {\"name\": \"juharszirup\", \"units\": \"néhány evőkanál\", \"amount\": null}, {\"name\": \"porcukor\", \"units\": \"ha nem elég édes\", \"amount\": null}, {\"name\": \"darált dió\", \"units\": \"dkg\", \"amount\": 10}]",
+    "instructions": "1. A tészta hozzávalóit összedolgozzuk, formázható legyen. Tegyük félórára hűtőbe. 2. A vajat habosítsuk ki, majd adjuk hozzá a juharszirupot, diót és még porcukrot( ha szükséges). 3. Fóliára én szórtam még darált diót és azon nyújtottam ki a kekszes tésztát. A krémet egyenletesen rákenem, majd feltekerem. Pár óra hűtő és utána szeletelhető.",
+    "category": "Dessert",
+    "prep_time": "30 minutes",
+    "cook_time": null,
+    "total_time": "45 minutes",
+    "notes": null,
+    "tags": "sütés nélkül, desszert, egyszerű, gyors"
+}

@@ -1,0 +1,1047 @@
+<html lang="ru-RU"><head><meta charset="UTF-8"><script>if(navigator.userAgent.match(/MSIE|Internet Explorer/i)||navigator.userAgent.match(/Trident\/7\..*?rv:11/i)){var href=document.location.href;if(!href.match(/[?&]nowprocket/)){if(href.indexOf("?")==-1){if(href.indexOf("#")==-1){document.location.href=href+"?nowprocket=1"}else{document.location.href=href.replace("#","?nowprocket=1#")}}else{if(href.indexOf("#")==-1){document.location.href=href+"&nowprocket=1"}else{document.location.href=href.replace("#","&nowprocket=1#")}}}}</script><script>(()=>{class RocketLazyLoadScripts{constructor(){this.v="2.0.2",this.userEvents=["keydown","keyup","mousedown","mouseup","mousemove","mouseover","mouseenter","mouseout","mouseleave","touchmove","touchstart","touchend","touchcancel","wheel","click","dblclick","input","visibilitychange"],this.attributeEvents=["onblur","onclick","oncontextmenu","ondblclick","onfocus","onmousedown","onmouseenter","onmouseleave","onmousemove","onmouseout","onmouseover","onmouseup","onmousewheel","onscroll","onsubmit"]}async t(){this.i(),this.o(),/iP(ad|hone)/.test(navigator.userAgent)&&this.h(),this.u(),this.l(this),this.m(),this.k(this),this.p(this),this._(),await Promise.all([this.R(),this.L()]),this.lastBreath=Date.now(),this.S(this),this.P(),this.D(),this.O(),this.M(),await this.C(this.delayedScripts.normal),await this.C(this.delayedScripts.defer),await this.C(this.delayedScripts.async),this.T("domReady"),await this.F(),await this.j(),await this.I(),this.T("windowLoad"),await this.A(),window.dispatchEvent(new Event("rocket-allScriptsLoaded")),this.everythingLoaded=!0,this.lastTouchEnd&&await new Promise((t=>setTimeout(t,500-Date.now()+this.lastTouchEnd))),this.H(),this.T("all"),this.U(),this.W()}i(){this.CSPIssue=sessionStorage.getItem("rocketCSPIssue"),document.addEventListener("securitypolicyviolation",(t=>{this.CSPIssue||"script-src-elem"!==t.violatedDirective||"data"!==t.blockedURI||(this.CSPIssue=!0,sessionStorage.setItem("rocketCSPIssue",!0))}),{isRocket:!0})}o(){window.addEventListener("pageshow",(t=>{this.persisted=t.persisted,this.realWindowLoadedFired=!0}),{isRocket:!0}),window.addEventListener("pagehide",(()=>{this.onFirstUserAction=null}),{isRocket:!0})}h(){let t;function e(e){t=e}window.addEventListener("touchstart",e,{isRocket:!0}),window.addEventListener("touchend",(function i(o){Math.abs(o.changedTouches[0].pageX-t.changedTouches[0].pageX)<10&&Math.abs(o.changedTouches[0].pageY-t.changedTouches[0].pageY)<10&&o.timeStamp-t.timeStamp<200&&(o.target.dispatchEvent(new PointerEvent("click",{target:o.target,bubbles:!0,cancelable:!0})),event.preventDefault(),window.removeEventListener("touchstart",e,{isRocket:!0}),window.removeEventListener("touchend",i,{isRocket:!0}))}),{isRocket:!0})}q(t){this.userActionTriggered||("mousemove"!==t.type||this.firstMousemoveIgnored?"keyup"===t.type||"mouseover"===t.type||"mouseout"===t.type||(this.userActionTriggered=!0,this.onFirstUserAction&&this.onFirstUserAction()):this.firstMousemoveIgnored=!0),"click"===t.type&&t.preventDefault(),this.savedUserEvents.length>0&&(t.stopPropagation(),t.stopImmediatePropagation()),"touchstart"===this.lastEvent&&"touchend"===t.type&&(this.lastTouchEnd=Date.now()),"click"===t.type&&(this.lastTouchEnd=0),this.lastEvent=t.type,this.savedUserEvents.push(t)}u(){this.savedUserEvents=[],this.userEventHandler=this.q.bind(this),this.userEvents.forEach((t=>window.addEventListener(t,this.userEventHandler,{passive:!1,isRocket:!0})))}U(){this.userEvents.forEach((t=>window.removeEventListener(t,this.userEventHandler,{passive:!1,isRocket:!0}))),this.savedUserEvents.forEach((t=>{t.target.dispatchEvent(new window[t.constructor.name](t.type,t))}))}m(){this.eventsMutationObserver=new MutationObserver((t=>{const e="return false";for(const i of t){if("attributes"===i.type){const t=i.target.getAttribute(i.attributeName);t&&t!==e&&(i.target.setAttribute("data-rocket-"+i.attributeName,t),i.target.setAttribute(i.attributeName,e))}"childList"===i.type&&i.addedNodes.forEach((t=>{if(t.nodeType===Node.ELEMENT_NODE)for(const i of t.attributes)this.attributeEvents.includes(i.name)&&i.value&&""!==i.value&&(t.setAttribute("data-rocket-"+i.name,i.value),t.setAttribute(i.name,e))}))}})),this.eventsMutationObserver.observe(document,{subtree:!0,childList:!0,attributeFilter:this.attributeEvents})}H(){this.eventsMutationObserver.disconnect(),this.attributeEvents.forEach((t=>{document.querySelectorAll("[data-rocket-"+t+"]").forEach((e=>{e.setAttribute(t,e.getAttribute("data-rocket-"+t)),e.removeAttribute("data-rocket-"+t)}))}))}k(t){Object.defineProperty(HTMLElement.prototype,"onclick",{get(){return this.rocketonclick},set(e){this.rocketonclick=e,this.setAttribute(t.everythingLoaded?"onclick":"data-rocket-onclick","this.rocketonclick(event)")}})}S(t){function e(e,i){let o=e[i];e[i]=null,Object.defineProperty(e,i,{get:()=>o,set(s){t.everythingLoaded?o=s:e["rocket"+i]=o=s}})}e(document,"onreadystatechange"),e(window,"onload"),e(window,"onpageshow");try{Object.defineProperty(document,"readyState",{get:()=>t.rocketReadyState,set(e){t.rocketReadyState=e},configurable:!0}),document.readyState="loading"}catch(t){console.log("WPRocket DJE readyState conflict, bypassing")}}l(t){this.originalAddEventListener=EventTarget.prototype.addEventListener,this.originalRemoveEventListener=EventTarget.prototype.removeEventListener,this.savedEventListeners=[],EventTarget.prototype.addEventListener=function(e,i,o){o&&o.isRocket||!t.B(e,this)&&!t.userEvents.includes(e)||t.B(e,this)&&!t.userActionTriggered||e.startsWith("rocket-")?t.originalAddEventListener.call(this,e,i,o):t.savedEventListeners.push({target:this,remove:!1,type:e,func:i,options:o})},EventTarget.prototype.removeEventListener=function(e,i,o){o&&o.isRocket||!t.B(e,this)&&!t.userEvents.includes(e)||t.B(e,this)&&!t.userActionTriggered||e.startsWith("rocket-")?t.originalRemoveEventListener.call(this,e,i,o):t.savedEventListeners.push({target:this,remove:!0,type:e,func:i,options:o})}}T(t){"all"===t&&(EventTarget.prototype.addEventListener=this.originalAddEventListener,EventTarget.prototype.removeEventListener=this.originalRemoveEventListener),this.savedEventListeners=this.savedEventListeners.filter((e=>{let i=e.type,o=e.target||window;return"domReady"===t&&"DOMContentLoaded"!==i&&"readystatechange"!==i||("windowLoad"===t&&"load"!==i&&"readystatechange"!==i&&"pageshow"!==i||(this.B(i,o)&&(i="rocket-"+i),e.remove?o.removeEventListener(i,e.func,e.options):o.addEventListener(i,e.func,e.options),!1))}))}p(t){let e;function i(e){return t.everythingLoaded?e:e.split(" ").map((t=>"load"===t||t.startsWith("load.")?"rocket-jquery-load":t)).join(" ")}function o(o){function s(e){const s=o.fn[e];o.fn[e]=o.fn.init.prototype[e]=function(){return this[0]===window&&t.userActionTriggered&&("string"==typeof arguments[0]||arguments[0]instanceof String?arguments[0]=i(arguments[0]):"object"==typeof arguments[0]&&Object.keys(arguments[0]).forEach((t=>{const e=arguments[0][t];delete arguments[0][t],arguments[0][i(t)]=e}))),s.apply(this,arguments),this}}if(o&&o.fn&&!t.allJQueries.includes(o)){const e={DOMContentLoaded:[],"rocket-DOMContentLoaded":[]};for(const t in e)document.addEventListener(t,(()=>{e[t].forEach((t=>t()))}),{isRocket:!0});o.fn.ready=o.fn.init.prototype.ready=function(i){function s(){parseInt(o.fn.jquery)>2?setTimeout((()=>i.bind(document)(o))):i.bind(document)(o)}return t.realDomReadyFired?!t.userActionTriggered||t.fauxDomReadyFired?s():e["rocket-DOMContentLoaded"].push(s):e.DOMContentLoaded.push(s),o([])},s("on"),s("one"),s("off"),t.allJQueries.push(o)}e=o}t.allJQueries=[],o(window.jQuery),Object.defineProperty(window,"jQuery",{get:()=>e,set(t){o(t)}})}P(){const t=new Map;document.write=document.writeln=function(e){const i=document.currentScript,o=document.createRange(),s=i.parentElement;let n=t.get(i);void 0===n&&(n=i.nextSibling,t.set(i,n));const a=document.createDocumentFragment();o.setStart(a,0),a.appendChild(o.createContextualFragment(e)),s.insertBefore(a,n)}}async R(){return new Promise((t=>{this.userActionTriggered?t():this.onFirstUserAction=t}))}async L(){return new Promise((t=>{document.addEventListener("DOMContentLoaded",(()=>{this.realDomReadyFired=!0,t()}),{isRocket:!0})}))}async I(){return this.realWindowLoadedFired?Promise.resolve():new Promise((t=>{window.addEventListener("load",t,{isRocket:!0})}))}M(){this.pendingScripts=[];this.scriptsMutationObserver=new MutationObserver((t=>{for(const e of t)e.addedNodes.forEach((t=>{"SCRIPT"!==t.tagName||t.noModule||t.isWPRocket||this.pendingScripts.push({script:t,promise:new Promise((e=>{const i=()=>{const i=this.pendingScripts.findIndex((e=>e.script===t));i>=0&&this.pendingScripts.splice(i,1),e()};t.addEventListener("load",i,{isRocket:!0}),t.addEventListener("error",i,{isRocket:!0}),setTimeout(i,1e3)}))})}))})),this.scriptsMutationObserver.observe(document,{childList:!0,subtree:!0})}async j(){await this.J(),this.pendingScripts.length?(await this.pendingScripts[0].promise,await this.j()):this.scriptsMutationObserver.disconnect()}D(){this.delayedScripts={normal:[],async:[],defer:[]},document.querySelectorAll("script[type$=rocketlazyloadscript]").forEach((t=>{t.hasAttribute("data-rocket-src")?t.hasAttribute("async")&&!1!==t.async?this.delayedScripts.async.push(t):t.hasAttribute("defer")&&!1!==t.defer||"module"===t.getAttribute("data-rocket-type")?this.delayedScripts.defer.push(t):this.delayedScripts.normal.push(t):this.delayedScripts.normal.push(t)}))}async _(){await this.L();let t=[];document.querySelectorAll("script[type$=rocketlazyloadscript][data-rocket-src]").forEach((e=>{let i=e.getAttribute("data-rocket-src");if(i&&!i.startsWith("data:")){i.startsWith("//")&&(i=location.protocol+i);try{const o=new URL(i).origin;o!==location.origin&&t.push({src:o,crossOrigin:e.crossOrigin||"module"===e.getAttribute("data-rocket-type")})}catch(t){}}})),t=[...new Map(t.map((t=>[JSON.stringify(t),t]))).values()],this.N(t,"preconnect")}async $(t){if(await this.G(),!0!==t.noModule||!("noModule"in HTMLScriptElement.prototype))return new Promise((e=>{let i;function o(){(i||t).setAttribute("data-rocket-status","executed"),e()}try{if(navigator.userAgent.includes("Firefox/")||""===navigator.vendor||this.CSPIssue)i=document.createElement("script"),[...t.attributes].forEach((t=>{let e=t.nodeName;"type"!==e&&("data-rocket-type"===e&&(e="type"),"data-rocket-src"===e&&(e="src"),i.setAttribute(e,t.nodeValue))})),t.text&&(i.text=t.text),t.nonce&&(i.nonce=t.nonce),i.hasAttribute("src")?(i.addEventListener("load",o,{isRocket:!0}),i.addEventListener("error",(()=>{i.setAttribute("data-rocket-status","failed-network"),e()}),{isRocket:!0}),setTimeout((()=>{i.isConnected||e()}),1)):(i.text=t.text,o()),i.isWPRocket=!0,t.parentNode.replaceChild(i,t);else{const i=t.getAttribute("data-rocket-type"),s=t.getAttribute("data-rocket-src");i?(t.type=i,t.removeAttribute("data-rocket-type")):t.removeAttribute("type"),t.addEventListener("load",o,{isRocket:!0}),t.addEventListener("error",(i=>{this.CSPIssue&&i.target.src.startsWith("data:")?(console.log("WPRocket: CSP fallback activated"),t.removeAttribute("src"),this.$(t).then(e)):(t.setAttribute("data-rocket-status","failed-network"),e())}),{isRocket:!0}),s?(t.fetchPriority="high",t.removeAttribute("data-rocket-src"),t.src=s):t.src="data:text/javascript;base64,"+window.btoa(unescape(encodeURIComponent(t.text)))}}catch(i){t.setAttribute("data-rocket-status","failed-transform"),e()}}));t.setAttribute("data-rocket-status","skipped")}async C(t){const e=t.shift();return e?(e.isConnected&&await this.$(e),this.C(t)):Promise.resolve()}O(){this.N([...this.delayedScripts.normal,...this.delayedScripts.defer,...this.delayedScripts.async],"preload")}N(t,e){this.trash=this.trash||[];let i=!0;var o=document.createDocumentFragment();t.forEach((t=>{const s=t.getAttribute&&t.getAttribute("data-rocket-src")||t.src;if(s&&!s.startsWith("data:")){const n=document.createElement("link");n.href=s,n.rel=e,"preconnect"!==e&&(n.as="script",n.fetchPriority=i?"high":"low"),t.getAttribute&&"module"===t.getAttribute("data-rocket-type")&&(n.crossOrigin=!0),t.crossOrigin&&(n.crossOrigin=t.crossOrigin),t.integrity&&(n.integrity=t.integrity),t.nonce&&(n.nonce=t.nonce),o.appendChild(n),this.trash.push(n),i=!1}})),document.head.appendChild(o)}W(){this.trash.forEach((t=>t.remove()))}async F(){try{document.readyState="interactive"}catch(t){}this.fauxDomReadyFired=!0;try{await this.G(),document.dispatchEvent(new Event("rocket-readystatechange")),await this.G(),document.rocketonreadystatechange&&document.rocketonreadystatechange(),await this.G(),document.dispatchEvent(new Event("rocket-DOMContentLoaded")),await this.G(),window.dispatchEvent(new Event("rocket-DOMContentLoaded"))}catch(t){console.error(t)}}async A(){try{document.readyState="complete"}catch(t){}try{await this.G(),document.dispatchEvent(new Event("rocket-readystatechange")),await this.G(),document.rocketonreadystatechange&&document.rocketonreadystatechange(),await this.G(),window.dispatchEvent(new Event("rocket-load")),await this.G(),window.rocketonload&&window.rocketonload(),await this.G(),this.allJQueries.forEach((t=>t(window).trigger("rocket-jquery-load"))),await this.G();const t=new Event("rocket-pageshow");t.persisted=this.persisted,window.dispatchEvent(t),await this.G(),window.rocketonpageshow&&window.rocketonpageshow({persisted:this.persisted})}catch(t){console.error(t)}}async G(){Date.now()-this.lastBreath>45&&(await this.J(),this.lastBreath=Date.now())}async J(){return document.hidden?new Promise((t=>setTimeout(t))):new Promise((t=>requestAnimationFrame(t)))}B(t,e){return e===document&&"readystatechange"===t||(e===document&&"DOMContentLoaded"===t||(e===window&&"DOMContentLoaded"===t||(e===window&&"load"===t||e===window&&"pageshow"===t)))}static run(){(new RocketLazyLoadScripts).t()}}RocketLazyLoadScripts.run()})();</script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+	<title>Торт "Красный бархат" в домашних условиях - пошаговый фото рецепт</title><link rel="preload" data-rocket-preload="" as="style" href="https://fonts.googleapis.com/css?family=Roboto%3A400%2C400i%2C700&amp;subset=cyrillic&amp;display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto%3A400%2C400i%2C700&amp;subset=cyrillic&amp;display=swap" media="all" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto%3A400%2C400i%2C700&#038;subset=cyrillic&#038;display=swap" /></noscript>
+	<link rel="canonical" href="https://malinika.ru/tort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept/">
+	<meta property="og:locale" content="ru_RU">
+	<meta property="og:type" content="article">
+	<meta property="og:title" content="Торт &quot;Красный бархат&quot; в домашних условиях - пошаговый фото рецепт">
+	<meta property="og:description" content="Приготовление Муку тщательно смешиваете с крахмалом, разрыхлителем и порошком какао. Потом дважды просеиваете получившуюся сухую массу. В чаше соединяете яйца и сахар. Включаете миксер и минут пять взбиваете сахарно-яичную массу. Отдельно (в другой чаше) смешиваете кефир с содой и вводите краситель. Красителя может потребоваться от одной до трех чайных ложек, все зависит от его насыщенности. […]">
+	<meta property="og:url" content="https://malinika.ru/tort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept/">
+	<meta property="og:site_name" content="Malinika.ru - Рецепты">
+	<meta property="article:published_time" content="2021-12-17T00:00:00+00:00">
+	<meta property="article:modified_time" content="2022-03-01T21:59:26+00:00">
+	<meta property="og:image" content="https://malinika.ru/wp-content/uploads/f/1/5/f15ce0eecee0ad0ba0d3e8eb9e5e5c5c.jpeg">
+	<meta property="og:image:width" content="491">
+	<meta property="og:image:height" content="320">
+	<meta property="og:image:type" content="image/jpeg">
+	<meta name="author" content="Игорь Бекушев">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:label1" content="Написано автором">
+	<meta name="twitter:data1" content="Игорь Бекушев">
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://malinika.ru/tort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept/","url":"https://malinika.ru/tort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept/","name":"Торт \"Красный бархат\" в домашних условиях - пошаговый фото рецепт","isPartOf":{"@id":"https://malinika.ru/#website"},"primaryImageOfPage":{"@id":"https://malinika.ru/tort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept/#primaryimage"},"image":{"@id":"https://malinika.ru/tort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept/#primaryimage"},"thumbnailUrl":"https://malinika.ru/wp-content/uploads/f/1/5/f15ce0eecee0ad0ba0d3e8eb9e5e5c5c.jpeg","datePublished":"2021-12-17T00:00:00+00:00","dateModified":"2022-03-01T21:59:26+00:00","author":{"@id":"https://malinika.ru/#/schema/person/8b8bef3d65544d4db170856dfdfb007f"},"breadcrumb":{"@id":"https://malinika.ru/tort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept/#breadcrumb"},"inLanguage":"ru-RU","potentialAction":[{"@type":"ReadAction","target":["https://malinika.ru/tort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept/"]}]},{"@type":"ImageObject","inLanguage":"ru-RU","@id":"https://malinika.ru/tort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept/#primaryimage","url":"https://malinika.ru/wp-content/uploads/f/1/5/f15ce0eecee0ad0ba0d3e8eb9e5e5c5c.jpeg","contentUrl":"https://malinika.ru/wp-content/uploads/f/1/5/f15ce0eecee0ad0ba0d3e8eb9e5e5c5c.jpeg","width":491,"height":320},{"@type":"BreadcrumbList","@id":"https://malinika.ru/tort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная страница","item":"https://malinika.ru/"},{"@type":"ListItem","position":2,"name":"Торт «Красный бархат»"}]},{"@type":"WebSite","@id":"https://malinika.ru/#website","url":"https://malinika.ru/","name":"Malinika.ru - Рецепты","description":"Рецепты на каждый день","potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://malinika.ru/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"ru-RU"},{"@type":"Person","@id":"https://malinika.ru/#/schema/person/8b8bef3d65544d4db170856dfdfb007f","name":"Игорь Бекушев","image":{"@type":"ImageObject","inLanguage":"ru-RU","@id":"https://malinika.ru/#/schema/person/image/","url":"https://malinika.ru/wp-content/plugins/clearfy-pro/assets/images/default-avatar.png","contentUrl":"https://malinika.ru/wp-content/plugins/clearfy-pro/assets/images/default-avatar.png","caption":"Игорь Бекушев"},"sameAs":["https://malinika.ru"],"url":"https://malinika.ru/author/markiz/"}]}</script>
+
+
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<link href="https://fonts.gstatic.com" crossorigin="" rel="preconnect">
+<style id="wp-img-auto-sizes-contain-inline-css" type="text/css">
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<link data-minify="1" rel="stylesheet" id="fotorama.css-css" href="https://malinika.ru/wp-content/cache/min/1/wp-content/plugins/fotorama/fotorama.css?ver=1766748290" media="all">
+<link data-minify="1" rel="stylesheet" id="fotorama-wp.css-css" href="https://malinika.ru/wp-content/cache/min/1/wp-content/plugins/fotorama/fotorama-wp.css?ver=1766748290" media="all">
+<style id="classic-theme-styles-inline-css" type="text/css">
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+/*# sourceURL=/wp-includes/css/classic-themes.min.css */
+</style>
+
+<link data-minify="1" rel="stylesheet" id="yelly-style-css" href="https://malinika.ru/wp-content/cache/min/1/wp-content/themes/yelly/assets/css/style.min.css?ver=1766748290" media="all">
+<link data-minify="1" rel="stylesheet" id="yarpp-thumbnails-css" href="https://malinika.ru/wp-content/cache/min/1/wp-content/plugins/yet-another-related-posts-plugin/style/styles_thumbnails.css?ver=1766748328" media="all">
+<style id="yarpp-thumbnails-inline-css" type="text/css">
+.yarpp-thumbnails-horizontal .yarpp-thumbnail {width: 130px;height: 170px;margin: 5px;margin-left: 0px;}.yarpp-thumbnail > img, .yarpp-thumbnail-default {width: 120px;height: 120px;margin: 5px;}.yarpp-thumbnails-horizontal .yarpp-thumbnail-title {margin: 7px;margin-top: 0px;width: 120px;}.yarpp-thumbnail-default > img {min-height: 120px;min-width: 120px;}
+.yarpp-thumbnails-horizontal .yarpp-thumbnail {width: 130px;height: 170px;margin: 5px;margin-left: 0px;}.yarpp-thumbnail > img, .yarpp-thumbnail-default {width: 120px;height: 120px;margin: 5px;}.yarpp-thumbnails-horizontal .yarpp-thumbnail-title {margin: 7px;margin-top: 0px;width: 120px;}.yarpp-thumbnail-default > img {min-height: 120px;min-width: 120px;}
+/*# sourceURL=yarpp-thumbnails-inline-css */
+</style>
+<style id="rocket-lazyload-inline-css" type="text/css">
+.rll-youtube-player{position:relative;padding-bottom:56.23%;height:0;overflow:hidden;max-width:100%;}.rll-youtube-player:focus-within{outline: 2px solid currentColor;outline-offset: 5px;}.rll-youtube-player iframe{position:absolute;top:0;left:0;width:100%;height:100%;z-index:100;background:0 0}.rll-youtube-player img{bottom:0;display:block;left:0;margin:auto;max-width:100%;width:100%;position:absolute;right:0;top:0;border:none;height:auto;-webkit-transition:.4s all;-moz-transition:.4s all;transition:.4s all}.rll-youtube-player img:hover{-webkit-filter:brightness(75%)}.rll-youtube-player .play{height:100%;width:100%;left:0;top:0;position:absolute;background:url(https://malinika.ru/wp-content/plugins/wp-rocket/assets/img/youtube.png) no-repeat center;background-color: transparent !important;cursor:pointer;border:none;}.wp-embed-responsive .wp-has-aspect-ratio .rll-youtube-player{position:absolute;padding-bottom:0;width:100%;height:100%;top:0;bottom:0;left:0;right:0}
+/*# sourceURL=rocket-lazyload-inline-css */
+</style>
+<link data-minify="1" rel="stylesheet" id="yarppRelatedCss-css" href="https://malinika.ru/wp-content/cache/min/1/wp-content/plugins/yet-another-related-posts-plugin/style/related.css?ver=1766748328" media="all">
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-includes/js/jquery/jquery.min.js" id="jquery-core-js"></script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-includes/js/jquery/jquery-migrate.min.js" id="jquery-migrate-js" data-rocket-defer="" defer=""></script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-content/plugins/fotorama/fotorama.js" id="fotorama.js-js" data-rocket-defer="" defer=""></script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-content/plugins/fotoramaDefaults.js" id="fotoramaDefaults.js-js" data-rocket-defer="" defer=""></script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-content/plugins/fotorama/fotorama-wp.js" id="fotorama-wp.js-js" data-rocket-defer="" defer=""></script>
+<style>.pseudo-clearfy-link { color: #008acf; cursor: pointer;}.pseudo-clearfy-link:hover { text-decoration: none;}</style><link rel="preload" href="https://malinika.ru/wp-content/themes/yelly/assets/fonts/icomoon.ttf" as="font" crossorigin="">
+    <style>.scrolltop:before{content:"\fe3d"}::selection, .card-slider__category, .card-slider-container .swiper-pagination-bullet-active, .post-card--grid .post-card__thumbnail:before, .post-card:not(.post-card--small) .post-card__thumbnail a:before, .post-card:not(.post-card--small) .post-card__category,  .post-box--high .post-box__category span, .post-box--wide .post-box__category span, .page-separator, .pagination .nav-links .page-numbers:not(.dots):not(.current):before, .btn, .btn-primary:hover, .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle, .comment-respond .form-submit input, .widget-area .widget-header, .page-links__item, .pagination .nav-links .page-numbers{background-color:#333333}.entry-image--big .entry-image__body .post-card__category a, .entry-category a, .home-text ul:not([class])>li:before, .entry-content ul:not([class])>li:before, .taxonomy-description ul:not([class])>li:before, .widget_categories ul.menu li a:before, .widget_categories ul.menu li span:before, .widget_categories>ul li a:before, .widget_categories>ul li span:before, .widget_nav_menu ul.menu li a:before, .widget_nav_menu ul.menu li span:before, .widget_nav_menu>ul li a:before, .widget_nav_menu>ul li span:before, .page-links .page-numbers:not(.dots):not(.current):before, .page-links .post-page-numbers:not(.dots):not(.current):before, .pagination .nav-links .page-numbers:not(.dots):not(.current):before, .pagination .nav-links .post-page-numbers:not(.dots):not(.current):before, .entry-image--full .entry-image__body .post-card__category a, .entry-image--fullscreen .entry-image__body .post-card__category a, .entry-image--wide .entry-image__body .post-card__category a{background-color:#333333}.comment-respond input:focus, select:focus, textarea:focus, .post-card--grid.post-card--thumbnail-no, .post-card--standard:after, .post-card--related.post-card--thumbnail-no:hover, .spoiler-box, .btn-primary, .btn-primary:hover, .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle, .inp:focus, .entry-tag:focus, .entry-tag:hover, .search-screen .search-form .search-field:focus, .entry-content blockquote,
+        .input:focus, input[type=color]:focus, input[type=date]:focus, input[type=datetime-local]:focus, input[type=datetime]:focus, input[type=email]:focus, input[type=month]:focus, input[type=number]:focus, input[type=password]:focus, input[type=range]:focus, input[type=search]:focus, input[type=tel]:focus, input[type=text]:focus, input[type=time]:focus, input[type=url]:focus, input[type=week]:focus, select:focus, textarea:focus{border-color:#333333 !important}.post-card--grid a:hover, .post-card--small .post-card__category, .post-card__author:before, .post-card__comments:before, .post-card__date:before, .post-card__like:before, .post-card__views:before, .entry-author:before, .entry-date:before, .entry-time:before, .entry-views:before, .entry-content ol:not([class])>li:before, .text-content ol:not([class])>li:before, .taxonomy-description ol:not([class])>li:before, .entry-content blockquote:before, .spoiler-box__title:after, .search-icon:hover:before, .search-form .search-submit:hover:before, .star-rating-item.hover,
+        .comment-list .bypostauthor>.comment-body .comment-author:after,
+        .search-screen .search-form .search-submit:before, .widget_categories ul li:before,
+        .star-rating--score-1:not(.hover) .star-rating-item:nth-child(1),
+        .star-rating--score-2:not(.hover) .star-rating-item:nth-child(1), .star-rating--score-2:not(.hover) .star-rating-item:nth-child(2),
+        .star-rating--score-3:not(.hover) .star-rating-item:nth-child(1), .star-rating--score-3:not(.hover) .star-rating-item:nth-child(2), .star-rating--score-3:not(.hover) .star-rating-item:nth-child(3),
+        .star-rating--score-4:not(.hover) .star-rating-item:nth-child(1), .star-rating--score-4:not(.hover) .star-rating-item:nth-child(2), .star-rating--score-4:not(.hover) .star-rating-item:nth-child(3), .star-rating--score-4:not(.hover) .star-rating-item:nth-child(4),
+        .star-rating--score-5:not(.hover) .star-rating-item:nth-child(1), .star-rating--score-5:not(.hover) .star-rating-item:nth-child(2), .star-rating--score-5:not(.hover) .star-rating-item:nth-child(3), .star-rating--score-5:not(.hover) .star-rating-item:nth-child(4), .star-rating--score-5:not(.hover) .star-rating-item:nth-child(5){color:#333333}@media (min-width: 768px){body{background-attachment: scroll}}.site-header{background-color:#333333}@media (min-width: 992px){.site-header ul li .sub-menu{background-color:#333333}}.site-header{background-image: url("https://malinika.ru/wp-content/uploads/2022/03/malinika.ru_.jpg")}@media (max-width: 767px){.site-header{background-size: cover}}.site-footer{background-color:#333333}</style>
+<link rel="icon" href="https://malinika.ru/wp-content/uploads/2022/03/cropped-malinika-favicon-32x32.png" sizes="32x32">
+<link rel="icon" href="https://malinika.ru/wp-content/uploads/2022/03/cropped-malinika-favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="https://malinika.ru/wp-content/uploads/2022/03/cropped-malinika-favicon-180x180.png">
+<meta name="msapplication-TileImage" content="https://malinika.ru/wp-content/uploads/2022/03/cropped-malinika-favicon-270x270.png">
+<noscript><style id="rocket-lazyload-nojs-css">.rll-youtube-player, [data-lazy-src]{display:none !important;}</style></noscript>    <style id="global-styles-inline-css" type="text/css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 19.5px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36.5px;--wp--preset--font-size--x-large: 42px;--wp--preset--font-size--normal: 22px;--wp--preset--font-size--huge: 49.5px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+<meta name="generator" content="WP Rocket 3.18.1.5" data-wpr-features="wpr_delay_js wpr_defer_js wpr_lazyload_iframes wpr_image_dimensions wpr_minify_css wpr_desktop"><link href="https://w.uptolike.com" rel="preconnect"></head>
+	
+
+<body class="wp-singular post-template-default single single-post postid-21409 single-format-standard wp-embed-responsive wp-theme-yelly wp-child-theme-yelly_child sidebar-right">
+
+
+
+<div data-rocket-location-hash="54257ff4dc2eb7aae68fa23eb5f11e06" id="page" class="site">
+    <a class="skip-link screen-reader-text" href="#content">Перейти к контенту</a>
+
+    
+    
+    <div data-rocket-location-hash="27eae8816772119298a24727d45914b4" class="search-screen-overlay js-search-screen-overlay"></div>
+    <div data-rocket-location-hash="3882f6cb63557ea7e3951416af29d4f7" class="search-screen js-search-screen">
+        
+<form role="search" method="get" class="search-form" action="https://malinika.ru/">
+    <label>
+        <span class="screen-reader-text">Search for:</span>
+        <input type="search" class="search-field" placeholder="Поиск..." value="" name="s">
+    </label>
+    <button type="submit" class="search-submit"></button>
+</form>    </div>
+
+    
+
+<header data-rocket-location-hash="e21be6226fda8fef111d5e57b12bbf74" id="masthead" class="site-header full" itemscope="" itemtype="http://schema.org/WPHeader">
+    <div data-rocket-location-hash="37593f518caeab60bd9c10a051c52ee7" class="site-header-inner fixed">
+
+        <div class="humburger js-humburger"><span></span><span></span><span></span></div>
+
+        
+<div class="site-branding">
+
+    <div class="site-branding__body"><div class="site-title"><a href="https://malinika.ru/">Malinika.ru - Рецепты</a></div><p class="site-description">Рецепты на каждый день</p></div></div><!-- .site-branding -->
+<div class="header-search"><span class="search-icon js-search-icon"></span></div>    </div>
+</header><!-- #masthead -->
+
+
+
+    
+    
+    <div data-rocket-location-hash="146f0a8bcad64f4b7e148da44777830c" id="content" class="site-content fixed">
+
+        <div data-rocket-location-hash="6b066574a0d875535e5db71f9166ff2c" class="b-r b-r--before_site_content"> </div>
+        <div data-rocket-location-hash="fcd9a77b8df80a69ebdb56768ab3bb52" class="site-content-inner">
+    
+        
+        <div id="primary" class="content-area" itemscope="" itemtype="http://schema.org/Article">
+            <main id="main" class="site-main">
+
+                
+<article id="post-21409" class="article-post post-21409 post type-post status-publish format-standard has-post-thumbnail  category-poleznoe">
+
+    
+        <div class="breadcrumb" itemscope="" itemtype="http://schema.org/BreadcrumbList"><span class="breadcrumb-item" itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a href="https://malinika.ru/" itemprop="item"><span itemprop="name">Главная</span></a><meta itemprop="position" content="0"></span> <span class="breadcrumb-separator">»</span> <span class="breadcrumb-item" itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a href="https://malinika.ru/category/poleznoe/" itemprop="item"><span itemprop="name">Полезное</span></a><meta itemprop="position" content="1"></span></div>
+        <header class="entry-header"><h1 class="entry-title" itemprop="headline">Торт «Красный бархат»</h1></header>
+        
+        
+        
+    
+    
+    <div class="entry-meta"></div>
+	<div class="entry-content" itemprop="articleBody">
+		<div class="b-r b-r--before_content"> </div><div class="table-of-contents"><div class="table-of-contents__header"><span class="table-of-contents__hide js-table-of-contents-hide">Содержание</span></div><ol class="table-of-contents__list js-table-of-contents-list" style="display:none;">
+<li class="level-1"><a href="#prigotovlenie">Приготовление</a></li><li class="level-1"><a href="#tort-krasnyy-barhat-s-maskarpone">Торт красный бархат с маскарпоне</a></li><li class="level-1"><a href="#ingredienty-dlya-prigotovleniya-torta-krasnogo">Ингредиенты для приготовления торта «Красного бархат»</a></li><li class="level-3"><a href="#dlya-testa">Для теста:</a></li><li class="level-1"><a href="#prigotovlenie-torta-krasnogo-barhat">Приготовление торта «Красного бархат»:</a></li><li class="level-3"><a href="#1-gotovim-pahtu">1 готовим пахту.</a></li><li class="level-3"><a href="#2-zameshivaem-testo">2 замешиваем тесто.</a></li><li class="level-3"><a href="#3-gotovim-korzhi">3 готовим коржи.</a></li><li class="level-3"><a href="#4-gotovim-krem">4 готовим крем.</a></li><li class="level-3"><a href="#5-shem-tort-krasnyy-barhat">5 «шьем» торт «Красный бархат.</a></li><li class="level-3"><a href="#sovety-k-retseptu">Советы к рецепту</a></li><li class="level-1"><a href="#prostye-i-slozhnye-varianty-krasnogo-barhata">Простые и сложные варианты «Красного бархата»</a></li><li class="level-2"><a href="#klassicheskiy-retsept-torta-krasnyy-barhat">Классический рецепт торта «Красный бархат»</a></li><li class="level-2"><a href="#chizkeyk-krasnyy-barhat">Чизкейк «Красный бархат»</a></li><li class="level-2"><a href="#tort-krasnyy-barhat-so-svekloy">Торт «Красный бархат» со свеклой</a></li><li class="level-1"><a href="#osobennosti-prigotovleniya-i-hitrosti">Особенности приготовления и хитрости</a></li><li class="level-1"><a href="#krasnyy-barhat-ot-olgi-matvey">«Красный бархат» от Ольги Матвей</a></li><li class="level-2"><a href="#prigotovlenie-2">Приготовление:</a></li><li class="level-1"><a href="#retsept-ot-gordona-ramzi">Рецепт от Гордона Рамзи</a></li><li class="level-3"><a href="#soglasno-retseptu-ot-gordona-ramzi-sleduet">Согласно рецепту от Гордона Рамзи следует подготовить:</a></li><li class="level-3"><a href="#biskvitnuyu-massu-gotovim-tak">Бисквитную массу готовим так:</a></li><li class="level-1"><a href="#kak-prigotovit-tort-v-multivarke">Как приготовить торт в мультиварке</a></li><li class="level-1"><a href="#tort-s-maskarpone">Торт с маскарпоне</a></li><li class="level-1"><a href="#retsept-3-poshagovyy-kak-gotovit-tort-krasnyy">Рецепт 3, пошаговый: как готовить торт Красный бархат</a></li></ol></div><h2 id="prigotovlenie">Приготовление</h2>
+<p>Муку тщательно смешиваете с крахмалом, разрыхлителем и порошком какао. Потом дважды просеиваете получившуюся сухую массу.</p>
+<p><img width="600" height="450" decoding="async" src="/wp-content/uploads/0/0/3/0033c483f1a91e748aad1f03232b9913.jpeg" alt="Торт «Красный бархат»"></p>
+<p>В чаше соединяете яйца и сахар. Включаете миксер и минут пять взбиваете сахарно-яичную массу.</p>
+<p><img width="600" height="450" decoding="async" src="/wp-content/uploads/4/0/3/403e3c3751146ae8784326c3249fd76d.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Отдельно (в другой чаше) смешиваете кефир с содой и вводите краситель. Красителя может потребоваться от одной до трех чайных ложек, все зависит от его насыщенности. Главное, чтобы получился ярко-красный цвет.</p>
+<p><img width="600" height="450" decoding="async" src="/wp-content/uploads/d/0/a/d0a6a6aa238c07dbfb022f1ea5888617.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Вливаете растительное масло без запаха и тщательно перемешиваете. Перед вводом необходимо обязательно проверить масло на отсутствие запаха, чтобы не испортить вкус бисквита.</p>
+<p><img width="600" height="450" decoding="async" src="/wp-content/uploads/0/0/9/0091aa732a788866175f429390031b35.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Затем соединяете кефирную массу с яичной, добавляете мучную смесь и получаете бордовое тесто средней густоты.</p>
+<p><img width="600" height="450" decoding="async" src="/wp-content/uploads/1/2/0/1201e0568addeb7e9d9d07471bf62667.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Тесто делите на две части и разливаете по двум одинаковым формам (18-20 см). На дно каждой формы обязательно стелите пекарский пергамент.</p>
+<p><img width="600" height="450" decoding="async" src="/wp-content/uploads/3/6/4/36482964ffe8c6065da2246fd6d0e45c.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Выпекаете красный бисквит при 170 градусах 20-35 минут. Готовность проверяете стандартным способом – втыкаете в тесто сухую спичку или зубочистку. Получаете два красивых коржа, каждый из которых разрезаете вдоль. Но делаете это только тогда, когда бисквиты полностью остынут и отлежатся хотя бы час.</p>
+<p><img width="600" height="450" decoding="async" src="/wp-content/uploads/2/8/a/28a75926234bcadf9e1d422377bd3612.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Охлажденные сливки взбиваете до воздушной плотности с половиной сахарной пудры.</p>
+<p><img width="600" height="450" decoding="async" src="/wp-content/uploads/8/0/d/80d97d7821b46fbdaea47a04797788a2.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Остатки пудры взбиваете с творожным сыром.</p>
+<p><img width="600" height="450" decoding="async" src="/wp-content/uploads/2/1/9/2199fca2e9a949b9bb401864443bc5ae.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Затем частями подмешиваете взбитые сливки в творожную массу и аккуратно перемешиваете. Все, сливочно-творожный крем для торта готов.</p>
+<p><img width="600" height="450" decoding="async" src="/wp-content/uploads/c/2/f/c2f90bc7867e2a93c738b272ead309f0.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Бисквит получается пористым и влажным, поэтому дополнительная пропитка не требуется. Берете первый корж и смазываете его сливочно-творожным кремом.</p>
+<p><img width="600" height="450" decoding="async" src="/wp-content/uploads/2/9/3/293cbc07f0514c8e14640151a70750af.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Потом по очереди укладываете и все остальные коржи. Кремовые прослойки делаете достаточно толстыми.</p>
+<p><img width="600" height="450" decoding="async" src="/wp-content/uploads/5/1/0/51025dd671488213a485fe2264aced50.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Верх и бока также покрываете плотным слоем крема.</p>
+<p><img width="600" height="450" decoding="async" src="/wp-content/uploads/5/6/a/56a02a25cacec59a33780886a668c2ac.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Теперь, когда все готово, украшаете торт, используя кокосовую стружку или другие кондитерские присыпки, свежие или засахаренные ягоды, листики мяты. Для украшения можно также использовать взбитые сливки, шоколад, сердечки из марципана. Даете готовому десерту настояться, для этого оставляете его в холодильнике на 4-5 часов, а уже потом наслаждаетесь его неповторимым вкусом.</p>
+<p><img width="600" height="450" decoding="async" src="/wp-content/uploads/4/2/4/42412f84bee23a68e71c91562707339e.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Крем для торта «Красный бархат» можно сделать другой – масляно-сырный. Так как после приготовления он должен еще какое-то время постоять в холодильнике, то его лучше сделать заранее, а потом уже браться за приготовление коржей.</p>
+<p>Достоинствами данного крема является то, что он отлично держит форму и обладает долгим сроком хранения (как минимум 5 дней).</p>
+<p>Взбиваете сливочный сыр (450 г) с размягченным сливочным маслом (200 г). В получившуюся массу добавляете ванильный сахар (10 г) и сахарную пудру (250 г), взбиваете еще раз. Готовый крем убираете на несколько часов в холодильник.</p>
+<p><img width="600" height="450" decoding="async" src="/wp-content/uploads/6/e/3/6e3b674bbf5ade23b795bddeaef65fc5.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Вот так выглядит наш торт «Красный бархат» в разрезе, коржи на кефире и растительном масле пористые и влажные, хорошо пропитались кремом, выглядит очень эффектно. Его можно украсить по желанию также белым шоколадом, но вообще он очень любит ягоды.</p>
+<p><img width="600" height="450" decoding="async" src="/wp-content/uploads/e/3/8/e38e80841628ef92bb2e3709f0e46853.jpeg" alt="Торт «Красный бархат»"></p>
+<h2 id="tort-krasnyy-barhat-s-maskarpone">Торт красный бархат с маскарпоне</h2>
+<p><img width="660" height="414" decoding="async" src="/wp-content/uploads/e/5/5/e555d3a4c07d007fde454cdc68694bf5.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Ингредиенты:</p>
+<ul>
+<li>Для крема:</li>
+<li>Сливки 33-35% &nbsp;– 400 мл.</li>
+<li>Сыр Маскарпоне – 500 гр.</li>
+<li>Сахарная пудра – 150 гр.</li>
+<li>Для теста:</li>
+<li>Мука – 300 гр.</li>
+<li>Сахарный песок – 300 гр.</li>
+<li>Растительное масло – 150 мл.</li>
+<li>Яйцо – 3 шт.</li>
+<li>Молоко – 280 мл.</li>
+<li>Лимонный сок – 1 ст. ложка</li>
+<li>Гелиевый краситель – 2 ч. ложки</li>
+<li>Какао – 1 ст. ложка</li>
+<li>Разрыхлитель – 1 ч. ложка</li>
+<li>Соль – ¼ ч. ложки</li>
+<li>Масло сливочное – 150 гр.</li>
+<li>Ванильный сахар – по вкусу</li>
+</ul>
+<p>Способ приготовления:</p>
+<p>1. В 280 мл. горячего молоко добавляем 1 ст. ложку лимонного сока и оставляем на пол часа.</p>
+<p><img width="607" height="357" decoding="async" src="/wp-content/uploads/a/7/9/a79eab07fc67094f744bac4403f07939.jpeg" alt="Торт «Красный бархат»"></p>
+<p>2. Тем временем просеиваем все сухие ингредиенты, муку, какао, соду, разрыхлитель, соль и перемешиваем веничком до однородности.</p>
+<p><img width="583" height="358" decoding="async" src="/wp-content/uploads/f/e/e/feecce8f881fc7c0fa4a1e1798ff172d.jpeg" alt="Торт «Красный бархат»"></p>
+<p>3. В чаше миксера соединяем сливочное масло с сахаром и на высоких оборотах, взбиваем до пышности. Затем взбиваем яйца по одному, каждый раз перемешиваем 1-2 минуты. Вливаем растительное масло.</p>
+<p><img width="588" height="358" decoding="async" src="/wp-content/uploads/5/9/b/59ba2f0d44a54adb0a277e989cda78cd.jpeg" alt="Торт «Красный бархат»"></p>
+<p>4. Далее в остывшее <a href="/sup-pure-17-lucsih-foto-receptov-na-luboj-vkus/">молоко добавляем две чайные ложки</a> красителя, хорошо размешиваем.</p>
+<p><img width="545" height="328" decoding="async" src="/wp-content/uploads/0/e/d/0ed2e823288b908a5ba30512819dd57a.jpeg" alt="Торт «Красный бархат»"></p>
+<p>5. Затем постепенно добавляем сухие смешанные ингредиенты. Перемешиваем тесто до однородности, следом вливаем молоко с красителем. Готовое тесто должно получится насыщенного красного цвета.</p>
+<p><img width="606" height="358" decoding="async" src="/wp-content/uploads/d/0/8/d089d5170c3c4aafceb4e7f8d82be0d9.jpeg" alt="Торт «Красный бархат»"></p>
+<p>6. Форму застилаем бумагой для выпечки, делим тесто на две части, на две формы. Оправляем тесто в разогретую до 180 градусов духовку на 30-40 минут. Готовность проверяем деревянной палочкой.</p>
+<div class="fotorama--wp" data-link="file" data-size="large" data-ids="21469,21470,21471,21472,21473,21474,21475,21476,21477,21478" data-itemtag="dl" data-icontag="dt" data-captiontag="dd" data-columns="0" data-width="491" data-auto="false" data-max-width="100%" data-min-width="100%" data-ratio="1.534375"><div id="gallery-1" class="gallery galleryid-21409 gallery-columns-0 gallery-size-thumbnail"><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/d/9/b/d9b7af94f4aa4f9858a21e8aab6f3e08.jpeg" data-full="https://malinika.ru/wp-content/uploads/d/9/b/d9b7af94f4aa4f9858a21e8aab6f3e08.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/d/9/b/d9b7af94f4aa4f9858a21e8aab6f3e08.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт &quot;красный бархат&quot; — пошаговый рецепт с фото"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/6/3/b/63b6941aa060490ae4edc1159a487803.jpeg" data-full="https://malinika.ru/wp-content/uploads/6/3/b/63b6941aa060490ae4edc1159a487803.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/6/3/b/63b6941aa060490ae4edc1159a487803.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт «Красный бархат»"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/3/5/f/35f7b5dcf1e72194cb017c9f84416ef0.jpeg" data-full="https://malinika.ru/wp-content/uploads/3/5/f/35f7b5dcf1e72194cb017c9f84416ef0.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/3/5/f/35f7b5dcf1e72194cb017c9f84416ef0.jpeg" class="attachment-thumbnail size-thumbnail" alt="Нюансы приготовления торта красный бархат в домашних условиях"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/3/c/7/3c742bc65a544514135386397694c69e.jpeg" data-full="https://malinika.ru/wp-content/uploads/3/c/7/3c742bc65a544514135386397694c69e.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/3/c/7/3c742bc65a544514135386397694c69e.jpeg" class="attachment-thumbnail size-thumbnail" alt="Домашний торт красный бархат: 7 шикарных рецептов"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/1/3/c/13cc5c5f46159a254c1a84bc9e63eb4b.jpeg" data-full="https://malinika.ru/wp-content/uploads/1/3/c/13cc5c5f46159a254c1a84bc9e63eb4b.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/1/3/c/13cc5c5f46159a254c1a84bc9e63eb4b.jpeg" class="attachment-thumbnail size-thumbnail" alt="Как приготовить торт красный бархат по пошаговому рецепту с фото"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/5/6/4/564a09086316e037d1facba9ad021d4a.jpeg" data-full="https://malinika.ru/wp-content/uploads/5/6/4/564a09086316e037d1facba9ad021d4a.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/5/6/4/564a09086316e037d1facba9ad021d4a.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт красный бархат, рецепт с фото пошагово - wowcook.net"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/f/3/d/f3d4e4298d96f32d9d682411f2a5d63f.jpeg" data-full="https://malinika.ru/wp-content/uploads/f/3/d/f3d4e4298d96f32d9d682411f2a5d63f.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/f/3/d/f3d4e4298d96f32d9d682411f2a5d63f.jpeg" class="attachment-thumbnail size-thumbnail" alt="Как приготовить дома торт красный бархат - 6 оригинальных рецептов"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/3/6/2/36252a89b732f4aa0602210af416adb7.jpeg" data-full="https://malinika.ru/wp-content/uploads/3/6/2/36252a89b732f4aa0602210af416adb7.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/3/6/2/36252a89b732f4aa0602210af416adb7.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт красный бархат - пошаговый рецепт с фото в домашних условиях"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/f/9/3/f939fd64ca8382be01baa26ffd0c6fc1.jpeg" data-full="https://malinika.ru/wp-content/uploads/f/9/3/f939fd64ca8382be01baa26ffd0c6fc1.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/f/9/3/f939fd64ca8382be01baa26ffd0c6fc1.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт красный бархат: классический рецепт с фото пошагово"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/c/d/0/cd09e2352ad0a47498f0278b6cc490f2.jpeg" data-full="https://malinika.ru/wp-content/uploads/c/d/0/cd09e2352ad0a47498f0278b6cc490f2.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/c/d/0/cd09e2352ad0a47498f0278b6cc490f2.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт «красный бархат» — пошаговый рецепт в домашних условиях"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl>
+		</div>
+</div>
+<p><img width="612" height="360" decoding="async" src="/wp-content/uploads/8/7/9/879ca89d8e96b766c786d9e7dc77f175.jpeg" alt="Торт «Красный бархат»"></p>
+<p>7. Готовим крем. Берем масло Маскарпоне, взбиваем его пару минут, затем всыпаем постепенно сахарную пудру, и в конце добавляем холодные сливки и еще несколько минут взбиваем.</p>
+<p><img width="608" height="395" decoding="async" src="/wp-content/uploads/d/c/0/dc04307ed41e2e73449f14854679a347.jpeg" alt="Торт «Красный бархат»"></p>
+<p>8. Даем бисквиту постоять 10-15 минут, после чего достаем из формы и охлаждаем на решетке. Срежем слегка верхушку у коржа, разомнем для украшения.&nbsp;Смазываем у каждого коржа верх и бока, посыпаем крошкой, можно украсить с помощью цветочков или еще чего-нибудь, как ваша фантазия играет.</p>
+<p><img width="636" height="374" decoding="async" src="/wp-content/uploads/0/d/3/0d3db72a495a915901372fea7fc7b6c6.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Даем выпечке пропитаться, как минимум 4-8 часов. Нарезаем и подаем к столу, приятного аппетита.</p>
+<h2 id="ingredienty-dlya-prigotovleniya-torta-krasnogo">Ингредиенты для приготовления торта «Красного бархат»</h2>
+<p>
+c http-equiv=»Content-Type» content=»text/html;charset=UTF-8″&gt;lass=»ingredients»&gt;</p>
+<h4 id="dlya-testa">Для теста:</h4>
+<ol>
+<li>
+Мука пшеничная в/с 250 гр
+</li>
+<li>
+Разрыхлитель для теста 1 ч.л
+</li>
+<li>
+Соль 1/2 ч.л
+</li>
+<li>
+Какао-порошок 15–20 гр
+</li>
+<li>
+Масло сливочное 115 га
+</li>
+<li>
+Сахарный песок 300 гр
+</li>
+<li>
+Яйца куриные 2 шт
+</li>
+<li>
+Ванильный сахар 1 ч.л
+</li>
+<li>
+Пахта 240 мл (можно сделать самим, см.в рецепте)
+</li>
+<li>
+Пищевой краситель красный жидкий 2ст.л; пастаобр. — 1/2 ч.л
+</li>
+<li>
+Сода пищевая 1 ч.л
+</li>
+<li>
+Уксус яблочный 6%– 1 ч.л по вкусу
+</li>
+</ol>
+<ol>
+<li>
+Молоко или кефир (3%) 240 мл
+</li>
+<li>
+Яблочный уксус 6% или лимонный сок 1 ст.л
+</li>
+</ol>
+<h2 id="prigotovlenie-torta-krasnogo-barhat">Приготовление торта «Красного бархат»:</h2>
+<h4 id="1-gotovim-pahtu">
+1 готовим пахту.</h4>
+<p>
+<img width="500" height="283" decoding="async" src="/wp-content/uploads/f/1/5/f15ce0eecee0ad0ba0d3e8eb9e5e5c5c.jpeg" alt="Торт «Красный бархат»"> Пахта – это масленка, по-простому. Раньше пахту делали из жидкости, которая оставалась после сбивания масла, добавляя специальные бактерии. Сегодня сделать пахту можно дома из подручных продуктов. Кефира или молока – 240 мл и столовой ложки яблочного уксуса или лимонного сока. Перемешиваем и оставляем в холодильнике на 10 минут.</p>
+<h4 id="2-zameshivaem-testo">
+2 замешиваем тесто.</h4>
+<p>
+<img width="400" height="400" decoding="async" src="/wp-content/uploads/4/5/1/4518f378741da7a3227358fd8eb980ef.jpeg" alt="Торт «Красный бархат»"> В глубокую тарелку просеиваем муку, порошок для выпечки. Туда же добавляем соль и какао-порошок. В миске взбиваем с помощью миксера сливочное масло в течении 2-х минут, всыпаем сахар, ванильный сахар и продолжаем взбивать до пышного кремообразного состояния. Затем по одному вбиваем яйца и добавляем краситель. Хорошенько взбиваем, чтобы краситель растворился. Когда эта масса готова – потихоньку вводим муку и пахту. Взбивать советую на низкой скорости, чтобы не оказаться в муке. В конце гасим уксус и добавляем в тесто.</p>
+<div style="clear:both; margin-top:0em; margin-bottom:1em;"><a href="https://malinika.ru/leco-iz-pomidor-i-perca-na-zimu-5-receptov-s-foto/" target="_blank" rel="nofollow" class="u505d3a694ec613eb46dc69b721a1f773"><!-- INLINE RELATED POSTS 1/3 //--><style> .u505d3a694ec613eb46dc69b721a1f773 , .u505d3a694ec613eb46dc69b721a1f773 .postImageUrl , .u505d3a694ec613eb46dc69b721a1f773 .centered-text-area { min-height: 80px; position: relative; } .u505d3a694ec613eb46dc69b721a1f773 , .u505d3a694ec613eb46dc69b721a1f773:hover , .u505d3a694ec613eb46dc69b721a1f773:visited , .u505d3a694ec613eb46dc69b721a1f773:active { border:0!important; } .u505d3a694ec613eb46dc69b721a1f773 .clearfix:after { content: ""; display: table; clear: both; } .u505d3a694ec613eb46dc69b721a1f773 { display: block; transition: background-color 250ms; webkit-transition: background-color 250ms; width: 100%; opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; background-color: #E67E22; } .u505d3a694ec613eb46dc69b721a1f773:active , .u505d3a694ec613eb46dc69b721a1f773:hover { opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; background-color: #D35400; } .u505d3a694ec613eb46dc69b721a1f773 .centered-text-area { width: 100%; position: relative; } .u505d3a694ec613eb46dc69b721a1f773 .ctaText { border-bottom: 0 solid #fff; color: #ECF0F1; font-size: 16px; font-weight: bold; margin: 0; padding: 0; text-decoration: underline; } .u505d3a694ec613eb46dc69b721a1f773 .postTitle { color: #2C3E50; font-size: 16px; font-weight: 600; margin: 0; padding: 0; width: 100%; } .u505d3a694ec613eb46dc69b721a1f773 .ctaButton { background-color: #D35400!important; color: #ECF0F1; border: none; border-radius: 3px; box-shadow: none; font-size: 14px; font-weight: bold; line-height: 26px; moz-border-radius: 3px; text-align: center; text-decoration: none; text-shadow: none; width: 80px; min-height: 80px; background: url(https://malinika.ru/wp-content/plugins/intelly-related-posts/assets/images/simple-arrow.png)no-repeat; position: absolute; right: 0; top: 0; } .u505d3a694ec613eb46dc69b721a1f773:hover .ctaButton { background-color: #E67E22!important; } .u505d3a694ec613eb46dc69b721a1f773 .centered-text { display: table; height: 80px; padding-left: 18px; top: 0; } .u505d3a694ec613eb46dc69b721a1f773 .u505d3a694ec613eb46dc69b721a1f773-content { display: table-cell; margin: 0; padding: 0; padding-right: 108px; position: relative; vertical-align: middle; width: 100%; } .u505d3a694ec613eb46dc69b721a1f773:after { content: ""; display: block; clear: both; } </style><div class="centered-text-area"><div class="centered-text" style="float: left;"><div class="u505d3a694ec613eb46dc69b721a1f773-content"><span class="ctaText">Популярные статьи</span>&nbsp; <span class="postTitle">Лечо из помидор и перца на зиму</span></div></div></div><div class="ctaButton"></div></a></div><h4 id="3-gotovim-korzhi">
+3 готовим коржи.</h4>
+<p>
+<img width="411" height="324" decoding="async" src="/wp-content/uploads/f/4/d/f4d866f632ac11e2bdb487a4bcd39dab.jpeg" alt="Торт «Красный бархат»"> Тесто теперь нужно разделить на две равные части. Духовку разогреваем до 175* , форму смазываем сливочным маслом и застилаем бумагой. Часть теста выливаем в форму и ставим на среднюю полку запекаться на 30 мин. По готовности вынимаем и даем остыть минут 10. Затем снимаем с формы и полностью остужаем на кухонной решетке. Затем корж оборачиваем пленкой и отправляем в холодильник на час. То же самое проделываем со второй порцией теста. Когда коржи отбудут свой срок в холодильнике, из надо будет достать и аккуратно острым ножом разделить пополам. Таким образом у нас будет 4 готовых коржа… красного цвета! А пока коржи выпекаются и остывают, займемся кремом.</p>
+<h4 id="4-gotovim-krem">
+4 готовим крем.</h4>
+<p>
+<img width="400" height="300" decoding="async" src="/wp-content/uploads/c/e/c/cecd8607dbdc716968b6df9fffaa273f.jpeg" alt="Торт «Красный бархат»"> Наш крем должен быть очень легким и мягким. Поэтому для этого в рецепте есть два вида сыра: сливочный и знаменитый маскарпоне (сыр, часто использующийся в пекарнях). Вот их надо взбить до однородной массы, затем добавить пудру и ванильный сахар. Тщательно перемешать и можно добавлять сливки. Взбивать до состояния густого и, главное, однородного крема.</p>
+<h4 id="5-shem-tort-krasnyy-barhat">
+5 «шьем» торт «Красный бархат.</h4>
+<p>
+ Подвигаем к себе наши коржи и начинаем собирать торт. Коржи перемазываем между собой кремом и складываем друг на друга. Затем обмазываем кремом вокруг и украшаем по вкусу. Чтобы украсить торт кремовыми завитушками вовсе нет необходимости покупать профессиональное кулинарное приспособление, можно использовать целофановый пакет: остатки крема выскрести в пакет, собрать в одном углу и завязать край пакета. обрезать ножницами уголок с кремом и потихоньку выдавливая украсить. Шаг 6: подаем торт <img width="300" height="200" decoding="async" src="/wp-content/uploads/c/2/c/c2cbd122a43130d0614eb2fc9a2f46f3.jpeg" alt="Торт «Красный бархат»"> Для украшения можно использовать кулинарные фигурки, ароматные травы базилика, лаванды и т.д. Их можно приобрести в специализированных магазинах. Подавать на праздничный стол с загадочной улыбкой! Приятного аппетита!</p>
+<h4 id="sovety-k-retseptu">Советы к рецепту</h4>
+<p>	– — Если нет кухонной решетки, остудить коржи можно поставив их на перевернутое сито;</p>
+<p>	– — Чтобы аккуратно разрезать толстый корж ровно и без поломок, можно натянуть шелковую нить на пальцах или тонкую леску и –пусть кто-то поможет и положит руку поверх- разрезать корж;</p>
+<p>	– — Перед тем, как смазывать собранный торт вокруг, лучше сразу его перенести на блюдо для подачи.</p>
+<h2 id="prostye-i-slozhnye-varianty-krasnogo-barhata">Простые и сложные варианты «Красного бархата»</h2>
+<p>Тающие во рту десерты с красной основой и кипенным кремом различаются по рецептуре. Каждый может выбрать для себя идеальный вариант.</p>
+<h3 id="klassicheskiy-retsept-torta-krasnyy-barhat">Классический рецепт торта «Красный бархат»</h3>
+<p><img width="620" height="411" decoding="async" src="/wp-content/uploads/8/6/9/869a09ce93865fe628f4a6dd5535e8ac.webp" alt="Торт «Красный бархат»"></p>
+<p>Оригинальный рецепт торта «Красный бархат» предполагает использование пахты. Но если ее не найти, можно взять кефир. Вкус от этого не пострадает. По пошаговому рецепту с фото торт «Красный бархат» в домашних условиях создать несложно.</p>
+<p>Ингредиенты:</p>
+<ul>
+<li>полкило муки;</li>
+<li>четыре яйца;</li>
+<li>2,5 стакана сахара;</li>
+<li>столько же нежного сыра и 33-процентных сливок;</li>
+<li>по щепотке соли и соды;</li>
+<li>алый пищевой краситель;</li>
+<li>160 граммов сахарной пудры;</li>
+<li>две десертные ложечки какао;</li>
+<li>полтора стакана кефира;</li>
+<li>0,4 литра растительного масла;</li>
+<li>четыре щепотки разрыхлителя.</li>
+</ul>
+<p>Способ приготовления:</p>
+<ol>
+<li>Яйца с сахарным песком довести миксером до атласной субстанции.  </li>
+<li>Загасить соду кефиром, слить с красящей добавкой и маслом.  </li>
+<li>Муку просеять с разрыхлителем и какао, чуть-чуть присолить.  </li>
+<li>Вылить в миксерную емкость окрашенную кефирную смесь и засыпать муку. Взбить до гладкости.  </li>
+<li>Тесто распределить в две формы, выстеленные кондитерской бумагой. Готовить в нагретой до 180 градусов духовой печи 35 минут. Каждую заготовку разделить на два коржа.  </li>
+<li>Взбить сливки с пудрой, дополнить сыром. Отправить под пленкой охлаждаться на четыре часа.</li>
+</ol>
+<p>Этим кремом нужно промазать все коржи и украсить им верхушку и, при желании, боковые стороны. Затем десерт должен «дозреть» на холоде три часа.</p>
+<p>Видео-рецепт классического торта «Красный бархат»:</p>
+<h3 id="chizkeyk-krasnyy-barhat">Чизкейк «Красный бархат»</h3>
+<p><img width="620" height="414" decoding="async" src="/wp-content/uploads/e/b/9/eb900765334e77cfb13a532535adb76f.webp" alt="Торт «Красный бархат»"></p>
+<p>Этот рецепт торта «Красный бархат» в домашних условиях необычен тем, что здесь не понадобится духовая печь. Нежный чизкейк выпекать не требуется.</p>
+<p>Ингредиенты:</p>
+<ul>
+<li>380 граммов кофейного печенья;</li>
+<li>в два раза больше творога;</li>
+<li>220 граммов сладкосливочного масла;</li>
+<li>150 мл молока;</li>
+<li>стакан сахарного песка;</li>
+<li>вполовину меньше жирной сметаны;</li>
+<li>20 граммов желатина;</li>
+<li>пакетик ванилина;</li>
+<li>три больших ложки какао-порошка;</li>
+<li>алый пищевой краситель.</li>
+</ul>
+<p>Способ приготовления:</p>
+<ol>
+<li>Растопить масло на паровой бане. Перемешать с растолченным в крошку печеньем и выложить получившийся состав в форму, охладить.</li>
+<li>Желатин залить водой, чтобы он разбух.</li>
+<li>Взбить творог, сметану и какао миксером в низкоскоростном режиме либо вручную.</li>
+<li>В молоке растворить сахар и ванилин, нагреть до кипения. Как только состав слегка остынет, добавить желатин и мешать до гладкости. Туда же положить краситель и творожную массу, размешать. Должен получиться алый кремообразный состав.</li>
+</ol>
+<p>Вытащить основу из холодильника, вылить сверху алую массу и вернуть обратно в холод на девять часов.</p>
+<p>Чтоб творожный слой вышел ровным, надо постучать наполненной формой по столешнице.</p>
+<h3 id="tort-krasnyy-barhat-so-svekloy">Торт «Красный бархат» со свеклой</h3>
+<p><img width="620" height="349" decoding="async" src="/wp-content/uploads/2/1/d/21d44b274a809d1f298bbf78841a30b8.webp" alt="Торт «Красный бархат»"></p>
+<p>Рецепт торта «Красный бархат» пошагово без красителя со свекольным соком порадует ценителей природной пищи.</p>
+<p>Ингредиенты:</p>
+<ul>
+<li>240 граммов муки;</li>
+<li>чайная ложечка какао;</li>
+<li>в два раза больше разрыхлителя;</li>
+<li>половина стакана растительного масла;</li>
+<li>пакетик ванильного порошка;</li>
+<li>полтора стакана сахара;</li>
+<li>240 мл молока;</li>
+<li>шесть яиц;</li>
+<li>свекла;</li>
+<li>треть стакана кефира;</li>
+<li>столько же воды;</li>
+<li>большая ложка винного уксуса;</li>
+<li>250 граммов нежного сыра;</li>
+<li>220 граммов сладкосливочного масла.</li>
+</ul>
+<p>Способ приготовления:</p>
+<ol>
+<li>Свеклу вымыть, упаковать в фольгу и запекать в духовой печи час. Охладить и избавиться от кожицы. Порезать ломтиками и пюрировать в блендере. Влить в получившееся пюре уксус и рафинированное масло, размешать.  </li>
+<li>Смешать молоко с кефиром и двумя яйцами, растворить в составе полстакана сахара и полпакета ванилина. Соединить молочную смесь с пюре, и всыпать туда просеянную муку с какао и разрыхлителем.  </li>
+<li>Замесить жидковатое тесто и влить в форму. Запекать в духовой печи при 190 градусах около получаса. Заготовку разделить на три коржика.  </li>
+<li>Сварить сироп из двух ложек сахара. Пропитать им коржи.  </li>
+<li>Для крема четыре белка взбивать с оставшимся сахаром и ванильным порошком. Сыр со сладкосливочным маслом превратить в однородную субстанцию. Нагревать на малом пламени белковую массу на паровой бане и аккуратно ввести в нее сыр.  </li>
+<li>Коржи прослоить кремом и намазать им же верх десерта.</li>
+</ol>
+<div style="clear:both; margin-top:0em; margin-bottom:1em;"><a href="https://malinika.ru/polza-temnogo-shokolada-5-poleznyh-svoystv-i-ego-vliyanie-na-organizm/" target="_blank" rel="nofollow" class="ud010bb7f19539d4d7daf6ff9709810b6"><!-- INLINE RELATED POSTS 2/3 //--><style> .ud010bb7f19539d4d7daf6ff9709810b6 , .ud010bb7f19539d4d7daf6ff9709810b6 .postImageUrl , .ud010bb7f19539d4d7daf6ff9709810b6 .centered-text-area { min-height: 80px; position: relative; } .ud010bb7f19539d4d7daf6ff9709810b6 , .ud010bb7f19539d4d7daf6ff9709810b6:hover , .ud010bb7f19539d4d7daf6ff9709810b6:visited , .ud010bb7f19539d4d7daf6ff9709810b6:active { border:0!important; } .ud010bb7f19539d4d7daf6ff9709810b6 .clearfix:after { content: ""; display: table; clear: both; } .ud010bb7f19539d4d7daf6ff9709810b6 { display: block; transition: background-color 250ms; webkit-transition: background-color 250ms; width: 100%; opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; background-color: #E67E22; } .ud010bb7f19539d4d7daf6ff9709810b6:active , .ud010bb7f19539d4d7daf6ff9709810b6:hover { opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; background-color: #D35400; } .ud010bb7f19539d4d7daf6ff9709810b6 .centered-text-area { width: 100%; position: relative; } .ud010bb7f19539d4d7daf6ff9709810b6 .ctaText { border-bottom: 0 solid #fff; color: #ECF0F1; font-size: 16px; font-weight: bold; margin: 0; padding: 0; text-decoration: underline; } .ud010bb7f19539d4d7daf6ff9709810b6 .postTitle { color: #2C3E50; font-size: 16px; font-weight: 600; margin: 0; padding: 0; width: 100%; } .ud010bb7f19539d4d7daf6ff9709810b6 .ctaButton { background-color: #D35400!important; color: #ECF0F1; border: none; border-radius: 3px; box-shadow: none; font-size: 14px; font-weight: bold; line-height: 26px; moz-border-radius: 3px; text-align: center; text-decoration: none; text-shadow: none; width: 80px; min-height: 80px; background: url(https://malinika.ru/wp-content/plugins/intelly-related-posts/assets/images/simple-arrow.png)no-repeat; position: absolute; right: 0; top: 0; } .ud010bb7f19539d4d7daf6ff9709810b6:hover .ctaButton { background-color: #E67E22!important; } .ud010bb7f19539d4d7daf6ff9709810b6 .centered-text { display: table; height: 80px; padding-left: 18px; top: 0; } .ud010bb7f19539d4d7daf6ff9709810b6 .ud010bb7f19539d4d7daf6ff9709810b6-content { display: table-cell; margin: 0; padding: 0; padding-right: 108px; position: relative; vertical-align: middle; width: 100%; } .ud010bb7f19539d4d7daf6ff9709810b6:after { content: ""; display: block; clear: both; } </style><div class="centered-text-area"><div class="centered-text" style="float: left;"><div class="ud010bb7f19539d4d7daf6ff9709810b6-content"><span class="ctaText">Популярные статьи</span>&nbsp; <span class="postTitle">Польза темного шоколада: 5 полезных свойств и его влияние на организм</span></div></div></div><div class="ctaButton"></div></a></div><p>По этому рецепту несложно сделать торт «Красный бархат» в мультиварке. Коржики готовятся в режиме «Выпечка» примерно три четверти часа. Время запекания уменьшается обратно пропорционально ширине чаши прибора. Затем нужно допечь основы для торта в режиме «Подогрев» еще 20 минут.</p>
+<h2 id="osobennosti-prigotovleniya-i-hitrosti">Особенности приготовления и хитрости</h2>
+<ol>
+<li>Первой особенностью нашего бисквита является то, что остывшие бисквиты нужно помещать в пленку и затем в холодильник. Если этого не сделать, коржи высохнут. А в пленке они остаются такими же влажными и сочными, какими должны быть;</li>
+<li>Зачем какао? Какао добавляется не для цвета, никак нет. Чтобы у красного бархата был вкус, в него в обязательном порядке добавляется какао. Его можно заменить, но чем? Пробуйте и делайте открытия;</li>
+<li>Пахта делает бисквит мягким и нежным. Он заменим и это хорошо. Можно взять сметану или кефир. Так как пахта сама по себе напоминает крем, то благодаря ей тесто становится таким нежным, гладким и кремовым.</li>
+</ol>
+<p>Что же, мы рассказали вам основные правила работы с «красным бархатом». Далее уже дело за вами. Крем готовится в основном на сливочном сыре, но вы можете добавить другой. Как и можете варьировать степень сладости бисквита и вкус пропитки. Начинайте, а мы будем вас хвалить за ваши вкусные и яркие работы.</p>
+<h2 id="krasnyy-barhat-ot-olgi-matvey">«Красный бархат» от Ольги Матвей</h2>
+<p><img width="700" height="400" decoding="async" src="/wp-content/uploads/6/6/3/663e757c4cf83e8cca46119aafd45639.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Для такого шедевра не жалко даже потраченного времени на приготовление. Выпечка получается очень вкусной, красивой, нежной, сочной и лёгкой. Это замечательный вариант для любого праздника. Им можно порадовать родных в любой день.</p>
+<p>Ингредиенты:</p>
+<p>Для бисквита:</p>
+<ul>
+<li>Мука — 340 г</li>
+<li>Сахар — 300 г</li>
+<li>Какао — 1 ст. ложка</li>
+<li>Соль — 1/4 ч. ложки</li>
+<li>Разрыхлитель — 2 ч. ложки</li>
+<li>Сода — 1 ч. ложка</li>
+<li>Яйца — 3 шт.</li>
+<li>Кефир 3,2% — 200 мл</li>
+<li>Сливки 33% — 80 г</li>
+<li>Масло подсолнечное — 300 г</li>
+<li>Краситель пищевой красный (гелевый) — 2 ч. ложки</li>
+</ul>
+<p>Для крема:</p>
+<ul>
+<li>Масло сливочное 82,5% — 100 г</li>
+<li>Пудра сахарная — 100 г</li>
+<li>Сыр сливочный (Филадельфия) — 350 г</li>
+</ul>
+<h3 id="prigotovlenie-2">Приготовление:</h3>
+<p><img width="550" height="330" decoding="async" src="/wp-content/uploads/6/7/d/67d0bf45291ec0abca1b8822d6a56749.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Все сухие продукты для теста ссыпать в сито. Просеять их на два – три раза. Тогда тесто получится более воздушным, за счёт скопившегося кислорода.</p>
+<p><img width="550" height="330" decoding="async" src="/wp-content/uploads/a/3/b/a3b16daf1565fb83044c2a6ab50b4683.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Для дальнейшего замеса теста, нужно добавить в сухую смесь оставшиеся продукты. Взбить их до однородного состояния, используя миксер или кухонный комбайн.</p>
+<p><img width="550" height="330" decoding="async" src="/wp-content/uploads/7/5/e/75e993227c487d250a13410ae1f4dff1.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Тесто должно стать средним по консистенции, однородным. Приобрести красивый яркий цвет. Взбивать его необходимо минимум 4 – 5 минут. Затем дать настояться минут пять.</p>
+<p>Духовку включить на 170 градусов, для равномерного прогревания.</p>
+<p>Тем временем, полученную красную массу разделить на две части. Так как нужно выпечь два коржа.</p>
+<div class="fotorama--wp" data-link="file" data-size="large" data-ids="21479,21480,21481,21482,21483,21484,21485,21486,21487,21488" data-itemtag="dl" data-icontag="dt" data-captiontag="dd" data-columns="0" data-width="491" data-auto="false" data-max-width="100%" data-min-width="100%" data-ratio="1.534375"><div id="gallery-3" class="gallery galleryid-21409 gallery-columns-0 gallery-size-thumbnail"><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/d/f/c/dfc0d2dc3f3337cb8b6e178bc809ad5b.jpeg" data-full="https://malinika.ru/wp-content/uploads/d/f/c/dfc0d2dc3f3337cb8b6e178bc809ad5b.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/d/f/c/dfc0d2dc3f3337cb8b6e178bc809ad5b.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт «красный бархат» - 5 лучших рецептов в домашних условиях"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/2/e/7/2e7d3ae4cc684044da14340f9fdeea5b.jpeg" data-full="https://malinika.ru/wp-content/uploads/2/e/7/2e7d3ae4cc684044da14340f9fdeea5b.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/2/e/7/2e7d3ae4cc684044da14340f9fdeea5b.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт красный бархат в домашних условиях | оригинальный рецепт"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/4/6/c/46c597dbd6b5b0f754ea464f17548412.jpeg" data-full="https://malinika.ru/wp-content/uploads/4/6/c/46c597dbd6b5b0f754ea464f17548412.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/4/6/c/46c597dbd6b5b0f754ea464f17548412.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт красный бархат классический рецепт: с фото, пошагово"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/0/a/9/0a92e833f31a7d8b9b3e78f06e9744c1.jpeg" data-full="https://malinika.ru/wp-content/uploads/0/a/9/0a92e833f31a7d8b9b3e78f06e9744c1.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/0/a/9/0a92e833f31a7d8b9b3e78f06e9744c1.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт красный бархат"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/c/d/4/cd41fa2567756e5cd2285cca87a82f2f.jpeg" data-full="https://malinika.ru/wp-content/uploads/c/d/4/cd41fa2567756e5cd2285cca87a82f2f.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/c/d/4/cd41fa2567756e5cd2285cca87a82f2f.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт &quot;красный бархат&quot;: оригинальный рецепт с пошаговыми фото"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/9/b/d/9bd3c2e3fb8c481799f9d93c517f13b7.jpeg" data-full="https://malinika.ru/wp-content/uploads/9/b/d/9bd3c2e3fb8c481799f9d93c517f13b7.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/9/b/d/9bd3c2e3fb8c481799f9d93c517f13b7.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт красный бархат — 6 рецептов в домашних условиях"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/1/4/2/14260d0ad16be67ace589c87569f9ff8.jpeg" data-full="https://malinika.ru/wp-content/uploads/1/4/2/14260d0ad16be67ace589c87569f9ff8.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/1/4/2/14260d0ad16be67ace589c87569f9ff8.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт «красный бархат»: 5 лучших рецептов в домашних условиях"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/1/1/1/1116a28e96a407e046ca0aa5376b7658.jpeg" data-full="https://malinika.ru/wp-content/uploads/1/1/1/1116a28e96a407e046ca0aa5376b7658.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/1/1/1/1116a28e96a407e046ca0aa5376b7658.jpeg" class="attachment-thumbnail size-thumbnail" alt="Рецепт торта &quot;красный бархат&quot; -пошаговый рецепт с фото"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/a/4/c/a4c45e40e7c4181cc78d49532bcb7abe.jpeg"><img loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/a/4/c/a4c45e40e7c4181cc78d49532bcb7abe.jpeg" class="attachment-thumbnail size-thumbnail" alt="Классический и оригинальные рецепты торта «красный бархат» - поварёнок с лучшими рецептами
+                                             - 13 мая
+                                             - 43145685458 - медиаплатформа миртесен"></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/a/4/c/a4c45e40e7c4181cc78d49532bcb7abe.jpeg" data-full="https://malinika.ru/wp-content/uploads/7/4/0/7406f6948745db5af7e3c0d620b7a1c2.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/7/4/0/7406f6948745db5af7e3c0d620b7a1c2.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт красный бархат – 5 рецептов приготовления в домашних условиях"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl>
+		</div>
+</div>
+<p><img width="550" height="330" decoding="async" src="/wp-content/uploads/c/9/b/c9b31c91f028077a45f0783e9c225bd0.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Дно разъёмной формы застелить пергаментной бумагой. Боковые стороны тщательно промазать сливочным маслом. Наполнить форму тестом, используя для этого только одну половину от всей массы.</p>
+<p>Выпекать корж около 20 минут в разогретой духовке.</p>
+<p><img width="550" height="330" decoding="async" src="/wp-content/uploads/6/c/f/6cf31582a0a79ee197e204580a41823a.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Готовность коржей определить при помощи зубочистки. Она должна быть абсолютно сухой и без крупинок. Это главное подтверждение тому, что бисквит пропёкся.</p>
+<p>Готовые коржи хорошо остудить, вынув из формы для выпечки.</p>
+<p><img width="550" height="330" decoding="async" src="/wp-content/uploads/3/8/9/38991d18ececa4117fba6f508b08bed3.jpeg" alt="Торт «Красный бархат»"></p>
+<p>При подъёме теста, основа получается сверху не такой ровной, как хотелось бы. Поэтому верхнюю часть лучше срезать.</p>
+<p><img width="550" height="330" decoding="async" src="/wp-content/uploads/b/9/1/b91f3b1650581997c26db12d74c28ec8.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Обрезки поместить в блендер, превратить их в крошку. Можно сделать это при помощи рук, но так проще и быстрее.</p>
+<p><img width="550" height="330" decoding="async" src="/wp-content/uploads/c/6/9/c694e6c3595ceb29dc31621e99615d2d.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Сливочное масло положить в стакан от миксера. Взбить его в течение 3 – 4 минут. Затем, высыпать в него сахарную пудру. Продолжить процесс взбивания около 2 – 3 минут.</p>
+<p><img width="550" height="330" decoding="async" src="/wp-content/uploads/b/b/7/bb7d26e913f70c9876d8fb749decfd06.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Добавить к маслу прохладный сливочный сыр. Взбить до однородности.</p>
+<p><img width="550" height="330" decoding="async" src="/wp-content/uploads/0/a/c/0ac6696d4a529e6d6bba7046ad365983.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Смазать кремом поверхность первого коржа, отступив от края на 0,5 см. Для этого, поместить кремовую массу в полиэтиленовый пакет, срезав край, угол в данном случае.</p>
+<p>Сверху положить второй корж и слегка придавить его при помощи деревянной разделочной доски. Это позволит сделать торт ровным.</p>
+<p><img width="550" height="330" decoding="async" src="/wp-content/uploads/3/f/b/3fbaf73eb92ac416c376a8565f2a639c.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Смазать тонким слоем крема верхнюю часть и боковые. Должна получиться вот такая белая круглая фигура.</p>
+<p><img width="550" height="330" decoding="async" src="/wp-content/uploads/1/d/c/1dc37c2c453305a2f5e2a57848c432c3.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Полностью обсыпать десерт крошкой. Отправить в холодильник на 5 – 6 часов.</p>
+<p><img width="550" height="330" decoding="async" src="/wp-content/uploads/8/c/e/8ce094fcaf13deff585ba39b4903ac78.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Такую изящную сладость подавать на стол, отрезая каждому по порционному сегменту.</p>
+<p>В дополнение поставить сок, кофе или свежезаваренный чай.</p>
+<p>Приятного аппетита и лёгкого трудового дня!</p>
+<h2 id="retsept-ot-gordona-ramzi">Рецепт от Гордона Рамзи</h2>
+<p>И вновь рецепт именитого торта от не менее известного повара, имеющего мировое признание, – Гордона Рамзи.</p>
+<p><img width="600" height="398" decoding="async" src="/wp-content/uploads/d/6/1/d614e3004f36b14384b433a1d5021f26.jpeg" alt="Торт «Красный бархат»"></p>
+<h4 id="soglasno-retseptu-ot-gordona-ramzi-sleduet">Согласно рецепту от Гордона Рамзи следует подготовить:</h4>
+<ul>
+<li>муку – 240 г;</li>
+<li>разрыхлитель – 10 г;</li>
+<li>соль – 3 г;</li>
+<li>краситель (порошковый) – 15 г;</li>
+<li>какао – 25 г;</li>
+<li>масло оливковое – 50 мл;</li>
+<li>сахар – 150 г;</li>
+<li>яйца – 2 шт.;</li>
+<li>ванилин – 5 г.</li>
+</ul>
+<h4 id="biskvitnuyu-massu-gotovim-tak">Бисквитную массу готовим так:</h4>
+<p>Взбиваем масло, пока вмешанный сахар не даст побеления массы: для этого нужно дождаться полного растворения кристаллов. Вмешиваем 1/2 от количества муки, смешанной с какао и ванилином. Следом – кефир и оставшаяся шоколадная мука.</p>
+<p>Выпекаем до чистой шпажки при 180°С.</p>
+<h2 id="kak-prigotovit-tort-v-multivarke">Как приготовить торт в мультиварке</h2>
+<p>Сегодня мультиварка стала незаменимым помощником на кухне, поэтому чуть ниже специально рецепт для нее. Коржи для торта с шикарным названием «Красный бархат» в мультиварке получаются очень пышные, нежные и тающие во рту.
+</p>
+<p>Бисквит:
+</p>
+<ul>
+<li>Яйца – 3 шт.</li>
+<li>Сахар – 1,5 ст.</li>
+<li>Кефир – 280-300 мл.</li>
+<li>Масло растительное (без запаха, рафинированное) – 300 мл.</li>
+<li>Какао – 1-1,5 ст. л.</li>
+<li>Разрыхлитель – 2 ч. л.</li>
+<li>Сода – 1 ч. л.</li>
+<li>Мука (сорт высший) – 2,5 ст.</li>
+<li>Краситель пищевой – 1,5 ч. л. (если нет в хозяйстве, можно заменить уваренным соком красных ягод).</li>
+<li>Ванилин.</li>
+</ul>
+<p>Крем:
+</p>
+<ul>
+<li>Мягкий сливочный сыр (типа Рикотта, Филадельфия, Маскарпоне) – 500 гр.</li>
+<li>Масло сливочное – 1 пачка.</li>
+<li>Сахарная пудра – 70-100 гр.</li>
+</ul>
+<p>Алгоритм приготовления:
+</p>
+<p>Главное отличие этого рецепт в том, что коржи пекутся не в духовке, а в мультиварке</p>
+<p>
+Режим выбирается согласно инструкции к мультиварке по выпечке бисквита.<br>
+Сначала готовится бисквитное тесто, здесь важно добиться однородной массы при взбивании яиц с сахаром и увеличения ее в объеме.<br>
+Сухие ингредиенты смешиваются в одной емкости, кефир с маслом, содой и разрыхлителем – в другой.<br>
+Затем в сахарно-яичную смесь сначала ввести кефир, затем по ложке подсыпать муку, тщательно вымешивая (можно использовать миксер).<br>
+Выпечь 2-3 коржа, разрезать вдоль, промазать кремом и украсить.<br>
+Приготовление крема – традиционно, сначала растереть сахарную пудру и масло, затем вмешать в смесь сыр. Должен получиться однородный, нежный и пышный крем.<br>
+Украшением для торта могут быть фрукты и ягоды, шоколад и разноцветная посыпка, как подскажет фантазия домашнего кулинара.
+</p><div style="clear:both; margin-top:0em; margin-bottom:1em;"><a href="https://malinika.ru/mirin-mehanizm-deystviya-preimuschestva-i-pobochnye-effekty/" target="_blank" rel="nofollow" class="u90a3ef9a6946c06cf7c75e9215813bc6"><!-- INLINE RELATED POSTS 3/3 //--><style> .u90a3ef9a6946c06cf7c75e9215813bc6 , .u90a3ef9a6946c06cf7c75e9215813bc6 .postImageUrl , .u90a3ef9a6946c06cf7c75e9215813bc6 .centered-text-area { min-height: 80px; position: relative; } .u90a3ef9a6946c06cf7c75e9215813bc6 , .u90a3ef9a6946c06cf7c75e9215813bc6:hover , .u90a3ef9a6946c06cf7c75e9215813bc6:visited , .u90a3ef9a6946c06cf7c75e9215813bc6:active { border:0!important; } .u90a3ef9a6946c06cf7c75e9215813bc6 .clearfix:after { content: ""; display: table; clear: both; } .u90a3ef9a6946c06cf7c75e9215813bc6 { display: block; transition: background-color 250ms; webkit-transition: background-color 250ms; width: 100%; opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; background-color: #E67E22; } .u90a3ef9a6946c06cf7c75e9215813bc6:active , .u90a3ef9a6946c06cf7c75e9215813bc6:hover { opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; background-color: #D35400; } .u90a3ef9a6946c06cf7c75e9215813bc6 .centered-text-area { width: 100%; position: relative; } .u90a3ef9a6946c06cf7c75e9215813bc6 .ctaText { border-bottom: 0 solid #fff; color: #ECF0F1; font-size: 16px; font-weight: bold; margin: 0; padding: 0; text-decoration: underline; } .u90a3ef9a6946c06cf7c75e9215813bc6 .postTitle { color: #2C3E50; font-size: 16px; font-weight: 600; margin: 0; padding: 0; width: 100%; } .u90a3ef9a6946c06cf7c75e9215813bc6 .ctaButton { background-color: #D35400!important; color: #ECF0F1; border: none; border-radius: 3px; box-shadow: none; font-size: 14px; font-weight: bold; line-height: 26px; moz-border-radius: 3px; text-align: center; text-decoration: none; text-shadow: none; width: 80px; min-height: 80px; background: url(https://malinika.ru/wp-content/plugins/intelly-related-posts/assets/images/simple-arrow.png)no-repeat; position: absolute; right: 0; top: 0; } .u90a3ef9a6946c06cf7c75e9215813bc6:hover .ctaButton { background-color: #E67E22!important; } .u90a3ef9a6946c06cf7c75e9215813bc6 .centered-text { display: table; height: 80px; padding-left: 18px; top: 0; } .u90a3ef9a6946c06cf7c75e9215813bc6 .u90a3ef9a6946c06cf7c75e9215813bc6-content { display: table-cell; margin: 0; padding: 0; padding-right: 108px; position: relative; vertical-align: middle; width: 100%; } .u90a3ef9a6946c06cf7c75e9215813bc6:after { content: ""; display: block; clear: both; } </style><div class="centered-text-area"><div class="centered-text" style="float: left;"><div class="u90a3ef9a6946c06cf7c75e9215813bc6-content"><span class="ctaText">Популярные статьи</span>&nbsp; <span class="postTitle">Мирин: механизм действия, преимущества и побочные эффекты</span></div></div></div><div class="ctaButton"></div></a></div><p></p>
+<p></p><div class="rll-youtube-player" data-src="https://www.youtube.com/embed/eo3Ykp_dh1U" data-id="eo3Ykp_dh1U" data-query="feature=oembed" data-alt="ВКУСНЫЙ ТОРТ КРАСНЫЙ БАРХАТ В МУЛЬТИВАРКЕ, ПОПУЛЯРНЫЙ ТОРТ В США И КАНАДЕ #РЕЦЕПТ ТОРТА"><div data-id="eo3Ykp_dh1U" data-query="feature=oembed" data-src="https://www.youtube.com/embed/eo3Ykp_dh1U"><img src="https://i.ytimg.com/vi/eo3Ykp_dh1U/hqdefault.jpg" alt="ВКУСНЫЙ ТОРТ КРАСНЫЙ БАРХАТ В МУЛЬТИВАРКЕ, ПОПУЛЯРНЫЙ ТОРТ В США И КАНАДЕ #РЕЦЕПТ ТОРТА" width="480" height="360"><button class="play" aria-label="Play Youtube video" data-rocket-onclick="this.rocketonclick(event)"></button></div></div><noscript><iframe title="ВКУСНЫЙ ТОРТ КРАСНЫЙ БАРХАТ В МУЛЬТИВАРКЕ, ПОПУЛЯРНЫЙ ТОРТ В США И КАНАДЕ #РЕЦЕПТ ТОРТА" width="730" height="411" src="https://www.youtube.com/embed/eo3Ykp_dh1U?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></noscript><p></p>
+<h2 id="tort-s-maskarpone">Торт с маскарпоне</h2>
+<p>Если хочется удивить домочадцев восхитительным угощением, не стоит отказываться от удовольствия.&nbsp;Торт «Красный бархат» с маскарпоне&nbsp;вне конкуренции.</p>
+<p>Рецепт с фото пошагово&nbsp;поможет даже неопытной домохозяйке создать кулинарный шедевр. Достаточно подготовить необходимые продукты и можно приступать к работе.</p>
+<p>
+<img width="600" height="809" decoding="async" src="/wp-content/uploads/4/b/4/4b434e12a0bbb906a88e5d39c03bd542.jpeg" alt="Торт «Красный бархат»"></p>
+<p>Ингредиенты:</p>
+<ul>
+<li>ванильный экстракт – 10 г;</li>
+<li>сливочное масло – 110 г;</li>
+<li>пищевой краситель алого цвета – 60 г;</li>
+<li>мука – 340 г;</li>
+<li>кефир – 240 мл;</li>
+<li>сода – 10 г;</li>
+<li>сахар – 380 г;</li>
+<li>растительное масло – 240 мл;</li>
+<li>уксус – 10мл;</li>
+<li>какао – 40 г;</li>
+<li>яйца – 5 шт.;</li>
+<li>соль – щепотка.</li>
+</ul>
+<p>Для крема:</p>
+<ul>
+<li>сахарная пудра – 320 г;</li>
+<li>сливочное масло – 110 г;</li>
+<li>сыр маскарпоне – 220 г;</li>
+<li>сыр Филадельфия – 450 г;</li>
+<li>ванильный экстракт – 20 г;</li>
+<li>молоко – 40 мл.</li>
+</ul>
+<p>Приготовление:</p>
+<ul>
+<li>Приготовим&nbsp;торт «Красный бархат» с маскарпоне. Рецепт с фото пошагово&nbsp;превратит готовку в увлекательное занятие.</li>
+<li>В чашу миксера забрасываем сливочное масло, засыпаем сахарный песок, взбиваем.</li>
+</ul>
+<p><img width="600" height="420" decoding="async" src="/wp-content/uploads/e/3/1/e319fbf3aa86b137f5e02b0838dcfb7d.jpeg" alt="Торт «Красный бархат»"><img width="600" height="412" decoding="async" src="/wp-content/uploads/2/2/d/22d1653e1688c57f585180f4e09fb0d2.jpeg" alt="Торт «Красный бархат»"><img width="600" height="424" decoding="async" src="/wp-content/uploads/8/5/0/85013447c67137618eec959fa3e1d45d.jpeg" alt="Торт «Красный бархат»"></p>
+<ul>
+<li>В общую массу выливаем кефир.</li>
+<li>В небольшую емкость заливаем уксус, засыпаем пищевой краситель. Полученный состав вводим в сливочную смесь.</li>
+</ul>
+<p><img width="600" height="418" decoding="async" src="/wp-content/uploads/6/d/1/6d141ea0dc02f222996fd03ff416157b.jpeg" alt="Торт «Красный бархат»"><img width="600" height="416" decoding="async" src="/wp-content/uploads/b/5/b/b5bb6fd7fe1676a3e1ca29686b4b0416.jpeg" alt="Торт «Красный бархат»"><img width="600" height="414" decoding="async" src="/wp-content/uploads/d/9/5/d95c4a0ce8f71aa989c7ad9f75eee52c.jpeg" alt="Торт «Красный бархат»"><img width="600" height="416" decoding="async" src="/wp-content/uploads/3/1/6/316f1f564b9dd2e9ed974e1aa03e340e.jpeg" alt="Торт «Красный бархат»"></p>
+<ul>
+<li>Разогреваем духовку, выбираем показатель 177 градусов.</li>
+<li>Подготовим 3 формы для выпечки, промазываем их сливочным маслом, присыпаем мукой.</li>
+<li>Выкладываем тесто в формы, не заполняя их до краев.</li>
+</ul>
+<p><img width="600" height="414" decoding="async" src="/wp-content/uploads/7/2/d/72db0c615eba585de7e05baaa3d4b56a.jpeg" alt="Торт «Красный бархат»"></p>
+<ul>
+<li>Выпекаем бисквит не более получаса.</li>
+<li>Как только выйдет 30 минут, достаем выпечку из духовки. Убираем в сторону для остывания.</li>
+<li>Сделаем крем. В чашу отправляем сливочное масло, взбиваем его миксером.</li>
+</ul>
+<p><img width="600" height="414" decoding="async" src="/wp-content/uploads/2/c/6/2c6e9617bb66516ce4ad9dbba9b2f0d1.jpeg" alt="Торт «Красный бархат»"></p>
+<ul>
+<li>Не спеша вводим сыр, взбиваем.</li>
+<li>В общую массу добавляем пудру, ванильный экстракт, молоко. Взбиваем крем до густоты.</li>
+<li>Собираем десерт. Коржи промазываем кремом, выкладываем стопкой.</li>
+</ul>
+<p><img width="600" height="425" decoding="async" src="/wp-content/uploads/4/e/7/4e76d61761d4abbc98e05b14427fcaa3.jpeg" alt="Торт «Красный бархат»"></p>
+<ul>
+<li>Украшаем лакомство исходя из личных предпочтений.</li>
+<li>Помещаем блюдо в холодильник.</li>
+</ul>
+<p>Торт «Красный бархат» с маскарпоне&nbsp;сделать&nbsp;по рецепту с фото пошагово&nbsp;несложно. От угощения отказаться невозможно. Даже дети полакомятся десертом.</p>
+<div class="fotorama--wp" data-link="file" data-size="large" data-ids="21489,21490,21491,21492,21493,21494,21495,21496,21497,21498" data-itemtag="dl" data-icontag="dt" data-captiontag="dd" data-columns="0" data-width="491" data-auto="false" data-max-width="100%" data-min-width="100%" data-ratio="1.534375"><div id="gallery-5" class="gallery galleryid-21409 gallery-columns-0 gallery-size-thumbnail"><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/a/4/1/a41c2ca0c5c694e732574fc013a2dbf3.jpeg" data-full="https://malinika.ru/wp-content/uploads/a/4/1/a41c2ca0c5c694e732574fc013a2dbf3.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/a/4/1/a41c2ca0c5c694e732574fc013a2dbf3.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт красный бархат рецепт с фото пошагово от энди шефа"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/3/9/d/39d1936377e485606d720ccf6f1366d6.jpeg" data-full="https://malinika.ru/wp-content/uploads/3/9/d/39d1936377e485606d720ccf6f1366d6.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/3/9/d/39d1936377e485606d720ccf6f1366d6.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт &quot;красный бархат&quot;"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/b/d/6/bd61ea8906ad71a56319a89f163da0c6.jpeg" data-full="https://malinika.ru/wp-content/uploads/b/d/6/bd61ea8906ad71a56319a89f163da0c6.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/b/d/6/bd61ea8906ad71a56319a89f163da0c6.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт «красный бархат»: пошаговый рецепт приготовления сладости с фото и видео"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/a/c/7/ac7c36e476f6ddb8c44f0078116c86fc.jpeg" data-full="https://malinika.ru/wp-content/uploads/a/c/7/ac7c36e476f6ddb8c44f0078116c86fc.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/a/c/7/ac7c36e476f6ddb8c44f0078116c86fc.jpeg" class="attachment-thumbnail size-thumbnail" alt="Домашний торт красный бархат: 7 шикарных рецептов"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/a/e/9/ae98bea35b579ee8d3c7160599b21e31.jpeg" data-full="https://malinika.ru/wp-content/uploads/a/e/9/ae98bea35b579ee8d3c7160599b21e31.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/a/e/9/ae98bea35b579ee8d3c7160599b21e31.jpeg" class="attachment-thumbnail size-thumbnail" alt="Пошаговый рецепт нежного торта красный бархат с фото"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/f/4/4/f44c127aff6f3ad54c5fcc58da581532.jpeg" data-full="https://malinika.ru/wp-content/uploads/f/4/4/f44c127aff6f3ad54c5fcc58da581532.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/f/4/4/f44c127aff6f3ad54c5fcc58da581532.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт красный бархат, рецепт с фото пошагово"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/a/f/2/af245047101c84a30331e48c8933e481.jpeg" data-full="https://malinika.ru/wp-content/uploads/a/f/2/af245047101c84a30331e48c8933e481.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/a/f/2/af245047101c84a30331e48c8933e481.jpeg" class="attachment-thumbnail size-thumbnail" alt="Как приготовить торт «красный бархат» в домашних условиях — 6 оригинальных рецептов"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/8/0/4/8049b200bc1c7975cd43cc0f75ad7008.jpeg" data-full="https://malinika.ru/wp-content/uploads/8/0/4/8049b200bc1c7975cd43cc0f75ad7008.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/8/0/4/8049b200bc1c7975cd43cc0f75ad7008.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт красный бархат"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/0/f/2/0f2458415fb1caad91ad25d4f7b95417.jpeg" data-full="https://malinika.ru/wp-content/uploads/0/f/2/0f2458415fb1caad91ad25d4f7b95417.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/0/f/2/0f2458415fb1caad91ad25d4f7b95417.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт красный бархат: классический рецепт с фото"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl><dl class="gallery-item">
+			<dt class="gallery-icon landscape">
+				<a href="https://malinika.ru/wp-content/uploads/0/2/3/0239592bad9ce66333e5492b63881780.jpeg" data-full="https://malinika.ru/wp-content/uploads/0/2/3/0239592bad9ce66333e5492b63881780.jpeg"><span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><img itemprop="url image" loading="lazy" decoding="async" width="150" height="150" src="https://malinika.ru/wp-content/uploads/0/2/3/0239592bad9ce66333e5492b63881780.jpeg" class="attachment-thumbnail size-thumbnail" alt="Торт «красный бархат» — пошаговый рецепт в домашних условиях"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></span></a>
+			</dt></dl>
+		</div>
+</div>
+<p>
+Обратите внимание!
+</p>
+<p>Торт можно хранить в холодильнике в течение недели. Если его убрать в морозильник, то срок хранения продлевается до месяца.</p>
+<h2 id="retsept-3-poshagovyy-kak-gotovit-tort-krasnyy">Рецепт 3, пошаговый: как готовить торт Красный бархат</h2>
+<p>Оригинальный американский шедевр очень легко приготовить в домашних условиях, а классический рецепт торта Красный бархат настолько прост, что с ним справится любая домохозяйка. Перед тем, как сделать торт Красный бархат, я немного изменила рецепт, так как не нашла пахту и маскарпоне, заменив их на обычный жирный кефир и творог.</p>
+<ul>
+<li>Мука 300 г</li>
+<li>Сахарный песок 500 г</li>
+<li>Растительное масло 1,5 ст.</li>
+<li>Сливочное масло 120 г</li>
+<li>Яйца 4 шт.</li>
+<li>Кефир жирный 200 мл</li>
+<li>Творог 300 г</li>
+<li>Какао-порошок 50 г</li>
+<li>Разрыхлитель или гашеная сода 2 ч. л.</li>
+<li>Красная пищевой краситель 2-3 ч. л.</li>
+</ul>
+<p>Если приготовить торт Красный бархат со свеклой, то можно обойтись без красителя, который тоже указан в рецепте. Для этого берем около 200 грамм вареной свеклы и измельчаем ее мелкой теркой или блендером. Добавляем две столовые ложки лимонного сока или уксуса. Эту кашицу кладем в тесто.</p>
+<p>Еще краситель можно заменить любыми измельченными свежими красными фруктами: вишней, смородиной, малиной. Только кислоту в них добавлять не нужно.</p>
+<p>Для начала просеиваем муку и какао-порошок.</p>
+<p>Отдельно смешиваем все сухие компоненты (муку, разрыхлитель, сахар и какао), отдельно жидкие (кефир, растительное масло, краситель и яйца).</p>
+<p>Объединяем содержимое двух мисок. Берем миксер и взбиваем все до однородности. Должна получиться пастообразная массакрасного цвета. Если использовать краситель-гель для торта Красный бархат, то цвет будет насыщеннее.</p>
+<p>Оставляем тесто на полчаса набираться сил. После этого делим его на две равные части. В форму, которую мы смазали маслом и застелили пергаментной бумагой, выкладываем одну часть теста и ставим в печь, нагретую до 180°.</p>
+<p>Через 35 минут проверяем степень приготовления зубочисткой, для чего протыкаем ею корж по центру. Бисквит считается готовым, если зубочистка осталась сухой. Если нет, то допекаем еще 10-15 минут. Достаем форму с готовым коржом и даем ему немного остыть. После этого вынимаем корж.</p>
+<p>Делаем тоже самое со второй частью теста.&nbsp;Бисквит станет сочным и мягким, если завернуть его в пищевую пленку и минимум на два часа отправить в холодильник.</p>
+<p>В оригинале крем для торта Красный бархат должен быть приготовлен с маскарпоне. Мы же возьмем обычный творог, положим в него масло и сахар. Теперь, воспользовавшись миксером, сделаем все это гладким и однородным. Для ароматности можем добавить немножко ванили.</p>
+<p>Как украсить торт Красный бархат в домашних условиях?</p>
+<p>Для лучшей пропитки коржей нужно отрезать у них верхушки. Это также нужно для того, чтобы готовый торт был ровным и красивым. Обрезанные бисквиты можно слегка пропитать вишневым сиропом. От этого они станут еще сочнее.</p>
+<p>На одну бисквитную часть выкладываем большую часть крема. Кладем второй бисквит срезанной стороной сверху и легонько прижимаем.</p>
+<p>Намазываем оставшимся кремом бока. Посыпаем их покрошенными верхушками коржей.</p>
+<p>Красивым украшением торта Красный бархат могут стать розочки из белкового или масляного крема с вишней посередине. Можно присыпать кокосовой стружкой или оставшейся крошкой. Еще можно залить глазурью из растопленного шоколада или красиво выложить фрукты.</p>
+<p>Можно взять в два раза больше ингредиентов и сделать два больших бисквита, которые нужно будет разрезать пополам. Так получится четырехслойный торт.</p>
+<p>Или разделить тесто на три коржа. После приготовления слегка обрезать у них бока ножом или с помощью меньшей формы вырезать из них ровные круги. Собрать торт, но не смазывать бока. Сверху посадить большой цветок из мастики. Это будет трехъярусное чудо.</p><div class="yarpp yarpp-related yarpp-related-website yarpp-template-thumbnails">
+<!-- YARPP Thumbnails -->
+<h3>Рекомендуем:</h3>
+<div class="yarpp-thumbnails-horizontal">
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/snicel-7-receptov-idealnogo-bluda-video/" title="Шницель — 7 рецептов идеального блюда">
+<img width="120" height="78" src="https://malinika.ru/wp-content/uploads/6/3/6/636a19e40ddaa478fcc419e631075620.jpeg" class="attachment-yarpp-thumbnail size-yarpp-thumbnail wp-post-image" alt="" data-pin-nopin="true"><span class="yarpp-thumbnail-title">Шницель — 7 рецептов идеального блюда</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/kabacki-kak-gruzdi-na-zimu-3-posagovyh-recepta-s-foto-video/" title="Кабачки как грузди на зиму">
+<img width="120" height="78" src="https://malinika.ru/wp-content/uploads/4/5/5/455bdf43e4b310d742d52fb0412e06cd.jpeg" class="attachment-yarpp-thumbnail size-yarpp-thumbnail wp-post-image" alt="" data-pin-nopin="true"><span class="yarpp-thumbnail-title">Кабачки как грузди на зиму</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/krabovyj-salat-s-suharikami-5-foto-receptov-popularnogo-salata/" title="Крабовый салат с сухариками: 5 вариантов популярного крабового салата">
+<img width="120" height="78" src="https://malinika.ru/wp-content/uploads/6/9/d/69d295a273dc9b64cf76861aff4c1e9d.jpeg" class="attachment-yarpp-thumbnail size-yarpp-thumbnail wp-post-image" alt="" data-pin-nopin="true"><span class="yarpp-thumbnail-title">Крабовый салат с сухариками: 5 вариантов популярного крабового салата</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/bystrye-marinovannye-baklazany-s-cesnokom-foto-recept/" title="Быстрые маринованные баклажаны с чесноком">
+<img width="120" height="78" src="https://malinika.ru/wp-content/uploads/8/1/0/8107646b4ee8a509206d719d60f5528d.jpeg" class="attachment-yarpp-thumbnail size-yarpp-thumbnail wp-post-image" alt="" data-pin-nopin="true"><span class="yarpp-thumbnail-title">Быстрые маринованные баклажаны с чесноком</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/tonkoe-testo-na-piccu-8-lucsih-receptov-tonkogo-testa-dla-piccy/" title="Тонкое тесто на пиццу">
+<img width="120" height="78" src="https://malinika.ru/wp-content/uploads/5/c/6/5c6076c9f3ca964d6fb9a5c66c265a58.jpeg" class="attachment-yarpp-thumbnail size-yarpp-thumbnail wp-post-image" alt="" data-pin-nopin="true"><span class="yarpp-thumbnail-title">Тонкое тесто на пиццу</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/morkovnyj-biskvit-pysnyj-prostoj-s-orehami/" title="Морковный бисквит: 3 лучших рецептов с фото">
+<img width="120" height="78" src="https://malinika.ru/wp-content/uploads/6/d/0/6d073f9306b5ba10b9a5907dafe67d93.jpeg" class="attachment-yarpp-thumbnail size-yarpp-thumbnail wp-post-image" alt="" data-pin-nopin="true"><span class="yarpp-thumbnail-title">Морковный бисквит: 3 лучших рецептов с фото</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/saslyk-iz-govadiny-3-recepta-s-foto-idealnogo-saslyka/" title="Шашлык из говядины: фото-рецепты и секреты мягкого и вкусного мяса">
+<img width="120" height="78" src="https://malinika.ru/wp-content/uploads/9/4/0/940faca25948a6576c12873ad8126a2f.jpeg" class="attachment-yarpp-thumbnail size-yarpp-thumbnail wp-post-image" alt="" data-pin-nopin="true"><span class="yarpp-thumbnail-title">Шашлык из говядины: фото-рецепты и секреты мягкого и вкусного мяса</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/salat-s-kuricej-i-omletom-recept-s-foto/" title="Салат с курицей и омлетом: для праздников и будней">
+<img width="120" height="78" src="https://malinika.ru/wp-content/uploads/c/f/8/cf8d153a2fcb3ab9df5e128523c03601.png" class="attachment-yarpp-thumbnail size-yarpp-thumbnail wp-post-image" alt="" data-pin-nopin="true"><span class="yarpp-thumbnail-title">Салат с курицей и омлетом: для праздников и будней</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/kurica-v-duhovke-celikom-5-posagovyh-receptov-s-foto/" title="Курица в духовке целиком: в фольге, рукаве, на овощной подушке">
+<img width="120" height="78" src="https://malinika.ru/wp-content/uploads/1/b/0/1b07f32c14dda1cbf8f7662b95ba9fe3.png" class="attachment-yarpp-thumbnail size-yarpp-thumbnail wp-post-image" alt="" data-pin-nopin="true"><span class="yarpp-thumbnail-title">Курица в духовке целиком: в фольге, рукаве, на овощной подушке</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/sup-s-frikadelkami-i-kartoskoj-foto-recepty-sovety/" title="Суп с фрикадельками и картошкой: готовим вкуснейшее первое блюдо">
+<img width="120" height="78" src="https://malinika.ru/wp-content/uploads/c/0/1/c013f6fc9b75ca9ae145b149e69bc0a4.jpeg" class="attachment-yarpp-thumbnail size-yarpp-thumbnail wp-post-image" alt="" data-pin-nopin="true"><span class="yarpp-thumbnail-title">Суп с фрикадельками и картошкой: готовим вкуснейшее первое блюдо</span></a>
+</div>
+</div>
+	</div><!-- .entry-content -->
+
+</article>
+
+
+
+
+
+<div class="rating-box"><div class="rating-box__header">Оцените статью</div><div class="wp-star-rating js-star-rating star-rating--score-0" data-post-id="21409" data-rating-count="0" data-rating-sum="0" data-rating-value="0"><span class="star-rating-item js-star-rating-item" data-score="1"><svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="i-ico"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" class="ico-star"></path></svg></span><span class="star-rating-item js-star-rating-item" data-score="2"><svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="i-ico"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" class="ico-star"></path></svg></span><span class="star-rating-item js-star-rating-item" data-score="3"><svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="i-ico"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" class="ico-star"></path></svg></span><span class="star-rating-item js-star-rating-item" data-score="4"><svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="i-ico"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" class="ico-star"></path></svg></span><span class="star-rating-item js-star-rating-item" data-score="5"><svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="i-ico"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" class="ico-star"></path></svg></span></div></div>
+
+
+
+<div class="social-buttons"><span class="social-button social-button--vkontakte main" data-social="vkontakte"><span>Поделиться в ВКонтакте</span></span><span class="social-button social-button--facebook " data-social="facebook"></span><span class="social-button social-button--telegram " data-social="telegram"></span><span class="social-button social-button--odnoklassniki " data-social="odnoklassniki"></span><span class="social-button social-button--twitter " data-social="twitter"></span><span class="social-button social-button--whatsapp " data-social="whatsapp"></span></div>
+
+<!--noindex-->
+<div class="author-box">
+    <div class="author-info">
+        <div class="author-box__ava">
+            <img alt="" src="https://malinika.ru/wp-content/plugins/clearfy-pro/assets/images/default-avatar.png" srcset="https://malinika.ru/wp-content/plugins/clearfy-pro/assets/images/default-avatar.png 2x" class="avatar avatar-70 photo avatar-default" height="70" width="70" loading="lazy" decoding="async">        </div>
+
+        <div class="author-box__body">
+            <div class="author-box__author">
+                Игорь Бекушев            </div>
+            <div class="author-box__description">
+                <!--noindex--><!--/noindex-->
+            </div>
+
+            
+        </div>
+    </div>
+</div>
+<!--/noindex-->
+
+
+    <meta itemprop="author" content="Игорь Бекушев">
+<meta itemscope="" itemprop="mainEntityOfPage" itemtype="https://schema.org/WebPage" itemid="https://malinika.ru/tort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept/" content="Торт «Красный бархат»">
+    <meta itemprop="dateModified" content="2022-03-02">
+    <meta itemprop="datePublished" content="2021-12-17T00:00:00+03:00">
+<div itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization" style="display: none;"><meta itemprop="name" content="Malinika.ru - Рецепты"><meta itemprop="telephone" content="Malinika.ru - Рецепты"><meta itemprop="address" content="https://malinika.ru"></div>
+            </main><!-- #main -->
+        </div><!-- #primary -->
+
+        
+<aside id="secondary" class="widget-area" itemscope="" itemtype="http://schema.org/WPSideBar">
+
+		
+	<div id="categories-4" class="widget widget_categories"><div class="widget-header">Рубрики</div>
+			<ul>
+					<li class="cat-item cat-item-9"><a href="https://malinika.ru/category/varenya/">Варенья</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="https://malinika.ru/category/interesnoe/">Интересное</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="https://malinika.ru/category/poleznoe/">Полезное</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="https://malinika.ru/category/recipies/">Рецепты</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="https://malinika.ru/category/salaty/">Салаты</a>
+</li>
+			</ul>
+
+			</div><div id="execphp-2" class="widget widget_execphp">			<div class="execphpwidget"><style>
+div.c2f104 {
+padding: 5px !important;
+text-align: left !important;
+font-size: 12px !important;
+background-color: #F7F7F7 !important;
+border: 1px solid #000000 !important;
+}
+.c2f104 a {
+color: #0000CC !important;
+font-weight: normal;
+font-size: 12px !important;
+}
+.c2f104 .text {
+color: #666666 !important;
+font-size: 12px !important;
+padding: 3px 0 !important;
+line-height: normal !important;
+}
+.c2f104 .host {
+color: #006600;
+font-weight: normal;
+font-size: 12px !important;
+padding: 3px 0 !important;
+line-height: normal !important;
+}
+</style>
+<div class="c2f104">
+
+  <div>
+    <div><a href="https://ledxak.com/">Заказать взлом сайта</a></div>
+<div class="text">заказать взлом сайта</div>
+<div class="host">ledxak.com</div>
+
+  </div>
+
+</div>
+<script type="rocketlazyloadscript" async="async" data-rocket-src="https://w.uptolike.com/widgets/v1/zp.js?pid=tl2c69a20bb413ce2c73be99b6eceee79f2e678df7" data-rocket-type="text/javascript"></script></div>
+		</div>
+		<div id="recent-posts-2" class="widget widget_recent_entries">
+		<div class="widget-header">Новые публикации</div>
+		<ul>
+											<li>
+					<a href="https://malinika.ru/kak-bystro-zakryt-raschyotnyy-schyot-v-banke-podrobnaya-instruktsiya/">Как быстро закрыть расчётный счёт в банке: подробная инструкция</a>
+									</li>
+											<li>
+					<a href="https://malinika.ru/vkusnye-i-originalnye-idei-dlya-prigotovleniya-kanape-na-lyuboy-prazdnik/">Вкусные и оригинальные идеи для приготовления канапе на любой праздник</a>
+									</li>
+											<li>
+					<a href="https://malinika.ru/mery-bezopasnosti-v-chastnyh-domah-dlya-prestarelyh/">Меры безопасности в частных домах для престарелых</a>
+									</li>
+											<li>
+					<a href="https://malinika.ru/idealnij-desert-gotovim-makaruni-po-video/">Идеальный десерт — готовим макаруны по видео</a>
+									</li>
+											<li>
+					<a href="https://malinika.ru/ovoshnoj-tort-iz-dostupnix-produktov-za-polchasa-bistrij-retsept/">Овощной торт из доступных продуктов за полчаса — быстрый и вкусный рецепт для семейного ужина</a>
+									</li>
+					</ul>
+
+		</div><div id="execphp-3" class="widget widget_execphp">			<div class="execphpwidget"></div>
+		</div><div id="wpshop_widget_articles-3" class="widget widget_wpshop_widget_articles"><div class="widget-header">Популярное 2023 год</div><div class="widget-articles">
+<article class="post-card post-card--small ">
+            <div class="post-card__thumbnail">
+            <a href="https://malinika.ru/pankejki-na-moloke-svezem-kislom-s-razryhlitelem-i-bez-s-bananami/">
+                <div class="post-card__icon">
+                    <img width="100" height="65" src="https://malinika.ru/wp-content/uploads/5/9/3/5932e0d8b9e7b207981110a6fbdfaedd.jpeg" class="attachment-yelly_square size-yelly_square wp-post-image" alt="" decoding="async" loading="lazy">                </div>
+            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://malinika.ru/pankejki-na-moloke-svezem-kislom-s-razryhlitelem-i-bez-s-bananami/">Панкейки на молоке: 5 рецептов с идеальным результатом</a></div>
+
+                    <div class="post-card__description">
+                Панкейки по рецепту Энди Нередко в фильмах можно увидеть            </div>
+        
+        
+            </div>
+</article>
+<article class="post-card post-card--small ">
+            <div class="post-card__thumbnail">
+            <a href="https://malinika.ru/salat-s-kuricej-i-ananasom-7-vkusnejsih-receptov-s-foto-video/">
+                <div class="post-card__icon">
+                    <img width="100" height="65" src="https://malinika.ru/wp-content/uploads/a/0/4/a04ca29ff15c0ce7a6b10d73a3ce2a6a.jpeg" class="attachment-yelly_square size-yelly_square wp-post-image" alt="" decoding="async" loading="lazy">                </div>
+            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://malinika.ru/salat-s-kuricej-i-ananasom-7-vkusnejsih-receptov-s-foto-video/">Салат с курицей и ананасом</a></div>
+
+                    <div class="post-card__description">
+                Салат Викинг – классический рецепт с курицей, ананасами            </div>
+        
+        
+            </div>
+</article>
+<article class="post-card post-card--small ">
+            <div class="post-card__thumbnail">
+            <a href="https://malinika.ru/kak-prigotovit-pysnyj-biskvit-v-duhovke-foto-recept-pysnogo-biskvita/">
+                <div class="post-card__icon">
+                    <img width="100" height="65" src="https://malinika.ru/wp-content/uploads/b/7/3/b73233592179d1b476b802423c253bd7.png" class="attachment-yelly_square size-yelly_square wp-post-image" alt="" decoding="async" loading="lazy">                </div>
+            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://malinika.ru/kak-prigotovit-pysnyj-biskvit-v-duhovke-foto-recept-pysnogo-biskvita/">Очень пышный бисквит в духовке</a></div>
+
+                    <div class="post-card__description">
+                Классический бисквит в духовке, который всегда получается            </div>
+        
+        
+            </div>
+</article>
+<article class="post-card post-card--small ">
+            <div class="post-card__thumbnail">
+            <a href="https://malinika.ru/zakuska-iz-syra-15-prostyh-no-bezumno-vkusnyh-prazdnicnyh-receptov/">
+                <div class="post-card__icon">
+                    <img width="100" height="65" src="https://malinika.ru/wp-content/uploads/4/4/1/441bfe9345244b3fa15c523f7c76b025.jpeg" class="attachment-yelly_square size-yelly_square wp-post-image" alt="" decoding="async" loading="lazy">                </div>
+            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://malinika.ru/zakuska-iz-syra-15-prostyh-no-bezumno-vkusnyh-prazdnicnyh-receptov/">Закуска из сыра: 15 простых, но безумно вкусных праздничных рецептов</a></div>
+
+                    <div class="post-card__description">
+                Простой рецепт вкусной закуски с мясом «Довольный муж»            </div>
+        
+        
+            </div>
+</article>
+<article class="post-card post-card--small ">
+            <div class="post-card__thumbnail">
+            <a href="https://malinika.ru/samye-grubye-i-hamovitye-znaki-zodiaka/">
+                <div class="post-card__icon">
+                    <img width="100" height="65" src="https://malinika.ru/wp-content/uploads/d/c/5/dc5cc60d6891e4bb825948b185797678.jpeg" class="attachment-yelly_square size-yelly_square wp-post-image" alt="" decoding="async" loading="lazy">                </div>
+            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://malinika.ru/samye-grubye-i-hamovitye-znaki-zodiaka/">Грубияны среди нас: кто они — самые грубые знаки зодиака?</a></div>
+
+                    <div class="post-card__description">
+                Опасные личности Телец. Если Тельцов все устраивает            </div>
+        
+        
+            </div>
+</article>
+<article class="post-card post-card--small ">
+            <div class="post-card__thumbnail">
+            <a href="https://malinika.ru/sloi-seledki-pod-suboj-tri-varianta-klassiceskij-bez-aic-s-ablokami/">
+                <div class="post-card__icon">
+                    <img width="100" height="65" src="https://malinika.ru/wp-content/uploads/0/f/a/0facd97788739e6f4f9eaf5b9f401d34.jpeg" class="attachment-yelly_square size-yelly_square wp-post-image" alt="" decoding="async" loading="lazy">                </div>
+            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://malinika.ru/sloi-seledki-pod-suboj-tri-varianta-klassiceskij-bez-aic-s-ablokami/">Слои «Селедки под шубой»</a></div>
+
+                    <div class="post-card__description">
+                Классическая селедка под шубой с яблоком и сыром Если            </div>
+        
+        
+            </div>
+</article></div></div>	
+		
+</aside><!-- #secondary -->
+
+    
+
+    </div><!--.site-content-inner-->
+
+    
+</div><!--.site-content-->
+
+    
+    
+
+<div data-rocket-location-hash="5128a5574c4bee4d9f23f945f31777b8" class="site-footer-container">
+
+    
+
+    <div data-rocket-location-hash="ab26d3422f9cc0d9b6f5bf5026466f54" class="footer-navigation full" itemscope="" itemtype="http://schema.org/SiteNavigationElement">
+        <div class="main-navigation-inner fixed">
+            <div class="menu-footer-container"><ul id="footer_menu" class="menu"><li id="menu-item-70" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-privacy-policy menu-item-70"><a rel="privacy-policy" href="https://malinika.ru/privacy-policy/">Конфиденциальность</a></li>
+<li id="menu-item-75" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-75"><a href="https://malinika.ru/kontakt/">Контакты и условия использования</a></li>
+<li id="menu-item-88" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-88"><a href="https://malinika.ru/politika/">Политика использования файлов COOKIES</a></li>
+</ul></div>        </div>
+    </div><!--footer-navigation-->
+
+
+    <footer data-rocket-location-hash="f3f43e754490d334dad8f1f54757f7a0" id="colophon" class="site-footer full" itemscope="" itemtype="http://schema.org/WPFooter">
+        <div class="site-footer-inner fixed">
+
+            
+            
+<div class="footer-bottom">
+    <div class="footer-info">
+        <div class="footer-copyright">© 2026 Malinika.ru - Рецепты</div>
+        <div class="footer-under-copyright"></div>
+	        </div>
+
+    </div>
+        </div>
+    </footer><!--.site-footer-->
+</div>
+
+
+            <button type="button" class="scrolltop js-scrolltop"></button>
+    
+                    <div data-rocket-location-hash="a5c769ba046a7486e44d6bd0ec5ce911" class="top-line js-top-line">
+            <div data-rocket-location-hash="44b88fe0a5666d7c2d54a88164c8069f" class="top-line-inner fixed">
+
+                <div class="top-line__title">Торт «Красный бархат»</div><div class="top-line__like"><span class="btn-fb-like btn-top-like social-button--vkontakte" data-social="vkontakte"><span>Поделиться в ВКонтакте</span></span></div><div class="top-line__post"><div class="top-line__post_thumbnail"><a href="https://malinika.ru/kak-prigotovit-ogurtsy-s-tomatnoy-pastoy-na-zimu-6-vkusnyh-retseptov-s-poshagovymi-foto-instruktsiyami/"><img width="100" height="100" src="https://malinika.ru/wp-content/uploads/2023/10/kak-prigotovit-ogurtsy-s-tomatnoy-pastoy-na-zimu-6-vkusnyh-retseptov-s-poshagovymi-foto-instruktsiyami-100x100.jpg" class="attachment-yelly_square size-yelly_square wp-post-image" alt="" decoding="async" loading="lazy" srcset="https://malinika.ru/wp-content/uploads/2023/10/kak-prigotovit-ogurtsy-s-tomatnoy-pastoy-na-zimu-6-vkusnyh-retseptov-s-poshagovymi-foto-instruktsiyami-100x100.jpg 100w, https://malinika.ru/wp-content/uploads/2023/10/kak-prigotovit-ogurtsy-s-tomatnoy-pastoy-na-zimu-6-vkusnyh-retseptov-s-poshagovymi-foto-instruktsiyami-120x120.jpg 120w" sizes="auto, (max-width: 100px) 100vw, 100px"></a></div><div class="top-line__post_title"><a href="https://malinika.ru/kak-prigotovit-ogurtsy-s-tomatnoy-pastoy-na-zimu-6-vkusnyh-retseptov-s-poshagovymi-foto-instruktsiyami/">Как приготовить огурцы с томатной пастой на зиму: 6 вкусных рецептов с пошаговыми фото инструкциями</a></div></div>            </div>
+        </div>
+    
+</div><!-- #page -->
+
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/yelly_child/*","/wp-content/themes/yelly/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script type="rocketlazyloadscript">var pseudo_links = document.querySelectorAll(".pseudo-clearfy-link");for (var i=0;i<pseudo_links.length;i++ ) { pseudo_links[i].addEventListener("click", function(e){   window.open( e.target.getAttribute("data-uri") ); }); }</script><script type="rocketlazyloadscript">document.addEventListener("copy", (event) => {var pagelink = "\nИсточник: https://malinika.ru/tort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept";event.clipboardData.setData("text", document.getSelection() + pagelink);event.preventDefault();});</script><script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-content/plugins/fitvids-for-wordpress/jquery.fitvids.js" id="fitvids-js" data-rocket-defer="" defer=""></script>
+<script type="text/javascript" id="wp-postviews-cache-js-extra">
+/* <![CDATA[ */
+var viewsCacheL10n = {"admin_ajax_url":"https://malinika.ru/wp-admin/admin-ajax.php","nonce":"d584bac3f7","post_id":"21409"};
+//# sourceURL=wp-postviews-cache-js-extra
+/* ]]> */
+</script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-content/plugins/wp-postviews/postviews-cache.js" id="wp-postviews-cache-js" data-rocket-defer="" defer=""></script>
+<script type="text/javascript" id="yelly-scripts-js-extra">
+/* <![CDATA[ */
+var settings_array = {"rating_text_average":"\u0441\u0440\u0435\u0434\u043d\u0435\u0435","rating_text_from":"\u0438\u0437","lightbox_display":"1"};
+var wps_ajax = {"url":"https://malinika.ru/wp-admin/admin-ajax.php","nonce":"822b63d90b"};
+//# sourceURL=yelly-scripts-js-extra
+/* ]]> */
+</script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-content/themes/yelly/assets/js/scripts.min.js" id="yelly-scripts-js" data-rocket-defer="" defer=""></script>
+		<script type="rocketlazyloadscript" data-rocket-type="text/javascript">
+		jQuery(document).ready(function () {
+			jQuery('body').fitVids();
+		});
+		</script><script>window.lazyLoadOptions={elements_selector:"iframe[data-lazy-src]",data_src:"lazy-src",data_srcset:"lazy-srcset",data_sizes:"lazy-sizes",class_loading:"lazyloading",class_loaded:"lazyloaded",threshold:300,callback_loaded:function(element){if(element.tagName==="IFRAME"&&element.dataset.rocketLazyload=="fitvidscompatible"){if(element.classList.contains("lazyloaded")){if(typeof window.jQuery!="undefined"){if(jQuery.fn.fitVids){jQuery(element).parent().fitVids()}}}}}};window.addEventListener('LazyLoad::Initialized',function(e){var lazyLoadInstance=e.detail.instance;if(window.MutationObserver){var observer=new MutationObserver(function(mutations){var image_count=0;var iframe_count=0;var rocketlazy_count=0;mutations.forEach(function(mutation){for(var i=0;i<mutation.addedNodes.length;i++){if(typeof mutation.addedNodes[i].getElementsByTagName!=='function'){continue}
+if(typeof mutation.addedNodes[i].getElementsByClassName!=='function'){continue}
+images=mutation.addedNodes[i].getElementsByTagName('img');is_image=mutation.addedNodes[i].tagName=="IMG";iframes=mutation.addedNodes[i].getElementsByTagName('iframe');is_iframe=mutation.addedNodes[i].tagName=="IFRAME";rocket_lazy=mutation.addedNodes[i].getElementsByClassName('rocket-lazyload');image_count+=images.length;iframe_count+=iframes.length;rocketlazy_count+=rocket_lazy.length;if(is_image){image_count+=1}
+if(is_iframe){iframe_count+=1}}});if(image_count>0||iframe_count>0||rocketlazy_count>0){lazyLoadInstance.update()}});var b=document.getElementsByTagName("body")[0];var config={childList:!0,subtree:!0};observer.observe(b,config)}},!1)</script><script data-no-minify="1" async="" src="https://malinika.ru/wp-content/plugins/wp-rocket/assets/js/lazyload/17.8.3/lazyload.min.js"></script><script>function lazyLoadThumb(e,alt,l){var t='<img src="https://i.ytimg.com/vi/ID/hqdefault.jpg" alt="" width="480" height="360">',a='<button class="play" aria-label="Play Youtube video"></button>';if(l){t=t.replace('data-lazy-','');t=t.replace('loading="lazy"','');t=t.replace(/<noscript>.*?<\/noscript>/g,'');}t=t.replace('alt=""','alt="'+alt+'"');return t.replace("ID",e)+a}function lazyLoadYoutubeIframe(){var e=document.createElement("iframe"),t="ID?autoplay=1";t+=0===this.parentNode.dataset.query.length?"":"&"+this.parentNode.dataset.query;e.setAttribute("src",t.replace("ID",this.parentNode.dataset.src)),e.setAttribute("frameborder","0"),e.setAttribute("allowfullscreen","1"),e.setAttribute("allow","accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"),this.parentNode.parentNode.replaceChild(e,this.parentNode)}document.addEventListener("DOMContentLoaded",function(){var exclusions=[];var e,t,p,u,l,a=document.getElementsByClassName("rll-youtube-player");for(t=0;t<a.length;t++)(e=document.createElement("div")),(u='https://i.ytimg.com/vi/ID/hqdefault.jpg'),(u=u.replace('ID',a[t].dataset.id)),(l=exclusions.some(exclusion=>u.includes(exclusion))),e.setAttribute("data-id",a[t].dataset.id),e.setAttribute("data-query",a[t].dataset.query),e.setAttribute("data-src",a[t].dataset.src),(e.innerHTML=lazyLoadThumb(a[t].dataset.id,a[t].dataset.alt,l)),a[t].appendChild(e),(p=e.querySelector(".play")),(p.onclick=lazyLoadYoutubeIframe)});</script>
+
+<!-- Yandex.Metrika counter -->
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105985519', 'ym');
+
+    ym(105985519, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/105985519" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+<script type="rocketlazyloadscript" async="async" data-rocket-src="https://w.uptolike.com/widgets/v1/zp.js?pid=2048239" data-rocket-type="text/javascript"></script>
+
+<div data-rocket-location-hash="9f41222c41e023e814dfdbb0ecd4201c" class="image-hover-social-buttons" style="display: none;"><div data-rocket-location-hash="b8c3350d05b5ff681c29002ad659b99f" class="social-button social-button--vkontakte js-share-link" data-uri="https://vk.com/share.php?url=https%3A%2F%2Fmalinika.ru%2Ftort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept%2F"></div><div data-rocket-location-hash="1057d6514c850c335568ba6167681c4a" class="social-button social-button--facebook js-share-link" data-uri="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fmalinika.ru%2Ftort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept%2F"></div><div class="social-button social-button--telegram js-share-link" data-uri="https://t.me/share/url?url=https%3A%2F%2Fmalinika.ru%2Ftort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept%2F&amp;text=%D0%A2%D0%BE%D1%80%D1%82+%C2%AB%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D1%8B%D0%B9+%D0%B1%D0%B0%D1%80%D1%85%D0%B0%D1%82%C2%BB"></div><div class="social-button social-button--odnoklassniki js-share-link" data-uri="https://connect.ok.ru/dk?st.cmd=WidgetSharePreview&amp;service=odnoklassniki&amp;st.shareUrl=https%3A%2F%2Fmalinika.ru%2Ftort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept%2F"></div><div data-rocket-location-hash="c0845dbeb8ee5024dc9877ef809ac439" class="social-button social-button--twitter js-share-link" data-uri="http://twitter.com/share?url=https%3A%2F%2Fmalinika.ru%2Ftort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept%2Ftext=%D0%A2%D0%BE%D1%80%D1%82+%C2%AB%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D1%8B%D0%B9+%D0%B1%D0%B0%D1%80%D1%85%D0%B0%D1%82%C2%BB"></div><div data-rocket-location-hash="d9a099710ac9c6e992ae108fe2843efd" class="social-button social-button--whatsapp js-share-link" data-uri="whatsapp://send?url=https%3A%2F%2Fmalinika.ru%2Ftort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept%2Ftext=%D0%A2%D0%BE%D1%80%D1%82+%C2%AB%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D1%8B%D0%B9+%D0%B1%D0%B0%D1%80%D1%85%D0%B0%D1%82%C2%BB"></div></div>
+
+
+
+<script>var rocket_beacon_data = {"ajax_url":"https:\/\/malinika.ru\/wp-admin\/admin-ajax.php","nonce":"8592ed2108","url":"https:\/\/malinika.ru\/tort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept","is_mobile":false,"width_threshold":1600,"height_threshold":700,"delay":500,"debug":null,"status":{"atf":true,"lrc":true},"elements":"img, video, picture, p, main, div, li, svg, section, header, span","lrc_threshold":1800}</script><script data-name="wpr-wpr-beacon" src="https://malinika.ru/wp-content/plugins/wp-rocket/assets/js/wpr-beacon.min.js" async="" beacon-completed="true"></script>
+
+
+</body></html>

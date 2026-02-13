@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pistasjpudding (melkefri)",
+    "description": "En næringsrik dessert laget med pistasj, gelatin, soyamelk og akasiehonning.",
+    "ingredients": "[{\"name\": \"gelatinplater\", \"units\": null, \"amount\": 6}, {\"name\": \"soyamelk\", \"units\": \"dl\", \"amount\": 6}, {\"name\": \"akasiehonning\", \"units\": \"ss\", \"amount\": 5}, {\"name\": \"pistasjkjerner\", \"units\": \"gr\", \"amount\": 100}]",
+    "instructions": "Legg gelatinplatene i bløt i kaldt vann i ca fem minutter. Imens varmes 2-3 dl av soyamelken opp under omrøring, til den begynner å ryke. Trekk den så av varmen, og rør inn akasiehonning så den løser seg helt opp. Kryst forsiktig de ferdig bløtlagte gelatinplatene, én og én, og rør inn i den varme soyamelken. Rør sammen til gelatinen er helt oppløst. Bland inn resten av soyamelken. Ha i en blender sammen med pistasjkjernene, og kjør blandingen så jevn og glatt som mulig. Smak evt til med mer akasiehonning om ønskelig. Hell over i en serveringsskål, eller fordel i 4-5 porsjonsglass. Sett kaldt i kjøleskap i minimum fire timer, evt natten over.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Oppskriften rekker til omtrentlig fem personer. Kan halveres hvis nødvendig. Holder fint et par dager tildekket i kjøleskap.",
+    "tags": "melkefri, dessert, pistasj, glutenfri, kornfri, sukkerfri"
+}

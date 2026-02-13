@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pečena brokula s parmezanom",
+    "description": "Pečena brokula s parmezanom je ukusno i zdravo jelo koje se lako priprema.",
+    "ingredients": "[{\"name\": \"brokula\", \"units\": \"large head\", \"amount\": 1}, {\"name\": \"maslinovo ulje\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"sol\", \"units\": null, \"amount\": null}, {\"name\": \"crni papar\", \"units\": null, \"amount\": null}, {\"name\": \"češnjak\", \"units\": \"cloves\", \"amount\": 3}, {\"name\": \"parmezan\", \"units\": \"cup\", \"amount\": 0.5}]",
+    "instructions": "Zagrijte pećnicu na 200°C. Obložite lim za pečenje papirom za pečenje. Operite brokulu i odrežite cvjetove te ih stavite u veliku zdjelu. Prelijte maslinovo ulje preko brokule, dodajte sjeckani češnjak, sol i papar te sve dobro promiješajte. Rasporedite brokulu na lim za pečenje i pospite parmezanom. Pecite 15-20 minuta ili dok brokula ne postane zlatno-smeđa.",
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "30 minutes",
+    "notes": null,
+    "tags": "brokula, povrće, pečeno, zdravo"
+}

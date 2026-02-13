@@ -1,0 +1,12 @@
+{
+    "dish_name": "Grimolle aux Pommes",
+    "description": "La Grimolle ou Grimollée est un dessert rustique, originaire du Poitou en France.",
+    "ingredients": "[{\"name\": \"Beurre pour le moule\", \"units\": null, \"amount\": null}, {\"name\": \"cassonade\", \"units\": \"c. à soupe\", \"amount\": \"1\"}, {\"name\": \"farine\", \"units\": \"tasse\", \"amount\": \"2/3\"}, {\"name\": \"cassonade\", \"units\": \"c. à s.\", \"amount\": \"6\"}, {\"name\": \"levure chimique\", \"units\": \"c. à thé\", \"amount\": \"1\"}, {\"name\": \"extrait de vanille\", \"units\": \"c. à c.\", \"amount\": \"1\"}, {\"name\": \"œuf\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"lait\", \"units\": \"ml\", \"amount\": \"200\"}, {\"name\": \"pommes\", \"units\": null, \"amount\": \"4-5\"}, {\"name\": \"beurre\", \"units\": \"tasse\", \"amount\": \"1/4\"}, {\"name\": \"cassonade\", \"units\": \"tasse\", \"amount\": \"1/4\"}, {\"name\": \"œuf\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"amandes effilées\", \"units\": \"tasse\", \"amount\": \"2/3 + 2\"}]",
+    "instructions": "Préchauffer le four à 350 F (180C). Chemisez le moule à tarte de papier parchemin, puis beurrez-le et saupoudrez avec la cuillère à soupe de cassonade. Dans le bol du robot, mélanger au fouet la farine, la cassonade, la levure, l'extrait de vanille, l’œuf et le lait. Pelez et parez les pommes, puis les tailler en fines lamelles. Les mélanger à la préparation et bien les enrober à l'aide d'une spatule. Versez la préparation dans le moule préparé. Enfournez le moule pendant 30 minutes ou jusqu'à ce que le dessus soit légèrement doré. Préparez la croûte d'amandes en fouettant le beurre fondu avec le sucre et l'oeuf, puis ajoutez les amandes effilées. Versez la préparation aux amandes sur la Grimolle et remettez au four pendant 20 minutes. Laissez refroidir avant de démouler.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "50 minutes",
+    "total_time": null,
+    "notes": "Déguster avec une boule de crème glacée.",
+    "tags": "dessert aux pommes, dessert du poitoi, dessert rustique, grimolle aux pommes, grimollée, pommes"
+}

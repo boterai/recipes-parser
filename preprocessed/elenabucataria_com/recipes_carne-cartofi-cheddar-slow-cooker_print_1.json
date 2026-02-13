@@ -1,0 +1,12 @@
+{
+    "dish_name": "Carne cu cartofi și cheddar",
+    "description": "Un preparat reconfortant cu carne fragedă, cartofi și brânză cheddar, perfect pentru mesele în familie sau întâlnirile relaxate.",
+    "ingredients": "[{\"name\": \"mușchi de vita sau sirloin\", \"units\": \"grams\", \"amount\": 680}, {\"name\": \"cartofi medii Yukon Gold sau Russet\", \"units\": \"pieces\", \"amount\": 4}, {\"name\": \"ceapă mare\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"supă de vită cu conținut redus de sodiu\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"pudră de usturoi\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"sare\", \"units\": null, \"amount\": null}, {\"name\": \"piper\", \"units\": null, \"amount\": null}, {\"name\": \"brânză cheddar maturată rasă\", \"units\": \"cups\", \"amount\": 2}]",
+    "instructions": "01 - Tăiați mușchiul de vită în bucăți mici și feliați cartofii și ceapa subțire. 02 - În vasul de slow cooker, puneți un strat de felii de cartofi, urmat de jumătate din ceapă și bucăți de carne. Asezonați cu pudră de usturoi, sare și piper. 03 - Repetați procesul de stratificare cu ingredientele rămase și turnați supa de vită peste straturi. 04 - Setați slow cooker-ul pe joasă pentru 6 ore sau pe mare pentru 3 ore. 05 - În ultimele 30 de minute, presărați brânza cheddar deasupra și lăsați să se topească.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "6 hours",
+    "total_time": null,
+    "notes": "Asigurați-vă că stratificați uniform ingredientele pentru o gătire uniformă.",
+    "tags": null
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Quiche med Laks og Porrer",
+    "description": "En lækker Quiche med laks og porrer, der kombinerer en smørbagt bund med et fyldigt fyld af æg, fløde og ost.",
+    "ingredients": "[{\"name\": \"mel\", \"units\": \"g\", \"amount\": 235}, {\"name\": \"salt\", \"units\": \"tsp\", \"amount\": 1}, {\"name\": \"smør\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"vand\", \"units\": \"dl\", \"amount\": 0.5}, {\"name\": \"røget laks\", \"units\": \"ds\", \"amount\": 2}, {\"name\": \"piskefløde\", \"units\": \"dl\", \"amount\": 3}, {\"name\": \"mælk\", \"units\": \"dl\", \"amount\": 3}, {\"name\": \"æg\", \"units\": null, \"amount\": 4}, {\"name\": \"peber\", \"units\": null, \"amount\": null}, {\"name\": \"revet muskatnød\", \"units\": null, \"amount\": null}, {\"name\": \"porrer\", \"units\": null, \"amount\": 3}, {\"name\": \"smør eller olivenolie\", \"units\": null, \"amount\": null}, {\"name\": \"revet ost\", \"units\": \"g\", \"amount\": 100}]",
+    "instructions": "1. Smuldr mel, salt og smør til en ensartet masse. Tilsæt vand, og saml dejen. Pak dejen stramt i film, og lad den hvile i køleskabet i en times tid. 2. Bland piskefløde, mælk og æg, og pisk det godt sammen. Tilsæt salt, peber og revet muskatnød. 3. Damp de fintskårne porrer let i lidt smør eller olivenolie. 4. Rul dejen ud til ca. 1/2 cm tykkelse, læg den i en tærteform, og tryk den godt ned. 5. Forbag tærten i ca. 20 minutter ved 175 grader. 6. Læg de dampede porrer i tærtebunden, hæld flødeblandingen over, og fordel laksestykkerne. Drys med ost. 7. Bag tærten i 35-40 minutter ved 175 grader varmluft.",
+    "category": "Main Course",
+    "prep_time": "60 minutes",
+    "cook_time": "40 minutes",
+    "total_time": "100 minutes",
+    "notes": "Serveres med en grøn salat og et glas kold hvidvin eller rosé.",
+    "tags": "quiche, laks, porrer, fransk, hovedret"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gyozas de verduras",
+    "description": "Vamos a preparar gyozas de verduras, unas pequeñas empanadillas japonesas cocinadas al vapor que son una auténtica delicia.",
+    "ingredients": "[{\"name\": \"puerro\", \"units\": \"g\", \"amount\": 75}, {\"name\": \"zanahoria\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"calabacín\", \"units\": \"g\", \"amount\": 75}, {\"name\": \"pak choi\", \"units\": \"g\", \"amount\": 125}, {\"name\": \"champiñones\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"ajo\", \"units\": \"diente\", \"amount\": 1}, {\"name\": \"aceite de girasol\", \"units\": \"cucharadas\", \"amount\": 2}, {\"name\": \"salsa de soja\", \"units\": \"cucharadas\", \"amount\": 4}, {\"name\": \"oblea para gyozas\", \"units\": \"unidades\", \"amount\": 15}, {\"name\": \"agua\", \"units\": \"ml\", \"amount\": 150}, {\"name\": \"vinagre de arroz\", \"units\": \"cucharadas\", \"amount\": 2}, {\"name\": \"semillas de sésamo tostado\", \"units\": \"cucharadita\", \"amount\": 1}]",
+    "instructions": "1. Lavar, secar y cortar todas las verduras en bastones muy finitos. 2. Sofreír el ajo con el puerro y la zanahoria, añadir salsa de soja. 3. Añadir el calabacín, el pak choi y los champiñones, saltear y dejar enfriar el relleno. 4. Rellenar las obleas de gyoza y humedecer el borde superior antes de cerrarlas. 5. Cocinar las gyozas dorándolas por la base y luego al vapor. 6. Preparar una salsa de acompañamiento y servir las gyozas con la salsa.",
+    "category": "entrante",
+    "prep_time": "30 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "50 minutes",
+    "notes": "Se pueden preparar las obleas para gyozas caseras. Se puede añadir jengibre rallado al sofrito para más sabor.",
+    "tags": "gyozas, verduras, receta japonesa, veganas, vegetarianas"
+}

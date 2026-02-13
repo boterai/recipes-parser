@@ -1,0 +1,12 @@
+{
+    "dish_name": "Chocolate Fudge Cookies",
+    "description": "Rich, fudgy chocolate cookies filled with chocolate chunks. Perfect for chocolate lovers.",
+    "ingredients": "[{\"name\": \"unsalted butter\", \"units\": \"cup\", \"amount\": \"1/2\"}, {\"name\": \"brown sugar\", \"units\": \"cup\", \"amount\": \"1/2\"}, {\"name\": \"granulated sugar\", \"units\": \"cup\", \"amount\": \"1/4\"}, {\"name\": \"vanilla extract\", \"units\": \"teaspoon\", \"amount\": \"1\"}, {\"name\": \"large egg\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"all-purpose flour\", \"units\": \"cup\", \"amount\": \"1\"}, {\"name\": \"baking soda\", \"units\": \"teaspoon\", \"amount\": \"1/2\"}, {\"name\": \"cocoa powder\", \"units\": \"cup\", \"amount\": \"1/2\"}, {\"name\": \"whole milk\", \"units\": \"tablespoon\", \"amount\": \"1\"}, {\"name\": \"dark chocolate chunks\", \"units\": \"cup\", \"amount\": \"2/3\"}, {\"name\": \"extra chocolate for topping\", \"units\": null, \"amount\": null}]",
+    "instructions": "Step 01: Beat butter and sugars, then add vanilla and egg. Step 02: Sift in flour, baking soda, cocoa powder and salt. Step 03: Add milk if needed, stir in chocolate chunks. Step 04: Refrigerate dough for 30 minutes. Step 05: Form balls, bake at 350°F for 10-11 minutes. Step 06: Top with extra chocolate while warm.",
+    "category": "Sweet Treats",
+    "prep_time": "50 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "60 minutes",
+    "notes": "Chilling prevents spreading. Add milk only if needed.",
+    "tags": "cookies, chocolate, dessert, baking"
+}

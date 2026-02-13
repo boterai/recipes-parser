@@ -1,0 +1,784 @@
+<html lang="ru-RU"><head><meta charset="UTF-8"><script>if(navigator.userAgent.match(/MSIE|Internet Explorer/i)||navigator.userAgent.match(/Trident\/7\..*?rv:11/i)){var href=document.location.href;if(!href.match(/[?&]nowprocket/)){if(href.indexOf("?")==-1){if(href.indexOf("#")==-1){document.location.href=href+"?nowprocket=1"}else{document.location.href=href.replace("#","?nowprocket=1#")}}else{if(href.indexOf("#")==-1){document.location.href=href+"&nowprocket=1"}else{document.location.href=href.replace("#","&nowprocket=1#")}}}}</script><script>(()=>{class RocketLazyLoadScripts{constructor(){this.v="2.0.2",this.userEvents=["keydown","keyup","mousedown","mouseup","mousemove","mouseover","mouseenter","mouseout","mouseleave","touchmove","touchstart","touchend","touchcancel","wheel","click","dblclick","input","visibilitychange"],this.attributeEvents=["onblur","onclick","oncontextmenu","ondblclick","onfocus","onmousedown","onmouseenter","onmouseleave","onmousemove","onmouseout","onmouseover","onmouseup","onmousewheel","onscroll","onsubmit"]}async t(){this.i(),this.o(),/iP(ad|hone)/.test(navigator.userAgent)&&this.h(),this.u(),this.l(this),this.m(),this.k(this),this.p(this),this._(),await Promise.all([this.R(),this.L()]),this.lastBreath=Date.now(),this.S(this),this.P(),this.D(),this.O(),this.M(),await this.C(this.delayedScripts.normal),await this.C(this.delayedScripts.defer),await this.C(this.delayedScripts.async),this.T("domReady"),await this.F(),await this.j(),await this.I(),this.T("windowLoad"),await this.A(),window.dispatchEvent(new Event("rocket-allScriptsLoaded")),this.everythingLoaded=!0,this.lastTouchEnd&&await new Promise((t=>setTimeout(t,500-Date.now()+this.lastTouchEnd))),this.H(),this.T("all"),this.U(),this.W()}i(){this.CSPIssue=sessionStorage.getItem("rocketCSPIssue"),document.addEventListener("securitypolicyviolation",(t=>{this.CSPIssue||"script-src-elem"!==t.violatedDirective||"data"!==t.blockedURI||(this.CSPIssue=!0,sessionStorage.setItem("rocketCSPIssue",!0))}),{isRocket:!0})}o(){window.addEventListener("pageshow",(t=>{this.persisted=t.persisted,this.realWindowLoadedFired=!0}),{isRocket:!0}),window.addEventListener("pagehide",(()=>{this.onFirstUserAction=null}),{isRocket:!0})}h(){let t;function e(e){t=e}window.addEventListener("touchstart",e,{isRocket:!0}),window.addEventListener("touchend",(function i(o){Math.abs(o.changedTouches[0].pageX-t.changedTouches[0].pageX)<10&&Math.abs(o.changedTouches[0].pageY-t.changedTouches[0].pageY)<10&&o.timeStamp-t.timeStamp<200&&(o.target.dispatchEvent(new PointerEvent("click",{target:o.target,bubbles:!0,cancelable:!0})),event.preventDefault(),window.removeEventListener("touchstart",e,{isRocket:!0}),window.removeEventListener("touchend",i,{isRocket:!0}))}),{isRocket:!0})}q(t){this.userActionTriggered||("mousemove"!==t.type||this.firstMousemoveIgnored?"keyup"===t.type||"mouseover"===t.type||"mouseout"===t.type||(this.userActionTriggered=!0,this.onFirstUserAction&&this.onFirstUserAction()):this.firstMousemoveIgnored=!0),"click"===t.type&&t.preventDefault(),this.savedUserEvents.length>0&&(t.stopPropagation(),t.stopImmediatePropagation()),"touchstart"===this.lastEvent&&"touchend"===t.type&&(this.lastTouchEnd=Date.now()),"click"===t.type&&(this.lastTouchEnd=0),this.lastEvent=t.type,this.savedUserEvents.push(t)}u(){this.savedUserEvents=[],this.userEventHandler=this.q.bind(this),this.userEvents.forEach((t=>window.addEventListener(t,this.userEventHandler,{passive:!1,isRocket:!0})))}U(){this.userEvents.forEach((t=>window.removeEventListener(t,this.userEventHandler,{passive:!1,isRocket:!0}))),this.savedUserEvents.forEach((t=>{t.target.dispatchEvent(new window[t.constructor.name](t.type,t))}))}m(){this.eventsMutationObserver=new MutationObserver((t=>{const e="return false";for(const i of t){if("attributes"===i.type){const t=i.target.getAttribute(i.attributeName);t&&t!==e&&(i.target.setAttribute("data-rocket-"+i.attributeName,t),i.target.setAttribute(i.attributeName,e))}"childList"===i.type&&i.addedNodes.forEach((t=>{if(t.nodeType===Node.ELEMENT_NODE)for(const i of t.attributes)this.attributeEvents.includes(i.name)&&i.value&&""!==i.value&&(t.setAttribute("data-rocket-"+i.name,i.value),t.setAttribute(i.name,e))}))}})),this.eventsMutationObserver.observe(document,{subtree:!0,childList:!0,attributeFilter:this.attributeEvents})}H(){this.eventsMutationObserver.disconnect(),this.attributeEvents.forEach((t=>{document.querySelectorAll("[data-rocket-"+t+"]").forEach((e=>{e.setAttribute(t,e.getAttribute("data-rocket-"+t)),e.removeAttribute("data-rocket-"+t)}))}))}k(t){Object.defineProperty(HTMLElement.prototype,"onclick",{get(){return this.rocketonclick},set(e){this.rocketonclick=e,this.setAttribute(t.everythingLoaded?"onclick":"data-rocket-onclick","this.rocketonclick(event)")}})}S(t){function e(e,i){let o=e[i];e[i]=null,Object.defineProperty(e,i,{get:()=>o,set(s){t.everythingLoaded?o=s:e["rocket"+i]=o=s}})}e(document,"onreadystatechange"),e(window,"onload"),e(window,"onpageshow");try{Object.defineProperty(document,"readyState",{get:()=>t.rocketReadyState,set(e){t.rocketReadyState=e},configurable:!0}),document.readyState="loading"}catch(t){console.log("WPRocket DJE readyState conflict, bypassing")}}l(t){this.originalAddEventListener=EventTarget.prototype.addEventListener,this.originalRemoveEventListener=EventTarget.prototype.removeEventListener,this.savedEventListeners=[],EventTarget.prototype.addEventListener=function(e,i,o){o&&o.isRocket||!t.B(e,this)&&!t.userEvents.includes(e)||t.B(e,this)&&!t.userActionTriggered||e.startsWith("rocket-")?t.originalAddEventListener.call(this,e,i,o):t.savedEventListeners.push({target:this,remove:!1,type:e,func:i,options:o})},EventTarget.prototype.removeEventListener=function(e,i,o){o&&o.isRocket||!t.B(e,this)&&!t.userEvents.includes(e)||t.B(e,this)&&!t.userActionTriggered||e.startsWith("rocket-")?t.originalRemoveEventListener.call(this,e,i,o):t.savedEventListeners.push({target:this,remove:!0,type:e,func:i,options:o})}}T(t){"all"===t&&(EventTarget.prototype.addEventListener=this.originalAddEventListener,EventTarget.prototype.removeEventListener=this.originalRemoveEventListener),this.savedEventListeners=this.savedEventListeners.filter((e=>{let i=e.type,o=e.target||window;return"domReady"===t&&"DOMContentLoaded"!==i&&"readystatechange"!==i||("windowLoad"===t&&"load"!==i&&"readystatechange"!==i&&"pageshow"!==i||(this.B(i,o)&&(i="rocket-"+i),e.remove?o.removeEventListener(i,e.func,e.options):o.addEventListener(i,e.func,e.options),!1))}))}p(t){let e;function i(e){return t.everythingLoaded?e:e.split(" ").map((t=>"load"===t||t.startsWith("load.")?"rocket-jquery-load":t)).join(" ")}function o(o){function s(e){const s=o.fn[e];o.fn[e]=o.fn.init.prototype[e]=function(){return this[0]===window&&t.userActionTriggered&&("string"==typeof arguments[0]||arguments[0]instanceof String?arguments[0]=i(arguments[0]):"object"==typeof arguments[0]&&Object.keys(arguments[0]).forEach((t=>{const e=arguments[0][t];delete arguments[0][t],arguments[0][i(t)]=e}))),s.apply(this,arguments),this}}if(o&&o.fn&&!t.allJQueries.includes(o)){const e={DOMContentLoaded:[],"rocket-DOMContentLoaded":[]};for(const t in e)document.addEventListener(t,(()=>{e[t].forEach((t=>t()))}),{isRocket:!0});o.fn.ready=o.fn.init.prototype.ready=function(i){function s(){parseInt(o.fn.jquery)>2?setTimeout((()=>i.bind(document)(o))):i.bind(document)(o)}return t.realDomReadyFired?!t.userActionTriggered||t.fauxDomReadyFired?s():e["rocket-DOMContentLoaded"].push(s):e.DOMContentLoaded.push(s),o([])},s("on"),s("one"),s("off"),t.allJQueries.push(o)}e=o}t.allJQueries=[],o(window.jQuery),Object.defineProperty(window,"jQuery",{get:()=>e,set(t){o(t)}})}P(){const t=new Map;document.write=document.writeln=function(e){const i=document.currentScript,o=document.createRange(),s=i.parentElement;let n=t.get(i);void 0===n&&(n=i.nextSibling,t.set(i,n));const a=document.createDocumentFragment();o.setStart(a,0),a.appendChild(o.createContextualFragment(e)),s.insertBefore(a,n)}}async R(){return new Promise((t=>{this.userActionTriggered?t():this.onFirstUserAction=t}))}async L(){return new Promise((t=>{document.addEventListener("DOMContentLoaded",(()=>{this.realDomReadyFired=!0,t()}),{isRocket:!0})}))}async I(){return this.realWindowLoadedFired?Promise.resolve():new Promise((t=>{window.addEventListener("load",t,{isRocket:!0})}))}M(){this.pendingScripts=[];this.scriptsMutationObserver=new MutationObserver((t=>{for(const e of t)e.addedNodes.forEach((t=>{"SCRIPT"!==t.tagName||t.noModule||t.isWPRocket||this.pendingScripts.push({script:t,promise:new Promise((e=>{const i=()=>{const i=this.pendingScripts.findIndex((e=>e.script===t));i>=0&&this.pendingScripts.splice(i,1),e()};t.addEventListener("load",i,{isRocket:!0}),t.addEventListener("error",i,{isRocket:!0}),setTimeout(i,1e3)}))})}))})),this.scriptsMutationObserver.observe(document,{childList:!0,subtree:!0})}async j(){await this.J(),this.pendingScripts.length?(await this.pendingScripts[0].promise,await this.j()):this.scriptsMutationObserver.disconnect()}D(){this.delayedScripts={normal:[],async:[],defer:[]},document.querySelectorAll("script[type$=rocketlazyloadscript]").forEach((t=>{t.hasAttribute("data-rocket-src")?t.hasAttribute("async")&&!1!==t.async?this.delayedScripts.async.push(t):t.hasAttribute("defer")&&!1!==t.defer||"module"===t.getAttribute("data-rocket-type")?this.delayedScripts.defer.push(t):this.delayedScripts.normal.push(t):this.delayedScripts.normal.push(t)}))}async _(){await this.L();let t=[];document.querySelectorAll("script[type$=rocketlazyloadscript][data-rocket-src]").forEach((e=>{let i=e.getAttribute("data-rocket-src");if(i&&!i.startsWith("data:")){i.startsWith("//")&&(i=location.protocol+i);try{const o=new URL(i).origin;o!==location.origin&&t.push({src:o,crossOrigin:e.crossOrigin||"module"===e.getAttribute("data-rocket-type")})}catch(t){}}})),t=[...new Map(t.map((t=>[JSON.stringify(t),t]))).values()],this.N(t,"preconnect")}async $(t){if(await this.G(),!0!==t.noModule||!("noModule"in HTMLScriptElement.prototype))return new Promise((e=>{let i;function o(){(i||t).setAttribute("data-rocket-status","executed"),e()}try{if(navigator.userAgent.includes("Firefox/")||""===navigator.vendor||this.CSPIssue)i=document.createElement("script"),[...t.attributes].forEach((t=>{let e=t.nodeName;"type"!==e&&("data-rocket-type"===e&&(e="type"),"data-rocket-src"===e&&(e="src"),i.setAttribute(e,t.nodeValue))})),t.text&&(i.text=t.text),t.nonce&&(i.nonce=t.nonce),i.hasAttribute("src")?(i.addEventListener("load",o,{isRocket:!0}),i.addEventListener("error",(()=>{i.setAttribute("data-rocket-status","failed-network"),e()}),{isRocket:!0}),setTimeout((()=>{i.isConnected||e()}),1)):(i.text=t.text,o()),i.isWPRocket=!0,t.parentNode.replaceChild(i,t);else{const i=t.getAttribute("data-rocket-type"),s=t.getAttribute("data-rocket-src");i?(t.type=i,t.removeAttribute("data-rocket-type")):t.removeAttribute("type"),t.addEventListener("load",o,{isRocket:!0}),t.addEventListener("error",(i=>{this.CSPIssue&&i.target.src.startsWith("data:")?(console.log("WPRocket: CSP fallback activated"),t.removeAttribute("src"),this.$(t).then(e)):(t.setAttribute("data-rocket-status","failed-network"),e())}),{isRocket:!0}),s?(t.fetchPriority="high",t.removeAttribute("data-rocket-src"),t.src=s):t.src="data:text/javascript;base64,"+window.btoa(unescape(encodeURIComponent(t.text)))}}catch(i){t.setAttribute("data-rocket-status","failed-transform"),e()}}));t.setAttribute("data-rocket-status","skipped")}async C(t){const e=t.shift();return e?(e.isConnected&&await this.$(e),this.C(t)):Promise.resolve()}O(){this.N([...this.delayedScripts.normal,...this.delayedScripts.defer,...this.delayedScripts.async],"preload")}N(t,e){this.trash=this.trash||[];let i=!0;var o=document.createDocumentFragment();t.forEach((t=>{const s=t.getAttribute&&t.getAttribute("data-rocket-src")||t.src;if(s&&!s.startsWith("data:")){const n=document.createElement("link");n.href=s,n.rel=e,"preconnect"!==e&&(n.as="script",n.fetchPriority=i?"high":"low"),t.getAttribute&&"module"===t.getAttribute("data-rocket-type")&&(n.crossOrigin=!0),t.crossOrigin&&(n.crossOrigin=t.crossOrigin),t.integrity&&(n.integrity=t.integrity),t.nonce&&(n.nonce=t.nonce),o.appendChild(n),this.trash.push(n),i=!1}})),document.head.appendChild(o)}W(){this.trash.forEach((t=>t.remove()))}async F(){try{document.readyState="interactive"}catch(t){}this.fauxDomReadyFired=!0;try{await this.G(),document.dispatchEvent(new Event("rocket-readystatechange")),await this.G(),document.rocketonreadystatechange&&document.rocketonreadystatechange(),await this.G(),document.dispatchEvent(new Event("rocket-DOMContentLoaded")),await this.G(),window.dispatchEvent(new Event("rocket-DOMContentLoaded"))}catch(t){console.error(t)}}async A(){try{document.readyState="complete"}catch(t){}try{await this.G(),document.dispatchEvent(new Event("rocket-readystatechange")),await this.G(),document.rocketonreadystatechange&&document.rocketonreadystatechange(),await this.G(),window.dispatchEvent(new Event("rocket-load")),await this.G(),window.rocketonload&&window.rocketonload(),await this.G(),this.allJQueries.forEach((t=>t(window).trigger("rocket-jquery-load"))),await this.G();const t=new Event("rocket-pageshow");t.persisted=this.persisted,window.dispatchEvent(t),await this.G(),window.rocketonpageshow&&window.rocketonpageshow({persisted:this.persisted})}catch(t){console.error(t)}}async G(){Date.now()-this.lastBreath>45&&(await this.J(),this.lastBreath=Date.now())}async J(){return document.hidden?new Promise((t=>setTimeout(t))):new Promise((t=>requestAnimationFrame(t)))}B(t,e){return e===document&&"readystatechange"===t||(e===document&&"DOMContentLoaded"===t||(e===window&&"DOMContentLoaded"===t||(e===window&&"load"===t||e===window&&"pageshow"===t)))}static run(){(new RocketLazyLoadScripts).t()}}RocketLazyLoadScripts.run()})();</script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+	<title>10 простых рецептов мороженого в домашних условиях с фото пошагового приготовления - лучшие рецепты</title><link rel="preload" data-rocket-preload="" as="style" href="https://fonts.googleapis.com/css?family=Roboto%3A400%2C400i%2C700&amp;subset=cyrillic&amp;display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto%3A400%2C400i%2C700&amp;subset=cyrillic&amp;display=swap" media="all" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto%3A400%2C400i%2C700&#038;subset=cyrillic&#038;display=swap" /></noscript>
+	<link rel="canonical" href="https://malinika.ru/morozhenoe-v-domashnih-usloviyah-10-prostyh-retseptov-s-foto-poshagovogo-prigotovleniya/">
+	<meta property="og:locale" content="ru_RU">
+	<meta property="og:type" content="article">
+	<meta property="og:title" content="10 простых рецептов мороженого в домашних условиях с фото пошагового приготовления - лучшие рецепты">
+	<meta property="og:description" content="Мороженое — это любимое лакомство, которое никого не оставляет равнодушным. Теперь вы можете наслаждаться своими любимыми вкусами домашнего мороженого без посещения магазина! В этой статье мы предлагаем 10 простых рецептов, которые позволят вам приготовить вкусное и освежающее мороженое прямо у себя дома. Каждый из этих рецептов сопровождается подробными фотографиями и пошаговыми инструкциями, чтобы даже новички […]">
+	<meta property="og:url" content="https://malinika.ru/morozhenoe-v-domashnih-usloviyah-10-prostyh-retseptov-s-foto-poshagovogo-prigotovleniya/">
+	<meta property="og:site_name" content="Malinika.ru - Рецепты">
+	<meta property="article:published_time" content="2022-01-30T03:40:09+00:00">
+	<meta property="og:image" content="https://kulinarenok.ru/img/steps/2019/08/9-23.jpg">
+	<meta name="author" content="Игорь Бекушев">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:label1" content="Написано автором">
+	<meta name="twitter:data1" content="Игорь Бекушев">
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://malinika.ru/morozhenoe-v-domashnih-usloviyah-10-prostyh-retseptov-s-foto-poshagovogo-prigotovleniya/","url":"https://malinika.ru/morozhenoe-v-domashnih-usloviyah-10-prostyh-retseptov-s-foto-poshagovogo-prigotovleniya/","name":"10 простых рецептов мороженого в домашних условиях с фото пошагового приготовления - лучшие рецепты","isPartOf":{"@id":"https://malinika.ru/#website"},"primaryImageOfPage":{"@id":"https://malinika.ru/morozhenoe-v-domashnih-usloviyah-10-prostyh-retseptov-s-foto-poshagovogo-prigotovleniya/#primaryimage"},"image":{"@id":"https://malinika.ru/morozhenoe-v-domashnih-usloviyah-10-prostyh-retseptov-s-foto-poshagovogo-prigotovleniya/#primaryimage"},"thumbnailUrl":"https://kulinarenok.ru/img/steps/2019/08/9-23.jpg","datePublished":"2022-01-30T03:40:09+00:00","author":{"@id":"https://malinika.ru/#/schema/person/8b8bef3d65544d4db170856dfdfb007f"},"breadcrumb":{"@id":"https://malinika.ru/morozhenoe-v-domashnih-usloviyah-10-prostyh-retseptov-s-foto-poshagovogo-prigotovleniya/#breadcrumb"},"inLanguage":"ru-RU","potentialAction":[{"@type":"ReadAction","target":["https://malinika.ru/morozhenoe-v-domashnih-usloviyah-10-prostyh-retseptov-s-foto-poshagovogo-prigotovleniya/"]}]},{"@type":"ImageObject","inLanguage":"ru-RU","@id":"https://malinika.ru/morozhenoe-v-domashnih-usloviyah-10-prostyh-retseptov-s-foto-poshagovogo-prigotovleniya/#primaryimage","url":"https://kulinarenok.ru/img/steps/2019/08/9-23.jpg","contentUrl":"https://kulinarenok.ru/img/steps/2019/08/9-23.jpg"},{"@type":"BreadcrumbList","@id":"https://malinika.ru/morozhenoe-v-domashnih-usloviyah-10-prostyh-retseptov-s-foto-poshagovogo-prigotovleniya/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная страница","item":"https://malinika.ru/"},{"@type":"ListItem","position":2,"name":"Мороженое в домашних условиях: 10 простых рецептов с фото пошагового приготовления"}]},{"@type":"WebSite","@id":"https://malinika.ru/#website","url":"https://malinika.ru/","name":"Malinika.ru - Рецепты","description":"Рецепты на каждый день","potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://malinika.ru/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"ru-RU"},{"@type":"Person","@id":"https://malinika.ru/#/schema/person/8b8bef3d65544d4db170856dfdfb007f","name":"Игорь Бекушев","image":{"@type":"ImageObject","inLanguage":"ru-RU","@id":"https://malinika.ru/#/schema/person/image/","url":"https://malinika.ru/wp-content/plugins/clearfy-pro/assets/images/default-avatar.png","contentUrl":"https://malinika.ru/wp-content/plugins/clearfy-pro/assets/images/default-avatar.png","caption":"Игорь Бекушев"},"sameAs":["https://malinika.ru"],"url":"https://malinika.ru/author/markiz/"}]}</script>
+
+
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<link href="https://fonts.gstatic.com" crossorigin="" rel="preconnect">
+<style id="wp-img-auto-sizes-contain-inline-css" type="text/css">
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<link data-minify="1" rel="stylesheet" id="fotorama.css-css" href="https://malinika.ru/wp-content/cache/min/1/wp-content/plugins/fotorama/fotorama.css?ver=1766748290" media="all">
+<link data-minify="1" rel="stylesheet" id="fotorama-wp.css-css" href="https://malinika.ru/wp-content/cache/min/1/wp-content/plugins/fotorama/fotorama-wp.css?ver=1766748290" media="all">
+<style id="classic-theme-styles-inline-css" type="text/css">
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+/*# sourceURL=/wp-includes/css/classic-themes.min.css */
+</style>
+
+<link data-minify="1" rel="stylesheet" id="yelly-style-css" href="https://malinika.ru/wp-content/cache/min/1/wp-content/themes/yelly/assets/css/style.min.css?ver=1766748290" media="all">
+<link data-minify="1" rel="stylesheet" id="yarpp-thumbnails-css" href="https://malinika.ru/wp-content/cache/min/1/wp-content/plugins/yet-another-related-posts-plugin/style/styles_thumbnails.css?ver=1766748328" media="all">
+<style id="yarpp-thumbnails-inline-css" type="text/css">
+.yarpp-thumbnails-horizontal .yarpp-thumbnail {width: 130px;height: 170px;margin: 5px;margin-left: 0px;}.yarpp-thumbnail > img, .yarpp-thumbnail-default {width: 120px;height: 120px;margin: 5px;}.yarpp-thumbnails-horizontal .yarpp-thumbnail-title {margin: 7px;margin-top: 0px;width: 120px;}.yarpp-thumbnail-default > img {min-height: 120px;min-width: 120px;}
+.yarpp-thumbnails-horizontal .yarpp-thumbnail {width: 130px;height: 170px;margin: 5px;margin-left: 0px;}.yarpp-thumbnail > img, .yarpp-thumbnail-default {width: 120px;height: 120px;margin: 5px;}.yarpp-thumbnails-horizontal .yarpp-thumbnail-title {margin: 7px;margin-top: 0px;width: 120px;}.yarpp-thumbnail-default > img {min-height: 120px;min-width: 120px;}
+/*# sourceURL=yarpp-thumbnails-inline-css */
+</style>
+<style id="rocket-lazyload-inline-css" type="text/css">
+.rll-youtube-player{position:relative;padding-bottom:56.23%;height:0;overflow:hidden;max-width:100%;}.rll-youtube-player:focus-within{outline: 2px solid currentColor;outline-offset: 5px;}.rll-youtube-player iframe{position:absolute;top:0;left:0;width:100%;height:100%;z-index:100;background:0 0}.rll-youtube-player img{bottom:0;display:block;left:0;margin:auto;max-width:100%;width:100%;position:absolute;right:0;top:0;border:none;height:auto;-webkit-transition:.4s all;-moz-transition:.4s all;transition:.4s all}.rll-youtube-player img:hover{-webkit-filter:brightness(75%)}.rll-youtube-player .play{height:100%;width:100%;left:0;top:0;position:absolute;background:url(https://malinika.ru/wp-content/plugins/wp-rocket/assets/img/youtube.png) no-repeat center;background-color: transparent !important;cursor:pointer;border:none;}.wp-embed-responsive .wp-has-aspect-ratio .rll-youtube-player{position:absolute;padding-bottom:0;width:100%;height:100%;top:0;bottom:0;left:0;right:0}
+/*# sourceURL=rocket-lazyload-inline-css */
+</style>
+<link data-minify="1" rel="stylesheet" id="yarppRelatedCss-css" href="https://malinika.ru/wp-content/cache/min/1/wp-content/plugins/yet-another-related-posts-plugin/style/related.css?ver=1766748328" media="all">
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-includes/js/jquery/jquery.min.js" id="jquery-core-js"></script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-includes/js/jquery/jquery-migrate.min.js" id="jquery-migrate-js" data-rocket-defer="" defer=""></script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-content/plugins/fotorama/fotorama.js" id="fotorama.js-js" data-rocket-defer="" defer=""></script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-content/plugins/fotoramaDefaults.js" id="fotoramaDefaults.js-js" data-rocket-defer="" defer=""></script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-content/plugins/fotorama/fotorama-wp.js" id="fotorama-wp.js-js" data-rocket-defer="" defer=""></script>
+<style>.pseudo-clearfy-link { color: #008acf; cursor: pointer;}.pseudo-clearfy-link:hover { text-decoration: none;}</style><link rel="preload" href="https://malinika.ru/wp-content/themes/yelly/assets/fonts/icomoon.ttf" as="font" crossorigin="">
+    <style>.scrolltop:before{content:"\fe3d"}::selection, .card-slider__category, .card-slider-container .swiper-pagination-bullet-active, .post-card--grid .post-card__thumbnail:before, .post-card:not(.post-card--small) .post-card__thumbnail a:before, .post-card:not(.post-card--small) .post-card__category,  .post-box--high .post-box__category span, .post-box--wide .post-box__category span, .page-separator, .pagination .nav-links .page-numbers:not(.dots):not(.current):before, .btn, .btn-primary:hover, .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle, .comment-respond .form-submit input, .widget-area .widget-header, .page-links__item, .pagination .nav-links .page-numbers{background-color:#333333}.entry-image--big .entry-image__body .post-card__category a, .entry-category a, .home-text ul:not([class])>li:before, .entry-content ul:not([class])>li:before, .taxonomy-description ul:not([class])>li:before, .widget_categories ul.menu li a:before, .widget_categories ul.menu li span:before, .widget_categories>ul li a:before, .widget_categories>ul li span:before, .widget_nav_menu ul.menu li a:before, .widget_nav_menu ul.menu li span:before, .widget_nav_menu>ul li a:before, .widget_nav_menu>ul li span:before, .page-links .page-numbers:not(.dots):not(.current):before, .page-links .post-page-numbers:not(.dots):not(.current):before, .pagination .nav-links .page-numbers:not(.dots):not(.current):before, .pagination .nav-links .post-page-numbers:not(.dots):not(.current):before, .entry-image--full .entry-image__body .post-card__category a, .entry-image--fullscreen .entry-image__body .post-card__category a, .entry-image--wide .entry-image__body .post-card__category a{background-color:#333333}.comment-respond input:focus, select:focus, textarea:focus, .post-card--grid.post-card--thumbnail-no, .post-card--standard:after, .post-card--related.post-card--thumbnail-no:hover, .spoiler-box, .btn-primary, .btn-primary:hover, .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle, .inp:focus, .entry-tag:focus, .entry-tag:hover, .search-screen .search-form .search-field:focus, .entry-content blockquote,
+        .input:focus, input[type=color]:focus, input[type=date]:focus, input[type=datetime-local]:focus, input[type=datetime]:focus, input[type=email]:focus, input[type=month]:focus, input[type=number]:focus, input[type=password]:focus, input[type=range]:focus, input[type=search]:focus, input[type=tel]:focus, input[type=text]:focus, input[type=time]:focus, input[type=url]:focus, input[type=week]:focus, select:focus, textarea:focus{border-color:#333333 !important}.post-card--grid a:hover, .post-card--small .post-card__category, .post-card__author:before, .post-card__comments:before, .post-card__date:before, .post-card__like:before, .post-card__views:before, .entry-author:before, .entry-date:before, .entry-time:before, .entry-views:before, .entry-content ol:not([class])>li:before, .text-content ol:not([class])>li:before, .taxonomy-description ol:not([class])>li:before, .entry-content blockquote:before, .spoiler-box__title:after, .search-icon:hover:before, .search-form .search-submit:hover:before, .star-rating-item.hover,
+        .comment-list .bypostauthor>.comment-body .comment-author:after,
+        .search-screen .search-form .search-submit:before, .widget_categories ul li:before,
+        .star-rating--score-1:not(.hover) .star-rating-item:nth-child(1),
+        .star-rating--score-2:not(.hover) .star-rating-item:nth-child(1), .star-rating--score-2:not(.hover) .star-rating-item:nth-child(2),
+        .star-rating--score-3:not(.hover) .star-rating-item:nth-child(1), .star-rating--score-3:not(.hover) .star-rating-item:nth-child(2), .star-rating--score-3:not(.hover) .star-rating-item:nth-child(3),
+        .star-rating--score-4:not(.hover) .star-rating-item:nth-child(1), .star-rating--score-4:not(.hover) .star-rating-item:nth-child(2), .star-rating--score-4:not(.hover) .star-rating-item:nth-child(3), .star-rating--score-4:not(.hover) .star-rating-item:nth-child(4),
+        .star-rating--score-5:not(.hover) .star-rating-item:nth-child(1), .star-rating--score-5:not(.hover) .star-rating-item:nth-child(2), .star-rating--score-5:not(.hover) .star-rating-item:nth-child(3), .star-rating--score-5:not(.hover) .star-rating-item:nth-child(4), .star-rating--score-5:not(.hover) .star-rating-item:nth-child(5){color:#333333}@media (min-width: 768px){body{background-attachment: scroll}}.site-header{background-color:#333333}@media (min-width: 992px){.site-header ul li .sub-menu{background-color:#333333}}.site-header{background-image: url("https://malinika.ru/wp-content/uploads/2022/03/malinika.ru_.jpg")}@media (max-width: 767px){.site-header{background-size: cover}}.site-footer{background-color:#333333}</style>
+<link rel="icon" href="https://malinika.ru/wp-content/uploads/2022/03/cropped-malinika-favicon-32x32.png" sizes="32x32">
+<link rel="icon" href="https://malinika.ru/wp-content/uploads/2022/03/cropped-malinika-favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="https://malinika.ru/wp-content/uploads/2022/03/cropped-malinika-favicon-180x180.png">
+<meta name="msapplication-TileImage" content="https://malinika.ru/wp-content/uploads/2022/03/cropped-malinika-favicon-270x270.png">
+<noscript><style id="rocket-lazyload-nojs-css">.rll-youtube-player, [data-lazy-src]{display:none !important;}</style></noscript>    <style id="global-styles-inline-css" type="text/css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 19.5px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36.5px;--wp--preset--font-size--x-large: 42px;--wp--preset--font-size--normal: 22px;--wp--preset--font-size--huge: 49.5px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+<meta name="generator" content="WP Rocket 3.18.1.5" data-wpr-features="wpr_delay_js wpr_defer_js wpr_lazyload_iframes wpr_image_dimensions wpr_minify_css wpr_desktop"><link href="https://w.uptolike.com" rel="preconnect"></head>
+	
+
+<body class="wp-singular post-template-default single single-post postid-37664 single-format-standard wp-embed-responsive wp-theme-yelly wp-child-theme-yelly_child sidebar-right">
+
+
+
+<div data-rocket-location-hash="54257ff4dc2eb7aae68fa23eb5f11e06" id="page" class="site">
+    <a class="skip-link screen-reader-text" href="#content">Перейти к контенту</a>
+
+    
+    
+    <div data-rocket-location-hash="27eae8816772119298a24727d45914b4" class="search-screen-overlay js-search-screen-overlay"></div>
+    <div data-rocket-location-hash="3882f6cb63557ea7e3951416af29d4f7" class="search-screen js-search-screen">
+        
+<form role="search" method="get" class="search-form" action="https://malinika.ru/">
+    <label>
+        <span class="screen-reader-text">Search for:</span>
+        <input type="search" class="search-field" placeholder="Поиск..." value="" name="s">
+    </label>
+    <button type="submit" class="search-submit"></button>
+</form>    </div>
+
+    
+
+<header data-rocket-location-hash="e21be6226fda8fef111d5e57b12bbf74" id="masthead" class="site-header full" itemscope="" itemtype="http://schema.org/WPHeader">
+    <div data-rocket-location-hash="37593f518caeab60bd9c10a051c52ee7" class="site-header-inner fixed">
+
+        <div class="humburger js-humburger"><span></span><span></span><span></span></div>
+
+        
+<div class="site-branding">
+
+    <div class="site-branding__body"><div class="site-title"><a href="https://malinika.ru/">Malinika.ru - Рецепты</a></div><p class="site-description">Рецепты на каждый день</p></div></div><!-- .site-branding -->
+<div class="header-search"><span class="search-icon js-search-icon"></span></div>    </div>
+</header><!-- #masthead -->
+
+
+
+    
+    
+    <div data-rocket-location-hash="146f0a8bcad64f4b7e148da44777830c" id="content" class="site-content fixed">
+
+        <div data-rocket-location-hash="6b066574a0d875535e5db71f9166ff2c" class="b-r b-r--before_site_content"> </div>
+        <div data-rocket-location-hash="fcd9a77b8df80a69ebdb56768ab3bb52" class="site-content-inner">
+    
+        
+        <div id="primary" class="content-area" itemscope="" itemtype="http://schema.org/Article">
+            <main id="main" class="site-main">
+
+                
+<article id="post-37664" class="article-post post-37664 post type-post status-publish format-standard  category-poleznoe">
+
+    
+        <div class="breadcrumb" itemscope="" itemtype="http://schema.org/BreadcrumbList"><span class="breadcrumb-item" itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a href="https://malinika.ru/" itemprop="item"><span itemprop="name">Главная</span></a><meta itemprop="position" content="0"></span> <span class="breadcrumb-separator">»</span> <span class="breadcrumb-item" itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a href="https://malinika.ru/category/poleznoe/" itemprop="item"><span itemprop="name">Полезное</span></a><meta itemprop="position" content="1"></span></div>
+        <header class="entry-header"><h1 class="entry-title" itemprop="headline">Мороженое в домашних условиях: 10 простых рецептов с фото пошагового приготовления</h1></header>
+        
+        
+        
+    
+    
+    <div class="entry-meta"></div>
+	<div class="entry-content" itemprop="articleBody">
+		<div class="b-r b-r--before_content"> </div><p><img decoding="async" src="https://kulinarenok.ru/img/steps/2019/08/9-23.jpg" alt="Мороженое в домашних условиях 10 простых рецептов с фото пошагового приготовления" title="Мороженое в домашних условиях: 10 простых рецептов с фото пошагового приготовления"></p>
+<p></p><div class="rll-youtube-player" data-src="https://www.youtube.com/embed/_RbXXAr8GSM" data-id="_RbXXAr8GSM" data-query="" data-alt="Мороженое в домашних условиях 10 простых рецептов с фото пошагового приготовления"><div data-id="_RbXXAr8GSM" data-query="" data-src="https://www.youtube.com/embed/_RbXXAr8GSM"><img src="https://i.ytimg.com/vi/_RbXXAr8GSM/hqdefault.jpg" alt="Мороженое в домашних условиях 10 простых рецептов с фото пошагового приготовления" width="480" height="360"><button class="play" aria-label="Play Youtube video" data-rocket-onclick="this.rocketonclick(event)"></button></div></div><noscript><iframe width="750" height="420" src="https://www.youtube.com/embed/_RbXXAr8GSM" title="Мороженое в домашних условиях 10 простых рецептов с фото пошагового приготовления" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></noscript><p></p>
+<p>Мороженое — это любимое лакомство, которое никого не оставляет равнодушным. Теперь вы можете наслаждаться своими любимыми вкусами домашнего мороженого без посещения магазина! В этой статье мы предлагаем 10 простых рецептов, которые позволят вам приготовить вкусное и освежающее мороженое прямо у себя дома.</p>
+<p>Каждый из этих рецептов сопровождается подробными фотографиями и пошаговыми инструкциями, чтобы даже новички могли справиться с приготовлением мороженого. Вы можете выбрать любой из предложенных вариантов: от классического ванильного мороженого до экзотических фруктовых вариаций.</p>
+<p>Одним из главных преимуществ домашнего мороженого является возможность контролировать его состав и калорийность. Вы можете использовать натуральные ингредиенты, такие как свежие фрукты, ягоды, молоко и йогурт. Это позволяет придать мороженому неповторимый вкус и сделать его более полезным. Ведь вы знаете, что именно вы добавили в своё мороженое и можете быть уверены в его качестве.</p>
+<blockquote><p>Приготовление мороженого — это замечательный способ провести время с семьёй или друзьями. Вы можете включить их в процесс приготовления и наслаждаться результатом вместе. А ещё, домашнее мороженое — это прекрасный подарок для ваших близких. Каждый, кто его попробует, оценит вашу заботу и труд, вложенный в его приготовление. </p></blockquote>
+<p>Так что не теряйте время и начинайте эксперименты с домашним мороженым уже сегодня! Все необходимые рецепты и инструкции вы найдёте в нашей статье. Удачи вам и приятного аппетита!</p>
+<div class="table-of-contents"><div class="table-of-contents__header"><span class="table-of-contents__hide js-table-of-contents-hide">Содержание</span></div><ol class="table-of-contents__list js-table-of-contents-list" style="display:none;">
+<li class="level-1"><a href="#fruktovoe-morozhenoe">Фруктовое мороженое</a></li><li class="level-1"><a href="#retsept-1">Рецепт 1</a></li><li class="level-2"><a href="#prigotovlenie">Приготовление</a></li><li class="level-2"><a href="#foto-poshagovogo-prigotovleniya">Фото пошагового приготовления</a></li><li class="level-1"><a href="#retsept-2">Рецепт 2</a></li><li class="level-2"><a href="#prigotovlenie-2">Приготовление</a></li><li class="level-2"><a href="#foto-poshagovogo-prigotovleniya-2">Фото пошагового приготовления</a></li><li class="level-1"><a href="#shokoladnoe-morozhenoe">Шоколадное мороженое</a></li><li class="level-1"><a href="#retsept-1-2">Рецепт 1</a></li><li class="level-2"><a href="#prigotovlenie-3">Приготовление</a></li><li class="level-2"><a href="#foto-poshagovogo-prigotovleniya-3">Фото пошагового приготовления</a></li><li class="level-1"><a href="#retsept-2-2">Рецепт 2</a></li><li class="level-2"><a href="#prigotovlenie-4">Приготовление</a></li><li class="level-1"><a href="#vopros-otvet">Вопрос-ответ:</a></li><li class="level-3"><a href="#kak-prigotovit-prostoe-morozhenoe-v-domashnih">Как приготовить простое мороженое в домашних условиях?</a></li><li class="level-3"><a href="#kak-prigotovit-shokoladnoe-morozhenoe-doma">Как приготовить шоколадное мороженое дома?</a></li><li class="level-3"><a href="#kak-prigotovit-fruktovoe-morozhenoe-v-domashnih">Как приготовить фруктовое мороженое в домашних условиях?</a></li><li class="level-3"><a href="#kak-prigotovit-vanilnoe-morozhenoe">Как приготовить ванильное мороженое?</a></li><li class="level-1"><a href="#video">Видео:</a></li><li class="level-1"><a href="#otzyvy">Отзывы</a></li></ol></div><h2 id="fruktovoe-morozhenoe">Фруктовое мороженое</h2>
+<table>
+<tbody><tr>
+<th>Название рецепта</th>
+<th>Фото</th>
+<th>Ингредиенты</th>
+<th>Приготовление</th>
+</tr>
+<tr>
+<td>Банановое мороженое</td>
+<td>фото</td>
+<td>бананы, молоко, сахар, ваниль</td>
+<td>пюрировать бананы, добавить молоко, сахар и ваниль, заморозить</td>
+</tr>
+<tr>
+<td>Клубничное мороженое</td>
+<td>фото</td>
+<td>клубника, сахар, йогурт, лимонный сок</td>
+<td>смешать клубнику, сахар, йогурт и лимонный сок, заморозить</td>
+</tr>
+<tr>
+<td>Яблочное мороженое</td>
+<td>фото</td>
+<td>яблоки, сахар, сливки, корица</td>
+<td>поджарить яблоки с сахаром и корицей, добавить сливки, заморозить</td>
+</tr>
+<tr>
+<td>Апельсиновое мороженое</td>
+<td>фото</td>
+<td>апельсин, сахар, йогурт, ваниль</td>
+<td>смешать апельсиновый сок, сахар, йогурт и ваниль, заморозить</td>
+</tr>
+<tr>
+<td>Грушевое мороженое</td>
+<td>фото</td>
+<td>груши, молоко, сахар, корица</td>
+<td>поджарить груши с сахаром и корицей, добавить молоко, заморозить</td>
+</tr>
+</tbody></table>
+<p>Выберите любой рецепт из предложенных и наслаждайтесь вкусом домашнего фруктового мороженого вместе с семьей и друзьями!</p>
+<h2 id="retsept-1">Рецепт 1</h2>
+<table>
+<tbody><tr>
+<td>
+<p><img decoding="async" src="photo1.jpg" alt="Фото 1"></p>
+</td>
+<td>
+<p>Домашнее ванильное мороженое</p>
+<p>Ингредиенты:</p>
+<ul>
+<li>500 мл сливок</li>
+<li>4 яичных желтка</li>
+<li>150 г сахара</li>
+<li>1 ванильная палочка</li>
+</ul>
+<p>Приготовление:</p>
+<ol>
+<li>Разделите яйца так, чтобы получить только желтки. Отложите белки на использование в других рецептах.</li>
+<li>Смешайте сливки и половину сахара в кастрюле и нагрейте на среднем огне до появления пузырьков вокруг краев.</li>
+<li>Взбейте желтки с оставшейся половиной сахара в отдельной миске до образования пышной массы.</li>
+<li>Постепенно добавьте нагретые сливки в желтки, постоянно перемешивая, чтобы избежать скручивания яиц.</li>
+<li>Верните смесь обратно в кастрюлю и нагревайте на среднем огне, постоянно помешивая, до тех пор, пока смесь не загустеет и не покроется пленкой на задней стороне ложки.</li>
+<li>Удалите смесь с огня и позвольте ей полностью остыть.</li>
+<li>Разрежьте ванильную палочку пополам и выньте семена с помощью ножа. Добавьте семена и пустую ванильную палочку в охлажденную смесь.</li>
+<li>Перед тем как заморозить мороженое, удалите пустую ванильную палочку и выньте семена. Получившуюся смесь можно добавить в мороженицу или в большую емкость с крышкой.</li>
+<li>Заморозьте смесь в мороженице по инструкции к вашей модели или закройте крышкой и заморозьте в морозильной камере минимум на 4 часа.</li>
+<li>Подавайте охлажденное мороженое в креманках или рожках.</li>
+</ol>
+</td>
+</tr>
+</tbody></table>
+<h3 id="prigotovlenie">Приготовление</h3>
+<p><img decoding="async" src="https://img.inmyroom.ru/inmyroom/thumb/940x600/jpg:85/uploads/food_recipe/teaser/10/1074/jpg_1000_1074a94c-86f7-47af-8234-fb5521b3bf9b.jpg?sign=b89369513ad044bbb6e29e873ad1c3acfd036c7bda0c24480e8aa2e9444dcc95" alt="Приготовление"></p>
+<p>Чтобы приготовить домашнее мороженое, вам понадобятся следующие ингредиенты:</p>
+<ul>
+<li>Молоко — 2 стакана</li>
+<li>Сливки — 1 стакан</li>
+<li>Сахар — 1/2 стакана</li>
+<li>Ванильный сахар — 1 пакетик</li>
+<li>Яичные желтки — 4 штуки</li>
+<li>Лимонный сок — 1 столовая ложка</li>
+</ul>
+<p>1. В сотейнике смешайте молоко и сливки. Поставьте на огонь и доведите до кипения, постоянно помешивая.</p>
+<p>2. В отдельной миске смешайте яичные желтки, сахар и ванильный сахар. Взбейте до получения однородной массы.</p>
+<p>3. Понемногу вливайте горячую молочную смесь в яичную смесь, постоянно помешивая. Верните всю смесь обратно в сотейник.</p>
+<p>4. Поставьте сотейник на средний огонь и варите, постоянно помешивая, до загустения смеси. Она должна стать похожей на желе.</p>
+<p>5. Удалите сотейник с огня и дайте массе остыть до комнатной температуры.</p>
+<p>6. Добавьте лимонный сок и хорошо перемешайте.</p>
+<p>7. Охладите полученную смесь в холодильнике в течение 2-3 часов.</p>
+<p>8. Поставьте смесь в морозильную камеру и заморозьте до полной готовности. Процесс займет около 5-6 часов.</p>
+<p>9. Взбейте замороженную массу в миксере до пышности и однородной текстуры.</p>
+<p>10. Переложите мороженое в контейнер и храните в морозильнике до подачи.</p>
+<p>Теперь у вас есть домашнее мороженое, готовое к наслаждению в любое время!</p>
+<h3 id="foto-poshagovogo-prigotovleniya">Фото пошагового приготовления</h3>
+<p><img decoding="async" src="https://gotovim-doma.ru/images/recipe/1/1f/11f14adae1300eb7e767f1635a6e0381.jpg" alt="Фото пошагового приготовления"></p>
+<p><img decoding="async" src="https://paulinecakeclub.ru/wp-content/uploads/2022/07/morozhenoe-iz-sgushchyonki-i-slivok-foto-1-952x472.jpg" alt="Фото пошагового приготовления"></p>
+<p>Для того чтобы приготовить мороженое в домашних условиях, вам понадобятся следующие ингредиенты и инструменты:</p>
+<ul>
+<li>Молоко — 2 стакана</li>
+<li>Сахар — 1 стакан</li>
+<li>Сливки — 1 стакан</li>
+<li>Яичные желтки — 4 штуки</li>
+<li>Ванильный экстракт — 1 чайная ложка</li>
+<li>Миксер или венчик</li>
+<li>Кастрюля</li>
+<li>Форма для мороженого</li>
+<li>Палочки для мороженого</li>
+</ul>
+<p>1. В кастрюле соедините молоко, сахар и ванильный экстракт. Поставьте на средний огонь и доведите до кипения.</p>
+<p>2. В отдельной миске взбейте яичные желтки до гладкой массы.</p>
+<p>3. Постепенно влейте в яичные желтки горячую смесь молока, сахара и ванили, постоянно помешивая.</p>
+<p>4. Верните смесь в кастрюлю и нагревайте на слабом огне до загустения, постоянно помешивая.</p>
+<p>5. Уберите кастрюлю с огня и дайте смеси остыть при комнатной температуре.</p>
+<p>6. Взбейте сливки в плотную пену.</p>
+<p>7. Постепенно добавляйте взбитые сливки в остывшую смесь, аккуратно перемешивая.</p>
+<p>8. Полученную смесь перелейте в форму для мороженого.</p>
+<p>9. Вставьте в центр каждой ячейки палочку для мороженого.</p>
+<p>10. Поставьте форму в морозилку и оставьте на 6-8 часов, пока мороженое полностью не замрзнет.</p>
+<p>Теперь ваше домашнее мороженое готово! Угощайтесь и наслаждайтесь освежающим лакомством в любое время!</p>
+<h2 id="retsept-2">Рецепт 2</h2>
+<p>Ингредиенты:</p>
+<ul>
+<li><strong>200 г</strong> свежих ягод (клубника, малина, черника)</li>
+<li><strong>200 г</strong> сахара</li>
+<li><strong>500 мл</strong> сливок</li>
+<li><em>1</em> ванильный стручок</li>
+</ul>
+<p>Пошаговый рецепт:</p>
+<ol>
+<li>Переберите ягоды и удалите плодоножку.</li>
+<li>Поместите ягоды в блендер, добавьте сахар и измельчите до однородной массы.</li>
+<li>В отдельной емкости соедините сливки и содержимое ванильного стручка.</li>
+<li>Взбейте сливки с ванилью до упругой пены.</li>
+<li>Добавьте ягодное пюре к взбитым сливкам и тщательно перемешайте.</li>
+<li>Перелейте полученную массу в форму для мороженого.</li>
+<li>Заморозьте массу в морозилке в течение 6-8 часов.</li>
+<li>Мороженое готово к подаче!</li>
+</ol>
+<h3 id="prigotovlenie-2">Приготовление</h3>
+<p>Приготовление домашнего мороженого не требует особых навыков или сложных ингредиентов. Вот 10 простых рецептов, которые помогут вам насладиться вкусным и свежим мороженым.</p>
+<ol>
+<li>
+<p>Выберите рецепт, который вам нравится, и соберите все необходимые ингредиенты.</p>
+</li>
+<li>
+<p>Подготовьте форму для мороженого. Вы можете использовать специальные формы для приготовления мороженого или просто любую контейнерную емкость, которая подходит для замораживания продуктов.</p>
+</li>
+<li>
+<p>Следуйте рецепту и приготовьте основу для мороженого. Это может быть смесь сливок, молока, яиц, сахара и других ингредиентов, которые придают мороженому богатый и кремовый вкус.</p>
+</li>
+<li>
+<p>Если в рецепте указано, добавьте дополнительные ингредиенты, такие как фрукты, шоколадные капсулы, орехи или экстракты для придания мороженому уникального вкуса.</p>
+</li>
+<li>
+<p>Перелейте полученную смесь в подготовленную форму. Убедитесь, что смесь равномерно распределяется по всей емкости и не остаются пустые пространства.</p>
+</li>
+<li>
+<p>Поставьте форму с мороженым в морозильник и дайте ему заморозиться. Время замораживания может варьироваться от рецепта к рецепту, но обычно требуется несколько часов.</p>
+</li>
+<li>
+<p>Проверьте степень заморозки мороженого, вставив в него ложку или вилку. Если ваш инструмент наледь, то мороженое готово.</p>
+</li>
+<li>
+<p>Выньте форму из морозильника и оставьте мороженое на несколько минут, чтобы оно немного размякло перед подачей.</p>
+</li>
+<li>
+<p>Одним из важных шагов при приготовлении мороженого является его правильное подача. Мороженое можно сервировать в стаканчиках, рожках или использовать для декорации десертов и выпечки.</p>
+</li>
+<li>
+<p>Наслаждайтесь своим домашним мороженым с семьей и друзьями!</p>
+</li>
+</ol>
+<div style="clear:both; margin-top:0em; margin-bottom:1em;"><a href="https://malinika.ru/pirog-s-malinoj-recept-so-svezej-zamorozennoj-malinoj-so-sloenym-ili-pesocnym-testom-pirog-s-malinoj-v-multivarke/" target="_blank" rel="nofollow" class="u501ca678b8fb4085e2c4053c54106b5c"><!-- INLINE RELATED POSTS 1/3 //--><style> .u501ca678b8fb4085e2c4053c54106b5c , .u501ca678b8fb4085e2c4053c54106b5c .postImageUrl , .u501ca678b8fb4085e2c4053c54106b5c .centered-text-area { min-height: 80px; position: relative; } .u501ca678b8fb4085e2c4053c54106b5c , .u501ca678b8fb4085e2c4053c54106b5c:hover , .u501ca678b8fb4085e2c4053c54106b5c:visited , .u501ca678b8fb4085e2c4053c54106b5c:active { border:0!important; } .u501ca678b8fb4085e2c4053c54106b5c .clearfix:after { content: ""; display: table; clear: both; } .u501ca678b8fb4085e2c4053c54106b5c { display: block; transition: background-color 250ms; webkit-transition: background-color 250ms; width: 100%; opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; background-color: #E67E22; } .u501ca678b8fb4085e2c4053c54106b5c:active , .u501ca678b8fb4085e2c4053c54106b5c:hover { opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; background-color: #D35400; } .u501ca678b8fb4085e2c4053c54106b5c .centered-text-area { width: 100%; position: relative; } .u501ca678b8fb4085e2c4053c54106b5c .ctaText { border-bottom: 0 solid #fff; color: #ECF0F1; font-size: 16px; font-weight: bold; margin: 0; padding: 0; text-decoration: underline; } .u501ca678b8fb4085e2c4053c54106b5c .postTitle { color: #2C3E50; font-size: 16px; font-weight: 600; margin: 0; padding: 0; width: 100%; } .u501ca678b8fb4085e2c4053c54106b5c .ctaButton { background-color: #D35400!important; color: #ECF0F1; border: none; border-radius: 3px; box-shadow: none; font-size: 14px; font-weight: bold; line-height: 26px; moz-border-radius: 3px; text-align: center; text-decoration: none; text-shadow: none; width: 80px; min-height: 80px; background: url(https://malinika.ru/wp-content/plugins/intelly-related-posts/assets/images/simple-arrow.png)no-repeat; position: absolute; right: 0; top: 0; } .u501ca678b8fb4085e2c4053c54106b5c:hover .ctaButton { background-color: #E67E22!important; } .u501ca678b8fb4085e2c4053c54106b5c .centered-text { display: table; height: 80px; padding-left: 18px; top: 0; } .u501ca678b8fb4085e2c4053c54106b5c .u501ca678b8fb4085e2c4053c54106b5c-content { display: table-cell; margin: 0; padding: 0; padding-right: 108px; position: relative; vertical-align: middle; width: 100%; } .u501ca678b8fb4085e2c4053c54106b5c:after { content: ""; display: block; clear: both; } </style><div class="centered-text-area"><div class="centered-text" style="float: left;"><div class="u501ca678b8fb4085e2c4053c54106b5c-content"><span class="ctaText">Популярные статьи</span>&nbsp; <span class="postTitle">Пирог с малиной</span></div></div></div><div class="ctaButton"></div></a></div><h3 id="foto-poshagovogo-prigotovleniya-2">Фото пошагового приготовления</h3>
+<p>Шаг за шагом, с помощью фотоинструкций, вы с легкостью можете приготовить домашнее мороженое. Вот несколько простых рецептов, сопровождаемых подробными фотографиями:</p>
+<p><strong>Шаг 1:</strong> Составьте список ингредиентов, необходимых для приготовления выбранного мороженого. Убедитесь, что у вас есть все необходимые продукты.</p>
+<p><strong>Шаг 2:</strong> Подготовьте все ингредиенты, измерьте их и приготовьте, если необходимо.</p>
+<p><strong>Шаг 3:</strong> Продолжайте, согласно рецепту, смешивая и сначала высокооктановые, а затем низкооктановые ингредиенты.</p>
+<p><strong>Шаг 4:</strong> Взбейте смесь, пока она не станет однородной и пушистой. Обычно лучше всего использовать миксер или кухонный комбайн.</p>
+<p><strong>Шаг 5:</strong> Залейте смесь в форму для мороженого, удобную для замораживания. Выравняйте поверхность с помощью ложки или шпателя.</p>
+<p><strong>Шаг 6:</strong> Поставьте форму в морозильник и оставьте мороженое замораживаться в течение определенного времени, указанного в рецепте. Не забудьте закрыть крышкой форму или покрыть ее пленкой.</p>
+<p><strong>Шаг 7:</strong> После указанного времени проверьте готовность мороженого, используя указанные в рецепте методы тестирования. Поставьте мороженое в морозильник на дополнительное время, если оно еще не готово.</p>
+<p><strong>Шаг 8:</strong> Когда мороженое полностью заморожено, достаньте его из морозильника и оставьте на несколько минут, чтобы оно слегка размякло перед подачей.</p>
+<p><strong>Шаг 9:</strong> Подавайте мороженое в чашку или стакан, украсив его свежими фруктами, ягодами или шоколадными кусочками. И наслаждайтесь домашним мороженым вместе со своими близкими и друзьями!</p>
+<h2 id="shokoladnoe-morozhenoe">Шоколадное мороженое</h2>
+<p>Для приготовления шоколадного мороженого вам понадобятся следующие ингредиенты:</p>
+<ul>
+<li><strong>Молоко</strong> – 500 мл</li>
+<li><strong>Сливки</strong> – 250 мл</li>
+<li><strong>Сахар</strong> – 150 г</li>
+<li><strong>Какао-порошок</strong> – 50 г</li>
+<li><strong>Темный шоколад</strong> – 100 г</li>
+<li><strong>Ванильный экстракт</strong> – 1 ч.л.</li>
+</ul>
+<p>Шаги приготовления шоколадного мороженого:</p>
+<ol>
+<li>В кастрюле смешайте молоко, сливки и сахар. Разогрейте смесь на среднем огне, постоянно помешивая, до полного растворения сахара.</li>
+<li>Добавьте ванильный экстракт и какао-порошок. Перемешайте до получения однородной массы.</li>
+<li>Натрите темный шоколад на терке и добавьте его в смесь. Перемешайте, пока шоколад не растворится.</li>
+<li>Снимите смесь с огня и дайте ей остыть до комнатной температуры.</li>
+<li>Перелейте остывшую смесь в морозильник и заморозьте ее в течение 2-3 часов.</li>
+<li>Извлеките замороженную смесь из морозильника и перемешайте ее в блендере или миксере, чтобы разбить образовавшиеся кристаллы льда.</li>
+<li>Верните мороженое в морозильник и заморозьте еще на 2-3 часа.</li>
+<li>Подайте шоколадное мороженое в креманках или рожках и наслаждайтесь!</li>
+</ol>
+<p>Шоколадное мороженое готово! Оно отлично подойдет для десертов на любые мероприятия или просто для удовлетворения сладкого желания в любое время дня.</p>
+<p><em>Приятного аппетита!</em></p>
+<h2 id="retsept-1-2">Рецепт 1</h2>
+<p>Черника-мята:</p>
+<p>— 400 г черники</p>
+<p>— 200 г сахара</p>
+<p>— 500 мл сливок (жирностью не менее 30%)</p>
+<p>— 1 пучок свежей мяты</p>
+<p>1. Переберите чернику и промойте под проточной водой. Отложите небольшое количество ягод для украшения готового мороженого.</p>
+<p>2. В сотейнике смешайте чернику с сахаром и поставьте на средний огонь. Готовьте, помешивая, около 10-15 минут, пока ягоды не начнут мягкеть и отдавать сок.</p>
+<p>3. Взбейте сливки до образования жирной пены. Не взбивайте сливки до слишком плотной консистенции, иначе мороженое будет слишком плотным и твердым.</p>
+<p>4. Отложите 2-3 столовые ложки ягодного соуса и остудите его в холодильнике. Остальной соус измельчите блендером или погружным блендером, чтобы получилась однородная масса.</p>
+<p>5. Смешайте конечную массу сливок с остывшим черничным соусом и хорошо перемешайте. Добавьте свежую мяту и снова перемешайте.</p>
+<p>6. Полученную массу перелейте в форму для мороженого и уберите в морозилку. Через 1,5-2 часа достаньте форму из морозилки, перемешайте мороженое вилкой или шпателем таким образом, чтобы ломтики ягоды равномерно распределены по всей массе. Поставьте форму снова в морозилку на несколько часов или оставьте там на ночь до полного замерзания.</p>
+<p>7. При подаче посыпьте готовое мороженое сахарной пудрой и украсьте оставшимися ягодами черники и листочками мяты.</p>
+<h3 id="prigotovlenie-3">Приготовление</h3>
+<p>Чтобы приготовить домашнее мороженое, вам понадобятся следующие ингредиенты:</p>
+<ol>
+<li>Молоко — 500 мл.</li>
+<li>Сливки — 200 мл.</li>
+<li>Сахар — 150 г.</li>
+<li>Яйцо — 2 шт.</li>
+<li>Ванилин — по вкусу.</li>
+</ol>
+<p>1. В первую очередь, в большой кастрюле смешайте молоко и сливки. Доведите смесь до кипения на среднем огне.</p>
+<p>2. В отдельной миске взбейте яйца с сахаром до образования густой пены.</p>
+<p>3. Постепенно добавьте горячую смесь молока и сливок к взбитым яйцам, постоянно помешивая венчиком.</p>
+<p>4. Верните полученную смесь в кастрюлю и продолжайте варить на медленном огне, постоянно помешивая, до тех пор, пока смесь не загустеет.</p>
+<p>5. Удалите кастрюлю с огня и дайте затемнуть смеси до комнатной температуры.</p>
+<p>6. После этого добавьте ванилин или другие ароматизаторы по вашему вкусу.</p>
+<p>7. Поместите смесь в холодильник на 3-4 часа, чтобы охладить.</p>
+<p>8. Выньте смесь из холодильника и перемешайте.</p>
+<p>9. Поставьте мороженое в морозилку на 5-6 часов или до полного замораживания.</p>
+<p>10. Готовое мороженое можно подавать в стаканчиках или на рожке и украсить по желанию.</p>
+<p>Теперь вы знаете, как приготовить домашнее мороженое. Приятного аппетита!</p>
+<h3 id="foto-poshagovogo-prigotovleniya-3">Фото пошагового приготовления</h3>
+<p>Для того чтобы приготовить домашнее мороженое, следуйте следующим шагам:</p>
+<p><strong>Шаг 1:</strong> Смешайте все ингредиенты в кастрюле и поставьте на средний огонь.</p>
+<p><em>(фото: смешивание ингредиентов)</em></p>
+<p><strong>Шаг 2:</strong> Постоянно помешивайте смесь, пока она не станет густой.</p>
+<p><em>(фото: помешивание смеси)</em></p>
+<p><strong>Шаг 3:</strong> Уберите смесь с огня и дайте ей остыть.</p>
+<p><em>(фото: остывание смеси)</em></p>
+<p><strong>Шаг 4:</strong> Положите смесь в морозильник и оставьте на 4-6 часов.</p>
+<p><em>(фото: морозильник с смесью)</em></p>
+<p><strong>Шаг 5:</strong> Выньте мороженое из морозильника и дайте ему немного раскрепоститься.</p>
+<p><em>(фото: раскрепощение мороженого)</em></p>
+<p><strong>Шаг 6:</strong> Подаём мороженое и наслаждаемся его неповторимым вкусом!</p>
+<p><em>(фото: сервировка мороженого)</em></p>
+<p>Следуйте этим шагам и вы сможете насладиться домашним мороженым в любое время!</p>
+<h2 id="retsept-2-2">Рецепт 2</h2>
+<p>Ингредиенты:</p>
+<table>
+<tbody><tr>
+<td>500 мл сливок</td>
+</tr>
+<tr>
+<td>200 г сгущенного молока</td>
+</tr>
+<tr>
+<td>200 г черничного джема</td>
+</tr>
+<tr>
+<td>1 ч.л. ванильного экстракта</td>
+</tr>
+</tbody></table>
+<p>Приготовление:</p>
+<p>1. Взбейте сливки до образования пиков.</p>
+<p>2. Добавьте сгущенное молоко и ванильный экстракт. Тщательно перемешайте.</p>
+<div style="clear:both; margin-top:0em; margin-bottom:1em;"><a href="https://malinika.ru/dietolog-rasskazal-komu-sleduet-isklyuchit-supy-pyure-iz-ratsiona/" target="_blank" rel="nofollow" class="u11cdb423093af2d296d75c86558e3e98"><!-- INLINE RELATED POSTS 2/3 //--><style> .u11cdb423093af2d296d75c86558e3e98 , .u11cdb423093af2d296d75c86558e3e98 .postImageUrl , .u11cdb423093af2d296d75c86558e3e98 .centered-text-area { min-height: 80px; position: relative; } .u11cdb423093af2d296d75c86558e3e98 , .u11cdb423093af2d296d75c86558e3e98:hover , .u11cdb423093af2d296d75c86558e3e98:visited , .u11cdb423093af2d296d75c86558e3e98:active { border:0!important; } .u11cdb423093af2d296d75c86558e3e98 .clearfix:after { content: ""; display: table; clear: both; } .u11cdb423093af2d296d75c86558e3e98 { display: block; transition: background-color 250ms; webkit-transition: background-color 250ms; width: 100%; opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; background-color: #E67E22; } .u11cdb423093af2d296d75c86558e3e98:active , .u11cdb423093af2d296d75c86558e3e98:hover { opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; background-color: #D35400; } .u11cdb423093af2d296d75c86558e3e98 .centered-text-area { width: 100%; position: relative; } .u11cdb423093af2d296d75c86558e3e98 .ctaText { border-bottom: 0 solid #fff; color: #ECF0F1; font-size: 16px; font-weight: bold; margin: 0; padding: 0; text-decoration: underline; } .u11cdb423093af2d296d75c86558e3e98 .postTitle { color: #2C3E50; font-size: 16px; font-weight: 600; margin: 0; padding: 0; width: 100%; } .u11cdb423093af2d296d75c86558e3e98 .ctaButton { background-color: #D35400!important; color: #ECF0F1; border: none; border-radius: 3px; box-shadow: none; font-size: 14px; font-weight: bold; line-height: 26px; moz-border-radius: 3px; text-align: center; text-decoration: none; text-shadow: none; width: 80px; min-height: 80px; background: url(https://malinika.ru/wp-content/plugins/intelly-related-posts/assets/images/simple-arrow.png)no-repeat; position: absolute; right: 0; top: 0; } .u11cdb423093af2d296d75c86558e3e98:hover .ctaButton { background-color: #E67E22!important; } .u11cdb423093af2d296d75c86558e3e98 .centered-text { display: table; height: 80px; padding-left: 18px; top: 0; } .u11cdb423093af2d296d75c86558e3e98 .u11cdb423093af2d296d75c86558e3e98-content { display: table-cell; margin: 0; padding: 0; padding-right: 108px; position: relative; vertical-align: middle; width: 100%; } .u11cdb423093af2d296d75c86558e3e98:after { content: ""; display: block; clear: both; } </style><div class="centered-text-area"><div class="centered-text" style="float: left;"><div class="u11cdb423093af2d296d75c86558e3e98-content"><span class="ctaText">Популярные статьи</span>&nbsp; <span class="postTitle">Диетолог рассказал кому следует исключить супы-пюре из рациона</span></div></div></div><div class="ctaButton"></div></a></div><p>3. Добавьте черничный джем и снова перемешайте.</p>
+<p>4. Полученную смесь вылейте в форму для мороженого.</p>
+<p>5. Отправьте форму в морозильник на несколько часов, пока мороженое полностью не застынет.</p>
+<p>6. При подаче украсьте свежими ягодами и наслаждайтесь вкусом домашнего черничного мороженого.</p>
+<h3 id="prigotovlenie-4">Приготовление</h3>
+<p>1. Взять металлическую емкость или форму для замораживания мороженого.</p>
+<p>2. Поставить емкость в морозилку на 1-2 часа, чтобы она заморозилась.</p>
+<p>3. В миске смешать молоко, сливки и сахар. Размешивать, пока сахар полностью не растворится.</p>
+<p>4. Добавить в молочно-сливочную смесь ванильный экстракт или другие ароматизаторы по вашему выбору. Перемешать.</p>
+<p>5. Добавить яичные желтки в смесь и хорошо взбить всё венчиком или миксером до однородности.</p>
+<p>6. Поставить полученную смесь на медленный огонь и готовить, постоянно помешивая, пока она не загустеет.</p>
+<p>7. Убрать смесь с огня и остудить до комнатной температуры.</p>
+<p>8. Вынуть замороженную емкость из морозилки и аккуратно вылить в нее готовую смесь.</p>
+<p>9. Поставить емкость обратно в морозилку и замораживать приблизительно 6-8 часов до полной готовности.</p>
+<p>10. Вынуть мороженое из морозилки и подать на стол в порциях.</p>
+<p>Готовое мороженое можно украсить свежими ягодами, шоколадной крошкой, вафельными рожками или любыми другими декоративными элементами по вашему вкусу.</p>
+<h2 id="vopros-otvet">Вопрос-ответ:</h2>
+<h4 id="kak-prigotovit-prostoe-morozhenoe-v-domashnih">Как приготовить простое мороженое в домашних условиях?</h4>
+<p>Для простого мороженого вам понадобятся: сливки, сгущенное молоко, ванильный экстракт. Смешайте сливки и сгущенное молоко в миске и добавьте немного ванильного экстракта для аромата. Перемешайте все ингредиенты венчиком или погружным блендером до однородной массы. Затем выложите полученную смесь в контейнер и отправьте в морозильник на 4-6 часов. Готовое мороженое можно украсить свежими фруктами или шоколадной крошкой.</p>
+<h4 id="kak-prigotovit-shokoladnoe-morozhenoe-doma">Как приготовить шоколадное мороженое дома?</h4>
+<p>Чтобы приготовить шоколадное мороженое, вам понадобится: сливки, молоко, сахар, какао-порошок, яичные желтки, темный шоколад. В сотейнике смешайте сливки, молоко, сахар и какао-порошок. Разогревайте смесь на среднем огне до появления пара, не доводя до кипения. В отдельной миске взбейте яичные желтки. Постепенно добавьте горячую смесь в желтки, постоянно помешивая. Верните смесь в сотейник и готовьте на низком огне, постоянно помешивая, пока смесь не загустеет. Снимите с огня и добавьте натертый темный шоколад. Перемешайте до полного расплавления шоколада. Охладите смесь и затем выложите в контейнер для заморозки на 6-8 часов.</p>
+<h4 id="kak-prigotovit-fruktovoe-morozhenoe-v-domashnih">Как приготовить фруктовое мороженое в домашних условиях?</h4>
+<p>Для приготовления фруктового мороженого выберите свежие фрукты по вкусу (например, клубнику, малину, персики или бананы) и заморозьте их. Затем поместите замороженные фрукты в блендер и измельчите их до состояния пюре. Добавьте сливки или йогурт в пюре фруктов и взбейте все в блендере до однородной консистенции. Полученную смесь выложите в контейнер и отправьте в морозильник на 4-6 часов. Вкусное и полезное фруктовое мороженое готово!</p>
+<h4></h4>
+
+<h4 id="kak-prigotovit-vanilnoe-morozhenoe">Как приготовить ванильное мороженое?</h4>
+<p>Для приготовления ванильного мороженого вам понадобятся: 4 яичных желтка, 100 г сахара, 500 мл сливок, 1 столовая ложка ванильного экстракта. Желтки нужно взбить с сахаром до образования пышной массы. Затем в кастрюле смешать сливки и ванильный экстракт, довести до кипения и постепенно вливать в смесь желтков и сахара, постоянно помешивая. После этого вернуть смесь в кастрюлю и нагревать на среднем огне до загустения. Затем охладить и вылить в форму для заморозки. После 2-3 часов мороженое будет готово к употреблению.</p>
+<h2 id="video">Видео:</h2>
+<h2 id="otzyvy">Отзывы</h2>
+<p><strong>sergey_pop</strong></p>
+<p>Отличная статья! Я всегда мечтал научиться делать мороженое самостоятельно, но всегда думал, что это сложно и требует специального оборудования. Но благодаря вашим 10 простым рецептам, я понял, что все гораздо проще, чем кажется! Особенно радует, что вы приложили фото с пошаговым приготовлением. Теперь я готов попробовать приготовить мороженое своими руками! Меня заинтересовал рецепт «Шоколадного мороженого со сливками». Я обожаю шоколад, и представляю, какой неповторимый вкус получится при сочетании его с сливками. Также обрадовало то, что в составе всего лишь 4 ингредиента. Это значит, что я смогу легко найти все необходимое и не потратить много времени на приготовление. Спасибо вам за такую понятную и доступную статью! Теперь у меня есть мотивация попробовать приготовить мороженое дома. Я уверен, что рецепты из вашей статьи станут настоящим открытием для меня и не только удовлетворят мою сладкую зубную, но и порадуют моих близких. Желаю вам успехов и продолжайте делиться такими полезными и вкусными рецептами!</p>
+<p><strong>Katey89</strong></p>
+<p>Очень интересная статья! Я всегда мечтала научиться готовить мороженое дома, но всегда боялась, что это очень сложно. Благодаря вашим десяти простым рецептам с фото пошагового приготовления, теперь я уверена, что смогу попробовать себя в этом деле. Особенно меня заинтересовал рецепт мороженого с клубникой. Ведь в это время года клубника просто дарит своей сочностью и ягодным ароматом. Теперь я знаю, как сделать свежее и натуральное мороженое с клубникой прямо у себя дома. С нетерпением жду, когда придет лето, чтобы попробовать этот рецепт. А еще рецепт с мятой и шоколадными чипсами выглядит просто сказочно! Я обожаю мятный вкус и совмещение его с шоколадом звучит нереально вкусно. Спасибо за такую подробную и понятную статью, теперь я точно смогу порадовать свою семью домашним мороженым.</p>
+<p><strong>Ольга Попова</strong></p>
+<p>Статья просто великолепна! Очень понравилось, что в ней представлено 10 разных рецептов на любой вкус. Фото пошагового приготовления делают все еще понятнее и удобнее. Теперь я с уверенностью могу приготовить мороженое сама, не выходя из дома. Особенно меня заинтересовал рецепт мороженого с шоколадом и карамелью — это просто волшебство! Также, здорово, что статья содержит полезные советы по хранению и подаче мороженого. Теперь я точно не буду покупать готовое мороженое в магазине, а буду радовать себя и близких домашним, свежим и вкусным мороженым. Спасибо за такую полезную и вдохновляющую статью!</p>
+<p><strong>OlgaPop</strong></p>
+<p>Статья очень полезная и интересная! Я всегда мечтала научиться готовить мороженое самостоятельно, и эти 10 простых рецептов с фото пошагового приготовления просто спасение для меня. Я очень люблю мороженое и всегда хочу, чтобы оно было свежим и натуральным. Статья предлагает различные варианты: от классического ванильного до экзотического апельсинового. Я уже выбрала несколько рецептов, которые собираюсь попробовать, особенно заинтересовал рецепт шоколадно-орехового мороженого. Фотографии на каждом шаге очень помогают понять, как правильно готовить каждое блюдо. Я уверена, что с этими рецептами смогу порадовать свою семью и друзей вкусным домашним мороженым! Большое спасибо автору статьи за такой полезный материал!</p>
+<p><strong>Екатерина Смирнова</strong></p>
+<p>Действительно, лето не может обойтись без мороженого! Я всегда любила его, но иногда магазинное мороженое кажется немного однообразным. Поэтому я стала экспериментировать и приготовила мороженое самостоятельно! Это так просто и удивительно вкусно. Статья «Мороженое в домашних условиях: 10 простых рецептов» дала мне множество новых идей. Я раньше даже не знала, что можно приготовить мороженое с добавлением хрустящего орехового пралине или сосредоточиться на шоколадном варианте. Пошаговые фотографии очень помогли мне разобраться в процессе приготовления, а подробные описания позволили избежать ошибок. И конечно же, в домашнем мороженом нет никаких консервантов и искусственных добавок. Теперь я знаю точно, что употребляю только натуральные ингредиенты. Особенно мне понравились рецепты с фруктами. Банановое мороженое с добавлением свежих ягод и кокосового молока стало настоящим открытием для меня! Это такое освежающее и легкое десертное блюдо, и я могу добавить в него любимые фрукты. Теперь я всегда готова удивить гостей домашним мороженым. Создать свой вкусный и оригинальный десерт теперь легко благодаря этой статье. Попробуйте и вы, и ваше лето станет еще ярче и вкуснее.</p>
+<div style="clear:both; margin-top:0em; margin-bottom:1em;"><a href="https://malinika.ru/moda-zozh-podrobnosti-sovety-i-tendentsii/" target="_blank" rel="nofollow" class="u09ef8e000417ef27d9259beb966da179"><!-- INLINE RELATED POSTS 3/3 //--><style> .u09ef8e000417ef27d9259beb966da179 , .u09ef8e000417ef27d9259beb966da179 .postImageUrl , .u09ef8e000417ef27d9259beb966da179 .centered-text-area { min-height: 80px; position: relative; } .u09ef8e000417ef27d9259beb966da179 , .u09ef8e000417ef27d9259beb966da179:hover , .u09ef8e000417ef27d9259beb966da179:visited , .u09ef8e000417ef27d9259beb966da179:active { border:0!important; } .u09ef8e000417ef27d9259beb966da179 .clearfix:after { content: ""; display: table; clear: both; } .u09ef8e000417ef27d9259beb966da179 { display: block; transition: background-color 250ms; webkit-transition: background-color 250ms; width: 100%; opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; background-color: #E67E22; } .u09ef8e000417ef27d9259beb966da179:active , .u09ef8e000417ef27d9259beb966da179:hover { opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; background-color: #D35400; } .u09ef8e000417ef27d9259beb966da179 .centered-text-area { width: 100%; position: relative; } .u09ef8e000417ef27d9259beb966da179 .ctaText { border-bottom: 0 solid #fff; color: #ECF0F1; font-size: 16px; font-weight: bold; margin: 0; padding: 0; text-decoration: underline; } .u09ef8e000417ef27d9259beb966da179 .postTitle { color: #2C3E50; font-size: 16px; font-weight: 600; margin: 0; padding: 0; width: 100%; } .u09ef8e000417ef27d9259beb966da179 .ctaButton { background-color: #D35400!important; color: #ECF0F1; border: none; border-radius: 3px; box-shadow: none; font-size: 14px; font-weight: bold; line-height: 26px; moz-border-radius: 3px; text-align: center; text-decoration: none; text-shadow: none; width: 80px; min-height: 80px; background: url(https://malinika.ru/wp-content/plugins/intelly-related-posts/assets/images/simple-arrow.png)no-repeat; position: absolute; right: 0; top: 0; } .u09ef8e000417ef27d9259beb966da179:hover .ctaButton { background-color: #E67E22!important; } .u09ef8e000417ef27d9259beb966da179 .centered-text { display: table; height: 80px; padding-left: 18px; top: 0; } .u09ef8e000417ef27d9259beb966da179 .u09ef8e000417ef27d9259beb966da179-content { display: table-cell; margin: 0; padding: 0; padding-right: 108px; position: relative; vertical-align: middle; width: 100%; } .u09ef8e000417ef27d9259beb966da179:after { content: ""; display: block; clear: both; } </style><div class="centered-text-area"><div class="centered-text" style="float: left;"><div class="u09ef8e000417ef27d9259beb966da179-content"><span class="ctaText">Популярные статьи</span>&nbsp; <span class="postTitle">Мода ЗОЖ: подробности, советы и тенденции</span></div></div></div><div class="ctaButton"></div></a></div><p><strong>Alisa92</strong></p>
+<p>Спасибо за эту статью! Я всегда мечтала научиться делать вкусное мороженое дома, и теперь у меня есть 10 простых и доступных рецептов. Фотографии пошагового приготовления также очень помогут мне в этом процессе. Я не могу дождаться, чтобы попробовать все эти вкусные варианты: от классического шоколадного до экзотического манго. Более того, делать мороженое в домашних условиях звучит очень весело и интересно! Я уверена, что мои друзья и семья будут в восторге от этих домашних лакомств. Я уже представляю, как буду делиться этими рецептами со всеми и гордиться своими кулинарными достижениями. Еще раз спасибо, что поделились этой информацией!</p>
+<p><strong>Александра Иванова</strong></p>
+<p>Эта статья просто спасение для настоящих любителей мороженого! Я всегда мечтала научиться готовить мороженое в домашних условиях, но всегда думала, что это очень сложно. Спасибо автору за такой подробный и понятный мастер-класс! В статье описано 10 разных рецептов, каждый из которых включает пошаговое фото приготовления. Это очень удобно, особенно для новичков, которые только начинают разбираться в процессе. Я уже определила несколько рецептов, которые точно попробую: мороженое с клубникой, сливочное мороженое и шоколадное мороженое. Надеюсь, у меня получится воссоздать настоящую мороженую идеальность прямо у себя дома. Кстати, еще один плюс — все ингредиенты для рецептов вполне доступны и можно найти их в любом продуктовом магазине. Это значит, что вкусное мороженое я смогу приготовить в любое время! Уже не могу дождаться, чтобы начать эксперименты на кухне и порадовать себя и своих близких свежесделанным мороженым. Спасибо еще раз автору, теперь я точно знаю, какую статью использовать в качестве руководства для приготовления мороженого!</p>
+<p><strong>alexey_petrov</strong></p>
+<p>Отличная статья! Я всегда мечтал научиться делать мороженое в домашних условиях, и вот наконец-то я нашел все необходимые рецепты в одной статье. Фото пошагового приготовления очень помогают визуализировать процесс и понять, как выглядят конечные результаты. Я уже определился с первым рецептом, который хочу попробовать — это шоколадное мороженое. Оно выглядит так аппетитно и прямо расплавляет мое сердце! Я уверен, что домашнее мороженое будет намного вкуснее и полезнее, чем магазинное. И самое главное — я смогу добавить именно те ингредиенты, которые мне нравятся. Я не могу дождаться, когда приготовлю первую порцию мороженого и смогу насладиться его ароматом и вкусом вместе со своей семьей. Спасибо автору за чудесные рецепты и вдохновение!</p>
+<p><strong>Мария Кузнецова</strong></p>
+<p>Очень интересная статья! Я всегда мечтала научиться делать мороженое в домашних условиях, и эти 10 простых рецептов с фото пошагового приготовления — находка для меня! Мне нравится, что каждый рецепт представлен с подробным описанием и фотографиями, это очень помогает в процессе приготовления. Мороженое — это такое чудо, которое всегда радует и удивляет. И сейчас, когда мы ограничены в свободе перемещения, я с радостью буду экспериментировать с разными вкусами и составами мороженого прямо у себя дома. Банановое мороженое с орехами и шоколадом — это мой самый любимый рецепт! А еще я обязательно попробую сделать малиновое и манговое мороженое, поскольку эти фрукты обожаю. Хочу отметить, что мне нравится, что в рецептах используются натуральные и полезные ингредиенты, такие как свежие фрукты и ягоды, мед, йогурт и молоко. Это позволяет получить не только вкусное, но и полезное лакомство для всей семьи. Спасибо автору за такую полезную и интересную статью! Уверена, что многие читатели будут рады научиться делать домашнее мороженое и удивить своих близких этим вкусным лакомством. Я уже покупаю продукты и готова начать эксперименты с рецептами!</p>
+<p><strong>AnnaPetrova</strong></p>
+<p>Статья очень полезная и интересная! Я всегда мечтала научиться готовить мороженое самостоятельно, и эти 10 простых рецептов с фото пошагового приготовления меня идеально устроили. Очень радует тот факт, что все ингредиенты можно легко найти в любом магазине, и нет необходимости тратить много времени на поиск особенных составляющих. Теперь, когда я посмотрела все фото-инструкции, я точно смогу справиться с приготовлением мороженого дома. И самое главное, что есть рецепты для разных вкусных — от классического ванильного до экзотического кокосового. Я уже не могу дождаться, чтобы начать готовить своё первое домашнее мороженое! Спасибо за такую полезную информацию и потрясающие фотографии!</p>
+<p><strong>Александр</strong></p>
+<p>Уже лето на дворе, и я решил попробовать сделать свое собственное мороженое в домашних условиях. Знаете, мне нравится экспериментировать на кухне, и это был отличный способ разнообразить мои десерты. Я нашел статью о 10 простых рецептах мороженого с фото пошагового приготовления и решил попробовать сделать несколько из них. Первый рецепт был классическим ванильным мороженым. Я использовал свежие ингредиенты и следовал инструкциям со всеми фотографиями. Результат был потрясающий! Мое собственное мороженое получилось нежным и ароматным, точно таким, как в магазине. Второй рецепт был с мятой и шоколадными каплями. Я добавил немного свежей мяты в смесь и после замораживания посыпал мороженое шоколадными каплями. Этот вид мороженого стал моим новым фаворитом! Третий рецепт был банановым мороженым. Я просто смешал спелые бананы с сахаром и сливками, а затем заморозил смесь. Мороженое получилось очень кремовым и ароматным. Я продолжаю экспериментировать с остальными рецептами из статьи и мне очень нравится видеть результаты своих трудов. Процесс приготовления мороженого действительно простой, и результаты превзошли мои ожидания. Теперь у меня есть свежее и вкусное мороженое прямо у себя дома!</p><div class="yarpp yarpp-related yarpp-related-website yarpp-template-thumbnails">
+<!-- YARPP Thumbnails -->
+<h3>Рекомендуем:</h3>
+<div class="yarpp-thumbnails-horizontal">
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/golubcy-iz-svezej-kapusty-5-foto-receptov-palciki-oblizete/" title="Голубцы из свежей капусты: 5 вариантов приготовления с пошаговым фото">
+<img width="120" height="78" src="https://malinika.ru/wp-content/uploads/f/9/6/f969b99713d4ae4c38a8695df41b0cc2.jpeg" class="attachment-yarpp-thumbnail size-yarpp-thumbnail wp-post-image" alt="" data-pin-nopin="true"><span class="yarpp-thumbnail-title">Голубцы из свежей капусты: 5 вариантов приготовления с пошаговым фото</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/yablochnyy-uksus-naturalnoe-sredstvo-dlya-zdorovya-i-krasoty/" title="Яблочный уксус: натуральное средство для здоровья и красоты">
+<span class="yarpp-thumbnail-default"><img width="120" height="120" src="https://malinika.ru/wp-content/plugins/yet-another-related-posts-plugin/images/default.png" alt="Default Thumbnail" data-pin-nopin="true"></span><span class="yarpp-thumbnail-title">Яблочный уксус: натуральное средство для здоровья и красоты</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/tehteli-v-tomatno-smetannom-souse-v-duhovke-5-retseptov-s-poshagovymi-foto/" title="Техтели в томатно-сметанном соусе в духовке — 5 рецептов с пошаговыми фото">
+<span class="yarpp-thumbnail-default"><img width="120" height="120" src="https://malinika.ru/wp-content/plugins/yet-another-related-posts-plugin/images/default.png" alt="Default Thumbnail" data-pin-nopin="true"></span><span class="yarpp-thumbnail-title">Техтели в томатно-сметанном соусе в духовке — 5 рецептов с пошаговыми фото</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/dolma-klassicheskaya-10-retseptov-prigotovleniya-dolmy-v-vinogradnyh-listyah-s-poshagovymi-foto/" title="Долма классическая – 10 рецептов приготовления долмы в виноградных листьях с пошаговыми фото">
+<span class="yarpp-thumbnail-default"><img width="120" height="120" src="https://malinika.ru/wp-content/plugins/yet-another-related-posts-plugin/images/default.png" alt="Default Thumbnail" data-pin-nopin="true"></span><span class="yarpp-thumbnail-title">Долма классическая – 10 рецептов приготовления долмы в виноградных листьях с пошаговыми фото</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/klassicheskoe-satsivi-iz-kuritsy-po-gruzinski-6-retseptov-v-domashnih-usloviyah-s-foto/" title="Классическое сациви из курицы по-грузински: 6 рецептов в домашних условиях с фото">
+<span class="yarpp-thumbnail-default"><img width="120" height="120" src="https://malinika.ru/wp-content/plugins/yet-another-related-posts-plugin/images/default.png" alt="Default Thumbnail" data-pin-nopin="true"></span><span class="yarpp-thumbnail-title">Классическое сациви из курицы по-грузински: 6 рецептов в домашних условиях с фото</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/rizotto-s-krevetkami-5-klassicheskih-retseptov-s-poshagovymi-foto/" title="Ризотто с креветками – 5 классических рецептов с пошаговыми фото">
+<span class="yarpp-thumbnail-default"><img width="120" height="120" src="https://malinika.ru/wp-content/plugins/yet-another-related-posts-plugin/images/default.png" alt="Default Thumbnail" data-pin-nopin="true"></span><span class="yarpp-thumbnail-title">Ризотто с креветками – 5 классических рецептов с пошаговыми фото</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/bezdrozhzhevoy-hleb-8-retseptov-v-domashnih-usloviyah-v-duhovke-s-poshagovymi-foto/" title="Бездрожжевой хлеб – 8 рецептов в домашних условиях в духовке с пошаговыми фото">
+<span class="yarpp-thumbnail-default"><img width="120" height="120" src="https://malinika.ru/wp-content/plugins/yet-another-related-posts-plugin/images/default.png" alt="Default Thumbnail" data-pin-nopin="true"></span><span class="yarpp-thumbnail-title">Бездрожжевой хлеб – 8 рецептов в домашних условиях в духовке с пошаговыми фото</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/krabovyj-salat-s-suharikami-5-foto-receptov-popularnogo-salata/" title="Крабовый салат с сухариками: 5 вариантов популярного крабового салата">
+<img width="120" height="78" src="https://malinika.ru/wp-content/uploads/6/9/d/69d295a273dc9b64cf76861aff4c1e9d.jpeg" class="attachment-yarpp-thumbnail size-yarpp-thumbnail wp-post-image" alt="" data-pin-nopin="true"><span class="yarpp-thumbnail-title">Крабовый салат с сухариками: 5 вариантов популярного крабового салата</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/kak-sdelat-v-domasnih-usloviah-kokosovuu-struzku-i-moloko/" title="Как сделать дома кокосовую стружку и молоко">
+<img width="120" height="78" src="https://malinika.ru/wp-content/uploads/b/e/6/be602c6947dc801cb747cab9b0e890ce.jpeg" class="attachment-yarpp-thumbnail size-yarpp-thumbnail wp-post-image" alt="" data-pin-nopin="true"><span class="yarpp-thumbnail-title">Как сделать дома кокосовую стружку и молоко</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/5-sposobov-prigotovit-kompot-so-vkusom-ananasa-iz-kabachkov-s-podrobnymi-fotografiyami-i-poshagovymi-instruktsiyami-dlya-zimnego-hraneniya/" title="5 способов приготовить компот со вкусом ананаса из кабачков с подробными фотографиями и пошаговыми инструкциями для зимнего хранения">
+<span class="yarpp-thumbnail-default"><img width="120" height="120" src="https://malinika.ru/wp-content/plugins/yet-another-related-posts-plugin/images/default.png" alt="Default Thumbnail" data-pin-nopin="true"></span><span class="yarpp-thumbnail-title">5 способов приготовить компот со вкусом ананаса из кабачков с подробными фотографиями и пошаговыми инструкциями для зимнего хранения</span></a>
+</div>
+</div>
+	</div><!-- .entry-content -->
+
+</article>
+
+
+
+
+
+<div class="rating-box"><div class="rating-box__header">Оцените статью</div><div class="wp-star-rating js-star-rating star-rating--score-0" data-post-id="37664" data-rating-count="0" data-rating-sum="0" data-rating-value="0"><span class="star-rating-item js-star-rating-item" data-score="1"><svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="i-ico"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" class="ico-star"></path></svg></span><span class="star-rating-item js-star-rating-item" data-score="2"><svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="i-ico"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" class="ico-star"></path></svg></span><span class="star-rating-item js-star-rating-item" data-score="3"><svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="i-ico"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" class="ico-star"></path></svg></span><span class="star-rating-item js-star-rating-item" data-score="4"><svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="i-ico"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" class="ico-star"></path></svg></span><span class="star-rating-item js-star-rating-item" data-score="5"><svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="i-ico"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" class="ico-star"></path></svg></span></div></div>
+
+
+
+<div class="social-buttons"><span class="social-button social-button--vkontakte main" data-social="vkontakte"><span>Поделиться в ВКонтакте</span></span><span class="social-button social-button--facebook " data-social="facebook"></span><span class="social-button social-button--telegram " data-social="telegram"></span><span class="social-button social-button--odnoklassniki " data-social="odnoklassniki"></span><span class="social-button social-button--twitter " data-social="twitter"></span><span class="social-button social-button--whatsapp " data-social="whatsapp"></span></div>
+
+<!--noindex-->
+<div class="author-box">
+    <div class="author-info">
+        <div class="author-box__ava">
+            <img alt="" src="https://malinika.ru/wp-content/plugins/clearfy-pro/assets/images/default-avatar.png" srcset="https://malinika.ru/wp-content/plugins/clearfy-pro/assets/images/default-avatar.png 2x" class="avatar avatar-70 photo avatar-default" height="70" width="70" decoding="async">        </div>
+
+        <div class="author-box__body">
+            <div class="author-box__author">
+                Игорь Бекушев            </div>
+            <div class="author-box__description">
+                <!--noindex--><!--/noindex-->
+            </div>
+
+            
+        </div>
+    </div>
+</div>
+<!--/noindex-->
+
+
+    <meta itemprop="author" content="Игорь Бекушев">
+<meta itemscope="" itemprop="mainEntityOfPage" itemtype="https://schema.org/WebPage" itemid="https://malinika.ru/morozhenoe-v-domashnih-usloviyah-10-prostyh-retseptov-s-foto-poshagovogo-prigotovleniya/" content="Мороженое в домашних условиях: 10 простых рецептов с фото пошагового приготовления">
+    <meta itemprop="dateModified" content="2022-01-30">
+    <meta itemprop="datePublished" content="2022-01-30T06:40:09+03:00">
+<div itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization" style="display: none;"><meta itemprop="name" content="Malinika.ru - Рецепты"><meta itemprop="telephone" content="Malinika.ru - Рецепты"><meta itemprop="address" content="https://malinika.ru"></div>
+            </main><!-- #main -->
+        </div><!-- #primary -->
+
+        
+<aside id="secondary" class="widget-area" itemscope="" itemtype="http://schema.org/WPSideBar">
+
+		
+	<div id="categories-4" class="widget widget_categories"><div class="widget-header">Рубрики</div>
+			<ul>
+					<li class="cat-item cat-item-9"><a href="https://malinika.ru/category/varenya/">Варенья</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="https://malinika.ru/category/interesnoe/">Интересное</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="https://malinika.ru/category/poleznoe/">Полезное</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="https://malinika.ru/category/recipies/">Рецепты</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="https://malinika.ru/category/salaty/">Салаты</a>
+</li>
+			</ul>
+
+			</div><div id="execphp-2" class="widget widget_execphp">			<div class="execphpwidget"><script type="rocketlazyloadscript" async="async" data-rocket-src="https://w.uptolike.com/widgets/v1/zp.js?pid=tl2c69a20bb413ce2c73be99b6eceee79f2e678df7" data-rocket-type="text/javascript"></script></div>
+		</div>
+		<div id="recent-posts-2" class="widget widget_recent_entries">
+		<div class="widget-header">Новые публикации</div>
+		<ul>
+											<li>
+					<a href="https://malinika.ru/kak-bystro-zakryt-raschyotnyy-schyot-v-banke-podrobnaya-instruktsiya/">Как быстро закрыть расчётный счёт в банке: подробная инструкция</a>
+									</li>
+											<li>
+					<a href="https://malinika.ru/vkusnye-i-originalnye-idei-dlya-prigotovleniya-kanape-na-lyuboy-prazdnik/">Вкусные и оригинальные идеи для приготовления канапе на любой праздник</a>
+									</li>
+											<li>
+					<a href="https://malinika.ru/mery-bezopasnosti-v-chastnyh-domah-dlya-prestarelyh/">Меры безопасности в частных домах для престарелых</a>
+									</li>
+											<li>
+					<a href="https://malinika.ru/idealnij-desert-gotovim-makaruni-po-video/">Идеальный десерт — готовим макаруны по видео</a>
+									</li>
+											<li>
+					<a href="https://malinika.ru/ovoshnoj-tort-iz-dostupnix-produktov-za-polchasa-bistrij-retsept/">Овощной торт из доступных продуктов за полчаса — быстрый и вкусный рецепт для семейного ужина</a>
+									</li>
+					</ul>
+
+		</div><div id="execphp-3" class="widget widget_execphp">			<div class="execphpwidget"></div>
+		</div><div id="wpshop_widget_articles-3" class="widget widget_wpshop_widget_articles"><div class="widget-header">Популярное 2023 год</div><div class="widget-articles">
+<article class="post-card post-card--small ">
+            <div class="post-card__thumbnail">
+            <a href="https://malinika.ru/pankejki-na-moloke-svezem-kislom-s-razryhlitelem-i-bez-s-bananami/">
+                <div class="post-card__icon">
+                    <img width="100" height="65" src="https://malinika.ru/wp-content/uploads/5/9/3/5932e0d8b9e7b207981110a6fbdfaedd.jpeg" class="attachment-yelly_square size-yelly_square wp-post-image" alt="" decoding="async">                </div>
+            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://malinika.ru/pankejki-na-moloke-svezem-kislom-s-razryhlitelem-i-bez-s-bananami/">Панкейки на молоке: 5 рецептов с идеальным результатом</a></div>
+
+                    <div class="post-card__description">
+                Панкейки по рецепту Энди Нередко в фильмах можно увидеть            </div>
+        
+        
+            </div>
+</article>
+<article class="post-card post-card--small ">
+            <div class="post-card__thumbnail">
+            <a href="https://malinika.ru/salat-s-kuricej-i-ananasom-7-vkusnejsih-receptov-s-foto-video/">
+                <div class="post-card__icon">
+                    <img width="100" height="65" src="https://malinika.ru/wp-content/uploads/a/0/4/a04ca29ff15c0ce7a6b10d73a3ce2a6a.jpeg" class="attachment-yelly_square size-yelly_square wp-post-image" alt="" decoding="async">                </div>
+            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://malinika.ru/salat-s-kuricej-i-ananasom-7-vkusnejsih-receptov-s-foto-video/">Салат с курицей и ананасом</a></div>
+
+                    <div class="post-card__description">
+                Салат Викинг – классический рецепт с курицей, ананасами            </div>
+        
+        
+            </div>
+</article>
+<article class="post-card post-card--small ">
+            <div class="post-card__thumbnail">
+            <a href="https://malinika.ru/kak-prigotovit-pysnyj-biskvit-v-duhovke-foto-recept-pysnogo-biskvita/">
+                <div class="post-card__icon">
+                    <img width="100" height="65" src="https://malinika.ru/wp-content/uploads/b/7/3/b73233592179d1b476b802423c253bd7.png" class="attachment-yelly_square size-yelly_square wp-post-image" alt="" decoding="async" loading="lazy">                </div>
+            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://malinika.ru/kak-prigotovit-pysnyj-biskvit-v-duhovke-foto-recept-pysnogo-biskvita/">Очень пышный бисквит в духовке</a></div>
+
+                    <div class="post-card__description">
+                Классический бисквит в духовке, который всегда получается            </div>
+        
+        
+            </div>
+</article>
+<article class="post-card post-card--small ">
+            <div class="post-card__thumbnail">
+            <a href="https://malinika.ru/zakuska-iz-syra-15-prostyh-no-bezumno-vkusnyh-prazdnicnyh-receptov/">
+                <div class="post-card__icon">
+                    <img width="100" height="65" src="https://malinika.ru/wp-content/uploads/4/4/1/441bfe9345244b3fa15c523f7c76b025.jpeg" class="attachment-yelly_square size-yelly_square wp-post-image" alt="" decoding="async" loading="lazy">                </div>
+            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://malinika.ru/zakuska-iz-syra-15-prostyh-no-bezumno-vkusnyh-prazdnicnyh-receptov/">Закуска из сыра: 15 простых, но безумно вкусных праздничных рецептов</a></div>
+
+                    <div class="post-card__description">
+                Простой рецепт вкусной закуски с мясом «Довольный муж»            </div>
+        
+        
+            </div>
+</article>
+<article class="post-card post-card--small ">
+            <div class="post-card__thumbnail">
+            <a href="https://malinika.ru/samye-grubye-i-hamovitye-znaki-zodiaka/">
+                <div class="post-card__icon">
+                    <img width="100" height="65" src="https://malinika.ru/wp-content/uploads/d/c/5/dc5cc60d6891e4bb825948b185797678.jpeg" class="attachment-yelly_square size-yelly_square wp-post-image" alt="" decoding="async" loading="lazy">                </div>
+            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://malinika.ru/samye-grubye-i-hamovitye-znaki-zodiaka/">Грубияны среди нас: кто они — самые грубые знаки зодиака?</a></div>
+
+                    <div class="post-card__description">
+                Опасные личности Телец. Если Тельцов все устраивает            </div>
+        
+        
+            </div>
+</article>
+<article class="post-card post-card--small ">
+            <div class="post-card__thumbnail">
+            <a href="https://malinika.ru/sloi-seledki-pod-suboj-tri-varianta-klassiceskij-bez-aic-s-ablokami/">
+                <div class="post-card__icon">
+                    <img width="100" height="65" src="https://malinika.ru/wp-content/uploads/0/f/a/0facd97788739e6f4f9eaf5b9f401d34.jpeg" class="attachment-yelly_square size-yelly_square wp-post-image" alt="" decoding="async" loading="lazy">                </div>
+            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://malinika.ru/sloi-seledki-pod-suboj-tri-varianta-klassiceskij-bez-aic-s-ablokami/">Слои «Селедки под шубой»</a></div>
+
+                    <div class="post-card__description">
+                Классическая селедка под шубой с яблоком и сыром Если            </div>
+        
+        
+            </div>
+</article></div></div>	
+		
+</aside><!-- #secondary -->
+
+    
+
+    </div><!--.site-content-inner-->
+
+    
+</div><!--.site-content-->
+
+    
+    
+
+<div data-rocket-location-hash="5128a5574c4bee4d9f23f945f31777b8" class="site-footer-container">
+
+    
+
+    <div data-rocket-location-hash="ab26d3422f9cc0d9b6f5bf5026466f54" class="footer-navigation full" itemscope="" itemtype="http://schema.org/SiteNavigationElement">
+        <div class="main-navigation-inner fixed">
+            <div class="menu-footer-container"><ul id="footer_menu" class="menu"><li id="menu-item-70" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-privacy-policy menu-item-70"><a rel="privacy-policy" href="https://malinika.ru/privacy-policy/">Конфиденциальность</a></li>
+<li id="menu-item-75" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-75"><a href="https://malinika.ru/kontakt/">Контакты и условия использования</a></li>
+<li id="menu-item-88" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-88"><a href="https://malinika.ru/politika/">Политика использования файлов COOKIES</a></li>
+</ul></div>        </div>
+    </div><!--footer-navigation-->
+
+
+    <footer data-rocket-location-hash="f3f43e754490d334dad8f1f54757f7a0" id="colophon" class="site-footer full" itemscope="" itemtype="http://schema.org/WPFooter">
+        <div class="site-footer-inner fixed">
+
+            
+            
+<div class="footer-bottom">
+    <div class="footer-info">
+        <div class="footer-copyright">© 2026 Malinika.ru - Рецепты</div>
+        <div class="footer-under-copyright"></div>
+	        </div>
+
+    </div>
+        </div>
+    </footer><!--.site-footer-->
+</div>
+
+
+            <button type="button" class="scrolltop js-scrolltop"></button>
+    
+                    <div data-rocket-location-hash="a5c769ba046a7486e44d6bd0ec5ce911" class="top-line js-top-line">
+            <div data-rocket-location-hash="44b88fe0a5666d7c2d54a88164c8069f" class="top-line-inner fixed">
+
+                <div class="top-line__title">Мороженое в домашних условиях: 10 простых рецептов с фото пошагового приготовления</div><div class="top-line__like"><span class="btn-fb-like btn-top-like social-button--vkontakte" data-social="vkontakte"><span>Поделиться в ВКонтакте</span></span></div><div class="top-line__post"><div class="top-line__post_thumbnail"><a href="https://malinika.ru/novogodnij-desert-vkusnejshij-bananovij-split-dlya-vsej-semi/"></a></div><div class="top-line__post_title"><a href="https://malinika.ru/novogodnij-desert-vkusnejshij-bananovij-split-dlya-vsej-semi/">Новогодний десерт — вкуснейший банановый сплит для всей семьи!</a></div></div>            </div>
+        </div>
+    
+</div><!-- #page -->
+
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/yelly_child/*","/wp-content/themes/yelly/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script type="rocketlazyloadscript">var pseudo_links = document.querySelectorAll(".pseudo-clearfy-link");for (var i=0;i<pseudo_links.length;i++ ) { pseudo_links[i].addEventListener("click", function(e){   window.open( e.target.getAttribute("data-uri") ); }); }</script><script type="rocketlazyloadscript">document.addEventListener("copy", (event) => {var pagelink = "\nИсточник: https://malinika.ru/morozhenoe-v-domashnih-usloviyah-10-prostyh-retseptov-s-foto-poshagovogo-prigotovleniya";event.clipboardData.setData("text", document.getSelection() + pagelink);event.preventDefault();});</script><script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-content/plugins/fitvids-for-wordpress/jquery.fitvids.js" id="fitvids-js" data-rocket-defer="" defer=""></script>
+<script type="text/javascript" id="wp-postviews-cache-js-extra">
+/* <![CDATA[ */
+var viewsCacheL10n = {"admin_ajax_url":"https://malinika.ru/wp-admin/admin-ajax.php","nonce":"9cc218528d","post_id":"37664"};
+//# sourceURL=wp-postviews-cache-js-extra
+/* ]]> */
+</script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-content/plugins/wp-postviews/postviews-cache.js" id="wp-postviews-cache-js" data-rocket-defer="" defer=""></script>
+<script type="text/javascript" id="yelly-scripts-js-extra">
+/* <![CDATA[ */
+var settings_array = {"rating_text_average":"\u0441\u0440\u0435\u0434\u043d\u0435\u0435","rating_text_from":"\u0438\u0437","lightbox_display":"1"};
+var wps_ajax = {"url":"https://malinika.ru/wp-admin/admin-ajax.php","nonce":"542ee12bb1"};
+//# sourceURL=yelly-scripts-js-extra
+/* ]]> */
+</script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-content/themes/yelly/assets/js/scripts.min.js" id="yelly-scripts-js" data-rocket-defer="" defer=""></script>
+		<script type="rocketlazyloadscript" data-rocket-type="text/javascript">
+		jQuery(document).ready(function () {
+			jQuery('body').fitVids();
+		});
+		</script><script>window.lazyLoadOptions={elements_selector:"iframe[data-lazy-src]",data_src:"lazy-src",data_srcset:"lazy-srcset",data_sizes:"lazy-sizes",class_loading:"lazyloading",class_loaded:"lazyloaded",threshold:300,callback_loaded:function(element){if(element.tagName==="IFRAME"&&element.dataset.rocketLazyload=="fitvidscompatible"){if(element.classList.contains("lazyloaded")){if(typeof window.jQuery!="undefined"){if(jQuery.fn.fitVids){jQuery(element).parent().fitVids()}}}}}};window.addEventListener('LazyLoad::Initialized',function(e){var lazyLoadInstance=e.detail.instance;if(window.MutationObserver){var observer=new MutationObserver(function(mutations){var image_count=0;var iframe_count=0;var rocketlazy_count=0;mutations.forEach(function(mutation){for(var i=0;i<mutation.addedNodes.length;i++){if(typeof mutation.addedNodes[i].getElementsByTagName!=='function'){continue}
+if(typeof mutation.addedNodes[i].getElementsByClassName!=='function'){continue}
+images=mutation.addedNodes[i].getElementsByTagName('img');is_image=mutation.addedNodes[i].tagName=="IMG";iframes=mutation.addedNodes[i].getElementsByTagName('iframe');is_iframe=mutation.addedNodes[i].tagName=="IFRAME";rocket_lazy=mutation.addedNodes[i].getElementsByClassName('rocket-lazyload');image_count+=images.length;iframe_count+=iframes.length;rocketlazy_count+=rocket_lazy.length;if(is_image){image_count+=1}
+if(is_iframe){iframe_count+=1}}});if(image_count>0||iframe_count>0||rocketlazy_count>0){lazyLoadInstance.update()}});var b=document.getElementsByTagName("body")[0];var config={childList:!0,subtree:!0};observer.observe(b,config)}},!1)</script><script data-no-minify="1" async="" src="https://malinika.ru/wp-content/plugins/wp-rocket/assets/js/lazyload/17.8.3/lazyload.min.js"></script><script>function lazyLoadThumb(e,alt,l){var t='<img src="https://i.ytimg.com/vi/ID/hqdefault.jpg" alt="" width="480" height="360">',a='<button class="play" aria-label="Play Youtube video"></button>';if(l){t=t.replace('data-lazy-','');t=t.replace('loading="lazy"','');t=t.replace(/<noscript>.*?<\/noscript>/g,'');}t=t.replace('alt=""','alt="'+alt+'"');return t.replace("ID",e)+a}function lazyLoadYoutubeIframe(){var e=document.createElement("iframe"),t="ID?autoplay=1";t+=0===this.parentNode.dataset.query.length?"":"&"+this.parentNode.dataset.query;e.setAttribute("src",t.replace("ID",this.parentNode.dataset.src)),e.setAttribute("frameborder","0"),e.setAttribute("allowfullscreen","1"),e.setAttribute("allow","accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"),this.parentNode.parentNode.replaceChild(e,this.parentNode)}document.addEventListener("DOMContentLoaded",function(){var exclusions=[];var e,t,p,u,l,a=document.getElementsByClassName("rll-youtube-player");for(t=0;t<a.length;t++)(e=document.createElement("div")),(u='https://i.ytimg.com/vi/ID/hqdefault.jpg'),(u=u.replace('ID',a[t].dataset.id)),(l=exclusions.some(exclusion=>u.includes(exclusion))),e.setAttribute("data-id",a[t].dataset.id),e.setAttribute("data-query",a[t].dataset.query),e.setAttribute("data-src",a[t].dataset.src),(e.innerHTML=lazyLoadThumb(a[t].dataset.id,a[t].dataset.alt,l)),a[t].appendChild(e),(p=e.querySelector(".play")),(p.onclick=lazyLoadYoutubeIframe)});</script>
+
+<!-- Yandex.Metrika counter -->
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105985519', 'ym');
+
+    ym(105985519, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/105985519" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+<script type="rocketlazyloadscript" async="async" data-rocket-src="https://w.uptolike.com/widgets/v1/zp.js?pid=2048239" data-rocket-type="text/javascript"></script>
+
+<div data-rocket-location-hash="9f41222c41e023e814dfdbb0ecd4201c" class="image-hover-social-buttons" style="display: none;"><div data-rocket-location-hash="f42bf3cfbde01e0efa1a0f6337eb1f8c" class="social-button social-button--vkontakte js-share-link" data-uri="https://vk.com/share.php?url=https%3A%2F%2Fmalinika.ru%2Fmorozhenoe-v-domashnih-usloviyah-10-prostyh-retseptov-s-foto-poshagovogo-prigotovleniya%2F"></div><div data-rocket-location-hash="3a006764edfa561d33d44ecb3f001f13" class="social-button social-button--facebook js-share-link" data-uri="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fmalinika.ru%2Fmorozhenoe-v-domashnih-usloviyah-10-prostyh-retseptov-s-foto-poshagovogo-prigotovleniya%2F"></div><div class="social-button social-button--telegram js-share-link" data-uri="https://t.me/share/url?url=https%3A%2F%2Fmalinika.ru%2Fmorozhenoe-v-domashnih-usloviyah-10-prostyh-retseptov-s-foto-poshagovogo-prigotovleniya%2F&amp;text=%D0%9C%D0%BE%D1%80%D0%BE%D0%B6%D0%B5%D0%BD%D0%BE%D0%B5+%D0%B2+%D0%B4%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D0%B8%D1%85+%D1%83%D1%81%D0%BB%D0%BE%D0%B2%D0%B8%D1%8F%D1%85%3A+10+%D0%BF%D1%80%D0%BE%D1%81%D1%82%D1%8B%D1%85+%D1%80%D0%B5%D1%86%D0%B5%D0%BF%D1%82%D0%BE%D0%B2+%D1%81+%D1%84%D0%BE%D1%82%D0%BE+%D0%BF%D0%BE%D1%88%D0%B0%D0%B3%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE+%D0%BF%D1%80%D0%B8%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F"></div><div class="social-button social-button--odnoklassniki js-share-link" data-uri="https://connect.ok.ru/dk?st.cmd=WidgetSharePreview&amp;service=odnoklassniki&amp;st.shareUrl=https%3A%2F%2Fmalinika.ru%2Fmorozhenoe-v-domashnih-usloviyah-10-prostyh-retseptov-s-foto-poshagovogo-prigotovleniya%2F"></div><div data-rocket-location-hash="dea1dc8a603e2cdf46ef58d02605c922" class="social-button social-button--twitter js-share-link" data-uri="http://twitter.com/share?url=https%3A%2F%2Fmalinika.ru%2Fmorozhenoe-v-domashnih-usloviyah-10-prostyh-retseptov-s-foto-poshagovogo-prigotovleniya%2Ftext=%D0%9C%D0%BE%D1%80%D0%BE%D0%B6%D0%B5%D0%BD%D0%BE%D0%B5+%D0%B2+%D0%B4%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D0%B8%D1%85+%D1%83%D1%81%D0%BB%D0%BE%D0%B2%D0%B8%D1%8F%D1%85%3A+10+%D0%BF%D1%80%D0%BE%D1%81%D1%82%D1%8B%D1%85+%D1%80%D0%B5%D1%86%D0%B5%D0%BF%D1%82%D0%BE%D0%B2+%D1%81+%D1%84%D0%BE%D1%82%D0%BE+%D0%BF%D0%BE%D1%88%D0%B0%D0%B3%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE+%D0%BF%D1%80%D0%B8%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F"></div><div data-rocket-location-hash="a71a23971f6d726e496da588f52c4624" class="social-button social-button--whatsapp js-share-link" data-uri="whatsapp://send?url=https%3A%2F%2Fmalinika.ru%2Fmorozhenoe-v-domashnih-usloviyah-10-prostyh-retseptov-s-foto-poshagovogo-prigotovleniya%2Ftext=%D0%9C%D0%BE%D1%80%D0%BE%D0%B6%D0%B5%D0%BD%D0%BE%D0%B5+%D0%B2+%D0%B4%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D0%B8%D1%85+%D1%83%D1%81%D0%BB%D0%BE%D0%B2%D0%B8%D1%8F%D1%85%3A+10+%D0%BF%D1%80%D0%BE%D1%81%D1%82%D1%8B%D1%85+%D1%80%D0%B5%D1%86%D0%B5%D0%BF%D1%82%D0%BE%D0%B2+%D1%81+%D1%84%D0%BE%D1%82%D0%BE+%D0%BF%D0%BE%D1%88%D0%B0%D0%B3%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE+%D0%BF%D1%80%D0%B8%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F"></div></div>
+
+
+
+<script>var rocket_beacon_data = {"ajax_url":"https:\/\/malinika.ru\/wp-admin\/admin-ajax.php","nonce":"33937d883a","url":"https:\/\/malinika.ru\/morozhenoe-v-domashnih-usloviyah-10-prostyh-retseptov-s-foto-poshagovogo-prigotovleniya","is_mobile":false,"width_threshold":1600,"height_threshold":700,"delay":500,"debug":null,"status":{"atf":true,"lrc":true},"elements":"img, video, picture, p, main, div, li, svg, section, header, span","lrc_threshold":1800}</script><script data-name="wpr-wpr-beacon" src="https://malinika.ru/wp-content/plugins/wp-rocket/assets/js/wpr-beacon.min.js" async="" beacon-completed="true"></script>
+
+
+</body></html>

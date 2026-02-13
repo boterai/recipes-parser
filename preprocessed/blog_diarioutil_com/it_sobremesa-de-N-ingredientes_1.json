@@ -1,0 +1,12 @@
+{
+    "dish_name": "dessert con 3 ingredienti",
+    "description": "Un dessert veloce e pratico dal sapore affettuoso.",
+    "ingredients": "[{\"name\": \"yogurt naturale\", \"units\": \"tazza\", \"amount\": 1}, {\"name\": \"cocco grattugiato\", \"units\": \"cucchiai\", \"amount\": 3}, {\"name\": \"zucchero\", \"units\": \"cucchiai\", \"amount\": 1.5}]",
+    "instructions": "Mescolate bene lo yogurt e lo zucchero in una piccola ciotola. Mescolate fino a quando lo zucchero non si sarà sciolto completamente. Aggiungere il cocco grattugiato e mescolare al composto. Disporre in tazze o barattoli individuali. Lasciare riposare in frigorifero per almeno 15 minuti.",
+    "category": "Dessert",
+    "prep_time": "5 minutes",
+    "cook_time": null,
+    "total_time": "15 minutes",
+    "notes": "Puoi guarnire con un po' di cocco. Varianti: aggiungere cannella, scorza di limone, frutta tritata.",
+    "tags": "dessert, facile, 3 ingredienti"
+}

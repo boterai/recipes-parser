@@ -1,0 +1,12 @@
+{
+    "dish_name": "Burger",
+    "description": "Nem og ligetil opskrift på traditionelle burgers med sprød bacon, saftige bøffer og smeltende ost.",
+    "ingredients": "[{\"name\": \"hakket oksekød\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"olie og/eller smør\", \"units\": null, \"amount\": null}, {\"name\": \"burgerboller\", \"units\": null, \"amount\": 4}, {\"name\": \"ost\", \"units\": \"skiver\", \"amount\": 4}, {\"name\": \"bacon\", \"units\": \"skiver\", \"amount\": 8}, {\"name\": \"salathoved\", \"units\": null, \"amount\": \"½-1\"}, {\"name\": \"løg\", \"units\": null, \"amount\": 1}, {\"name\": \"tomater\", \"units\": null, \"amount\": 2}, {\"name\": \"syltede agurker\", \"units\": null, \"amount\": 4}, {\"name\": \"Tomatketchup\", \"units\": null, \"amount\": null}, {\"name\": \"Sennep\", \"units\": null, \"amount\": null}, {\"name\": \"Salt\", \"units\": null, \"amount\": null}, {\"name\": \"peber\", \"units\": null, \"amount\": null}]",
+    "instructions": "Form farsen til fire flade, lige store bøffer. Hak bøfferne på begge sider med en kniv. Drys med salt og peber. Tænd ovnen på 175° C. Steg bacon på panden. Læg bacon på et stykke køkkenrulle. Brun og steg bøfferne. Steg bøfferne til de er gennemstegte. Læg en skive ost oven på bøfferne. Lun burgerbollerne i ovnen. Skyl salaten og skær løget og tomaterne. Smør burgerbollerne med ketchup og sennep. Læg salat, bøf, løg, tomater, agurk og overbollen sammen.",
+    "category": "aftensmad",
+    "prep_time": "20 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Du kan lave dine egne hjemmelavede burgerboller.",
+    "tags": "burger, aftensmad, amerikansk"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Frigarui de Pui Bang Bang",
+    "description": "Aceste frigarui de pui Bang Bang combină perfect carnea suculentă de pui cu un sos cremos și picant.",
+    "ingredients": "[{\"name\": \"pulpe sau piept de pui dezosate fără piele\", \"units\": \"g\", \"amount\": 680}, {\"name\": \"ulei de măsline\", \"units\": \"lingură\", \"amount\": 1}, {\"name\": \"pudră de usturoi\", \"units\": \"linguriță\", \"amount\": 1}, {\"name\": \"paprika afumată\", \"units\": \"linguriță\", \"amount\": 1}, {\"name\": \"sare și piper\", \"units\": null, \"amount\": null}, {\"name\": \"maioneză\", \"units\": \"ml\", \"amount\": 120}, {\"name\": \"sriracha fără zahăr\", \"units\": \"lingi\", \"amount\": 2}, {\"name\": \"oțet de orez\", \"units\": \"lingură\", \"amount\": 1}, {\"name\": \"eritritol pudră\", \"units\": \"lingură\", \"amount\": 1}, {\"name\": \"pudră de usturoi\", \"units\": \"linguriță\", \"amount\": 1}]",
+    "instructions": "1. Marinarea Puiului: Combină bucățile de pui cu uleiul de măsline, pudra de usturoi, paprika afumată, sare și piper într-un bol mare. Acoperă și refrigerează pentru cel puțin 30 de minute. 2. Pregătirea Frigăruilor: Înfige bucățile de pui marinate pe frigărui. 3. Gătirea la Grătar: Preîncălzește un grătar și gătește frigăruile timp de 4-5 minute pe fiecare parte. 4. Prepararea Sosului: Amestecă toate ingredientele pentru sosul bang bang. 5. Servirea: Toarnă sosul peste frigăruile de pui gătite sau servește-l separat.",
+    "category": "Feluri Principale",
+    "prep_time": "10 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "20 minutes",
+    "notes": "Pentru un gust mai picant, adăugați mai multă sriracha. Pulpele de pui oferă mai multă suculență.",
+    "tags": "low-carb, pui, grătar, sos picant"
+}

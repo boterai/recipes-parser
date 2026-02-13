@@ -1,0 +1,12 @@
+{
+    "dish_name": "ごぼうの唐揚げ",
+    "description": "ごぼうや片栗粉を使った人気の副菜レシピです。",
+    "ingredients": "[{\"name\": \"ごぼう\", \"units\": \"本（150g）\", \"amount\": \"1\"}, {\"name\": \"片栗粉\", \"units\": null, \"amount\": \"大さじ1\"}, {\"name\": \"すり白ごま\", \"units\": null, \"amount\": \"大さじ1\"}, {\"name\": \"うま味調味料「味の素®」\", \"units\": \"ふり\", \"amount\": \"8\"}, {\"name\": \"「瀬戸のほんじお」\", \"units\": null, \"amount\": \"少々\"}, {\"name\": \"「AJINOMOTO サラダ油」\", \"units\": null, \"amount\": \"適量\"}]",
+    "instructions": "1. ごぼうは泥を落としてよく洗い、皮ごと５ｃｍ長さの短冊切りにし、水にさらしてアクを抜き、水気をよくきって片栗粉をまぶす。2. フライパンに多めの油を熱し、（１）のごぼうを入れて揚げ焼きにする。3. ごぼうが熱いうちに混ぜ合わせたＡをまぶす。",
+    "category": null,
+    "prep_time": "15 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Surdeig",
+    "description": "Oppskrift for å lage din egen surdeig.",
+    "ingredients": "[{\"name\": \"Grov sammalt rug\", \"units\": \"grams\", \"amount\": 100}, {\"name\": \"Rosiner økologiske\", \"units\": \"grams\", \"amount\": 100}, {\"name\": \"Vann\", \"units\": null, \"amount\": null}, {\"name\": \"Siktet hvetemel\", \"units\": null, \"amount\": null}]",
+    "instructions": "Dag 1: Bløtlegg rosinene i et kvarter. Sil av og ta vare på rosinvannet. Mål opp 100 gram grov sammalt rug og 68 ml/gram av rosinvannet. Bland sammen til en deig. Dag 2: Etter 24 timer, kaster du halvparten av surdeigen, og mater den med 100 gram grov rug og 68 ml/gram vann. Dag 3: Hvis surdeigen viser aktivitet, deler du den i to. Den ene halvdelen mater du med grov rug og vann, den andre med siktet hvetemel og vann. Dag 4 og utover: Fortsett å mate surdeigen som beskrevet.",
+    "category": "Brød og småbakst",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Surdeigen kan oppbevares i kjøleskapet og bør mates minst en gang i uken.",
+    "tags": "surdeig, baking, brød"
+}

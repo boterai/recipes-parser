@@ -1,0 +1,12 @@
+{
+    "dish_name": "Easy Shrimp Tacos Flavor",
+    "description": "These shrimp tacos combine tender, seasoned shrimp with fresh shredded cabbage and creamy, spicy sauce.",
+    "ingredients": "[{\"name\": \"Greek yogurt\", \"units\": \"ml\", \"amount\": 120}, {\"name\": \"fresh lime juice\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"sriracha sauce\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"garlic powder\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"smoked paprika\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"water\", \"units\": null, \"amount\": null}, {\"name\": \"large shrimp\", \"units\": \"g\", \"amount\": 450}, {\"name\": \"smoked paprika\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"garlic powder\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"dried oregano\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"onion powder\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"black pepper\", \"units\": null, \"amount\": null}, {\"name\": \"olive oil\", \"units\": \"ml\", \"amount\": 15}, {\"name\": \"small corn or flour tortillas\", \"units\": \"pieces\", \"amount\": 8}, {\"name\": \"small red or green cabbage\", \"units\": \"head\", \"amount\": 0.5}, {\"name\": \"avocado\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"fresh cilantro\", \"units\": \"g\", \"amount\": 15}, {\"name\": \"crumbled Cotija cheese\", \"units\": \"g\", \"amount\": 30}]",
+    "instructions": "Step 01: In a bowl, mix Greek yogurt, lime juice, sriracha, garlic powder, smoked paprika, and salt. Adjust consistency with water if too thick. Step 02: Season shrimp with smoked paprika, garlic powder, oregano, onion powder, salt, and black pepper. Step 03: Heat olive oil in a skillet over medium-high heat and fry shrimp for about 2 minutes on each side until pink and opaque. Step 04: Warm tortillas in a separate skillet or microwave until soft and warm. Step 05: On each tortilla, place cooked shrimp, then add shredded cabbage, avocado slices, cilantro, Cotija cheese, and drizzle with the spicy sauce.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "30 minutes",
+    "notes": "For added flavor, you can marinate the shrimp for 10 minutes before frying.",
+    "tags": "shrimp, tacos, Mexican, easy, quick"
+}

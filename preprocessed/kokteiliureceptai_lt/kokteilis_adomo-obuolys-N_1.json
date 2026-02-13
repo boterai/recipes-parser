@@ -1,0 +1,12 @@
+{
+    "dish_name": "Adomo obuolys",
+    "description": null,
+    "ingredients": "[{\"name\": \"Arbata\", \"units\": \"ml\", \"amount\": 60}, {\"name\": \"Nefiltruotos obuolių sultys\", \"units\": \"ml\", \"amount\": 90}, {\"name\": \"Medus\", \"units\": \"arbat. šaukštel.\", \"amount\": 2}, {\"name\": \"Citrinų sultys\", \"units\": \"ml\", \"amount\": 10}, {\"name\": \"Cinamono lazdelė\", \"units\": \"vnt.\", \"amount\": 1}, {\"name\": \"Obuolio grežinėlis\", \"units\": \"vnt.\", \"amount\": 1}]",
+    "instructions": "Pašildykite visus ingridientus puode, bet neužvirinkite. Patiekite airiškos kavos taurėje. Kokteilį papuoškite cinamono lazdele ir obuolio griežinėliu.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

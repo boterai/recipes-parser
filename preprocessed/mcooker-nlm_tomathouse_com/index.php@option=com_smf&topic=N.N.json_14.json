@@ -1,0 +1,12 @@
+{
+    "dish_name": "Courgettemuffins met tomaat en harde kaas",
+    "description": "Muffins gemaakt van courgette, tomaat en harde kaas, gebakken in de oven.",
+    "ingredients": "[{\"name\": \"jonge courgette\", \"units\": \"stuks\", \"amount\": \"1-2\"}, {\"name\": \"tomaten\", \"units\": \"stuks\", \"amount\": \"2\"}, {\"name\": \"ei\", \"units\": \"stuks\", \"amount\": \"3\"}, {\"name\": \"zout\", \"units\": \"theelepel\", \"amount\": \"0.5\"}, {\"name\": \"grond zwarte peper\", \"units\": null, \"amount\": \"smaak\"}, {\"name\": \"meel\", \"units\": \"g\", \"amount\": \"100\"}, {\"name\": \"bakpoeder\", \"units\": \"theelepel\", \"amount\": \"1\"}, {\"name\": \"harde kaas\", \"units\": \"g\", \"amount\": \"150-200\"}]",
+    "instructions": "Courgette drie op een grove rasp. Snijd de tomaten in kleine blokjes. Snijd de kaas in plakjes en zet apart. Klop de eieren met gemalen peper en zout schuimig. Combineer tomaten, courgette en giet de losgeklopte eieren eruit. Meng de bloem met bakpoeder, voeg het toe aan het ei en de groentemassa. Neem muffinvormpjes en smeer ze in met olie. Giet de helft van het deeg in de helft van de vormpjes. Leg de stukjes kaas in elke vorm. Giet het resterende 1/2 deel van het deeg op de kaas. Zet de vormen in een oven die 25-30 minuten voorverwarmd is tot 180 °. Bak tot ze gaar zijn.",
+    "category": "Bakkerijproducten",
+    "prep_time": null,
+    "cook_time": "25-30 minutes",
+    "total_time": null,
+    "notes": "Heel eenvoudig, snel en handig! Best betaalbare producten! Zelfs kinderen kunnen het!",
+    "tags": "muffins, courgette, tomaat, kaas"
+}

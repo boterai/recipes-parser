@@ -1,0 +1,12 @@
+{
+    "dish_name": "Olla Podrida",
+    "description": "Tradicional guiso español lleno de historia y sabor, compuesto principalmente por carnes, legumbres y verduras.",
+    "ingredients": "[{\"name\": \"cerdo\", \"units\": null, \"amount\": null}, {\"name\": \"tocino\", \"units\": null, \"amount\": null}, {\"name\": \"chorizo\", \"units\": null, \"amount\": null}, {\"name\": \"morcilla\", \"units\": null, \"amount\": null}, {\"name\": \"carne de vacuno\", \"units\": null, \"amount\": null}, {\"name\": \"garbanzos\", \"units\": null, \"amount\": null}, {\"name\": \"cebolla\", \"units\": null, \"amount\": null}, {\"name\": \"puerro\", \"units\": null, \"amount\": null}, {\"name\": \"zanahoria\", \"units\": null, \"amount\": null}, {\"name\": \"repollo\", \"units\": null, \"amount\": null}, {\"name\": \"sal\", \"units\": null, \"amount\": null}, {\"name\": \"pimienta\", \"units\": null, \"amount\": null}, {\"name\": \"pimentón dulce o picante\", \"units\": null, \"amount\": null}]",
+    "instructions": "Colocar las carnes en una olla grande con agua fría para su cocción lenta. Cocinar a fuego lento durante al menos tres horas, añadiendo los garbanzos una vez que la carne esté parcialmente cocida. Incorporar las verduras elegidas en el momento adecuado.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "3 hours",
+    "total_time": null,
+    "notes": "Es esencial elegir ingredientes frescos y de calidad. La cocción lenta es clave para lograr un buen sabor.",
+    "tags": "guiso, español, tradicional"
+}

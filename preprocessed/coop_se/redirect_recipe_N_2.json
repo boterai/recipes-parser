@@ -1,0 +1,12 @@
+{
+    "dish_name": "One pot pasta med köttfärssås",
+    "description": "Köttfärssås med vita bönor och pasta som lagas som en one pot, allt i en panna så att pastan suger upp alla goda smaker.",
+    "ingredients": "[{\"name\": \"nötfärs\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"gul lök\", \"units\": \"st\", \"amount\": 1}, {\"name\": \"olivolja\", \"units\": \"msk\", \"amount\": 1}, {\"name\": \"salt\", \"units\": \"tsk\", \"amount\": 1}, {\"name\": \"svartpeppar\", \"units\": \"tsk\", \"amount\": 0.5}, {\"name\": \"vitlöksklyfta\", \"units\": \"st\", \"amount\": 1}, {\"name\": \"morötter\", \"units\": \"st\", \"amount\": 2}, {\"name\": \"krossade tomater\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"vita bönor i tomatsås\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"vatten\", \"units\": \"dl\", \"amount\": 7}, {\"name\": \"torkad timjan eller oregano\", \"units\": \"tsk\", \"amount\": 2}, {\"name\": \"köttbuljongtärning\", \"units\": \"st\", \"amount\": 1}, {\"name\": \"pasta\", \"units\": \"g\", \"amount\": 320}]",
+    "instructions": "Stek färs och lök i olja i en stor stekpanna tills färsen är genomstekt. Salta och peppra. Tillsätt vitlök och morötter och stek under ytterligare några minuter. Häll på krossade tomater, hälften av vattnet och timjan eller oregano och buljongtärningen. Låt småputtra ca 5 min. Tillsätt pastan, vita bönor i tomatsås och resten av vattnet i köttfärssåsen. Låt sjuda under lock tills pastan är al dente. Späd med mer vatten om det behövs. Smaka av med salt och peppar.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "25 min",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

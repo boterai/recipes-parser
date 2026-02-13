@@ -1,0 +1,12 @@
+{
+    "dish_name": "Klassinen pilaf",
+    "description": "Klassinen pilaf on runsas ja runsaan makuinen ruokalaji, jota valmistetaan monissa perheissä.",
+    "ingredients": "[{\"name\": \"valkoinen riisi\", \"units\": \"kiloa\", \"amount\": 1}, {\"name\": \"Lampaanliha\", \"units\": \"kiloa\", \"amount\": 1}, {\"name\": \"Porkkana\", \"units\": \"kiloa\", \"amount\": 1}, {\"name\": \"Sipulisipulit\", \"units\": \"asiat\", \"amount\": 4}, {\"name\": \"Valkosipuli\", \"units\": \"päät\", \"amount\": 2}, {\"name\": \"Chili\", \"units\": \"asiat\", \"amount\": 2}, {\"name\": \"Kasviöljy\", \"units\": \"millilitraa\", \"amount\": 300}, {\"name\": \"Happomarjapensas\", \"units\": \"lusikallista\", \"amount\": 1}, {\"name\": \"Zira\", \"units\": \"lusikallista\", \"amount\": 1}, {\"name\": \"Korianteri\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"Suola\", \"units\": \"maku\", \"amount\": null}]",
+    "instructions": "Pese määritetty määrä riisiä useita kertoja kylmässä vedessä. Teemme tämän, kunnes siitä tulee täysin läpinäkyvä. Pesemme lampaan ja leikkaamme sen paloiksi. Leikkaamme sipulin puolirenkaiksi ja porkkanat kuutioiksi. Jätä yksi sipuli kokonaiseksi. Poistamme valkosipulin päistä vain yläkuoren. Kuumenna kasviöljy kattilassa. Aseta kuorittu kokonainen sipuli tähän. Paista tummaksi ja ota pois kattilasta. Seuraavaksi jatkamme zirvakin - pilafin perustan - valmistelua. Paista hienonnettua sipulia kullanruskeaksi. Tämä kestää noin 5-7 minuuttia. Lisää sipulin joukkoon karitsan paloja. Keitä noin 10-15 minuuttia koko ajan sekoittaen. Lisää porkkanat, murskattu kumina, korianteri ja barberry. Suolaa maun mukaan. Paista noin 10 minuuttia. Lisää kuivatut kuumat paprikapalot, täytä kaikki 2 cm vedellä ja keitä tunnin ajan. Kaada joukkoon pesty riisi ja levitä tasaiseksi kerrokseksi. Täytä kaikki vedellä 3 cm riisin yläpuolella ja lisää lämpöä. Kun vesi on imeytynyt, vähennä lämpöä. Laita valkosipulin päät riisin joukkoon, sulje kansi ja hauduta, kunnes riisi on valmis. Voit tehdä riisiin syviä puhkaisuja, jotta höyry pääsee poistumaan. Kestää vielä noin 30 minuuttia, ennen kuin se on täysin valmis. Klassinen Uzbekistanin pilaf kattilassa liedellä on valmis. Laita lautasille ja tarjoa runsas ruokapöytä!",
+    "category": "Main Course",
+    "prep_time": "0 minutes",
+    "cook_time": "140 minutes",
+    "total_time": "140 minutes",
+    "notes": null,
+    "tags": "pilaf, uzbek, main course"
+}

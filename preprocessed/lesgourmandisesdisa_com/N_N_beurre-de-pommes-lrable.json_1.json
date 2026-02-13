@@ -1,0 +1,12 @@
+{
+    "dish_name": "Beurre de Pommes à l'Érable",
+    "description": "Une excellente recette de beurre de pommes au sirop d'érable, parfaite pour les paniers gourmands de Noël.",
+    "ingredients": "[{\"name\": \"pommes\", \"units\": \"pieces\", \"amount\": 8}, {\"name\": \"sirop d'érable\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"beurre\", \"units\": \"cup\", \"amount\": 0.5}]",
+    "instructions": "Mélanger le tout dans une casserole et faire cuire à feu moyen sur la cuisinière pendant environ 30 à 45 minutes, jusqu'à ce que les pommes soient tendres et se défassent. Réduire en purée au mélangeur. Verser dans des pots stérilisés ou simplement congeler. Conserver au réfrigérateur.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "30-45 minutes",
+    "total_time": null,
+    "notes": "Le sirop de catégorie B peut convenir pour un goût plus prononcé.",
+    "tags": "beurre de pommes, erable, noel, paniers gourmands"
+}

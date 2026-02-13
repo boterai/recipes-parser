@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tortilla de Patatas",
+    "description": "Un clásico de la cocina española, la tortilla de patatas es un plato sencillo pero delicioso que combina patatas, huevos y cebolla.",
+    "ingredients": "[{\"name\": \"Patatas\", \"units\": null, \"amount\": null}, {\"name\": \"Huevos\", \"units\": null, \"amount\": null}, {\"name\": \"Cebolla\", \"units\": null, \"amount\": null}, {\"name\": \"Aceite de oliva\", \"units\": null, \"amount\": null}, {\"name\": \"Sal\", \"units\": null, \"amount\": null}]",
+    "instructions": "Pelar y cortar las patatas, freírlas en aceite de oliva, batir los huevos y mezclarlos con las patatas, cocinar a fuego medio-bajo y voltear la tortilla.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Seleccionar ingredientes de calidad es crucial para el éxito de la tortilla. Experimentar con el punto de cocción y técnicas de volteo puede mejorar el resultado final.",
+    "tags": "tortilla, patatas, español, receta"
+}

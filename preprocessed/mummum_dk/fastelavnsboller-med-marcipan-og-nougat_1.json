@@ -1,0 +1,12 @@
+{
+    "dish_name": "Fastelavnsboller med marcipan og nougat",
+    "description": "Opskrift på de lækreste fastelavnsboller med marcipan og nougat. Gammeldags fastelavnsboller med fyld af marcipan og nougat.",
+    "ingredients": "[{\"name\": \"mælk\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"gær\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"salt\", \"units\": \"tsk\", \"amount\": 1}, {\"name\": \"æg\", \"units\": \"stk\", \"amount\": 1}, {\"name\": \"sukker\", \"units\": \"spsk\", \"amount\": 2}, {\"name\": \"smør\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"hvedemel\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"smør\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"marcipan\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"sukker\", \"units\": \"spsk\", \"amount\": 4}, {\"name\": \"nougat\", \"units\": \"g\", \"amount\": 75}, {\"name\": \"æg\", \"units\": \"stk\", \"amount\": 1}, {\"name\": \"nougat\", \"units\": \"g\", \"amount\": 75}, {\"name\": \"pistacienødder\", \"units\": \"g\", \"amount\": 10}]",
+    "instructions": "Fyld: I en skål blandes marcipan, sukker og blødt smør sammen med en gaffel til massen er samlet. Dej: Tag smør ud af køleskabet, så det kan blive blødt. Lun mælken, så det bliver lillefingervarmt. Rør gær ud i mælken. Tilsæt sammenpisket æg, salt, sukker og blødt smør. Tilsæt hvedemel lidt efter lidt og ælt dejen godt sammen. Sæt den til hævning et lunt sted i 1 time. Slå dejen ned og rul den ud. Fordel remoncen ud på alle firkanter. Skær nougat i tern og fordel det på remoncen. Saml enderne. Placer bollerne med lukningen nedad på en bageplade. Lad dem efterhæve i 45 minutter. Tænd ovnen på 200 grader. Pensl bollerne med et sammenpisket æg. Bag i ca. 12-15 minutter. Smelt nougat og lad det afkøle. Sæt bollerne til afkøling. Smør nougat på toppen og drys med hakkede pistacienødder.",
+    "category": "Dessert",
+    "prep_time": "1 hour and 30 minutes",
+    "cook_time": "1 hour",
+    "total_time": "2 hours and 30 minutes",
+    "notes": "En blød bolle godt med fyld, som kun smager bedre sammen med en god kop kaffe.",
+    "tags": "Pistacienødder, Sukker, Nougat, Hvedemel, Marcipan, Tørvarer, Gær, Kølevarer, Mælk, Smør, Æg, Fastelavn, Vegetarisk, Forår"
+}

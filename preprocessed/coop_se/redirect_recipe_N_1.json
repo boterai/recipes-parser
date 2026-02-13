@@ -1,0 +1,12 @@
+{
+    "dish_name": "One pot med kyckling och ris",
+    "description": "En mustig allt-i-ett-gryta med kyckling, ris, paprika, rödlök och oliver. Perfekt som både bjudmat och lite lyxigare vardagsmiddag.",
+    "ingredients": "[{\"name\": \"kycklinglårfilé\", \"units\": \"g\", \"amount\": 600}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"olivolja\", \"units\": \"matskedar\", \"amount\": 2}, {\"name\": \"tomatpuré\", \"units\": \"matskedar\", \"amount\": 2}, {\"name\": \"sambal oelek\", \"units\": \"tsk\", \"amount\": 2}, {\"name\": \"röd paprika\", \"units\": null, \"amount\": 1}, {\"name\": \"rödlök\", \"units\": null, \"amount\": 1}, {\"name\": \"vitlöksklyftor\", \"units\": null, \"amount\": 2}, {\"name\": \"hönsbuljongtärning eller grönsaksbuljongtärning\", \"units\": null, \"amount\": 1}, {\"name\": \"honung\", \"units\": \"tsk\", \"amount\": 2}, {\"name\": \"gröna oliver\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"basmatiris\", \"units\": \"dl\", \"amount\": 3}, {\"name\": \"vatten\", \"units\": \"dl\", \"amount\": 6}]",
+    "instructions": "Salta kycklingen. Bryn 5 min i olja, tomatpuré och sambal oelek i en stor djup panna med lock. Tillsätt paprika, lök och vitlök. Låt få lite färg och tillsätt sedan buljongtärning, honung, oliver, ris och vatten och sätt på locket. Sänk värmen och låt koka på svag värme ca 25 min. Riset ska vara mjukt och kycklingen genomstekt.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "35 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

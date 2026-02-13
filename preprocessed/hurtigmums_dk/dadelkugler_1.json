@@ -1,0 +1,12 @@
+{
+    "dish_name": "Dadelkugler",
+    "description": "Opskrift på dadelkugler med kokos, lakrids eller hindbær.",
+    "ingredients": "[{\"name\": \"friske dadler\", \"units\": \"gram\", \"amount\": 500}, {\"name\": \"kokosmel\", \"units\": \"g\", \"amount\": 70}, {\"name\": \"ren kakao\", \"units\": \"g\", \"amount\": 40}, {\"name\": \"vaniljesukker\", \"units\": \"tsk\", \"amount\": 1}, {\"name\": \"ristede hakkede mandler\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"havregryn\", \"units\": \"dl\", \"amount\": \"1-2\"}, {\"name\": \"Romessens\", \"units\": null, \"amount\": \"efter behov\"}, {\"name\": \"chiafrø\", \"units\": \"spsk\", \"amount\": \"1-2\"}, {\"name\": \"kokosolie\", \"units\": \"spsk\", \"amount\": \"1\"}, {\"name\": \"kokosmel, lakridspulver og/eller frysetørrede hindbær\", \"units\": null, \"amount\": \"til at rulle kuglerne i\"}]",
+    "instructions": "Bland alle ingredienser undtagen det til udenpå dadelkuglerne. Havregryn tilsættes således at det kan få massen til at samles. Brug gerne en minihakker, blender eller lignende til at få massen ensartet og lækker. Sæt massen på køl i minimum en time. Form kuglerne, og rul dadelkugler i kokos, lakrids eller hindbær.",
+    "category": "Dessert",
+    "prep_time": "1 hour",
+    "cook_time": null,
+    "total_time": "1 hour 15 minutes",
+    "notes": "Opbevaring af dadelkugler: Hold dem kølige eventuelt i køleskabet eller et andet køligt sted, så holder de sig bedst, og så smager de også lækkert, når de er kolde. De burde kunne holde sig i 2-3 uger i køleskabet.",
+    "tags": "Dadelkugler, Dessert, Sund snack"
+}

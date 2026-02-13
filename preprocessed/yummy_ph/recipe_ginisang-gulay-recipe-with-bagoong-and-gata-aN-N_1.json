@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ginisang Gulay with Bagoong and Gata",
+    "description": "This makes a simple yet super tasty veggie dish.",
+    "ingredients": "[{\"name\": \"cooking oil\", \"units\": \"tablespoons\", \"amount\": 3}, {\"name\": \"Garlic\", \"units\": \"cloves\", \"amount\": 4}, {\"name\": \"red onion\", \"units\": \"medium\", \"amount\": 1}, {\"name\": \"string beans (sitaw)\", \"units\": \"pieces\", \"amount\": 6}, {\"name\": \"coconut milk\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"okra\", \"units\": \"to 8 pieces\", \"amount\": 6}, {\"name\": \"talong (eggplant)\", \"units\": \"medium\", \"amount\": 1}, {\"name\": \"red bell pepper\", \"units\": \"Small\", \"amount\": 1}, {\"name\": \"shrimp paste (bagoong alamang)\", \"units\": \"tablespoons\", \"amount\": 1.5}, {\"name\": \"ground black pepper\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"red chili\", \"units\": null, \"amount\": 1}]",
+    "instructions": "Heat oil in a wok. Sauté garlic and onion. Continue to cook until the onions are soft. Add the sitaw. Continue to sauté for 3 minutes. Pour the coconut milk into the cooking pot. Let come to a boil. Cover the pot and then simmer for 10 minutes. Add the okra, and eggplant. Stir and cook for 8 minutes. Then add the bell pepper. Stir in the shrimp paste and ground black pepper. Cook for 5 minutes. Transfer to a serving bowl. Serve hot.",
+    "category": "Side Dishes",
+    "prep_time": "20 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "50 minutes",
+    "notes": "The ginisang gulay can be made up of other vegetables, too, if you’re not keen on the mix that is listed here! Swap out the sitaw for green peas or Baguio beans. Add carrots or use that as a replacement for the bell peppers. You can also add a can of sweet kernel corn to this veggie mix, a great idea since it marries well with the gata and the bagoong, too.",
+    "tags": "filipino, vegetable, stir-fry, easy recipe"
+}

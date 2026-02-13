@@ -1,0 +1,12 @@
+{
+    "dish_name": "ぶりしゃぶ鍋",
+    "description": "脂がのったとろける美味しさのぶりしゃぶ鍋のレシピ。",
+    "ingredients": "[{\"name\": \"水\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"昆布\", \"units\": \"cm\", \"amount\": \"10-15\"}, {\"name\": \"酒\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"ゆずこしょう\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"みりん\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"しょうゆ\", \"units\": \"tablespoon\", \"amount\": 0.5}, {\"name\": \"大根おろし\", \"units\": null, \"amount\": null}, {\"name\": \"酒\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"甜麺醤\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"豆板醤\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"砂糖\", \"units\": \"teaspoon\", \"amount\": 0.25}, {\"name\": \"ごま油\", \"units\": null, \"amount\": null}]",
+    "instructions": "鍋にたっぷりの水を入れ、昆布と酒を加えて中火にかけ、沸騰したら中火弱～弱火にする。つけだれを作るために、材料を混ぜ合わせる。",
+    "category": "鍋料理",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "ぶりしゃぶには、たっぷり脂がのった腹身を選ぶことが重要です。",
+    "tags": "鍋, 魚, 冬, レシピ"
+}

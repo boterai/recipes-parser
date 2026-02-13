@@ -1,0 +1,12 @@
+{
+    "dish_name": "Rehevä munakas",
+    "description": "Pörröinen munakas on ihanteellinen ravitsevaksi aamiaiseksi tai kevyeksi illalliseksi.",
+    "ingredients": "[{\"name\": \"Kananmuna\", \"units\": \"kpl\", \"amount\": 3}, {\"name\": \"Lehmänmaito\", \"units\": \"millilitraa\", \"amount\": 150}, {\"name\": \"voita\", \"units\": \"grammaa\", \"amount\": 30}, {\"name\": \"Suola\", \"units\": \"puristaa\", \"amount\": 2}]",
+    "instructions": "Ota munat etukäteen jääkaapista ja anna niiden lämmetä huoneenlämpöiseksi. Mittaamme tarvittavan määrän maitoa, jonka rasvapitoisuuden määritämme itsenäisesti omien mieltymystemme mukaan. Pesemme lämmitetyt munat ja pyyhimme kuivaksi. Laita isoon astiaan. Kaada joukkoon maito ja lisää suolaa maun mukaan. Lisää halutessasi suosikkimausteitasi. Sekoita ainekset huolellisesti vispilällä. Laita paistinpannu tulelle ja kuumenna kohtalaisella liekillä. Laita sitten voi kuumalle pinnalle ja sulata nesteeksi. Levitä öljy pohjalle ja sivuille. Kaada munakasseos varovasti joukkoon samalla kun minimoi lämpö. Peitä kannella ja keitä munakasta 10-15 minuuttia, kunnes munakasseos on jähmettynyt hyvin. Määritetyn ajan kuluttua sammuta lämpö ja anna seistä 5 minuuttia avaamatta kantta. Jaa valmistettu kuohkea munakas osiin ja laita lautasille. Tarjoile heti ennen kuin ruokalaji jäähtyy.",
+    "category": "Toiset kurssit",
+    "prep_time": "20 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "35 minutes",
+    "notes": null,
+    "tags": "munakas, aamiainen, helppo"
+}

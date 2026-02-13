@@ -1,0 +1,12 @@
+{
+    "dish_name": "supă de pui",
+    "description": "Această rețetă de supă de pui îți aduce gustul copilăriei în farfurie, fără efort.",
+    "ingredients": "[{\"name\": \"carne de găină de țară\", \"units\": \"kg\", \"amount\": \"1\"}, {\"name\": \"ceapă albă mare\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"țelină\", \"units\": \"g\", \"amount\": \"150\"}, {\"name\": \"morcovi\", \"units\": \"g\", \"amount\": \"200\"}, {\"name\": \"rădăcină pătrunjel\", \"units\": \"g\", \"amount\": \"150\"}, {\"name\": \"sare\", \"units\": \"lingurițe\", \"amount\": \"2\"}, {\"name\": \"apă\", \"units\": \"L\", \"amount\": \"2.5-3\"}, {\"name\": \"piper\", \"units\": \"după gust\", \"amount\": null}, {\"name\": \"tăieței sau găluște\", \"units\": \"după preferință\", \"amount\": null}, {\"name\": \"pătrunjel tocat mărunt\", \"units\": null, \"amount\": null}]",
+    "instructions": "Pasul 1: Așezăm toate ingredientele (în afară de tăieței, piper și verdeață) în vasul de la slow cooker. Pasul 2: Se setează aparatul la 6 sau 7 ore pe funcția High. Timpul poate varia în funcție de tipul cărnii folosite, de aceea recomand ca, după 6 ore, să verificați dacă este gătită carnea sau nu. Continuați fierberea dacă mai este nevoie. Pasul 3: După fierbere, se scot legumele și carnea din supă. Pasul 4: Supa se strecoară ca să fie limpede. Pasul 5: În supă se adaugă tăieței fierți, legume tăiate mărunt sau chiar și bucăți de carne. Pasul 6: Supa se gustă și se drege cu sare și piper. Se adaugă și verdeața mărunțită și poftă bună!",
+    "category": "Supe și ciorbe",
+    "prep_time": "7h:20m",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "supă, pui, slow cooker"
+}

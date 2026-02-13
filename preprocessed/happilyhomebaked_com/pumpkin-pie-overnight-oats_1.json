@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pumpkin Pie Overnight Oats",
+    "description": "Pumpkin Pie Overnight Oats are a simple and tasty way to enjoy the cozy flavors of pumpkin pie without baking a whole dessert.",
+    "ingredients": "[{\"name\": \"rolled oats\", \"units\": \"cup\", \"amount\": \"½\"}, {\"name\": \"milk\", \"units\": \"cup\", \"amount\": \"½\"}, {\"name\": \"canned pumpkin puree\", \"units\": \"cup\", \"amount\": \"¼\"}, {\"name\": \"chia seeds\", \"units\": \"tbsp\", \"amount\": \"1\"}, {\"name\": \"maple syrup or honey\", \"units\": \"tbsp\", \"amount\": \"1\"}, {\"name\": \"pumpkin pie spice\", \"units\": \"tsp\", \"amount\": \"½\"}, {\"name\": \"vanilla extract\", \"units\": \"tsp\", \"amount\": \"¼\"}, {\"name\": \"salt\", \"units\": null, \"amount\": \"pinch\"}, {\"name\": \"whipped cream or coconut whipped cream\", \"units\": null, \"amount\": null}, {\"name\": \"chopped pecans or walnuts\", \"units\": null, \"amount\": null}, {\"name\": \"ground cinnamon\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. In a bowl or jar, add the rolled oats, milk, pumpkin puree, chia seeds, maple syrup, pumpkin pie spice, vanilla extract, and a pinch of salt. Stir everything together until well combined, making sure all the oats are coated. 2. Cover your bowl or jar with a lid or plastic wrap and place it in the refrigerator. Let the mixture soak for at least 4 hours, or overnight, so the oats absorb the liquids and become creamy. 3. In the morning, give the oats a good stir. If it feels too thick, add a splash of milk and stir again. Spoon the oats into your serving bowls or glasses. Top with a dollop of whipped cream, sprinkle chopped nuts on top, and finish with a light dusting of cinnamon. Enjoy your delicious pumpkin pie-flavored breakfast!",
+    "category": "Breakfast",
+    "prep_time": "5 minutes",
+    "cook_time": null,
+    "total_time": "4 hours",
+    "notes": "Store in an airtight container in the refrigerator for up to 3 days. Stir before eating and add a splash of milk if the oats have thickened.",
+    "tags": "pumpkin, oats, breakfast, fall"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gammeldags oksesteg",
+    "description": "Lækker mør oksesteg i slowcooker.",
+    "ingredients": "[{\"name\": \"gulerødder\", \"units\": null, \"amount\": 2}, {\"name\": \"løg\", \"units\": null, \"amount\": 2}, {\"name\": \"sellerisalt\", \"units\": \"tsk.\", \"amount\": \"1-2\"}, {\"name\": \"smør\", \"units\": \"g\", \"amount\": 15}, {\"name\": \"oksesteg\", \"units\": \"kg\", \"amount\": \"1-1½\"}, {\"name\": \"vand\", \"units\": \"l\", \"amount\": 0.5}, {\"name\": \"Fløde\", \"units\": null, \"amount\": null}, {\"name\": \"Kulør\", \"units\": null, \"amount\": null}, {\"name\": \"Salt\", \"units\": null, \"amount\": null}, {\"name\": \"peber\", \"units\": null, \"amount\": null}]",
+    "instructions": "Tænd slow cookeren på lav varme. Skræl gulerødderne, og pil løgene, og skær begge dele groft ud, og læg dem i bunden af slow cookeren. Drys med lidt sellerisalt. Brun smørret i en stegepande, og brun stegen hurtigt på alle sider – det tager ikke mere end et par minutter – og krydr den med salt og peber. Læg stegen oven på grøntsagerne, og drys også den med lidt sellerisalt. Kog panden af med noget af vandet, og hæld afkogningsvandet og resten af vandet ned i slow cookeren. Læg låg på, og sæt tiden til 7½ time. Tag stegen op af gryden, og hold den varm ved at pakke den ind i stanniol – den steger ikke videre og bliver ikke tør af det, når den er stegt ved så lav varme. Blend grøntsager og stegeskyen sammen, og bring det i kog i en gryde. Jævn med fløde, så sovsen får den rigtige tykkelse, og giv den lidt farve med et par dråber kulør. Smag til med salt og peber. Skær oksestegen i tykke skiver. Det kan godt være lidt svært, uden at det går i stykker, når kødet er så mørt.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "7 hours 30 minutes",
+    "total_time": "7 hours 30 minutes",
+    "notes": "Uanset, hvordan du tilbereder din gammeldags oksesteg, så skal kødet være så mørt, at det nærmest smelter på tungen.",
+    "tags": "slow cooker, oksesteg, hovedret"
+}

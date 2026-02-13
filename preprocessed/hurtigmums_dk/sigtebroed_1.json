@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sigtebrød",
+    "description": "Sigtebrød er en sjov ting, det er ikke mørkt brød, men det er heller ikke rigtig lyst brød.",
+    "ingredients": "[{\"name\": \"kærnemælk\", \"units\": \"dl\", \"amount\": 3}, {\"name\": \"gær\", \"units\": \"g\", \"amount\": 25}, {\"name\": \"honning\", \"units\": \"spsk.\", \"amount\": 2}, {\"name\": \"smør\", \"units\": \"g\", \"amount\": 15}, {\"name\": \"sigtemel\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"salt\", \"units\": \"tsk.\", \"amount\": 2}, {\"name\": \"knust fennikelfrø\", \"units\": \"tsk.\", \"amount\": 1}, {\"name\": \"brun kommen\", \"units\": \"spsk.\", \"amount\": 1}]",
+    "instructions": "Varm kærnemælken op i en gryde, så den bliver 37° C (fingervarm du ved). Smuldr gæren i den lune kærnemælk. Tilsæt honning og smør. Vej 450 g mel af, og bland salt, knuste fennikelfrø og kommen i. Tilsæt mel- og krydderiblandingen, og ælt det godt igennem – kan med fordel gøres i en røremaskine. Ælt i ca. 5-8 minutter. Tjek dejen. Den skal være smidig og let klæbende – uden at være for våd. Er den for våd, så tilsæt mere mel. Kom dejen i en form, der enten er beklædt med bagepapir, er af silikone eller andet slip-let-materiale eller er smurt med lidt smør. Lad dejen hæve, tildækket, et lunt sted i en halv times tid. Varm i mellemtiden ovnen op til 175° C, varmluft. Prik brødet med en gaffel, og pensl med vand. Sæt brødet i den forvarmede ovn og lad det bage i ca. 35-40 minutter, til det er gennembagt. Bank let på det. Lyder det hult, er det gennembagt. Lad brødet køle af på en rist. Det behøver ikke være helt koldt, før du smager på det. Lunt sigtebrød smager fantastisk.",
+    "category": "Brød",
+    "prep_time": "10 minutes",
+    "cook_time": "1 hour 10 minutes",
+    "total_time": "1 hour 20 minutes",
+    "notes": "Brødet kan holde sig i 3-4 dage, hvis du opbevarer det i en plasticpose ved stuetemperatur. Men brødet kan også fryses ned, og så kan det holde sig rigtig længe – i hvert fald mindst ½ år.",
+    "tags": "brød, sigtebrød, opskrift"
+}

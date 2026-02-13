@@ -1,0 +1,12 @@
+{
+    "dish_name": "Baltasis rusas",
+    "description": "Kokteilis, maišomas su degtine, kavos likeriu ir pienu.",
+    "ingredients": "[{\"name\": \"Degtinė\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"Kavos likeris\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"Šaltas pienas\", \"units\": \"ml\", \"amount\": 30}, {\"name\": \"Ledo kubeliai\", \"units\": \"pagal skonį\", \"amount\": null}]",
+    "instructions": "Į stiklinę įberkite norimą kiekį ledo kubelių. Užpilkite degtine, kavos likeriu ir pienu.",
+    "category": "ALKOHOLINIAI GĖRIMAI",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "\"Baltasis rusas\" yra labai panašus į \"Juodąjį rusą\", tik maišomas su pienu.",
+    "tags": "kokteilis, alkoholis, Baltasis rusas"
+}

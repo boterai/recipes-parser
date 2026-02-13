@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ječmena kaša",
+    "description": "Zdrav doručak kao ječmena kaša ključan je za održavanje dobrog zdravlja i blagostanja.",
+    "ingredients": "[{\"name\": \"ječam\", \"units\": \"šalica\", \"amount\": \"1\"}, {\"name\": \"voda\", \"units\": \"šalice\", \"amount\": \"2\"}, {\"name\": \"svježe ili sušeno voće\", \"units\": \"šalica\", \"amount\": \"1\"}, {\"name\": \"sjemenke\", \"units\": \"žlice\", \"amount\": \"2\"}, {\"name\": \"cimet\", \"units\": \"žličica\", \"amount\": \"1\"}, {\"name\": \"med\", \"units\": \"žlica\", \"amount\": \"1\"}]",
+    "instructions": "Isperite ječam pod tekućom vodom. U loncu prokuhajte vodu i dodajte žitaricu. Smanjite vatru, poklopite lonac i kuhajte smjesu dok žitarica ne omekša, otprilike 15-20 minuta. Nasjeckajte voće po želji. Kada je ječam kuhan, ocijedite ga i prebacite u posudu za serviranje. Dodajte nasjeckano voće, sjemenke i cimet. Dobro promiješajte. Prelijte kašu medom i poslužite ju dok je topla.",
+    "category": "Breakfast",
+    "prep_time": "5 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "25 minutes",
+    "notes": "Možete dodati malo bademovog mlijeka ili jogurta za kremastiju teksturu.",
+    "tags": "zdrav doručak, ječmena kaša, recepti"
+}

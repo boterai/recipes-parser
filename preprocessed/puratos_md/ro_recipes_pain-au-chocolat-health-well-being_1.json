@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pain Au Chocolat",
+    "description": "A recipe for making Pain Au Chocolat with a focus on health and well-being.",
+    "ingredients": "[{\"name\": \"Strong Flour\", \"units\": \"g\", \"amount\": 1000}, {\"name\": \"Water\", \"units\": \"g\", \"amount\": 630}, {\"name\": \"Salt\", \"units\": \"g\", \"amount\": 20}, {\"name\": \"Fresh Yeast\", \"units\": \"g\", \"amount\": 60}, {\"name\": \"Sugar\", \"units\": \"g\", \"amount\": 60}, {\"name\": \"Trimoline\", \"units\": \"g\", \"amount\": 40}, {\"name\": \"S500\", \"units\": \"g\", \"amount\": 10}, {\"name\": \"Sapore Baiota\", \"units\": \"g\", \"amount\": 30}, {\"name\": \"Belcolade CacaoPowder CP1Cacao-Trace\", \"units\": \"g\", \"amount\": 120}, {\"name\": \"Mimetic CL\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"Chocolate Filling\", \"units\": \"g\", \"amount\": 490}, {\"name\": \"Sugar Syrup\", \"units\": \"g\", \"amount\": 30}, {\"name\": \"Water\", \"units\": \"g\", \"amount\": 30}]",
+    "instructions": "1. Set aside 40g of cocoa powder and 40g of water. At the end of mixing, take out 450g of dough and mix with cocoa powder and water to create a darker shade of brown. Mix until 100%, flatten and keep until the end of lamination for the bicolor method. 2. Mixing: 5 minutes speed 1, 4 minutes speed 2. 3. Dough temperature: 16°C. 4. Cool to -18°C for 1 hour. 5. Lamination: 2 double folds (16 layers). Place the colored layer on top before cooling again to 4°C. 6. Scaling: 70 grams. 7. Cool to 4°C for 30 minutes. 8. Final lamination: Roll out to a block of 37cm width by 129cm length, make incisions with a grid cutter on the colored layer and cut rectangles of 18cm length by 8cm width. Insert 7g of chocolate filling, fold, insert another 7g and roll. 9. Final proofing: 2 hours at 31°C and 85% humidity. 10. Baking: Convection oven at 190°C top and bottom for 17 minutes.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "17 minutes",
+    "total_time": "2 hours 32 minutes",
+    "notes": null,
+    "tags": "pastry, chocolate, dessert"
+}

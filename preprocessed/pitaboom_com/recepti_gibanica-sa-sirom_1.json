@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gibanica sa sirom",
+    "description": "Gibanica sa sirom je jedno od najomiljenijih jela srpske kuhinje. Hrskave kore i bogat nadev od sira čine je neodoljivom kombinacijom jednostavnosti i ukusa.",
+    "ingredients": "[{\"name\": \"Domaćih tankih kora\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"Punomasnog belog sira\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"Jaja\", \"units\": \"kom\", \"amount\": 6}, {\"name\": \"Punomasnog jogurta\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"Kisele pavlake\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"Kisele vode\", \"units\": \"ml\", \"amount\": 150}, {\"name\": \"Ulja (suncokretovog)\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"Otopljenog maslaca\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"So\", \"units\": \"po ukusu\", \"amount\": null}, {\"name\": \"Praška za pecivo\", \"units\": \"g\", \"amount\": 6}]",
+    "instructions": "Korak 1: Umutiti jaja i sir. Korak 2: Dodati jogurt i pavlaku. Korak 3: Umešati ulje, maslac i kiselu vodu. Korak 4: Posoliti i dodati prašak za pecivo. Korak 5: Pripremiti tepsiju i osnovne kore. Korak 6: Gužvati, umačiti i slagati kore. Korak 7: Zatvoriti i premazati. Korak 8: Peći i poslužiti.",
+    "category": null,
+    "prep_time": "15 minuta",
+    "cook_time": "30 minuta",
+    "total_time": "45 minuta",
+    "notes": "Ako već praviš gibanicu gužvaru sa sirom, nemoj koristiti najjeftiniji sir iz akcije.",
+    "tags": "gibanica, srpska kuhinja, pita, sir"
+}

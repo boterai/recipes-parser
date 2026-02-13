@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pumpkin Chocolate Chip Cookies",
+    "description": "This recipe is fool proof and so easy that even young kids (with baking adult supervision!) can make.",
+    "ingredients": "[{\"name\": \"Spice Cake Mix\", \"units\": \"box\", \"amount\": \"1\"}, {\"name\": \"Pumpkin\", \"units\": \"small can (15 oz)\", \"amount\": \"1\"}, {\"name\": \"semisweet chocolate chips\", \"units\": \"cup\", \"amount\": \"1/2\"}]",
+    "instructions": "Preheat oven to 350F. Mix cake mix with pumpkin until well blended. Add chocolate chips and stir with spatula until evenly distributed in batter. Line a cookie sheet with parchment paper. Spoon batter, using a soup spoon, into small mounds and onto cookie sheet, leaving a couple of inches in between. Bake in preheated oven for 10-15 minutes or until golden on top and bottom. Sprinkle with powdered sugar before serving.",
+    "category": "Cookies",
+    "prep_time": null,
+    "cook_time": "10-15 minutes",
+    "total_time": null,
+    "notes": "Feel free to add extra chocolate chips. Too much chocolate….said no one EVER! Another sign that the cookies are done is that, when you gently touch them on top, they spring back. You can just use a fork to make these cookies. It’s that easy!",
+    "tags": null
+}

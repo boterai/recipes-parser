@@ -1,0 +1,12 @@
+{
+    "dish_name": "ボローニャ風ラザニア",
+    "description": "本格的なボローニャ風ラザニアのレシピで、手作りのパスタ生地と3種類のソースを使用した料理。",
+    "ingredients": "[{\"name\": \"薄力粉と強力粉\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"塩\", \"units\": \"g\", \"amount\": 3}, {\"name\": \"卵\", \"units\": \"個\", \"amount\": 2}, {\"name\": \"エキストラバージンオリーブオイル\", \"units\": \"g\", \"amount\": 5}, {\"name\": \"牛ひき肉\", \"units\": \"g\", \"amount\": 350}, {\"name\": \"塩\", \"units\": \"g\", \"amount\": 5}, {\"name\": \"にんにく\", \"units\": \"片\", \"amount\": 1}, {\"name\": \"玉ねぎ\", \"units\": \"個\", \"amount\": 0.5}, {\"name\": \"セロリ\", \"units\": \"本\", \"amount\": 1}, {\"name\": \"にんじん\", \"units\": \"本\", \"amount\": 0.5}, {\"name\": \"米油\", \"units\": \"大さじ\", \"amount\": 3.33}, {\"name\": \"薄力粉\", \"units\": \"g\", \"amount\": 5}, {\"name\": \"ローリエ\", \"units\": \"枚\", \"amount\": 1}, {\"name\": \"ローズマリー\", \"units\": \"枝\", \"amount\": 1}, {\"name\": \"トマトペースト\", \"units\": \"g\", \"amount\": 70}, {\"name\": \"赤ワイン\", \"units\": \"ml\", \"amount\": 300}, {\"name\": \"牛乳\", \"units\": \"ml\", \"amount\": 700}, {\"name\": \"ナツメグパウダー\", \"units\": null, \"amount\": null}, {\"name\": \"バター\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"薄力粉\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"ホールトマト缶\", \"units\": \"缶\", \"amount\": 1}, {\"name\": \"パルメザンチーズ\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"バジル\", \"units\": \"パック\", \"amount\": 1}, {\"name\": \"モッツァレラチーズ\", \"units\": \"g\", \"amount\": 145}, {\"name\": \"バター\", \"units\": null, \"amount\": null}, {\"name\": \"エキストラバージンオリーブオイル\", \"units\": \"大さじ\", \"amount\": 4}]",
+    "instructions": "1. ラザニアのパスタ生地を作る。2. ボロネーゼのソフリットを作る。3. ボロネーゼを作る。4. ベシャメルソースを作る。5. トマトソースを作る。6. ラザニアのパスタ生地を成形する。7. ラザニアのパスタ生地をゆでる。8. ラザニアを仕上げる。9. ラザニアを焼く。",
+    "category": "Main Course",
+    "prep_time": "60 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "90 minutes",
+    "notes": "市販のラザニア用パスタで代用する場合のアドバイスあり。",
+    "tags": "イタリアン, ラザニア, メインディッシュ"
+}

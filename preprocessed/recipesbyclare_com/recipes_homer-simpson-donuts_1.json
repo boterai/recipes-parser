@@ -1,0 +1,12 @@
+{
+    "dish_name": "Homer Simpson Donuts",
+    "description": "Classic Homer Simpson-style donuts made from scratch with yeasted dough and pink glaze.",
+    "ingredients": "[{\"name\": \"all-purpose flour\", \"units\": \"cups\", \"amount\": 3}, {\"name\": \"instant yeast\", \"units\": \"teaspoons\", \"amount\": 2.25}, {\"name\": \"granulated sugar\", \"units\": \"cups\", \"amount\": 0.25}, {\"name\": \"warm whole milk\", \"units\": \"cups\", \"amount\": 0.75}, {\"name\": \"unsalted butter\", \"units\": \"cups\", \"amount\": 0.25}, {\"name\": \"large eggs\", \"units\": \"units\", \"amount\": 2}, {\"name\": \"powdered sugar\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"milk\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"pink food coloring\", \"units\": \"drops\", \"amount\": 1}, {\"name\": \"funfetti sprinkles\", \"units\": \"cups\", \"amount\": 0.5}]",
+    "instructions": "1. In a large bowl, mix warm milk, yeast, and sugar. Let sit for 5 minutes until frothy. Add eggs, melted butter, and sifted flour. Knead until smooth and elastic, about 10 minutes by hand or 5 minutes with a mixer. 2. Cover the bowl with plastic wrap or a damp cloth. Let the dough rise in a warm place for 1-2 hours until it doubles in size. 3. Roll out the dough to 1/2-inch thickness. Use a round cutter (3 inches) to cut donuts and a smaller cutter (1 inch) for the centers. Place donuts on a lined baking sheet, cover, and let rise for 30-40 minutes. 4. Heat oil in a deep fryer or large pot to 350°F (175°C). Fry donuts in batches for 1-2 minutes per side until golden brown. Drain on paper towels. 5. Mix powdered sugar, milk, and pink food coloring to make the glaze. Dip each donut top into the glaze and sprinkle immediately with funfetti sprinkles. Let set on a wire rack.",
+    "category": "Sweet Treats",
+    "prep_time": "100 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "110 minutes",
+    "notes": "Best served fresh. Keep oil at steady temperature. Let cool before glazing.",
+    "tags": "donuts,sweet treats,Homer Simpson"
+}

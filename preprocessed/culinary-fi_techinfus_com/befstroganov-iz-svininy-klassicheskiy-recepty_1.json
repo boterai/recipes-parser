@@ -1,0 +1,12 @@
+{
+    "dish_name": "Klassinen porsaan stroganoff",
+    "description": "Klassinen porsaan stroganoff paistinpannussa kastikkeella on universaali ruokalaji runsaaseen ja maukkaaseen kotitekoiseen lounaaseen.",
+    "ingredients": "[{\"name\": \"Porsaan\", \"units\": \"kiloa\", \"amount\": \"⅔\"}, {\"name\": \"Sipulisipulit\", \"units\": \"asiat\", \"amount\": \"1\"}, {\"name\": \"Jauhot\", \"units\": \"lusikallista\", \"amount\": \"2\"}, {\"name\": \"smetana\", \"units\": \"lasit\", \"amount\": \"½\"}, {\"name\": \"Tomaattisose\", \"units\": \"tl\", \"amount\": \"1\"}, {\"name\": \"Suola\", \"units\": null, \"amount\": \"maku\"}, {\"name\": \"Jauhettu mustapippuri\", \"units\": null, \"amount\": \"maku\"}, {\"name\": \"Vesi\", \"units\": \"lasit\", \"amount\": \"1\"}, {\"name\": \"Kasviöljy\", \"units\": null, \"amount\": \"paistamista varten\"}]",
+    "instructions": "Poistamme luettelossa mainitut päätuotteet. Valitsemme sianlihan ilman rasvaa. Tavallinen luuton lihapala on ihanteellinen. Pesemme lihapalan hyvin, leikkaa se ensin ohuiksi viipaleiksi, kuten klassiset kyljykset. Seuraavaksi leikkaamme nämä viipaleet ohuiksi nauhoiksi. Pyrimme tekemään kaikista palasista saman paksuisia, jotta ne kypsyvät tasaisesti ja näyttävät houkuttelevilta valmiissa ruokalajissa. Laita lihatuote pussiin jauhojen kanssa. Ravista pakkauksen sisältöä aktiivisesti. Näin varmistetaan, että kuiva-aine jakautuu nopeasti ja tasaisesti kaikille lihapaloille. Kuumenna paistinpannu kasviöljyllä. Laskemme tähän ohuet sipulin puolirenkaat (otamme tavallisen sipulin). Ruskista hienonnettu kasvis kevyesti. Täydennämme sipuleita jauhoissa leivotulla porsaanlihalla. Kypsennä ruokaa viisi minuuttia kääntäen ajoittain lihapaloja. Sekoita kastiketta varten erillisessä kulhossa smetana ja tomaattipyree. Lisää tähän suolaa, pippuria ja vettä. Kaada syntynyt kastike porsaan ja sipulien päälle. Vähennä lämpöä, peitä astia kannella ja anna hautua noin 12-15 minuuttia.",
+    "category": "Liharuoat",
+    "prep_time": "30 minuuttia",
+    "cook_time": "30 minuuttia",
+    "total_time": "60 minuuttia",
+    "notes": null,
+    "tags": "stroganoff,porsaan,ruoka"
+}

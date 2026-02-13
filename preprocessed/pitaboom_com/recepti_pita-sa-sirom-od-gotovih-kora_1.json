@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pita sa sirom od gotovih kora",
+    "description": "Balkanska pita sa sirom, poznata i kao sirnica, pravi se brzo i lako od gotovih kora.",
+    "ingredients": "[{\"name\": \"Kore za pitu\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"Feta sira\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"Jaja\", \"units\": \"kom\", \"amount\": 3}, {\"name\": \"Jogurta\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"Ulja\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"Praška za pecivo\", \"units\": \"g\", \"amount\": 10}, {\"name\": \"So\", \"units\": null, \"amount\": null}]",
+    "instructions": "Korak 1: Uključite rernu na 180 °C da se zagreva. U posudi sjedinite jaja, jogurt, ulje, prašak za pecivo i so, pa umutite ujednačen fil. Korak 2: U fil umešajte izmrvljen sir i sve dobro sjedinite. Svaku koru premažite, ravnomerno rasporedite fil i pažljivo urolajte. Ređajte u pleh. Korak 3: Pitu odozgo premažite i pecite u rerni oko 30-35 minuta, dok ne porumeni. Ostavite je da kratko odmori pre sečenja.",
+    "category": null,
+    "prep_time": "15 minuta",
+    "cook_time": "30-35 minuta",
+    "total_time": "45 minuta",
+    "notes": "Vrednosti su procenjene prema datom receptu. Stvarna nutritivna vrednost može varirati u zavisnosti od količine ulja, vrste sira i dodataka kao što su špinat ili pavlaka.",
+    "tags": "pita, sir, brza hrana, balkanska kuhinja"
+}

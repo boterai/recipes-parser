@@ -1,0 +1,12 @@
+{
+    "dish_name": "Porridge de avena",
+    "description": "El clásico y muy rico desayuno de gachas de avena.",
+    "ingredients": "[{\"name\": \"leche o bebida vegetal\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"copos de avena\", \"units\": \"g\", \"amount\": 70}, {\"name\": \"canela en polvo\", \"units\": null, \"amount\": null}, {\"name\": \"azúcar moreno\", \"units\": null, \"amount\": null}, {\"name\": \"fruta fresca al gusto\", \"units\": null, \"amount\": null}]",
+    "instructions": "Ponemos un cazo a fuego alto con 400 ml de leche. En cuanto la leche vaya a empezar a hervir, bajamos el fuego, añadimos 70 g de copos de avena y mezclamos. Vamos a cocinar los copos de avena a fuego medio durante unos 10 minutos, removiendo de vez en cuando para que la mezcla no se pegue al fondo. Pasados los 10 minutos, la mezcla habrá adquirido una textura como de papilla. Colocamos el porridge en el bol donde lo vamos a servir, le añadimos un poquito de canela en polvo y, si queremos endulzarlo, le añadimos también azúcar moreno al gusto y mezclamos para que el azúcar se derrita con el calor residual. Preparamos la fruta que le vamos a colocar por encima al porridge. En nuestro caso, hemos preparado un puñado de arándanos enteros y unas rodajitas de fresas y de plátano. Terminamos colocando la fruta en la superficie y ya está listo para servir.",
+    "category": "desayuno",
+    "prep_time": "5 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "15 minutes",
+    "notes": "Se puede endulzar con azúcar moreno, panela, miel o sirope de agave. También se puede añadir canela al gusto.",
+    "tags": "desayuno, avena, saludable"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Slow Cooker Irish Beef stoofpot",
+    "description": "Deze Slow Cooker Irish Beef stoofpot zit vol met uit elkaar vallen mals rundvlees, aardappelen en wortelen, met een rijke bouillon op smaak gebracht met Guinness.",
+    "ingredients": "[{\"name\": \"beef\", \"units\": \"pound\", \"amount\": \"1\"}, {\"name\": \"brown sugar\", \"units\": \"tablespoons\", \"amount\": \"1 ½\"}, {\"name\": \"fresh thyme\", \"units\": \"tablespoon\", \"amount\": \"1\"}, {\"name\": \"carrots\", \"units\": \"pound\", \"amount\": \"1\"}, {\"name\": \"Yukon gold potatoes\", \"units\": \"pounds\", \"amount\": \"1 ½\"}, {\"name\": \"fresh parsley\", \"units\": null, \"amount\": null}, {\"name\": \"salt\", \"units\": null, \"amount\": null}, {\"name\": \"pepper\", \"units\": null, \"amount\": null}, {\"name\": \"Guinness\", \"units\": \"cups\", \"amount\": \"1 ¼\"}, {\"name\": \"onions\", \"units\": null, \"amount\": null}, {\"name\": \"flour\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Season beef with salt and pepper toss with flour to fully coat. 2. Verwarm een Nederlandse oven op middelhoog vuur. Voeg 1 eetlepel olie toe. Bruin rundvlees aan alle kanten. 3. Verwijder rundvlees uit de pan en breng over op slow cooker. 4. Voeg nog een eetlepel olie toe. Voeg de uien toe en bak tot goudbruin. 5. Voeg tomatenpuree en knoflook toe. 6. Klop langzaam de runderbouillon binnen. 7. Voeg aardappelen en wortelen toe aan slow cooker. 8. Zet de slow cooker op laag en kook gedurende 6-8 uur. 9. Roer na het koken de resterende Guinness en verse gehakte peterselie door. 10. Proef en voeg zout en peper naar smaak toe. Serveren.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "6 hours",
+    "total_time": null,
+    "notes": "Als de stoofpot niet zo dik is als je wilt, gebruik dan een slurry om de gewenste consistentie te bereiken.",
+    "tags": "beef recipes, Crockpot/Slow Cooker, St. Patrick’s Day Recipes, stew"
+}

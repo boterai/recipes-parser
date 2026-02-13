@@ -1,0 +1,12 @@
+{
+    "dish_name": "Hjemmelavet Sushi",
+    "description": "En guide til at lave lækker hjemmelavet sushi med forskellige fyld og teknikker.",
+    "ingredients": "[{\"name\": \"nori-tang\", \"units\": \"stykker\", \"amount\": \"2.5 eller 5\"}, {\"name\": \"sushiris\", \"units\": \"g\", \"amount\": \"150\"}, {\"name\": \"vand\", \"units\": \"dl\", \"amount\": \"2\"}, {\"name\": \"salt\", \"units\": null, \"amount\": \"et godt nip\"}, {\"name\": \"riseddike\", \"units\": \"spsk\", \"amount\": \"2\"}, {\"name\": \"sesamfrø\", \"units\": \"spsk\", \"amount\": \"1.5\"}, {\"name\": \"flødeost naturel\", \"units\": \"pakke\", \"amount\": \"1/2\"}, {\"name\": \"frisk laks af sushi-kvalitet\", \"units\": \"g\", \"amount\": \"200\"}, {\"name\": \"agurk\", \"units\": null, \"amount\": \"1/2\"}, {\"name\": \"avocado\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"forårsløg\", \"units\": \"strimler\", \"amount\": \"2\"}]",
+    "instructions": "1. Kog risene. Skyl sushirisene grundigt under koldt vand. Bring vandet i kog og lad risene simre i 15 minutter. 2. Smag risene til med riseddike. 3. Klargør fyldet ved at skære laksen, agurk, avocado og forårsløg. 4. Pak sushi-måtten ind i plastikfilm. 5. Rul sushien med fyldet og skær rullerne i stykker. 6. Anret og server med dyppelser.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "30 minutes",
+    "notes": "Brug sushi-kvalitet fisk og vær opmærksom på sikkerheden ved rå fisk.",
+    "tags": "sushi,hjemmelavet,asiatisk"
+}

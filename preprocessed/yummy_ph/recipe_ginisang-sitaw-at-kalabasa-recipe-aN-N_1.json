@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ginisang Sitaw at Kalabasa",
+    "description": "This stir-fry is a healthy side dish that comes together in only a few minutes.",
+    "ingredients": "[{\"name\": \"green beans (sitaw)\", \"units\": \"Cup\", \"amount\": 1}, {\"name\": \"squash (kalabasa)\", \"units\": \"cups\", \"amount\": 1.5}, {\"name\": \"canola oil\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"dried shrimp (hibe)\", \"units\": \"tablespoons\", \"amount\": 1.5}, {\"name\": \"white onion\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"Garlic\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"water\", \"units\": \"Cup\", \"amount\": 0.25}, {\"name\": \"fish sauce (patis)\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"Pepper\", \"units\": \"to taste\", \"amount\": null}, {\"name\": \"Leeks\", \"units\": \"for garnish\", \"amount\": null}]",
+    "instructions": "Heat oil over medium heat on a wok and sauté hibe, onions, and garlic. Add the kalabasa and sauté for 1 minute. Add water and cover and allow to simmer until kalabasa is cooked, about 5 minutes, more water may be added if necessary. Once the kalabasa is almost cooked, add the sitaw and season with patis and pepper, cover. Allow to steam for 1-2 minutes, then turn off heat and leave the cover on for another minute to allow the sitaw to cook more.",
+    "category": "Side Dishes",
+    "prep_time": "5 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "15 minutes",
+    "notes": null,
+    "tags": "filipino, vegetable, stir-fry, healthy"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Hjemmelaget pasta",
+    "description": "Oppskrift på hjemmelaget pasta med egg og mel.",
+    "ingredients": "[{\"name\": \"egg\", \"units\": \"stk\", \"amount\": 4}, {\"name\": \"durumsemule\", \"units\": \"gram\", \"amount\": 200}, {\"name\": \"hvetemel\", \"units\": \"gram\", \"amount\": 200}, {\"name\": \"kaldt vann\", \"units\": null, \"amount\": null}]",
+    "instructions": "Bland mel og semule. Ha det i foodprosessoren. Pisk sammen eggene. Ha eggene i melet og kjør foodprosessoren til du har en grynet masse. Ha deigen på melet benkeplate, og elt den kjapt sammen til en smidig deig. Pakk deigen inn i klingfilm, og la den hvile en times tid i kjøleskapet før du kjevler den ut.",
+    "category": "Grunnoppskrift",
+    "prep_time": "10 minutes",
+    "cook_time": "60 minutes",
+    "total_time": "70 minutes",
+    "notes": "Husk å mele pastaen når du kjevler den ut. Du kan bruke vanlig hvetemel hvis du ikke har pastamel og durumsemule.",
+    "tags": "hjemmelagetpasta"
+}

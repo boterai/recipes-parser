@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tostada de aguacate",
+    "description": "La tostada de aguacate es una elaboración tan sencilla como sabrosa. Una opción ideal para desayunar.",
+    "ingredients": "[{\"name\": \"pan\", \"units\": \"rebanadas\", \"amount\": 2}, {\"name\": \"aguacate\", \"units\": null, \"amount\": 1}, {\"name\": \"queso crema\", \"units\": \"cucharadas\", \"amount\": 4}, {\"name\": \"sal\", \"units\": null, \"amount\": null}, {\"name\": \"pimienta negra molida\", \"units\": null, \"amount\": null}, {\"name\": \"chile en escamas\", \"units\": null, \"amount\": \"1 pizca\"}, {\"name\": \"semillas de sésamo negro\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Tostamos 2 rebanadas de pan en la tostadora o en la sartén. 2. Pelamos 1 aguacate, le retiramos el hueso y con la ayuda de una cuchara le retiramos la pulpa. 3. Cortamos cada mitad en rodajas de aproximadamente medio centímetro de grosor. 4. Repartimos 4 cucharadas de queso crema en las tostadas. 5. Repartimos el aguacate sobre el queso, condimentamos y servimos inmediatamente.",
+    "category": "desayuno",
+    "prep_time": "5 minutes",
+    "cook_time": "5 minutes",
+    "total_time": "10 minutes",
+    "notes": "El aguacate debe estar en su punto óptimo de maduración. Se pueden personalizar las tostadas con ingredientes favoritos.",
+    "tags": "desayuno, aguacate, tostadas, saludables"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sour Cream Cake",
+    "description": "A tender vanilla cake that uses sour cream in both batter and frosting for amazing moisture and flavor.",
+    "ingredients": "[{\"name\": \"plain flour\", \"units\": \"cups\", \"amount\": 1.5}, {\"name\": \"baking powder\", \"units\": \"teaspoons\", \"amount\": 2}, {\"name\": \"caster sugar\", \"units\": \"cups\", \"amount\": 0.75}, {\"name\": \"salt\", \"units\": \"teaspoon\", \"amount\": 0.25}, {\"name\": \"vegetable oil\", \"units\": \"cups\", \"amount\": 0.5}, {\"name\": \"vanilla extract\", \"units\": \"teaspoons\", \"amount\": 2}, {\"name\": \"large egg\", \"units\": null, \"amount\": 1}, {\"name\": \"sour cream\", \"units\": \"cups\", \"amount\": 1}, {\"name\": \"butter\", \"units\": \"cups\", \"amount\": 0.5}, {\"name\": \"powdered sugar\", \"units\": \"cups\", \"amount\": 3}, {\"name\": \"sour cream for frosting\", \"units\": \"cups\", \"amount\": 0.25}]",
+    "instructions": "Step 01: Heat oven to 350°F. Line 8-inch cake pan. Step 02: Combine flour, baking powder, sugar and salt. Step 03: Blend oil, vanilla, egg and sour cream. Step 04: Mix wet into dry ingredients until just combined. Step 05: Pour into pan, bake 35-40 minutes. Step 06: Beat butter, add sugar and sour cream until smooth.",
+    "category": "Sweet Treats",
+    "prep_time": "45 minutes",
+    "cook_time": "45 minutes",
+    "total_time": "90 minutes",
+    "notes": "Batter will be very thick. Use room temperature ingredients.",
+    "tags": "cake,dessert,sour cream,vanilla"
+}

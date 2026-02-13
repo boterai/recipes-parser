@@ -1,0 +1,12 @@
+{
+    "dish_name": "Khachapuri kefirin kanssa",
+    "description": "Khachapuri kefirin kanssa on erittäin maukas ja herkullinen georgialaisen keittiön inspiroima herkku.",
+    "ingredients": "[{\"name\": \"Jauhot\", \"units\": \"grammaa\", \"amount\": 520}, {\"name\": \"Kefiiri\", \"units\": \"millilitraa\", \"amount\": 520}, {\"name\": \"Kananmuna\", \"units\": \"asiat\", \"amount\": 2}, {\"name\": \"Ruokasooda\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"Suola\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"Adyghe-juusto\", \"units\": \"grammaa\", \"amount\": 300}, {\"name\": \"voita\", \"units\": \"grammaa\", \"amount\": 40}]",
+    "instructions": "Kuinka keittää khachapuri kefirin kanssa kotona paistinpannulla? Otamme kaikki tarvittavat tuotteet listaltamme. Kaada taikinaa varten kefir kulhoon. Lisää siihen yksi muna, suola ja sooda. Sekoita kaikki hyvin ja lisää vähitellen siivilöidyt jauhot. Jatka sekoittamista tasaiseksi. Peitä sitten taikina kalvolla ja jätä 1 tunti. Tässä vaiheessa tehdään täyte. Raasta juusto ja sekoita se toisen kananmunan ja voin kanssa. Jaa syntynyt taikina yhtä suuriin osiin, jotka pyöritämme ohuiksi ympyröiksi. Laita täyte kaikkien taikinapyörien keskelle. Käärimme sen taikinaan, muotoilemme litteän kakun, käännämme saumapuoli alaspäin ja kaulimme varovasti. Paista jokainen leipä kuivalla paistinpannulla. Keitä miedolla lämmöllä kannen alla noin 8 minuuttia. Käännä ja keitä vielä kolme minuuttia. Ennen tarjoilua voit päällystää voilla.",
+    "category": "Leipomo",
+    "prep_time": "80 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "khachapuri, georgialainen, leivonnaiset"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lazanje",
+    "description": "Recept za najukusnije lazanje koje ste ikad probali.",
+    "ingredients": "[{\"name\": \"lazanja\", \"units\": \"pakovanje\", \"amount\": 1}, {\"name\": \"mešano mleveno meso\", \"units\": \"grama\", \"amount\": 500}, {\"name\": \"glavica luka\", \"units\": \"komad\", \"amount\": 1}, {\"name\": \"čena belog luka\", \"units\": \"komada\", \"amount\": 4}, {\"name\": \"šargarepa\", \"units\": \"komad\", \"amount\": 1}, {\"name\": \"sos od paradajza\", \"units\": \"tegla\", \"amount\": 1}, {\"name\": \"mleko\", \"units\": null, \"amount\": null}, {\"name\": \"biljni začin\", \"units\": null, \"amount\": null}, {\"name\": \"so\", \"units\": null, \"amount\": null}, {\"name\": \"biber\", \"units\": null, \"amount\": null}, {\"name\": \"ulje\", \"units\": null, \"amount\": null}, {\"name\": \"peršun\", \"units\": null, \"amount\": null}, {\"name\": \"putera\", \"units\": null, \"amount\": null}, {\"name\": \"brašno\", \"units\": \"kašike\", \"amount\": 2}, {\"name\": \"mleka\", \"units\": \"šolje\", \"amount\": 3}, {\"name\": \"narendane Mocarele\", \"units\": \"šolje\", \"amount\": 2}, {\"name\": \"sveže Mocarele\", \"units\": \"grama\", \"amount\": 300}, {\"name\": \"narendanog parmezana\", \"units\": \"šolje\", \"amount\": 0.5}]",
+    "instructions": "Propržite crni i beli luk, a pa onda dodajte sitno iseckanu šargarepu. Kada se to dobro proprži, dodajte meso i dinstajte. Potom dodajte sos od paradajza, začinite i kuvajte oko pola sata na srednjoj temperaturi. Da biste napravili beli sos, na veoma niskoj temperaturi, propržite na ulju brašno, pa polako dodajte mleko stalno mešajući. Dodajte i začine i kada se sve zgusne, dodajte narendani sir. Uzmite pleh za pečenje, pa stavite prvo red crvenog sosa, preko stavite lazanje tako da se ne preklapaju. Potom stavite beli sos, pa testo crveni sos. Naseći mocarelu na kolutiće i time prekriti crveni sos. Preko svega staviti još jedan red lazanja, beli sos, a za odozgore ostavite malo soka od crvenog sosa. Prekriti aluminijumskom folijom lazanje i peći u zagrejanoj rerni na 180 stepeni oko sat vremena. Kada je skoro gotovo, gore stavite narendani parmezan i pecite još 10 minuta.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "60 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "Recept,Lazanje,Ideja za ručak,Mleveno meso,Italijanska kuhinja"
+}

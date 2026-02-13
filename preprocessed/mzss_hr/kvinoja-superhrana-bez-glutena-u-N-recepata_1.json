@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kvinoja recepti",
+    "description": "Različiti recepti s kvinojom, uključujući doručak, ručak i desert.",
+    "ingredients": "[{\"name\": \"kvinoja\", \"units\": null, \"amount\": null}, {\"name\": \"voće\", \"units\": null, \"amount\": null}, {\"name\": \"luk\", \"units\": null, \"amount\": null}, {\"name\": \"češnjak\", \"units\": null, \"amount\": null}, {\"name\": \"tikvica\", \"units\": null, \"amount\": null}, {\"name\": \"mrkva\", \"units\": null, \"amount\": null}, {\"name\": \"sir\", \"units\": null, \"amount\": null}, {\"name\": \"avokado\", \"units\": null, \"amount\": null}, {\"name\": \"čokolada\", \"units\": null, \"amount\": null}, {\"name\": \"maslinovo ulje\", \"units\": null, \"amount\": null}, {\"name\": \"limun\", \"units\": null, \"amount\": null}, {\"name\": \"mango\", \"units\": null, \"amount\": null}]",
+    "instructions": "Različite upute za pripremu jela s kvinojom.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "bez glutena, kvinoja, prehrana, recepti, žitarica"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tavuklu Garnitürlü Börek",
+    "description": "Tavuklu garnitürlü börek, hem doyurucu hem de pratik lezzetlerden biridir. Özellikle milföy hamuruyla hazırlanan milföylü talaş böreği, çıtır dokusuyla sofraların gözdesi olur.",
+    "ingredients": "[{\"name\": \"milföy hamuru\", \"units\": \"paket\", \"amount\": \"0.5\"}, {\"name\": \"garnitür\", \"units\": \"kase\", \"amount\": \"1\"}, {\"name\": \"haşlanmış tavuk\", \"units\": \"kase\", \"amount\": \"1\"}, {\"name\": \"dere otu\", \"units\": \"tutam\", \"amount\": \"1\"}, {\"name\": \"sıvı yağ\", \"units\": \"yemek kaşığı\", \"amount\": \"1-2\"}, {\"name\": \"tuz\", \"units\": \"çay kaşığı\", \"amount\": \"1\"}, {\"name\": \"pul biber\", \"units\": \"çay kaşığı\", \"amount\": \"1\"}, {\"name\": \"kekik\", \"units\": \"çay kaşığı\", \"amount\": \"1\"}, {\"name\": \"karabiber\", \"units\": \"çay kaşığı\", \"amount\": \"0.5\"}, {\"name\": \"yumurta sarısı\", \"units\": \"adet\", \"amount\": \"1\"}, {\"name\": \"çörek otu\", \"units\": null, \"amount\": null}, {\"name\": \"susam\", \"units\": null, \"amount\": null}]",
+    "instructions": "100 gram kadar tavuk göğsünü haşlayalım. Sonra süzüp didikleyelim. Dilerseniz tavuk göğsü yerine tavuk but(kalça kısmı), tavuk baget veya tavuk pirzola kullanılabilir. 1 tutam dereotunu kıyalım. Sonra derin bir kaba 1 kase garnitür koyalım. 1 küçük konserve bunun için yeterli olur. Dilerseniz konserve yerine patates, havuç ve bezelyeyi haşlayıp kendi hazırladığınız garnitürünü kullanabilirsiniz. Kaba didiklediğimiz tavuğu ve kıydığımız dereotunu koyalım. 1 çay kaşığı kekik, 1 çay kaşığı pul biber, 1 çay kaşığı tuz ve yarım çay kaşığı karabiber dökelim. 1-2 yemek kaşığı sıvı yağı döküp karıştıralım. Milföy hamurunu ikiye bölelim. Toplam yarım paket milföy hamuru kullanacağız. Milföy hamurunun içine 1 yemek kaşığı hazırladığımız içten koyalım. Köşelerinden katlayalım. Fırın tepsisine yağlı kağıt serelim, hazırladıklarımızı dizelim. 1 tane yumurta sarısını böreklerin üzerine sürelim. Üzerine çörek otu ve susam serpelim. 180 derece fırında üzeri kızarana kadar pişirelim.",
+    "category": "Börek",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Milföy hamurlarını buzluktan çıkarıp hafif yumuşadıktan sonra kullanın. Garnitürün suyunu iyice süzün; aksi takdirde börek içi ıslak kalabilir.",
+    "tags": "börek, tavuk, milföy"
+}

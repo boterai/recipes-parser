@@ -1,0 +1,12 @@
+{
+    "dish_name": "Burgonyás cukkínis lepény",
+    "description": null,
+    "ingredients": "[{\"name\": \"vöröshagyma\", \"units\": \"db\", \"amount\": 1}, {\"name\": \"fokhagyma\", \"units\": \"gerezd\", \"amount\": 2}, {\"name\": \"burgonya\", \"units\": \"dkg\", \"amount\": 20}, {\"name\": \"cukkíni\", \"units\": \"db\", \"amount\": 1}, {\"name\": \"tojás\", \"units\": \"db\", \"amount\": 2}, {\"name\": \"trappista sajt\", \"units\": \"dkg\", \"amount\": 5}, {\"name\": \"parmezán\", \"units\": \"dkg\", \"amount\": 3}, {\"name\": \"darált mogyoró\", \"units\": \"dkg\", \"amount\": 5}, {\"name\": \"olívaolaj\", \"units\": \"kevés\", \"amount\": null}, {\"name\": \"liszt\", \"units\": \"dkg\", \"amount\": 10}, {\"name\": \"tejszín\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"petrezselyem\", \"units\": \"fél csokor\", \"amount\": null}, {\"name\": \"majoranna\", \"units\": \"friss\", \"amount\": null}, {\"name\": \"kakukkfű\", \"units\": \"friss\", \"amount\": null}, {\"name\": \"oregano\", \"units\": \"friss\", \"amount\": null}]",
+    "instructions": "A vöröshagymát finomra vágjuk, és a fokhagymákat felaprítjuk, majd kevés olívaolajon pirítani kezdjük. A cukkínit és a tisztított burgonyát nyersen lereszeljük, és a pirult hagymákhoz keverjük. Sózzuk, borsozzuk, és friss majorannát, kakukkfű levelet illetve petrezselyem levelet aprítunk bele. Hozzáütünk két egész tojást, majd elkeverjük, és 10 deka liszttel egynemű masszává dolgozzuk. Ekkor belereszeljük a sajtot, és hozzáadjuk a főzőtejszínt és a darált mogyorót. A masszát vajazott, morzsázott tepsiben egyenletesen elosztjuk, tetejére 3 deka parmezánt reszelünk. Végül 190-200 fokra előmelegített sütőben, 30-40 perc alatt megsütjük.",
+    "category": "Kenyerek, péksütemények",
+    "prep_time": null,
+    "cook_time": "30-40 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tavada Kırpık Böreği",
+    "description": "Bugün size ister kahvaltıda ister 5 çayına yapabileceğiniz pratik lezzetli tavada kırpık börek tarifi sunacağız.",
+    "ingredients": "[{\"name\": \"yufka\", \"units\": null, \"amount\": 3}, {\"name\": \"yumurta\", \"units\": null, \"amount\": 3}, {\"name\": \"süt\", \"units\": \"bardak\", \"amount\": 1}, {\"name\": \"maydanoz\", \"units\": null, \"amount\": null}, {\"name\": \"lor peyniri\", \"units\": null, \"amount\": null}, {\"name\": \"beyaz peynir\", \"units\": null, \"amount\": null}, {\"name\": \"sıvı yağ\", \"units\": \"kaşık\", \"amount\": 1}]",
+    "instructions": "Yufkaları kesiyoruz, istersek elimizle bölebiliriz. Yumurtaları kırıp sıvı yağ, maydanoz ve sütü çırpıyoruz. Sonrasında peyniri ezip ekliyoruz. Hazırladığımız sosa yufkaları buluyoruz. Kızdırdığımız tavada böreğimizi dizip pişiriyoruz.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Afiyet olsun.",
+    "tags": null
+}

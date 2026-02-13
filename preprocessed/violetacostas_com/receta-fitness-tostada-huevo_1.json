@@ -1,0 +1,12 @@
+{
+    "dish_name": "Huevo en canasta",
+    "description": "Receta de desayuno de tostada de pan de molde con un huevo dentro.",
+    "ingredients": "[{\"name\": \"huevo\", \"units\": null, \"amount\": 1}, {\"name\": \"pan de molde\", \"units\": \"de tu preferencia\", \"amount\": null}]",
+    "instructions": "Engrasar la sartén, agujerear el pan de molde, añadir el huevo y cocinar tapado.",
+    "category": "Desayuno",
+    "prep_time": null,
+    "cook_time": "minutes",
+    "total_time": "a couple of minutes",
+    "notes": "Ideal para desayunos sanos y fáciles.",
+    "tags": "desayuno, huevo, saludable"
+}

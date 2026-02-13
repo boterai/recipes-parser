@@ -1,0 +1,12 @@
+{
+    "dish_name": "Fastelavnsboller af wienerdej med ferrerorocher og nougat",
+    "description": "Opskrift på lækre fastelavnsboller af wienerdej med ferrerorocher, nougatcreme og chokolade. De er så nemme at lave, da vi bruger den nemme løsning.",
+    "ingredients": "[{\"name\": \"bake-off fastelavnsboller\", \"units\": \"pk.\", \"amount\": 1}, {\"name\": \"piskefløde\", \"units\": \"dl.\", \"amount\": 2.5}, {\"name\": \"bagekakao\", \"units\": \"spsk.\", \"amount\": 2}, {\"name\": \"flormelis\", \"units\": \"spsk.\", \"amount\": 2}, {\"name\": \"Ferrero Rocher\", \"units\": \"stk.\", \"amount\": 4}, {\"name\": \"nougat\", \"units\": \"g.\", \"amount\": 50}, {\"name\": \"piskefløde\", \"units\": \"dl.\", \"amount\": 1.25}, {\"name\": \"flormelis\", \"units\": \"g.\", \"amount\": 80}, {\"name\": \"bagekakao\", \"units\": \"g.\", \"amount\": 10}, {\"name\": \"vand\", \"units\": \"spsk.\", \"amount\": 1.5}]",
+    "instructions": "Nougatcreme: Smelt nougat i en skål over vandbad eller i mikroovnen. Lad den køle af, så den kun er fingervarm. Pisk fløde til flødeskum. Vend nougat rundt i flødeskum, så du får en nougatcreme. Sæt på køl indtil brug. Fastelavnsboller: Bag fastelavnsbollerne efter pakkens anvisning. Lad dem køle helt af. Skær dem over og tag “låget” af. Pisk fløde sammen med kakaopulver og flormelis, indtil du har en fast creme. Først sprøjtes nougatcremen i midten, hvorefter kakaoskum sprøjtes rundt om. Sæt “låget” på. Rør glasur sammen af flormelis, kakaopulver og varmt vand. Fordel en klat ovenpå hver. Sprøjt lidt kakaoskum på toppen og pynt med friske ferrero rocher.",
+    "category": "Dessert",
+    "prep_time": "30 minutter",
+    "cook_time": "30 minutter",
+    "total_time": "1 time",
+    "notes": "De er samtidig rigtig nemme at lave, da vi jo som sagt bruger en bake-off udgave af selve bollen. Så man skal blot lave fyldet selv og samle dem.",
+    "tags": "bake-off fastelavnsboller, Ferrero rocher, flormelis, bagekakao, nougat, piskefløde, fastelavn, dansk, vegetarisk, forår"
+}

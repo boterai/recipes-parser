@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pane in padella senza farina bianca",
+    "description": "Una ricetta pratica per ogni momento della giornata, veloce, sano e delizioso.",
+    "ingredients": "[{\"name\": \"Uovo\", \"units\": null, \"amount\": 1}, {\"name\": \"crusca d'avena\", \"units\": \"cucchiai\", \"amount\": 2}, {\"name\": \"yogurt naturale o acqua\", \"units\": \"cucchiaio\", \"amount\": 1}, {\"name\": \"sale\", \"units\": \"pizzico\", \"amount\": 1}, {\"name\": \"lievito in polvere\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"origano, chia, semi di lino, formaggio grattugiato o erbe essiccate\", \"units\": \"facoltativo\", \"amount\": null}]",
+    "instructions": "In una ciotola, sbattete l'uovo con una forchetta fino a quando non sarà ben amalgamato. Aggiungere la crusca d'avena, lo yogurt (o l'acqua) e il sale. Mescolare bene fino a formare un impasto. Aggiungere il lievito e mescolare delicatamente. Scaldate una padella antiaderente a fuoco basso e ungetela con un filo d'olio o di oliva. Versate l'impasto e stendetelo con un cucchiaio, formando un disco. Coprite la padella e lasciate cuocere per 2 o 3 minuti. Girare il pane e farlo dorare anche dall'altro lato per altri 1 o 2 minuti.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "5 minutes",
+    "total_time": null,
+    "notes": "Varianti: aggiungere mezza banana schiacciata per una versione dolce, o 1 misurino di proteine in polvere per una versione proteica.",
+    "tags": "pane, colazione, sano, veloce"
+}

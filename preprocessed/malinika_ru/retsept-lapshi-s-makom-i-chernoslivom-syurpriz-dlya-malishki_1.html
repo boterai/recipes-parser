@@ -1,0 +1,598 @@
+<html lang="ru-RU"><head><meta charset="UTF-8"><script>if(navigator.userAgent.match(/MSIE|Internet Explorer/i)||navigator.userAgent.match(/Trident\/7\..*?rv:11/i)){var href=document.location.href;if(!href.match(/[?&]nowprocket/)){if(href.indexOf("?")==-1){if(href.indexOf("#")==-1){document.location.href=href+"?nowprocket=1"}else{document.location.href=href.replace("#","?nowprocket=1#")}}else{if(href.indexOf("#")==-1){document.location.href=href+"&nowprocket=1"}else{document.location.href=href.replace("#","&nowprocket=1#")}}}}</script><script>(()=>{class RocketLazyLoadScripts{constructor(){this.v="2.0.2",this.userEvents=["keydown","keyup","mousedown","mouseup","mousemove","mouseover","mouseenter","mouseout","mouseleave","touchmove","touchstart","touchend","touchcancel","wheel","click","dblclick","input","visibilitychange"],this.attributeEvents=["onblur","onclick","oncontextmenu","ondblclick","onfocus","onmousedown","onmouseenter","onmouseleave","onmousemove","onmouseout","onmouseover","onmouseup","onmousewheel","onscroll","onsubmit"]}async t(){this.i(),this.o(),/iP(ad|hone)/.test(navigator.userAgent)&&this.h(),this.u(),this.l(this),this.m(),this.k(this),this.p(this),this._(),await Promise.all([this.R(),this.L()]),this.lastBreath=Date.now(),this.S(this),this.P(),this.D(),this.O(),this.M(),await this.C(this.delayedScripts.normal),await this.C(this.delayedScripts.defer),await this.C(this.delayedScripts.async),this.T("domReady"),await this.F(),await this.j(),await this.I(),this.T("windowLoad"),await this.A(),window.dispatchEvent(new Event("rocket-allScriptsLoaded")),this.everythingLoaded=!0,this.lastTouchEnd&&await new Promise((t=>setTimeout(t,500-Date.now()+this.lastTouchEnd))),this.H(),this.T("all"),this.U(),this.W()}i(){this.CSPIssue=sessionStorage.getItem("rocketCSPIssue"),document.addEventListener("securitypolicyviolation",(t=>{this.CSPIssue||"script-src-elem"!==t.violatedDirective||"data"!==t.blockedURI||(this.CSPIssue=!0,sessionStorage.setItem("rocketCSPIssue",!0))}),{isRocket:!0})}o(){window.addEventListener("pageshow",(t=>{this.persisted=t.persisted,this.realWindowLoadedFired=!0}),{isRocket:!0}),window.addEventListener("pagehide",(()=>{this.onFirstUserAction=null}),{isRocket:!0})}h(){let t;function e(e){t=e}window.addEventListener("touchstart",e,{isRocket:!0}),window.addEventListener("touchend",(function i(o){Math.abs(o.changedTouches[0].pageX-t.changedTouches[0].pageX)<10&&Math.abs(o.changedTouches[0].pageY-t.changedTouches[0].pageY)<10&&o.timeStamp-t.timeStamp<200&&(o.target.dispatchEvent(new PointerEvent("click",{target:o.target,bubbles:!0,cancelable:!0})),event.preventDefault(),window.removeEventListener("touchstart",e,{isRocket:!0}),window.removeEventListener("touchend",i,{isRocket:!0}))}),{isRocket:!0})}q(t){this.userActionTriggered||("mousemove"!==t.type||this.firstMousemoveIgnored?"keyup"===t.type||"mouseover"===t.type||"mouseout"===t.type||(this.userActionTriggered=!0,this.onFirstUserAction&&this.onFirstUserAction()):this.firstMousemoveIgnored=!0),"click"===t.type&&t.preventDefault(),this.savedUserEvents.length>0&&(t.stopPropagation(),t.stopImmediatePropagation()),"touchstart"===this.lastEvent&&"touchend"===t.type&&(this.lastTouchEnd=Date.now()),"click"===t.type&&(this.lastTouchEnd=0),this.lastEvent=t.type,this.savedUserEvents.push(t)}u(){this.savedUserEvents=[],this.userEventHandler=this.q.bind(this),this.userEvents.forEach((t=>window.addEventListener(t,this.userEventHandler,{passive:!1,isRocket:!0})))}U(){this.userEvents.forEach((t=>window.removeEventListener(t,this.userEventHandler,{passive:!1,isRocket:!0}))),this.savedUserEvents.forEach((t=>{t.target.dispatchEvent(new window[t.constructor.name](t.type,t))}))}m(){this.eventsMutationObserver=new MutationObserver((t=>{const e="return false";for(const i of t){if("attributes"===i.type){const t=i.target.getAttribute(i.attributeName);t&&t!==e&&(i.target.setAttribute("data-rocket-"+i.attributeName,t),i.target.setAttribute(i.attributeName,e))}"childList"===i.type&&i.addedNodes.forEach((t=>{if(t.nodeType===Node.ELEMENT_NODE)for(const i of t.attributes)this.attributeEvents.includes(i.name)&&i.value&&""!==i.value&&(t.setAttribute("data-rocket-"+i.name,i.value),t.setAttribute(i.name,e))}))}})),this.eventsMutationObserver.observe(document,{subtree:!0,childList:!0,attributeFilter:this.attributeEvents})}H(){this.eventsMutationObserver.disconnect(),this.attributeEvents.forEach((t=>{document.querySelectorAll("[data-rocket-"+t+"]").forEach((e=>{e.setAttribute(t,e.getAttribute("data-rocket-"+t)),e.removeAttribute("data-rocket-"+t)}))}))}k(t){Object.defineProperty(HTMLElement.prototype,"onclick",{get(){return this.rocketonclick},set(e){this.rocketonclick=e,this.setAttribute(t.everythingLoaded?"onclick":"data-rocket-onclick","this.rocketonclick(event)")}})}S(t){function e(e,i){let o=e[i];e[i]=null,Object.defineProperty(e,i,{get:()=>o,set(s){t.everythingLoaded?o=s:e["rocket"+i]=o=s}})}e(document,"onreadystatechange"),e(window,"onload"),e(window,"onpageshow");try{Object.defineProperty(document,"readyState",{get:()=>t.rocketReadyState,set(e){t.rocketReadyState=e},configurable:!0}),document.readyState="loading"}catch(t){console.log("WPRocket DJE readyState conflict, bypassing")}}l(t){this.originalAddEventListener=EventTarget.prototype.addEventListener,this.originalRemoveEventListener=EventTarget.prototype.removeEventListener,this.savedEventListeners=[],EventTarget.prototype.addEventListener=function(e,i,o){o&&o.isRocket||!t.B(e,this)&&!t.userEvents.includes(e)||t.B(e,this)&&!t.userActionTriggered||e.startsWith("rocket-")?t.originalAddEventListener.call(this,e,i,o):t.savedEventListeners.push({target:this,remove:!1,type:e,func:i,options:o})},EventTarget.prototype.removeEventListener=function(e,i,o){o&&o.isRocket||!t.B(e,this)&&!t.userEvents.includes(e)||t.B(e,this)&&!t.userActionTriggered||e.startsWith("rocket-")?t.originalRemoveEventListener.call(this,e,i,o):t.savedEventListeners.push({target:this,remove:!0,type:e,func:i,options:o})}}T(t){"all"===t&&(EventTarget.prototype.addEventListener=this.originalAddEventListener,EventTarget.prototype.removeEventListener=this.originalRemoveEventListener),this.savedEventListeners=this.savedEventListeners.filter((e=>{let i=e.type,o=e.target||window;return"domReady"===t&&"DOMContentLoaded"!==i&&"readystatechange"!==i||("windowLoad"===t&&"load"!==i&&"readystatechange"!==i&&"pageshow"!==i||(this.B(i,o)&&(i="rocket-"+i),e.remove?o.removeEventListener(i,e.func,e.options):o.addEventListener(i,e.func,e.options),!1))}))}p(t){let e;function i(e){return t.everythingLoaded?e:e.split(" ").map((t=>"load"===t||t.startsWith("load.")?"rocket-jquery-load":t)).join(" ")}function o(o){function s(e){const s=o.fn[e];o.fn[e]=o.fn.init.prototype[e]=function(){return this[0]===window&&t.userActionTriggered&&("string"==typeof arguments[0]||arguments[0]instanceof String?arguments[0]=i(arguments[0]):"object"==typeof arguments[0]&&Object.keys(arguments[0]).forEach((t=>{const e=arguments[0][t];delete arguments[0][t],arguments[0][i(t)]=e}))),s.apply(this,arguments),this}}if(o&&o.fn&&!t.allJQueries.includes(o)){const e={DOMContentLoaded:[],"rocket-DOMContentLoaded":[]};for(const t in e)document.addEventListener(t,(()=>{e[t].forEach((t=>t()))}),{isRocket:!0});o.fn.ready=o.fn.init.prototype.ready=function(i){function s(){parseInt(o.fn.jquery)>2?setTimeout((()=>i.bind(document)(o))):i.bind(document)(o)}return t.realDomReadyFired?!t.userActionTriggered||t.fauxDomReadyFired?s():e["rocket-DOMContentLoaded"].push(s):e.DOMContentLoaded.push(s),o([])},s("on"),s("one"),s("off"),t.allJQueries.push(o)}e=o}t.allJQueries=[],o(window.jQuery),Object.defineProperty(window,"jQuery",{get:()=>e,set(t){o(t)}})}P(){const t=new Map;document.write=document.writeln=function(e){const i=document.currentScript,o=document.createRange(),s=i.parentElement;let n=t.get(i);void 0===n&&(n=i.nextSibling,t.set(i,n));const a=document.createDocumentFragment();o.setStart(a,0),a.appendChild(o.createContextualFragment(e)),s.insertBefore(a,n)}}async R(){return new Promise((t=>{this.userActionTriggered?t():this.onFirstUserAction=t}))}async L(){return new Promise((t=>{document.addEventListener("DOMContentLoaded",(()=>{this.realDomReadyFired=!0,t()}),{isRocket:!0})}))}async I(){return this.realWindowLoadedFired?Promise.resolve():new Promise((t=>{window.addEventListener("load",t,{isRocket:!0})}))}M(){this.pendingScripts=[];this.scriptsMutationObserver=new MutationObserver((t=>{for(const e of t)e.addedNodes.forEach((t=>{"SCRIPT"!==t.tagName||t.noModule||t.isWPRocket||this.pendingScripts.push({script:t,promise:new Promise((e=>{const i=()=>{const i=this.pendingScripts.findIndex((e=>e.script===t));i>=0&&this.pendingScripts.splice(i,1),e()};t.addEventListener("load",i,{isRocket:!0}),t.addEventListener("error",i,{isRocket:!0}),setTimeout(i,1e3)}))})}))})),this.scriptsMutationObserver.observe(document,{childList:!0,subtree:!0})}async j(){await this.J(),this.pendingScripts.length?(await this.pendingScripts[0].promise,await this.j()):this.scriptsMutationObserver.disconnect()}D(){this.delayedScripts={normal:[],async:[],defer:[]},document.querySelectorAll("script[type$=rocketlazyloadscript]").forEach((t=>{t.hasAttribute("data-rocket-src")?t.hasAttribute("async")&&!1!==t.async?this.delayedScripts.async.push(t):t.hasAttribute("defer")&&!1!==t.defer||"module"===t.getAttribute("data-rocket-type")?this.delayedScripts.defer.push(t):this.delayedScripts.normal.push(t):this.delayedScripts.normal.push(t)}))}async _(){await this.L();let t=[];document.querySelectorAll("script[type$=rocketlazyloadscript][data-rocket-src]").forEach((e=>{let i=e.getAttribute("data-rocket-src");if(i&&!i.startsWith("data:")){i.startsWith("//")&&(i=location.protocol+i);try{const o=new URL(i).origin;o!==location.origin&&t.push({src:o,crossOrigin:e.crossOrigin||"module"===e.getAttribute("data-rocket-type")})}catch(t){}}})),t=[...new Map(t.map((t=>[JSON.stringify(t),t]))).values()],this.N(t,"preconnect")}async $(t){if(await this.G(),!0!==t.noModule||!("noModule"in HTMLScriptElement.prototype))return new Promise((e=>{let i;function o(){(i||t).setAttribute("data-rocket-status","executed"),e()}try{if(navigator.userAgent.includes("Firefox/")||""===navigator.vendor||this.CSPIssue)i=document.createElement("script"),[...t.attributes].forEach((t=>{let e=t.nodeName;"type"!==e&&("data-rocket-type"===e&&(e="type"),"data-rocket-src"===e&&(e="src"),i.setAttribute(e,t.nodeValue))})),t.text&&(i.text=t.text),t.nonce&&(i.nonce=t.nonce),i.hasAttribute("src")?(i.addEventListener("load",o,{isRocket:!0}),i.addEventListener("error",(()=>{i.setAttribute("data-rocket-status","failed-network"),e()}),{isRocket:!0}),setTimeout((()=>{i.isConnected||e()}),1)):(i.text=t.text,o()),i.isWPRocket=!0,t.parentNode.replaceChild(i,t);else{const i=t.getAttribute("data-rocket-type"),s=t.getAttribute("data-rocket-src");i?(t.type=i,t.removeAttribute("data-rocket-type")):t.removeAttribute("type"),t.addEventListener("load",o,{isRocket:!0}),t.addEventListener("error",(i=>{this.CSPIssue&&i.target.src.startsWith("data:")?(console.log("WPRocket: CSP fallback activated"),t.removeAttribute("src"),this.$(t).then(e)):(t.setAttribute("data-rocket-status","failed-network"),e())}),{isRocket:!0}),s?(t.fetchPriority="high",t.removeAttribute("data-rocket-src"),t.src=s):t.src="data:text/javascript;base64,"+window.btoa(unescape(encodeURIComponent(t.text)))}}catch(i){t.setAttribute("data-rocket-status","failed-transform"),e()}}));t.setAttribute("data-rocket-status","skipped")}async C(t){const e=t.shift();return e?(e.isConnected&&await this.$(e),this.C(t)):Promise.resolve()}O(){this.N([...this.delayedScripts.normal,...this.delayedScripts.defer,...this.delayedScripts.async],"preload")}N(t,e){this.trash=this.trash||[];let i=!0;var o=document.createDocumentFragment();t.forEach((t=>{const s=t.getAttribute&&t.getAttribute("data-rocket-src")||t.src;if(s&&!s.startsWith("data:")){const n=document.createElement("link");n.href=s,n.rel=e,"preconnect"!==e&&(n.as="script",n.fetchPriority=i?"high":"low"),t.getAttribute&&"module"===t.getAttribute("data-rocket-type")&&(n.crossOrigin=!0),t.crossOrigin&&(n.crossOrigin=t.crossOrigin),t.integrity&&(n.integrity=t.integrity),t.nonce&&(n.nonce=t.nonce),o.appendChild(n),this.trash.push(n),i=!1}})),document.head.appendChild(o)}W(){this.trash.forEach((t=>t.remove()))}async F(){try{document.readyState="interactive"}catch(t){}this.fauxDomReadyFired=!0;try{await this.G(),document.dispatchEvent(new Event("rocket-readystatechange")),await this.G(),document.rocketonreadystatechange&&document.rocketonreadystatechange(),await this.G(),document.dispatchEvent(new Event("rocket-DOMContentLoaded")),await this.G(),window.dispatchEvent(new Event("rocket-DOMContentLoaded"))}catch(t){console.error(t)}}async A(){try{document.readyState="complete"}catch(t){}try{await this.G(),document.dispatchEvent(new Event("rocket-readystatechange")),await this.G(),document.rocketonreadystatechange&&document.rocketonreadystatechange(),await this.G(),window.dispatchEvent(new Event("rocket-load")),await this.G(),window.rocketonload&&window.rocketonload(),await this.G(),this.allJQueries.forEach((t=>t(window).trigger("rocket-jquery-load"))),await this.G();const t=new Event("rocket-pageshow");t.persisted=this.persisted,window.dispatchEvent(t),await this.G(),window.rocketonpageshow&&window.rocketonpageshow({persisted:this.persisted})}catch(t){console.error(t)}}async G(){Date.now()-this.lastBreath>45&&(await this.J(),this.lastBreath=Date.now())}async J(){return document.hidden?new Promise((t=>setTimeout(t))):new Promise((t=>requestAnimationFrame(t)))}B(t,e){return e===document&&"readystatechange"===t||(e===document&&"DOMContentLoaded"===t||(e===window&&"DOMContentLoaded"===t||(e===window&&"load"===t||e===window&&"pageshow"===t)))}static run(){(new RocketLazyLoadScripts).t()}}RocketLazyLoadScripts.run()})();</script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+	<title>Рецепт лапши с маком и черносливом – сюрприз для малышки</title><link rel="preload" data-rocket-preload="" as="style" href="https://fonts.googleapis.com/css?family=Roboto%3A400%2C400i%2C700&amp;subset=cyrillic&amp;display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto%3A400%2C400i%2C700&amp;subset=cyrillic&amp;display=swap" media="all" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto%3A400%2C400i%2C700&#038;subset=cyrillic&#038;display=swap" /></noscript>
+	<meta name="description" content="Изысканное блюдо лапша с маком и черносливом, которое порадует вашу малышку своим нежным и сытным вкусом.">
+	<link rel="canonical" href="https://malinika.ru/retsept-lapshi-s-makom-i-chernoslivom-syurpriz-dlya-malishki/">
+	<meta property="og:locale" content="ru_RU">
+	<meta property="og:type" content="article">
+	<meta property="og:title" content="Рецепт лапши с маком и черносливом – сюрприз для малышки">
+	<meta property="og:description" content="Изысканное блюдо лапша с маком и черносливом, которое порадует вашу малышку своим нежным и сытным вкусом.">
+	<meta property="og:url" content="https://malinika.ru/retsept-lapshi-s-makom-i-chernoslivom-syurpriz-dlya-malishki/">
+	<meta property="og:site_name" content="Malinika.ru - Рецепты">
+	<meta property="article:published_time" content="2024-02-01T20:05:54+00:00">
+	<meta property="og:image" content="https://images.iptv.rt.ru/images/c70mo2bir4ssllu1eav0.jpg">
+	<meta name="author" content="Игорь Бекушев">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:label1" content="Написано автором">
+	<meta name="twitter:data1" content="Игорь Бекушев">
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://malinika.ru/retsept-lapshi-s-makom-i-chernoslivom-syurpriz-dlya-malishki/","url":"https://malinika.ru/retsept-lapshi-s-makom-i-chernoslivom-syurpriz-dlya-malishki/","name":"Рецепт лапши с маком и черносливом – сюрприз для малышки","isPartOf":{"@id":"https://malinika.ru/#website"},"primaryImageOfPage":{"@id":"https://malinika.ru/retsept-lapshi-s-makom-i-chernoslivom-syurpriz-dlya-malishki/#primaryimage"},"image":{"@id":"https://malinika.ru/retsept-lapshi-s-makom-i-chernoslivom-syurpriz-dlya-malishki/#primaryimage"},"thumbnailUrl":"https://images.iptv.rt.ru/images/c70mo2bir4ssllu1eav0.jpg","datePublished":"2024-02-01T20:05:54+00:00","author":{"@id":"https://malinika.ru/#/schema/person/8b8bef3d65544d4db170856dfdfb007f"},"description":"Изысканное блюдо лапша с маком и черносливом, которое порадует вашу малышку своим нежным и сытным вкусом.","breadcrumb":{"@id":"https://malinika.ru/retsept-lapshi-s-makom-i-chernoslivom-syurpriz-dlya-malishki/#breadcrumb"},"inLanguage":"ru-RU","potentialAction":[{"@type":"ReadAction","target":["https://malinika.ru/retsept-lapshi-s-makom-i-chernoslivom-syurpriz-dlya-malishki/"]}]},{"@type":"ImageObject","inLanguage":"ru-RU","@id":"https://malinika.ru/retsept-lapshi-s-makom-i-chernoslivom-syurpriz-dlya-malishki/#primaryimage","url":"https://images.iptv.rt.ru/images/c70mo2bir4ssllu1eav0.jpg","contentUrl":"https://images.iptv.rt.ru/images/c70mo2bir4ssllu1eav0.jpg"},{"@type":"BreadcrumbList","@id":"https://malinika.ru/retsept-lapshi-s-makom-i-chernoslivom-syurpriz-dlya-malishki/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная страница","item":"https://malinika.ru/"},{"@type":"ListItem","position":2,"name":"Рецепт лапши с маком и черносливом – Сюрприз для малышки"}]},{"@type":"WebSite","@id":"https://malinika.ru/#website","url":"https://malinika.ru/","name":"Malinika.ru - Рецепты","description":"Рецепты на каждый день","potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://malinika.ru/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"ru-RU"},{"@type":"Person","@id":"https://malinika.ru/#/schema/person/8b8bef3d65544d4db170856dfdfb007f","name":"Игорь Бекушев","image":{"@type":"ImageObject","inLanguage":"ru-RU","@id":"https://malinika.ru/#/schema/person/image/","url":"https://malinika.ru/wp-content/plugins/clearfy-pro/assets/images/default-avatar.png","contentUrl":"https://malinika.ru/wp-content/plugins/clearfy-pro/assets/images/default-avatar.png","caption":"Игорь Бекушев"},"sameAs":["https://malinika.ru"],"url":"https://malinika.ru/author/markiz/"}]}</script>
+
+
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<link href="https://fonts.gstatic.com" crossorigin="" rel="preconnect">
+<style id="wp-img-auto-sizes-contain-inline-css" type="text/css">
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<link data-minify="1" rel="stylesheet" id="fotorama.css-css" href="https://malinika.ru/wp-content/cache/min/1/wp-content/plugins/fotorama/fotorama.css?ver=1766748290" media="all">
+<link data-minify="1" rel="stylesheet" id="fotorama-wp.css-css" href="https://malinika.ru/wp-content/cache/min/1/wp-content/plugins/fotorama/fotorama-wp.css?ver=1766748290" media="all">
+<style id="classic-theme-styles-inline-css" type="text/css">
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+/*# sourceURL=/wp-includes/css/classic-themes.min.css */
+</style>
+
+<link data-minify="1" rel="stylesheet" id="yelly-style-css" href="https://malinika.ru/wp-content/cache/min/1/wp-content/themes/yelly/assets/css/style.min.css?ver=1766748290" media="all">
+<link data-minify="1" rel="stylesheet" id="yarpp-thumbnails-css" href="https://malinika.ru/wp-content/cache/min/1/wp-content/plugins/yet-another-related-posts-plugin/style/styles_thumbnails.css?ver=1766748328" media="all">
+<style id="yarpp-thumbnails-inline-css" type="text/css">
+.yarpp-thumbnails-horizontal .yarpp-thumbnail {width: 130px;height: 170px;margin: 5px;margin-left: 0px;}.yarpp-thumbnail > img, .yarpp-thumbnail-default {width: 120px;height: 120px;margin: 5px;}.yarpp-thumbnails-horizontal .yarpp-thumbnail-title {margin: 7px;margin-top: 0px;width: 120px;}.yarpp-thumbnail-default > img {min-height: 120px;min-width: 120px;}
+/*# sourceURL=yarpp-thumbnails-inline-css */
+</style>
+<style id="rocket-lazyload-inline-css" type="text/css">
+.rll-youtube-player{position:relative;padding-bottom:56.23%;height:0;overflow:hidden;max-width:100%;}.rll-youtube-player:focus-within{outline: 2px solid currentColor;outline-offset: 5px;}.rll-youtube-player iframe{position:absolute;top:0;left:0;width:100%;height:100%;z-index:100;background:0 0}.rll-youtube-player img{bottom:0;display:block;left:0;margin:auto;max-width:100%;width:100%;position:absolute;right:0;top:0;border:none;height:auto;-webkit-transition:.4s all;-moz-transition:.4s all;transition:.4s all}.rll-youtube-player img:hover{-webkit-filter:brightness(75%)}.rll-youtube-player .play{height:100%;width:100%;left:0;top:0;position:absolute;background:url(https://malinika.ru/wp-content/plugins/wp-rocket/assets/img/youtube.png) no-repeat center;background-color: transparent !important;cursor:pointer;border:none;}.wp-embed-responsive .wp-has-aspect-ratio .rll-youtube-player{position:absolute;padding-bottom:0;width:100%;height:100%;top:0;bottom:0;left:0;right:0}
+/*# sourceURL=rocket-lazyload-inline-css */
+</style>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-includes/js/jquery/jquery.min.js" id="jquery-core-js"></script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-includes/js/jquery/jquery-migrate.min.js" id="jquery-migrate-js" data-rocket-defer="" defer=""></script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-content/plugins/fotorama/fotorama.js" id="fotorama.js-js" data-rocket-defer="" defer=""></script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-content/plugins/fotoramaDefaults.js" id="fotoramaDefaults.js-js" data-rocket-defer="" defer=""></script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-content/plugins/fotorama/fotorama-wp.js" id="fotorama-wp.js-js" data-rocket-defer="" defer=""></script>
+<style>.pseudo-clearfy-link { color: #008acf; cursor: pointer;}.pseudo-clearfy-link:hover { text-decoration: none;}</style><link rel="preload" href="https://malinika.ru/wp-content/themes/yelly/assets/fonts/icomoon.ttf" as="font" crossorigin="">
+    <style>.scrolltop:before{content:"\fe3d"}::selection, .card-slider__category, .card-slider-container .swiper-pagination-bullet-active, .post-card--grid .post-card__thumbnail:before, .post-card:not(.post-card--small) .post-card__thumbnail a:before, .post-card:not(.post-card--small) .post-card__category,  .post-box--high .post-box__category span, .post-box--wide .post-box__category span, .page-separator, .pagination .nav-links .page-numbers:not(.dots):not(.current):before, .btn, .btn-primary:hover, .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle, .comment-respond .form-submit input, .widget-area .widget-header, .page-links__item, .pagination .nav-links .page-numbers{background-color:#333333}.entry-image--big .entry-image__body .post-card__category a, .entry-category a, .home-text ul:not([class])>li:before, .entry-content ul:not([class])>li:before, .taxonomy-description ul:not([class])>li:before, .widget_categories ul.menu li a:before, .widget_categories ul.menu li span:before, .widget_categories>ul li a:before, .widget_categories>ul li span:before, .widget_nav_menu ul.menu li a:before, .widget_nav_menu ul.menu li span:before, .widget_nav_menu>ul li a:before, .widget_nav_menu>ul li span:before, .page-links .page-numbers:not(.dots):not(.current):before, .page-links .post-page-numbers:not(.dots):not(.current):before, .pagination .nav-links .page-numbers:not(.dots):not(.current):before, .pagination .nav-links .post-page-numbers:not(.dots):not(.current):before, .entry-image--full .entry-image__body .post-card__category a, .entry-image--fullscreen .entry-image__body .post-card__category a, .entry-image--wide .entry-image__body .post-card__category a{background-color:#333333}.comment-respond input:focus, select:focus, textarea:focus, .post-card--grid.post-card--thumbnail-no, .post-card--standard:after, .post-card--related.post-card--thumbnail-no:hover, .spoiler-box, .btn-primary, .btn-primary:hover, .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle, .inp:focus, .entry-tag:focus, .entry-tag:hover, .search-screen .search-form .search-field:focus, .entry-content blockquote,
+        .input:focus, input[type=color]:focus, input[type=date]:focus, input[type=datetime-local]:focus, input[type=datetime]:focus, input[type=email]:focus, input[type=month]:focus, input[type=number]:focus, input[type=password]:focus, input[type=range]:focus, input[type=search]:focus, input[type=tel]:focus, input[type=text]:focus, input[type=time]:focus, input[type=url]:focus, input[type=week]:focus, select:focus, textarea:focus{border-color:#333333 !important}.post-card--grid a:hover, .post-card--small .post-card__category, .post-card__author:before, .post-card__comments:before, .post-card__date:before, .post-card__like:before, .post-card__views:before, .entry-author:before, .entry-date:before, .entry-time:before, .entry-views:before, .entry-content ol:not([class])>li:before, .text-content ol:not([class])>li:before, .taxonomy-description ol:not([class])>li:before, .entry-content blockquote:before, .spoiler-box__title:after, .search-icon:hover:before, .search-form .search-submit:hover:before, .star-rating-item.hover,
+        .comment-list .bypostauthor>.comment-body .comment-author:after,
+        .search-screen .search-form .search-submit:before, .widget_categories ul li:before,
+        .star-rating--score-1:not(.hover) .star-rating-item:nth-child(1),
+        .star-rating--score-2:not(.hover) .star-rating-item:nth-child(1), .star-rating--score-2:not(.hover) .star-rating-item:nth-child(2),
+        .star-rating--score-3:not(.hover) .star-rating-item:nth-child(1), .star-rating--score-3:not(.hover) .star-rating-item:nth-child(2), .star-rating--score-3:not(.hover) .star-rating-item:nth-child(3),
+        .star-rating--score-4:not(.hover) .star-rating-item:nth-child(1), .star-rating--score-4:not(.hover) .star-rating-item:nth-child(2), .star-rating--score-4:not(.hover) .star-rating-item:nth-child(3), .star-rating--score-4:not(.hover) .star-rating-item:nth-child(4),
+        .star-rating--score-5:not(.hover) .star-rating-item:nth-child(1), .star-rating--score-5:not(.hover) .star-rating-item:nth-child(2), .star-rating--score-5:not(.hover) .star-rating-item:nth-child(3), .star-rating--score-5:not(.hover) .star-rating-item:nth-child(4), .star-rating--score-5:not(.hover) .star-rating-item:nth-child(5){color:#333333}@media (min-width: 768px){body{background-attachment: scroll}}.site-header{background-color:#333333}@media (min-width: 992px){.site-header ul li .sub-menu{background-color:#333333}}.site-header{background-image: url("https://malinika.ru/wp-content/uploads/2022/03/malinika.ru_.jpg")}@media (max-width: 767px){.site-header{background-size: cover}}.site-footer{background-color:#333333}</style>
+<link rel="icon" href="https://malinika.ru/wp-content/uploads/2022/03/cropped-malinika-favicon-32x32.png" sizes="32x32">
+<link rel="icon" href="https://malinika.ru/wp-content/uploads/2022/03/cropped-malinika-favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="https://malinika.ru/wp-content/uploads/2022/03/cropped-malinika-favicon-180x180.png">
+<meta name="msapplication-TileImage" content="https://malinika.ru/wp-content/uploads/2022/03/cropped-malinika-favicon-270x270.png">
+<noscript><style id="rocket-lazyload-nojs-css">.rll-youtube-player, [data-lazy-src]{display:none !important;}</style></noscript>    <style id="global-styles-inline-css" type="text/css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 19.5px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36.5px;--wp--preset--font-size--x-large: 42px;--wp--preset--font-size--normal: 22px;--wp--preset--font-size--huge: 49.5px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+<link data-minify="1" rel="stylesheet" id="yarppRelatedCss-css" href="https://malinika.ru/wp-content/cache/min/1/wp-content/plugins/yet-another-related-posts-plugin/style/related.css?ver=1766748328" media="all">
+
+<meta name="generator" content="WP Rocket 3.18.1.5" data-wpr-features="wpr_delay_js wpr_defer_js wpr_lazyload_iframes wpr_image_dimensions wpr_minify_css wpr_desktop"><link href="https://w.uptolike.com" rel="preconnect"></head>
+	
+
+<body class="wp-singular post-template-default single single-post postid-37914 single-format-standard wp-embed-responsive wp-theme-yelly wp-child-theme-yelly_child sidebar-right">
+
+
+
+<div data-rocket-location-hash="54257ff4dc2eb7aae68fa23eb5f11e06" id="page" class="site">
+    <a class="skip-link screen-reader-text" href="#content">Перейти к контенту</a>
+
+    
+    
+    <div data-rocket-location-hash="27eae8816772119298a24727d45914b4" class="search-screen-overlay js-search-screen-overlay"></div>
+    <div data-rocket-location-hash="3882f6cb63557ea7e3951416af29d4f7" class="search-screen js-search-screen">
+        
+<form role="search" method="get" class="search-form" action="https://malinika.ru/">
+    <label>
+        <span class="screen-reader-text">Search for:</span>
+        <input type="search" class="search-field" placeholder="Поиск..." value="" name="s">
+    </label>
+    <button type="submit" class="search-submit"></button>
+</form>    </div>
+
+    
+
+<header data-rocket-location-hash="e21be6226fda8fef111d5e57b12bbf74" id="masthead" class="site-header full" itemscope="" itemtype="http://schema.org/WPHeader">
+    <div data-rocket-location-hash="37593f518caeab60bd9c10a051c52ee7" class="site-header-inner fixed">
+
+        <div class="humburger js-humburger"><span></span><span></span><span></span></div>
+
+        
+<div class="site-branding">
+
+    <div class="site-branding__body"><div class="site-title"><a href="https://malinika.ru/">Malinika.ru - Рецепты</a></div><p class="site-description">Рецепты на каждый день</p></div></div><!-- .site-branding -->
+<div class="header-search"><span class="search-icon js-search-icon"></span></div>    </div>
+</header><!-- #masthead -->
+
+
+
+    
+    
+    <div data-rocket-location-hash="146f0a8bcad64f4b7e148da44777830c" id="content" class="site-content fixed">
+
+        <div data-rocket-location-hash="6b066574a0d875535e5db71f9166ff2c" class="b-r b-r--before_site_content"> </div>
+        <div data-rocket-location-hash="fcd9a77b8df80a69ebdb56768ab3bb52" class="site-content-inner">
+    
+        
+        <div id="primary" class="content-area" itemscope="" itemtype="http://schema.org/Article">
+            <main id="main" class="site-main">
+
+                
+<article id="post-37914" class="article-post post-37914 post type-post status-publish format-standard  category-recipies">
+
+    
+        <div class="breadcrumb" itemscope="" itemtype="http://schema.org/BreadcrumbList"><span class="breadcrumb-item" itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a href="https://malinika.ru/" itemprop="item"><span itemprop="name">Главная</span></a><meta itemprop="position" content="0"></span> <span class="breadcrumb-separator">»</span> <span class="breadcrumb-item" itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a href="https://malinika.ru/category/recipies/" itemprop="item"><span itemprop="name">Рецепты</span></a><meta itemprop="position" content="1"></span></div>
+        <header class="entry-header"><h1 class="entry-title" itemprop="headline">Рецепт лапши с маком и черносливом – Сюрприз для малышки</h1></header>
+        
+        
+        
+    
+    
+    <div class="entry-meta"></div>
+	<div class="entry-content" itemprop="articleBody">
+		<div class="b-r b-r--before_content"> </div><p><img decoding="async" src="https://images.iptv.rt.ru/images/c70mo2bir4ssllu1eav0.jpg" alt="Рецепт лапши с маком и черносливом – Сюрприз для малышки" title="Рецепт лапши с маком и черносливом – Сюрприз для малышки"></p>
+<p></p><div class="rll-youtube-player" data-src="https://www.youtube.com/embed/E260xOVcI5g" data-id="E260xOVcI5g" data-query="" data-alt="Рецепт лапши с маком и черносливом – Сюрприз для малышки"><div data-id="E260xOVcI5g" data-query="" data-src="https://www.youtube.com/embed/E260xOVcI5g"><img src="https://i.ytimg.com/vi/E260xOVcI5g/hqdefault.jpg" alt="Рецепт лапши с маком и черносливом – Сюрприз для малышки" width="480" height="360"><button class="play" aria-label="Play Youtube video" data-rocket-onclick="this.rocketonclick(event)"></button></div></div><noscript><iframe width="750" height="420" src="https://www.youtube.com/embed/E260xOVcI5g" title="Рецепт лапши с маком и черносливом – Сюрприз для малышки" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></noscript><p></p>
+<p>Лапша с маком и черносливом – это действительно волшебное блюдо, способное покорить не только детские сердца, но и взрослых гурманов. Уже с первого взгляда на эту аппетитную лапшу, вы не устоите перед ее привлекательностью. Это действительно изысканное и неповторимое сочетание мака и чернослива в соусе, которое будет радовать как малышку, так и всю семью. Отличная идея для ужина или особого праздничного события.</p>
+<p><strong>Лапша с маком</strong> – это одно из самых аутентичных блюд азиатской кухни. Она завоевала популярность во многих странах мира благодаря своей неповторимой текстуре и аромату. Кроме того, она является прекрасным источником энергии и питательных веществ. Лапша с маком и черносливом – это отличный выбор для тех, кто хочет испытать что-то уникальное и вкусное.</p>
+<p>Уникальность этого блюда в том, что оно обладает нежным и ароматным вкусом, который сложно описать словами. Лапша с маком и черносливом сочетает в себе сладость чернослива и изысканный аромат мака, что придает этому блюду особый шарм и привлекательность. Итак, давайте приготовим эту удивительную лапшу, чтобы приятно удивить малышку и порадовать весь дом достойным ужином.</p>
+<div class="table-of-contents"><div class="table-of-contents__header"><span class="table-of-contents__hide js-table-of-contents-hide">Содержание</span></div><ol class="table-of-contents__list js-table-of-contents-list" style="display:none;">
+<li class="level-1"><a href="#retsept-lapshi-s-makom-i-chernoslivom-syurpriz">Рецепт лапши с маком и черносливом – Сюрприз для малышки</a></li><li class="level-1"><a href="#ingredienty">Ингредиенты:</a></li><li class="level-2"><a href="#lapsha">Лапша:</a></li><li class="level-2"><a href="#mak">Мак:</a></li><li class="level-2"><a href="#chernosliv">Чернослив:</a></li><li class="level-1"><a href="#prigotovlenie">Приготовление:</a></li><li class="level-2"><a href="#prigotovlenie-lapshi">Приготовление лапши:</a></li><li class="level-2"><a href="#prigotovlenie-maka">Приготовление мака:</a></li><li class="level-1"><a href="#video">Видео:</a></li></ol></div><h2 id="retsept-lapshi-s-makom-i-chernoslivom-syurpriz">Рецепт лапши с маком и черносливом – Сюрприз для малышки</h2>
+<p>Ингредиенты:</p>
+<ul>
+<li>200 г лапши</li>
+<li>50 г мака</li>
+<li>50 г чернослива</li>
+<li>2 столовые ложки меда</li>
+<li>По вкусу – изюм</li>
+</ul>
+<p>Приготовление:</p>
+<ol>
+<li>Сначала следует приготовить лапшу по инструкции на упаковке. Обычно это занимает около 5-7 минут.</li>
+<li>Пока лапша варится, можно подготовить ингредиенты для соуса. Чернослив нужно мелко нарезать, а мак предварительно измельчить в кофемолке или специальном измельчителе.</li>
+<li>Когда лапша готова, ее нужно слить на большое сито и промыть холодной водой. Это сделает ее более эластичной и позволит лучше впитать соус.</li>
+<li>В большой сковороде или кастрюле с толстым дном разогреть мед и добавить мак. Поджарить немного, чтобы мед расплавился и смешался с маком.</li>
+<li>Добавить чернослив и изюм, хорошо перемешать и тушить все вместе на небольшом огне 2-3 минуты.</li>
+<li>Затем добавить промытую лапшу в сковороду со связкой мака и чернослива. Хорошо перемешать, чтобы соус равномерно распределился по всей лапше.</li>
+<li>Поджарить лапшу с соусом на среднем огне еще 2-3 минуты, пока она не нагреется и не пропитается ароматами мака и чернослива.</li>
+<li>Готовую лапшу с маком и черносливом можно подавать теплой. Приятного аппетита малышке!</li>
+</ol>
+<div style="clear:both; margin-top:0em; margin-bottom:1em;"><a href="https://malinika.ru/pechene-paltsi-vedmi-na-xellouin-retsept-i-sekreti-prigotovleniya/" target="_blank" rel="nofollow" class="uf4633f1727a5c7e129a2f1f8ad402bbd"><!-- INLINE RELATED POSTS 1/3 //--><style> .uf4633f1727a5c7e129a2f1f8ad402bbd , .uf4633f1727a5c7e129a2f1f8ad402bbd .postImageUrl , .uf4633f1727a5c7e129a2f1f8ad402bbd .centered-text-area { min-height: 80px; position: relative; } .uf4633f1727a5c7e129a2f1f8ad402bbd , .uf4633f1727a5c7e129a2f1f8ad402bbd:hover , .uf4633f1727a5c7e129a2f1f8ad402bbd:visited , .uf4633f1727a5c7e129a2f1f8ad402bbd:active { border:0!important; } .uf4633f1727a5c7e129a2f1f8ad402bbd .clearfix:after { content: ""; display: table; clear: both; } .uf4633f1727a5c7e129a2f1f8ad402bbd { display: block; transition: background-color 250ms; webkit-transition: background-color 250ms; width: 100%; opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; background-color: #E67E22; } .uf4633f1727a5c7e129a2f1f8ad402bbd:active , .uf4633f1727a5c7e129a2f1f8ad402bbd:hover { opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; background-color: #D35400; } .uf4633f1727a5c7e129a2f1f8ad402bbd .centered-text-area { width: 100%; position: relative; } .uf4633f1727a5c7e129a2f1f8ad402bbd .ctaText { border-bottom: 0 solid #fff; color: #ECF0F1; font-size: 16px; font-weight: bold; margin: 0; padding: 0; text-decoration: underline; } .uf4633f1727a5c7e129a2f1f8ad402bbd .postTitle { color: #2C3E50; font-size: 16px; font-weight: 600; margin: 0; padding: 0; width: 100%; } .uf4633f1727a5c7e129a2f1f8ad402bbd .ctaButton { background-color: #D35400!important; color: #ECF0F1; border: none; border-radius: 3px; box-shadow: none; font-size: 14px; font-weight: bold; line-height: 26px; moz-border-radius: 3px; text-align: center; text-decoration: none; text-shadow: none; width: 80px; min-height: 80px; background: url(https://malinika.ru/wp-content/plugins/intelly-related-posts/assets/images/simple-arrow.png)no-repeat; position: absolute; right: 0; top: 0; } .uf4633f1727a5c7e129a2f1f8ad402bbd:hover .ctaButton { background-color: #E67E22!important; } .uf4633f1727a5c7e129a2f1f8ad402bbd .centered-text { display: table; height: 80px; padding-left: 18px; top: 0; } .uf4633f1727a5c7e129a2f1f8ad402bbd .uf4633f1727a5c7e129a2f1f8ad402bbd-content { display: table-cell; margin: 0; padding: 0; padding-right: 108px; position: relative; vertical-align: middle; width: 100%; } .uf4633f1727a5c7e129a2f1f8ad402bbd:after { content: ""; display: block; clear: both; } </style><div class="centered-text-area"><div class="centered-text" style="float: left;"><div class="uf4633f1727a5c7e129a2f1f8ad402bbd-content"><span class="ctaText">Популярные статьи</span>&nbsp; <span class="postTitle">Печенье Пальцы ведьмы на Хеллоуин – удивительный рецепт, который покорит всех гостей своим страшным внешним видом и вкусом!</span></div></div></div><div class="ctaButton"></div></a></div><p>Такой сюрприз из лапши с маком и черносливом обязательно понравится вашей маленькой принцессе. Этот рецепт сочетает в себе вкус, полезные свойства и невероятную ароматику. Попробуйте приготовить его на обед или ужин, и ваш ребенок останется в восторге!</p>
+<h2 id="ingredienty">Ингредиенты:</h2>
+<p><img decoding="async" src="https://tv.ua/i/93/67/92/936792/33977aa94645ac5f2393de68b87dd9be-quality_50Xresize_crop_1Xallow_enlarge_0Xw_367Xh_227.jpg" alt="Ингредиенты:"></p>
+<p><strong>1 кг</strong> лапши из муки высшего сорта</p>
+<p><strong>200 г</strong> мака</p>
+<p><strong>200 г</strong> чернослива без косточек</p>
+<p><strong>100 г</strong> сахара</p>
+<p><strong>50 г</strong> сливочного масла</p>
+<p><strong>1 л</strong> молока</p>
+<p><em>По желанию:</em></p>
+<p><em>щепотка корицы для аромата</em></p>
+<p><em>щепотка соли для насыщенности вкуса</em></p>
+<h3 id="lapsha">Лапша:</h3>
+<ol>
+<li>Мука – 300 г</li>
+<li>Яйца – 2 шт</li>
+<li>Соль – по вкусу</li>
+<li>Вода – около 150-200 мл</li>
+</ol>
+<p>Для начала, в большой миске смешайте муку и соль. Сделайте углубление в центре и влейте яйца. Тщательно перемешайте яйца с мукой, пока не образуется однородное тесто.</p>
+<p>Постепенно добавляйте воду и продолжайте мешать, пока тесто не станет гладким и эластичным. Если тесто слишком сухое, добавьте еще немного воды, а если слишком липкое – немного муки. Затем вылейте тесто на рабочую поверхность и замесите его руками до состояния однородной массы.</p>
+<p>Разделите тесто на несколько частей и раскатайте их с помощью паста машины или раскатки до тонкого слоя. Вырежьте из теста лапшу нужной формы: ленточки, круги или квадраты.</p>
+<p>После того, как лапша будет готова, ее можно сразу использовать для приготовления блюда с маком и черносливом или хранить в холодильнике до использования.</p>
+<p>Теперь вы готовы приступить к приготовлению запеченной лапши с маком и черносливом.</p>
+<h3 id="mak">Мак:</h3>
+<p>В кулинарии мак широко используется для создания различных десертов, выпечки, соусов и начинок. Одним из классических комбинаций является мак с черносливом. Вместе они создают неповторимый вкусовой букет и придают блюду уникальный аромат. Чернослив и мак вместе обладают множеством полезных свойств для организма, включая улучшение пищеварения и обмена веществ, повышение иммунитета и общего тонуса организма.</p>
+<p>В рецепте лапши с маком и черносливом, мак добавляется в основу теста, придавая ему нежный вкус и украшая его приятными черными точками. Чернослив же дополняет эти впечатления, делая блюдо более насыщенным и сладким. В итоге получается полезное и вкусное блюдо, которое понравится не только детям, но и взрослым.</p>
+<div style="clear:both; margin-top:0em; margin-bottom:1em;"><a href="https://malinika.ru/vkusnie-i-poleznie-maffini-iz-kabachkov-i-kurinogo-file-retsept-s-foto/" target="_blank" rel="nofollow" class="u17e69ce7e1e12abfd5b6a89b71ae3bf5"><!-- INLINE RELATED POSTS 2/3 //--><style> .u17e69ce7e1e12abfd5b6a89b71ae3bf5 , .u17e69ce7e1e12abfd5b6a89b71ae3bf5 .postImageUrl , .u17e69ce7e1e12abfd5b6a89b71ae3bf5 .centered-text-area { min-height: 80px; position: relative; } .u17e69ce7e1e12abfd5b6a89b71ae3bf5 , .u17e69ce7e1e12abfd5b6a89b71ae3bf5:hover , .u17e69ce7e1e12abfd5b6a89b71ae3bf5:visited , .u17e69ce7e1e12abfd5b6a89b71ae3bf5:active { border:0!important; } .u17e69ce7e1e12abfd5b6a89b71ae3bf5 .clearfix:after { content: ""; display: table; clear: both; } .u17e69ce7e1e12abfd5b6a89b71ae3bf5 { display: block; transition: background-color 250ms; webkit-transition: background-color 250ms; width: 100%; opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; background-color: #E67E22; } .u17e69ce7e1e12abfd5b6a89b71ae3bf5:active , .u17e69ce7e1e12abfd5b6a89b71ae3bf5:hover { opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; background-color: #D35400; } .u17e69ce7e1e12abfd5b6a89b71ae3bf5 .centered-text-area { width: 100%; position: relative; } .u17e69ce7e1e12abfd5b6a89b71ae3bf5 .ctaText { border-bottom: 0 solid #fff; color: #ECF0F1; font-size: 16px; font-weight: bold; margin: 0; padding: 0; text-decoration: underline; } .u17e69ce7e1e12abfd5b6a89b71ae3bf5 .postTitle { color: #2C3E50; font-size: 16px; font-weight: 600; margin: 0; padding: 0; width: 100%; } .u17e69ce7e1e12abfd5b6a89b71ae3bf5 .ctaButton { background-color: #D35400!important; color: #ECF0F1; border: none; border-radius: 3px; box-shadow: none; font-size: 14px; font-weight: bold; line-height: 26px; moz-border-radius: 3px; text-align: center; text-decoration: none; text-shadow: none; width: 80px; min-height: 80px; background: url(https://malinika.ru/wp-content/plugins/intelly-related-posts/assets/images/simple-arrow.png)no-repeat; position: absolute; right: 0; top: 0; } .u17e69ce7e1e12abfd5b6a89b71ae3bf5:hover .ctaButton { background-color: #E67E22!important; } .u17e69ce7e1e12abfd5b6a89b71ae3bf5 .centered-text { display: table; height: 80px; padding-left: 18px; top: 0; } .u17e69ce7e1e12abfd5b6a89b71ae3bf5 .u17e69ce7e1e12abfd5b6a89b71ae3bf5-content { display: table-cell; margin: 0; padding: 0; padding-right: 108px; position: relative; vertical-align: middle; width: 100%; } .u17e69ce7e1e12abfd5b6a89b71ae3bf5:after { content: ""; display: block; clear: both; } </style><div class="centered-text-area"><div class="centered-text" style="float: left;"><div class="u17e69ce7e1e12abfd5b6a89b71ae3bf5-content"><span class="ctaText">Популярные статьи</span>&nbsp; <span class="postTitle">Вкусные и полезные маффины из кабачков и куриного филе - рецепт с фото!</span></div></div></div><div class="ctaButton"></div></a></div><table>
+<tbody><tr>
+<th>Мак в кулинарии:</th>
+<th>Полезные свойства мака:</th>
+</tr>
+<tr>
+<td>• Приготовление десертов и выпечки</td>
+<td>• Богат содержанием аминокислот и полиненасыщенных жирных кислот</td>
+</tr>
+<tr>
+<td>• Создание соусов и начинок</td>
+<td>• Улучшение пищеварения и обмена веществ </td>
+</tr>
+<tr>
+<td></td>
+<td>• Повышение иммунитета и общего тонуса организма</td>
+</tr>
+</tbody></table>
+<h3 id="chernosliv">Чернослив:</h3>
+<p><img decoding="async" src="https://e3.edimdoma.ru/data/recipes/0004/9038/49038-ed4_wide.jpg?1468496773" alt="Чернослив:"></p>
+<p>Кроме того, чернослив – отличный источник минералов и витаминов. Он содержит витамины группы В, витамин А, витамин К, а также калий, магний, железо и медь. Все эти вещества необходимы для нормального функционирования организма и поддержания здоровья.</p>
+<p>Чернослив также является источником природных антиоксидантов, которые помогают бороться со свободными радикалами и предотвращают преждевременное старение клеток. Они также способствуют укреплению иммунной системы и повышению ее защитных функций.</p>
+<table>
+<tbody><tr>
+<th>Пищевая ценность на 100 г чернослива:</th>
+<th>Количество</th>
+</tr>
+<tr>
+<td>Калории:</td>
+<td>240 ккал</td>
+</tr>
+<tr>
+<td>Белки:</td>
+<td>2,3 г</td>
+</tr>
+<tr>
+<td>Жиры:</td>
+<td>0,7 г</td>
+</tr>
+<tr>
+<td>Углеводы:</td>
+<td>59 г</td>
+</tr>
+<tr>
+<td>Пищевые волокна:</td>
+<td>7 г</td>
+</tr>
+</tbody></table>
+<p>Таким образом, чернослив – отличный добавка к лапше с маком, которая не только вкусная и сытная, но и полезная для организма малышки.</p>
+<h2 id="prigotovlenie">Приготовление:</h2>
+<p><img decoding="async" src="https://i.ytimg.com/vi/hdPNk9D1Xg4/mqdefault.jpg" alt="Приготовление:"></p>
+<p>1. Подготовить все необходимые ингредиенты: 200 г лапши из пшеничной муки, 100 г чернослива, 50 г мака, 2 столовые ложки сахара, 1 столовую ложку масла.</p>
+<p>2. Чернослив залить кипятком и оставить на 15 минут для набухания. Затем его нужно слить и нарезать кубиками.</p>
+<p>3. Приготовить лапшу, следуя инструкции на упаковке.</p>
+<p>4. В кипящую воду добавить сахар, лапшу и варить до готовности, которая обычно занимает около 5 минут.</p>
+<p>5. Откинуть лапшу на дуршлаг, чтобы стекла лишняя вода.</p>
+<p>6. Выложить лапшу на тарелку и добавить нарезанный чернослив и мак.</p>
+<p>7. Полить лапшу растопленным маслом и перемешать все ингредиенты.</p>
+<p>8. Лапшу с маком и черносливом можно подавать как горячей, так и остывшей. Приятного аппетита!</p>
+<h3 id="prigotovlenie-lapshi">Приготовление лапши:</h3>
+<p><img decoding="async" src="https://www.povarenok.ru/data/cache/2023may/24/19/3052635_94451-640x480.jpg" alt="Приготовление лапши:"></p>
+<p>Для приготовления лапши с маком и черносливом вам понадобится следующие ингредиенты:</p>
+<p><strong>Ингредиенты:</strong></p>
+<ul>
+<li>200 г лапши из пшеничной муки</li>
+<li>50 г чернослива</li>
+<li>30 г мака</li>
+<li>100 г сахара</li>
+<li>50 г сливочного масла</li>
+<li>100 мл кипятка</li>
+</ul>
+<p><em>Шаг 1:</em></p>
+<p>Сначала организуйте все необходимые ингредиенты перед началом готовки. Убедитесь, что у вас есть достаточно пшеничной лапши, чернослива, мака, сахара, сливочного масла и кипятка.</p>
+<p><em>Шаг 2:</em></p>
+<p>Положите лапшу в кипяток и варите до готовности в соответствии с инструкцией на упаковке. Обычно это занимает около 5-7 минут.</p>
+<div style="clear:both; margin-top:0em; margin-bottom:1em;"><a href="https://malinika.ru/retsept-blinnix-ruletikov-zakusochka-5-variantov-prigotovleniya/" target="_blank" rel="nofollow" class="ubfd2ec73c4853dbfbbe6d60f1d051016"><!-- INLINE RELATED POSTS 3/3 //--><style> .ubfd2ec73c4853dbfbbe6d60f1d051016 , .ubfd2ec73c4853dbfbbe6d60f1d051016 .postImageUrl , .ubfd2ec73c4853dbfbbe6d60f1d051016 .centered-text-area { min-height: 80px; position: relative; } .ubfd2ec73c4853dbfbbe6d60f1d051016 , .ubfd2ec73c4853dbfbbe6d60f1d051016:hover , .ubfd2ec73c4853dbfbbe6d60f1d051016:visited , .ubfd2ec73c4853dbfbbe6d60f1d051016:active { border:0!important; } .ubfd2ec73c4853dbfbbe6d60f1d051016 .clearfix:after { content: ""; display: table; clear: both; } .ubfd2ec73c4853dbfbbe6d60f1d051016 { display: block; transition: background-color 250ms; webkit-transition: background-color 250ms; width: 100%; opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; background-color: #E67E22; } .ubfd2ec73c4853dbfbbe6d60f1d051016:active , .ubfd2ec73c4853dbfbbe6d60f1d051016:hover { opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; background-color: #D35400; } .ubfd2ec73c4853dbfbbe6d60f1d051016 .centered-text-area { width: 100%; position: relative; } .ubfd2ec73c4853dbfbbe6d60f1d051016 .ctaText { border-bottom: 0 solid #fff; color: #ECF0F1; font-size: 16px; font-weight: bold; margin: 0; padding: 0; text-decoration: underline; } .ubfd2ec73c4853dbfbbe6d60f1d051016 .postTitle { color: #2C3E50; font-size: 16px; font-weight: 600; margin: 0; padding: 0; width: 100%; } .ubfd2ec73c4853dbfbbe6d60f1d051016 .ctaButton { background-color: #D35400!important; color: #ECF0F1; border: none; border-radius: 3px; box-shadow: none; font-size: 14px; font-weight: bold; line-height: 26px; moz-border-radius: 3px; text-align: center; text-decoration: none; text-shadow: none; width: 80px; min-height: 80px; background: url(https://malinika.ru/wp-content/plugins/intelly-related-posts/assets/images/simple-arrow.png)no-repeat; position: absolute; right: 0; top: 0; } .ubfd2ec73c4853dbfbbe6d60f1d051016:hover .ctaButton { background-color: #E67E22!important; } .ubfd2ec73c4853dbfbbe6d60f1d051016 .centered-text { display: table; height: 80px; padding-left: 18px; top: 0; } .ubfd2ec73c4853dbfbbe6d60f1d051016 .ubfd2ec73c4853dbfbbe6d60f1d051016-content { display: table-cell; margin: 0; padding: 0; padding-right: 108px; position: relative; vertical-align: middle; width: 100%; } .ubfd2ec73c4853dbfbbe6d60f1d051016:after { content: ""; display: block; clear: both; } </style><div class="centered-text-area"><div class="centered-text" style="float: left;"><div class="ubfd2ec73c4853dbfbbe6d60f1d051016-content"><span class="ctaText">Популярные статьи</span>&nbsp; <span class="postTitle">Рецепт блинных рулетиков «Закусочка» - 5 вариантов приготовления для разнообразия вашего стола</span></div></div></div><div class="ctaButton"></div></a></div><p><em>Шаг 3:</em></p>
+<p>На Разрез вишневого пирога поставьте сушеный чернослив и мак, а затем винный вишневый пирог вижет руку вишневого пирога постоянно борются в жареном. с 2/3 стакана воды вызвать опару. Заварить повешенную яму часть пирога на запекаемую локацию вишневого пирога, смазывание пежевела столовая ложка ржаной муки. Открыть полотенным бубном вокруг филе, чтобы с сравнять вершины соседних аксиоматик и припереть пирог и без энергозатрат выбросить необходимое новое количество джема. Черный и смазанный крем создает грант, является составным филе с точкой. Всю пластину пирога изготовить, облучивать компот как топинамбурный и катер менструальной муки.</p>
+<p><em>Шаг 4:</em></p>
+<p>Слейте воду, в которой варилась лапша. Добавьте сливочное масло и сахар в сковороду. Разогревайте на среднем огне до полного растворения сахара и плавления масла. Постоянно помешивайте, чтобы не дать сахару и маслу пригореть или попасть на лапшу.</p>
+<p><em>Шаг 5:</em></p>
+<p>Добавьте в сковороду чернослив и мак. Перемешайте, чтобы они равномерно распределились по всей лапше. Продолжайте готовить на среднем огне еще 2-3 минуты, пока чернослив станет мягким и мак раскроется.</p>
+<p><em>Шаг 6:</em></p>
+<p>Готовую лапшу с маком и черносливом можно подавать к столу горячей. Приятного аппетита!</p>
+<h3 id="prigotovlenie-maka">Приготовление мака:</h3>
+<p>Как правило, перед использованием мака его нужно предварительно приготовить. Для этого следует следовать нескольким простым шагам:</p>
+<ol>
+<li>Налейте кипяток в чашку или миску.</li>
+<li>Добавьте мак, чтобы он покрылся водой. Оставьте на 15-20 минут для набухания.</li>
+<li>После набухания мака, взбейте его в мельнице или используйте ступку, чтобы получить маковую муку.</li>
+<li>Процедите полученную муку через мелкую сито, чтобы избавиться от крупных частиц.</li>
+<li>Готовый мак можно использовать в различных рецептах, включая лапшу с маком и черносливом.</li>
+</ol>
+<h2 id="video">Видео:</h2><div class="yarpp yarpp-related yarpp-related-website yarpp-template-thumbnails">
+<!-- YARPP Thumbnails -->
+<h3>Рекомендуем:</h3>
+<div class="yarpp-thumbnails-horizontal">
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/tort-krasnyj-barhat-v-domasnih-usloviah-posagovyj-foto-recept/" title="Торт «Красный бархат»">
+<img width="120" height="78" src="https://malinika.ru/wp-content/uploads/f/1/5/f15ce0eecee0ad0ba0d3e8eb9e5e5c5c.jpeg" class="attachment-yarpp-thumbnail size-yarpp-thumbnail wp-post-image" alt="" data-pin-nopin="true"><span class="yarpp-thumbnail-title">Торт «Красный бархат»</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/pirog-s-kapustoj-interesnye-recepty-na-luboj-vkus/" title="Пирог с капустой">
+<img width="120" height="78" src="https://malinika.ru/wp-content/uploads/0/f/a/0facd97788739e6f4f9eaf5b9f401d34.jpeg" class="attachment-yarpp-thumbnail size-yarpp-thumbnail wp-post-image" alt="" data-pin-nopin="true"><span class="yarpp-thumbnail-title">Пирог с капустой</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/kabachki-v-tomatnom-souse-5-luchshih-retseptov-na-zimu-s-foto/" title="Кабачки в томатном соусе — 5 лучших рецептов на зиму с фото">
+<img width="120" height="120" src="https://malinika.ru/wp-content/uploads/2023/10/kabachki-v-tomatnom-souse-5-luchshih-retseptov-na-zimu-s-foto-120x120.jpg" class="attachment-yarpp-thumbnail size-yarpp-thumbnail wp-post-image" alt="" data-pin-nopin="true" srcset="https://malinika.ru/wp-content/uploads/2023/10/kabachki-v-tomatnom-souse-5-luchshih-retseptov-na-zimu-s-foto-120x120.jpg 120w, https://malinika.ru/wp-content/uploads/2023/10/kabachki-v-tomatnom-souse-5-luchshih-retseptov-na-zimu-s-foto-100x100.jpg 100w" sizes="(max-width: 120px) 100vw, 120px"><span class="yarpp-thumbnail-title">Кабачки в томатном соусе — 5 лучших рецептов на зиму с фото</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/kak-prigotovit-bliny-15-sposobov-kak-prigotovit-bliny-na-moloke-kefire-kislom-moloke-drozzah-vode-i-td-video/" title="Как приготовить блины?">
+<img width="120" height="78" src="https://malinika.ru/wp-content/uploads/c/3/0/c30fe39170fa33e2552bb3f877a434bb.jpeg" class="attachment-yarpp-thumbnail size-yarpp-thumbnail wp-post-image" alt="" data-pin-nopin="true"><span class="yarpp-thumbnail-title">Как приготовить блины?</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/tehteli-v-tomatno-smetannom-souse-v-duhovke-5-retseptov-s-poshagovymi-foto/" title="Техтели в томатно-сметанном соусе в духовке — 5 рецептов с пошаговыми фото">
+<span class="yarpp-thumbnail-default"><img width="120" height="120" src="https://malinika.ru/wp-content/plugins/yet-another-related-posts-plugin/images/default.png" alt="Default Thumbnail" data-pin-nopin="true"></span><span class="yarpp-thumbnail-title">Техтели в томатно-сметанном соусе в духовке — 5 рецептов с пошаговыми фото</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/retsept-supa-iz-tsiplenka-s-yablokom-i-chernoslivom-vkusnoe-blyudo-na-kazhdij-den/" title="Рецепт супа из цыпленка с яблоком и черносливом — вкусное блюдо на каждый день">
+<span class="yarpp-thumbnail-default"><img width="120" height="120" src="https://malinika.ru/wp-content/plugins/yet-another-related-posts-plugin/images/default.png" alt="Default Thumbnail" data-pin-nopin="true"></span><span class="yarpp-thumbnail-title">Рецепт супа из цыпленка с яблоком и черносливом — вкусное блюдо на каждый день</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/retsept-tvorozhno-bananovogo-pechenya-s-kokosovoj-struzhkoj-sdelajte-vkusnuyu-domashnyuyu-vipechku/" title="Рецепт творожно-бананового печенья с кокосовой стружкой — вкусная домашняя выпечка, которая удивит вас своим нежным вкусом и простотой приготовления!">
+<span class="yarpp-thumbnail-default"><img width="120" height="120" src="https://malinika.ru/wp-content/plugins/yet-another-related-posts-plugin/images/default.png" alt="Default Thumbnail" data-pin-nopin="true"></span><span class="yarpp-thumbnail-title">Рецепт творожно-бананового печенья с кокосовой стружкой — вкусная домашняя выпечка, которая удивит вас своим нежным вкусом и простотой приготовления!</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/assorti-iz-ovosej-na-zimu-5-izumitelnyh-receptov/" title="Ассорти из овощей на зиму">
+<img width="120" height="78" src="https://malinika.ru/wp-content/uploads/1/c/6/1c66bd89af8ea07de6f88a4badbb9c1e.jpeg" class="attachment-yarpp-thumbnail size-yarpp-thumbnail wp-post-image" alt="" data-pin-nopin="true"><span class="yarpp-thumbnail-title">Ассорти из овощей на зиму</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/retsept-apelsinovix-kruzhochkov-s-medom-vkusnie-deserti-s-apelsinami/" title="Сладкие круги из апельсинов с нежным медовым вкусом — идеальный рецепт для наслаждения вкуснейшим десертом!">
+<span class="yarpp-thumbnail-default"><img width="120" height="120" src="https://malinika.ru/wp-content/plugins/yet-another-related-posts-plugin/images/default.png" alt="Default Thumbnail" data-pin-nopin="true"></span><span class="yarpp-thumbnail-title">Сладкие круги из апельсинов с нежным медовым вкусом — идеальный рецепт для наслаждения вкуснейшим десертом!</span></a>
+<a class="yarpp-thumbnail" rel="norewrite" href="https://malinika.ru/pecen-s-ovosami-4-samyh-prostyh-i-vkusnyh-recepta/" title="Как приготовить печень с овощами">
+<img width="120" height="78" src="https://malinika.ru/wp-content/uploads/0/b/9/0b91b129423ba4941c526fa6bfabdd89.jpeg" class="attachment-yarpp-thumbnail size-yarpp-thumbnail wp-post-image" alt="" data-pin-nopin="true"><span class="yarpp-thumbnail-title">Как приготовить печень с овощами</span></a>
+</div>
+</div>
+	</div><!-- .entry-content -->
+
+</article>
+
+
+
+
+
+<div class="rating-box"><div class="rating-box__header">Оцените статью</div><div class="wp-star-rating js-star-rating star-rating--score-0" data-post-id="37914" data-rating-count="0" data-rating-sum="0" data-rating-value="0"><span class="star-rating-item js-star-rating-item" data-score="1"><svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="i-ico"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" class="ico-star"></path></svg></span><span class="star-rating-item js-star-rating-item" data-score="2"><svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="i-ico"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" class="ico-star"></path></svg></span><span class="star-rating-item js-star-rating-item" data-score="3"><svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="i-ico"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" class="ico-star"></path></svg></span><span class="star-rating-item js-star-rating-item" data-score="4"><svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="i-ico"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" class="ico-star"></path></svg></span><span class="star-rating-item js-star-rating-item" data-score="5"><svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="i-ico"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" class="ico-star"></path></svg></span></div></div>
+
+
+
+<div class="social-buttons"><span class="social-button social-button--vkontakte main" data-social="vkontakte"><span>Поделиться в ВКонтакте</span></span><span class="social-button social-button--facebook " data-social="facebook"></span><span class="social-button social-button--telegram " data-social="telegram"></span><span class="social-button social-button--odnoklassniki " data-social="odnoklassniki"></span><span class="social-button social-button--twitter " data-social="twitter"></span><span class="social-button social-button--whatsapp " data-social="whatsapp"></span></div>
+
+<!--noindex-->
+<div class="author-box">
+    <div class="author-info">
+        <div class="author-box__ava">
+            <img alt="" src="https://malinika.ru/wp-content/plugins/clearfy-pro/assets/images/default-avatar.png" srcset="https://malinika.ru/wp-content/plugins/clearfy-pro/assets/images/default-avatar.png 2x" class="avatar avatar-70 photo avatar-default" height="70" width="70" decoding="async">        </div>
+
+        <div class="author-box__body">
+            <div class="author-box__author">
+                Игорь Бекушев            </div>
+            <div class="author-box__description">
+                <!--noindex--><!--/noindex-->
+            </div>
+
+            
+        </div>
+    </div>
+</div>
+<!--/noindex-->
+
+
+    <meta itemprop="author" content="Игорь Бекушев">
+<meta itemscope="" itemprop="mainEntityOfPage" itemtype="https://schema.org/WebPage" itemid="https://malinika.ru/retsept-lapshi-s-makom-i-chernoslivom-syurpriz-dlya-malishki/" content="Рецепт лапши с маком и черносливом – Сюрприз для малышки">
+    <meta itemprop="dateModified" content="2024-02-01">
+    <meta itemprop="datePublished" content="2024-02-01T23:05:54+03:00">
+<div itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization" style="display: none;"><meta itemprop="name" content="Malinika.ru - Рецепты"><meta itemprop="telephone" content="Malinika.ru - Рецепты"><meta itemprop="address" content="https://malinika.ru"></div>
+            </main><!-- #main -->
+        </div><!-- #primary -->
+
+        
+<aside id="secondary" class="widget-area" itemscope="" itemtype="http://schema.org/WPSideBar">
+
+		
+	<div id="categories-4" class="widget widget_categories"><div class="widget-header">Рубрики</div>
+			<ul>
+					<li class="cat-item cat-item-9"><a href="https://malinika.ru/category/varenya/">Варенья</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="https://malinika.ru/category/interesnoe/">Интересное</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="https://malinika.ru/category/poleznoe/">Полезное</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="https://malinika.ru/category/recipies/">Рецепты</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="https://malinika.ru/category/salaty/">Салаты</a>
+</li>
+			</ul>
+
+			</div><div id="execphp-2" class="widget widget_execphp">			<div class="execphpwidget"><script type="rocketlazyloadscript" async="async" data-rocket-src="https://w.uptolike.com/widgets/v1/zp.js?pid=tl2c69a20bb413ce2c73be99b6eceee79f2e678df7" data-rocket-type="text/javascript"></script></div>
+		</div>
+		<div id="recent-posts-2" class="widget widget_recent_entries">
+		<div class="widget-header">Новые публикации</div>
+		<ul>
+											<li>
+					<a href="https://malinika.ru/kak-bystro-zakryt-raschyotnyy-schyot-v-banke-podrobnaya-instruktsiya/">Как быстро закрыть расчётный счёт в банке: подробная инструкция</a>
+									</li>
+											<li>
+					<a href="https://malinika.ru/vkusnye-i-originalnye-idei-dlya-prigotovleniya-kanape-na-lyuboy-prazdnik/">Вкусные и оригинальные идеи для приготовления канапе на любой праздник</a>
+									</li>
+											<li>
+					<a href="https://malinika.ru/mery-bezopasnosti-v-chastnyh-domah-dlya-prestarelyh/">Меры безопасности в частных домах для престарелых</a>
+									</li>
+											<li>
+					<a href="https://malinika.ru/idealnij-desert-gotovim-makaruni-po-video/">Идеальный десерт — готовим макаруны по видео</a>
+									</li>
+											<li>
+					<a href="https://malinika.ru/ovoshnoj-tort-iz-dostupnix-produktov-za-polchasa-bistrij-retsept/">Овощной торт из доступных продуктов за полчаса — быстрый и вкусный рецепт для семейного ужина</a>
+									</li>
+					</ul>
+
+		</div><div id="execphp-3" class="widget widget_execphp">			<div class="execphpwidget"></div>
+		</div><div id="wpshop_widget_articles-3" class="widget widget_wpshop_widget_articles"><div class="widget-header">Популярное 2023 год</div><div class="widget-articles">
+<article class="post-card post-card--small ">
+            <div class="post-card__thumbnail">
+            <a href="https://malinika.ru/pankejki-na-moloke-svezem-kislom-s-razryhlitelem-i-bez-s-bananami/">
+                <div class="post-card__icon">
+                    <img width="100" height="65" src="https://malinika.ru/wp-content/uploads/5/9/3/5932e0d8b9e7b207981110a6fbdfaedd.jpeg" class="attachment-yelly_square size-yelly_square wp-post-image" alt="" decoding="async">                </div>
+            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://malinika.ru/pankejki-na-moloke-svezem-kislom-s-razryhlitelem-i-bez-s-bananami/">Панкейки на молоке: 5 рецептов с идеальным результатом</a></div>
+
+                    <div class="post-card__description">
+                Панкейки по рецепту Энди Нередко в фильмах можно увидеть            </div>
+        
+        
+            </div>
+</article>
+<article class="post-card post-card--small ">
+            <div class="post-card__thumbnail">
+            <a href="https://malinika.ru/salat-s-kuricej-i-ananasom-7-vkusnejsih-receptov-s-foto-video/">
+                <div class="post-card__icon">
+                    <img width="100" height="65" src="https://malinika.ru/wp-content/uploads/a/0/4/a04ca29ff15c0ce7a6b10d73a3ce2a6a.jpeg" class="attachment-yelly_square size-yelly_square wp-post-image" alt="" decoding="async">                </div>
+            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://malinika.ru/salat-s-kuricej-i-ananasom-7-vkusnejsih-receptov-s-foto-video/">Салат с курицей и ананасом</a></div>
+
+                    <div class="post-card__description">
+                Салат Викинг – классический рецепт с курицей, ананасами            </div>
+        
+        
+            </div>
+</article>
+<article class="post-card post-card--small ">
+            <div class="post-card__thumbnail">
+            <a href="https://malinika.ru/kak-prigotovit-pysnyj-biskvit-v-duhovke-foto-recept-pysnogo-biskvita/">
+                <div class="post-card__icon">
+                    <img width="100" height="65" src="https://malinika.ru/wp-content/uploads/b/7/3/b73233592179d1b476b802423c253bd7.png" class="attachment-yelly_square size-yelly_square wp-post-image" alt="" decoding="async" loading="lazy">                </div>
+            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://malinika.ru/kak-prigotovit-pysnyj-biskvit-v-duhovke-foto-recept-pysnogo-biskvita/">Очень пышный бисквит в духовке</a></div>
+
+                    <div class="post-card__description">
+                Классический бисквит в духовке, который всегда получается            </div>
+        
+        
+            </div>
+</article>
+<article class="post-card post-card--small ">
+            <div class="post-card__thumbnail">
+            <a href="https://malinika.ru/zakuska-iz-syra-15-prostyh-no-bezumno-vkusnyh-prazdnicnyh-receptov/">
+                <div class="post-card__icon">
+                    <img width="100" height="65" src="https://malinika.ru/wp-content/uploads/4/4/1/441bfe9345244b3fa15c523f7c76b025.jpeg" class="attachment-yelly_square size-yelly_square wp-post-image" alt="" decoding="async" loading="lazy">                </div>
+            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://malinika.ru/zakuska-iz-syra-15-prostyh-no-bezumno-vkusnyh-prazdnicnyh-receptov/">Закуска из сыра: 15 простых, но безумно вкусных праздничных рецептов</a></div>
+
+                    <div class="post-card__description">
+                Простой рецепт вкусной закуски с мясом «Довольный муж»            </div>
+        
+        
+            </div>
+</article>
+<article class="post-card post-card--small ">
+            <div class="post-card__thumbnail">
+            <a href="https://malinika.ru/samye-grubye-i-hamovitye-znaki-zodiaka/">
+                <div class="post-card__icon">
+                    <img width="100" height="65" src="https://malinika.ru/wp-content/uploads/d/c/5/dc5cc60d6891e4bb825948b185797678.jpeg" class="attachment-yelly_square size-yelly_square wp-post-image" alt="" decoding="async" loading="lazy">                </div>
+            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://malinika.ru/samye-grubye-i-hamovitye-znaki-zodiaka/">Грубияны среди нас: кто они — самые грубые знаки зодиака?</a></div>
+
+                    <div class="post-card__description">
+                Опасные личности Телец. Если Тельцов все устраивает            </div>
+        
+        
+            </div>
+</article>
+<article class="post-card post-card--small ">
+            <div class="post-card__thumbnail">
+            <a href="https://malinika.ru/sloi-seledki-pod-suboj-tri-varianta-klassiceskij-bez-aic-s-ablokami/">
+                <div class="post-card__icon">
+                    <img width="100" height="65" src="https://malinika.ru/wp-content/uploads/0/f/a/0facd97788739e6f4f9eaf5b9f401d34.jpeg" class="attachment-yelly_square size-yelly_square wp-post-image" alt="" decoding="async" loading="lazy">                </div>
+            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://malinika.ru/sloi-seledki-pod-suboj-tri-varianta-klassiceskij-bez-aic-s-ablokami/">Слои «Селедки под шубой»</a></div>
+
+                    <div class="post-card__description">
+                Классическая селедка под шубой с яблоком и сыром Если            </div>
+        
+        
+            </div>
+</article></div></div>	
+		
+</aside><!-- #secondary -->
+
+    
+
+    </div><!--.site-content-inner-->
+
+    
+</div><!--.site-content-->
+
+    
+    
+
+<div data-rocket-location-hash="5128a5574c4bee4d9f23f945f31777b8" class="site-footer-container">
+
+    
+
+    <div data-rocket-location-hash="ab26d3422f9cc0d9b6f5bf5026466f54" class="footer-navigation full" itemscope="" itemtype="http://schema.org/SiteNavigationElement">
+        <div class="main-navigation-inner fixed">
+            <div class="menu-footer-container"><ul id="footer_menu" class="menu"><li id="menu-item-70" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-privacy-policy menu-item-70"><a rel="privacy-policy" href="https://malinika.ru/privacy-policy/">Конфиденциальность</a></li>
+<li id="menu-item-75" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-75"><a href="https://malinika.ru/kontakt/">Контакты и условия использования</a></li>
+<li id="menu-item-88" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-88"><a href="https://malinika.ru/politika/">Политика использования файлов COOKIES</a></li>
+</ul></div>        </div>
+    </div><!--footer-navigation-->
+
+
+    <footer data-rocket-location-hash="f3f43e754490d334dad8f1f54757f7a0" id="colophon" class="site-footer full" itemscope="" itemtype="http://schema.org/WPFooter">
+        <div class="site-footer-inner fixed">
+
+            
+            
+<div class="footer-bottom">
+    <div class="footer-info">
+        <div class="footer-copyright">© 2026 Malinika.ru - Рецепты</div>
+        <div class="footer-under-copyright"></div>
+	        </div>
+
+    </div>
+        </div>
+    </footer><!--.site-footer-->
+</div>
+
+
+            <button type="button" class="scrolltop js-scrolltop"></button>
+    
+                    <div data-rocket-location-hash="a5c769ba046a7486e44d6bd0ec5ce911" class="top-line js-top-line">
+            <div data-rocket-location-hash="44b88fe0a5666d7c2d54a88164c8069f" class="top-line-inner fixed">
+
+                <div class="top-line__title">Рецепт лапши с маком и черносливом – Сюрприз для малышки</div><div class="top-line__like"><span class="btn-fb-like btn-top-like social-button--vkontakte" data-social="vkontakte"><span>Поделиться в ВКонтакте</span></span></div><div class="top-line__post"><div class="top-line__post_thumbnail"><a href="https://malinika.ru/retsept-aziatskogo-salata-s-lapshoj-soba-vkusno-i-legko-prigotovit/"></a></div><div class="top-line__post_title"><a href="https://malinika.ru/retsept-aziatskogo-salata-s-lapshoj-soba-vkusno-i-legko-prigotovit/">Рецепт азиатского салата с лапшой соба — легкое и вкусное блюдо в стиле Азии, которое можно легко приготовить</a></div></div>            </div>
+        </div>
+    
+</div><!-- #page -->
+
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/yelly_child/*","/wp-content/themes/yelly/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script type="rocketlazyloadscript">var pseudo_links = document.querySelectorAll(".pseudo-clearfy-link");for (var i=0;i<pseudo_links.length;i++ ) { pseudo_links[i].addEventListener("click", function(e){   window.open( e.target.getAttribute("data-uri") ); }); }</script><script type="rocketlazyloadscript">document.addEventListener("copy", (event) => {var pagelink = "\nИсточник: https://malinika.ru/retsept-lapshi-s-makom-i-chernoslivom-syurpriz-dlya-malishki";event.clipboardData.setData("text", document.getSelection() + pagelink);event.preventDefault();});</script><script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-content/plugins/fitvids-for-wordpress/jquery.fitvids.js" id="fitvids-js" data-rocket-defer="" defer=""></script>
+<script type="text/javascript" id="wp-postviews-cache-js-extra">
+/* <![CDATA[ */
+var viewsCacheL10n = {"admin_ajax_url":"https://malinika.ru/wp-admin/admin-ajax.php","nonce":"d584bac3f7","post_id":"37914"};
+//# sourceURL=wp-postviews-cache-js-extra
+/* ]]> */
+</script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-content/plugins/wp-postviews/postviews-cache.js" id="wp-postviews-cache-js" data-rocket-defer="" defer=""></script>
+<script type="text/javascript" id="yelly-scripts-js-extra">
+/* <![CDATA[ */
+var settings_array = {"rating_text_average":"\u0441\u0440\u0435\u0434\u043d\u0435\u0435","rating_text_from":"\u0438\u0437","lightbox_display":"1"};
+var wps_ajax = {"url":"https://malinika.ru/wp-admin/admin-ajax.php","nonce":"822b63d90b"};
+//# sourceURL=yelly-scripts-js-extra
+/* ]]> */
+</script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" data-rocket-src="https://malinika.ru/wp-content/themes/yelly/assets/js/scripts.min.js" id="yelly-scripts-js" data-rocket-defer="" defer=""></script>
+		<script type="rocketlazyloadscript" data-rocket-type="text/javascript">
+		jQuery(document).ready(function () {
+			jQuery('body').fitVids();
+		});
+		</script><script>window.lazyLoadOptions={elements_selector:"iframe[data-lazy-src]",data_src:"lazy-src",data_srcset:"lazy-srcset",data_sizes:"lazy-sizes",class_loading:"lazyloading",class_loaded:"lazyloaded",threshold:300,callback_loaded:function(element){if(element.tagName==="IFRAME"&&element.dataset.rocketLazyload=="fitvidscompatible"){if(element.classList.contains("lazyloaded")){if(typeof window.jQuery!="undefined"){if(jQuery.fn.fitVids){jQuery(element).parent().fitVids()}}}}}};window.addEventListener('LazyLoad::Initialized',function(e){var lazyLoadInstance=e.detail.instance;if(window.MutationObserver){var observer=new MutationObserver(function(mutations){var image_count=0;var iframe_count=0;var rocketlazy_count=0;mutations.forEach(function(mutation){for(var i=0;i<mutation.addedNodes.length;i++){if(typeof mutation.addedNodes[i].getElementsByTagName!=='function'){continue}
+if(typeof mutation.addedNodes[i].getElementsByClassName!=='function'){continue}
+images=mutation.addedNodes[i].getElementsByTagName('img');is_image=mutation.addedNodes[i].tagName=="IMG";iframes=mutation.addedNodes[i].getElementsByTagName('iframe');is_iframe=mutation.addedNodes[i].tagName=="IFRAME";rocket_lazy=mutation.addedNodes[i].getElementsByClassName('rocket-lazyload');image_count+=images.length;iframe_count+=iframes.length;rocketlazy_count+=rocket_lazy.length;if(is_image){image_count+=1}
+if(is_iframe){iframe_count+=1}}});if(image_count>0||iframe_count>0||rocketlazy_count>0){lazyLoadInstance.update()}});var b=document.getElementsByTagName("body")[0];var config={childList:!0,subtree:!0};observer.observe(b,config)}},!1)</script><script data-no-minify="1" async="" src="https://malinika.ru/wp-content/plugins/wp-rocket/assets/js/lazyload/17.8.3/lazyload.min.js"></script><script>function lazyLoadThumb(e,alt,l){var t='<img src="https://i.ytimg.com/vi/ID/hqdefault.jpg" alt="" width="480" height="360">',a='<button class="play" aria-label="Play Youtube video"></button>';if(l){t=t.replace('data-lazy-','');t=t.replace('loading="lazy"','');t=t.replace(/<noscript>.*?<\/noscript>/g,'');}t=t.replace('alt=""','alt="'+alt+'"');return t.replace("ID",e)+a}function lazyLoadYoutubeIframe(){var e=document.createElement("iframe"),t="ID?autoplay=1";t+=0===this.parentNode.dataset.query.length?"":"&"+this.parentNode.dataset.query;e.setAttribute("src",t.replace("ID",this.parentNode.dataset.src)),e.setAttribute("frameborder","0"),e.setAttribute("allowfullscreen","1"),e.setAttribute("allow","accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"),this.parentNode.parentNode.replaceChild(e,this.parentNode)}document.addEventListener("DOMContentLoaded",function(){var exclusions=[];var e,t,p,u,l,a=document.getElementsByClassName("rll-youtube-player");for(t=0;t<a.length;t++)(e=document.createElement("div")),(u='https://i.ytimg.com/vi/ID/hqdefault.jpg'),(u=u.replace('ID',a[t].dataset.id)),(l=exclusions.some(exclusion=>u.includes(exclusion))),e.setAttribute("data-id",a[t].dataset.id),e.setAttribute("data-query",a[t].dataset.query),e.setAttribute("data-src",a[t].dataset.src),(e.innerHTML=lazyLoadThumb(a[t].dataset.id,a[t].dataset.alt,l)),a[t].appendChild(e),(p=e.querySelector(".play")),(p.onclick=lazyLoadYoutubeIframe)});</script>
+
+<!-- Yandex.Metrika counter -->
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105985519', 'ym');
+
+    ym(105985519, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/105985519" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+<script type="rocketlazyloadscript" async="async" data-rocket-src="https://w.uptolike.com/widgets/v1/zp.js?pid=2048239" data-rocket-type="text/javascript"></script>
+
+<div data-rocket-location-hash="9f41222c41e023e814dfdbb0ecd4201c" class="image-hover-social-buttons" style="display: none;"><div data-rocket-location-hash="f0d2eec432c36d3a3e2be522751bb7e7" class="social-button social-button--vkontakte js-share-link" data-uri="https://vk.com/share.php?url=https%3A%2F%2Fmalinika.ru%2Fretsept-lapshi-s-makom-i-chernoslivom-syurpriz-dlya-malishki%2F"></div><div data-rocket-location-hash="8d417d4ffafa34bb47bb92868c5be9c5" class="social-button social-button--facebook js-share-link" data-uri="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fmalinika.ru%2Fretsept-lapshi-s-makom-i-chernoslivom-syurpriz-dlya-malishki%2F"></div><div class="social-button social-button--telegram js-share-link" data-uri="https://t.me/share/url?url=https%3A%2F%2Fmalinika.ru%2Fretsept-lapshi-s-makom-i-chernoslivom-syurpriz-dlya-malishki%2F&amp;text=%D0%A0%D0%B5%D1%86%D0%B5%D0%BF%D1%82+%D0%BB%D0%B0%D0%BF%D1%88%D0%B8+%D1%81+%D0%BC%D0%B0%D0%BA%D0%BE%D0%BC+%D0%B8+%D1%87%D0%B5%D1%80%D0%BD%D0%BE%D1%81%D0%BB%D0%B8%D0%B2%D0%BE%D0%BC+%E2%80%93+%D0%A1%D1%8E%D1%80%D0%BF%D1%80%D0%B8%D0%B7+%D0%B4%D0%BB%D1%8F+%D0%BC%D0%B0%D0%BB%D1%8B%D1%88%D0%BA%D0%B8"></div><div class="social-button social-button--odnoklassniki js-share-link" data-uri="https://connect.ok.ru/dk?st.cmd=WidgetSharePreview&amp;service=odnoklassniki&amp;st.shareUrl=https%3A%2F%2Fmalinika.ru%2Fretsept-lapshi-s-makom-i-chernoslivom-syurpriz-dlya-malishki%2F"></div><div data-rocket-location-hash="31d84db2348ce964cc6f92a4ac827ec8" class="social-button social-button--twitter js-share-link" data-uri="http://twitter.com/share?url=https%3A%2F%2Fmalinika.ru%2Fretsept-lapshi-s-makom-i-chernoslivom-syurpriz-dlya-malishki%2Ftext=%D0%A0%D0%B5%D1%86%D0%B5%D0%BF%D1%82+%D0%BB%D0%B0%D0%BF%D1%88%D0%B8+%D1%81+%D0%BC%D0%B0%D0%BA%D0%BE%D0%BC+%D0%B8+%D1%87%D0%B5%D1%80%D0%BD%D0%BE%D1%81%D0%BB%D0%B8%D0%B2%D0%BE%D0%BC+%E2%80%93+%D0%A1%D1%8E%D1%80%D0%BF%D1%80%D0%B8%D0%B7+%D0%B4%D0%BB%D1%8F+%D0%BC%D0%B0%D0%BB%D1%8B%D1%88%D0%BA%D0%B8"></div><div data-rocket-location-hash="e1e9e1a2892b2e758010d4e034bcaed4" class="social-button social-button--whatsapp js-share-link" data-uri="whatsapp://send?url=https%3A%2F%2Fmalinika.ru%2Fretsept-lapshi-s-makom-i-chernoslivom-syurpriz-dlya-malishki%2Ftext=%D0%A0%D0%B5%D1%86%D0%B5%D0%BF%D1%82+%D0%BB%D0%B0%D0%BF%D1%88%D0%B8+%D1%81+%D0%BC%D0%B0%D0%BA%D0%BE%D0%BC+%D0%B8+%D1%87%D0%B5%D1%80%D0%BD%D0%BE%D1%81%D0%BB%D0%B8%D0%B2%D0%BE%D0%BC+%E2%80%93+%D0%A1%D1%8E%D1%80%D0%BF%D1%80%D0%B8%D0%B7+%D0%B4%D0%BB%D1%8F+%D0%BC%D0%B0%D0%BB%D1%8B%D1%88%D0%BA%D0%B8"></div></div>
+
+
+
+<script>var rocket_beacon_data = {"ajax_url":"https:\/\/malinika.ru\/wp-admin\/admin-ajax.php","nonce":"8592ed2108","url":"https:\/\/malinika.ru\/retsept-lapshi-s-makom-i-chernoslivom-syurpriz-dlya-malishki","is_mobile":false,"width_threshold":1600,"height_threshold":700,"delay":500,"debug":null,"status":{"atf":true,"lrc":true},"elements":"img, video, picture, p, main, div, li, svg, section, header, span","lrc_threshold":1800}</script><script data-name="wpr-wpr-beacon" src="https://malinika.ru/wp-content/plugins/wp-rocket/assets/js/wpr-beacon.min.js" async="" beacon-completed="true"></script>
+
+
+</body></html>

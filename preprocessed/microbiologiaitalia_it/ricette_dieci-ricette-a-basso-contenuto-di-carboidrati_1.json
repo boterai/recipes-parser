@@ -1,0 +1,12 @@
+{
+    "dish_name": "Zoodles al Pesto",
+    "description": "Un piatto di spaghetti di zucchine con pesto, ideale per una dieta a basso contenuto di carboidrati.",
+    "ingredients": "[{\"name\": \"zucchine\", \"units\": \"grandi\", \"amount\": 2}, {\"name\": \"pesto\", \"units\": \"tazza\", \"amount\": 0.25}, {\"name\": \"olio d'oliva\", \"units\": \"cucchiaio\", \"amount\": 1}, {\"name\": \"aglio\", \"units\": \"spicchio\", \"amount\": 1}, {\"name\": \"Parmigiano\", \"units\": \"opzionale\", \"amount\": null}, {\"name\": \"sale\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"pepe\", \"units\": \"q.b.\", \"amount\": null}]",
+    "instructions": "Utilizza uno spiralizzatore per creare zoodles. In una padella, riscalda l'olio d'oliva e aggiungi l'aglio tritato, cuoci per 1-2 minuti. Aggiungi gli zoodles e cuoci per 2-3 minuti. Rimuovi dal fuoco e mescola con il pesto. Condisci con sale, pepe e parmigiano, se desiderato.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "5 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "low-carb, zucchini, pasta alternative"
+}

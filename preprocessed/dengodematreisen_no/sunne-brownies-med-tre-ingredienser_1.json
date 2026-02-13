@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sunne brownies med tre ingredienser",
+    "description": "Oppskrift på smakfulle og sunne brownies laget med kun tre ingredienser – dadler, egg og kakao.",
+    "ingredients": "[{\"name\": \"dadler\", \"units\": \"gr\", \"amount\": 300}, {\"name\": \"egg\", \"units\": null, \"amount\": 4}, {\"name\": \"kakao\", \"units\": \"gr\", \"amount\": 70}, {\"name\": \"olivenolje\", \"units\": \"litt\", \"amount\": null}]",
+    "instructions": "1. Bløtlegg dadlene i kaldt friskt vann for å mykne dem (5-6 timer eller natten over). 2. Forvarm stekeovnen til 175 grader. 3. Fjern steinene fra dadlene og ha dem i en food processor sammen med egg og kakao. Kjør røren jevn. 4. Kle kakeformen med bakepapir og pensle med olivenolje. 5. Hell røren i formen og jevn ut. 6. Stek i ca 20 minutter.",
+    "category": "Dessert",
+    "prep_time": "6 hours",
+    "cook_time": "20 minutes",
+    "total_time": "6 hours 20 minutes",
+    "notes": "Kaken kan deles i mindre stykker. Pensle bakepapiret med olivenolje for enklere fjerning etter steking.",
+    "tags": "kaker, dessert, snacks, sukkerfri, glutenfri"
+}

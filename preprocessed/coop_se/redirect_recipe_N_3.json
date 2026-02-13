@@ -1,0 +1,12 @@
+{
+    "dish_name": "Räkgryta",
+    "description": "Fantastisk god one pot- räkgryta med fänkål, potatis och morötter som görs från grunden med egen fond.",
+    "ingredients": "[{\"name\": \"frysta räkor med skal, tinade\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"olivolja\", \"units\": \"matsked\", \"amount\": 1}, {\"name\": \"gul lök, hackad\", \"units\": null, \"amount\": 1}, {\"name\": \"vitlöksklyfta, finriven\", \"units\": null, \"amount\": 1}, {\"name\": \"tomatpuré\", \"units\": \"matsked\", \"amount\": 2}, {\"name\": \"vatten\", \"units\": \"dl\", \"amount\": 3}, {\"name\": \"vitt matlagningsvin\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"fänkål\", \"units\": null, \"amount\": 1}, {\"name\": \"potatis, tärnad\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"morot, tärnad\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"cayennepeppar\", \"units\": \"tsk\", \"amount\": 0.5}, {\"name\": \"vatten\", \"units\": \"dl\", \"amount\": 3}, {\"name\": \"grädde\", \"units\": \"dl\", \"amount\": 2.5}, {\"name\": \"salt\", \"units\": null, \"amount\": null}]",
+    "instructions": "Skala räkorna och lägg dem åt sidan, spara skalen. Hetta upp olja i en kastrull och stek räkskalen tillsammans med hälften av löken, vitlöken och tomatpurén. Stek tills allt fått en rostad mörkröd färg. Häll på vatten och vin och låt koka ca 4 min. Sila av räkfonden ner i en skål med en finmaskig sil. Fräs resten av lök, halva fänkålen i tärningar, potatis och morot med cayennepeppar i olja i kastrullen. Häll på räkfonden, vatten och grädde och låt sjuda under lock tills potatisen är mjuk, ca 10 min. Smaka av med salt. Toppa grytan med de skalade räkorna och tunt hyvlad fänkål.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "45 minutes",
+    "total_time": "45 minutes",
+    "notes": null,
+    "tags": null
+}

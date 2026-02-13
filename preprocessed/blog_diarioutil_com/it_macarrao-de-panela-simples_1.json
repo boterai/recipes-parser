@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pasta semplice in una pentola",
+    "description": "Una ricetta economica e veloce per preparare la pasta in un'unica pentola.",
+    "ingredients": "[{\"name\": \"pasta\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"olio o margarina\", \"units\": \"cucchiaio\", \"amount\": 1}, {\"name\": \"aglio\", \"units\": \"spicchio\", \"amount\": 1}, {\"name\": \"cipolla\", \"units\": \"cipolla\", \"amount\": 0.5}, {\"name\": \"pomodoro\", \"units\": \"pomodoro\", \"amount\": 1}, {\"name\": \"salsiccia calabrese\", \"units\": null, \"amount\": null}, {\"name\": \"acqua\", \"units\": \"tazze\", \"amount\": 2}, {\"name\": \"concentrato di pomodoro\", \"units\": \"cucchiaio\", \"amount\": 1}, {\"name\": \"sale\", \"units\": null, \"amount\": null}, {\"name\": \"formaggio grattugiato\", \"units\": null, \"amount\": null}]",
+    "instructions": "In una pentola capiente, aggiungete l'olio e fate rosolare l'aglio e la cipolla fino a quando non saranno dorati. Aggiungete il salame piccante e fatelo rosolare per qualche minuto, finché non sprigionerà il suo delizioso aroma. Aggiungere i pomodori tritati e il concentrato di pomodoro. Mescolare bene. Mettere la pasta cruda direttamente nella padella. Aggiungere 2 tazze di acqua e sale. Mescolare bene. Coprite la padella e lasciate cuocere per circa 10-12 minuti, mescolando di tanto in tanto per evitare che si attacchi. Quando l'acqua sarà quasi asciutta e la pasta sarà cotta, spegnete il fuoco. Completate con del formaggio grattugiato, se lo gradite.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "10-12 minutes",
+    "total_time": null,
+    "notes": "Puoi personalizzare la ricetta anche utilizzando ciò che hai in casa.",
+    "tags": "pasta, economica, veloce, ricetta facile"
+}

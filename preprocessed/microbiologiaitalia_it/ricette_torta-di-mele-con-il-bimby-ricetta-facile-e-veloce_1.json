@@ -1,0 +1,12 @@
+{
+    "dish_name": "Torta di Mele con il Bimby",
+    "description": "La torta di mele è un dolce classico e amato da tutti, prepararla con il Bimby rende il processo semplice e rapido, senza rinunciare al gusto e alla sofficità.",
+    "ingredients": "[{\"name\": \"Mele\", \"units\": \"pcs\", \"amount\": 3}, {\"name\": \"Farina 00\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"Zucchero\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"Burro\", \"units\": \"g\", \"amount\": 80}, {\"name\": \"Latte\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"Uova\", \"units\": \"pcs\", \"amount\": 3}, {\"name\": \"Lievito per dolci\", \"units\": \"bustina\", \"amount\": 1}, {\"name\": \"Scorza di limone grattugiata\", \"units\": \"cucchiaino\", \"amount\": 1}, {\"name\": \"Cannella in polvere\", \"units\": \"cucchiaino\", \"amount\": 0.5}, {\"name\": \"Sale\", \"units\": \"pizzico\", \"amount\": 1}, {\"name\": \"Zucchero a velo\", \"units\": \"opzionale\", \"amount\": null}]",
+    "instructions": "1. Preparazione delle mele: Sbuccia 2 mele e tagliale a dadini. Sbuccia la terza mela e affettala sottilmente. Spruzza qualche goccia di succo di limone sulle mele. 2. Preparare l’impasto: Montare le uova con lo zucchero. Aggiungere il burro morbido e mescolare. Incorporare farina, lievito e aromi. Aggiungere il latte. Unire le mele a dadini. 3. Cottura: Preparare la teglia. Versare l’impasto. Disporre le fette di mela. Infornare a 180°C per 40-45 minuti. 4. Decorazione: Lascia raffreddare e spolverizza con zucchero a velo.",
+    "category": "Dessert",
+    "prep_time": "20 minutes",
+    "cook_time": "40-45 minutes",
+    "total_time": "55-60 minutes",
+    "notes": "Usa mele di qualità per un gusto migliore. Puoi sostituire il burro con olio di semi. La torta si può congelare.",
+    "tags": "dessert, cake, apple, bimby"
+}
