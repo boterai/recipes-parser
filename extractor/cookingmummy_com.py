@@ -213,6 +213,26 @@ class CookingmummyExtractor(BaseRecipeExtractor):
                 if ingredients:
                     break
         
+        # Если ничего не найдено, ищем любой список UL в странице
+        if not ingredients:
+            all_lists = self.soup.find_all('ul')
+            for ul_list in all_lists:
+                items = ul_list.find_all('li')
+                temp_ingredients = []
+                for item in items:
+                    ingredient_text = item.get_text(separator=' ', strip=True)
+                    ingredient_text = self.clean_text(ingredient_text)
+                    
+                    if ingredient_text and len(ingredient_text) > 2 and not ingredient_text.endswith(':'):
+                        parsed = self.parse_ingredient(ingredient_text)
+                        if parsed:
+                            temp_ingredients.append(parsed)
+                
+                # Если нашли хотя бы 2 ингредиента, считаем это списком ингредиентов
+                if len(temp_ingredients) >= 2:
+                    ingredients = temp_ingredients
+                    break
+        
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
     def parse_ingredient(self, ingredient_text: str) -> Optional[dict]:
@@ -349,6 +369,26 @@ class CookingmummyExtractor(BaseRecipeExtractor):
                 
                 if steps:
                     break
+        
+        # Если ничего не найдено, ищем параграфы с текстом инструкций
+        if not steps:
+            # Ищем все параграфы в body
+            all_paragraphs = self.soup.find_all('p')
+            for p in all_paragraphs:
+                text = p.get_text(separator=' ', strip=True)
+                text = self.clean_text(text)
+                
+                # Проверяем, что это похоже на инструкцию (не слишком короткое, содержит глаголы действия)
+                if text and len(text) > 10:
+                    # Проверяем на ключевые слова инструкций
+                    instruction_keywords = ['mix', 'add', 'cook', 'bake', 'serve', 'heat', 'combine', 
+                                           'place', 'pour', 'stir', 'blend', 'prepare', 'preheat',
+                                           'whisk', 'beat', 'fold', 'spread', 'cut', 'chop', 'slice']
+                    text_lower = text.lower()
+                    
+                    # Если содержит хотя бы одно ключевое слово или выглядит как инструкция
+                    if any(keyword in text_lower for keyword in instruction_keywords) or '.' in text:
+                        steps.append(text)
         
         # Добавляем нумерацию если её нет ни в одном шаге
         if steps:
