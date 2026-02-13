@@ -97,8 +97,13 @@ class GodaomasExtractor(BaseRecipeExtractor):
         if not entry_content:
             return None
         
-        # Ищем заголовок "Ingrediënten"
-        ingredients_heading = entry_content.find('h3', string=re.compile(r'Ingrediënten', re.I))
+        # Ищем заголовок "Ingrediënten" - нужно искать через get_text() так как текст может быть в <strong>
+        ingredients_heading = None
+        for h3 in entry_content.find_all('h3'):
+            if 'Ingrediënten' in h3.get_text():
+                ingredients_heading = h3
+                break
+        
         if not ingredients_heading:
             return None
         
@@ -133,6 +138,10 @@ class GodaomasExtractor(BaseRecipeExtractor):
         # Чистим текст
         text = ingredient_text.strip()
         
+        # Удаляем emoji в начале строки (распространенный паттерн на godaomas.com)
+        # Включаем вариационные селекторы (FE00-FEFF) и расширенные emoji диапазоны
+        text = re.sub(r'^[\U0001F000-\U0001FFFF\U00002000-\U00002BFF\U0000FE00-\U0000FEFF\s]+', '', text)
+        
         # Заменяем Unicode дроби на числа
         fraction_map = {
             '½': '0.5', '¼': '0.25', '¾': '0.75',
@@ -146,7 +155,8 @@ class GodaomasExtractor(BaseRecipeExtractor):
         
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "300 g groene asperges", "2 eetlepels honing", "120 g brie"
-        pattern = r'^([\d\s/.,]+)?\s*(g|kg|ml|l|eetlepels?|eetlepel|theelepels?|theelepel|stuks?|stuk|plakken|snufje|takjes?|takje|blaadjes?|blaad|teentjes?|teen)?\s*(.+)'
+        # Добавлены сокращения: el (eetlepel), tl (theelepel)
+        pattern = r'^([\d\s/.,]+)?\s*(g|kg|ml|l|eetlepels?|eetlepel|theelepels?|theelepel|stuks?|stuk|plakken|snufje|takjes?|takje|blaadjes?|blaad|teentjes?|teen|el|tl|middelgrote)?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -155,7 +165,7 @@ class GodaomasExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "unit": None
+                "units": None
             }
         
         amount_str, unit, name = match.groups()
@@ -219,22 +229,60 @@ class GodaomasExtractor(BaseRecipeExtractor):
         if not entry_content:
             return None
         
-        # Ищем заголовок "Bereidingswijze" или "Bereiding"
-        instructions_heading = entry_content.find('h3', string=re.compile(r'Bereidingswijze|Bereiding', re.I))
+        # Ищем заголовок "Bereidingswijze" или "Bereiding" или "instructies"
+        # Нужно искать через get_text() так как текст может быть в <strong>
+        instructions_heading = None
+        for h3 in entry_content.find_all('h3'):
+            h3_text = h3.get_text()
+            if re.search(r'Bereidingswijze|Bereiding|instructies', h3_text, re.I):
+                instructions_heading = h3
+                break
+        
         if not instructions_heading:
             return None
         
-        # Берем следующий список <ol> или <ul> после заголовка
-        instructions_list = instructions_heading.find_next_sibling(['ol', 'ul'])
-        if not instructions_list:
-            return None
-        
-        # Извлекаем шаги
+        # Собираем все шаги инструкций
         steps = []
-        for item in instructions_list.find_all('li'):
-            step_text = self.clean_text(item.get_text())
-            if step_text:
-                steps.append(step_text)
+        
+        # Проверяем структуру: если сразу после заголовка h4, то это сложная структура
+        # В противном случае это может быть простой список
+        next_elem = instructions_heading.find_next_sibling()
+        has_h4_structure = next_elem and next_elem.name == 'h4'
+        
+        if not has_h4_structure:
+            # Простая структура: попробуем найти список
+            instructions_list = instructions_heading.find_next_sibling(['ol', 'ul'])
+            if instructions_list and instructions_list.find_all('li'):
+                # Проверяем, что это действительно список с инструкциями, а не просто один элемент
+                items = instructions_list.find_all('li')
+                if len(items) > 1:  # Больше одного элемента = вероятно это полный список инструкций
+                    for item in items:
+                        step_text = self.clean_text(item.get_text())
+                        if step_text:
+                            steps.append(step_text)
+                    return ' '.join(steps) if steps else None
+        
+        # Сложная структура или простой список не найден: собираем все до следующего h3
+        current = instructions_heading.find_next_sibling()
+        while current and current.name != 'h3':
+            if current.name == 'h4':
+                # Это подзаголовок этапа (например, "Stap 1: Maak de vulling")
+                step_text = self.clean_text(current.get_text())
+                if step_text:
+                    steps.append(step_text)
+            elif current.name == 'p':
+                # Это описание шага
+                step_text = self.clean_text(current.get_text())
+                if step_text and not step_text.isspace():
+                    steps.append(step_text)
+            elif current.name in ['ul', 'ol']:
+                # Список внутри шагов
+                for item in current.find_all('li'):
+                    step_text = self.clean_text(item.get_text())
+                    if step_text:
+                        steps.append(step_text)
+            
+            current = current.find_next_sibling()
         
         # Объединяем шаги в одну строку
         return ' '.join(steps) if steps else None
