@@ -7,6 +7,7 @@ import time
 import json
 import re
 import random
+import socket
 import threading
 from pathlib import Path
 from urllib.parse import urlparse, urljoin
@@ -22,7 +23,7 @@ if __name__ == "__main__":
     import sys
     sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-import config.config as config
+from config.config import config
 from src.stages.extract.recipe_extractor import RecipeExtractor
 from src.stages.analyse.analyse import RecipeAnalyzer
 from src.repositories.site import SiteRepository
@@ -42,7 +43,7 @@ class SiteExplorer:
     def __init__(self, base_url: str, debug_mode: bool = True, recipe_pattern: str = None,
                  max_errors: int = 3, max_urls_per_pattern: int = None, debug_port: int = None,
                  driver: webdriver.Chrome = None, custom_logger: logging.Logger = None, 
-                 max_no_recipe_pages: Optional[int] = None):
+                 max_no_recipe_pages: Optional[int] = None, proxy: str = None):
         """
         Args:
             base_url: Базовый URL сайта
@@ -54,9 +55,11 @@ class SiteExplorer:
             driver: Переданный экземпляр webdriver.Chrome (если None, создается новый)
             custom_logger: Пользовательский логгер (если None, используется стандартный)
             max_no_recipe_pages: Максимальное количество страниц без рецепта подряд (None = без ограничений). Если указано прерывает исследвоание сайта при достижении лимита
+            proxy: Прокси сервер (формат: host:port или http://host:port). Если None, берется из config.PROXY
         """
         self.debug_mode = debug_mode
-        self.debug_port = debug_port if debug_port is not None else config.CHROME_DEBUG_PORT
+        self.debug_port = debug_port if debug_port is not None else config.PARSER_DEFAULT_CHROME_PORT
+        self.proxy = proxy or config.PARSER_PROXY  # Берем из параметра или из конфига
         self.driver = driver
         self.recipe_regex = None
         self.request_count = 0  # Счетчик запросов для адаптивных пауз
@@ -97,7 +100,7 @@ class SiteExplorer:
         self.exploration_queue: List[tuple] = []  # Очередь URL для исследования: [(url, depth), ...]
         
         # Файлы для сохранения
-        self.save_dir = os.path.join(config.PARSED_DIR, self.site.name,"exploration")
+        self.save_dir = os.path.join(config.PARSER_DIR, self.site.name,"exploration")
         os.makedirs(self.save_dir, exist_ok=True)
         
         self.state_file = os.path.join(self.save_dir, "exploration_state.json")
@@ -113,8 +116,6 @@ class SiteExplorer:
         self.recipe_extractor = RecipeExtractor()
         self.max_no_recipe_pages: Optional[int] = max_no_recipe_pages 
         self.no_recipe_page_count: int = 0  # Счетчик страниц без рецепта подряд
-
-        self.cookie_accepted: bool = False  # Флаг принятия кукис
 
     def set_pattern(self, pattern: str):
         self.site.pattern = pattern
@@ -214,8 +215,8 @@ class SiteExplorer:
         
         try:
             self.driver = webdriver.Chrome(options=chrome_options)
-            self.driver.implicitly_wait(config.IMPLICIT_WAIT)
-            self.driver.set_page_load_timeout(config.PAGE_LOAD_TIMEOUT)
+            self.driver.implicitly_wait(config.PARSER_DEFAULT_IMPLICIT_WAIT)
+            self.driver.set_page_load_timeout(config.PARSER_DEFAULT_PAGE_LOAD_TIMEOUT)
             
             # Проверяем что подключение работает
             try:
@@ -244,9 +245,7 @@ class SiteExplorer:
         
         Returns:
             True если Chrome доступен
-        """
-        import socket
-        
+        """        
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(1)
@@ -347,10 +346,7 @@ class SiteExplorer:
         if (self.site.language is None or self.site.language != language) and language != 'unknown':
             self.site.language = language
             try:
-                site = self.site_repository.get_by_id(self.site.id)
-                site.language = language
-                if self.site_repository.update(site) is not None:
-                    self.logger.error("Ошибка обновления языка сайта в БД")
+                self.site_repository.update_language(site_id=self.site.id, language=language)
             except Exception as e:
                 self.logger.error(f"Ошибка обновления языка сайта в БД: {e}")
         
@@ -372,17 +368,18 @@ class SiteExplorer:
         self.no_recipe_page_count = 0 # сброс счетчика страниц без рецепта
         return True
     
-    def should_explore_url(self, url: str) -> bool:
+    def should_explore_url(self, url: str, ignore_visited: bool = False) -> bool:
         """
         Проверка, нужно ли исследовать данный URL
         
         Args:
-            url: URL для проверки            
+            url: URL для проверки     
+            ignore_visited: Если True, игнорирует проверку на посещенные URL (используется для начальной загрузки ссылок)       
         Returns:
             True если URL нужно посетить
         """
         # Пропускаем если уже посещали
-        if url in self.visited_urls:
+        if url in self.visited_urls and ignore_visited is False:
             return False
         
         # Проверка лимита URL на паттерн
@@ -489,11 +486,11 @@ class SiteExplorer:
                 for i in range(num_scrolls):
                     current_position += scroll_step
                     self.driver.execute_script(f"window.scrollTo(0, {current_position});")
-                    time.sleep(random.uniform(0.3, 0.5))
+                    time.sleep(random.uniform(0.1, 0.5))
                 
                 # Быстрая прокрутка в конец
                 self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                time.sleep(random.uniform(0.3, 0.6))
+                time.sleep(random.uniform(0.1, 0.3))
             else:
                 # Обычная прокрутка
                 num_scrolls = random.randint(3, 5)
@@ -503,10 +500,10 @@ class SiteExplorer:
                 for i in range(num_scrolls):
                     current_position += scroll_step
                     self.driver.execute_script(f"window.scrollTo(0, {current_position});")
-                    time.sleep(random.uniform(0.4, 0.8))
+                    time.sleep(random.uniform(0.2, 0.4))
                 
                 self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                time.sleep(random.uniform(0.5, 1.0))
+                time.sleep(random.uniform(0.25, 0.5))
             
         except Exception as e:
             self.logger.debug(f"Ошибка при прокрутке: {e}")
@@ -944,7 +941,8 @@ class SiteExplorer:
             pattern = self.get_url_pattern(current_url)
             
             # Проверка, нужно ли посещать
-            if not self.should_explore_url(current_url) and urls_explored > 0 and not check_pages_with_extractor:
+            ignore_visited = len(queue) <= 5  # В начале обхода игнорируем посещенные URL, чтобы быстрее набрать базу паттернов
+            if self.should_explore_url(current_url, ignore_visited=ignore_visited) is False and urls_explored > 0 and not check_pages_with_extractor:
                 continue
             
             try:
@@ -1013,11 +1011,11 @@ class SiteExplorer:
                 self.request_count += 1
                 if self.request_count % 10 == 0:
                     # Каждые 10 запросов - более длинная пауза для снижения подозрительности
-                    delay = random.uniform(3, 5)
+                    delay = random.uniform(1, 3)
                     self.logger.info(f"  Длинная пауза после {self.request_count} запросов: {delay:.1f}с")
                 else:
                     # Обычная короткая пауза
-                    delay = random.uniform(0.8, 1.5)
+                    delay = random.uniform(0.5, 1)
                 time.sleep(delay)
                 
                 # Прокрутка для загрузки контента (быстрый режим для ускорения)
@@ -1061,7 +1059,7 @@ class SiteExplorer:
                 has_recipe_pattern = self.recipe_regex is not None
                 
                 for link_url in new_links:
-                    if self.should_explore_url(link_url) or len(queue) == 0:
+                    if self.should_explore_url(link_url, ignore_visited=len(queue) <= 5): # Всегда добавляем, если очередь маленькая (для старта и чтобы не вылететь на начальном этапе)
                         # Запоминаем источник перехода
                         if link_url not in self.referrer_map:
                             self.referrer_map[link_url] = current_url
@@ -1117,6 +1115,7 @@ class SiteExplorer:
         """Закрытие браузера и БД"""
         if self.driver and not self.debug_mode:
             self.driver.quit()
+        
         self.site_repository.close()
         self.page_repository.close()
         self.logger.info("Готово")

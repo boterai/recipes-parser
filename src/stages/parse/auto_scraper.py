@@ -19,7 +19,7 @@ from selenium.common.exceptions import TimeoutException, WebDriverException
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-import config.config as config
+from config.config import config
 from src.stages.parse.search_query_generator import SearchQueryGenerator
 from src.models.site import Site, get_name_base_url_from_url
 from src.repositories.site import SiteRepository
@@ -41,7 +41,7 @@ class AutoScraper:
             debug_port: Порт для подключения к существующему Chrome (по умолчанию из config)
         """
         self.debug_mode = debug_mode
-        self.debug_port = debug_port if debug_port is not None else config.CHROME_DEBUG_PORT
+        self.debug_port = debug_port if debug_port is not None else config.PARSER_DEFAULT_CHROME_PORT
         self.driver = None
         self.site_repository = SiteRepository()
         self.search_query_repository = SearchQueryRepository()
@@ -77,8 +77,8 @@ class AutoScraper:
         
         try:
             self.driver = webdriver.Chrome(options=chrome_options)
-            self.driver.implicitly_wait(config.IMPLICIT_WAIT)
-            self.driver.set_page_load_timeout(config.PAGE_LOAD_TIMEOUT)
+            self.driver.implicitly_wait(config.PARSER_DEFAULT_IMPLICIT_WAIT)
+            self.driver.set_page_load_timeout(config.PARSER_DEFAULT_PAGE_LOAD_TIMEOUT)
             self.logger.info("Успешное подключение к браузеру")
         except WebDriverException as e:
             self.logger.error(f"Ошибка подключения к браузеру: {e}")

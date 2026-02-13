@@ -5,7 +5,7 @@
 import logging
 from typing import Optional, List
 from sqlalchemy import and_, func
-
+from sqlalchemy.exc import IntegrityError  
 from src.repositories.base import BaseRepository
 from src.models.page import PageORM, Page
 from src.models.image import ImageORM
@@ -44,6 +44,23 @@ class PageRepository(BaseRepository[PageORM]):
             ).first()
         finally:
             session.close()
+
+    def get_for_translation(self, last_processed_id: int, site_id: Optional[int]=None, limit: int = 100) -> List[PageORM]:
+        session = self.get_session()
+        try:
+            query = session.query(PageORM).filter(PageORM.is_recipe == True, 
+                                                        PageORM.ingredients != None, 
+                                                        PageORM.dish_name != None,
+                                                        PageORM.instructions != None, 
+                                                        PageORM.id > last_processed_id)
+                    
+            if site_id:
+                query = query.filter(PageORM.site_id == site_id)
+
+            query = query.order_by(PageORM.id.asc()).limit(limit)
+            return query.all()
+        finally:
+            session.close()
     
     def get_by_site(self, site_id: int, limit: Optional[int] = None, confidence_score: Optional[int] = None,
                     offset: Optional[int] = None) -> List[PageORM]:
@@ -75,7 +92,7 @@ class PageRepository(BaseRepository[PageORM]):
             session.close()
     
     def get_recipes(self, site_id: Optional[int] = None, language: Optional[str] = None, 
-                    limit: Optional[int] = None, random_order: bool = False,
+                    limit: Optional[int] = None, random_order: bool = False, order_by_id: bool = False,
                     page_ids: Optional[list[int]] = None) -> List[PageORM]:
         """
         Получить страницы с рецептами
@@ -106,6 +123,8 @@ class PageRepository(BaseRepository[PageORM]):
             # Сортировка
             if random_order:
                 query = query.order_by(func.random())  # Случайный порядок
+            elif order_by_id:
+                query = query.order_by(PageORM.id.asc())  # По id
             else:
                 query = query.order_by(PageORM.confidence_score.desc())  # По уверенности
             
@@ -235,33 +254,45 @@ class PageRepository(BaseRepository[PageORM]):
         Returns:
             PageORM объект с загруженными images
         """
+        # Фильтруем валидные URL изображений (убираем невалидные например 'compress')
+        valid_image_urls = [
+            url for url in image_urls 
+            if url and isinstance(url, str) and (url.startswith('http://') or url.startswith('https://'))
+        ]
+        
+        if len(valid_image_urls) < len(image_urls):
+            invalid_urls = [url for url in image_urls if url not in valid_image_urls]
+            logger.warning(f"Отфильтровано {len(invalid_urls)} невалидных URL изображений: {invalid_urls}")
+        
         session = self.get_session()
+        page_pydantic_backup = None  # Для сохранения Pydantic модели в случае ошибки
+        
         try:
             if page_orm.id: # ищем по ID если есть
                 existing = session.query(PageORM).filter(PageORM.id == page_orm.id).first()
             else: # иначе по URL
                 existing = session.query(PageORM).filter(PageORM.url == page_orm.url).first()
-
+                
             if existing:
                 # Обновляем существующую страницу
                 # Обновляем поля страницы
                 existing.update_from_page(page_orm)
                 
-                if image_urls:
+                if valid_image_urls:
                     if replace_images:
                         # Заменяем все изображения
                         existing.images.clear()
                         existing.images = [
                             ImageORM(image_url=url)
-                            for url in image_urls
+                            for url in valid_image_urls
                         ]
-                        logger.debug(f"✓ Заменено {len(image_urls)} изображений для страницы ID={existing.id}")
+                        logger.debug(f"✓ Заменено {len(valid_image_urls)} изображений для страницы ID={existing.id}")
                     else:
                         # Добавляем только новые (проверяем дубликаты)
                         existing_urls = {img.image_url for img in existing.images}
                         new_images = [
                             ImageORM(image_url=url)
-                            for url in image_urls
+                            for url in valid_image_urls
                             if url not in existing_urls
                         ]
                         existing.images.extend(new_images)
@@ -276,10 +307,10 @@ class PageRepository(BaseRepository[PageORM]):
                 page_orm = page_orm if isinstance(page_orm, PageORM) else page_orm.to_orm()
 
                 # Добавляем изображения через relationship
-                if image_urls:
+                if valid_image_urls:
                     page_orm.images = [
                         ImageORM(image_url=url) 
-                        for url in image_urls
+                        for url in valid_image_urls
                     ]
                 
                 # Сохраняем в одной транзакции
@@ -287,9 +318,35 @@ class PageRepository(BaseRepository[PageORM]):
                 session.commit()
                 session.refresh(page_orm)
                 
-                logger.debug(f"✓ Создана страница ID={page_orm.id} с {len(image_urls)} изображениями: {page_orm.url}")
+                logger.debug(f"✓ Создана страница ID={page_orm.id} с {len(valid_image_urls)} изображениями: {page_orm.url}")
                 return page_orm
                 
+        except IntegrityError as ie:
+            logger.error(f"Ошибка целостности данных при сохранении страницы: {ie}")
+            if isinstance(page_orm, PageORM):
+                try:
+                    page_pydantic_backup = page_orm.to_pydantic_no_images()
+                except Exception as conv_err:
+                    logger.error(f"Не удалось конвертировать PageORM в Pydantic: {conv_err}")
+                    page_pydantic_backup = None
+            else:
+                page_pydantic_backup = page_orm.model_copy(update={'images': []})
+            
+            session.rollback()
+            
+            # Обработка дублирующихся изображений
+            if "Duplicate entry" in str(ie) and "for key 'images.unique_image_url_hash'" in str(ie):
+                logger.warning("Обнаружено дублирующееся изображение. Пробуем сохранить страницу без изображений")
+                
+                if page_pydantic_backup:
+                    try:
+                        return self.create_or_update(page_pydantic_backup)
+                    except Exception as retry_err:
+                        logger.error(f"Не удалось сохранить страницу даже без изображений: {retry_err}")
+                        return None
+            
+            return None
+            
         except Exception as e:
             session.rollback()
             logger.error(f"Ошибка обновления страницы с изображениями: {e}")
@@ -339,6 +396,32 @@ class PageRepository(BaseRepository[PageORM]):
         except Exception as e:
             session.rollback()
             logger.error(f"Ошибка удаления страниц сайта {site_id}: {e}")
+            return 0
+        finally:
+            session.close()
+
+    def update_page_language_by_site(self, site_id: int, language: str) -> int:
+        """
+        Обновить язык для всех страниц определенного сайта
+        
+        Args:
+            site_id: ID сайта
+            language: Новый язык для всех страниц сайта
+            
+        Returns:
+            Количество обновленных страниц
+        """
+        session = self.get_session()
+        try:
+            updated_count = session.query(PageORM).filter(
+                PageORM.site_id == site_id
+            ).update({PageORM.language: language})
+            session.commit()
+            logger.info(f"✓ Обновлен язык на '{language}' для {updated_count} страниц сайта ID={site_id}")
+            return updated_count
+        except Exception as e:
+            session.rollback()
+            logger.error(f"Ошибка обновления языка для сайта {site_id}: {e}")
             return 0
         finally:
             session.close()
@@ -433,7 +516,7 @@ class PageRepository(BaseRepository[PageORM]):
         finally:
             session.close()
 
-    def get_recipe_sites(self) -> List[int]:
+    def get_recipe_sites(self, min_site_id: Optional[int] = None) -> List[int]:
         """
         Получить список уникальных site_id, для которых есть страницы с рецептами
         
@@ -442,12 +525,17 @@ class PageRepository(BaseRepository[PageORM]):
         """
         session = self.get_session()
         try:
-            site_ids = session.query(PageORM.site_id).filter(
+            query = session.query(PageORM.site_id).filter(
                 PageORM.is_recipe == True,
                 PageORM.ingredients != None,
                 PageORM.dish_name != None,
                 PageORM.instructions != None
-            ).distinct().all()
+            )
+
+            if min_site_id is not None:
+                query = query.filter(PageORM.site_id >= min_site_id)
+            
+            site_ids = query.distinct().order_by(PageORM.site_id.asc()).all()
             site_ids = [sid[0] for sid in site_ids]
             return site_ids
         finally:

@@ -2,6 +2,7 @@
 
 from typing import Optional
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +21,7 @@ LanguageCodes = {
     "en": ["en", "eng", "english", "en-GB", "en-US"],
     "ru": ["ru", "rus", "russian", "ru-RU"],
     "de": ["de", "ger", "german", "de-DE"],
-    "fr": ["fr", "fre", "french", "fr-FR"],
+    "fr": ["fr", "fre", "french", "fr-FR", "fr-CA"],
     "es": ["es", "spa", "spanish", "es-ES"],
     "it": ["it", "ita", "italian", "it-IT"],
     "tr": ["tr", "tur", "turkish", "tr-TR"],
@@ -133,7 +134,7 @@ def convert_language_name_to_code(language_name: str) -> Optional[str]:
     logger.warning(f"Не удалось конвертировать название '{language_name}' в код языка")
     return None
 
-def validate_and_normalize_language(language: str) -> Optional[str]:
+def validate_and_normalize_language(language: str) -> str:
     """
     Проверяет язык в ключах и значениях вариаций, возвращает нормализованный код
     
@@ -156,8 +157,8 @@ def validate_and_normalize_language(language: str) -> Optional[str]:
             return main_code
     
     # Язык не найден
-    logger.error(f"Язык '{language}' не поддерживается")
-    return None
+    logger.error(f"Язык '{language}' не поддерживается, возвращаем исходное значение")
+    return lang_lower
 
 COOKIE_KEYWORDS = [
         # English

@@ -35,6 +35,26 @@ class PromptGenerator:
         self.template_file = Path(template_file)
         self.output_dir = Path(output_dir)
         self.site_repository = SiteRepository()
+
+    def scan_extractor_folder(self) -> list[str]:
+        """
+        Сканирует папку extractor и получает имена всех модулей (без .py)
+        
+        Returns:
+            Список имен модулей
+        """
+        extractor_dir = Path("extractor")
+        if not extractor_dir.exists():
+            logger.error(f"Директория экстракторов не найдена: {extractor_dir}")
+            return []
+        
+        module_names = []
+        for file in extractor_dir.glob("*.py"):
+            if file.stem not in ["__init__", "base"]:
+                module_names.append(file.stem)
+        
+        logger.info(f"Найдено {len(module_names)} модулей в extractor/")
+        return module_names
     
     def scan_preprocessed_folders(self) -> list[str]:
         """
@@ -118,6 +138,24 @@ class PromptGenerator:
         except Exception as e:
             logger.error(f"Ошибка сохранения промпта для {module_name}: {e}")
             return False
+        
+    def generate_prompts_for_sites(self, site_names: list[str]) -> dict:
+        template = self.load_template()
+        if not template:
+            logger.error("Не удалось загрузить шаблон")
+            return {}
+        
+        logger.info(f"Начинаем генерацию промптов для {len(site_names)} модулей")
+        prompt_dict = {}
+        sites = self.site_repository.get_by_site_names(site_names)
+        site_dict = {site.name: site for site in sites}
+        for mod in site_names:
+            site = site_dict.get(mod)
+            if site:
+                prompt_dict[mod] = self.generate_prompt(mod, site.base_url, template)
+            else:
+                logger.warning(f"Сайт для модуля '{mod}' не найден в БД, пропускаем")
+        return prompt_dict
     
     def generate_all_prompts(self, save_to_files: bool = False) -> dict:
         """

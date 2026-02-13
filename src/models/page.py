@@ -61,6 +61,32 @@ class PageORM(Base):
         Index('idx_is_recipe', 'is_recipe'),
         Index('idx_confidence', 'confidence_score'),
     )
+
+    def to_pydantic_no_images(self) -> 'Page':
+        """Конвертация ORM модели в Pydantic без загрузки изображений"""
+        # Создаем словарь из атрибутов, исключая images
+        return Page(
+            id=self.id,
+            site_id=self.site_id,
+            url=self.url,
+            pattern=self.pattern,
+            title=self.title,
+            language=self.language,
+            html_path=self.html_path,
+            ingredients=self.ingredients,
+            instructions=self.instructions,
+            dish_name=self.dish_name,
+            category=self.category,
+            prep_time=self.prep_time,
+            cook_time=self.cook_time,
+            total_time=self.total_time,
+            description=self.description,
+            notes=self.notes,
+            tags=self.tags,
+            confidence_score=float(self.confidence_score) if self.confidence_score is not None else None,
+            is_recipe=self.is_recipe,
+            created_at=self.created_at
+        )
     
     def to_pydantic(self) -> 'Page':
         """Конвертация ORM модели в Pydantic"""

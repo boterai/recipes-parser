@@ -263,7 +263,7 @@ Query: "pasta with tomatoes without meat"
         
         # Получаем рецепт если передан только ID
         if recipe is None and recipe_id is not None:
-            recipes = self.clickhouse_db.get_recipes_by_ids([recipe_id], table_name=table_name)
+            recipes = self.clickhouse_db.get_recipes_by_ids([recipe_id])
             if not recipes:
                 logger.warning(f"Рецепт с id={recipe_id} не найден в ClickHouse")   
                 return []

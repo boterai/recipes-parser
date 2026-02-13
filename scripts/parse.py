@@ -11,11 +11,11 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
 import queue
 from typing import Optional
-import random
 # Добавление корневой директории в PYTHONPATH
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.stages.parse.parse import RecipeParserRunner
+from config.config import config
 
 # Создаем директорию для логов
 LOGS_DIR = Path(__file__).parent.parent / "logs"
@@ -78,7 +78,7 @@ def setup_thread_logger(module_name: str, port: int) -> logging.Logger:
 
 
 def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_depth: int = 4, 
-                      max_no_recipe_pages: Optional[int] = 30):
+                      max_no_recipe_pages: Optional[int] = 30) -> tuple[bool, bool]:
     """
     Запуск парсера в отдельном потоке с собственным логгером
     
@@ -88,6 +88,9 @@ def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_dep
         max_urls: Максимальное количество URL
         max_depth: Максимальная глубина обхода
         max_no_recipe_pages: Максимальное количество страниц без рецептов перед остановкой
+
+    Returns:
+        tuple[bool, bool]: (успех парсинга, фатальная ли это ошибка)
     """
     # Создаем отдельный логгер для этого потока
     thread_logger = setup_thread_logger(module_name, port)
@@ -101,7 +104,7 @@ def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_dep
     try:
         parser = RecipeParserRunner(extractor_dir="extractor")
         
-        parser.run_parser(
+        return parser.run_parser(
             module_name=module_name, 
             port=port, 
             max_urls=max_urls, 
@@ -109,11 +112,9 @@ def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_dep
             custom_logger=thread_logger,
             max_no_recipe_pages=max_no_recipe_pages
         )
-        
-        thread_logger.info(f"✓ Парсинг {module_name} завершен успешно")
-        
     except Exception as e:
         thread_logger.error(f"✗ Ошибка при парсинге {module_name}: {e}", exc_info=True)
+        return False, False
     
     finally:
         # Закрываем handlers
@@ -140,7 +141,7 @@ def main(module_name: str = "24kitchen_nl", port: int = 9222):
     )
 
 
-def run_parallel(ports: list[int], modules: list[str] = None, max_urls: int = 4000, 
+def run_parallel(ports: list[int], modules: Optional[list[str]] = None, max_urls: int = 4000, 
                  max_depth: int = 4, max_recipes_per_module: Optional[int] = 4000):
     """
     Запуск парсеров в нескольких потоках с отдельными логами
@@ -156,16 +157,13 @@ def run_parallel(ports: list[int], modules: list[str] = None, max_urls: int = 40
     
     parser = RecipeParserRunner(extractor_dir="extractor")
 
-    processed_modules = []
-    if max_recipes_per_module is not None:
-        processed_modules = parser.site_repository.get_extractors(min_recipes=max_recipes_per_module)
+    # получаем модули для парсинга с учетом max_recipes_per_module и сортируя по убыванию количества рецептов
+    site_names = parser.site_repository.get_extractors(max_recipes=max_recipes_per_module, order="desc", min_recipes=100)
 
     if not modules:
-        modules = [ex for ex in parser.available_extractors if ex not in processed_modules]
+        modules = [site_name for site_name in site_names if site_name in parser.available_extractors]
     else:
-        extractors = parser.available_extractors.copy()
-        extractors = [ex for ex in extractors if not (ex in processed_modules or ex in modules)]
-        random.shuffle(extractors)
+        extractors = [site_name for site_name in site_names if (site_name not in modules and site_name in parser.available_extractors)]
         modules.extend(extractors)
     
     logger.info(f"\nВсего модулей: {len(modules)}, Портов: {len(ports)}")
@@ -207,24 +205,28 @@ def run_parallel(ports: list[int], modules: list[str] = None, max_urls: int = 40
     
         # Обрабатываем завершенные задачи и запускаем новые на освободившихся портах
         while futures:
-            # Ждем завершения хотя бы одной задачи
-            as_completed(futures.keys())
-            
+            # Ждем завершения хотя бы одной задачи            
             for future in as_completed(futures.keys()):
                 module, port = futures.pop(future)
                 
-                try:
-                    future.result()
+                success, is_fatal = future.result()
+
+                if success:
                     with results["lock"]:
                         results["success"] += 1
                         success_count = results["success"]
                     logger.info(f"✓ Завершен [{success_count}/{len(modules)}]: {module}:{port}")
-                except Exception as e:
+                else:
                     with results["lock"]:
                         results["failed"] += 1
                         failed_count = results["failed"]
-                    logger.error(f"✗ Ошибка [{failed_count}]: {module}:{port} - {e}")
+                    logger.error(f"✗ Неудача [{failed_count}/{len(modules)}]: {module}:{port}")
                 
+                if is_fatal:
+                    logger.error(f"Фатальная ошибка при парсинге {module} на порту {port}. Больше не подключаемся к этому порту.")
+                    module_queue.put(module)  # возвращаем модуль в очередь, чтобы попытаться запустить его на другом порту
+                    continue  # не возвращаем порт в очередь, просто пропускаем этот модуль в будущем
+
                 # Порт освободился → возвращаем в очередь
                 free_ports.put(port)
                 
@@ -258,7 +260,7 @@ if __name__ == "__main__":
     parser.add_argument(
         '--parallel',
         action='store_true',
-        default=True,
+        default= True,
         help='Запустить в нескольких потоках'
     )
     parser.add_argument(
@@ -286,13 +288,14 @@ if __name__ == "__main__":
     parser.add_argument(
         '--max_urls',
         type=int,
-        default=10_000,
-        help='Максимальное количество просмотренных URL для каждого модуля'
+        default=7_000,
+        help='Максимальное количество просмотренных URL для каждого модуля, включая те, что не содержат рецептов (по умолчанию: 10 000)'
     )
     
     args = parser.parse_args()
     
     if args.parallel:
-        run_parallel(ports=args.ports,  modules=args.modules, max_recipes_per_module=args.max_recipes_per_module, max_urls=args.max_urls)
+        run_parallel(ports=args.ports,  modules=None, max_recipes_per_module=args.max_recipes_per_module, max_urls=args.max_urls,
+                     max_depth=5)
     else:
-        main(args.modules[0], args.ports[0])
+        main("allrecipes_com", args.ports[0])

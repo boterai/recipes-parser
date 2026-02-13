@@ -227,7 +227,7 @@ if __name__ == "__main__":
     parser.add_argument(
         '--target-sites-count',
         type=int,
-        default=300,
+        default=200,
         help='Минимальное количество необработанных, те уже собранных сайтов (по умолчанию: 150)'
     )
 

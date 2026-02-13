@@ -1,22 +1,21 @@
 """
 Настройки базы данных
 """
-
-import os
 from urllib.parse import quote_plus
 from dotenv import load_dotenv
-
 load_dotenv()
+
+from config.config import config
 
 
 class MySQLConfig:
     """Конфигурация MySQL"""
     
-    MYSQL_HOST = os.getenv('MYSQL_HOST', 'localhost')
-    MYSQL_PORT = int(os.getenv('MYSQL_PORT', 3306))
-    MYSQL_USER = os.getenv('MYSQL_USER', 'root')
-    MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD', '')
-    MYSQL_DATABASE = os.getenv('MYSQL_DATABASE', 'recipe_parser')
+    MYSQL_HOST = config.MYSQL_HOST
+    MYSQL_PORT = config.MYSQL_PORT
+    MYSQL_USER = config.MYSQL_USER
+    MYSQL_PASSWORD = config.MYSQL_PASSWORD
+    MYSQL_DATABASE = config.MYSQL_DATABASE
     
     @classmethod
     def get_connection_url(cls) -> str:
@@ -35,13 +34,14 @@ class MySQLConfig:
 class ClickHouseConfig:
     """Конфигурация ClickHouse"""
     
-    CH_HOST = os.getenv('CLICKHOUSE_HOST', 'localhost')
-    CH_PORT = int(os.getenv('CLICKHOUSE_PORT', 9000))
-    CH_USER = os.getenv('CLICKHOUSE_USER', 'default')
-    CH_PASSWORD = os.getenv('CLICKHOUSE_PASSWORD', '')
-    CH_DATABASE = os.getenv('CLICKHOUSE_DATABASE', 'recipes')
-    CH_SECURE = bool(int(os.getenv('CLICKHOUSE_SECURE', '1')))
-    CH_PROXY = os.getenv('SOCKS5', None)
+    CH_HOST = config.CLICKHOUSE_HOST
+    CH_PORT = config.CLICKHOUSE_PORT
+    CH_USER = config.CLICKHOUSE_USER
+    CH_PASSWORD = config.CLICKHOUSE_PASSWORD
+    CH_DATABASE = config.CLICKHOUSE_DATABASE
+    CH_SECURE = config.CLICKHOUSE_SECURE
+    CH_PROXY = config.SOCKS5
+    CH_RECIPE_TABLE = config.CLICKHOUSE_RECIPE_TABLE
     
     @classmethod
     def get_connection_params(cls) -> dict:
@@ -60,11 +60,11 @@ class ClickHouseConfig:
 class QdrantConfig:
     """Конфигурация Qdrant"""
     
-    QDRANT_HOST = os.getenv('QDRANT_HOST_CLOUD', 'localhost')
-    QDRANT_PORT = int(os.getenv('QDRANT_PORT_CLOUD', 6333))
-    QDRANT_API_KEY = os.getenv('QDRANT_API_KEY_CLOUD', None)
-    QDRANT_HTTPS = os.getenv('QDRANT_HTTPS', 'false').lower() == 'true'
-    QDRANT_PROXY = os.getenv('PROXY', None)
+    QDRANT_HOST = config.QDRANT_HOST
+    QDRANT_PORT = config.QDRANT_PORT
+    QDRANT_API_KEY = config.QDRANT_API_KEY
+    QDRANT_HTTPS = config.QDRANT_HTTPS
+    QDRANT_PROXY = config.PROXY
     
     @classmethod
     def get_connection_params(cls) -> dict:

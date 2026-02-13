@@ -12,6 +12,7 @@ from clickhouse_connect.driver import Client
 from src.models.recipe import Recipe
 from urllib.parse import urlparse
 from urllib3.contrib.socks import SOCKSProxyManager
+from config.config import config
 
 logger = logging.getLogger(__name__)
 
@@ -20,11 +21,17 @@ CONNECTION_ERROR = "Ошибка подключения к ClickHouse"
 class ClickHouseManager:    
     _instance = None
     _client = None
+    _default_table = ClickHouseConfig.CH_RECIPE_TABLE # дефолтная таблица для рецептов (может быть изменена через конфиг и правку миграционного файла)
     
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super(ClickHouseManager, cls).__new__(cls)
         return cls._instance
+    
+    @property
+    def default_table(self) -> str:
+        """Получение имени таблицы для рецептов"""
+        return self._default_table
     
     @property
     def client(self) -> Optional[Client]:
@@ -157,7 +164,7 @@ class ClickHouseManager:
             return False
         
         try:
-            with open('db/schemas/clickhouse.sql', 'r', encoding='utf-8') as f:
+            with open(config.CLICKHOUSE_SCHEMA, 'r', encoding='utf-8') as f:
                 migration_schema = f.read()
         
             # Разбиваем на отдельные команды
@@ -179,7 +186,7 @@ class ClickHouseManager:
         
         return False
     
-    def insert_recipes_batch(self, recipes: list[Recipe], table_name: str = "recipe_en") -> int:
+    def insert_recipes_batch(self, recipes: list[Recipe]) -> int:
         """
         Батчевая вставка рецептов в ClickHouse
         
@@ -191,7 +198,7 @@ class ClickHouseManager:
             Количество успешно вставленных рецептов
         """
         if not self.client:
-            logger.error("ClickHouse не подключен")
+            logger.error(CONNECTION_ERROR)
             return 0
         
         if not recipes:
@@ -215,12 +222,12 @@ class ClickHouseManager:
             
             # Батчевая вставка
             self.client.insert(
-                table_name,
+                self.default_table,
                 data,
                 column_names=column_names
             )
             
-            logger.info(f"✓ Вставлено {len(data)} рецептов в {table_name}")
+            logger.info(f"✓ Вставлено {len(data)} рецептов в {self.default_table}")
             return len(data)
             
         except Exception as e:
@@ -228,7 +235,7 @@ class ClickHouseManager:
             logger.info("Попытка вставки рецептов по одному...")
             
             # Fallback: вставляем по одному
-            return self._insert_recipes_one_by_one(recipes, table_name, column_names)
+            return self._insert_recipes_one_by_one(recipes, column_names)
     
     def _recipe_to_row(self, recipe: Recipe) -> list:
         """
@@ -256,7 +263,7 @@ class ClickHouseManager:
             recipe.ingredients_with_amounts or []
         ]
     
-    def _insert_recipes_one_by_one(self, recipes: list[Recipe], table_name: str, column_names: list[str]) -> int:
+    def _insert_recipes_one_by_one(self, recipes: list[Recipe], column_names: list[str]) -> int:
         """
         Вставка рецептов по одному (fallback при ошибке батча)
         
@@ -275,7 +282,7 @@ class ClickHouseManager:
             try:
                 row = self._recipe_to_row(recipe)
                 self.client.insert(
-                    table_name,
+                    self.default_table,
                     [row],
                     column_names=column_names
                 )
@@ -289,23 +296,9 @@ class ClickHouseManager:
             logger.warning(f"Не удалось вставить {len(failed_ids)} рецептов: {failed_ids[:10]}{'...' if len(failed_ids) > 10 else ''}")
         
         if success_count > 0:
-            logger.info(f"✓ Вставлено {success_count}/{len(recipes)} рецептов в {table_name} (поодиночке)")
+            logger.info(f"✓ Вставлено {success_count}/{len(recipes)} рецептов в {self.default_table} (поодиночке)")
         
         return success_count
-    
-    def upsert_recipes_batch(self, recipes: list, table_name: str = "recipe_en") -> int:
-        """
-        Батчевая вставка/обновление рецептов (благодаря ReplacingMergeTree)
-        
-        Args:
-            recipes: Список объектов Recipe
-            table_name: Имя таблицы (recipe_en, recipe_ru и т.д.)
-        
-        Returns:
-            Количество успешно обработанных рецептов
-        """
-        # ReplacingMergeTree автоматически заменит записи с одинаковым page_id
-        return self.insert_recipes_batch(recipes, table_name)
     
     def parse_recipes_from_dataframe(self, df, score_column: Optional[str] = None) -> list[Recipe]|list[tuple[float, Recipe]]:
         """
@@ -348,8 +341,7 @@ class ClickHouseManager:
     
     def get_recipes_by_ids(
         self, 
-        page_ids: list[int],
-        table_name: str = "recipe_en"
+        page_ids: list[int]
     ) -> list[Recipe]:
         """
         Получение рецептов по списку ID
@@ -382,7 +374,7 @@ class ClickHouseManager:
                     argMax(vectorised, last_updated) as vectorised,
                     argMax(tags, last_updated) as tags,
                     argMax(ingredients_with_amounts, last_updated) as ingredients_with_amounts
-                FROM {table_name}
+                FROM {self.default_table}
                 WHERE page_id IN %(page_ids)s
                 GROUP BY page_id
                 ORDER BY page_id
@@ -408,8 +400,7 @@ class ClickHouseManager:
         self,
         site_id: int,
         limit: Optional[int] = None,
-        vectorised: Optional[bool] = None,
-        table_name: str = "recipe_en"
+        vectorised: Optional[bool] = None
     ) -> list[Recipe]:
         """
         Получение рецептов по site_id с фильтрацией
@@ -418,7 +409,6 @@ class ClickHouseManager:
             site_id: ID сайта
             limit: Максимальное количество рецептов
             vectorised: Если True - только векторизованные, False - только невекторизованные, None - все
-            table_name: Имя таблицы
         
         Returns:
             Список объектов Recipe
@@ -443,7 +433,7 @@ class ClickHouseManager:
                     argMax(category, last_updated) as category,
                     argMax(vectorised, last_updated) as vectorised,
                     argMax(ingredients_with_amounts, last_updated) as ingredients_with_amounts
-                FROM {table_name}
+                FROM {self.default_table}
                 WHERE site_id = %(site_id)s
                 GROUP BY page_id
             """
@@ -481,14 +471,12 @@ class ClickHouseManager:
             traceback.print_exc()
             return []
     
-    def get_page_ids_by_site(self, site_id: int, table_name: str = "recipe_en") -> list[int]:
+    def get_page_ids_by_site(self, site_id: int) -> list[int]:
         """
         Получение всех page_id для заданного site_id
         
         Args:
-            site_id: ID сайта
-            table_name: Имя таблицы
-        
+            site_id: ID сайта        
         Returns:
             Список всех page_id для данного сайта (отсортированный по возрастанию)
         """
@@ -499,7 +487,7 @@ class ClickHouseManager:
         try:
             query = f"""
                 SELECT DISTINCT page_id
-                FROM {table_name}
+                FROM {self.default_table}
                 WHERE site_id = %(site_id)s
                 ORDER BY page_id
             """
@@ -507,7 +495,7 @@ class ClickHouseManager:
             df = self.client.query_df(query, parameters={'site_id': site_id})
             
             if len(df) == 0:
-                logger.info(f"Нет рецептов для site_id={site_id} в {table_name}")
+                logger.info(f"Нет рецептов для site_id={site_id} в {self.default_table}")
                 return []
             
             page_ids = df['page_id'].astype(int).tolist()

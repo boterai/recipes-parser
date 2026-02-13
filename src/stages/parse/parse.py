@@ -5,6 +5,7 @@ import random
 import logging
 from pathlib import Path
 from typing import Optional
+from selenium.common.exceptions import WebDriverException
 
 if __name__ == "__main__":
     import sys
@@ -71,7 +72,7 @@ class RecipeParserRunner:
         max_depth: int = 4,
         custom_logger: Optional[logging.Logger] = None,
         max_no_recipe_pages: Optional[int] = None
-    ) -> bool:
+    ) -> tuple[bool, bool]:
         """
         Запуск парсинга с указанным или случайным модулем
         
@@ -84,13 +85,13 @@ class RecipeParserRunner:
             helper_links: Дополнительные URL для добавления в очередь
             
         Returns:
-            True если парсинг запущен успешно, False в случае ошибки
+            tuple[bool, bool]: (успех парсинга, фатальная ли это ошибка)
         """
         # Выбор модуля
         if module_name is None:
             module_name = self.get_random_extractor()
             if module_name is None:
-                return False
+                return False, False
         else:
             # Проверка существования модуля
             if module_name not in self.available_extractors:
@@ -98,13 +99,13 @@ class RecipeParserRunner:
                     f"Модуль '{module_name}' не найден. "
                     f"Доступные модули: {', '.join(self.available_extractors)}"
                 )
-                return False
+                return False, False
         
         # Получение URL сайта
         site_orm = self.site_repository.get_by_name(module_name)
         if site_orm is None:
             custom_logger.error(f"URL для модуля '{module_name}' не найден в БД сайтов")
-            return False
+            return False, False
         
         custom_logger.info("=" * 60)
         custom_logger.info("Запуск парсинга")
@@ -135,10 +136,18 @@ class RecipeParserRunner:
             )
             
             custom_logger.info(f"Парсинг {module_name} завершен успешно")
-            return True
+            return True, False
+
+        except WebDriverException as wde:
+            if "Chrome не запущен на порту" in str(wde):
+                custom_logger.error(f"Ошибка подключения к Chrome на порту {port}: {wde}")
+                return False, True # Возвращаем флаг для перезапуска потока с новым портом
+            else:
+                custom_logger.error(f"WebDriverException при парсинге {module_name}: {wde}", exc_info=True)
+                return False, True
             
         except Exception as e:
             custom_logger.error(f"Ошибка при парсинге {module_name}: {e}", exc_info=True)
-            return False
+            return False, False
 
 

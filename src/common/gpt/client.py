@@ -12,15 +12,13 @@ import re
 import asyncio
 import aiohttp
 from src.common.gpt.clean_response import GPTJsonExtractor
+from config.config import config
 # Загрузка переменных окружения
 load_dotenv()
 
 logger = logging.getLogger(__name__)
 
 # OpenAI API настройки
-GPT_API_KEY = os.getenv('GPT_API_KEY')
-GPT_PROXY = os.getenv('PROXY', None)
-GPT_MODEL_MINI = os.getenv('GPT_MODEL_MINI', 'gpt-4o-mini')
 GPT_API_URL = "https://api.openai.com/v1/chat/completions"
 
 
@@ -35,9 +33,15 @@ class GPTClient:
             api_key: API ключ OpenAI (по умолчанию из env)
             proxy: Прокси сервер (по умолчанию из env)
         """
-        self.api_key = api_key or GPT_API_KEY
-        self.proxy = proxy or GPT_PROXY
+        self.api_key = api_key or config.GPT_API_KEY
+        self.proxy = proxy or config.PROXY
         self.api_url = GPT_API_URL
+        self.default_model = config.GPT_MODEL_MINI
+
+        self.headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.api_key}"
+        }
         
         if not self.api_key:
             raise ValueError("GPT_API_KEY не установлен")
@@ -67,10 +71,10 @@ class GPTClient:
         self,
         system_prompt: str,
         user_prompt: str,
-        model: str = GPT_MODEL_MINI,
+        model: str = None,
         temperature: float = 0.1,
         max_tokens: Optional[int] = None,
-        timeout: int = 30,
+        request_timeout: int = 30,
         retry_attempts: int = 3,
         response_schema: Optional[dict] = None
     ) -> dict[str, Any]:
@@ -83,7 +87,7 @@ class GPTClient:
             model: Модель GPT для использования
             temperature: Температура генерации (0-1)
             max_tokens: Максимальное количество токенов в ответе
-            timeout: Таймаут запроса в секундах
+            request_timeout: Таймаут запроса в секундах
             retry_attempts: Количество попыток при ошибках
             response_schema: Схема валидации ответа (опционально), помогает вычищать ответ от двойных кавычек и лишних символов 
             
@@ -93,10 +97,8 @@ class GPTClient:
         Raises:
             Exception: При ошибке запроса или парсинга
         """
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.api_key}"
-        }
+        if model is None:
+            model = self.default_model
         
         payload = {
             "model": model,
@@ -117,32 +119,30 @@ class GPTClient:
             payload["max_tokens"] = max_tokens
         
         last_exception = None
-        
-        # Настройка прокси для aiohttp
-        connector = None
-        if self.proxy:
-            connector = aiohttp.TCPConnector()
-        
-        timeout_obj = aiohttp.ClientTimeout(total=timeout)
+        timeout_obj = aiohttp.ClientTimeout(total=request_timeout)
         
         for attempt in range(retry_attempts):
+            session = None
             try:
-                async with aiohttp.ClientSession(connector=connector, timeout=timeout_obj) as session:
-                    async with session.post(
-                        self.api_url,
-                        headers=headers,
-                        json=payload,
-                        proxy=self.proxy if self.proxy else None
-                    ) as response:
-                        response.raise_for_status()
-                        response_data = await response.json()
-                        result_text = response_data['choices'][0]['message']['content'].strip()
-                        
-                        # Очистка от markdown форматирования
-                        result_text = self._clean_markdown(result_text)
-                        result = json.loads(result_text)
-                        
-                        return result
+                # Создаем новую сессию для каждой попытки
+                connector = aiohttp.TCPConnector() if self.proxy else None
+                session = aiohttp.ClientSession(connector=connector, timeout=timeout_obj)
+                
+                async with session.post(
+                    self.api_url,
+                    headers=self.headers,
+                    json=payload,
+                    proxy=self.proxy if self.proxy else None
+                ) as response:
+                    response.raise_for_status()
+                    response_data = await response.json()
+                    result_text = response_data['choices'][0]['message']['content'].strip()
+                    
+                    # Очистка от markdown форматирования
+                    result_text = self._clean_markdown(result_text)
+                    result = json.loads(result_text)
+                    
+                    return result
                 
             except json.JSONDecodeError as e:
                 # если есть схема - пробуем ручной парсинг
@@ -188,9 +188,23 @@ class GPTClient:
                     logger.error(f"Ошибка запроса к GPT после {retry_attempts} попыток: {e}")
                     
             except Exception as e:
-                logger.error(f"Неожиданная ошибка запроса к GPT: {e}")
                 last_exception = e
-                break
+                # Проверяем, является ли это ошибкой закрытой сессии
+                if "Session is closed" in str(e) or "Cannot enter into task" in str(e):
+                    if attempt < retry_attempts - 1:
+                        delay = 2 ** attempt
+                        logger.warning(f"Session error: попытка {attempt + 1}/{retry_attempts}. Повтор через {delay}с...")
+                        await asyncio.sleep(delay)
+                    else:
+                        logger.error(f"Ошибка сессии после {retry_attempts} попыток: {e}")
+                else:
+                    logger.error(f"Неожиданная ошибка запроса к GPT: {e}")
+                    break
+            
+            finally:
+                # Закрываем сессию после каждой попытки
+                if session and not session.closed:
+                    await session.close()
         
         # Если дошли сюда - все попытки исчерпаны
         raise last_exception if last_exception else Exception("Неизвестная ошибка запроса к GPT")
@@ -199,7 +213,7 @@ class GPTClient:
         self,
         system_prompt: str,
         user_prompt: str,
-        model: str = GPT_MODEL_MINI,
+        model: str = None,
         temperature: float = 0.1,
         max_tokens: Optional[int] = None,
         timeout: int = 30,
@@ -225,11 +239,8 @@ class GPTClient:
         Raises:
             Exception: При ошибке запроса или парсинга
         """
-        
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.api_key}"
-        }
+        if model is None:
+            model = self.default_model
         
         payload = {
             "model": model,
@@ -257,7 +268,7 @@ class GPTClient:
             try:
                 response = requests.post(
                     self.api_url,
-                    headers=headers,
+                    headers=self.headers,
                     json=payload,
                     timeout=timeout,
                     proxies=proxies
@@ -317,9 +328,18 @@ class GPTClient:
                     logger.error(f"Ошибка запроса к GPT после {retry_attempts} попыток: {e}")
                     
             except Exception as e:
-                logger.error(f"Неожиданная ошибка запроса к GPT: {e}")
                 last_exception = e
-                break
+                # Проверяем, является ли это ошибкой закрытой сессии
+                if "Session is closed" in str(e):
+                    if attempt < retry_attempts - 1:
+                        delay = 2 ** attempt
+                        logger.warning(f"Session is closed: попытка {attempt + 1}/{retry_attempts}. Повтор через {delay}с...")
+                        time.sleep(delay)
+                    else:
+                        logger.error(f"Ошибка 'Session is closed' после {retry_attempts} попыток: {e}")
+                else:
+                    logger.error(f"Неожиданная ошибка запроса к GPT: {e}")
+                    break
         
         # Если дошли сюда - все попытки исчерпаны
         raise last_exception if last_exception else Exception("Неизвестная ошибка запроса к GPT")
@@ -342,6 +362,124 @@ class GPTClient:
             text = text[:-3]
         
         return text.strip()
+
+    async def async_request_with_images(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        image_urls: list[str],
+        model: str = "gpt-4o",
+        temperature: float = 0.1,
+        max_tokens: int = 500,
+        request_timeout: int = 60,
+        retry_attempts: int = 3,
+    ) -> dict[str, Any]:
+        """
+        Асинхронный запрос к GPT с изображениями (Vision API).
+        
+        Args:
+            system_prompt: Системный промпт
+            user_prompt: Пользовательский промпт
+            image_urls: Список URL изображений для анализа
+            model: Модель (gpt-4o, gpt-4o-mini поддерживают vision)
+            temperature: Температура генерации
+            max_tokens: Максимальное количество токенов
+            timeout: Таймаут запроса
+            retry_attempts: Количество повторных попыток
+            
+        Returns:
+            Распарсенный JSON ответ
+        """
+
+        # Формируем content с текстом и изображениями
+        content = [{"type": "text", "text": user_prompt}]
+        for url in image_urls:
+            content.append({
+                "type": "image_url",
+                "image_url": {"url": url, "detail": "low"}  # low для экономии токенов
+            })
+        
+        payload = {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": content}
+            ],
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+        }
+        
+        last_exception = None
+        timeout_obj = aiohttp.ClientTimeout(total=request_timeout)
+        
+        for attempt in range(retry_attempts):
+            session = None
+            try:
+                # Создаем новую сессию для каждой попытки
+                connector = aiohttp.TCPConnector() if self.proxy else None
+                session = aiohttp.ClientSession(connector=connector, timeout=timeout_obj)
+                
+                async with session.post(
+                    self.api_url,
+                    headers=self.headers,
+                    json=payload,
+                    proxy=self.proxy if self.proxy else None
+                ) as response:
+                    response.raise_for_status()
+                    response_data = await response.json()
+                    result_text = response_data['choices'][0]['message']['content'].strip()
+                    
+                    result_text = self._clean_markdown(result_text)
+                    return json.loads(result_text)
+                        
+            except json.JSONDecodeError as e:
+                logger.error(f"Ошибка парсинга JSON от GPT Vision: {e}")
+                logger.error(f"Ответ GPT: {result_text if 'result_text' in locals() else 'N/A'}")
+                last_exception = e
+                break
+                
+            except aiohttp.ClientResponseError as e:
+                if e.status == 403:
+                    logger.error("Ошибка 403 (Forbidden): проверьте API ключ")
+                    raise
+                
+                last_exception = e
+                if attempt < retry_attempts - 1:
+                    delay = 2 ** attempt
+                    logger.warning(f"HTTP ошибка {e.status} (Vision): попытка {attempt + 1}/{retry_attempts}. Повтор через {delay}с...")
+                    await asyncio.sleep(delay)
+                else:
+                    logger.error(f"Ошибка HTTP запроса к GPT Vision после {retry_attempts} попыток: {e}")
+                    
+            except (aiohttp.ClientError, asyncio.TimeoutError) as e:
+                last_exception = e
+                if attempt < retry_attempts - 1:
+                    delay = 2 ** attempt
+                    logger.warning(f"Ошибка запроса к GPT Vision: попытка {attempt + 1}/{retry_attempts}. Повтор через {delay}с...")
+                    await asyncio.sleep(delay)
+                else:
+                    logger.error(f"Ошибка запроса к GPT Vision после {retry_attempts} попыток: {e}")
+                    
+            except Exception as e:
+                last_exception = e
+                # Проверяем, является ли это ошибкой закрытой сессии
+                if "Session is closed" in str(e) or "Cannot enter into task" in str(e):
+                    if attempt < retry_attempts - 1:
+                        delay = 2 ** attempt
+                        logger.warning(f"Session error (Vision): попытка {attempt + 1}/{retry_attempts}. Повтор через {delay}с...")
+                        await asyncio.sleep(delay)
+                    else:
+                        logger.error(f"Ошибка сессии Vision после {retry_attempts} попыток: {e}")
+                else:
+                    logger.error(f"Неожиданная ошибка запроса к GPT Vision: {e}")
+                    break
+            
+            finally:
+                # Закрываем сессию после каждой попытки
+                if session and not session.closed:
+                    await session.close()
+        
+        raise last_exception if last_exception else Exception("Неизвестная ошибка запроса к GPT Vision")
 
 if __name__ == "__main__":
     client = GPTClient()

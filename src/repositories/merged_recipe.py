@@ -4,14 +4,14 @@
 
 import logging
 from typing import Optional, List
-
+import json
 from src.repositories.base import BaseRepository
 from src.models.merged_recipe import MergedRecipeORM, MergedRecipe, merged_recipe_images
 from src.models.merged_recipe import MergedRecipe
 from src.models.image import ImageORM
 from src.common.db.connection import get_db_connection
 import hashlib
-from sqlalchemy import insert
+from sqlalchemy import insert, func, or_
 from sqlalchemy.orm import joinedload
 
 logger = logging.getLogger(__name__)
@@ -35,6 +35,145 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
             if result:
                 session.expunge(result)
             return result
+        
+
+    def get_all_without_images(self, last_id: Optional[int] = None, limit: Optional[int] = None, language: str = "en") -> List[MergedRecipeORM]:
+
+        """
+        получить все объединенные рецепты без связанных изображений
+        Args:
+            limit: Максимальное количество записей для возврата
+            language: Язык рецептов (по умолчанию "en")
+        """
+
+        session = self.get_session()
+        try:
+            # LEFT JOIN с merged_recipe_images и фильтр где image_id IS NULL
+            query = session.query(MergedRecipeORM)\
+                .options(joinedload(MergedRecipeORM.images))\
+                .where(MergedRecipeORM.language == language)\
+                .outerjoin(merged_recipe_images, MergedRecipeORM.id == merged_recipe_images.c.merged_recipe_id)\
+                .filter(merged_recipe_images.c.image_id == None)
+            
+            if last_id is not None:
+                query = query.filter(MergedRecipeORM.id > last_id)
+            
+            if limit is not None:
+                query = query.order_by(MergedRecipeORM.id.asc()).limit(limit)
+            
+            results = query.all()
+            # Отвязываем объекты от сессии, чтобы они были доступны после закрытия
+            for result in results:
+                session.expunge(result)
+            return results
+        finally:
+            session.close()
+
+    def get_by_base_recipe_ids(self, base_recipe_ids: List[int]) -> List[MergedRecipeORM]:
+        """
+        Получить объединенные рецепты по списку base_recipe_id
+        Args:
+            base_recipe_ids: Список ID базовых рецептов (page_id ближайшего к центроиду)
+        Returns:
+            Список MergedRecipeORM объектов
+        """
+        session = self.get_session()
+        try:
+            results = session.query(MergedRecipeORM)\
+                .options(joinedload(MergedRecipeORM.images))\
+                .filter(MergedRecipeORM.base_recipe_id.in_(base_recipe_ids))\
+                .all()
+            for result in results:
+                session.expunge(result)
+            return results
+        finally:
+            session.close()
+    
+    def get_by_base_recipe_id(self, base_recipe_id: int) -> Optional[MergedRecipeORM]:
+        """
+        Получить merged recipe по ID базового рецепта.
+        
+        Args:
+            base_recipe_id: page_id базового рецепта (ближайшего к центроиду)
+        
+        Returns:
+            MergedRecipeORM или None если не найдено
+        """
+        with self.get_session() as session:
+            result = session.query(MergedRecipeORM)\
+                .options(joinedload(MergedRecipeORM.images))\
+                .filter(MergedRecipeORM.base_recipe_id == base_recipe_id)\
+                .first()
+            if result:
+                session.expunge(result)
+            return result
+
+    
+    def update_merged_recipe(
+        self,
+        merged_recipe_id: int,
+        merged_recipe: MergedRecipe
+    ) -> Optional[MergedRecipeORM]:
+        """
+        Обновить существующий merged recipe.
+        
+        Args:
+            merged_recipe_id: ID существующего merged recipe
+            merged_recipe: Новые данные для обновления
+        
+        Returns:
+            Обновленный MergedRecipeORM или None если не найден
+        """
+        session = self.get_session()
+        try:
+            existing = session.query(MergedRecipeORM).filter(
+                MergedRecipeORM.id == merged_recipe_id
+            ).first()
+            
+            if not existing:
+                return None
+            
+            # Обновляем page_ids если предоставлены
+            if merged_recipe.page_ids:
+                sorted_ids = sorted(merged_recipe.page_ids)
+                pages_csv = ','.join(map(str, sorted_ids))
+                pages_hash = hashlib.sha256(pages_csv.encode()).hexdigest()
+                existing.pages_csv = pages_csv
+                existing.pages_hash_sha256 = pages_hash
+                existing.recipe_count = len(merged_recipe.page_ids)
+            
+            # Обновляем остальные поля если предоставлены
+            if merged_recipe.dish_name is not None:
+                existing.dish_name = merged_recipe.dish_name
+            if merged_recipe.ingredients is not None:
+                existing.ingredients = merged_recipe.ingredients
+            if merged_recipe.instructions is not None:
+                existing.instructions = json.dumps(merged_recipe.instructions)
+            if merged_recipe.description is not None:
+                existing.description = merged_recipe.description
+            if merged_recipe.prep_time is not None:
+                existing.prep_time = merged_recipe.prep_time
+            if merged_recipe.cook_time is not None:
+                existing.cook_time = merged_recipe.cook_time
+            if merged_recipe.merge_comments is not None:
+                existing.merge_comments = merged_recipe.merge_comments
+            if merged_recipe.tags is not None:
+                existing.tags = merged_recipe.tags
+            if merged_recipe.gpt_validated is not None:
+                existing.gpt_validated = merged_recipe.gpt_validated
+            
+            session.commit()
+            session.refresh(existing)
+            
+            logger.info(f"✓ Обновлен merged recipe {merged_recipe_id}: {existing.dish_name}")
+            return existing
+            
+        except Exception as e:
+            session.rollback()
+            logger.error(f"Ошибка обновления merged recipe {merged_recipe_id}: {e}")
+            raise
+        finally:
+            session.close()
     
     def create_merged_recipe(
         self,
@@ -60,10 +199,11 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
             sorted_ids = sorted(page_ids)
             pages_csv = ','.join(map(str, sorted_ids))
             pages_hash = hashlib.sha256(pages_csv.encode()).hexdigest()
+            recipe_count = len(page_ids)
             
             # Проверяем существование
             existing = session.query(MergedRecipeORM).filter(
-                MergedRecipeORM.pages_hash_sha256 == pages_hash
+                (MergedRecipeORM.pages_hash_sha256 == pages_hash) & (MergedRecipeORM.base_recipe_id == merged_recipe.base_recipe_id)
             ).first()
             
             if existing:
@@ -74,9 +214,10 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
             merged_recipe_orm = MergedRecipeORM(
                 pages_hash_sha256=pages_hash,
                 pages_csv=pages_csv,
+                base_recipe_id=merged_recipe.base_recipe_id,
                 dish_name=merged_recipe.dish_name,
                 ingredients=merged_recipe.ingredients,
-                instructions=merged_recipe.instructions,
+                instructions=json.dumps(merged_recipe.instructions),
                 description=merged_recipe.description,
                 prep_time=merged_recipe.prep_time,
                 cook_time=merged_recipe.cook_time,
@@ -86,7 +227,8 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
                 tags=merged_recipe.tags,
                 cluster_type=merged_recipe.cluster_type,
                 gpt_validated=merged_recipe.gpt_validated,
-                score_threshold=merged_recipe.score_threshold
+                score_threshold=merged_recipe.score_threshold,
+                recipe_count=recipe_count
             )
             
             session.add(merged_recipe_orm)
@@ -160,13 +302,15 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
                 # Пересчитываем CSV для нового объекта
                 sorted_ids = sorted(merged_recipe.page_ids)
                 pages_csv = ','.join(map(str, sorted_ids))
+                recipe_count = len(merged_recipe.page_ids)
                 
                 merged_recipe_orm = MergedRecipeORM(
                     pages_hash_sha256=pages_hash,
                     pages_csv=pages_csv,
+                    base_recipe_id=merged_recipe.base_recipe_id,
                     dish_name=merged_recipe.dish_name,
                     ingredients=merged_recipe.ingredients,
-                    instructions=merged_recipe.instructions,
+                    instructions=json.dumps(merged_recipe.instructions),
                     description=merged_recipe.description,
                     prep_time=merged_recipe.prep_time,
                     cook_time=merged_recipe.cook_time,
@@ -177,6 +321,7 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
                     score_threshold=merged_recipe.score_threshold,
                     merge_model=merged_recipe.merge_model,
                     tags=merged_recipe.tags,
+                    recipe_count=recipe_count,
                 )
                 new_recipes.append(merged_recipe_orm)
                 
@@ -241,6 +386,14 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
             ).first()
         finally:
             session.close()
+        
+    def get_pages_with_digits_in_csv(self, digits: list[int]) -> list[MergedRecipeORM]:
+        with self.get_session() as session:
+            pages_csv_wrapped = func.concat(',', MergedRecipeORM.pages_csv, ',')
+            query = session.query(MergedRecipeORM).filter(
+                or_(*[pages_csv_wrapped.like(f'%,{d},%') for d in digits])
+            )
+            return query.all()
     
     def get_by_page_ids(self, page_ids: list[int]) -> Optional[MergedRecipeORM]:
         """

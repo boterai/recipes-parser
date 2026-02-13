@@ -57,12 +57,12 @@ if __name__ == "__main__":
 
     # 3. Векторизация
     vectorize_parser = subparsers.add_parser('vectorize', help='Векторизация рецептов и изображений')
-    vectorize_parser.add_argument('--batch-size', type=int, default=9, help='Размер батча для embedding')
+    vectorize_parser.add_argument('--batch-size', type=int, help='Размер батча для embedding')
     vectorize_parser.add_argument('--images', action='store_true', help='Векторизовать изображения')
     vectorize_parser.add_argument('--recipes', action='store_true', help='Векторизовать рецепты')
     vectorize_parser.add_argument('--all', action='store_true', help='Векторизовать и рецепты и изображения')
     vectorize_parser.add_argument('--translate', action='store_true', default=True, help='Перевести рецепты перед векторизацией. Если выбрана векторизация рецептов, проверяется наличие не переведенных рецептов и при их наличии в начале выполняется перевод все рецептов (по умолчанию: True)')
-    vectorize_parser.add_argument('--target-language', type=str, default="en", help='Целевой язык для перевода рецептов (по умолчанию: "en")')
+    vectorize_parser.add_argument('--target-language', type=str, help='Целевой язык для перевода рецептов (по умолчанию: "en")')
     
     # 4. merge рецептов
     merge_parser = subparsers.add_parser('merge', help='Слияние похожих рецептов для создания новых рецептов')
@@ -75,7 +75,9 @@ if __name__ == "__main__":
     merge_parser.add_argument('--merge-different-langs', action='store_true', default=False, help='Выполнять слияние рецептов из разных языков (по умолчанию: False). Слияние выполняется только для рецептов на одинаковых языках, при этом не используется mysql')
 
     if len(sys.argv) == 1:
-        sys.argv.extend(['vectorize', '--recipes'])
+        # в таком случае берем все аргументы из .env для запуска полного пайплайна
+        parser.print_help()
+        sys.exit(1)
     
     args = parser.parse_args()
     
@@ -119,8 +121,8 @@ if __name__ == "__main__":
             if args.images or args.all:
                 vectorise_all_images(batch_size=args.batch_size)
         case 'merge':
-                from scripts.merge import run_merge_with_same_lang
-                asyncio.run(run_merge_with_same_lang(
+                from scripts.merge import run_merge
+                asyncio.run(run_merge(
                     score_thresold=args.threshold,
                     build_type=args.cluster_type,
                     max_merged_recipes=args.limit,
