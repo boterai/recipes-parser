@@ -105,13 +105,33 @@ def load_clusters_from_history(filename: str) -> list[list[int]]:
     with open(filename, "r") as f:
         return json.load(f)
 
+async def execute_cluster_batch(tasks: list, clusters_in_batch: list[str]) -> list[list[int]]:
+    """Выполняет асинхронные задачи и обрабатывает результаты, возвращая список успешно обработанных кластеров.
+    Args:
+        tasks: Список асинхронных задач для выполнения.
+        clusters_in_batch: Список кластеров, соответствующих каждой задаче.
+    Returns:
+        Список кластеров, для которых задачи были успешно выполнены."""
+    success_clusters = []
+    completed_tasks = await asyncio.gather(*tasks, return_exceptions=True)
+    for i, result in enumerate(completed_tasks):
+        if isinstance(result, Exception):
+            logger.error(f"Error in task for cluster {clusters_in_batch[i]}: {result}")
+        else:
+            for merged_recipes in completed_tasks:
+                if merged_recipes and not isinstance(merged_recipes, Exception):
+                    logger.info(f"Created {len(merged_recipes)} variations.")
+            success_clusters.append(clusters_in_batch[i])
+    return success_clusters
+
 async def merge_cluster_recipes(
         similarity_threshold: float | None, 
         build_type: Literal["full", "ingredients"] | None,
         max_variation_per_cluster: int | None = 1,
         max_aggregated_recipes: int = 8,
         max_recipes_per_gpt_merge_request: int = 4,
-        check_cluster_update: bool = False
+        check_cluster_update: bool = False, 
+        limit: Optional[int] = None
         ):
     
     """
@@ -136,28 +156,41 @@ async def merge_cluster_recipes(
         logger.info(f"No centroids found for build type - {build_type}, score_threshold - {similarity_threshold}, exiting...")
         return
 
+    total_tasks = len(centroids)
     if existing_clusters:
         logger.info(f"Загружено {len(existing_clusters)} кластеров из истории, всего кластеров {len(centroids)}, пропускаем уже обработанные.")
         centroids = {k: v for k, v in centroids.items() if k not in existing_clusters}
         logger.info(f"Осталось {len(centroids)} кластеров для обработки после фильтрации истории.")
 
+    total = 0
+    tasks = []
+    clusters_in_current_batch = []
+
     for cluster, centroid in centroids.items():
         cluster_list = list(map(int, cluster.split(",")))
+        clusters_in_current_batch.append(cluster)
 
-        try:
-            await generate_from_one_cluster(
+        tasks.append(generate_from_one_cluster(
                 merger=merger,
                 cluster=cluster_list,
                 cluster_centroid=centroid,
                 max_variations= max_variation_per_cluster,
                 max_aggregated_recipes= max_aggregated_recipes
-            )
-
-            existing_clusters.append(cluster)
+            ))
+        
+        if len(tasks) >= config.MERGE_MAX_MERGE_RECIPES or len(existing_clusters) == total_tasks: # набран батч или все кластеры уже были в истории
+            success_clusters = await execute_cluster_batch(tasks, clusters_in_current_batch)
+            total += len(success_clusters)
+            existing_clusters.extend(success_clusters)
             save_clusters_to_history(existing_clusters, cluster_processing_history)
-        except Exception as e:
-            logger.error(f"Error processing cluster {cluster}: {e}")
-            continue
+
+            tasks = []
+            clusters_in_current_batch = []
+
+        
+        if limit and total >= limit:
+            logger.info(f"Достигнут лимит в {limit} успешно обработанных кластеров, останавливаемся.")
+            break
 
 async def generate_from_one_cluster(
         merger: ClusterVariationGenerator, 
