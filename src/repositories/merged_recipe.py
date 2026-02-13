@@ -4,14 +4,14 @@
 
 import logging
 from typing import Optional, List
-
+import json
 from src.repositories.base import BaseRepository
 from src.models.merged_recipe import MergedRecipeORM, MergedRecipe, merged_recipe_images
 from src.models.merged_recipe import MergedRecipe
 from src.models.image import ImageORM
 from src.common.db.connection import get_db_connection
 import hashlib
-from sqlalchemy import insert, func
+from sqlalchemy import insert, func, or_
 from sqlalchemy.orm import joinedload
 
 logger = logging.getLogger(__name__)
@@ -148,7 +148,7 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
             if merged_recipe.ingredients is not None:
                 existing.ingredients = merged_recipe.ingredients
             if merged_recipe.instructions is not None:
-                existing.instructions = merged_recipe.instructions
+                existing.instructions = json.dumps(merged_recipe.instructions)
             if merged_recipe.description is not None:
                 existing.description = merged_recipe.description
             if merged_recipe.prep_time is not None:
@@ -217,7 +217,7 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
                 base_recipe_id=merged_recipe.base_recipe_id,
                 dish_name=merged_recipe.dish_name,
                 ingredients=merged_recipe.ingredients,
-                instructions=merged_recipe.instructions,
+                instructions=json.dumps(merged_recipe.instructions),
                 description=merged_recipe.description,
                 prep_time=merged_recipe.prep_time,
                 cook_time=merged_recipe.cook_time,
@@ -310,7 +310,7 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
                     base_recipe_id=merged_recipe.base_recipe_id,
                     dish_name=merged_recipe.dish_name,
                     ingredients=merged_recipe.ingredients,
-                    instructions=merged_recipe.instructions,
+                    instructions=json.dumps(merged_recipe.instructions),
                     description=merged_recipe.description,
                     prep_time=merged_recipe.prep_time,
                     cook_time=merged_recipe.cook_time,
@@ -386,15 +386,14 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
             ).first()
         finally:
             session.close()
-
-    def count_pages_with_digit_in_csv(self, digit: int) -> int:
-        """Count pages where pages_csv contains a specific digit."""
+        
+    def get_pages_with_digits_in_csv(self, digits: list[int]) -> list[MergedRecipeORM]:
         with self.get_session() as session:
             pages_csv_wrapped = func.concat(',', MergedRecipeORM.pages_csv, ',')
             query = session.query(MergedRecipeORM).filter(
-                pages_csv_wrapped.like(f'%,{digit},%')
+                or_(*[pages_csv_wrapped.like(f'%,{d},%') for d in digits])
             )
-            return query.count()
+            return query.all()
     
     def get_by_page_ids(self, page_ids: list[int]) -> Optional[MergedRecipeORM]:
         """

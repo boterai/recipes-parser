@@ -917,7 +917,7 @@ if __name__ == "__main__":
                     union_top_k=15,
                     query_batch=128,
                     density_min_similarity=0.93
-                ), build_type="ingredients") # "image", "full", "ingredients"
+                ), build_type="full") # "image", "full", "ingredients"
         try:
             ss.load_dsu_state()
             last_id = ss.last_id # получаем last id после загрузки состояния (такая штука работает только опираясь на тот факт, что каждй вновь доавбленный рецепт имеет id не меньше уже векторизованных рецептов, иначе рецепты могут быть пропущены)
@@ -931,7 +931,6 @@ if __name__ == "__main__":
                 break
         except Exception as e:
             logger.error(f"Error during cluster building: {e}")
-            ss.save_dsu_state()
             continue
 
     final_clusters = build_clusters_from_dsu(ss.dsu, min_cluster_size=4)

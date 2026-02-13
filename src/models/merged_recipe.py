@@ -11,6 +11,7 @@ from src.models.base import Base
 import hashlib
 import logging
 from utils.normalization import normalize_ingredients_list
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +41,7 @@ class MergedRecipeORM(Base):
     dish_name = Column(String(500))  # 100% обязательное поле
     ingredients = Column(JSON)  # 100% обязательное поле - список ингредиентов с amounts
     description = Column(Text)
-    instructions = Column(Text)  # 100% обязательное поле
+    instructions = Column(JSON)  # 100% обязательное поле
     prep_time = Column(String(100))
     cook_time = Column(String(100))
 
@@ -104,7 +105,7 @@ class MergedRecipeORM(Base):
             dish_name=self.dish_name,
             ingredients=self.ingredients,
             description=self.description,
-            instructions=self.instructions,
+            instructions=json.loads(self.instructions) if self.instructions else None,
             prep_time=self.prep_time,
             cook_time=self.cook_time,
             merge_comments=self.merge_comments,
@@ -138,7 +139,7 @@ class MergedRecipe(BaseModel):
     dish_name: Optional[str] = None
     ingredients: Optional[list[dict]] = None
     description: Optional[str] = None
-    instructions: Optional[str] = None
+    instructions: Optional[list[str]] = None
     prep_time: Optional[str] = None
     cook_time: Optional[str] = None
     

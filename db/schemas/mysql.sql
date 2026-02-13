@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS merged_recipes (
     dish_name VARCHAR(500), -- 100 % обязательное поле
     ingredients JSON, -- 100% обязательное поле
     description TEXT,
-    instructions TEXT, -- 100% обязательное поле
+    instructions JSON, -- 100% обязательное поле
     nutrition_info TEXT,
     prep_time VARCHAR(100),
     cook_time VARCHAR(100),
