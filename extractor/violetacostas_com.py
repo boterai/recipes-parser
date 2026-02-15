@@ -93,6 +93,17 @@ class VioletaCostasExtractor(BaseRecipeExtractor):
         """
         ingredient_str = self.clean_text(ingredient_str)
         
+        # Преобразуем текстовые числа в цифры
+        text_numbers = {
+            'un ': '1 ', 'una ': '1 ', 'dos ': '2 ', 'tres ': '3 ',
+            'cuatro ': '4 ', 'cinco ': '5 ', 'seis ': '6 '
+        }
+        ingredient_lower = ingredient_str.lower()
+        for text_num, digit in text_numbers.items():
+            if ingredient_lower.startswith(text_num):
+                ingredient_str = digit + ingredient_str[len(text_num):]
+                break
+        
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "50 gramos almendras", "1 cda miel", "1 limón"
         # Улучшенный паттерн, который не захватывает первый символ названия как unit
@@ -129,70 +140,232 @@ class VioletaCostasExtractor(BaseRecipeExtractor):
             "unit": None
         }
     
+    def _extract_ingredients_from_html(self) -> Optional[str]:
+        """
+        Извлечение ингредиентов из HTML для страниц без JSON-LD Recipe
+        
+        Returns:
+            JSON строка с массивом ингредиентов
+        """
+        ingredients_list = []
+        seen_ingredients = set()
+        
+        # Ищем параграфы, которые могут содержать список ингредиентов
+        # Обычно они находятся после заголовка "Ingredientes"
+        found_ingredients_section = False
+        
+        # Сначала попробуем найти заголовок с ингредиентами
+        all_elements = self.soup.find_all(['h3', 'h2', 'p', 'strong'])
+        
+        for elem in all_elements:
+            elem_text = elem.get_text().lower()
+            
+            # Проверяем заголовок ингредиентов
+            if elem.name in ['h3', 'h2'] and 'ingrediente' in elem_text:
+                found_ingredients_section = True
+                continue
+            
+            # Если мы в секции ингредиентов
+            if found_ingredients_section:
+                # Если встретили новый заголовок шагов/приготовления, выходим
+                if elem.name in ['h3', 'h2'] and any(word in elem_text for word in ['paso', 'preparar', 'batir', 'calentar']):
+                    break
+                
+                # Извлекаем текст из strong тегов или из параграфов
+                if elem.name == 'strong':
+                    text = elem.get_text().strip()
+                elif elem.name == 'p':
+                    # Разбиваем параграф на части, включая plain text после strong тегов
+                    # Сначала извлекаем все strong теги
+                    strong_texts = [s.get_text().strip() for s in elem.find_all('strong')]
+                    
+                    # Также извлекаем plain text (может быть в конце параграфа)
+                    # Получаем весь текст и пытаемся найти части без strong
+                    full_text = elem.get_text()
+                    for strong_text in strong_texts:
+                        full_text = full_text.replace(strong_text, '|SPLIT|')
+                    
+                    # Разбиваем и добавляем все части
+                    all_parts = full_text.split('|SPLIT|')
+                    all_parts = [p.strip() for p in all_parts if p.strip()]
+                    
+                    # Объединяем strong теги и plain text части
+                    potential_ingredients = strong_texts + all_parts
+                    
+                    for text in potential_ingredients:
+                        if not text:
+                            continue
+                        
+                        text_lower = text.lower()
+                        
+                        # Проверяем паттерны ингредиентов
+                        ingredient_starters = ['un ', 'una ', 'dos ', 'tres ', 'cuatro ', 'cinco ']
+                        ingredient_starters += [str(i) + ' ' for i in range(1, 1000)]
+                        ingredient_starters += [str(i) + '/' for i in range(1, 10)]
+                        
+                        is_ingredient = any(text_lower.startswith(starter) for starter in ingredient_starters)
+                        has_food_keywords = any(word in text_lower for word in 
+                            ['huevo', 'plátano', 'yogur', 'leche', 'avena', 'copo', 
+                             'clara', 'bebida', 'vegetal', 'pan', 'harina', 'gramos'])
+                        
+                        if is_ingredient and has_food_keywords:
+                            normalized = text.lower().strip()
+                            if normalized not in seen_ingredients and len(normalized) < 100:
+                                seen_ingredients.add(normalized)
+                                parsed = self._parse_ingredient_string(text)
+                                ingredients_list.append({
+                                    "name": parsed["name"],
+                                    "units": parsed["unit"],
+                                    "amount": parsed["amount"]
+                                })
+                                
+                                # Ограничиваем количество
+                                if len(ingredients_list) >= 10:
+                                    break
+                    continue
+                else:
+                    continue
+                
+                # Обработка standalone strong тегов
+                text_lower = elem.get_text().lower()
+                
+                ingredient_starters = ['un ', 'una ', 'dos ', 'tres ', 'cuatro ', 'cinco ']
+                ingredient_starters += [str(i) + ' ' for i in range(1, 1000)]
+                ingredient_starters += [str(i) + '/' for i in range(1, 10)]
+                
+                is_ingredient = any(text_lower.startswith(starter) for starter in ingredient_starters)
+                has_food_keywords = any(word in text_lower for word in 
+                    ['huevo', 'plátano', 'yogur', 'leche', 'avena', 'copo', 
+                     'clara', 'bebida', 'vegetal', 'pan', 'harina'])
+                
+                if is_ingredient and has_food_keywords:
+                    text = elem.get_text().strip()
+                    normalized = text.lower().strip()
+                    if normalized not in seen_ingredients:
+                        seen_ingredients.add(normalized)
+                        parsed = self._parse_ingredient_string(text)
+                        ingredients_list.append({
+                            "name": parsed["name"],
+                            "units": parsed["unit"],
+                            "amount": parsed["amount"]
+                        })
+        
+        if ingredients_list:
+            return json.dumps(ingredients_list, ensure_ascii=False)
+        
+        return None
+    
+    def _extract_instructions_from_html(self) -> Optional[str]:
+        """
+        Извлечение инструкций из HTML для страниц без JSON-LD Recipe
+        
+        Returns:
+            Строка с пошаговыми инструкциями
+        """
+        # Ищем h3 заголовки, которые обозначают шаги
+        h3_tags = self.soup.find_all('h3')
+        
+        steps = []
+        step_count = 0
+        
+        for h3 in h3_tags:
+            h3_text = h3.get_text().strip().lower()
+            
+            # Пропускаем заголовки, которые явно не являются шагами
+            skip_keywords = ['ingrediente', 'nota', 'versión', 'pixelcafe', 'receta']
+            if any(keyword in h3_text for keyword in skip_keywords):
+                continue
+            
+            # Ищем заголовки, которые похожи на шаги
+            step_keywords = ['batir', 'mezclar', 'calentar', 'añadir', 'cocinar', 
+                           'preparar', 'verter', 'esperar', 'dar vuelta', 'sartén']
+            
+            if any(keyword in h3_text for keyword in step_keywords):
+                # Получаем следующий параграф с описанием шага
+                next_p = h3.find_next('p')
+                if next_p:
+                    step_text = self.clean_text(next_p.get_text())
+                    # Берем первое предложение или до определенной длины
+                    sentences = step_text.split('. ')
+                    if sentences:
+                        step_count += 1
+                        steps.append(f"{step_count}. {sentences[0].strip()}.")
+                        
+                        # Ограничиваем количество шагов
+                        if step_count >= 5:
+                            break
+        
+        if steps:
+            return ' '.join(steps)
+        
+        return None
+    
     def extract_ingredients(self) -> Optional[str]:
         """
-        Извлечение ингредиентов из JSON-LD
+        Извлечение ингредиентов из JSON-LD или HTML
         
         Returns:
             JSON строка с массивом ингредиентов в формате [{name, amount, units}]
         """
         recipe_data = self._get_json_ld_recipe()
         
-        if not recipe_data or 'recipeIngredient' not in recipe_data:
-            return None
-        
-        ingredients_list = []
-        
-        for ingredient_str in recipe_data['recipeIngredient']:
-            parsed = self._parse_ingredient_string(ingredient_str)
+        # Сначала пробуем JSON-LD
+        if recipe_data and 'recipeIngredient' in recipe_data:
+            ingredients_list = []
             
-            # Используем 'units' вместо 'unit' для совместимости с эталоном
-            ingredients_list.append({
-                "name": parsed["name"],
-                "units": parsed["unit"],
-                "amount": parsed["amount"]
-            })
+            for ingredient_str in recipe_data['recipeIngredient']:
+                parsed = self._parse_ingredient_string(ingredient_str)
+                
+                # Используем 'units' вместо 'unit' для совместимости с эталоном
+                ingredients_list.append({
+                    "name": parsed["name"],
+                    "units": parsed["unit"],
+                    "amount": parsed["amount"]
+                })
+            
+            # Возвращаем как JSON строку
+            return json.dumps(ingredients_list, ensure_ascii=False)
         
-        # Возвращаем как JSON строку
-        return json.dumps(ingredients_list, ensure_ascii=False)
+        # Если JSON-LD нет, пробуем извлечь из HTML
+        return self._extract_ingredients_from_html()
     
     def extract_instructions(self) -> Optional[str]:
-        """Извлечение инструкций приготовления"""
+        """Извлечение инструкций приготовления из JSON-LD или HTML"""
         recipe_data = self._get_json_ld_recipe()
         
-        if not recipe_data or 'recipeInstructions' not in recipe_data:
-            return None
-        
-        instructions = recipe_data['recipeInstructions']
-        
-        # Если это список объектов HowToStep
-        if isinstance(instructions, list):
-            steps = []
-            for i, step in enumerate(instructions, 1):
-                if isinstance(step, dict):
-                    # Извлекаем текст из объекта HowToStep
-                    text = step.get('text') or step.get('name') or ''
-                    text = self.clean_text(text)
-                    # Убираем начальные дефисы, пробелы и нумерацию
-                    text = re.sub(r'^[-\s]+', '', text)
-                    text = re.sub(r'^\d+[.)]\s*', '', text)
-                    # Убираем лишние точки в конце предложений перед добавлением номера
-                    text = text.rstrip('. ')
-                    if text:
-                        steps.append(f"{i}. {text}.")
-                elif isinstance(step, str):
-                    text = self.clean_text(step)
-                    text = re.sub(r'^[-\s]+', '', text)
-                    text = text.rstrip('. ')
-                    steps.append(f"{i}. {text}.")
+        # Сначала пробуем JSON-LD
+        if recipe_data and 'recipeInstructions' in recipe_data:
+            instructions = recipe_data['recipeInstructions']
             
-            return ' '.join(steps) if steps else None
+            # Если это список объектов HowToStep
+            if isinstance(instructions, list):
+                steps = []
+                for i, step in enumerate(instructions, 1):
+                    if isinstance(step, dict):
+                        # Извлекаем текст из объекта HowToStep
+                        text = step.get('text') or step.get('name') or ''
+                        text = self.clean_text(text)
+                        # Убираем начальные дефисы, пробелы и нумерацию
+                        text = re.sub(r'^[-\s]+', '', text)
+                        text = re.sub(r'^\d+[.)]\s*', '', text)
+                        # Убираем лишние точки в конце предложений перед добавлением номера
+                        text = text.rstrip('. ')
+                        if text:
+                            steps.append(f"{i}. {text}.")
+                    elif isinstance(step, str):
+                        text = self.clean_text(step)
+                        text = re.sub(r'^[-\s]+', '', text)
+                        text = text.rstrip('. ')
+                        steps.append(f"{i}. {text}.")
+                
+                return ' '.join(steps) if steps else None
+            
+            # Если это строка
+            if isinstance(instructions, str):
+                return self.clean_text(instructions)
         
-        # Если это строка
-        if isinstance(instructions, str):
-            return self.clean_text(instructions)
-        
-        return None
+        # Если JSON-LD нет, пробуем извлечь из HTML
+        return self._extract_instructions_from_html()
     
     def extract_category(self) -> Optional[str]:
         """Извлечение категории блюда"""
@@ -263,10 +436,20 @@ class VioletaCostasExtractor(BaseRecipeExtractor):
         for p in all_paragraphs:
             text = self.clean_text(p.get_text())
             # Ищем параграфы, которые начинаются с подсказок
-            if text and any(keyword in text.lower() for keyword in ['puedes sustituir', 'nota:', 'consejo:', 'tip:']):
+            # Но игнорируем те, которые содержат слишком много упоминаний ингредиентов
+            if text and any(keyword in text.lower() for keyword in ['puedes sustituir', 'nota:', 'consejo:', 'tip:', 'ideal para']):
+                # Проверяем, не является ли это списком ингредиентов
+                # (если много strong тегов внутри, это скорее всего список ингредиентов)
+                strong_tags_in_p = p.find_all('strong')
+                if len(strong_tags_in_p) > 3:
+                    continue
+                
                 # Убираем префикс "Nota:"
                 text = re.sub(r'^Nota:\s*', '', text, flags=re.IGNORECASE)
-                return text
+                
+                # Ограничиваем длину заметки
+                if len(text) < 300:
+                    return text
         
         return None
     
