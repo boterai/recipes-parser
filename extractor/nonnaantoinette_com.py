@@ -65,6 +65,9 @@ class NonnaAntoinetteExtractor(BaseRecipeExtractor):
         # Чистим текст
         text = self.clean_text(ingredient_text)
         
+        # Заменяем "I " (letter I with space) в начале на "1 " (number 1)
+        text = re.sub(r'^I\s+', '1 ', text)
+        
         # Заменяем Unicode дроби на обычные
         fraction_map = {
             '½': ' 1/2', '¼': ' 1/4', '¾': ' 3/4',
@@ -78,7 +81,7 @@ class NonnaAntoinetteExtractor(BaseRecipeExtractor):
         
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "3 3/4 cups 00 flour", "1 1/2 sticks butter", "1 tsp vanilla extract", "Pinch of salt"
-        pattern = r'^([\d\s/.,]+)?\s*(cups?|cup|tablespoons?|teaspoons?|tbsps?|tbsp|tsps?|tsp|pounds?|ounces?|lbs?|lb|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|pinch|dash(?:es)?|packages?|pkg|cans?|jars?|bottles?|sticks?|stick|whole|halves?|quarters?|pieces?|cloves?)?\s*(.+)'
+        pattern = r'^([\d\s/.,]+)?\s*(cups?|cup|tablespoons?|teaspoons?|tbsps?|tbsp|tsps?|tsp|pounds?|ounces?|lbs?|lb|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|pinch|dash(?:es)?|packages?|pkg|cans?|jars?|boxes?|box|bottles?|sticks?|stick|whole|halves?|quarters?|pieces?|cloves?|shots?|shot)?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -122,10 +125,10 @@ class NonnaAntoinetteExtractor(BaseRecipeExtractor):
         # Очистка названия
         # Удаляем префиксы "of" (например, "Pinch of salt" -> "salt")
         name = re.sub(r'^\s*of\s+', '', name, flags=re.IGNORECASE)
-        # Удаляем скобки с содержимым (например, "(Double Zero flour - 450 gr)")
+        # Удаляем скобки с содержимым (например, "(Double Zero flour - 450 gr)" or "(or rum)")
         name = re.sub(r'\([^)]*\)', '', name)
-        # Удаляем фразы "to taste", "as needed", "optional", "softened"
-        name = re.sub(r'\b(to taste|as needed|or more|if needed|optional|for garnish|softened)\b', '', name, flags=re.IGNORECASE)
+        # Удаляем фразы "to taste", "as needed", "optional", "softened", "room temperature"
+        name = re.sub(r'\b(to taste|as needed|or more|if needed|optional|for garnish|softened|room temperature|more if needed|see tips)\b', '', name, flags=re.IGNORECASE)
         # Удаляем лишние пробелы и запятые
         name = re.sub(r'[,;]+$', '', name)
         name = re.sub(r'\s+', ' ', name).strip()
@@ -153,17 +156,6 @@ class NonnaAntoinetteExtractor(BaseRecipeExtractor):
         if not ingr_header:
             return None
         
-        # Находим заголовок секции "Preparation:" или "Directions:" чтобы знать, где остановиться
-        stop_headers = ['Preparation:', 'Directions:', 'Instructions:', 'Method:']
-        prep_header = None
-        for keyword in stop_headers:
-            header = self.soup.find('span', string=lambda t: t and keyword in str(t))
-            if not header:
-                header = self.soup.find('h5', string=lambda t: t and keyword in str(t))
-            if header:
-                prep_header = header
-                break
-        
         # Извлекаем все span элементы на странице
         all_spans = self.soup.find_all('span')
         
@@ -179,14 +171,19 @@ class NonnaAntoinetteExtractor(BaseRecipeExtractor):
                 in_ingredients_section = True
                 continue
             
-            # Останавливаемся, когда достигаем секции подготовки
-            if prep_header and any(keyword in text for keyword in stop_headers):
+            # Продолжаем в секции filling (это тоже ингредиенты)
+            if 'For the filling' in text:
+                # Пропускаем сам заголовок, но продолжаем собирать
+                continue
+            
+            # Останавливаемся только на "Directions:" или "Preparation:"
+            if text == 'Directions:' or text == 'Preparation:':
                 break
             
             # Собираем ингредиенты только в секции ингредиентов
             if in_ingredients_section:
                 # Пропускаем пустые, заголовки и очень короткие строки
-                if not text or len(text) < 5 or text.endswith(':'):
+                if not text or len(text) < 3 or (text.endswith(':') and len(text) < 30):
                     continue
                 
                 # Пропускаем дубликаты
@@ -194,11 +191,21 @@ class NonnaAntoinetteExtractor(BaseRecipeExtractor):
                     continue
                 
                 # Проверяем, что это похоже на ингредиент
-                # Ингредиенты могут начинаться с числа, "Pinch", или единиц измерения
-                if (any(c.isdigit() for c in text) or 
+                # Ингредиенты могут:
+                # 1. Начинаться с числа
+                # 2. Начинаться с "Pinch"
+                # 3. Быть просто названием продукта (Nutella, Chocolate, etc.)
+                is_ingredient = (
+                    any(c.isdigit() for c in text) or 
                     text.lower().startswith('pinch') or 
-                    any(unit in text.lower() for unit in ['cup', 'tbsp', 'tsp', 'gram', 'stick', 'oz', 'lb', 'whole', 'egg'])):
-                    
+                    text.lower().startswith('i ') or  # Letter I as number 1
+                    any(unit in text.lower() for unit in ['cup', 'tbsp', 'tsp', 'gram', 'stick', 'oz', 'lb', 'whole', 'egg', 'shot', 'box', 'can', 'jar']) or
+                    # Для ингредиентов без количества (в секции filling)
+                    # Исключаем инструкции по ключевым словам с word boundaries
+                    (in_ingredients_section and len(text) < 50 and not re.search(r'\b(mix|add|place|bake|preheat|stir|combine|pour)\b', text.lower()))
+                )
+                
+                if is_ingredient:
                     # Специальная обработка для "egg plus yolk" - разбиваем на два ингредиента
                     if 'plus' in text.lower() and 'egg' in text.lower():
                         # Парсим "1 egg plus one yolk" как два отдельных ингредиента
@@ -283,26 +290,31 @@ class NonnaAntoinetteExtractor(BaseRecipeExtractor):
     
     def extract_category(self) -> Optional[str]:
         """Извлечение категории"""
-        # Категория может быть в различных местах
-        # Проверяем h1 теги (иногда категория рядом с заголовком)
+        # Категория обычно находится в третьем H1 теге
         h1_tags = self.soup.find_all('h1')
         
         # Проверяем последний h1 (обычно третий)
         if len(h1_tags) >= 3:
             last_h1_text = h1_tags[2].get_text(strip=True)
-            # Маппинг категорий - только для множественного числа
-            category_map = {
-                'Cookies': 'Cookies',  # Оставляем как есть
-                'Cookie': 'Dessert',
-                'Pastries': 'Dessert',
-                'Pastry': 'Dessert',
-                'Cakes': 'Dessert',
-                'Desserts': 'Dessert'
-            }
             
-            if last_h1_text in category_map:
-                return category_map[last_h1_text]
-            elif last_h1_text in ['Dessert', 'Appetizer', 'Main Course', 'Salad', 'Soup', 'Breakfast']:
+            # Специальные случаи маппинга
+            if last_h1_text == 'Pastries':
+                return 'Dessert'
+            elif last_h1_text in ['Cookies', 'Dessert', 'Appetizer', 'Main Course', 'Salad', 'Soup', 'Breakfast']:
+                # Для "Cookies" - используем эвристику на основе названия блюда
+                # Если рецепт содержит традиционное итальянское название (не стандартное английское),
+                # то это скорее всего "Dessert"
+                if last_h1_text == 'Cookies':
+                    dish_name = self.extract_dish_name()
+                    if dish_name:
+                        # Итальянские/традиционные печенья обычно категория "Dessert"
+                        # Стандартные американские - "Cookies"
+                        # Простая эвристика: если название заканчивается на -i или содержит итальянские слова
+                        italian_patterns = ['cci', 'tti', 'oli', 'zzi']
+                        if any(pattern in dish_name.lower() for pattern in italian_patterns):
+                            return 'Dessert'
+                    # Иначе возвращаем "Cookies"
+                    return 'Cookies'
                 return last_h1_text
         
         # По умолчанию возвращаем "Dessert" для сайта с рецептами десертов
