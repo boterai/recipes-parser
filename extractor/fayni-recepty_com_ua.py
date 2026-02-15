@@ -1,5 +1,5 @@
 """
-Екстрактор данных рецептов для сайта fayni-recepty.com.ua
+Экстрактор данных рецептов для сайта fayni-recepty.com.ua
 """
 
 import sys
@@ -13,10 +13,10 @@ from extractor.base import BaseRecipeExtractor, process_directory
 
 
 class FayniReceptyExtractor(BaseRecipeExtractor):
-    """Екстрактор для fayni-recepty.com.ua"""
+    """Экстрактор для fayni-recepty.com.ua"""
     
     def _get_recipe_json_ld(self) -> Optional[dict]:
-        """Извлечение Recipe данных из JSON-LD"""
+        """Извлечение данных рецепта из JSON-LD"""
         scripts = self.soup.find_all('script', type='application/ld+json')
         
         for script in scripts:
