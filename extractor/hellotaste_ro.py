@@ -98,9 +98,9 @@ class HellotasteRoExtractor(BaseRecipeExtractor):
         text = self.clean_text(ingredient_text)
         
         # Паттерн для извлечения количества, единицы и названия
-        # Важно: более длинные единицы должны идти первыми, чтобы "linguriță" не совпадал с "l"
+        # Важно: более длинные единицы должны идти первыми, чтобы "linguriță" не совпадал с "linguri"
         # Примеры: "500 g făină albă", "1 linguriță extract de vanilie", "sare"
-        pattern = r'^([\d\s/.,]+)?\s*(lingurit[ăeș]+|lingur[ăiș]+|kilograme?|mililitr[ui]?|gram[eș]?|litr[ui]?|plic(?:ul)?|pac(?:het)?|can(?:ul)?|buc(?:ăț[iă])?|felii?|căpățân[ăi]|praf|conserv[ăe]|kg|ml|un\s+praf|pentru\s+\w+|g|l)?\s*(.+)'
+        pattern = r'^([\d\s/.,]+)?\s*(lingurit[ăeș]+|linguriț[ăe]+|lingur[ăiș]+|kilograme?|mililitr[ui]?|gram[eș]?|litr[ui]?|plic(?:ul)?|pac(?:het)?|can(?:ul)?|buc(?:ăț[iă])?|felii?|căpățân[ăi]|praf|conserv[ăe]|un\s+praf|pentru\s+\w+|pcs|kg|ml|g|l)?(?:\s+(.+)|$)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
