@@ -1,0 +1,12 @@
+{
+    "dish_name": "Supă de legume cu ghimbir",
+    "description": "Supa de legume cu ghimbir este o alegere ideală pentru zilele răcoroase sau atunci când îți dorești un preparat sănătos și hrănitor.",
+    "ingredients": "[{\"name\": \"morcov mare\", \"units\": null, \"amount\": 1}, {\"name\": \"cartof mare\", \"units\": null, \"amount\": 1}, {\"name\": \"suc de lămâie\", \"units\": \"lingură\", \"amount\": 1}, {\"name\": \"țelină mică\", \"units\": null, \"amount\": 1}, {\"name\": \"ceapă mare\", \"units\": null, \"amount\": 1}, {\"name\": \"căței de usturoi\", \"units\": null, \"amount\": 2}, {\"name\": \"ghimbir proaspăt, ras\", \"units\": \"linguriță\", \"amount\": 1}, {\"name\": \"supă de legume sau apă\", \"units\": \"litru\", \"amount\": 1}, {\"name\": \"ulei de măsline\", \"units\": \"linguri\", \"amount\": 2}, {\"name\": \"sare\", \"units\": null, \"amount\": null}, {\"name\": \"turmeric\", \"units\": \"linguriță\", \"amount\": 0.5}, {\"name\": \"piper\", \"units\": null, \"amount\": null}, {\"name\": \"frunze pătrunjel sau coriandru\", \"units\": null, \"amount\": null}]",
+    "instructions": "Speli legumele, le cureți și le toci rondele sau cuburi mici, după preferință. Într-o oală mai mare, adaugi uleiul de măsline, călești ceapa și usturoiul zdrobit la foc mediu, până devin translucide. Adaugi, apoi, legumele, amesteci și continui să le gătești aproximativ 5 minute. Torni apa sau supa peste legume și lași să fiarbă la foc mic aproximativ 20 de minute sau până ce legumele s-au frăgezit. După aceasta, adaugi ghimbirul și turmericul, amesteci și mai lași să fiarbă 5 minute. Potrivești de sare și piper, adaugi sucul de lămâie și servești cu pătrunjel sau coriandru proaspăt tocat.",
+    "category": "Soup",
+    "prep_time": "null",
+    "cook_time": "25 minutes",
+    "total_time": "null",
+    "notes": null,
+    "tags": "vegetable, soup, healthy"
+}

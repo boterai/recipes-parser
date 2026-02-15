@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lasagne met courgette en ricotta-tomatensaus",
+    "description": "Deze heerlijke lasagne combineert de romige smaak van ricotta met frisse courgette en een rijke tomatensaus. Perfect voor een doordeweekse maaltijd of een gezellig etentje!",
+    "ingredients": "[{\"name\": \"courgettes\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"polpa of passata\", \"units\": \"grams\", \"amount\": 800}, {\"name\": \"ui\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"knoflook\", \"units\": \"cloves\", \"amount\": 2}, {\"name\": \"ricotta\", \"units\": \"grams\", \"amount\": 250}, {\"name\": \"verse lasagnebladen\", \"units\": \"grams\", \"amount\": 250}, {\"name\": \"mozzarella\", \"units\": \"ball\", \"amount\": 1}, {\"name\": \"Parmezaanse kaas\", \"units\": \"grams\", \"amount\": 30}, {\"name\": \"gedroogde oregano\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"gedroogde dragon\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"peper en zout\", \"units\": null, \"amount\": null}, {\"name\": \"olijfolie\", \"units\": null, \"amount\": null}, {\"name\": \"chilivlokken\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Verhit een scheutje olijfolie in een pan op laag vuur. Fruit de ui 5 minuten tot deze zacht is. 2. Voeg de knoflook toe en bak nog 2 minuten mee. 3. Doe de polpa erbij en breng op smaak met oregano, dragon, peper, zout en eventueel chilivlokken. Laat de saus 15 minuten op middelhoog vuur inkoken. 4. Roer de ricotta door de saus en zet het vuur uit. 5. Snijd de courgettes in lange dunne plakken, bij voorkeur met een mandoline. 6. Verwarm de oven voor op 180°C. 7. Neem een ovenschaal van ongeveer 30×20 cm. 8. Verdeel een laagje tomatensaus over de bodem. 9. Leg een laag courgetteplakken dakpansgewijs op de saus. 10. Bedek met lasagnebladen. 11. Herhaal deze lagen tot de ingrediënten op zijn, eindigend met een laag tomatensaus. 12. Verdeel de mozzarella en Parmezaanse kaas over de bovenkant. 13. Bak de lasagne 45 minuten in de oven op 180°C tot de kaas goudbruin is. 14. Laat de lasagne 5-10 minuten rusten voordat je hem aansnijdt. Buon appetito!",
+    "category": "hoofdgerecht",
+    "prep_time": "20 minutes",
+    "cook_time": "45 minutes",
+    "total_time": "1 hour 5 minutes",
+    "notes": "Gebruik verse lasagnevellen voor een betere textuur en smaak.",
+    "tags": "courgette, lasagne"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gogoși pufoase cu dovleac copt",
+    "description": "Un desert cu arome de toamnă, gogoși pufoase cu dovleac copt, iaurt și scorțișoară.",
+    "ingredients": "[{\"name\": \"făină\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"dovleac plăcintar\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"iaurt gras\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"ouă\", \"units\": null, \"amount\": 2}, {\"name\": \"zahăr\", \"units\": \"g\", \"amount\": 80}, {\"name\": \"unt\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"praf de copt\", \"units\": \"g\", \"amount\": 10}, {\"name\": \"esență de vanilie\", \"units\": \"linguriță\", \"amount\": 1}, {\"name\": \"scorțișoară\", \"units\": \"linguriță\", \"amount\": 0.5}, {\"name\": \"sare\", \"units\": \"un praf\", \"amount\": null}, {\"name\": \"ulei\", \"units\": \"pentru prăjit\", \"amount\": null}, {\"name\": \"zahăr pudră\", \"units\": \"pentru decor\", \"amount\": null}, {\"name\": \"scorțișoară\", \"units\": \"pentru decor\", \"amount\": null}]",
+    "instructions": "Vei începe cu pregătirea dovleacului. Acesta se coace până când devine moale, apoi se pasează fin cu furculița sau blenderul. După ce ai pasat dovleacul copt urmează amestecarea ingredientelor lichide. Într-un bol mare se bat ouăle cu zahărul, apoi se adaugă iaurtul, piureul de dovleac, vanilia și untul topit. În alt bol făina se cerne și se amestecă cu praful de copt, sarea și scorțișoara. Se încorporează treptat ingredientele uscate în cele lichide, amestecând ușor până se obține un aluat moale, puțin mai dens decât cel de clătite groase. Într-o tigaie adâncă se încinge uleiul. Cu o lingură umezită se iau porții din aluat și se lasă în uleiul încins. Gogoșile se rumenesc frumos pe ambele părți, la foc potrivit, până devin aurii. Se scot pe hârtie absorbantă și, cât sunt calde, se pudrează cu zahăr sau se trec printr-un amestec de zahăr și scorțișoară.",
+    "category": "Desert",
+    "prep_time": null,
+    "cook_time": "60 minutes",
+    "total_time": null,
+    "notes": "Aceste gogoși sunt ideale să fie servite cu diverse adaosuri, cum ar fi zahăr pudră, scorțișoară amestecată cu zahăr, miere, gem ori sosuri de fructe.",
+    "tags": "desert, gogoși, dovleac, toamnă"
+}

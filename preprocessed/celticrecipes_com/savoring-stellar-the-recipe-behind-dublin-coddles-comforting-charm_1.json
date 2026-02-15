@@ -1,0 +1,12 @@
+{
+    "dish_name": "Dublin Coddle",
+    "description": "A traditional Irish stew rich in flavor and history, typically made with sausages, bacon, potatoes, and onions.",
+    "ingredients": "[{\"name\": \"Pork Sausages\", \"units\": \"g\", \"amount\": 450}, {\"name\": \"Bacon\", \"units\": \"g\", \"amount\": 450}, {\"name\": \"Potatoes\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"Onions\", \"units\": \"large\", \"amount\": 2}, {\"name\": \"Garlic\", \"units\": \"cloves\", \"amount\": 2}, {\"name\": \"Chicken Stock\", \"units\": \"ml\", \"amount\": 600}, {\"name\": \"Thyme\", \"units\": \"sprig\", \"amount\": 1}, {\"name\": \"Salt\", \"units\": null, \"amount\": null}, {\"name\": \"Pepper\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Sear the bacon until crispy, then brown the sausages. 2. Cook onions until translucent, add garlic. 3. Add potatoes and mix. 4. Pour in chicken stock, add thyme, salt, and pepper. 5. Simmer with meats for 45 minutes. 6. Adjust seasoning and serve.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "45 minutes",
+    "total_time": null,
+    "notes": "Coddle tastes better the next day. Can be made vegetarian with plant-based sausages.",
+    "tags": "Irish, stew, comfort food"
+}

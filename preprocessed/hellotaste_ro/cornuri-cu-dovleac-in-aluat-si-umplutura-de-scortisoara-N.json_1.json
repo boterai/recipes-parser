@@ -1,0 +1,12 @@
+{
+    "dish_name": "Cornuri cu dovleac în aluat și umplutură de scorțișoară",
+    "description": "Aceste cornuri cu dovleac în aluat și umplutură de scorțișoară sunt perfecte pentru un mic dejun de toamnă irezistibil.",
+    "ingredients": "[{\"name\": \"făină albă\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"piure de dovleac copt\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"zahăr\", \"units\": \"g\", \"amount\": 70}, {\"name\": \"ulei\", \"units\": \"ml\", \"amount\": 80}, {\"name\": \"lapte vegetal\", \"units\": \"ml\", \"amount\": 150}, {\"name\": \"drojdie proaspătă\", \"units\": \"g\", \"amount\": 25}, {\"name\": \"extract de vanilie\", \"units\": \"linguriță\", \"amount\": 1}, {\"name\": \"sare\", \"units\": null, \"amount\": null}, {\"name\": \"zahăr brun\", \"units\": \"g\", \"amount\": 80}, {\"name\": \"scorțișoară măcinată\", \"units\": \"linguri\", \"amount\": 2}, {\"name\": \"ulei\", \"units\": \"linguri\", \"amount\": 3}, {\"name\": \"lapte vegetal\", \"units\": \"linguri\", \"amount\": 2}, {\"name\": \"zahăr\", \"units\": \"linguriță\", \"amount\": 1}]",
+    "instructions": "Primul pas constă în pregătirea aluatului. Dizolvă drojdia în laptele vegetal călduț cu 1 linguriță de zahăr și lasă să se activeze 10 minute. Într-un bol mare, amestecă făina cu zahărul și sarea. Adaugă piureul de dovleac, uleiul, vanilia și maiaua de drojdie. Frământă până când obții un aluat elastic și ușor lipicios. Lasă la dospit 1 oră, acoperit. Împarte aluatul în două, întinde fiecare bucată în cerc subțire, unge cu ulei, presară amestecul de zahăr brun și scorțișoară, taie în triunghiuri și rulează. Așază în tavă, lasă 20 de minute la crescut, unge cu lapte vegetal amestecat cu zahăr. Coace 20–25 de minute la 180°C.",
+    "category": "Dessert",
+    "prep_time": "10 minutes",
+    "cook_time": "25 minutes",
+    "total_time": "35 minutes",
+    "notes": "Sunt cornuri de post, dar atât de fine și gustoase încât nu vei simți lipsa ingredientelor de origine animală.",
+    "tags": "cornuri, dovleac, desert, scorțișoară"
+}

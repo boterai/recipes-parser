@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ravioli cu ciuperci",
+    "description": "Pastele fac casă bună cu ciupercile.",
+    "ingredients": "[{\"name\": \"ravioli al funghi\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"ciuperci\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"parmezan\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"smântână\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"sare\", \"units\": null, \"amount\": null}, {\"name\": \"piper\", \"units\": null, \"amount\": null}, {\"name\": \"chilli\", \"units\": null, \"amount\": null}]",
+    "instructions": "Se pun ciupercile tăiate mărunt la călit.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

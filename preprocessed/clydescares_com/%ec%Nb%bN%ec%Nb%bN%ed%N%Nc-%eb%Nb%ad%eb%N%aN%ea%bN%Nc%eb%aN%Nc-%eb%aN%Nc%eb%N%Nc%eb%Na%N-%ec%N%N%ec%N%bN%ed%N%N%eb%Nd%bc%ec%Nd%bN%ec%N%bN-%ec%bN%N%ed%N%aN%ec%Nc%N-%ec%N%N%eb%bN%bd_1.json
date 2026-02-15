@@ -1,0 +1,12 @@
+{
+    "dish_name": "에어프라이어 치킨윙",
+    "description": "싱싱한 닭날개로 만드는 에어프라이어 치킨윙 완벽 레시피.",
+    "ingredients": "[{\"name\": \"닭날개\", \"units\": null, \"amount\": null}, {\"name\": \"소금\", \"units\": null, \"amount\": null}, {\"name\": \"후추\", \"units\": null, \"amount\": null}, {\"name\": \"간장\", \"units\": null, \"amount\": null}, {\"name\": \"마늘가루\", \"units\": null, \"amount\": null}, {\"name\": \"올리브유\", \"units\": null, \"amount\": null}, {\"name\": \"생강\", \"units\": null, \"amount\": null}, {\"name\": \"칠리 파우더\", \"units\": null, \"amount\": null}, {\"name\": \"파프리카 가루\", \"units\": null, \"amount\": null}, {\"name\": \"꿀\", \"units\": null, \"amount\": null}, {\"name\": \"레몬즙\", \"units\": null, \"amount\": null}, {\"name\": \"사과 식초\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. 닭날개를 깨끗이 씻고 물기를 제거한 후 소금, 후추, 간장, 마늘가루로 마리네이드합니다. 2. 30분에서 1시간 정도 재워둡니다. 3. 에어프라이어를 200도로 예열합니다. 4. 마리네이드한 닭날개를 한 겹으로 놓고 20-25분간 조리합니다. 5. 중간에 뒤집어 주면 더욱 균일하게 익습니다. 6. 완성된 치킨윙은 소스와 함께 서빙합니다.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "25 minutes",
+    "total_time": "55 minutes",
+    "notes": "마리네이드 시간을 조절하여 더욱 깊은 맛을 낼 수 있습니다.",
+    "tags": "치킨, 에어프라이어, 간편 요리"
+}

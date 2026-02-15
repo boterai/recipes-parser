@@ -1,0 +1,12 @@
+{
+    "dish_name": "Vegetar frikadeller med broccoli",
+    "description": "Vegetar frikadeller med broccoli er et lækkert sundt alternativ til de klassiske frikadeller med svinekød.",
+    "ingredients": "[{\"name\": \"broccoli buketter\", \"units\": \"gr\", \"amount\": 250}, {\"name\": \"æg\", \"units\": \"stk\", \"amount\": 1}, {\"name\": \"løg\", \"units\": \"stk\", \"amount\": 1}, {\"name\": \"hvidløg\", \"units\": \"fed\", \"amount\": 1}, {\"name\": \"frisk fintrevet parmesan\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"kikærtemel\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"frisk basilikum\", \"units\": \"håndfuld\", \"amount\": 1}, {\"name\": \"stødt muskatnød\", \"units\": \"knivspids\", \"amount\": 1}, {\"name\": \"salt\", \"units\": \"tsk\", \"amount\": 0.5}, {\"name\": \"friskkværnet peber\", \"units\": null, \"amount\": null}, {\"name\": \"Olivenolie til stegning\", \"units\": null, \"amount\": null}]",
+    "instructions": "Kom broccolibuketterne i en gryde med letsaltet vand og kog dem møre, men ikke udkogte. Hæld kold vand over og lad dem dryppe godt af. Hak løg fint i en minihakker eller riv det. Kom også de kogte afkølede broccolibuketter i minikhakkeren og blend indtil man har en grov mos. Rør broccolimos og løg sammen med æg, presset hvidløg, ost og finthakket basilikum. Vend kikærtemel i samt salt, peber og muskatnød. Form farsen til små minifrikadeller med en teske og steg dem i olivenolie ved mellemvarme, indtil de har god farve på begge sider og er gennemstegte. Lad dem køle en smule af, inden de spises.",
+    "category": "Hovedret",
+    "prep_time": "20 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "40 minutes",
+    "notes": "Nemme vegetar frikadeller med broccoli er perfekte til mange ting, som salater eller som 'kødboller' i tomatsovs med pasta.",
+    "tags": "vegetar, frikadeller, broccoli, sundt"
+}

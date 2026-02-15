@@ -1,0 +1,12 @@
+{
+    "dish_name": "Costillas adobadas al horno",
+    "description": "Las costillas de cerdo al horno, con adobo previo, quedan suculentas.",
+    "ingredients": "[{\"name\": \"Costillar De Cerdo\", \"units\": \"kilogramo\", \"amount\": 1}, {\"name\": \"Ajos\", \"units\": null, \"amount\": 2}, {\"name\": \"Cebollitas\", \"units\": \"gramos\", \"amount\": 400}, {\"name\": \"Pimentón\", \"units\": null, \"amount\": null}, {\"name\": \"Comino\", \"units\": null, \"amount\": null}, {\"name\": \"Orégano seco\", \"units\": null, \"amount\": null}, {\"name\": \"Tomillo fresco\", \"units\": null, \"amount\": null}, {\"name\": \"Vinagre De Jerez\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"Vino Blanco\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"Miel\", \"units\": \"ml\", \"amount\": 10}, {\"name\": \"Aceite\", \"units\": null, \"amount\": null}, {\"name\": \"Sal\", \"units\": null, \"amount\": null}]",
+    "instructions": "Pela los 2 ajos, ponlos en el vaso de la batidora con 2 cucharadas de pimentón, 2 cucharadas de comino y 2 de orégano, unas ramas de tomillo lavadas, secas y cortadas, 50 ml de vinagre de Jerez, 50 ml de vino blanco, 10 ml de aceite y sal y tritura. Coloca las costillas en una fuente, riégalas con el adobo que hemos preparado y déjalas macerar durante 24 horas en la nevera. Pon las costillas en una bandeja apta para horno y ásalas durante una hora en el horno precalentado a 180º, pincelándolas de vez en cuando con el adobo. Retíralas y déjalas reposar 10 minutos. Pela las cebollas y cuécelas en una olla con agua salada durante 2 minutos. Escúrrelas y saltéalas en una sartén con aceite. Añade 1 cucharada de miel y caramelízalas 2 minutos. Sírvelas con las costillas troceadas.",
+    "category": "Segundos platos y platos principales",
+    "prep_time": "20 minutes",
+    "cook_time": "75 minutes",
+    "total_time": "95 minutes",
+    "notes": "Puedes sustituir el adobo casero por salsa barbacoa si no tienes mucho tiempo.",
+    "tags": "costillas, horno, fácil, mediterránea"
+}

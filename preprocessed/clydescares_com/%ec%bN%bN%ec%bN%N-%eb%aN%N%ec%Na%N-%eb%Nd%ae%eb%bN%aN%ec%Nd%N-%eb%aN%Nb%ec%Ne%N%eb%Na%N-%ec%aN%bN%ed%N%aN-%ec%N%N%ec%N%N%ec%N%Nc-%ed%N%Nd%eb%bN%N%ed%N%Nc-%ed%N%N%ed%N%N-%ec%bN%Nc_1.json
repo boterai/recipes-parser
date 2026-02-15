@@ -1,0 +1,12 @@
+{
+    "dish_name": "참치 마요 덮밥",
+    "description": "참치 마요 덮밥은 간편하면서도 풍부한 영양소를 제공하는 최고의 한 끼로 사랑받고 있습니다.",
+    "ingredients": "[{\"name\": \"참치\", \"units\": null, \"amount\": null}, {\"name\": \"마요네즈\", \"units\": null, \"amount\": null}, {\"name\": \"밥\", \"units\": null, \"amount\": null}, {\"name\": \"양파\", \"units\": null, \"amount\": null}, {\"name\": \"김치\", \"units\": null, \"amount\": null}, {\"name\": \"아보카도\", \"units\": null, \"amount\": null}]",
+    "instructions": "먼저, 참치를 뜯어서 그릇에 담고 마요네즈와 잘 섞어줍니다. 그 후, 밥을 준비하고 그 위에 참치 마요를 올려줍니다. 취향에 따라 김가루나 깨를 뿌려 보세요.",
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": null,
+    "total_time": "10 minutes",
+    "notes": "신선한 재료를 사용할 것, 마요네즈의 양을 조절하여 칼로리를 관리할 것.",
+    "tags": "참치, 마요네즈, 덮밥, 영양소, 레시피"
+}

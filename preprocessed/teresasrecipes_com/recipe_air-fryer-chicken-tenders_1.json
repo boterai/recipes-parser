@@ -1,0 +1,12 @@
+{
+    "dish_name": "Crispy Air Fryer Chicken Tenders",
+    "description": "Indulge in the crispy goodness of these air fryer chicken tenders, a healthier twist on a beloved classic.",
+    "ingredients": "[{\"name\": \"Cooking spray\", \"units\": null, \"amount\": \"as needed\"}, {\"name\": \"Salt\", \"units\": null, \"amount\": \"to taste\"}, {\"name\": \"Black pepper\", \"units\": null, \"amount\": \"to taste\"}, {\"name\": \"Paprika\", \"units\": \"teaspoon\", \"amount\": \"1\"}, {\"name\": \"Garlic powder\", \"units\": \"teaspoon\", \"amount\": \"1\"}, {\"name\": \"Grated Parmesan cheese\", \"units\": \"cup\", \"amount\": \"1/2\"}, {\"name\": \"Breadcrumbs\", \"units\": \"cup\", \"amount\": \"1\"}, {\"name\": \"Egg\", \"units\": \"beaten\", \"amount\": \"1\"}, {\"name\": \"Chicken tenders\", \"units\": \"pound\", \"amount\": \"1\"}]",
+    "instructions": "Preheat the air fryer to 400°F (200°C). In a shallow bowl, beat the egg until smooth. In a separate shallow bowl, combine the breadcrumbs, grated Parmesan cheese, garlic powder, paprika, salt, and pepper. Mix well to ensure even distribution of spices. Dip each chicken tender into the beaten egg, allowing excess to drip off, then coat it with the breadcrumb mixture, pressing gently to ensure it adheres well. Arrange the coated chicken tenders in a single layer in the air fryer basket, making sure they are not touching to allow for even cooking. Lightly spray the tops of the chicken tenders with cooking spray to enhance crispiness. Cook in the air fryer for 10-12 minutes, flipping halfway through, until the chicken is golden brown, crispy, and fully cooked (internal temperature should reach 165°F or 74°C). Serve hot with your favorite dipping sauce, such as honey mustard, barbecue sauce, or ranch dressing.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "12 minutes",
+    "total_time": null,
+    "notes": "For added flavor, marinate the chicken tenders in buttermilk for a few hours before breading. Experiment with different spices such as cayenne pepper for a spicy kick or Italian seasoning for an herby flavor. Use panko breadcrumbs for an extra crunchy texture.",
+    "tags": null
+}

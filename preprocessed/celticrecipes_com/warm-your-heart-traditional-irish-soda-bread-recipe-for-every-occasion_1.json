@@ -1,0 +1,12 @@
+{
+    "dish_name": "Traditional Irish Soda Bread",
+    "description": "A simple yet delicious bread that is a staple in Irish households, perfect for any occasion.",
+    "ingredients": "[{\"name\": \"all-purpose flour\", \"units\": \"cups\", \"amount\": 4}, {\"name\": \"baking soda\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"salt\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"buttermilk\", \"units\": \"cups\", \"amount\": 1.75}, {\"name\": \"raisins or currants\", \"units\": \"cups\", \"amount\": 0.5}, {\"name\": \"caraway seeds\", \"units\": \"tablespoon\", \"amount\": 1}]",
+    "instructions": "1. Preheat your oven to 425°F (220°C). 2. In a large mixing bowl, combine the all-purpose flour, baking soda, and salt. If using raisins or currants, add them now. 3. Make a well in the center and pour in the buttermilk. Mix until a soft dough forms. 4. Shape into a round loaf on a floured surface. 5. Score the top with a deep cross. 6. Bake for 35-45 minutes until golden brown. 7. Cool on a wire rack for at least 15 minutes before serving.",
+    "category": "Bread",
+    "prep_time": "10 minutes",
+    "cook_time": "35-45 minutes",
+    "total_time": null,
+    "notes": "You can substitute up to 50% of the all-purpose flour with whole wheat flour for a healthier option. If you don't have buttermilk, mix 1 tablespoon of vinegar or lemon juice with a cup of milk.",
+    "tags": "Irish, bread, soda bread, traditional"
+}

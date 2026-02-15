@@ -1,0 +1,12 @@
+{
+    "dish_name": "Jajca po Benediktinsko",
+    "description": "Jajca po benediktinsko so popolna izbira za razkošen zajtrk ali brunch. Ta klasična jed združuje poširana jajca, hrustljavo popečen angleški muffin, rezino sočnega pršuta in kremasto holandsko omako.",
+    "ingredients": "[{\"name\": \"jajca\", \"units\": \"kom\", \"amount\": 4}, {\"name\": \"angleški muffin\", \"units\": \"kom\", \"amount\": 2}, {\"name\": \"pršut ali šunka\", \"units\": \"rezine\", \"amount\": 4}, {\"name\": \"beli kis\", \"units\": \"žlici\", \"amount\": 2}, {\"name\": \"drobnjak ali peteršilj\", \"units\": \"neobvezno\", \"amount\": null}, {\"name\": \"rumenjaki\", \"units\": null, \"amount\": 3}, {\"name\": \"limonin sok\", \"units\": \"žlica\", \"amount\": 1}, {\"name\": \"maslo\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"sol\", \"units\": \"ščepec\", \"amount\": null}, {\"name\": \"kajenski poper\", \"units\": \"ščepec\", \"amount\": null}]",
+    "instructions": "Priprava holandske omake: V skledi, primerni za vodno kopel, stepite rumenjake z limoninim sokom, dokler se ne zgostijo in posvetlijo. Postavite skledo nad vročo vodo (vendar ne vrelo) in postopoma vmešajte stopljeno maslo, pri tem nenehno mešajte, dokler omaka ne postane gosta in kremasta. Začinite s soljo in po želji kajenskim poprom. Omako držite na toplem. Poširanje jajc: V večji kozici zavrite vodo, nato zmanjšajte ogenj, da voda rahlo vre. Dodajte kis. Jajca previdno ubijte v posamezne skodelice, nato pa jih nežno spustite v vodo. Kuhajte približno 3-4 minute, dokler se beljak ne strdi, rumenjak pa ostane tekoč. Jajca previdno odstranite s penovko in jih odcedite na papirnati brisači. Priprava muffinov in pršuta: Medtem ko se jajca poširajo, popečite angleške muffine do zlato rjave barve. Na vsak kos muffina položite rezino pršuta ali šunke. Sestavljanje: Na vsak angleški muffin z rezino pršuta položite poširano jajce. Prelijte s toplo holandsko omako. Po želji okrasite s svežim drobnjakom ali peteršiljem. Postrezite takoj, dokler so še topla.",
+    "category": null,
+    "prep_time": "15 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "35 minutes",
+    "notes": "Če vam priprava holandske omake ne uspe takoj, ne obupajte. Ključ do uspeha je nenehno mešanje in previdnost pri temperaturi. Uporabite lahko tudi popečeno špinačo namesto pršuta za vegetarijansko različico te jedi. Za bolj kremasto omako lahko uporabite mešanico stopljenega masla in malo smetane.",
+    "tags": "zajtrk, brunch, jajca, holandska omaka"
+}

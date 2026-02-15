@@ -1,0 +1,12 @@
+{
+    "dish_name": "Crispy Irish Colcannon Spring Rolls",
+    "description": "These Crispy Irish Colcannon Spring Rolls combine the creamy, savory goodness of traditional colcannon-mashed potatoes, cabbage, and a hint of scallion-with a golden, crunchy spring roll wrapper that’s perfect for sharing.",
+    "ingredients": "[{\"name\": \"Potatoes\", \"units\": \"medium\", \"amount\": 4}, {\"name\": \"Kale or cabbage\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"Scallions\", \"units\": \"sliced thin\", \"amount\": 3}, {\"name\": \"Butter\", \"units\": \"tbsp\", \"amount\": 1}, {\"name\": \"Salt\", \"units\": null, \"amount\": null}, {\"name\": \"Pepper\", \"units\": null, \"amount\": null}, {\"name\": \"Nutmeg\", \"units\": null, \"amount\": null}, {\"name\": \"Spring roll wrappers\", \"units\": \"wrappers\", \"amount\": 12}, {\"name\": \"Vegetable oil\", \"units\": \"for frying\", \"amount\": null}, {\"name\": \"Shredded cheddar cheese\", \"units\": \"optional\", \"amount\": null}, {\"name\": \"Lemon wedges\", \"units\": \"optional\", \"amount\": null}]",
+    "instructions": "Begin by preparing your classic colcannon filling. Boil peeled potatoes until tender, then mash them with steamed cabbage, sautéed onions, and a generous knob of butter for that creamy indulgence. Season with salt, pepper, and a hint of nutmeg to awaken the flavors. While the mixture cools, prepare your spring roll wrappers by laying them flat on a clean surface, ready to be filled and folded. Next, spoon a modest amount of the colcannon mixture onto each wrapper. Use the traditional spring roll folding technique: fold in the sides first, then roll tightly from the bottom up, making sure the ends are sealed to avoid any leaks during frying. For extra crispness, lightly brush the edges with beaten egg before sealing. Heat oil to a perfect 350°F (175°C) and fry the rolls in batches until golden and crunchy, around 3-4 minutes each side. Place them on a paper towel to drain and serve with a tangy mustard dip for a modern Irish bite!",
+    "category": "Appetizer",
+    "prep_time": "30 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "60 minutes",
+    "notes": "These spring rolls are not only delicious but also incredibly versatile. Ready in under 30 minutes, they make the perfect appetizer or side dish for any occasion.",
+    "tags": "Irish, Spring Rolls, Appetizer, Comfort Food"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pasta Cremosa al Pomodoro Facile in Pentola Unica",
+    "description": "Pasta cremosa al pomodoro facile in pentola unica è il piatto perfetto per chi cerca un confort food semplice e saporito.",
+    "ingredients": "[{\"name\": \"pasta\", \"units\": \"g\", \"amount\": 350}, {\"name\": \"pomodori pelati in scatola\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"panna da cucina\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"cipolla piccola\", \"units\": \"unit\", \"amount\": 1}, {\"name\": \"aglio\", \"units\": \"spicchi\", \"amount\": 2}, {\"name\": \"olio d'oliva\", \"units\": \"cucchiai\", \"amount\": 3}, {\"name\": \"parmigiano grattugiato\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"sale\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"pepe\", \"units\": \"q.b.\", \"amount\": null}, {\"name\": \"basilico fresco\", \"units\": \"opzionale\", \"amount\": null}]",
+    "instructions": "1. Scaldare l’olio: In una pentola grande, aggiungi l’olio d’oliva e riscaldalo a fuoco medio. 2. Aggiungere cipolla e aglio: Quando l’olio è caldo, aggiungi la cipolla tritata e cuoci fino a farla diventare traslucida. Aggiungi poi l’aglio e cuoci per circa 1-2 minuti, fino a quando non sprigiona il suo profumo. 3. Unire i pomodori: Aggiungi i pomodori pelati nella pentola. Usa un cucchiaio di legno per romperli leggermente e mescolare bene. 4. Cucinare la salsa: Porta a ebollizione, quindi riduci il fuoco e lascia cuocere per 10 minuti. Aggiusta di sale e pepe a piacere. 5. Aggiungere la pasta: Versa la pasta nella pentola e aggiungi 600 ml di acqua. Mescola bene per assicurarti che la pasta sia completamente immersa nella salsa. 6. Cuocere la pasta: Copri la pentola e porta a ebollizione. Cuoci la pasta seguendo le indicazioni del pacchetto, mescolando di tanto in tanto. 7. Aggiungere la panna: Quando la pasta è al dente e l’acqua è quasi completamente assorbita, aggiungi la panna da cucina. Mescola bene per iniziare a creare la salsa cremosa. 8. Completare il piatto: Cuoci per un paio di minuti in più fino a quando la salsa non si è ben amalgamata e risulta cremosa.",
+    "category": "Cena",
+    "prep_time": "15 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "35 minutes",
+    "notes": "Usa Ingredienti Freschi: Se possibile, utilizza pomodori freschi e gustosi. Questo farà una grande differenza nel sapore finale del piatto.",
+    "tags": "pasta, comfort food, ricetta facile"
+}

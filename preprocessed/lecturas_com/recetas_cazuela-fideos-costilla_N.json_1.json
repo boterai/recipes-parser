@@ -1,0 +1,12 @@
+{
+    "dish_name": "Fideos a la cazuela con costilla",
+    "description": "Receta de la abuela ideal para el invierno, fácil de preparar y nutritiva.",
+    "ingredients": "[{\"name\": \"costilla de cerdo troceada\", \"units\": \"grams\", \"amount\": 400}, {\"name\": \"fideos del número 2\", \"units\": \"grams\", \"amount\": 200}, {\"name\": \"tomates\", \"units\": null, \"amount\": 2}, {\"name\": \"cebolla\", \"units\": null, \"amount\": 1}, {\"name\": \"pimiento verde\", \"units\": null, \"amount\": 1}, {\"name\": \"diente de ajo\", \"units\": null, \"amount\": 2}, {\"name\": \"pimentón dulce\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"caldo de carne\", \"units\": \"liter\", \"amount\": 1}, {\"name\": \"hojas de laurel\", \"units\": null, \"amount\": 2}, {\"name\": \"sal\", \"units\": null, \"amount\": null}, {\"name\": \"aceite de oliva\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Pica las verduras. 2. Dora la costilla en aceite de oliva. 3. Elabora el sofrito con cebolla, pimiento, ajo, pimentón y tomate. 4. Cocina los fideos con el caldo y las hojas de laurel.",
+    "category": "Plato único",
+    "prep_time": "20 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "50 minutes",
+    "notes": "Puedes sustituir los fideos por arroz o quinoa. Aumenta las verduras para un plato más saludable.",
+    "tags": "fideos, cazuela, fácil, receta de la abuela"
+}

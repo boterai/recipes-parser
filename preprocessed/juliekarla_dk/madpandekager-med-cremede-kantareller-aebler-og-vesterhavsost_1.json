@@ -1,0 +1,12 @@
+{
+    "dish_name": "Madpandekager med cremede kantareller, æbler og Vesterhavsost",
+    "description": "En lækker hverdagsopskrift på madpandekager med cremede kantareller, æbler og Vesterhavsost.",
+    "ingredients": "[{\"name\": \"mælk\", \"units\": \"dl\", \"amount\": 6}, {\"name\": \"æg\", \"units\": null, \"amount\": 6}, {\"name\": \"grahamsmel\", \"units\": \"g\", \"amount\": 30}, {\"name\": \"hvedemel\", \"units\": \"g\", \"amount\": 130}, {\"name\": \"flagesalt\", \"units\": \"tsk\", \"amount\": 0.5}, {\"name\": \"smør\", \"units\": \"g\", \"amount\": 75}, {\"name\": \"klargjorte kantareller\", \"units\": \"g\", \"amount\": 350}, {\"name\": \"bananskalotteløg\", \"units\": \"stort\", \"amount\": 1}, {\"name\": \"olivenolie\", \"units\": \"spsk\", \"amount\": 1}, {\"name\": \"finthakket frisk timian\", \"units\": \"spsk\", \"amount\": 1}, {\"name\": \"creme fraiche\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"friskkværnet peber\", \"units\": null, \"amount\": null}, {\"name\": \"rødt æble\", \"units\": null, \"amount\": 1}, {\"name\": \"citronsaft\", \"units\": null, \"amount\": null}, {\"name\": \"fintrevet Vesterhavsost\", \"units\": \"g\", \"amount\": 50}]",
+    "instructions": "Pisk mælk og æg sammen i en røreskål. Sigt grahamsmel ned i og pisk godt. Si hvedemel i og pisk det hele godt sammen. Kom salt i. Smelt smørret på den pande, du skal bruge til at bage pandekagerne. Kom det smeltede smør i dejen og pisk grundigt. Bag pandekagerne og sæt dem til side, evt. tildækket, så de beholder varmen. Snit løgene helt fint. Hak timian helt fint. Steg løg og timian gyldent. Kom de klargjorte kantareller på og steg dem møre ved høj varme. Når det meste af væden fra kantarellerne er fordampet tilsæt creme fraiche. Skru ned og rør det hele godt rundt. Smag svampecremen til med flagesalt og friskkværnet peber. Skær æblet ud i små stykker og vend dem med citronsaft. Kom en spiseskefuld svampecreme i hver pandekage samt æbletern og revet Vesterhavsost.",
+    "category": "aftensmad",
+    "prep_time": "45 minutes",
+    "cook_time": "45 minutes",
+    "total_time": "1 hour 30 minutes",
+    "notes": "Har du ikke kantareller, så brug endelig bare andre svampe.",
+    "tags": "madpandekager, svampe, æbler, Vesterhavsost, hverdagsmad"
+}

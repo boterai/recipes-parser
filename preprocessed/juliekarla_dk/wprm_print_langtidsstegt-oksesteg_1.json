@@ -1,0 +1,12 @@
+{
+    "dish_name": "Langtidsstegt oksesteg",
+    "description": null,
+    "ingredients": "[{\"name\": \"oksetykkam\", \"units\": \"stk\", \"amount\": \"1\"}, {\"name\": \"løg\", \"units\": \"stk\", \"amount\": \"2\"}, {\"name\": \"hvidløg\", \"units\": \"fed\", \"amount\": \"2\"}, {\"name\": \"bladselleri\", \"units\": \"stilke\", \"amount\": \"3\"}, {\"name\": \"gulerødder\", \"units\": \"stk\", \"amount\": \"3\"}, {\"name\": \"passata\", \"units\": \"flaske\", \"amount\": \"1\"}, {\"name\": \"vand\", \"units\": \"dl\", \"amount\": \"1/2\"}, {\"name\": \"fløde\", \"units\": \"dl\", \"amount\": \"1\"}, {\"name\": \"tørrede laurbærblade\", \"units\": \"stk\", \"amount\": \"3\"}, {\"name\": \"frisk rosmarin\", \"units\": \"kviste\", \"amount\": \"2\"}, {\"name\": \"frisk timian\", \"units\": \"kviste\", \"amount\": \"4\"}, {\"name\": \"røget paprika\", \"units\": \"tsk\", \"amount\": \"1\"}, {\"name\": \"kanel\", \"units\": \"tsk\", \"amount\": \"1/2\"}, {\"name\": \"cayenne peber\", \"units\": \"tsk\", \"amount\": \"1/4\"}, {\"name\": \"salt\", \"units\": \"tsk\", \"amount\": \"1\"}, {\"name\": \"sukker\", \"units\": \"spsk\", \"amount\": \"1\"}, {\"name\": \"friskkværnet peber\", \"units\": null, \"amount\": \"null\"}, {\"name\": \"friske krydderurter\", \"units\": null, \"amount\": \"null\"}]",
+    "instructions": "Start med at brune kødet af på en pande med smør. Vend den godt rundt, så den bliver brunet på alle sider. Kom stegen ned i crock-potten sammen med alle de øvrige ingredienser undtagen fløden. Husk også stegeskyen fra panden. Sæt temperaturen på din crock-pot på lav (1), og sæt uret til 8 timer, og læg låg på. En halv time før oksestegen er færdig hældes fløden i, og der røres forsigtigt rundt. Læg låg på igen. Skær kødet ud i skiver, og servér den møre langtidsstegte oksesteg sammen med tilbehør og drys med hakkede friske krydderurter som f.eks. frisk løvstikke og persille.",
+    "category": "Hovedret",
+    "prep_time": null,
+    "cook_time": "8 hours",
+    "total_time": null,
+    "notes": null,
+    "tags": "kød, dansk, Italiensk"
+}

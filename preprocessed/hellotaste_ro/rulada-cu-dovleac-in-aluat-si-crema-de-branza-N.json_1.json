@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ruladă cu dovleac în aluat și cremă de brânză",
+    "description": "O ruladă cu dovleac în aluat și cremă de brânză, ideală pentru un desert cu arome de toamnă.",
+    "ingredients": "[{\"name\": \"ouă mari\", \"units\": \"pcs\", \"amount\": 3}, {\"name\": \"zahăr\", \"units\": \"g\", \"amount\": 120}, {\"name\": \"dovleac copt\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"făină\", \"units\": \"g\", \"amount\": 80}, {\"name\": \"praful de copt\", \"units\": \"linguriță\", \"amount\": 1}, {\"name\": \"scorțișoară\", \"units\": \"linguriță\", \"amount\": 0.5}, {\"name\": \"ghimbir pudră\", \"units\": \"linguriță\", \"amount\": 0.5}, {\"name\": \"nucșoară\", \"units\": \"linguriță\", \"amount\": 0.25}, {\"name\": \"sare\", \"units\": null, \"amount\": null}, {\"name\": \"cremă de brânză\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"unt moale\", \"units\": \"g\", \"amount\": 70}, {\"name\": \"zahăr pudră vanilat\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"coaja rasă de lămâie\", \"units\": null, \"amount\": null}]",
+    "instructions": "Amestecă ouăle cu zahărul până când devin spumoase. Încorporează piureul de dovleac copt, apoi adaugă făina cernută cu praful de copt, condimentele și sarea. Tapetează o tavă cu hârtie de copt și întinde compoziția. Coace în cuptorul preîncălzit la 180°C timp de 12-15 minute. Răstoarnă pe un prosop presărat cu zahăr pudră și rulează. Prepară crema mixând crema de brânză cu untul, zahărul pudră și coaja de lămâie. Desfă rulada, unge cu crema și rulează din nou. Lasă la rece cel puțin 2 ore.",
+    "category": "Desert",
+    "prep_time": null,
+    "cook_time": "30 minutes",
+    "total_time": null,
+    "notes": "Serviți cu zahăr pudră deasupra.",
+    "tags": "desert, ruladă, dovleac, cremă de brânză"
+}

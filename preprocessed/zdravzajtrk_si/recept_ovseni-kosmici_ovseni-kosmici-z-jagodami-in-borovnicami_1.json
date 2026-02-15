@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ovseni kosmiči z jagodami in borovnicami",
+    "description": "Ta recept združuje sladkost jagod in borovnic z nežno kremastimi ovsenimi kosmiči, kar ustvarja popolno kombinacijo okusov in tekstur.",
+    "ingredients": "[{\"name\": \"ovsenih kosmičev\", \"units\": \"skodelica\", \"amount\": 1}, {\"name\": \"vode ali mleka\", \"units\": \"skodelici\", \"amount\": 2}, {\"name\": \"svežih ali zamrznjenih jagod\", \"units\": \"skodelice\", \"amount\": 0.5}, {\"name\": \"svežih ali zamrznjenih borovnic\", \"units\": \"skodelice\", \"amount\": 0.5}, {\"name\": \"medu ali javorjevega sirupa\", \"units\": \"žlica\", \"amount\": 1}, {\"name\": \"vaniljevega ekstrakta\", \"units\": \"čajna žlička\", \"amount\": 1}, {\"name\": \"nasekljanih mandljev ali orehov\", \"units\": \"skodelice\", \"amount\": 0.25}, {\"name\": \"soli\", \"units\": \"ščep\", \"amount\": 0}, {\"name\": \"kalorij\", \"units\": \"kcal\", \"amount\": 350}]",
+    "instructions": "V srednje veliki lonec dodajte ovsene kosmiče in vodo ali mleko. Zavrite na srednjem ognju in občasno premešajte. Zmanjšajte temperaturo in pustite, da kosmiči nežno vrejo, dokler ne dosežejo želeno gostoto, približno 5-7 minut. Med kuhanjem dodajte vaniljev ekstrakt in ščepec soli, da obogatite okus. Ko so kosmiči kuhani, jih odstavite z ognja in vmešajte med ali javorjev sirup po okusu. V skledo servirajte ovsene kosmiče, nanje pa položite sveže jagode in borovnice. Po vrhu posujte nasekljane mandlje ali orehe za hrustljavost.",
+    "category": null,
+    "prep_time": "5 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "15 minutes",
+    "notes": "Za še bolj intenziven okus lahko jagode in borovnice rahlo pretlačite in jih vmešate v kosmiče med kuhanjem. Če želite kremasto teksturo, dodajte malo grškega jogurta ali kokosovega jogurta ob serviranju. Zamrznjene jagode in borovnice so prav tako odlična izbira, še posebej izven sezone, saj ohranijo večino hranilnih snovi.",
+    "tags": "zajtrk, ovseni kosmiči, jagode, borovnice"
+}

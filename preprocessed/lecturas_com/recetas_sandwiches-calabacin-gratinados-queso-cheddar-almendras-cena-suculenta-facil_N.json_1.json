@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sándwiches de calabacín gratinados con queso cheddar y almendras",
+    "description": "Una cena suculenta y fácil con calabacines gratinados en forma de sándwich.",
+    "ingredients": "[{\"name\": \"Calabacines\", \"units\": null, \"amount\": 2}, {\"name\": \"dientes de ajo\", \"units\": null, \"amount\": 2}, {\"name\": \"pan rallado\", \"units\": null, \"amount\": null}, {\"name\": \"Almendras picadas\", \"units\": \"gramos\", \"amount\": 80}, {\"name\": \"clara de huevo\", \"units\": null, \"amount\": 1}, {\"name\": \"ramita de perejil\", \"units\": null, \"amount\": 1}, {\"name\": \"Queso Cheddar en lonchas\", \"units\": \"gramos\", \"amount\": 150}, {\"name\": \"pimentón dulce\", \"units\": null, \"amount\": null}, {\"name\": \"sal\", \"units\": null, \"amount\": null}, {\"name\": \"aceite de oliva\", \"units\": null, \"amount\": null}]",
+    "instructions": "Despunta los calabacines, lávalos bien y sécalos con un trapo de algodón. Pártelos en 6 trozos, y corta cada uno en 4 láminas de 5 mm de grosor. Sazónalas y ásalas unos 2 minutos por cada lado, en la plancha engrasada con un poco de aceite. Lava el perejil y sécalo bien con papel de cocina. Pela los ajos. Pica los dos finamente y mézclalos. Coloca la clara de huevo en un cuenco; salpimienta y bátela ligeramente. Añade luego el perejil, el ajo, la almendra, 1 cucharada de pan rallado y ½ cucharadita de pimentón. Mezcla todo bien hasta obtener una pasta densa. Precalienta el horno a 200º C en la posición de gratinado. Forra una fuente refractaria apta para horno con papel sulfurizado. Dispón en el fondo un tercio de las láminas de calabacín y cúbrelas con unas lonchas de queso cheddar. Repite la operación y termina con una lámina de calabacín. Cubre los sándwiches de calabacín con la pasta de almendra y gratina todo durante unos 10 minutos. Cuando esté gratinado, retira del horno, riega con un hilo de aceite y espolvorea con una pizca de pimentón. Sirve enseguida y ¡a disfrutar!",
+    "category": "Primeros platos y entrantes",
+    "prep_time": "20 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "50 minutes",
+    "notes": "Estos calabacines gratinados son facilísimos de preparar y el resultado es espectacular.",
+    "tags": "calabacín, sándwich, gratinado, cena, fácil"
+}

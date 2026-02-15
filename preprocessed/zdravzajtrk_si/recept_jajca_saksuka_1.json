@@ -1,0 +1,12 @@
+{
+    "dish_name": "Šakšuka",
+    "description": "Šakšuka je jed, ki prihaja iz severnoafriške in bližnjevzhodne kuhinje, a je s svojo preprostostjo in bogatim okusom osvojila srca ljubiteljev zdrave prehrane po vsem svetu.",
+    "ingredients": "[{\"name\": \"olivno olje\", \"units\": \"žlici\", \"amount\": 2}, {\"name\": \"čebula\", \"units\": \"velika\", \"amount\": 1}, {\"name\": \"rdeča paprika\", \"units\": \"velika\", \"amount\": 1}, {\"name\": \"česen\", \"units\": \"stroki\", \"amount\": 3}, {\"name\": \"mleta kumina\", \"units\": \"žlička\", \"amount\": 1}, {\"name\": \"mleta paprika\", \"units\": \"žlička\", \"amount\": 1}, {\"name\": \"kajenski poper\", \"units\": \"žlička\", \"amount\": 1}, {\"name\": \"paradižniki\", \"units\": \"veliki\", \"amount\": 4}, {\"name\": \"sol\", \"units\": null, \"amount\": null}, {\"name\": \"poper\", \"units\": null, \"amount\": null}, {\"name\": \"jajca\", \"units\": null, \"amount\": 4}, {\"name\": \"peteršilj ali koriander\", \"units\": null, \"amount\": null}]",
+    "instructions": "V veliki ponvi segrejte olivno olje na srednji temperaturi. Dodajte narezano čebulo in papriko ter pražite približno 5-7 minut, dokler ne postaneta mehki. Dodajte sesekljan česen in začimbe (kumina, paprika, kajenski poper) ter pražite še eno minuto, da se sprostijo arome. V ponev dodajte narezane paradižnike in jih kuhajte približno 10 minut, dokler se ne zmehčajo in se omaka nekoliko zgosti. Začinite s soljo in poprom po okusu. Z žlico naredite štiri vdolbine v omaki in v vsako previdno ubijte jajce. Pokrijte ponev in kuhajte še 5-7 minut, dokler se beljaki ne strdijo, rumenjaki pa ostanejo tekoči (ali po vašem okusu). Postrezite vroče, posuto s svežim peteršiljem ali koriandrom, skupaj s kosom svežega kruha ali pita kruhom.",
+    "category": "Breakfast",
+    "prep_time": "10 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "30 minutes",
+    "notes": "Za bolj pekočo različico lahko dodate več kajenskega popra ali svežo čili papriko. Šakšuko lahko prilagodite tako, da dodate druge zelenjavne sestavine, kot so bučke ali špinača.",
+    "tags": "breakfast, healthy, eggs, Mediterranean"
+}

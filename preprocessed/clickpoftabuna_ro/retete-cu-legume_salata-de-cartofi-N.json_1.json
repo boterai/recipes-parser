@@ -1,0 +1,12 @@
+{
+    "dish_name": "Salată de cartofi",
+    "description": "Salata de cartofi se servește rece sau la temperatura camerei și este nelipsită de la mesele de familie, picnicuri sau sărbători.",
+    "ingredients": "[{\"name\": \"cartofi\", \"units\": null, \"amount\": 6}, {\"name\": \"capere\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"muștar Dijon\", \"units\": \"linguri\", \"amount\": 2}, {\"name\": \"maioneză\", \"units\": \"lingură\", \"amount\": 1}, {\"name\": \"ceapă roșie mică\", \"units\": null, \"amount\": 1}, {\"name\": \"ceapă verde\", \"units\": null, \"amount\": 1}, {\"name\": \"mărar proaspăt\", \"units\": null, \"amount\": null}, {\"name\": \"pătrunjel proaspăt\", \"units\": null, \"amount\": null}]",
+    "instructions": "Tai cartofii cuburi și îi fierbi, având grijă să nu se înmoaie ca pentru piure. Îi scurgi apoi bine. Într-un castron, combini maioneza, muștarul și caperele, apoi pui acest amestec peste cartofii scurși și omogenizezi pentru a se acoperi uniform cu sosul. Toci fin ceapa și o pui peste cartofi, apoi adaugi mărarul și pătrunjelul tocate.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Mango Jalapeno Margarita Mocktail",
+    "description": "Transport yourself to a tropical paradise with this invigorating Mango Jalapeno Margarita Mocktail. The luscious sweetness of ripe mangoes beautifully complements the zesty tang of lime and the subtle heat from the jalapeno.",
+    "ingredients": "[{\"name\": \"Lime wedges\", \"units\": null, \"amount\": 4}, {\"name\": \"Salt\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"Ice cubes\", \"units\": \"as needed\", \"amount\": null}, {\"name\": \"Club soda\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"Agave syrup\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"Lime juice\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"Jalapeno\", \"units\": null, \"amount\": 1}, {\"name\": \"Mango\", \"units\": \"large\", \"amount\": 1}]",
+    "instructions": "In a blender, add the diced mango, chopped jalapeno, fresh lime juice, and agave syrup. Blend until the mixture turns smooth and all ingredients are well incorporated. Prepare the glasses by rubbing a lime wedge around each rim. Dip the rim into a plate of salt to create a nicely salted edge. Fill the glasses halfway with ice cubes. Pour the blended mango jalapeno mixture over the ice, filling up to three-quarters of the glass. Top up each glass with club soda, and stir gently to mix. Garnish each glass with a lime wedge on the rim. Serve immediately and enjoy the tropical burst of flavors!",
+    "category": "Beverage",
+    "prep_time": "10 minutes",
+    "cook_time": "0 minutes",
+    "total_time": null,
+    "notes": "For a spicier mocktail, leave a few seeds in the jalapeno. If fresh mangoes aren't available, feel free to use frozen or canned mangoes in their juice. For an added twist, consider adding a few sprigs of fresh mint or basil to the blender.",
+    "tags": "mocktail, beverage, tropical, mango, jalapeno"
+}
