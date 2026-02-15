@@ -256,16 +256,16 @@ class TestFoodNdtvComExtractor(unittest.TestCase):
         self.assertIsNotNone(result['dish_name'])
         self.assertGreater(len(result['dish_name']), 0)
     
-    def test_minimal_html_handling(self):
-        """Тест обработки минимального HTML с отсутствующими данными"""
-        test_file = self.test_dir / "test_minimal.html"
+    def test_required_fields_always_present(self):
+        """Тест что обязательные поля всегда присутствуют в результате"""
+        test_file = self.test_dir / "test_recipe.html"
         if not test_file.exists():
-            self.skipTest("test_minimal.html not found")
+            self.skipTest("test_recipe.html not found")
         
         extractor = FoodNdtvComExtractor(str(test_file))
         result = extractor.extract_all()
         
-        # Проверяем что все поля присутствуют
+        # Проверяем что все поля присутствуют (могут быть None, но ключи должны быть)
         required_fields = [
             'dish_name', 'description', 'ingredients', 'instructions',
             'category', 'prep_time', 'cook_time', 'total_time',
@@ -274,6 +274,11 @@ class TestFoodNdtvComExtractor(unittest.TestCase):
         
         for field in required_fields:
             self.assertIn(field, result, f"Field {field} should be present even if None")
+        
+        # Проверяем что обязательные для рецепта поля не None
+        self.assertIsNotNone(result['dish_name'], "dish_name is required")
+        self.assertIsNotNone(result['ingredients'], "ingredients is required")
+        self.assertIsNotNone(result['instructions'], "instructions is required")
 
 
 class TestFoodNdtvComExtractorEdgeCases(unittest.TestCase):
