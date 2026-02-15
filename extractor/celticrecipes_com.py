@@ -24,8 +24,9 @@ class CelticRecipesExtractor(BaseRecipeExtractor):
         
         if h1:
             title = self.clean_text(h1.get_text())
-            # Убираем суффиксы вроде ": A Tasty Twist!" или "! - CelticRecipes"
-            title = re.sub(r'[:\-!]\s*[A-Z][^!\-:]*[!\-:]?\s*$', '', title)
+            # Убираем только очевидные подзаголовки типа ": A Tasty Twist!"
+            # но сохраняем ": The Recipe..." и подобное
+            title = re.sub(r':\s*A\s+\w+\s+\w+!?\s*$', '', title)  # ": A Tasty Twist!"
             title = re.sub(r'\s*-\s*CelticRecipes\s*$', '', title, flags=re.IGNORECASE)
             return self.clean_text(title)
         
@@ -34,7 +35,7 @@ class CelticRecipesExtractor(BaseRecipeExtractor):
         if og_title and og_title.get('content'):
             title = og_title['content']
             # Убираем суффикс сайта и подзаголовки
-            title = re.sub(r'[:\-!]\s*[A-Z][^!\-:]*[!\-:]?\s*$', '', title)
+            title = re.sub(r':\s*A\s+\w+\s+\w+!?\s*$', '', title)
             title = re.sub(r'\s*-\s*CelticRecipes\s*$', '', title, flags=re.IGNORECASE)
             return self.clean_text(title)
         
