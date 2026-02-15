@@ -462,13 +462,23 @@ class NonnaAntoinetteExtractor(BaseRecipeExtractor):
         
         for img in images:
             src = img.get('src')
-            if src and 'http' in src:
+            if src and src.startswith('http'):
                 # Фильтруем служебные изображения (логотипы, иконки, аватары)
                 if not any(word in src.lower() for word in ['logo', 'icon', 'avatar', 'button', 'social']):
                     # Проверяем, что это изображение из медиа-библиотеки сайта
-                    if 'wixstatic.com' in src or 'nonnaantoinette.com' in src:
-                        if src not in urls:
-                            urls.append(src)
+                    # Используем более безопасную проверку с urlparse
+                    from urllib.parse import urlparse
+                    try:
+                        parsed_url = urlparse(src)
+                        # Проверяем домен изображения более строго (exact match или subdomain)
+                        netloc = parsed_url.netloc.lower()
+                        if (netloc == 'wixstatic.com' or netloc.endswith('.wixstatic.com') or
+                            netloc == 'nonnaantoinette.com' or netloc.endswith('.nonnaantoinette.com')):
+                            if src not in urls:
+                                urls.append(src)
+                    except Exception:
+                        # Если не удалось распарсить URL, пропускаем
+                        continue
         
         # Ограничиваем количество изображений (обычно не больше 10)
         if urls:
