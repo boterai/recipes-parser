@@ -25,16 +25,18 @@ class ClydescaresExtractor(BaseRecipeExtractor):
             text = re.split(r'\s*[|｜]\s*', text)[0]
             text = self.clean_text(text)
             
-            # Убираем лишние слова в конце (например, "맛있게 끓이는 법과 재료 소개")
+            # Убираем лишние слова в начале и конце
             # Список шаблонов для удаления
             remove_patterns = [
+                # В конце
                 r'\s+맛있게\s+끓이는\s+법.*$',
                 r'\s+완벽\s+레시피.*$',
                 r'\s+법과\s+재료\s+소개.*$',
                 r'의\s+맛있는\s+조합.*$',
-                r'\s+로\s+만드는.*$',
                 r'\s+완벽한\s+레시피.*$',
-                r'\s+싱싱한\s+닭날개로\s+만드는\s+',
+                # В начале
+                r'^싱싱한\s+닭날개로\s+만드는\s+',
+                r'^.*로\s+만드는\s+',
             ]
             
             for pattern in remove_patterns:
@@ -51,7 +53,7 @@ class ClydescaresExtractor(BaseRecipeExtractor):
             text = re.sub(r'\s*-\s*clydescares.*$', '', text, flags=re.IGNORECASE)
             
             # Убираем лишние слова
-            for pattern in [r'\s+맛있게\s+끓이는\s+법.*$', r'\s+완벽\s+레시피.*$', r'의\s+맛있는\s+조합.*$']:
+            for pattern in [r'\s+맛있게\s+끓이는\s+법.*$', r'\s+완벽\s+레시피.*$', r'의\s+맛있는\s+조합.*$', r'^.*로\s+만드는\s+']:
                 text = re.sub(pattern, '', text)
             
             return self.clean_text(text)
@@ -148,7 +150,7 @@ class ClydescaresExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "오징어 1마리" или "무 200g"
             
         Returns:
-            dict: {"name": "오징어", "amount": "1", "units": "마리"} или None
+            dict: {"name": "오징어", "units": "마리", "amount": "1"} или None
         """
         if not ingredient_text:
             return None
@@ -168,10 +170,11 @@ class ClydescaresExtractor(BaseRecipeExtractor):
         
         if match:
             name, amount, units = match.groups()
+            # Возвращаем в правильном порядке: name, units, amount (как в reference)
             return {
                 "name": name.strip(),
-                "amount": amount.strip(),
-                "units": units.strip() if units else None
+                "units": units.strip() if units else None,
+                "amount": amount.strip()
             }
         
         # Если не совпало, пробуем без единиц (только название и количество)
@@ -182,15 +185,15 @@ class ClydescaresExtractor(BaseRecipeExtractor):
             name, amount = match2.groups()
             return {
                 "name": name.strip(),
-                "amount": amount.strip(),
-                "units": None
+                "units": None,
+                "amount": amount.strip()
             }
         
         # Если паттерн не совпал, возвращаем только название
         return {
             "name": text,
-            "amount": None,
-            "units": None
+            "units": None,
+            "amount": None
         }
     
     def extract_instructions(self) -> Optional[str]:
