@@ -113,7 +113,7 @@ class ZdravZajtrkExtractor(BaseRecipeExtractor):
     def parse_ingredient(self, text: str) -> Optional[dict]:
         """
         Parse ingredient text into structured format
-        Expected format: amount unit name
+        Expected format: amount unit name or amount adjective name
         Examples: "4 velika jajca", "2 žlici belega kisa", "1 skodelica ovsenih kosmičev"
         """
         if not text:
@@ -131,13 +131,21 @@ class ZdravZajtrkExtractor(BaseRecipeExtractor):
         for fraction, decimal in fraction_map.items():
             text = text.replace(fraction, decimal)
         
-        # Try to parse: "amount unit name" pattern
-        # Pattern matches: "1 skodelica ovsenih kosmičev", "2 žlici belega kisa", "4 velika jajca"
-        pattern = r'^([\d\s/.,]+)\s+([^\d\s][^\s]*)\s+(.+)$'
-        match = re.match(pattern, text, re.IGNORECASE)
+        # Common units in Slovenian recipes (lowercase)
+        common_units = {'skodelica', 'skodelice', 'skodelico', 'žlica', 'žlice', 'žlico', 'žlici', 
+                       'gram', 'grama', 'gramov', 'g', 'kg', 'ml', 'l', 'kom', 'kos', 'kosa', 'kosov',
+                       'ščepec', 'rezina', 'rezine', 'rezino', 'strok', 'stroki', 'strokov'}
+        
+        # Common adjectives that should NOT be treated as units
+        adjectives = {'velika', 'veliki', 'veliko', 'malo', 'mala', 'mali', 'srednja', 'srednje', 'srednjih',
+                     'angleška', 'angleški', 'angleške', 'svež', 'sveža', 'sveže', 'svežih'}
+        
+        # Try pattern: number word rest
+        pattern = r'^([\d\s/.,]+)\s+(\S+)\s*(.*)$'
+        match = re.match(pattern, text)
         
         if match:
-            amount_str, unit, name = match.groups()
+            amount_str, second_word, rest = match.groups()
             
             # Process amount
             amount = None
@@ -161,49 +169,48 @@ class ZdravZajtrkExtractor(BaseRecipeExtractor):
                     except:
                         amount = None
             
-            # Clean unit
-            unit = unit.strip() if unit else None
+            # Determine if second_word is a unit or part of name
+            second_lower = second_word.lower()
+            unit = None
+            name = None
             
-            # Clean name - remove parentheses, optional markers
-            name = re.sub(r'\([^)]*\)', '', name)
-            name = re.sub(r'\b(po želji|neobvezno|optional|or more|if needed)\b', '', name, flags=re.IGNORECASE)
-            name = re.sub(r',\s*narezane?\s+na\s+.*$', '', name, flags=re.IGNORECASE)  # Remove cutting instructions
-            name = re.sub(r',\s*stopljenega$', '', name, flags=re.IGNORECASE)  # Remove "melted" type instructions
-            name = re.sub(r'\s*\(lahko.*?\)', '', name, flags=re.IGNORECASE)  # Remove optional suggestions in parens
-            name = re.sub(r'[,;]+$', '', name)
-            name = re.sub(r'\s+', ' ', name).strip()
+            if second_lower in common_units:
+                # It's a unit
+                unit = second_word
+                name = rest.strip() if rest else second_word
+            elif second_lower in adjectives or second_word[0].isupper():
+                # It's an adjective or proper name - part of ingredient name
+                name = (second_word + ' ' + rest).strip()
+            else:
+                # Check if it might be a unit we didn't list or part of name
+                # If rest exists and second_word is short, treat as unit
+                if rest and len(second_word) <= 10:
+                    # Might be a unit
+                    unit = second_word
+                    name = rest.strip()
+                else:
+                    # Treat as part of name
+                    name = (second_word + ' ' + rest).strip() if rest else second_word
             
-            if name and len(name) > 1:
-                return {
-                    "name": name,
-                    "units": unit,
-                    "amount": amount
-                }
-        
-        # If no match, try simple pattern: "amount name" without unit
-        simple_pattern = r'^([\d\s/.,]+)\s+(.+)$'
-        simple_match = re.match(simple_pattern, text)
-        if simple_match:
-            amount_str, name = simple_match.groups()
-            try:
-                val = float(amount_str.strip().replace(',', '.'))
-                amount = int(val) if val == int(val) else val
-            except:
-                amount = None
-            
-            # Clean name
-            name = re.sub(r'\([^)]*\)', '', name)
-            name = re.sub(r'\b(po želji|neobvezno|optional)\b', '', name, flags=re.IGNORECASE)
-            name = name.strip()
-            
+            # Clean name - remove parentheses, optional markers, preparation instructions
             if name:
-                return {
-                    "name": name,
-                    "units": None,
-                    "amount": amount
-                }
+                name = re.sub(r'\([^)]*\)', '', name)
+                name = re.sub(r'\b(po želji|neobvezno|optional|or more|if needed)\b', '', name, flags=re.IGNORECASE)
+                name = re.sub(r',\s*narezane?\s+na\s+.*$', '', name, flags=re.IGNORECASE)
+                name = re.sub(r',\s*prerezana\s+na\s+.*$', '', name, flags=re.IGNORECASE)
+                name = re.sub(r',\s*stopljenega\s*$', '', name, flags=re.IGNORECASE)
+                name = re.sub(r'\s*\(lahko.*?\)', '', name, flags=re.IGNORECASE)
+                name = re.sub(r'[,;]+$', '', name)
+                name = re.sub(r'\s+', ' ', name).strip()
+                
+                if name and len(name) > 1:
+                    return {
+                        "name": name,
+                        "units": unit,
+                        "amount": amount
+                    }
         
-        # Last resort: return the whole text as name with no amount/unit
+        # If no number at start, return whole text as name
         clean_name = re.sub(r'\([^)]*\)', '', text)
         clean_name = re.sub(r'\b(po želji|neobvezno)\b', '', clean_name, flags=re.IGNORECASE)
         clean_name = clean_name.strip()
