@@ -355,7 +355,6 @@ class OttimaPowerExtractor(BaseRecipeExtractor):
 
 
 def main():
-    import os
     # Обрабатываем папку preprocessed/ottima-power_com
     repo_root = Path(__file__).parent.parent
     recipes_dir = repo_root / "preprocessed" / "ottima-power_com"
