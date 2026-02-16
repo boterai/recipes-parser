@@ -15,6 +15,12 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class PitaboomExtractor(BaseRecipeExtractor):
     """Экстрактор для pitaboom.com"""
     
+    # Константы для единиц измерения
+    UNITS = ['g', 'kg', 'ml', 'l', 'kom', 'tbsp', 'tsp']
+    
+    # Ключевые слова для заметок
+    NOTE_KEYWORDS = ['napomena', 'savet', 'tip', 'važno', 'preporuka']
+    
     @staticmethod
     def parse_iso_duration(duration: str) -> Optional[str]:
         """
@@ -206,7 +212,8 @@ class PitaboomExtractor(BaseRecipeExtractor):
         
         # Паттерн 1: количество + единица + название
         # Примеры: "500 g Domaćih tankih kora", "6 kom Jaja", "100 ml Jogurta"
-        pattern1 = r'^(\d+(?:[.,]\d+)?)\s+(g|kg|ml|l|kom|tbsp|tsp)\s+(.+)$'
+        units_pattern = '|'.join(self.UNITS)
+        pattern1 = rf'^(\d+(?:[.,]\d+)?)\s+({units_pattern})\s+(.+)$'
         
         match = re.match(pattern1, ingredient_str, re.IGNORECASE)
         
@@ -544,9 +551,10 @@ class PitaboomExtractor(BaseRecipeExtractor):
             text = self.clean_text(p.get_text())
             if text and len(text) > 50:
                 # Проверяем, содержит ли параграф ключевые слова заметок
-                if re.search(r'\b(napomena|savet|tip|važno|preporuka)\b', text, re.IGNORECASE):
-                    # Убираем префикс "Napomena:"
-                    text = re.sub(r'^\s*(napomena|savet|tip|važno|preporuka)\s*:\s*', '', text, flags=re.IGNORECASE)
+                keywords_pattern = '|'.join(self.NOTE_KEYWORDS)
+                if re.search(rf'\b({keywords_pattern})\b', text, re.IGNORECASE):
+                    # Убираем префикс с ключевым словом
+                    text = re.sub(rf'^\s*({keywords_pattern})\s*:\s*', '', text, flags=re.IGNORECASE)
                     if text:
                         return text
         
