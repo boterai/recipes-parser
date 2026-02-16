@@ -187,6 +187,36 @@ class MiJourneyExtractor(BaseRecipeExtractor):
                     if 'recipeIngredient' in data and data['recipeIngredient']:
                         ingredient_text = data['recipeIngredient']
                         
+                        # Проверяем, содержит ли текст "【材料と作り方】" (это комбинированный формат)
+                        # В этом случае извлекаем ингредиенты из текста внутри этих секций
+                        if '【材料と作り方】' in ingredient_text:
+                            # Извлекаем ингредиенты из текста после "【材料と作り方】"
+                            # Паттерн: после "【材料と作り方】" идет текст с ингредиентами
+                            parts = re.split(r'【材料と作り方】', ingredient_text)
+                            
+                            for part in parts[1:]:  # Пропускаем первую часть (до первого разделителя)
+                                # Берем текст до первой точки или до конца
+                                # Это обычно содержит ингредиенты
+                                # Извлекаем ингредиенты, упомянутые с количеством
+                                ingredient_matches = re.findall(r'([^、。]+[0-9０-９]+(?:[~/～]?[0-9０-９]+)?[a-zA-Zぁ-んァ-ン一-龯]+)', part)
+                                
+                                for match in ingredient_matches:
+                                    parsed = self.parse_ingredient_from_text(match.strip())
+                                    if parsed and parsed['name']:
+                                        ingredient = {
+                                            "name": parsed['name'],
+                                            "units": parsed['unit'],
+                                            "amount": parsed['amount']
+                                        }
+                                        ingredients.append(ingredient)
+                            
+                            if ingredients:
+                                return json.dumps(ingredients, ensure_ascii=False)
+                            else:
+                                # Если не удалось извлечь, возвращаем None (будем искать в HTML)
+                                continue
+                        
+                        # Стандартный формат
                         # Разбиваем по переводам строк и другим разделителям
                         lines = re.split(r'[\r\n]+', ingredient_text)
                         
@@ -218,6 +248,32 @@ class MiJourneyExtractor(BaseRecipeExtractor):
             except (json.JSONDecodeError, KeyError):
                 continue
         
+        # Если JSON-LD не помог или пустой, ищем в HTML
+        # Ищем заголовок с "材料" (материалы/ингредиенты)
+        headings = self.soup.find_all(['h3', 'h4'])
+        
+        for heading in headings:
+            heading_text = heading.get_text()
+            if '材料' in heading_text and '作り方' not in heading_text:
+                # Ищем следующий список <ul> после заголовка
+                next_ul = heading.find_next('ul')
+                if next_ul:
+                    # Извлекаем элементы списка
+                    items = next_ul.find_all('li')
+                    for item in items:
+                        ingredient_text = item.get_text(strip=True)
+                        parsed = self.parse_ingredient_from_text(ingredient_text)
+                        if parsed and parsed['name']:
+                            ingredient = {
+                                "name": parsed['name'],
+                                "units": parsed['unit'],
+                                "amount": parsed['amount']
+                            }
+                            ingredients.append(ingredient)
+                    
+                    if ingredients:
+                        return json.dumps(ingredients, ensure_ascii=False)
+        
         return None
     
     def extract_instructions(self) -> Optional[str]:
@@ -232,10 +288,11 @@ class MiJourneyExtractor(BaseRecipeExtractor):
                 data = json.loads(script.string)
                 
                 if isinstance(data, dict) and data.get('@type') == 'Recipe':
+                    # Проверяем recipeInstructions
                     if 'recipeInstructions' in data:
                         instructions = data['recipeInstructions']
                         
-                        if isinstance(instructions, list):
+                        if isinstance(instructions, list) and len(instructions) > 0:
                             for step in instructions:
                                 if isinstance(step, str):
                                     step_text = self.clean_text(step)
@@ -249,9 +306,76 @@ class MiJourneyExtractor(BaseRecipeExtractor):
                             # Форматируем с номерами
                             formatted_steps = [f"{i}. {step}" for i, step in enumerate(steps, 1)]
                             return ' '.join(formatted_steps)
+                    
+                    # Проверяем recipeIngredient на случай комбинированного формата
+                    if 'recipeIngredient' in data and data['recipeIngredient']:
+                        ingredient_text = data['recipeIngredient']
+                        
+                        # Если содержит "【材料と作り方】", извлекаем инструкции
+                        if '【材料と作り方】' in ingredient_text:
+                            # Извлекаем текст после "【材料と作り方】"
+                            # Разбиваем по этому паттерну и берем части с инструкциями
+                            parts = re.split(r'【材料と作り方】', ingredient_text)
+                            
+                            instruction_text = ''
+                            for part in parts:
+                                if part.strip():
+                                    # Извлекаем только текст инструкций (без названий секций)
+                                    # Убираем названия секций типа "ぶりしゃぶ鍋「スープ」のレシピ"
+                                    # Оставляем только текст после "【材料と作り方】"
+                                    cleaned = re.sub(r'^[^。]+のレシピ\s*', '', part.strip())
+                                    if cleaned and not cleaned.startswith('「'):
+                                        instruction_text += cleaned + ' '
+                            
+                            if instruction_text.strip():
+                                return self.clean_text(instruction_text.strip())
                         
             except (json.JSONDecodeError, KeyError):
                 continue
+        
+        # Если JSON-LD не помог или пустой, ищем в HTML
+        # Ищем заголовок с "作り方" (способ приготовления)
+        headings = self.soup.find_all(['h3', 'h4'])
+        
+        for heading in headings:
+            heading_text = heading.get_text()
+            if '作り方' in heading_text:
+                # Ищем все следующие h4 заголовки (шаги) до следующего h2/h3
+                current = heading.find_next_sibling()
+                
+                while current:
+                    # Останавливаемся на следующем h2 или h3
+                    if current.name in ['h2', 'h3']:
+                        break
+                    
+                    # Ищем h4 заголовки с номерами шагов
+                    if current.name == 'h4':
+                        step_text = current.get_text(strip=True)
+                        # Убираем номер в начале (например "1.　")
+                        step_text = re.sub(r'^\d+[.．　\s]+', '', step_text)
+                        if step_text:
+                            steps.append(step_text)
+                    
+                    current = current.find_next_sibling()
+                
+                if steps:
+                    # Форматируем с номерами
+                    formatted_steps = [f"{i}. {step}" for i, step in enumerate(steps, 1)]
+                    return ' '.join(formatted_steps)
+                
+                # Если нет h4, пробуем найти список ol после заголовка
+                next_ol = heading.find_next('ol')
+                if next_ol:
+                    items = next_ol.find_all('li')
+                    for item in items:
+                        step_text = item.get_text(separator=' ', strip=True)
+                        step_text = self.clean_text(step_text)
+                        if step_text:
+                            steps.append(step_text)
+                    
+                    if steps:
+                        formatted_steps = [f"{i}. {step}" for i, step in enumerate(steps, 1)]
+                        return ' '.join(formatted_steps)
         
         return None
     
