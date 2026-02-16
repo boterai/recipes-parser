@@ -16,6 +16,30 @@ class MicrobiologiaItaliaItExtractor(BaseRecipeExtractor):
     """Экстрактор для microbiologiaitalia.it"""
     
     @staticmethod
+    def clean_ingredient_name(name: str) -> str:
+        """
+        Очистка названия ингредиента от дополнительных примечаний
+        
+        Args:
+            name: название ингредиента
+            
+        Returns:
+            Очищенное название
+        """
+        # Убираем комментарии в скобках
+        name = re.sub(r'\s*\([^)]*\)', '', name).strip()
+        
+        # Убираем приставки типа "La ", "Il ", "Un ", "Una "
+        name = re.sub(r'^(La|Il|Un|Una|Gli|Le|I)\s+', '', name, flags=re.IGNORECASE)
+        
+        # Убираем заметки о подготовке (после запятой или "a temperatura ambiente" и т.п.)
+        name = re.split(r'\s*,\s*', name)[0]
+        name = re.split(r'\s+a\s+temperatura\s+ambiente', name, flags=re.IGNORECASE)[0]
+        name = re.split(r'\s+per\s+(decorare|spolverare|guarnire)', name, flags=re.IGNORECASE)[0]
+        
+        return name.strip()
+    
+    @staticmethod
     def parse_ingredient(ingredient_text: str) -> dict:
         """
         Парсинг строки ингредиента в структурированный формат
@@ -28,6 +52,36 @@ class MicrobiologiaItaliaItExtractor(BaseRecipeExtractor):
         """
         ingredient_text = ingredient_text.strip()
         
+        # Специальная обработка для "Una presa di ...", "Un pizzico di ..."
+        pinch_pattern = r'^(Una?\s+)?(?:presa|pizzico)\s+di\s+(.+)$'
+        pinch_match = re.match(pinch_pattern, ingredient_text, re.IGNORECASE)
+        if pinch_match:
+            name = MicrobiologiaItaliaItExtractor.clean_ingredient_name(pinch_match.group(2))
+            return {
+                "name": name,
+                "amount": "1",
+                "unit": "pinch"
+            }
+        
+        # Специальная обработка для "La scorza di N limoni", "2 uova grandi", etc.
+        # Паттерн: [артикль] название di количество продукт
+        di_pattern = r'^(?:La|Il|Un|Una|Gli|Le|I)?\s*(.+?)\s+di\s+(\d+(?:[.,/]\d+)?)\s+(.+)$'
+        di_match = re.match(di_pattern, ingredient_text, re.IGNORECASE)
+        if di_match:
+            name_part = di_match.group(1).strip()
+            amount = di_match.group(2).replace(',', '.')
+            product = di_match.group(3).strip()
+            
+            # Объединяем название (например "scorza grattugiata" + "limoni")
+            name = f"{name_part} di {product}"
+            name = MicrobiologiaItaliaItExtractor.clean_ingredient_name(name)
+            
+            return {
+                "name": name,
+                "amount": amount,
+                "unit": None
+            }
+        
         # Паттерн 1: "Name: amount unit" format (используется на microbiologiaitalia.it)
         # Примеры: "Mele: 3", "Farina 00: 250 g", "Burro: 80 g (a temperatura ambiente)"
         colon_pattern = r'^(.+?):\s*(\d+(?:[.,/]\d+)?)\s*(.*)$'
@@ -38,8 +92,8 @@ class MicrobiologiaItaliaItExtractor(BaseRecipeExtractor):
             amount = colon_match.group(2).replace(',', '.')
             rest = colon_match.group(3).strip()
             
-            # Убираем комментарии в скобках
-            name = re.sub(r'\s*\([^)]*\)', '', name).strip()
+            # Очищаем название
+            name = MicrobiologiaItaliaItExtractor.clean_ingredient_name(name)
             rest = re.sub(r'\s*\([^)]*\)', '', rest).strip()
             
             # Извлекаем единицу измерения из остатка
@@ -79,8 +133,8 @@ class MicrobiologiaItaliaItExtractor(BaseRecipeExtractor):
                 unit = None
                 name = f"{potential_unit} {rest}".strip()
             
-            # Убираем комментарии в скобках из названия
-            name = re.sub(r'\s*\([^)]*\)', '', name).strip()
+            # Очищаем название
+            name = MicrobiologiaItaliaItExtractor.clean_ingredient_name(name)
             
             return {
                 "name": name,
@@ -96,7 +150,7 @@ class MicrobiologiaItaliaItExtractor(BaseRecipeExtractor):
         if match2:
             amount = match2.group(1).replace(',', '.')
             name = match2.group(2).strip()
-            name = re.sub(r'\s*\([^)]*\)', '', name).strip()
+            name = MicrobiologiaItaliaItExtractor.clean_ingredient_name(name)
             
             return {
                 "name": name,
@@ -105,8 +159,8 @@ class MicrobiologiaItaliaItExtractor(BaseRecipeExtractor):
             }
         
         # Если ничего не подошло, возвращаем весь текст как название
-        # Например: "Una presa di sale", "Salt to taste", "Q.b. (quanto basta)"
-        name = re.sub(r'\s*\([^)]*\)', '', ingredient_text).strip()
+        # Например: "Salt to taste", "Q.b. (quanto basta)"
+        name = MicrobiologiaItaliaItExtractor.clean_ingredient_name(ingredient_text)
         return {
             "name": name,
             "amount": None,
@@ -177,8 +231,9 @@ class MicrobiologiaItaliaItExtractor(BaseRecipeExtractor):
             if text:
                 parsed = self.parse_ingredient(text)
                 # Переименовываем unit в units для совместимости с форматом
+                # Конвертируем название в lowercase
                 ingredient_dict = {
-                    "name": parsed["name"],
+                    "name": parsed["name"].lower() if parsed["name"] else None,
                     "units": parsed["unit"],
                     "amount": parsed["amount"]
                 }
