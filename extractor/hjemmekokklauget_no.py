@@ -30,10 +30,16 @@ class HjemmekokklaugetExtractor(BaseRecipeExtractor):
                         if isinstance(item, dict) and item.get('@type') == 'Recipe':
                             name = item.get('name')
                             if name:
+                                # Убираем суффиксы типа " - Hjemmekokklauget.no"
+                                name = re.sub(r'\s*-\s*Hjemmekokklauget\.no.*$', '', name, flags=re.IGNORECASE)
+                                name = re.sub(r'\s*-\s*Hva,\s*hvorfor.*$', '', name, flags=re.IGNORECASE)
                                 return self.clean_text(name)
                 elif isinstance(data, dict) and data.get('@type') == 'Recipe':
                     name = data.get('name')
                     if name:
+                        # Убираем суффиксы
+                        name = re.sub(r'\s*-\s*Hjemmekokklauget\.no.*$', '', name, flags=re.IGNORECASE)
+                        name = re.sub(r'\s*-\s*Hva,\s*hvorfor.*$', '', name, flags=re.IGNORECASE)
                         return self.clean_text(name)
             except (json.JSONDecodeError, KeyError):
                 continue
@@ -41,7 +47,9 @@ class HjemmekokklaugetExtractor(BaseRecipeExtractor):
         # Альтернатива - из мета-тегов
         og_title = self.soup.find('meta', property='og:title')
         if og_title and og_title.get('content'):
-            return self.clean_text(og_title['content'])
+            title = og_title['content']
+            title = re.sub(r'\s*-\s*Hjemmekokklauget\.no.*$', '', title, flags=re.IGNORECASE)
+            return self.clean_text(title)
         
         # Или из h1
         h1 = self.soup.find('h1')
@@ -187,14 +195,21 @@ class HjemmekokklaugetExtractor(BaseRecipeExtractor):
                     # Проверяем, что это не дубликат
                     if not any(ing['name'] == parsed['name'] for ing in ingredients):
                         ingredients.append(parsed)
-            # Также добавляем ингредиенты без количества (например, "Kaldt vann")
-            # Но только если они действительно короткие и содержат ключевые слова
-            elif len(text) < 60 and any(word in text.lower() for word in 
-                ['vann', 'salt', 'sukker', 'nori', 'wasabi', 'soyasaus', 'agurk', 'avokado', 'sesamfrø']):
-                parsed = self.parse_ingredient_text(text)
-                if parsed and parsed['name']:
-                    if not any(ing['name'] == parsed['name'] for ing in ingredients):
-                        ingredients.append(parsed)
+            # Также добавляем ингредиенты без количества
+            # Это ингредиенты, которые короткие и состоят только из названия
+            elif len(text) < 60 and not any(word in text.lower() for word in ['dag ', 'slik ser']):
+                # Проверяем, что это похоже на название ингредиента
+                # (не начинается с глаголов, не содержит предложений)
+                if not any(text.lower().startswith(word) for word in ['bland', 'ha', 'kjør', 'pakk', 'kjevle']):
+                    # Дополнительная проверка: содержит ли распространенные ингредиенты или не содержит глаголов
+                    if any(word in text.lower() for word in 
+                        ['vann', 'salt', 'sukker', 'nori', 'wasabi', 'soyasaus', 'agurk', 'avokado', 
+                         'sesamfrø', 'mel', 'rug', 'hvete', 'rosin', 'siktet', 'grov', 'tomater', 
+                         'olje', 'løk', 'чеснок', 'фреш', 'оливковое']):
+                        parsed = self.parse_ingredient_text(text)
+                        if parsed and parsed['name']:
+                            if not any(ing['name'] == parsed['name'] for ing in ingredients):
+                                ingredients.append(parsed)
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
@@ -222,13 +237,18 @@ class HjemmekokklaugetExtractor(BaseRecipeExtractor):
                  'bløtlegg', 'kast', 'mat', 'del', 'fortsett', 'skyll', 'skog', 'plasser', 'rull', 'вымойте', 'нарежьте']):
                 # Очищаем текст
                 cleaned = self.clean_text(text)
-                # Убираем фразы типа "NB! har du..." и комментарии в предложениях
-                cleaned = re.sub(r'\s*NB!.*?\.', '.', cleaned, flags=re.IGNORECASE)
-                cleaned = re.sub(r'Har du.*?гangen\.', '', cleaned, flags=re.IGNORECASE)
-                # Убираем лишние пробелы
+                
+                # Убираем вспомогательные комментарии и советы из инструкций
+                # Эти фразы обычно начинаются с "Har du", "NB!", "Hvis du"
+                cleaned = re.sub(r'\.?\s*Har du[^.]*\.\s*', '. ', cleaned, flags=re.IGNORECASE)
+                cleaned = re.sub(r'\.?\s*NB![^.]*\.\s*', '. ', cleaned, flags=re.IGNORECASE)
+                cleaned = re.sub(r'\.?\s*Hvis du[^.]*\.\s*', '. ', cleaned, flags=re.IGNORECASE)
+                
+                # Убираем лишние пробелы и множественные точки
                 cleaned = re.sub(r'\s+', ' ', cleaned).strip()
-                # Убираем двойные точки
-                cleaned = re.sub(r'\.+', '.', cleaned)
+                cleaned = re.sub(r'\.{2,}', '.', cleaned)
+                cleaned = re.sub(r'\.\s*\.', '.', cleaned)
+                
                 if cleaned and cleaned not in steps:
                     steps.append(cleaned)
         
@@ -237,11 +257,22 @@ class HjemmekokklaugetExtractor(BaseRecipeExtractor):
     def extract_category(self) -> Optional[str]:
         """Извлечение категории"""
         # Ищем в fusion-li-item-content divs
+        # Сначала пробуем найти "Kategori:" (более специфичная категория)
         fusion_items = self.soup.find_all('div', class_='fusion-li-item-content')
         
         for item in fusion_items:
             text = item.get_text(strip=True)
-            # Ищем "Måltidstype:" или похожие маркеры
+            if text.startswith('Kategori:'):
+                # Извлекаем значение после двоеточия
+                category = text.replace('Kategori:', '').strip()
+                # Берем первое значение из списка (разделенного запятыми)
+                if ',' in category:
+                    category = category.split(',')[0].strip()
+                return self.clean_text(category)
+        
+        # Если не нашли Kategori, ищем Måltidstype
+        for item in fusion_items:
+            text = item.get_text(strip=True)
             if text.startswith('Måltidstype:'):
                 # Извлекаем значение после двоеточия
                 category = text.replace('Måltidstype:', '').strip()
