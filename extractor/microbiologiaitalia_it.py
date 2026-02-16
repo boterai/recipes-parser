@@ -209,18 +209,36 @@ class MicrobiologiaItaliaItExtractor(BaseRecipeExtractor):
         if not entry_content:
             return None
         
-        # Ищем заголовок с "Ingredienti"
+        # Способ 1: Ищем заголовок с "Ingredienti"
         ingredienti_heading = None
         for heading in entry_content.find_all(['h2', 'h3', 'h4']):
             if 'ingredienti' in heading.get_text().lower():
                 ingredienti_heading = heading
                 break
         
-        if not ingredienti_heading:
-            return None
+        # Ищем следующий ul после заголовка
+        ul = None
+        if ingredienti_heading:
+            ul = ingredienti_heading.find_next('ul')
         
-        # Ищем следующий ul после этого заголовка
-        ul = ingredienti_heading.find_next('ul')
+        # Способ 2: Если не нашли через заголовок, ищем параграф с "Ingredienti:"
+        if not ul:
+            for p in entry_content.find_all('p'):
+                p_text = p.get_text().strip()
+                if p_text.lower() == 'ingredienti' or p_text.lower() == 'ingredienti:':
+                    # Ищем следующий ul как sibling (а не просто следующий в документе)
+                    next_elem = p.find_next_sibling()
+                    while next_elem:
+                        if next_elem.name == 'ul':
+                            ul = next_elem
+                            break
+                        elif next_elem.name in ['h2', 'h3', 'h4', 'ol']:
+                            # Дошли до другого раздела или списка
+                            break
+                        next_elem = next_elem.find_next_sibling()
+                    if ul:
+                        break
+        
         if not ul:
             return None
         
@@ -251,7 +269,7 @@ class MicrobiologiaItaliaItExtractor(BaseRecipeExtractor):
         if not entry_content:
             return None
         
-        # Ищем заголовок с "Istruzioni" или "Procedimento" или "Preparazione"
+        # Способ 1: Ищем заголовок с "Istruzioni" или "Procedimento" или "Preparazione"
         istruzioni_heading = None
         for heading in entry_content.find_all(['h2', 'h3', 'h4']):
             heading_text = heading.get_text().lower()
@@ -259,13 +277,31 @@ class MicrobiologiaItaliaItExtractor(BaseRecipeExtractor):
                 istruzioni_heading = heading
                 break
         
-        if not istruzioni_heading:
-            return None
+        # Ищем следующий ol/ul после заголовка
+        instructions_list = None
+        if istruzioni_heading:
+            instructions_list = istruzioni_heading.find_next(['ol', 'ul'])
         
-        # Ищем следующий ol (ordered list) после этого заголовка
-        ol = istruzioni_heading.find_next('ol')
-        if ol:
-            items = ol.find_all('li')
+        # Способ 2: Если не нашли через заголовок, ищем параграф с "Preparazione:" или "Istruzioni:"
+        if not instructions_list:
+            for p in entry_content.find_all('p'):
+                p_text = p.get_text().strip().lower()
+                if p_text in ['preparazione', 'preparazione:', 'istruzioni', 'istruzioni:']:
+                    # Ищем следующий ol/ul как sibling
+                    next_elem = p.find_next_sibling()
+                    while next_elem:
+                        if next_elem.name in ['ol', 'ul']:
+                            instructions_list = next_elem
+                            break
+                        elif next_elem.name in ['h2', 'h3', 'h4']:
+                            # Дошли до другого раздела
+                            break
+                        next_elem = next_elem.find_next_sibling()
+                    if instructions_list:
+                        break
+        
+        if instructions_list:
+            items = instructions_list.find_all('li')
             steps = []
             for i, item in enumerate(items, 1):
                 text = self.clean_text(item.get_text())
@@ -275,31 +311,31 @@ class MicrobiologiaItaliaItExtractor(BaseRecipeExtractor):
             if steps:
                 return ' '.join(steps)
         
-        # Если ol не найден, ищем текст после заголовка до следующего заголовка
-        # Это может быть в параграфах или в ul
-        instructions_text = []
-        next_sibling = istruzioni_heading.find_next_sibling()
-        while next_sibling and next_sibling.name not in ['h2', 'h3', 'h4']:
-            if next_sibling.name == 'p':
-                text = self.clean_text(next_sibling.get_text())
-                if text:
-                    instructions_text.append(text)
-            elif next_sibling.name == 'ul':
-                items = next_sibling.find_all('li')
-                for item in items:
-                    text = self.clean_text(item.get_text())
-                    if text:
+        # Если ol/ul не найден, ищем текст после заголовка до следующего заголовка
+        if istruzioni_heading:
+            instructions_text = []
+            next_sibling = istruzioni_heading.find_next_sibling()
+            while next_sibling and next_sibling.name not in ['h2', 'h3', 'h4']:
+                if next_sibling.name == 'p':
+                    text = self.clean_text(next_sibling.get_text())
+                    if text and text.lower() not in ['preparazione', 'preparazione:', 'istruzioni', 'istruzioni:']:
                         instructions_text.append(text)
-            elif next_sibling.name == 'ol':
-                items = next_sibling.find_all('li')
-                for i, item in enumerate(items, 1):
-                    text = self.clean_text(item.get_text())
-                    if text:
-                        instructions_text.append(f"{i}. {text}")
-            next_sibling = next_sibling.find_next_sibling()
-        
-        if instructions_text:
-            return ' '.join(instructions_text)
+                elif next_sibling.name == 'ul':
+                    items = next_sibling.find_all('li')
+                    for item in items:
+                        text = self.clean_text(item.get_text())
+                        if text:
+                            instructions_text.append(text)
+                elif next_sibling.name == 'ol':
+                    items = next_sibling.find_all('li')
+                    for i, item in enumerate(items, 1):
+                        text = self.clean_text(item.get_text())
+                        if text:
+                            instructions_text.append(f"{i}. {text}")
+                next_sibling = next_sibling.find_next_sibling()
+            
+            if instructions_text:
+                return ' '.join(instructions_text)
         
         return None
     
