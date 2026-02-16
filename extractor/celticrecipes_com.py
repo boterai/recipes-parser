@@ -92,12 +92,12 @@ class CelticRecipesExtractor(BaseRecipeExtractor):
         
         if not ingredients_container:
             # Вариант 3: ищем заголовок с "Ingredients" и берем следующий ul
-            ing_header = self.soup.find(['h2', 'h3', 'h4'], string=re.compile(r'Ingredients?|Gather.*Ingredients', re.I))
+            ing_header = self.soup.find(['h2', 'h3', 'h4'], string=re.compile(r'Ingredients?|Gather.*Ingredients|Star.*Ingredients', re.I))
             if ing_header:
-                # Ищем следующий ul после заголовка
+                # Ищем следующий ul или ol после заголовка
                 sibling = ing_header.find_next_sibling()
                 while sibling:
-                    if sibling.name == 'ul':
+                    if sibling.name in ['ul', 'ol']:
                         ingredients_container = sibling
                         break
                     sibling = sibling.find_next_sibling()
@@ -142,6 +142,11 @@ class CelticRecipesExtractor(BaseRecipeExtractor):
         
         text = self.clean_text(ingredient_text)
         
+        # Для формата "450g (1 lb) of Pork Sausages: description"
+        # Извлекаем только до двоеточия, если оно есть
+        if ':' in text:
+            text = text.split(':')[0].strip()
+        
         # Заменяем Unicode дроби на числа
         fraction_map = {
             '½': '0.5', '¼': '0.25', '¾': '0.75',
@@ -154,8 +159,9 @@ class CelticRecipesExtractor(BaseRecipeExtractor):
             text = text.replace(fraction, decimal)
         
         # Паттерн для извлечения количества, единицы и названия
-        # Примеры: "2 cups kale", "4 medium potatoes", "1 tbsp butter"
-        pattern = r'^([\d\s/.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|wrappers?|medium|large|small|sprig)?\s*(.+)'
+        # Примеры: "2 cups kale", "4 medium potatoes", "1 tbsp butter", "450g of Pork"
+        # Важно: избегаем захвата одиночной "l" (liters) - требуем полное слово или "ml"
+        pattern = r'^([\d\s/.,\-]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|lb|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|sprig|whole|halves?|quarters?|pieces?|head|heads|wrappers?)?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
@@ -173,8 +179,17 @@ class CelticRecipesExtractor(BaseRecipeExtractor):
         amount = None
         if amount_str:
             amount_str = amount_str.strip()
+            # Обработка диапазонов типа "1-2"
+            if '-' in amount_str and not amount_str.endswith('-'):
+                # Берем первое значение из диапазона
+                parts = amount_str.split('-')
+                try:
+                    amount = float(parts[0].strip())
+                    amount = int(amount) if amount == int(amount) else amount
+                except ValueError:
+                    amount = None
             # Обработка дробей типа "1/2" или "1 1/2"
-            if '/' in amount_str:
+            elif '/' in amount_str:
                 parts = amount_str.split()
                 total = 0.0
                 for part in parts:
@@ -196,16 +211,27 @@ class CelticRecipesExtractor(BaseRecipeExtractor):
         units = unit.strip() if unit else None
         
         # Очистка названия
-        # Удаляем скобки с содержимым
+        # Удаляем скобки с содержимым (например "(1 lb)")
         name = re.sub(r'\([^)]*\)', '', name)
+        # Удаляем лишние пробелы которые могли появиться после удаления скобок
+        name = re.sub(r'\s+', ' ', name).strip()
+        # Удаляем "of" в начале
+        name = re.sub(r'^of\s+', '', name, flags=re.IGNORECASE)
+        # Проверяем, не начинается ли название с размера (large, medium, small)
+        size_match = re.match(r'^(large|medium|small)\s+(.+)', name, re.IGNORECASE)
+        if size_match:
+            # Если units пустой, используем размер как units
+            if not units:
+                units = size_match.group(1).lower()
+            name = size_match.group(2)
         # Удаляем leading/trailing разделители и пробелы
         name = re.sub(r'^[,:\-\s]+|[,:\-\s]+$', '', name)
         # Удаляем фразы "to taste", "as needed", "optional" только в конце
         name = re.sub(r',?\s*(to taste|as needed|or more|if needed|for frying|for garnish)\s*$', '', name, flags=re.IGNORECASE)
-        # Удаляем лишние пробелы
+        # Удаляем лишние пробелы еще раз
         name = re.sub(r'\s+', ' ', name).strip()
         
-        # Убираем "optional" из units если оно там оказалось, и переместим в конец name
+        # Убираем "optional" из units если оно там оказалось
         if units and re.search(r'optional', units, re.I):
             units = None
         
@@ -228,7 +254,8 @@ class CelticRecipesExtractor(BaseRecipeExtractor):
             return None
         
         # Ищем секцию с инструкциями по заголовку в контенте
-        inst_header = content.find(['h2', 'h3'], string=re.compile(r'Step.*Guide|Instructions?|Method|Directions?', re.I))
+        # Используем более специфичные паттерны, избегая "Preparation Time"
+        inst_header = content.find(['h2', 'h3'], string=re.compile(r'Step.*Guide|^Instructions?$|^Method$|^Directions?$|Preparation.*Crafting|^The Process$', re.I))
         
         if inst_header:
             # Проверяем следующий элемент - может быть div с параграфами
@@ -247,22 +274,43 @@ class CelticRecipesExtractor(BaseRecipeExtractor):
                         if not re.search(r'^To whip up|^To gather|^You\'ll need|^Check your', text, re.I):
                             instructions_paragraphs.append(text)
             else:
-                # Иначе собираем siblings как раньше
+                # Собираем siblings, включая h3 заголовки шагов
                 current = next_elem
                 while current:
-                    # Останавливаемся при следующем заголовке h2/h3
-                    if current.name in ['h2', 'h3']:
+                    # Останавливаемся при следующем заголовке h2 (но не h3, т.к. это шаги)
+                    if current.name == 'h2':
                         break
                     
-                    if current.name == 'p':
+                    # Если это h3 со словом "Step", это заголовок шага
+                    if current.name == 'h3':
+                        step_text = self.clean_text(current.get_text())
+                        if re.match(r'^Step\s+\d+', step_text, re.I):
+                            # Ищем следующий параграф с описанием шага
+                            next_p = current.find_next_sibling('p')
+                            if next_p:
+                                desc_text = self.clean_text(next_p.get_text())
+                                if desc_text and len(desc_text) > 20:
+                                    # Объединяем заголовок и описание
+                                    instructions_paragraphs.append(f"{step_text} {desc_text}")
+                    
+                    elif current.name == 'p':
                         text = self.clean_text(current.get_text())
                         
                         if text and len(text) > 20:
+                            # Пропускаем параграфы, которые уже были добавлены как часть шага
+                            prev_sibling = current.find_previous_sibling()
+                            if prev_sibling and prev_sibling.name == 'h3':
+                                step_heading = self.clean_text(prev_sibling.get_text())
+                                if re.match(r'^Step\s+\d+', step_heading, re.I):
+                                    # Этот параграф уже был обработан как часть h3
+                                    current = current.find_next_sibling()
+                                    continue
+                            
                             # Пропускаем заключительные параграфы
                             if re.match(r'^And there you have it|^Enjoy|^Happy cooking|Sláinte', text, re.I):
                                 break
-                            # Пропускаем вводные параграфы об ингредиентах
-                            if not re.search(r'^To whip up|^To gather|^You\'ll need|^Check your', text, re.I):
+                            # Пропускаем вводные параграфы об ингредиентах и времени
+                            if not re.search(r'^To whip up|^To gather|^You\'ll need|^Check your|^Now.*walk through|^This recipe.*quick', text, re.I):
                                 instructions_paragraphs.append(text)
                     
                     elif current.name in ['ol', 'ul']:
