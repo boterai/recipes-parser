@@ -35,11 +35,13 @@ class _DSU:
     def __init__(self) -> None:
         self.parent: dict[int, int] = {}
         self.rank: dict[int, int] = {}
+        self.size: dict[int, int] = {}  # размер кластера (хранится в корне)
 
     def find(self, x: int) -> int:
         if x not in self.parent:
             self.parent[x] = x
             self.rank[x] = 0
+            self.size[x] = 1
             return x
         if self.parent[x] != x:
             self.parent[x] = self.find(self.parent[x])
@@ -49,11 +51,23 @@ class _DSU:
         ra, rb = self.find(a), self.find(b)
         if ra == rb:
             return
+        
+        # Суммируем размеры до объединения
+        new_size = self.size.get(ra, 1) + self.size.get(rb, 1)
+        
         if self.rank[ra] < self.rank[rb]:
             ra, rb = rb, ra
         self.parent[rb] = ra
         if self.rank[ra] == self.rank[rb]:
             self.rank[ra] += 1
+        
+        # Обновляем размер в новом корне
+        self.size[ra] = new_size
+    
+    def get_size(self, x: int) -> int:
+        """Возвращает размер кластера, содержащего элемент x."""
+        root = self.find(x)
+        return self.size.get(root, 1)
 
 
 def build_clusters_from_dsu(dsu: _DSU, min_cluster_size: int) -> list[list[int]]:
@@ -72,7 +86,7 @@ class ClusterParams:
     score_threshold: float = 0.9 # порог
     scroll_batch: int = 1000      # чтение ids из Qdrant
     query_batch: int = 64        # сколько векторов в batch query
-    min_cluster_size: int = 2     # отбрасывать одиночки
+    min_cluster_size: int = 5     # отбрасывать одиночки
 
     # параметры коллекции Qdrant
     collection_name: str = "full"
@@ -90,6 +104,12 @@ class ClusterParams:
     # Параметры проверки центроида
     use_centroid_check: bool = True       # использовать проверку центроида при union
     centroid_threshold: float = 0.9      # минимальная похожесть с центроидом для объединения
+    
+    # Параметры адаптивного порога
+    use_adaptive_threshold: bool = True   # использовать адаптивный порог (строже для больших кластеров)
+    adaptive_min_cluster_size: int = 30   # применять адаптивный порог только для кластеров >= этого размера
+    adaptive_size_factor: float = 0.002   # увеличение порога на каждый элемент кластера (сверх adaptive_min_cluster_size)
+    adaptive_max_threshold: float = 0.98  # максимальный порог (верхний лимит)
     
     # Параметры валидации плотности кластеров
     min_cluster_size_for_validation: int = 5  # валидировать только кластеры >= этого размера
@@ -196,6 +216,38 @@ class SimilaritySearcher:
             return 0.0
         return float(np.dot(vec1, vec2) / (norm1 * norm2))
     
+    def _get_adaptive_threshold(self, cluster_size: int) -> float:
+        """
+        Вычисляет адаптивный порог на основе размера кластера.
+        
+        Чем больше кластер, тем строже порог — предотвращает "снежный ком".
+        Для кластеров меньше adaptive_min_cluster_size (по умолчанию 30) 
+        возвращается базовый centroid_threshold.
+        
+        Args:
+            cluster_size: текущий размер кластера
+            
+        Returns:
+            Адаптивный порог похожести
+        """
+        if not self.params.use_adaptive_threshold:
+            return self.params.centroid_threshold
+        
+        # Для кластеров меньше минимального размера — базовый порог
+        if cluster_size < self.params.adaptive_min_cluster_size:
+            return self.params.centroid_threshold
+        
+        # Считаем прирост только от элементов сверх минимального размера
+        extra_size = cluster_size - self.params.adaptive_min_cluster_size
+        adaptive = self.params.centroid_threshold + (extra_size * self.params.adaptive_size_factor)
+        return min(adaptive, self.params.adaptive_max_threshold)
+    
+    def _get_cluster_size(self, root_id: int) -> int:
+        """
+        Возвращает размер кластера из DSU.
+        """
+        return self.dsu.get_size(root_id)
+    
     def union_with_centroid_check(
         self,
         src_id: int,
@@ -204,10 +256,12 @@ class SimilaritySearcher:
         dst_vec: np.ndarray,
     ) -> bool:
         """
-        Объединяет два элемента в DSU с проверкой центроида.
+        Объединяет два элемента в DSU с проверкой центроида и адаптивным порогом.
         
         Предотвращает "транзитивный дрейф" кластеров, проверяя что новый элемент
         достаточно близок к центроиду существующего кластера.
+        
+        Адаптивный порог: чем больше кластер, тем строже проверка.
         
         Args:
             src_id: ID исходного элемента
@@ -225,6 +279,14 @@ class SimilaritySearcher:
         if src_root == dst_root:
             return False
         
+        # Получаем размеры кластеров
+        src_size = self._get_cluster_size(src_root)
+        dst_size = self._get_cluster_size(dst_root)
+        max_size = max(src_size, dst_size)
+        
+        # Вычисляем адаптивный порог
+        threshold = self._get_adaptive_threshold(max_size)
+        
         # Получаем центроиды кластеров (или сами векторы если кластер новый)
         src_centroid = self.cluster_centroids.get(src_root, src_vec)
         dst_centroid = self.cluster_centroids.get(dst_root, dst_vec)
@@ -235,19 +297,18 @@ class SimilaritySearcher:
         # Проверяем похожесть src с центроидом dst кластера  
         sim_src_to_dst_centroid = self._cosine_similarity(src_vec, dst_centroid)
         
-        # Оба должны быть достаточно близки к центроидам
-        if sim_dst_to_src_centroid < self.params.centroid_threshold or \
-           sim_src_to_dst_centroid < self.params.centroid_threshold:
+        # Оба должны быть достаточно близки к центроидам (с адаптивным порогом)
+        if sim_dst_to_src_centroid < threshold or sim_src_to_dst_centroid < threshold:
             return False
         
         # Выполняем объединение
         self.dsu.union(src_id, dst_id)
         
-        # Обновляем центроид объединённого кластера (средний вектор)
+        # Обновляем центроид объединённого кластера (взвешенный по размеру)
         new_root = self.dsu.find(src_id)
         
-        # Простое усреднение центроидов (можно улучшить взвешенным средним)
-        new_centroid = (src_centroid + dst_centroid) / 2
+        # Взвешенное усреднение центроидов по размеру кластеров
+        new_centroid = (src_centroid * src_size + dst_centroid * dst_size) / (src_size + dst_size)
         # Нормализуем для косинусной метрики
         norm = np.linalg.norm(new_centroid)
         if norm > 0:
@@ -256,22 +317,23 @@ class SimilaritySearcher:
         self.cluster_centroids[new_root] = new_centroid
         
         # Удаляем старые центроиды если они отличаются от нового корня
-        if src_root != new_root and src_root in self.cluster_centroids:
-            del self.cluster_centroids[src_root]
-        if dst_root != new_root and dst_root in self.cluster_centroids:
-            del self.cluster_centroids[dst_root]
+        if src_root != new_root:
+            self.cluster_centroids.pop(src_root, None)
+        if dst_root != new_root:
+            self.cluster_centroids.pop(dst_root, None)
         
         return True
     
     def init_centroid(self, point_id: int, vector: np.ndarray) -> None:
         """
         Инициализирует центроид для точки (если ещё не в кластере).
+        Размер кластера автоматически отслеживается в DSU.
         
         Args:
             point_id: ID точки
             vector: Вектор точки
         """
-        root = self.dsu.find(point_id)
+        root = self.dsu.find(point_id)  # DSU автоматически инициализирует size=1 для новых элементов
         if root not in self.cluster_centroids:
             vec_np = np.array(vector, dtype=np.float32)
             norm = np.linalg.norm(vec_np)
@@ -908,15 +970,18 @@ class SimilaritySearcher:
 if __name__ == "__main__":
     while True:
         ss = SimilaritySearcher(params=ClusterParams(
-                    limit=30,
-                    score_threshold=0.92,
+                    limit=50,
+                    score_threshold=0.88,
                     scroll_batch=3500,
-                    centroid_threshold=0.93,
+                    centroid_threshold=0.91,
                     min_cluster_size=4,
                     use_centroid_check=True,
-                    union_top_k=15,
+                    union_top_k=20,
                     query_batch=128,
-                    density_min_similarity=0.93
+                    density_min_similarity=0.9,
+                    adaptive_max_threshold=0.97,
+                    adaptive_min_cluster_size=15,
+                    max_async_tasks=15,
                 ), build_type="full") # "image", "full", "ingredients"
         try:
             ss.load_dsu_state()
