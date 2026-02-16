@@ -25,9 +25,12 @@ class RecepttarKiskegyedHuExtractor(BaseRecipeExtractor):
                 data = json.loads(script.string)
                 if isinstance(data, dict) and data.get('@type') == 'Recipe' and 'name' in data:
                     name = data['name']
-                    # Убираем суффиксы типа " hagyományosan", " - sütés nélkül" и т.д.
+                    # Убираем суффиксы типа " hagyományosan", " - sütés nélkül", "kakaós piskótával könnyen", "recept" и т.д.
                     name = re.sub(r'\s+(hagyományosan|recept|receptje)$', '', name, flags=re.IGNORECASE)
                     name = re.sub(r'\s+-\s+sütés\s+nélkül$', '', name, flags=re.IGNORECASE)
+                    name = re.sub(r'\s+kakaós\s+piskótával\s+könnyen$', '', name, flags=re.IGNORECASE)
+                    # More generic: remove " XXX XXX könnyen" pattern
+                    name = re.sub(r'\s+[a-záéíóöőúüű]+\s+[a-záéíóöőúüű]+\s+könnyen$', '', name, flags=re.IGNORECASE)
                     return self.clean_text(name)
             except (json.JSONDecodeError, KeyError):
                 continue
@@ -38,6 +41,8 @@ class RecepttarKiskegyedHuExtractor(BaseRecipeExtractor):
             name = h1.get_text()
             name = re.sub(r'\s+-\s+sütés\s+nélkül$', '', name, flags=re.IGNORECASE)
             name = re.sub(r'\s+(hagyományosan|recept|receptje)$', '', name, flags=re.IGNORECASE)
+            name = re.sub(r'\s+kakaós\s+piskótával\s+könnyen$', '', name, flags=re.IGNORECASE)
+            name = re.sub(r'\s+[a-záéíóöőúüű]+\s+[a-záéíóöőúüű]+\s+könnyen$', '', name, flags=re.IGNORECASE)
             return self.clean_text(name)
         
         # Из meta тега
@@ -49,8 +54,32 @@ class RecepttarKiskegyedHuExtractor(BaseRecipeExtractor):
     
     def extract_description(self) -> Optional[str]:
         """Извлечение описания рецепта"""
-        # Description часто отсутствует в HTML, возвращаем None
-        # (в эталонных JSON это поле содержит вручную добавленные описания)
+        # Пробуем извлечь из первого <p> в секции detail
+        detail_section = self.soup.find('section', class_='detail')
+        
+        if detail_section:
+            # Ищем первый <p> tag на верхнем уровне
+            first_p = detail_section.find('p', recursive=False)
+            if first_p:
+                text = self.clean_text(first_p.get_text())
+                # Проверяем, что это не служебный текст
+                if text and len(text) > 10 and 'hozz' not in text.lower():
+                    return text
+        
+        # Альтернативно - из JSON-LD
+        json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
+        
+        for script in json_ld_scripts:
+            try:
+                data = json.loads(script.string)
+                if isinstance(data, dict) and data.get('@type') == 'Recipe' and 'description' in data:
+                    desc = self.clean_text(data['description'])
+                    # Пропускаем служебные описания
+                    if desc and len(desc) > 20 and 'receptje' not in desc.lower() and 'recepttár' not in desc.lower():
+                        return desc
+            except (json.JSONDecodeError, KeyError):
+                continue
+        
         return None
     
     def parse_ingredient(self, ingredient_text: str) -> Optional[dict]:
@@ -167,24 +196,46 @@ class RecepttarKiskegyedHuExtractor(BaseRecipeExtractor):
                         has_ingredients_header = True
             
             if has_ingredients_header:
-                # Извлекаем все параграфы с ингредиентами
-                for p in column_left.find_all('p'):
-                    ingredient_text = p.get_text(separator=' ', strip=True)
-                    ingredient_text = self.clean_text(ingredient_text)
-                    
-                    # Пропускаем заголовки секций (содержат "Hozzávalók", "Az alaphoz:", "A krémhez:" и т.д.)
-                    if not ingredient_text:
-                        continue
-                    
-                    text_lower = ingredient_text.lower()
-                    if 'hozz' in text_lower and 'val' in text_lower:
-                        continue
-                    if ingredient_text.endswith(':') and len(ingredient_text) < 30:
-                        continue
-                    
-                    parsed = self.parse_ingredient(ingredient_text)
-                    if parsed:
-                        ingredients.append(parsed)
+                # Извлекаем ингредиенты из <ul><li> или <p> tags
+                
+                # Сначала пробуем найти <ul> с <li>
+                ul = column_left.find('ul')
+                if ul:
+                    for li in ul.find_all('li'):
+                        ingredient_text = li.get_text(separator=' ', strip=True)
+                        ingredient_text = self.clean_text(ingredient_text)
+                        
+                        if ingredient_text:
+                            parsed = self.parse_ingredient(ingredient_text)
+                            if parsed:
+                                ingredients.append(parsed)
+                
+                # Если не нашли <ul>, используем <p> tags
+                if not ingredients:
+                    for p in column_left.find_all('p'):
+                        ingredient_text = p.get_text(separator=' ', strip=True)
+                        ingredient_text = self.clean_text(ingredient_text)
+                        
+                        # Пропускаем заголовки секций (содержат "Hozzávalók", "Az alaphoz:", "A krémhez:" и т.д.)
+                        if not ingredient_text:
+                            continue
+                        
+                        text_lower = ingredient_text.lower()
+                        # Пропускаем заголовок "Hozzávalók"
+                        if 'hozz' in text_lower and 'val' in text_lower:
+                            continue
+                        # Пропускаем секции типа "A tésztához:", "A krémhez:", "Az alaphoz:" и т.д.
+                        if ingredient_text.endswith(':') and len(ingredient_text) < 30:
+                            continue
+                        # Также пропускаем короткие фразы, начинающиеся с "A " или "Az " (без двоеточия в HTML)
+                        if (text_lower.startswith('a ') or text_lower.startswith('az ')) and len(ingredient_text) < 20:
+                            # Проверяем, что это не ингредиент (нет цифр)
+                            if not any(char.isdigit() for char in ingredient_text):
+                                continue
+                        
+                        parsed = self.parse_ingredient(ingredient_text)
+                        if parsed:
+                            ingredients.append(parsed)
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
@@ -346,26 +397,7 @@ class RecepttarKiskegyedHuExtractor(BaseRecipeExtractor):
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
-        # Заметки обычно находятся в первом <p> тегу в секции detail
-        detail_section = self.soup.find('section', class_='detail')
-        
-        if detail_section:
-            # Ищем первый <p> tag на верхнем уровне (не внутри column_left/column_right)
-            first_p = detail_section.find('p', recursive=False)
-            if first_p:
-                text = self.clean_text(first_p.get_text())
-                # Проверяем, что это не служебный текст
-                if text and len(text) > 10 and 'hozzávalók' not in text.lower():
-                    return text
-        
-        # Альтернативно - из meta description
-        meta_desc = self.soup.find('meta', {'name': 'description'})
-        if meta_desc and meta_desc.get('content'):
-            text = self.clean_text(meta_desc['content'])
-            # Пропускаем служебные описания
-            if text and len(text) > 20 and 'receptje' not in text.lower() and 'recepttár' not in text.lower():
-                return text
-        
+        # Notes обычно отсутствует в HTML, возвращаем None
         return None
     
     def extract_tags(self) -> Optional[str]:
