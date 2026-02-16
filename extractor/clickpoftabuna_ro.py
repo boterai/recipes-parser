@@ -165,7 +165,8 @@ class ClickPoftabunaExtractor(BaseRecipeExtractor):
         
         # Паттерн для извлечения количества, единицы и названия
         # Примеры: "250 g de ravioli", "2 linguri muștar", "1 ceapă roșie"
-        pattern = r'^([\d\s/.,]+)?\s*(g|kg|ml|l|litri?|linguri?|linguriță|lingurițe|căței|bucăți?|buc|felii?|fir(?:e)?|frunze|capere)?\s*(?:de\s+)?(.+)'
+        # Важно: более длинные единицы должны быть первыми, чтобы "linguri" не матчилось как "l"
+        pattern = r'^([\d\s/.,]+)?\s*(lingurițe?|linguriță|lingură|linguri?|litri?|bucăți?|căței|frunze|capere|felii?|fir(?:e)?|buc|kg|ml|g|l)?\s*(?:de\s+)?(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
