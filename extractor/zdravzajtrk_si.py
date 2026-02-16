@@ -166,7 +166,7 @@ class ZdravZajtrkExtractor(BaseRecipeExtractor):
                     try:
                         val = float(amount_str.replace(',', '.'))
                         amount = int(val) if val == int(val) else val
-                    except:
+                    except (ValueError, TypeError):
                         amount = None
             
             # Determine if second_word is a unit or part of name
@@ -269,7 +269,7 @@ class ZdravZajtrkExtractor(BaseRecipeExtractor):
                                     categories = [c.strip() for c in section.split(',')]
                                     categories = [c for c in categories if c.lower() != 'recept']
                                     return ', '.join(categories) if categories else None
-            except (json.JSONDecodeError, KeyError):
+            except json.JSONDecodeError:
                 continue
         
         return None
@@ -399,7 +399,7 @@ class ZdravZajtrkExtractor(BaseRecipeExtractor):
                                     return keywords
                                 elif isinstance(keywords, list):
                                     return ', '.join(keywords)
-            except (json.JSONDecodeError, KeyError):
+            except json.JSONDecodeError:
                 continue
         
         return None
@@ -437,7 +437,7 @@ class ZdravZajtrkExtractor(BaseRecipeExtractor):
                                         urls.append(img_url)
                                 elif isinstance(img, str) and img not in urls:
                                     urls.append(img)
-            except (json.JSONDecodeError, KeyError):
+            except json.JSONDecodeError:
                 continue
         
         # Remove duplicates while preserving order
