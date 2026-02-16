@@ -23,6 +23,23 @@ class ClydescaresExtractor(BaseRecipeExtractor):
             text = h3.get_text()
             # Убираем всё после символа | (включая сам символ)
             text = re.split(r'\s*[|｜]\s*', text)[0]
+            text = self.clean_text(text)
+            
+            # Убираем лишние слова в конце (например, "맛있게 끓이는 법과 재료 소개")
+            # Список шаблонов для удаления
+            remove_patterns = [
+                r'\s+맛있게\s+끓이는\s+법.*$',
+                r'\s+완벽\s+레시피.*$',
+                r'\s+법과\s+재료\s+소개.*$',
+                r'의\s+맛있는\s+조합.*$',
+                r'\s+로\s+만드는.*$',
+                r'\s+완벽한\s+레시피.*$',
+                r'\s+싱싱한\s+닭날개로\s+만드는\s+',
+            ]
+            
+            for pattern in remove_patterns:
+                text = re.sub(pattern, '', text)
+            
             return self.clean_text(text)
         
         # Альтернативно - из title тега
@@ -32,6 +49,11 @@ class ClydescaresExtractor(BaseRecipeExtractor):
             # Убираем всё после символа | и - clydescares
             text = re.split(r'\s*[|｜]\s*', text)[0]
             text = re.sub(r'\s*-\s*clydescares.*$', '', text, flags=re.IGNORECASE)
+            
+            # Убираем лишние слова
+            for pattern in [r'\s+맛있게\s+끓이는\s+법.*$', r'\s+완벽\s+레시피.*$', r'의\s+맛있는\s+조합.*$']:
+                text = re.sub(pattern, '', text)
+            
             return self.clean_text(text)
         
         return None
@@ -178,6 +200,8 @@ class ClydescaresExtractor(BaseRecipeExtractor):
         # Ищем в параграфах шаги приготовления
         paragraphs = self.soup.find_all('p')
         
+        # Сначала ищем параграфы с явной нумерацией (1. 2. 3. и т.д.)
+        numbered_steps = []
         for p in paragraphs:
             text = p.get_text().strip()
             
@@ -185,37 +209,71 @@ class ClydescaresExtractor(BaseRecipeExtractor):
             if len(text) < 20:
                 continue
             
-            # Ищем параграфы с номерами шагов
+            # Ищем параграфы с номерами шагов в начале
             # Формат может быть: "1. текст", "2. текст" и т.д.
-            if re.match(r'^\d+\.', text):
-                # Это шаг приготовления
-                steps.append(text)
-            # Или ищем параграфы, которые содержат несколько предложений с инструкциями
-            elif not steps:
-                # Если еще не нашли шаги, проверяем параграф на наличие инструкций
-                # (обычно содержат глаголы типа "넣고", "썰어", "끓여" и т.д.)
-                if any(word in text for word in ['넣고', '썰어', '끓여', '준비합니다', '익으면']):
-                    # Разбиваем на предложения по точке
-                    sentences = [s.strip() for s in text.split('.') if s.strip()]
-                    if len(sentences) >= 2:
-                        # Это похоже на инструкции
-                        for i, sent in enumerate(sentences, 1):
-                            if sent:
-                                steps.append(f"{i}. {sent}.")
+            match = re.match(r'^(\d+)\.\s+(.+)', text)
+            if match:
+                num, step_text = match.groups()
+                numbered_steps.append((int(num), step_text))
+        
+        # Если нашли numbered steps, используем их
+        if numbered_steps:
+            # Сортируем по номеру и собираем
+            numbered_steps.sort(key=lambda x: x[0])
+            for num, step_text in numbered_steps:
+                steps.append(f"{num}. {step_text}")
+        
+        # Если не нашли numbered steps, ищем параграфы с инструкциями
+        if not steps:
+            # Ищем параграфы, которые начинаются с "먼저", "그 후", "다음" и т.д.
+            instruction_markers = ['먼저', '그 후', '다음', '마지막으로']
+            instruction_paragraphs = []
+            
+            for p in paragraphs:
+                text = p.get_text().strip()
+                
+                # Пропускаем короткие и длинные параграфы
+                if len(text) < 30 or len(text) > 500:
+                    continue
+                
+                # Проверяем, начинается ли с маркера инструкции
+                if any(text.startswith(marker) for marker in instruction_markers):
+                    instruction_paragraphs.append(text)
+                # Или содержит глаголы приготовления
+                elif any(verb in text for verb in ['섞어', '올려', '뿌려', '넣고', '끓여', '익으면', '준비합니다']):
+                    # Проверяем, что это не просто описание, а инструкция
+                    if '합니다' in text or '줍니다' in text or '세요' in text or '됩니다' in text:
+                        # Проверяем, что это похоже на инструкцию (короткий параграф с действиями)
+                        if 50 < len(text) < 300:
+                            instruction_paragraphs.append(text)
+            
+            # Если нашли параграфы с инструкциями, нумеруем их
+            if instruction_paragraphs:
+                for i, text in enumerate(instruction_paragraphs, 1):
+                    steps.append(f"{i}. {text}")
+            else:
+                # Последняя попытка - ищем один параграф, который содержит всю инструкцию
+                # (с фразами "먼저", "그 후" внутри текста)
+                for p in paragraphs:
+                    text = p.get_text().strip()
+                    if '먼저' in text and '그 후' in text:
+                        if 100 < len(text) < 500:
+                            # Это один параграф с несколькими шагами
+                            # Разбиваем по маркерам
+                            parts = []
+                            for marker in ['먼저, ', '그 후, ', '다음, ', '마지막으로, ']:
+                                if marker in text:
+                                    text = text.replace(marker, f'|||{marker}')
+                            
+                            parts = [part.strip() for part in text.split('|||') if part.strip()]
+                            if len(parts) > 1:
+                                for i, part in enumerate(parts, 1):
+                                    steps.append(f"{i}. {part}")
+                                break
         
         # Объединяем шаги
         if steps:
-            # Убираем дубликаты и нормализуем нумерацию
-            unique_steps = []
-            step_num = 1
-            for step in steps:
-                # Убираем начальную нумерацию, если есть
-                step_text = re.sub(r'^\d+\.\s*', '', step)
-                if step_text and step_text not in [re.sub(r'^\d+\.\s*', '', s) for s in unique_steps]:
-                    unique_steps.append(f"{step_num}. {step_text}")
-                    step_num += 1
-            
-            return ' '.join(unique_steps)
+            return ' '.join(steps)
         
         return None
     
@@ -247,43 +305,17 @@ class ClydescaresExtractor(BaseRecipeExtractor):
         Args:
             time_type: Тип времени ('prep', 'cook', 'total')
         """
-        # Ищем в H2 заголовках упоминания времени
-        h2s = self.soup.find_all('h2')
-        
-        for h2 in h2s:
-            h2_text = h2.get_text()
-            
-            # Ищем заголовки с упоминанием времени
-            if '시간' in h2_text or '조리 시간' in h2_text:
-                # Находим следующий параграф после этого заголовка
-                next_p = h2.find_next('p')
-                if next_p:
-                    p_text = next_p.get_text()
-                    
-                    # Ищем упоминание времени в минутах
-                    # Примеры: "20분", "20-25분", "약 30분"
-                    time_match = re.search(r'(\d+(?:[-~]\d+)?)\s*분', p_text)
-                    if time_match:
-                        minutes = time_match.group(1)
-                        return f"{minutes} minutes"
-                    
-                    # Также ищем англоязычные варианты
-                    time_match = re.search(r'(\d+(?:[-~]\d+)?)\s*minutes?', p_text, re.IGNORECASE)
-                    if time_match:
-                        minutes = time_match.group(1)
-                        return f"{minutes} minutes"
-        
-        # Ищем в любых параграфах упоминания времени
         paragraphs = self.soup.find_all('p')
         
         time_patterns = {
-            'prep': ['준비.*시간', '손질.*시간', 'prep.*time'],
-            'cook': ['조리.*시간', '익히는.*시간', '끓이는.*시간', 'cook.*time'],
-            'total': ['총.*시간', '전체.*시간', 'total.*time']
+            'prep': ['준비.*시간', '손질.*시간', '마리네이드.*시간', '재워', 'prep.*time', '마리네이드'],
+            'cook': ['조리.*시간', '익히는.*시간', '끓이는.*시간', '소요', 'cook.*time', r'약\s+\d+[-~]\d+분.*조리'],
+            'total': ['총.*시간', '전체.*시간', '이내', 'total.*time', '10분.*만들']
         }
         
         patterns = time_patterns.get(time_type, [])
         
+        # Для каждого параграфа проверяем паттерны
         for p in paragraphs:
             p_text = p.get_text()
             
@@ -291,12 +323,46 @@ class ClydescaresExtractor(BaseRecipeExtractor):
             for pattern in patterns:
                 if re.search(pattern, p_text, re.IGNORECASE):
                     # Ищем время в минутах
+                    # Примеры: "약 30분", "20-25분", "30분에서 1시간", "10분 이내"
                     time_match = re.search(r'(\d+(?:[-~]\d+)?)\s*분', p_text)
                     if time_match:
                         minutes = time_match.group(1)
                         return f"{minutes} minutes"
                     
                     time_match = re.search(r'(\d+(?:[-~]\d+)?)\s*minutes?', p_text, re.IGNORECASE)
+                    if time_match:
+                        minutes = time_match.group(1)
+                        return f"{minutes} minutes"
+        
+        # Если не нашли по паттернам, для prep_time ищем упоминания маринования
+        if time_type == 'prep':
+            for p in paragraphs:
+                p_text = p.get_text()
+                # "30분에서 1시간 정도 재워"
+                if '재워' in p_text or '마리네이드' in p_text:
+                    time_match = re.search(r'(\d+)\s*분(?:에서|\s*[-~]\s*)', p_text)
+                    if time_match:
+                        minutes = time_match.group(1)
+                        return f"{minutes} minutes"
+        
+        # Для cook_time ищем более общие упоминания времени приготовления
+        if time_type == 'cook':
+            for p in paragraphs:
+                p_text = p.get_text()
+                # "20-25분간 조리", "200도에서 20-25분"
+                if '조리' in p_text or '익' in p_text or '끓' in p_text:
+                    time_match = re.search(r'(\d+(?:[-~]\d+)?)\s*분', p_text)
+                    if time_match:
+                        minutes = time_match.group(1)
+                        return f"{minutes} minutes"
+        
+        # Для total_time ищем фразы типа "10분 이내"
+        if time_type == 'total':
+            for p in paragraphs:
+                p_text = p.get_text()
+                # "10분 이내에 손쉽게"
+                if '이내' in p_text or '만들' in p_text:
+                    time_match = re.search(r'(\d+)\s*분', p_text)
                     if time_match:
                         minutes = time_match.group(1)
                         return f"{minutes} minutes"
