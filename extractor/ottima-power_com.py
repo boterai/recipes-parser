@@ -57,6 +57,8 @@ class OttimaPowerExtractor(BaseRecipeExtractor):
                 if text and len(text) > 50 and not text.startswith(('Print', 'Pin', 'Course:', 'Cuisine:', 'Keyword:', 'Prep Time:', 'Cook Time:')):
                     # Проверяем, что нет изображений
                     if not prev_div.find('img'):
+                        # Убираем trailing запятую
+                        text = re.sub(r',\s*$', '', text)
                         return self.clean_text(text)
                 prev_div = prev_div.find_previous('div')
         
@@ -187,8 +189,8 @@ class OttimaPowerExtractor(BaseRecipeExtractor):
                     step_text = self.clean_text(step_text)
                     
                     if step_text:
-                        # Удаляем запятые в конце шага
-                        step_text = re.sub(r',\s*$', '', step_text)
+                        # Удаляем запятую в конце (если это последняя часть предложения)
+                        step_text = re.sub(r',(\s*)$', r'.\1', step_text)
                         steps.append(step_text)
         
         return ' '.join(steps) if steps else None
