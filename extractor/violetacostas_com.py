@@ -150,11 +150,49 @@ class VioletaCostasExtractor(BaseRecipeExtractor):
         ingredients_list = []
         seen_ingredients = set()
         
-        # Ищем параграфы, которые могут содержать список ингредиентов
-        # Обычно они находятся после заголовка "Ingredientes"
-        found_ingredients_section = False
+        # Стратегия 1: Ищем <ul> список после заголовка "Ingredientes"
+        # Это самый надежный способ для страниц с правильной структурой
+        headers = self.soup.find_all(['h2', 'h3', 'strong'])
+        for header in headers:
+            if 'ingrediente' in header.get_text().lower():
+                # Нашли заголовок с ингредиентами, ищем следующий <ul> список
+                ul = header.find_next('ul')
+                if ul:
+                    # Проверяем, что это действительно список ингредиентов, а не навигация
+                    # Навигационные элементы обычно содержат стрелки или ссылки
+                    li_items = ul.find_all('li')
+                    
+                    # Проверка: если большинство элементов содержат стрелки/навигацию, пропускаем
+                    nav_count = sum(1 for li in li_items if any(char in li.get_text() for char in ['←', '→', '»', '«']))
+                    if nav_count > len(li_items) / 2:
+                        # Это навигация, не ингредиенты
+                        continue
+                    
+                    # Извлекаем все <li> элементы
+                    for li in li_items:
+                        text = self.clean_text(li.get_text())
+                        if text and len(text) < 200:  # Разумная длина для ингредиента
+                            # Дополнительная проверка: пропускаем навигационные элементы
+                            if any(char in text for char in ['←', '→', '»', '«']):
+                                continue
+                            
+                            normalized = text.lower().strip()
+                            if normalized not in seen_ingredients:
+                                seen_ingredients.add(normalized)
+                                parsed = self._parse_ingredient_string(text)
+                                ingredients_list.append({
+                                    "name": parsed["name"],
+                                    "units": parsed["unit"],
+                                    "amount": parsed["amount"]
+                                })
+                    
+                    # Если нашли ингредиенты в списке, возвращаем результат
+                    if ingredients_list:
+                        return json.dumps(ingredients_list, ensure_ascii=False)
         
-        # Сначала попробуем найти заголовок с ингредиентами
+        # Стратегия 2: Если списка нет, ищем ингредиенты в strong тегах
+        # Это для страниц, где ингредиенты выделены жирным в параграфах
+        found_ingredients_section = False
         all_elements = self.soup.find_all(['h3', 'h2', 'p', 'strong'])
         
         for elem in all_elements:
