@@ -21,7 +21,7 @@ class JulieKarlaExtractor(BaseRecipeExtractor):
         Конвертирует ISO 8601 duration в читаемый формат
         
         Args:
-            duration: строка вида "PT20M" или "PT1H30M"
+            duration: строка вида "PT20M" или "PT1H30M" или "PT8H" или "PT90M"
             
         Returns:
             Время в читаемом формате, например "20 minutes" или "1 hour 30 minutes"
@@ -44,12 +44,17 @@ class JulieKarlaExtractor(BaseRecipeExtractor):
         if min_match:
             minutes = int(min_match.group(1))
         
+        # Если минут больше 60, конвертируем в часы + минуты
+        if minutes >= 60:
+            hours += minutes // 60
+            minutes = minutes % 60
+        
         # Форматируем в читаемый вид
         parts = []
         if hours > 0:
-            parts.append(f"{hours} hour" + ("s" if hours > 1 else ""))
+            parts.append(f"{hours} {'hour' if hours == 1 else 'hours'}")
         if minutes > 0:
-            parts.append(f"{minutes} minute" + ("s" if minutes > 1 else ""))
+            parts.append(f"{minutes} {'minute' if minutes == 1 else 'minutes'}")
         
         return " ".join(parts) if parts else None
     
@@ -261,49 +266,42 @@ class JulieKarlaExtractor(BaseRecipeExtractor):
     def extract_notes(self) -> Optional[str]:
         """
         Извлечение заметок к рецепту
-        Ищем в h2 и параграфах после рецепта
+        Ищем в параграфах характерные фразы-заметки
         """
         entry_content = self.soup.find(class_='entry-content')
         if not entry_content:
             return None
         
-        # Сначала ищем h2 с характерными фразами для заметок
+        # Ищем в параграфах фразы, начинающиеся с ключевых слов для заметок
+        paragraphs = entry_content.find_all('p')
+        
+        for p in paragraphs:
+            text = p.get_text(strip=True)
+            # Разбиваем на предложения
+            sentences = re.split(r'[.!]', text)
+            
+            for sent in sentences:
+                sent = sent.strip()
+                # Проверяем, начинается ли с ключевых фраз
+                if re.match(r'^(Har du ikke|Har du|Nemme|Tip|Note)', sent, re.IGNORECASE):
+                    # Это заметка - возвращаем первое предложение
+                    # Очищаем от лишнего текста в скобках
+                    sent = re.sub(r'\([^)]*\)', '', sent).strip()
+                    if sent:
+                        # Добавляем точку в конце
+                        if not sent.endswith('.'):
+                            sent += '.'
+                        return self.clean_text(sent)
+        
+        # Если не нашли в параграфах, ищем в h2 с многоточием
         h2_elements = entry_content.find_all('h2')
         for h2 in h2_elements:
             h2_text = h2.get_text(strip=True)
-            # Проверяем, содержит ли заголовок ключевые слова
-            if re.search(r'(Nemme|perfekte|Tips?|Note)', h2_text, re.IGNORECASE):
-                # Если в h2 есть многоточие, текст продолжается в следующем параграфе
-                if h2_text.endswith('…'):
-                    next_p = h2.find_next_sibling('p')
-                    if next_p:
-                        # Объединяем h2 и параграф
-                        h2_base = h2_text.rstrip('…').strip()
-                        p_text = next_p.get_text(strip=True)
-                        # Берем первое предложение из параграфа до первого знака препинания (! или .)
-                        # Сплит по ! или . с учетом того, что могут быть и другие знаки
-                        sentences = re.split(r'[.!]', p_text)
-                        if sentences:
-                            first_sentence = sentences[0].strip()
-                            full_text = h2_base + ' ' + first_sentence + '.'
-                            return self.clean_text(full_text)
-                else:
-                    return self.clean_text(h2_text)
-        
-        # Если не нашли в h2, ищем в параграфах после recipe container
-        recipe_container = self.soup.find('div', id=re.compile(r'wprm-recipe-container'))
-        if recipe_container:
-            current = recipe_container
-            for _ in range(10):
-                current = current.find_next_sibling()
-                if not current:
-                    break
-                if current.name == 'p':
-                    text = current.get_text(strip=True)
-                    # Проверяем короткие параграфы с ключевыми словами
-                    if text and 20 < len(text) < 250:
-                        if re.match(r'^(Har du|Nemme|Tip|Note)', text, re.IGNORECASE):
-                            return self.clean_text(text)
+            # Проверяем, содержит ли заголовок ключевые слова и многоточие
+            if re.search(r'(Nemme|perfekte|Tips?)', h2_text, re.IGNORECASE) and h2_text.endswith('…'):
+                # Пытаемся собрать полную заметку из h2 и следующего параграфа
+                # Это сложный случай - пока просто возвращаем h2 без многоточия
+                return self.clean_text(h2_text.rstrip('…').strip() + '.')
         
         return None
     
