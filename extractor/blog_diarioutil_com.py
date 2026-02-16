@@ -265,7 +265,9 @@ class BlogDiarioutilExtractor(BaseRecipeExtractor):
                 r'tempo\s+prep[:\s]+(\d+)\s+minut'
             ],
             'cook': [
-                r'tempo\s+di\s+cottura[:\s]+(\d+)\s+minut', 
+                r'cuocere\s+per\s+circa\s+(\d+(?:\s*-\s*\d+)?)\s+minut',
+                r'lasciate\s+cuocere\s+per\s+(\d+(?:\s*o\s*\d+)?)\s+minut',
+                r'tempo\s+di\s+cottura[:\s]+(\d+(?:\s*-\s*\d+)?)\s+minut', 
                 r'cottura[:\s]+(\d+)\s+minut',
                 r'tempo\s+cook[:\s]+(\d+)\s+minut',
                 r'cuocere\s+per\s+(\d+)\s+minut'
@@ -283,6 +285,8 @@ class BlogDiarioutilExtractor(BaseRecipeExtractor):
             match = re.search(pattern, text, re.IGNORECASE)
             if match:
                 minutes = match.group(1)
+                # Нормализуем формат: "10-12" или "2 o 3" -> "10-12 minutes" или "2-3 minutes"
+                minutes = re.sub(r'\s*o\s*', '-', minutes)  # "2 o 3" -> "2-3"
                 return f"{minutes} minutes"
         
         return None
