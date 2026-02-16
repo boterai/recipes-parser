@@ -34,28 +34,30 @@ class ClickPoftabunaExtractor(BaseRecipeExtractor):
         
         return None
     
+    @staticmethod
+    def get_first_sentence(text: str) -> str:
+        """Извлекает первое предложение из текста"""
+        if not text:
+            return text
+        if '. ' in text:
+            return text.split('. ')[0] + '.'
+        elif '…' in text:
+            return text.split('…')[0] + '.'
+        return text
+    
     def extract_description(self) -> Optional[str]:
         """Извлечение описания рецепта"""
         # Ищем в meta description
         meta_desc = self.soup.find('meta', {'name': 'description'})
         if meta_desc and meta_desc.get('content'):
             desc = self.clean_text(meta_desc['content'])
-            # Берем только первое предложение (до первой точки или "…")
-            if '. ' in desc:
-                desc = desc.split('. ')[0] + '.'
-            elif '…' in desc:
-                desc = desc.split('…')[0] + '.'
-            return desc
+            return self.get_first_sentence(desc)
         
         # Альтернативно - из og:description
         og_desc = self.soup.find('meta', property='og:description')
         if og_desc and og_desc.get('content'):
             desc = self.clean_text(og_desc['content'])
-            if '. ' in desc:
-                desc = desc.split('. ')[0] + '.'
-            elif '…' in desc:
-                desc = desc.split('…')[0] + '.'
-            return desc
+            return self.get_first_sentence(desc)
         
         # Первый параграф после h1
         h1 = self.soup.find('h1')
@@ -65,11 +67,7 @@ class ClickPoftabunaExtractor(BaseRecipeExtractor):
                 if sibling.name == 'p':
                     text = self.clean_text(sibling.get_text())
                     if text and len(text) > 20 and 'ingredient' not in text.lower():
-                        if '. ' in text:
-                            text = text.split('. ')[0] + '.'
-                        elif '…' in text:
-                            text = text.split('…')[0] + '.'
-                        return text
+                        return self.get_first_sentence(text)
         
         return None
     
@@ -144,7 +142,7 @@ class ClickPoftabunaExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "250 g de ravioli al funghi" или "6 cartofi"
             
         Returns:
-            dict: {"name": "ravioli al funghi", "amount": "250", "unit": "g"} или None
+            dict: {"name": "ravioli al funghi", "amount": 250, "units": "g"} или None
         """
         if not ingredient_text:
             return None
