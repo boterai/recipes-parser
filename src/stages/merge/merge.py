@@ -451,7 +451,7 @@ class ClusterVariationGenerator:
         cluster_recipes: list[int], 
         target_language: Optional[str] = None,
         save_to_db: bool = True,
-        max_aggregaeted_recipes: int = 5
+        max_aggregated_recipes: int = 5
     ) -> Optional[MergedRecipe]:
         """
         Генерирует каноничный рецепт для кластера через GPT, комбинируя информацию из всех рецептов кластера.
@@ -472,7 +472,7 @@ class ClusterVariationGenerator:
             cluster_recipes: Список page_id рецептов кластера (включая base_recipe_id)
             target_language: Целевой язык для генерации
             save_to_db: Сохранять ли результат в БД
-            max_aggregaeted_recipes: Максимальное количество рецептов из кластера для агрегации в один canonical (включая базовый). Если в кластере больше, будут выбраны рандомные
+            max_aggregated_recipes: Максимальное количество рецептов из кластера для агрегации в один canonical (включая базовый). Если в кластере больше, будут выбраны рандомные
             
         Returns:
             MergedRecipe или None если не удалось создать
@@ -487,7 +487,7 @@ class ClusterVariationGenerator:
                 logger.info(f"Canonical recipe для base_recipe_id={base_recipe_id} уже полностью расширен")
                 return existing_merged
             
-            max_aggregaeted_recipes = max(1, max_aggregaeted_recipes - len(remaining_recipes))
+            max_aggregated_recipes = max(1, max_aggregated_recipes + 1 - len(used_page_ids)) # +1 для базового рецепта
             
             logger.info(f"Расширяем существующий canonical recipe {existing_merged.id} "
                        f"добавлением {len(remaining_recipes)} рецептов")
@@ -499,7 +499,7 @@ class ClusterVariationGenerator:
                 new_recipe_ids=remaining_recipes,
                 target_language=target_language,
                 save_to_db=save_to_db,
-                max_aggregaeted_recipes=max_aggregaeted_recipes
+                max_aggregated_recipes=max_aggregated_recipes
             )
         
         # Создаем новый canonical recipe
@@ -509,7 +509,7 @@ class ClusterVariationGenerator:
             cluster_recipes=cluster_recipes,
             target_language=target_language,
             save_to_db=save_to_db,
-            max_aggregaeted_recipes=max_aggregaeted_recipes
+            max_aggregated_recipes=max_aggregated_recipes
         )
     
     async def _create_new_canonical_recipe(
@@ -518,7 +518,7 @@ class ClusterVariationGenerator:
         cluster_recipes: list[int],
         target_language: Optional[str] = None,
         save_to_db: bool = True, 
-        max_aggregaeted_recipes: int = 5
+        max_aggregated_recipes: int = 5
     ) -> Optional[MergedRecipe]:
         """Создать новый canonical recipe с нуля"""
         
@@ -559,12 +559,12 @@ class ClusterVariationGenerator:
         other_recipe_ids = [pid for pid in cluster_recipes if pid != base_recipe_id]
         
         # Batch size = max_merge_recipes_per_request - 1 (1 слот занят canonical/base)
-        batch_size = min(max_aggregaeted_recipes, max(1, self.max_merge_recipes_per_request - 1))
+        batch_size = min(max_aggregated_recipes, max(1, self.max_merge_recipes_per_request - 1))
         aggregated_count = 0
         
         for i in range(0, len(other_recipe_ids), batch_size):
             batch_ids = other_recipe_ids[i:i + batch_size]
-            batch_ids = batch_ids[:min(max_aggregaeted_recipes - aggregated_count, len(batch_ids))]  # Учитываем уже добавленные рецепты
+            batch_ids = batch_ids[:min(max_aggregated_recipes - aggregated_count, len(batch_ids))]  # Учитываем уже добавленные рецепты
             if not batch_ids:
                 break
             
@@ -598,8 +598,8 @@ class ClusterVariationGenerator:
                     else:
                         logger.info(f"✗ Рецепт {recipe_id} не прошел валидацию, пропущен")
             
-            if aggregated_count >= max_aggregaeted_recipes:
-                logger.info(f"Достигнут лимит агрегации {max_aggregaeted_recipes} рецептов, прекращаем расширение")
+            if aggregated_count >= max_aggregated_recipes:
+                logger.info(f"Достигнут лимит агрегации {max_aggregated_recipes} рецептов, прекращаем расширение")
                 break
 
         # Финальная GPT валидация перед сохранением (экономим запросы - проверяем только итоговый результат)
@@ -629,7 +629,7 @@ class ClusterVariationGenerator:
         new_recipe_ids: list[int],
         target_language: Optional[str] = None,
         save_to_db: bool = True,
-        max_aggregaeted_recipes: int = 5
+        max_aggregated_recipes: int = 5
     ) -> Optional[MergedRecipe]:
         """Расширить существующий canonical recipe новыми рецептами (batch по max_merge_recipes_per_request-1)"""
         
@@ -648,12 +648,12 @@ class ClusterVariationGenerator:
         
         had_expansions = False
         # Batch size = max_merge_recipes_per_request - 1 (1 слот занят canonical/base)
-        batch_size = min(max_aggregaeted_recipes, max(1, self.max_merge_recipes_per_request - 1))
+        batch_size = min(max_aggregated_recipes, max(1, self.max_merge_recipes_per_request - 1))
         aggregated_count = 0
 
         for i in range(0, len(new_recipe_ids), batch_size):
             batch_ids = new_recipe_ids[i:i + batch_size]
-            batch_ids = batch_ids[:min(max_aggregaeted_recipes - aggregated_count, len(batch_ids))]  # Учитываем уже добавленные рецепты
+            batch_ids = batch_ids[:min(max_aggregated_recipes - aggregated_count, len(batch_ids))]  # Учитываем уже добавленные рецепты
             if not batch_ids:
                 break
 
@@ -687,8 +687,8 @@ class ClusterVariationGenerator:
                     else:
                         logger.info(f"✗ Рецепт {recipe_id} не прошел валидацию, пропущен")
 
-            if aggregated_count >= max_aggregaeted_recipes:
-                logger.info(f"Достигнут лимит агрегации {max_aggregaeted_recipes} рецептов, прекращаем расширение")
+            if aggregated_count >= max_aggregated_recipes:
+                logger.info(f"Достигнут лимит агрегации {max_aggregated_recipes} рецептов, прекращаем расширение")
                 break
         
         # Финальная GPT валидация перед обновлением (только если были изменения)
@@ -696,17 +696,18 @@ class ClusterVariationGenerator:
             is_valid, reason = await self.merger.validate_with_gpt(base_recipe, current_merged)
             if not is_valid:
                 logger.warning(f"Финальная валидация расширения не пройдена: {reason}. Откат изменений.")
-                return existing_merged  # Возвращаем исходный без изменений
+                return None  # Не сохраняем изменения, так как итоговый рецепт не прошёл валидацию, возвращаем None
             else:
                 current_merged.gpt_validated = True
                 logger.info("✓ Расширенный canonical recipe прошёл финальную GPT валидацию")
         
-        # Обновляем в БД если были изменения
+        # Обновляем в БД если были изменения и рецепт прошел финальную валидацию
         if save_to_db and had_expansions:
             try:
                 updated = self.merge_repository.update_merged_recipe(existing_merged.id, current_merged)
                 if updated:
                     logger.info(f"✓ Canonical recipe {existing_merged.id} обновлен")
+                    return updated.to_pydantic(get_images=False)
             except Exception as e:
                 logger.error(f"Ошибка обновления canonical recipe: {e}")
         
@@ -785,6 +786,7 @@ RULES:
 9. TAGS: 5-10 lowercase (cuisine, diet, method, main ingredient).
 10. CONSISTENCY: Every ingredient in list MUST appear in instructions and vice versa.
 11. NATURAL INGREDIENT COUNT: Keep it realistic (8-18 core ingredients max). Recipe should look home-cooked, not like a fusion experiment. Don't include every variation from sources.
+12. NO ADVERTISING: Remove ALL brand names from ingredients and instructions. Use generic terms instead. Example: "Kikkoman soy sauce" → "soy sauce", "Barilla pasta" → "pasta", "Philadelphia cream cheese" → "cream cheese". Keep only the ingredient type, never the brand.
 
 MERGE LOGIC:
 - 2+ sources have ingredient → include with averaged amount
@@ -845,7 +847,7 @@ If sources have conflicting info, prefer the most common or reasonable approach.
             result = await self.merger.gpt_client.async_request(
                 system_prompt=system_prompt,
                 user_prompt=user_prompt,
-                temperature=0.3,  # Низкая температура для консервативности
+                temperature=0.5,
                 max_tokens=2500,
                 request_timeout=90,
                 model=config.GPT_MODEL_MERGE,
@@ -907,51 +909,3 @@ If sources have conflicting info, prefer the most common or reasonable approach.
         valid_images_id = [img.id for img in images if img.image_url in valid_urls]
         self.merge_repository.add_images_to_recipe(merged_recipe.id, valid_images_id)
         return True
-
-# Пример использования в main
-if __name__ == "__main__":
-    import random
-    import asyncio
-    logging.basicConfig(level=logging.INFO)
-
-    async def example():
-        generator = ClusterVariationGenerator()
-        
-        # Пример кластера
-        cluster = [209,
-    8860,
-    8862,
-    8874,
-    8875,
-    11439,
-    11582,
-    11816,
-    11853,
-    11875,
-    12643]
-        random.shuffle(cluster)
-        
-        max_variations = min(1, max(3, len(cluster) / 4))
-        variations = await generator.create_variations(
-            cluster=cluster,
-            validate_gpt=True,
-            save_to_db=True,
-            max_variations=max_variations,
-            max_merged_recipes=4
-        )
-        for var in variations:
-            print(f"Создана вариация: {var.dish_name}")
-            print(f"  Ингредиенты: {len(var.ingredients)} items")
-            print(f"""{', '.join([f"{i.get('name')} {i.get('amount')} {i.get('unit')}" for i in var.ingredients])}""" )
-            print(f"  Описание: {len(var.description)} chars")
-            print(var.description)
-            print(f"  Инструкции: {len(var.instructions)} chars")
-            print(var.instructions)
-            print("-----")
-        #for batch in batched(cluster, 3):
-        #    if len(batch) < 2:
-        #        continue
-        #    pairwise = await generator.create_variation_best_base_gpt(cluster=list(batch), validate_gpt=True, save_to_db=True)
-        #    print(f"Создана 1 вариация лучшим базовым через GPT:    {pairwise.dish_name if pairwise else 'нет вариации'}")
-
-    asyncio.run(example())

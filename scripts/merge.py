@@ -105,7 +105,7 @@ def load_clusters_from_history(filename: str) -> list[list[int]]:
     with open(filename, "r") as f:
         return json.load(f)
 
-async def execute_cluster_batch(tasks: list, clusters_in_batch: list[str]) -> list[list[int]]:
+async def execute_cluster_batch(tasks: list, clusters_in_batch: list[str]) -> tuple[list[list[int]], int]:
     """Выполняет асинхронные задачи и обрабатывает результаты, возвращая список успешно обработанных кластеров.
     Args:
         tasks: Список асинхронных задач для выполнения.
@@ -113,16 +113,20 @@ async def execute_cluster_batch(tasks: list, clusters_in_batch: list[str]) -> li
     Returns:
         Список кластеров, для которых задачи были успешно выполнены."""
     success_clusters = []
+    processed_count = 0
     completed_tasks = await asyncio.gather(*tasks, return_exceptions=True)
     for i, result in enumerate(completed_tasks):
         if isinstance(result, Exception):
             logger.error(f"Error in task for cluster {clusters_in_batch[i]}: {result}")
+        elif result is None:
+            continue
         else:
             for merged_recipes in completed_tasks:
                 if merged_recipes and not isinstance(merged_recipes, Exception):
                     logger.info(f"Created {len(merged_recipes)} variations.")
             success_clusters.append(clusters_in_batch[i])
-    return success_clusters
+            processed_count += 1
+    return success_clusters, processed_count
 
 async def merge_cluster_recipes(
         similarity_threshold: float | None, 
@@ -146,7 +150,7 @@ async def merge_cluster_recipes(
             None
     """
 
-    cluster_processing_history = os.path.join(config.MERGE_HISTORY_FOLDER, f"unprocessed_clusters_{build_type}_{similarity_threshold}_{similarity_threshold + 0.02}.json")
+    cluster_processing_history = os.path.join(config.MERGE_HISTORY_FOLDER, f"unprocessed_clusters_max_recipes_{max_aggregated_recipes}.json")
     existing_clusters = load_clusters_from_history(cluster_processing_history)
 
     merger = ClusterVariationGenerator(score_threshold=similarity_threshold, clusters_build_type=build_type, max_recipes_per_gpt_merge_request=max_recipes_per_gpt_merge_request)
@@ -179,8 +183,8 @@ async def merge_cluster_recipes(
             ))
         
         if len(tasks) >= config.MERGE_MAX_MERGE_RECIPES or len(existing_clusters) == total_tasks: # набран батч или все кластеры уже были в истории
-            success_clusters = await execute_cluster_batch(tasks, clusters_in_current_batch)
-            total += len(success_clusters)
+            success_clusters, processed = await execute_cluster_batch(tasks, clusters_in_current_batch)
+            total += processed
             existing_clusters.extend(success_clusters)
             save_clusters_to_history(existing_clusters, cluster_processing_history)
 
@@ -221,14 +225,14 @@ async def generate_from_one_cluster(
     
     tasks = []
     for mr in incomplete:
-        mr = mr.to_pydantic()
+        mr = mr.to_pydantic(get_images=False)
         tasks.append(merger.create_canonical_recipe_with_gpt(
             existing_merged=mr,
             base_recipe_id=mr.base_recipe_id,
             cluster_recipes=cluster,
             target_language=config.TARGET_LANGUAGE,
             save_to_db=True,
-            max_aggregaeted_recipes=max_aggregated_recipes
+            max_aggregated_recipes=max_aggregated_recipes
         ))
         random.shuffle(cluster)
 
@@ -245,7 +249,7 @@ async def generate_from_one_cluster(
             cluster_recipes=cluster,
             target_language=config.TARGET_LANGUAGE,
             save_to_db=True,
-            max_aggregaeted_recipes=max_aggregated_recipes
+            max_aggregated_recipes=max_aggregated_recipes
         ))
         random.shuffle(cluster)
 
@@ -286,11 +290,12 @@ if __name__ == "__main__":
     #config.MERGE_CENTROID_THRESHOLD_STEP = 0.02
     #asyncio.run(generate_from_one_cluster(merger=merger, cluster=cluster, cluster_centroid=base_recipe, 
     #                          max_variations=1, max_aggregated_recipes=10))
-
+    config.MERGE_MAX_MERGE_RECIPES = 1
     config.MERGE_CENTROID_THRESHOLD_STEP = 0.02
     asyncio.run(merge_cluster_recipes(similarity_threshold=0.89, 
                                              build_type="full", 
                                              max_variation_per_cluster=1, 
                                              max_aggregated_recipes=9, # + 1 базовый 
                                              max_recipes_per_gpt_merge_request=4,
-                                             check_cluster_update=False))
+                                             check_cluster_update=False, 
+                                             limit=10))
