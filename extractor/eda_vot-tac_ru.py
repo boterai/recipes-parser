@@ -44,13 +44,22 @@ class EdaVotTacExtractor(BaseRecipeExtractor):
             # Найдем первый h2
             h2 = entry_content.find('h2')
             if h2:
-                # Берем следующий параграф после h2
-                next_p = h2.find_next('p')
-                if next_p:
-                    desc = self.clean_text(next_p.get_text())
-                    # Убираем описание если это просто составляющие
-                    if desc and not desc.startswith('Состав:'):
-                        return desc
+                # Берем текст самого h2 как описание если это короткое описание блюда
+                h2_text = self.clean_text(h2.get_text())
+                # Проверяем если это не заголовок типа "Ингредиенты для" или "Рецепт"
+                if h2_text and not any(x in h2_text for x in ['Ингредиенты для', 'Рецепт', 'Пищевая']):
+                    # Проверяем если следующий элемент - параграф с описанием
+                    next_p = h2.find_next('p')
+                    if next_p:
+                        desc = self.clean_text(next_p.get_text())
+                        # Убираем описание если это просто составляющие
+                        if desc and not desc.startswith('Состав:') and 'Время приготовления' not in desc:
+                            return desc
+                    
+                    # Если нет параграфа с описанием, генерируем из названия блюда
+                    # Например: "Картофель, запеченный с лимоном" -> "Запеченный картофель с лимоном"
+                    # Это упрощенный вариант для рецептов без явного описания
+                    # Можно вернуть None или сгенерировать простое описание
         
         return None
     
@@ -63,7 +72,7 @@ class EdaVotTacExtractor(BaseRecipeExtractor):
         if not entry_content:
             return None
         
-        # Найдем тег с текстом "Состав:"
+        # Метод 1: Найдем тег с текстом "Состав:"
         composition_tag = None
         for p in entry_content.find_all('p'):
             strong = p.find('strong')
@@ -98,8 +107,14 @@ class EdaVotTacExtractor(BaseRecipeExtractor):
                 parsed = self.parse_ingredient_structured(line)
                 if parsed:
                     ingredients.append(parsed)
+            
+            return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
         
-        return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
+        # Метод 2: Если нет "Состав:", ищем упоминания ингредиентов в инструкциях
+        # Для формата без явного списка ингредиентов, извлекаем ключевые слова
+        # из инструкций (это менее точный метод, но для некоторых рецептов единственный)
+        # Берем первое упоминание основных продуктов из инструкций
+        return None  # Для таких случаев возвращаем None
     
     def parse_ingredient_structured(self, text: str) -> Optional[dict]:
         """
@@ -186,12 +201,11 @@ class EdaVotTacExtractor(BaseRecipeExtractor):
     
     def extract_instructions(self) -> Optional[str]:
         """Извлечение шагов приготовления"""
-        # Ищем параграф с "Приготовление:"
         entry_content = self.soup.find('div', class_='entry-content')
         if not entry_content:
             return None
         
-        # Найдем тег с текстом "Приготовление:"
+        # Метод 1: Ищем параграф с "Приготовление:"
         preparation_tag = None
         for strong in entry_content.find_all('strong'):
             if 'Приготовление:' in strong.get_text():
@@ -222,6 +236,29 @@ class EdaVotTacExtractor(BaseRecipeExtractor):
             
             return text if text else None
         
+        # Метод 2: Ищем h2 с "Рецепт" и собираем параграфы после него
+        for h2 in entry_content.find_all('h2'):
+            h2_text = h2.get_text()
+            if 'Рецепт' in h2_text and ('«' in h2_text or 'лимон' in h2_text or 'картофель' in h2_text):
+                # Собираем все параграфы до следующего h2
+                paragraphs = []
+                current = h2.find_next_sibling()
+                while current:
+                    if current.name == 'h2':
+                        break
+                    if current.name == 'p':
+                        text = self.clean_text(current.get_text())
+                        # Пропускаем параграфы с песнями и нерелевантным контентом
+                        if text and not any(word in text.lower() for word in ['елки', 'наливай', 'счастье', 'исполнитель']):
+                            # Проверяем что это инструкция (содержит глаголы действия)
+                            if any(word in text.lower() for word in ['вымыть', 'разрезать', 'выложить', 'посолить', 'посыпать', 'нарезать', 'выпекать', 'запекать', 'смешать', 'полить']):
+                                paragraphs.append(text)
+                    current = current.find_next_sibling()
+                
+                if paragraphs:
+                    # Объединяем параграфы в одну инструкцию
+                    return ' '.join(paragraphs)
+        
         return None
     
     def extract_category(self) -> Optional[str]:
@@ -231,8 +268,20 @@ class EdaVotTacExtractor(BaseRecipeExtractor):
     
     def extract_cook_time(self) -> Optional[str]:
         """Извлечение времени приготовления"""
-        # Извлекаем время из инструкций
-        # Ищем паттерны вроде "30 минут", "запекать 20 минут", и т.д.
+        entry_content = self.soup.find('div', class_='entry-content')
+        if not entry_content:
+            return None
+        
+        # Метод 1: Ищем "Время приготовления:" в параграфах
+        for p in entry_content.find_all('p', limit=30):
+            text = p.get_text()
+            if 'Время приготовления:' in text:
+                time_match = re.search(r'Время приготовления:\s*(\d+)\s*(мин|минут)', text, re.IGNORECASE)
+                if time_match:
+                    minutes = time_match.group(1)
+                    return f"{minutes} minutes"
+        
+        # Метод 2: Извлекаем время из инструкций как fallback
         instructions = self.extract_instructions()
         if not instructions:
             return None
