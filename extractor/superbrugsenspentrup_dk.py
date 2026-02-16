@@ -17,7 +17,7 @@ class SuperbrugsenspentrupExtractor(BaseRecipeExtractor):
     
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
-        # Сначала попробуем найти заголовок h2/h3 с "Opskrift:" (это более надежный источник)
+        # Сначала попробуем найти заголовок h2/h3 с "Opskrift:" в начале (это более надежный источник)
         headers = self.soup.find_all(['h2', 'h3'])
         for h in headers:
             text = h.get_text().strip()
@@ -26,6 +26,18 @@ class SuperbrugsenspentrupExtractor(BaseRecipeExtractor):
                 parts = text.split(':', 1)
                 if len(parts) > 1:
                     dish_name = parts[1].strip()
+                    # Убираем дополнительные суффиксы в скобках
+                    dish_name = re.sub(r'\s*\(.*\)$', '', dish_name)
+                    return self.clean_text(dish_name)
+        
+        # Если не нашли с "Opskrift:" в начале, ищем заголовок содержащий "Opskrift:" где угодно
+        for h in headers:
+            text = h.get_text().strip()
+            if 'opskrift:' in text.lower() and ':' in text:
+                # Извлекаем название после последнего ":"
+                parts = text.split(':')
+                if len(parts) > 1:
+                    dish_name = parts[-1].strip()
                     # Убираем дополнительные суффиксы в скобках
                     dish_name = re.sub(r'\s*\(.*\)$', '', dish_name)
                     return self.clean_text(dish_name)
