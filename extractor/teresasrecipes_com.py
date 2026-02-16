@@ -122,10 +122,10 @@ class TeresasRecipesExtractor(BaseRecipeExtractor):
             ingredient_line: Строка вида "Paprika, 1 teaspoon" или "Egg, 1, beaten"
             
         Returns:
-            dict: {"name": "Paprika", "amount": "1", "unit": "teaspoon"}
+            dict: {"name": "Paprika", "amount": "1", "units": "teaspoon"}
         """
         if not ingredient_line:
-            return {"name": None, "amount": None, "unit": None}
+            return {"name": None, "amount": None, "units": None}
         
         # Очищаем текст
         text = self.clean_text(ingredient_line)
@@ -138,7 +138,7 @@ class TeresasRecipesExtractor(BaseRecipeExtractor):
             return {
                 "name": parts[0].strip(),
                 "amount": None,
-                "unit": None
+                "units": None
             }
         
         name = parts[0].strip()
@@ -153,7 +153,7 @@ class TeresasRecipesExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": rest,
-                "unit": None
+                "units": None
             }
         
         # Убираем скобки и их содержимое для корректного парсинга
@@ -166,22 +166,22 @@ class TeresasRecipesExtractor(BaseRecipeExtractor):
         match = re.match(pattern, rest_clean)
         
         if match:
-            amount_str, unit_str, extra = match.groups()
+            amount_str, units_str, extra = match.groups()
             
             amount = amount_str.strip() if amount_str else None
-            unit = unit_str.strip() if unit_str else None
+            units = units_str.strip() if units_str else None
             
-            # Если есть extra (например, что-то после запятой), добавляем к unit
+            # Если есть extra (например, что-то после запятой), добавляем к units
             if extra:
-                if unit:
-                    unit = f"{unit}, {extra.strip()}"
+                if units:
+                    units = f"{units}, {extra.strip()}"
                 else:
-                    unit = extra.strip()
+                    units = extra.strip()
             
             return {
                 "name": name,
                 "amount": amount,
-                "unit": unit
+                "units": units
             }
         
         # Если предыдущий паттерн не сработал, пробуем только число и extra
@@ -192,19 +192,19 @@ class TeresasRecipesExtractor(BaseRecipeExtractor):
         if match2:
             amount_str, extra = match2.groups()
             amount = amount_str.strip() if amount_str else None
-            unit = extra.strip() if extra else None
+            units = extra.strip() if extra else None
             
             return {
                 "name": name,
                 "amount": amount,
-                "unit": unit
+                "units": units
             }
         
         # Последний вариант - возвращаем все как amount
         return {
             "name": name,
             "amount": rest,
-            "unit": None
+            "units": None
         }
     
     def extract_ingredients(self) -> Optional[str]:
@@ -217,10 +217,9 @@ class TeresasRecipesExtractor(BaseRecipeExtractor):
             for ingredient_line in recipe_data['recipeIngredient']:
                 parsed = self.parse_ingredient_line(ingredient_line)
                 if parsed and parsed['name']:
-                    # Используем "units" вместо "unit" для соответствия формату из JSON примера
                     ingredients.append({
                         "name": parsed['name'],
-                        "units": parsed['unit'],
+                        "units": parsed['units'],
                         "amount": parsed['amount']
                     })
             
