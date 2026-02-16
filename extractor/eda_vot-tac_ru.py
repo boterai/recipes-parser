@@ -6,7 +6,9 @@ import sys
 from pathlib import Path
 import json
 import re
+import copy
 from typing import Optional
+from bs4 import BeautifulSoup
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
@@ -14,6 +16,15 @@ from extractor.base import BaseRecipeExtractor, process_directory
 
 class EdaVotTacExtractor(BaseRecipeExtractor):
     """Экстрактор для eda.vot-tac.ru"""
+    
+    # Константы для фильтрации и распознавания контента
+    IRRELEVANT_CONTENT_KEYWORDS = ['елки', 'наливай', 'счастье', 'исполнитель']
+    COOKING_ACTION_VERBS = [
+        'вымыть', 'разрезать', 'выложить', 'посолить', 'посыпать', 
+        'нарезать', 'выпекать', 'запекать', 'смешать', 'полить'
+    ]
+    RUSSIAN_STOPWORDS = {'с', 'в', 'и', 'для', 'из', 'на', 'по', 'к', 'у', 'о'}
+    INGREDIENT_UNITS = r'(мл|г|кг|л|клубней|зубчика|зубчиков|шт|штук|ст\.?\s*л\.?|ч\.?\s*л\.?|стаканов?|чайных?\s+ложек?|столовых?\s+ложек?|кусочек)'
     
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
@@ -81,17 +92,12 @@ class EdaVotTacExtractor(BaseRecipeExtractor):
                 break
         
         if composition_tag:
-            # Клонируем параграф чтобы не модифицировать оригинал
-            import copy
-            p_copy = copy.copy(composition_tag)
-            
             # Получаем весь текст, заменяя <br> на перенос строки
             html_content = str(composition_tag)
             # Заменяем <br> на \n
             html_content = html_content.replace('<br>', '\n').replace('<br/>', '\n').replace('<br />', '\n')
             
             # Парсим снова чтобы извлечь текст
-            from bs4 import BeautifulSoup
             temp_soup = BeautifulSoup(html_content, 'lxml')
             text = temp_soup.get_text()
             
@@ -133,7 +139,7 @@ class EdaVotTacExtractor(BaseRecipeExtractor):
         # Паттерн для извлечения: [количество] [единица] [название]
         # Примеры: "6 клубней картофеля", "50 мл ароматного масла"
         # Поддержка формата "50 мл. название"
-        pattern1 = r'^(\d+(?:[.,]\d+)?)\s+(мл|г|кг|л|клубней|зубчика|зубчиков|шт|штук|ст\.?\s*л\.?|ч\.?\s*л\.?|стаканов?|чайных?\s+ложек?|столовых?\s+ложек?|кусочек)\.?\s+(.+)$'
+        pattern1 = rf'^(\d+(?:[.,]\d+)?)\s+{self.INGREDIENT_UNITS}\.?\s+(.+)$'
         
         match = re.match(pattern1, text, re.IGNORECASE)
         
@@ -213,11 +219,10 @@ class EdaVotTacExtractor(BaseRecipeExtractor):
                 break
         
         if preparation_tag:
-            # Клонируем и заменяем <br> на пробелы
+            # Заменяем <br> на пробелы
             html_content = str(preparation_tag)
             html_content = html_content.replace('<br>', ' ').replace('<br/>', ' ').replace('<br />', ' ')
             
-            from bs4 import BeautifulSoup
             temp_soup = BeautifulSoup(html_content, 'lxml')
             text = self.clean_text(temp_soup.get_text())
             
@@ -239,7 +244,8 @@ class EdaVotTacExtractor(BaseRecipeExtractor):
         # Метод 2: Ищем h2 с "Рецепт" и собираем параграфы после него
         for h2 in entry_content.find_all('h2'):
             h2_text = h2.get_text()
-            if 'Рецепт' in h2_text and ('«' in h2_text or 'лимон' in h2_text or 'картофель' in h2_text):
+            # Ищем заголовок рецепта (может содержать кавычки или быть более общим)
+            if 'Рецепт' in h2_text and '«' in h2_text:
                 # Собираем все параграфы до следующего h2
                 paragraphs = []
                 current = h2.find_next_sibling()
@@ -248,10 +254,10 @@ class EdaVotTacExtractor(BaseRecipeExtractor):
                         break
                     if current.name == 'p':
                         text = self.clean_text(current.get_text())
-                        # Пропускаем параграфы с песнями и нерелевантным контентом
-                        if text and not any(word in text.lower() for word in ['елки', 'наливай', 'счастье', 'исполнитель']):
+                        # Пропускаем параграфы с нерелевантным контентом
+                        if text and not any(word in text.lower() for word in self.IRRELEVANT_CONTENT_KEYWORDS):
                             # Проверяем что это инструкция (содержит глаголы действия)
-                            if any(word in text.lower() for word in ['вымыть', 'разрезать', 'выложить', 'посолить', 'посыпать', 'нарезать', 'выпекать', 'запекать', 'смешать', 'полить']):
+                            if any(word in text.lower() for word in self.COOKING_ACTION_VERBS):
                                 paragraphs.append(text)
                     current = current.find_next_sibling()
                 
@@ -262,8 +268,12 @@ class EdaVotTacExtractor(BaseRecipeExtractor):
         return None
     
     def extract_category(self) -> Optional[str]:
-        """Извлечение категории"""
-        # Всегда возвращаем "Main Course" как в референсных JSON
+        """Извлечение категории
+        
+        Note: Все рецепты на сайте eda.vot-tac.ru относятся к основным блюдам,
+        поэтому возвращаем статическую категорию "Main Course" для совместимости
+        с общим форматом проекта.
+        """
         return "Main Course"
     
     def extract_cook_time(self) -> Optional[str]:
@@ -328,7 +338,6 @@ class EdaVotTacExtractor(BaseRecipeExtractor):
         html_content = str(preparation_tag)
         html_content = html_content.replace('<br>', ' ').replace('<br/>', ' ').replace('<br />', ' ')
         
-        from bs4 import BeautifulSoup
         temp_soup = BeautifulSoup(html_content, 'lxml')
         text = self.clean_text(temp_soup.get_text())
         
@@ -360,13 +369,12 @@ class EdaVotTacExtractor(BaseRecipeExtractor):
         words = dish_name.lower().split()
         
         # Фильтруем общие слова и короткие слова
-        stopwords = {'с', 'в', 'и', 'для', 'из', 'на', 'по', 'к', 'у', 'о'}
         tags = []
         
         for word in words:
             # Убираем знаки препинания
             word = re.sub(r'[^\w\-]', '', word)
-            if word and word not in stopwords and len(word) > 2:
+            if word and word not in self.RUSSIAN_STOPWORDS and len(word) > 2:
                 tags.append(word)
         
         return ', '.join(tags) if tags else None
