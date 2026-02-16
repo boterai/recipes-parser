@@ -220,11 +220,16 @@ class HjemmekokklaugetExtractor(BaseRecipeExtractor):
         # Ищем в fusion-li-item-content - инструкции там длиннее ингредиентов
         fusion_items = self.soup.find_all('div', class_='fusion-li-item-content')
         
+        # Список метаданных полей, которые нужно пропускать
+        metadata_prefixes = ['Kjøkken:', 'Vanskelighetsgrad:', 'Allergener:', 'Kategori:', 
+                            'Måltidstype:', 'Sesong:', 'Råvaregruppe:', 'Stikkord:', 'Av:',
+                            'Forberedelser:', 'Tilberedning:', 'Total tid:']
+        
         for item in fusion_items:
             text = item.get_text(strip=True)
             
-            # Пропускаем элементы с двоеточием (метаданные)
-            if ':' in text:
+            # Пропускаем элементы метаданных
+            if any(text.startswith(prefix) for prefix in metadata_prefixes):
                 continue
             
             # Пропускаем короткие тексты (вероятно ингредиенты)
@@ -234,9 +239,16 @@ class HjemmekokklaugetExtractor(BaseRecipeExtractor):
             # Инструкции содержат глаголы действия
             if any(word in text.lower() for word in 
                 ['bland', 'ha', 'kjør', 'pakk', 'kjevle', 'kok', 'steg', 'rør', 'skjær', 'hell', 
-                 'bløtlegg', 'kast', 'mat', 'del', 'fortsett', 'skyll', 'skog', 'plasser', 'rull', 'вымойте', 'нарежьте']):
+                 'bløtlegg', 'kast', 'mat', 'del', 'fortsett', 'skyll', 'skog', 'plasser', 'rull', 
+                 'вымойте', 'нарежьте', 'разогрейте', 'добавьте', 'положите', 'дайте', 'используйте',
+                 'forbered', 'forvarm', 'tilsett', 'sautér', 'legg', 'varm', 'vask', 'fjern', 'skjær',
+                 'mos', 'bruk', 'smak', 'sil', 'avkjøl', 'oppbevar']):
                 # Очищаем текст
                 cleaned = self.clean_text(text)
+                
+                # Убираем метки шагов типа "Forbered tomatene:" и заменяем их на просто текст
+                # Паттерн: слово с заглавной буквы + двоеточие в начале
+                cleaned = re.sub(r'^[A-ZÆØÅ][^:]+:\s*', '', cleaned)
                 
                 # Убираем вспомогательные комментарии и советы из инструкций
                 # Эти фразы обычно начинаются с "Har du", "NB!", "Hvis du"
@@ -252,7 +264,14 @@ class HjemmekokklaugetExtractor(BaseRecipeExtractor):
                 if cleaned and cleaned not in steps:
                     steps.append(cleaned)
         
-        return ' '.join(steps) if steps else None
+        # Форматируем с нумерацией, если её нет
+        if steps:
+            # Проверяем, есть ли уже нумерация
+            if not steps[0].strip().startswith(('1.', '1 ', 'Dag 1')):
+                steps = [f"{i}. {step}" for i, step in enumerate(steps, 1)]
+            return ' '.join(steps)
+        
+        return None
     
     def extract_category(self) -> Optional[str]:
         """Извлечение категории"""
