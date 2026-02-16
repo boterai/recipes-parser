@@ -113,7 +113,7 @@ class CoopSeExtractor(BaseRecipeExtractor):
             ingredient_str: Строка вида "600 g kycklinglårfilé" или "2 msk olivolja"
             
         Returns:
-            dict: {"name": "kycklinglårfilé", "amount": "600", "unit": "g"}
+            dict: {"name": "kycklinglårfilé", "amount": 600, "units": "g"}
         """
         if not ingredient_str:
             return {"name": None, "amount": None, "unit": None}
@@ -135,14 +135,15 @@ class CoopSeExtractor(BaseRecipeExtractor):
             # Обработка единицы измерения - НЕ нормализуем, оставляем как есть
             unit = unit.strip() if unit else None
             
-            # Очистка названия - НЕ удаляем описания после запятой
+            # Очистка названия - удаляем описания после запятой для совместимости с референсом
+            name = re.split(r',', name)[0]
             name = re.sub(r'\s+', ' ', name).strip()
             
             if name and len(name) >= 2:
                 return {
                     "name": name,
                     "amount": amount,
-                    "unit": unit
+                    "units": unit
                 }
         
         # Паттерн 2: количество + название (без единицы)
@@ -158,20 +159,25 @@ class CoopSeExtractor(BaseRecipeExtractor):
             name_words = name.split()
             if name_words and name_words[0].lower() not in ['g', 'kg', 'ml', 'dl', 'l', 'msk', 'matsked', 'matskedar', 'tsk', 'tesked', 'teskedar', 'st', 'krm']:
                 amount = self._parse_amount(amount_str)
+                
+                # Удаляем описания после запятой для совместимости с референсом
+                name = re.split(r',', name)[0]
                 name = re.sub(r'\s+', ' ', name).strip()
                 
                 if name and len(name) >= 2:
                     return {
                         "name": name,
                         "amount": amount,
-                        "unit": None
+                        "units": None  # Для items без explicit unit возвращаем None
                     }
         
         # Если ничего не совпало, возвращаем только название
+        # Также удаляем описания после запятой
+        name = re.split(r',', text)[0]
         return {
-            "name": text,
+            "name": name.strip(),
             "amount": None,
-            "unit": None
+            "units": None
         }
     
     def _parse_amount(self, amount_str: str) -> Optional[float]:
@@ -220,7 +226,7 @@ class CoopSeExtractor(BaseRecipeExtractor):
                     # Используем формат из примера: units вместо unit
                     parsed_ingredients.append({
                         "name": parsed['name'],
-                        "units": parsed['unit'],
+                        "units": parsed['units'],
                         "amount": parsed['amount']
                     })
             
@@ -239,7 +245,7 @@ class CoopSeExtractor(BaseRecipeExtractor):
                 if parsed and parsed.get('name'):
                     parsed_ingredients.append({
                         "name": parsed['name'],
-                        "units": parsed['unit'],
+                        "units": parsed['units'],
                         "amount": parsed['amount']
                     })
             
