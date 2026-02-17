@@ -73,7 +73,7 @@ class MummumDkExtractor(BaseRecipeExtractor):
             hour_text = "hour" if hours == 1 else "hours"
             return f"{hours} {hour_text}"
         elif minutes > 0:
-            minute_text = "minutter" if minutes != 1 else "minut"
+            minute_text = "minute" if minutes == 1 else "minutes"
             return f"{minutes} {minute_text}"
         
         return None
@@ -251,6 +251,9 @@ class MummumDkExtractor(BaseRecipeExtractor):
             'husk at', 'kan også', 'anbefales', 'bemærk'
         ]
         
+        # Извлекаем описание один раз для сравнения
+        description = self.extract_description()
+        
         # Ищем все параграфы в recipe-wrapper
         recipe_wrapper = self.soup.find('div', class_='recipe-wrapper')
         if recipe_wrapper:
@@ -262,7 +265,6 @@ class MummumDkExtractor(BaseRecipeExtractor):
                     if keyword.lower() in text.lower() and len(text) < 300:
                         cleaned_text = self.clean_text(text)
                         # Убеждаемся что это не описание рецепта
-                        description = self.extract_description()
                         if description and cleaned_text != description:
                             return cleaned_text
         
@@ -281,10 +283,10 @@ class MummumDkExtractor(BaseRecipeExtractor):
                 # Извлекаем теги из классов типа "diaeter-vegetar", "saeson-efteraar"
                 if cls.startswith('diaeter-'):
                     tag = cls.replace('diaeter-', '')
-                    # Переводим основные теги
+                    # Переводим основные теги на английский
                     tag_map = {
-                        'vegetar': 'vegetarisk',
-                        'veganer': 'vegansk',
+                        'vegetar': 'vegetarian',
+                        'veganer': 'vegan',
                     }
                     tags.append(tag_map.get(tag, tag))
                 elif cls.startswith('saeson-'):
