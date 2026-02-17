@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 import json
 import re
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Any
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
@@ -69,7 +69,7 @@ class AkisPetretzikisExtractor(BaseRecipeExtractor):
         
         return None
     
-    def parse_ingredient(self, ingredient_text: str) -> Optional[Dict[str, any]]:
+    def parse_ingredient(self, ingredient_text: str) -> Optional[Dict[str, Any]]:
         """
         Парсинг строки ингредиента в структурированный формат
         
