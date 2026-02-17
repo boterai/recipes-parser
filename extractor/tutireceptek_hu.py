@@ -15,6 +15,13 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class TutireceptekExtractor(BaseRecipeExtractor):
     """Экстрактор для tutireceptek.hu"""
     
+    # Список общих слов без смысловой нагрузки для фильтрации тегов
+    STOPWORDS = {
+        'recept', 'receptek', 'étel', 'ital', 'koktél', 'turmix',
+        'sütemény', 'torta', 'főzés', 'sütés', 'édesség', 'köret',
+        'halétel', 'főétel', 'pizza', 'szendvics', 'szendvicskrém', 'leves'
+    }
+    
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда"""
         # Ищем в заголовке H1
@@ -448,17 +455,11 @@ class TutireceptekExtractor(BaseRecipeExtractor):
             tags_list = [tag.strip() for tag in keywords.split(',') if tag.strip()]
             
             # Фильтруем общие слова
-            stopwords = {
-                'recept', 'receptek', 'étel', 'ital', 'koktél', 'turmix',
-                'sütemény', 'torta', 'főzés', 'sütés', 'édesség', 'köret',
-                'halétel', 'főétel', 'pizza', 'szendvics', 'szendvicskrém', 'leves'
-            }
-            
             filtered_tags = []
             for tag in tags_list:
                 tag_lower = tag.lower()
                 # Пропускаем точные совпадения со стоп-словами
-                if tag_lower in stopwords:
+                if tag_lower in self.STOPWORDS:
                     continue
                 # Пропускаем теги, которые заканчиваются на " recept"
                 if tag_lower.endswith(' recept'):
