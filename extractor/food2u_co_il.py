@@ -277,53 +277,57 @@ class Food2uExtractor(BaseRecipeExtractor):
         content_div = self.soup.find('div', class_=re.compile(r'post-content|entry-content|elementor-widget-theme-post-content', re.I))
         
         if content_div:
-            # Ищем все заголовки h2/h3 и параграфы
+            # Сначала проверяем, есть ли параграф с "אופן ההכנה:" напрямую (как в lasagna)
+            all_paragraphs = content_div.find_all('p')
+            for p in all_paragraphs:
+                p_text = p.get_text()
+                if 'אופן ההכנה:' in p_text or ('הוראות' in p_text and ':' in p_text):
+                    # Извлекаем инструкции из параграфа, разделенного <br>
+                    full_text = str(p).replace('<br>', '\n').replace('<br/>', '\n')
+                    from bs4 import BeautifulSoup
+                    temp_soup = BeautifulSoup(full_text, 'lxml')
+                    text = temp_soup.get_text()
+                    
+                    # Убираем заголовок "אופן ההכנה:" если есть
+                    text = re.sub(r'^אופן ההכנה:\s*', '', text)
+                    text = re.sub(r'^הוראות הכנה:\s*', '', text)
+                    
+                    # Берем текст как одну инструкцию
+                    text = self.clean_text(text)
+                    if text and len(text) > 10:
+                        instructions.append(text)
+                    
+                    # Найдено, выходим
+                    if instructions:
+                        return ' '.join(instructions) if instructions else None
+            
+            # Если не нашли напрямую, ищем все заголовки h2/h3
             headers = content_div.find_all(['h2', 'h3'])
             
             for header in headers:
                 header_text = self.clean_text(header.get_text())
                 
                 # Проверяем, что это заголовок инструкций
-                if header_text and ('הוראות' in header_text or 'הכנה' in header_text or 'אופן ההכנה' in header_text):
+                if header_text and ('הוראות' in header_text or 'הכנה' in header_text):
                     # Собираем все параграфы после заголовка до следующего h2/h3
                     next_elem = header.find_next_sibling()
                     step_num = 1
                     
                     while next_elem:
                         if next_elem.name == 'p':
-                            # Проверяем, есть ли в параграфе "אופן ההכנה:" с <br>
-                            p_text = next_elem.get_text()
+                            text = self.clean_text(next_elem.get_text())
                             
-                            if 'אופן ההכנה:' in p_text or 'הוראות הכנה:' in p_text:
-                                # Извлекаем инструкции из параграфа, разделенного <br>
-                                full_text = str(next_elem).replace('<br>', '\n').replace('<br/>', '\n')
-                                from bs4 import BeautifulSoup
-                                temp_soup = BeautifulSoup(full_text, 'lxml')
-                                text = temp_soup.get_text()
+                            if text and len(text) > 10:
+                                # Убираем жирный текст заголовка шага, если есть
+                                # Например: "<strong>הכנת הקוסקוס:</strong> מעבירים..."
+                                text = re.sub(r'^[^:]+:\s*', '', text)
                                 
-                                # Убираем заголовок "אופן ההכנה:" если есть
-                                text = re.sub(r'^אופן ההכנה:\s*', '', text)
-                                text = re.sub(r'^הוראות הכנה:\s*', '', text)
+                                # Добавляем нумерацию, если её нет
+                                if not re.match(r'^\d+\.', text):
+                                    text = f"{step_num}. {text}"
+                                    step_num += 1
                                 
-                                # Берем текст как одну инструкцию, если нет явного разделения
-                                text = self.clean_text(text)
-                                if text and len(text) > 10:
-                                    # Не добавляем нумерацию для длинного текста без явных шагов
-                                    instructions.append(text)
-                                break
-                            else:
-                                text = self.clean_text(p_text)
-                                
-                                if text and len(text) > 10:
-                                    # Убираем жирный текст заголовка шага, если есть
-                                    text = re.sub(r'^[^:]+:\s*', '', text)
-                                    
-                                    # Добавляем нумерацию, если её нет
-                                    if not re.match(r'^\d+\.', text):
-                                        text = f"{step_num}. {text}"
-                                        step_num += 1
-                                    
-                                    instructions.append(text)
+                                instructions.append(text)
                         
                         elif next_elem.name in ['ol', 'ul']:
                             # Если инструкции в виде списка
