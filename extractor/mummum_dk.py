@@ -15,8 +15,20 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class MummumDkExtractor(BaseRecipeExtractor):
     """Экстрактор для mummum.dk"""
     
+    def __init__(self, html_path: str):
+        """
+        Args:
+            html_path: Путь к HTML файлу
+        """
+        super().__init__(html_path)
+        # Кешируем JSON-LD данные для избежания повторного парсинга
+        self._json_ld_cache = None
+    
     def _get_json_ld_data(self) -> Optional[dict]:
-        """Извлечение данных JSON-LD из страницы"""
+        """Извлечение данных JSON-LD из страницы (с кешированием)"""
+        if self._json_ld_cache is not None:
+            return self._json_ld_cache
+        
         json_ld_scripts = self.soup.find_all('script', type='application/ld+json')
         
         for script in json_ld_scripts:
@@ -28,11 +40,13 @@ class MummumDkExtractor(BaseRecipeExtractor):
                 
                 # Проверяем что это Recipe
                 if isinstance(data, dict) and data.get('@type') == 'Recipe':
+                    self._json_ld_cache = data
                     return data
                         
             except (json.JSONDecodeError, KeyError):
                 continue
         
+        self._json_ld_cache = {}  # Кешируем пустой результат
         return None
     
     @staticmethod
