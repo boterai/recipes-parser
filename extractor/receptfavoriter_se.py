@@ -106,8 +106,15 @@ class ReceptfavoriterSeExtractor(BaseRecipeExtractor):
         # Чистим текст
         text = self.clean_text(ingredient_text)
         
+        # Убираем префиксы типа "CURRYPASTA TIKKA MASALA:" или "GARNERING:"
+        if ':' in text:
+            parts = text.split(':', 1)
+            # Проверяем, является ли первая часть заголовком (все заглавные или содержит мало букв)
+            prefix = parts[0].strip()
+            if prefix.isupper() or len(prefix.split()) <= 3:
+                text = parts[1].strip()
+        
         # Заменяем запятые на точки в числах (но сохраняем запятые как разделители)
-        # Сначала заменяем запятые-разделители на специальный маркер
         # Ищем паттерн "число,число" и заменяем на "число.число"
         text = re.sub(r'(\d),(\d)', r'\1.\2', text)
         
@@ -196,6 +203,8 @@ class ReceptfavoriterSeExtractor(BaseRecipeExtractor):
                 name = re.split(r'\s+(?:som|eller|gärna)\s+', name)[0]
                 # Убираем описания в скобках
                 name = re.sub(r'\([^)]*\)', '', name)
+                # Убираем дополнительные описания после запятой типа ", ca 65 gram"
+                name = re.split(r',\s*ca\s+\d+', name)[0]
                 name = name.strip()
             
             return {
@@ -223,6 +232,7 @@ class ReceptfavoriterSeExtractor(BaseRecipeExtractor):
             # Очистка названия
             name = re.split(r'\s+(?:som|eller|gärna)\s+', name)[0]
             name = re.sub(r'\([^)]*\)', '', name)
+            name = re.split(r',\s*ca\s+\d+', name)[0]
             name = name.strip()
             
             return {
