@@ -213,7 +213,7 @@ class MummumDkExtractor(BaseRecipeExtractor):
         breadcrumbs = self.soup.find('p', class_='breadcrumbs')
         if breadcrumbs:
             links = breadcrumbs.find_all('a')
-            # Берем предпоследнюю ссылку (последняя это сам рецепт)
+            # Берем последнюю ссылку (категория перед самим рецептом)
             if len(links) >= 2:
                 category = self.clean_text(links[-1].get_text())
                 category_map = {
@@ -265,8 +265,10 @@ class MummumDkExtractor(BaseRecipeExtractor):
             'husk at', 'kan også', 'anbefales', 'bemærk'
         ]
         
-        # Извлекаем описание один раз для сравнения
-        description = self.extract_description()
+        # Извлекаем описание один раз для сравнения (с кешированием)
+        if not hasattr(self, '_description_cache'):
+            self._description_cache = self.extract_description()
+        description = self._description_cache
         
         # Ищем все параграфы в recipe-wrapper
         recipe_wrapper = self.soup.find('div', class_='recipe-wrapper')
@@ -306,9 +308,6 @@ class MummumDkExtractor(BaseRecipeExtractor):
                 elif cls.startswith('saeson-'):
                     tag = cls.replace('saeson-', '')
                     tags.append(tag)
-                elif cls.startswith('ingredienser-') and not cls.startswith('ingredienser-andet'):
-                    # Игнорируем слишком детальные ингредиенты
-                    continue
         
         # Также добавляем категории из breadcrumbs если есть
         breadcrumbs = self.soup.find('p', class_='breadcrumbs')
