@@ -16,20 +16,23 @@ from extractor.base import BaseRecipeExtractor, process_directory
 class Food2uExtractor(BaseRecipeExtractor):
     """Extractor for food2u.co.il"""
     
+    # Maximum number of images to extract from content
+    MAX_CONTENT_IMAGES = 3
+    
     def extract_dish_name(self) -> Optional[str]:
         """Extract dish name"""
-        # Ищем в meta og:title
+        # Look for meta og:title
         og_title = self.soup.find('meta', property='og:title')
         if og_title and og_title.get('content'):
             text = og_title['content']
-            # Убираем суффиксы типа " - Food2U", "מתכון ל...", "» פוד טו יו"
+            # Remove suffixes like " - Food2U", "מתכון ל...", "» פוד טו יו"
             text = re.sub(r'\s*[-–»]\s*(Food2U|פוד טו יו).*$', '', text, flags=re.IGNORECASE)
             text = re.sub(r'^מתכון\s+(ל|להכנת|להכנה\s*של)\s*', '', text)
             text = re.sub(r'^הכנת\s+', '', text)
             text = re.sub(r'^הכנה\s*של\s+', '', text)
             return self.clean_text(text)
         
-        # Ищем в заголовке h1
+        # Look for h1 heading
         h1 = self.soup.find('h1')
         if h1:
             text = self.clean_text(h1.get_text())
@@ -39,7 +42,7 @@ class Food2uExtractor(BaseRecipeExtractor):
                 text = re.sub(r'^הכנה\s*של\s+', '', text)
                 return text
         
-        # Альтернативно - из title тега
+        # Alternatively - from title tag
         title = self.soup.find('title')
         if title:
             text = title.get_text()
@@ -55,24 +58,24 @@ class Food2uExtractor(BaseRecipeExtractor):
     
     def extract_description(self) -> Optional[str]:
         """Extract recipe description"""
-        # Ищем в meta description
+        # Look for meta description
         meta_desc = self.soup.find('meta', {'name': 'description'})
         if meta_desc and meta_desc.get('content'):
             return self.clean_text(meta_desc['content'])
         
-        # Альтернативно - из og:description
+        # Alternatively - from og:description
         og_desc = self.soup.find('meta', property='og:description')
         if og_desc and og_desc.get('content'):
             return self.clean_text(og_desc['content'])
         
-        # Ищем первый параграф после заголовка
+        # Look for first paragraph after heading
         content_div = self.soup.find('div', class_=re.compile(r'post-content|entry-content|elementor-widget-theme-post-content', re.I))
         if content_div:
-            # Ищем первый параграф, который не является заголовком
+            # Look for first paragraph that is not a heading
             paragraphs = content_div.find_all('p')
             for p in paragraphs:
                 text = self.clean_text(p.get_text())
-                # Проверяем, что это не слишком короткий текст и не заголовок
+                # Check that this is not too short text and not a heading
                 if text and len(text) > 20 and not text.endswith(':'):
                     return text
         
@@ -91,21 +94,21 @@ class Food2uExtractor(BaseRecipeExtractor):
         if not ingredient_text:
             return None
         
-        # Чистим текст
+        # Clean text
         text = self.clean_text(ingredient_text)
         
-        # Паттерн для извлечения количества, единицы и названия
-        # Формат: [число] [единица] [название] (для иврита)
-        # Примеры: "2 כוסות קוסקוס", "500 גרם בשר", "מלח לפי הטעם"
+        # Pattern for extracting amount, unit and name
+        # Format: [number] [unit] [name] (for Hebrew)
+        # Examples: "2 כוסות קוסקוס", "500 גרם בשר", "מלח לפי הטעם"
         
-        # Сначала пробуем извлечь число в начале
+        # First try to extract number at the beginning
         number_match = re.match(r'^([\d.,/]+)\s+(.+)$', text)
         
         if number_match:
             amount_str = number_match.group(1)
             rest = number_match.group(2)
             
-            # Обработка дробей типа "1/2"
+            # Processing fractions like "1/2"
             if '/' in amount_str:
                 parts = amount_str.split('/')
                 if len(parts) == 2:
@@ -117,18 +120,18 @@ class Food2uExtractor(BaseRecipeExtractor):
                     amount = amount_str
             else:
                 try:
-                    # Пробуем конвертировать в число
+                    # Try to convert to number
                     if '.' in amount_str or ',' in amount_str:
                         amount = float(amount_str.replace(',', '.'))
                     else:
                         amount_num = int(amount_str)
-                        # Сохраняем как int, если это целое число
+                        # Keep as int if it's a whole number
                         amount = amount_num
                 except ValueError:
                     amount = amount_str
             
-            # Теперь пытаемся извлечь единицу измерения
-            # Общие Hebrew единицы: כוסות, כפות, כף, גרם, ק"ג, ליטר, מ"ל, יחידה, יחידות, חופן
+            # Now try to extract unit of measurement
+            # Common Hebrew units: כוסות, כפות, כף, גרם, ק"ג, ליטר, מ"ל, יחידה, יחידות, חופן
             unit_patterns = [
                 r'^(כוסות|כוס|כפות|כף|כפית|כפיות|גרם|ק"ג|קילוגרם|ליטר|מ"ל|מיליליטר|יחידה|יחידות|חופן|חופנים)\s+(.+)$',
             ]
@@ -143,7 +146,7 @@ class Food2uExtractor(BaseRecipeExtractor):
                     name = unit_match.group(2)
                     break
             
-            # Очистка названия от фраз "לפי הטעם", "(אופציונלי)" и т.д.
+            # Clean name from phrases "לפי הטעם", "(אופציונלי)" и т.д.
             name = re.sub(r'\s*\(אופציונלי\)', '', name)
             name = re.sub(r'\s*(לפי הטעם|לפי הצורך|אופציונלי|לקישוט)$', '', name)
             name = self.clean_text(name)
@@ -154,10 +157,10 @@ class Food2uExtractor(BaseRecipeExtractor):
                 "units": unit
             }
         else:
-            # Если нет числа в начале, это может быть "מלח לפי הטעם"
-            # Проверяем, есть ли "לפי הטעם" в конце
+            # If there's no number at the beginning, it could be "מלח לפי הטעם"
+            # Check if there is "לפי הטעם" в конце
             if 'לפי הטעם' in text:
-                # Извлекаем название без "לפי הטעם"
+                # Extract name without "לפי הטעם"
                 name = re.sub(r'\s*לפי הטעם\s*', '', text)
                 name = self.clean_text(name)
                 return {
@@ -166,7 +169,7 @@ class Food2uExtractor(BaseRecipeExtractor):
                     "units": "לפי הטעם"
                 }
             
-            # Ищем единицу без количества
+            # Look for unit without amount
             unit_patterns = [
                 r'^(כוסות|כוס|כפות|כף|כפית|כפיות|גרם|ק"ג|קילוגרם|ליטר|מ"ל|מיליליטר|יחידה|יחידות|חופן|חופנים)\s+(.+)$',
             ]
@@ -184,7 +187,7 @@ class Food2uExtractor(BaseRecipeExtractor):
                         "units": unit_or_phrase
                     }
             
-            # Если ничего не подошло, возвращаем только название
+            # If nothing matched, return only name
             name = re.sub(r'\s*\(אופציונלי\)', '', text)
             name = self.clean_text(name)
             return {
@@ -197,24 +200,24 @@ class Food2uExtractor(BaseRecipeExtractor):
         """Extract ingredients"""
         ingredients = []
         
-        # Ищем заголовок "מרכיבים:" (Ингредиенты)
+        # Look for heading "מרכיבים:" (Ингредиенты)
         content_div = self.soup.find('div', class_=re.compile(r'post-content|entry-content|elementor-widget-theme-post-content', re.I))
         
         if content_div:
-            # Ищем все заголовки h2/h3 и параграфы
+            # Look for all h2/h3 headings and paragraphs
             headers = content_div.find_all(['h2', 'h3'])
             
             for header in headers:
                 header_text = self.clean_text(header.get_text())
                 
-                # Проверяем, что это заголовок ингредиентов
+                # Check that this is ingredients heading
                 if header_text and ('מרכיבים' in header_text or 'מצרכים' in header_text):
-                    # Ищем следующий ul или ol список после заголовка
+                    # Look for next ul or ol list after heading
                     next_elem = header.find_next_sibling()
                     
                     while next_elem:
                         if next_elem.name in ['ul', 'ol']:
-                            # Нашли список ингредиентов
+                            # Found ingredients list
                             items = next_elem.find_all('li')
                             
                             for item in items:
@@ -227,11 +230,11 @@ class Food2uExtractor(BaseRecipeExtractor):
                             
                             break
                         elif next_elem.name == 'p':
-                            # Проверяем, есть ли в параграфе "מצרכים:" или список с <br>
+                            # Check if there's "מצרכים:" in paragraph or list with <br>
                             p_text = next_elem.get_text()
                             if 'מצרכים:' in p_text:
-                                # Извлекаем ингредиенты из параграфа, разделенного <br>
-                                # Разбиваем по <br> тегам
+                                # Extract ingredients from paragraph separated by <br>
+                                # Split by <br> tags
                                 lines = []
                                 for content in next_elem.children:
                                     if content.name == 'br':
@@ -239,15 +242,15 @@ class Food2uExtractor(BaseRecipeExtractor):
                                     elif isinstance(content, str):
                                         lines.append(content.strip())
                                 
-                                # Объединяем строки, разделенные br
+                                # Join lines separated by br
                                 full_text = str(next_elem).replace('<br>', '\n').replace('<br/>', '\n')
                                 temp_soup = BeautifulSoup(full_text, 'lxml')
                                 text = temp_soup.get_text()
                                 
-                                # Разбиваем по переносам строк
+                                # Split by newlines
                                 lines = text.split('\n')
                                 
-                                # Пропускаем первую строку если это "מצרכים:"
+                                # Skip first line if it's "מצרכים:"
                                 for line in lines:
                                     line = self.clean_text(line)
                                     if line and line != 'מצרכים:' and len(line) > 3:
@@ -258,12 +261,12 @@ class Food2uExtractor(BaseRecipeExtractor):
                                 break
                             next_elem = next_elem.find_next_sibling()
                         elif next_elem.name in ['h2', 'h3']:
-                            # Дошли до следующего заголовка, прекращаем поиск
+                            # Reached next heading, stop search
                             break
                         else:
                             next_elem = next_elem.find_next_sibling()
                     
-                    # Если нашли ингредиенты, выходим
+                    # If found ingredients, exit
                     if ingredients:
                         break
         
@@ -273,42 +276,42 @@ class Food2uExtractor(BaseRecipeExtractor):
         """Extract cooking instructions"""
         instructions = []
         
-        # Ищем заголовок "הוראות הכנה:" или подобный
+        # Look for heading "הוראות הכנה:" или подобный
         content_div = self.soup.find('div', class_=re.compile(r'post-content|entry-content|elementor-widget-theme-post-content', re.I))
         
         if content_div:
-            # Сначала проверяем, есть ли параграф с "אופן ההכנה:" напрямую (как в lasagna)
+            # First check if there's paragraph with "אופן ההכנה:" directly (as in lasagna)
             all_paragraphs = content_div.find_all('p')
             for p in all_paragraphs:
                 p_text = p.get_text()
                 if 'אופן ההכנה:' in p_text or ('הוראות' in p_text and ':' in p_text):
-                    # Извлекаем инструкции из параграфа, разделенного <br>
+                    # Extract instructions from paragraph separated by <br>
                     full_text = str(p).replace('<br>', '\n').replace('<br/>', '\n')
                     temp_soup = BeautifulSoup(full_text, 'lxml')
                     text = temp_soup.get_text()
                     
-                    # Убираем заголовок "אופן ההכנה:" если есть
+                    # Remove heading "אופן ההכנה:" если есть
                     text = re.sub(r'^אופן ההכנה:\s*', '', text)
                     text = re.sub(r'^הוראות הכנה:\s*', '', text)
                     
-                    # Берем текст как одну инструкцию
+                    # Take text as one instruction
                     text = self.clean_text(text)
                     if text and len(text) > 10:
                         instructions.append(text)
                     
-                    # Найдено, выходим
+                    # Found, exit
                     if instructions:
                         return ' '.join(instructions) if instructions else None
             
-            # Если не нашли напрямую, ищем все заголовки h2/h3
+            # If not found directly, look for all headings h2/h3
             headers = content_div.find_all(['h2', 'h3'])
             
             for header in headers:
                 header_text = self.clean_text(header.get_text())
                 
-                # Проверяем, что это заголовок инструкций
+                # Check that this is instructions heading
                 if header_text and ('הוראות' in header_text or 'הכנה' in header_text):
-                    # Собираем все параграфы после заголовка до следующего h2/h3
+                    # Collect all paragraphs after heading until next h2/h3
                     next_elem = header.find_next_sibling()
                     step_num = 1
                     
@@ -317,11 +320,11 @@ class Food2uExtractor(BaseRecipeExtractor):
                             text = self.clean_text(next_elem.get_text())
                             
                             if text and len(text) > 10:
-                                # Убираем жирный текст заголовка шага, если есть
-                                # Например: "<strong>הכנת הקוסקוס:</strong> מעבירים..."
+                                # Remove bold text of step heading if present
+                                # For example: "<strong>הכנת הקוסקוס:</strong> מעבירים..."
                                 text = re.sub(r'^[^:]+:\s*', '', text)
                                 
-                                # Добавляем нумерацию, если её нет
+                                # Add numbering if not present
                                 if not re.match(r'^\d+\.', text):
                                     text = f"{step_num}. {text}"
                                     step_num += 1
@@ -329,7 +332,7 @@ class Food2uExtractor(BaseRecipeExtractor):
                                 instructions.append(text)
                         
                         elif next_elem.name in ['ol', 'ul']:
-                            # Если инструкции в виде списка
+                            # If instructions as list
                             items = next_elem.find_all('li')
                             for item in items:
                                 text = self.clean_text(item.get_text())
@@ -340,12 +343,12 @@ class Food2uExtractor(BaseRecipeExtractor):
                                     instructions.append(text)
                         
                         elif next_elem.name in ['h2', 'h3']:
-                            # Дошли до следующего заголовка
+                            # Reached next heading
                             break
                         
                         next_elem = next_elem.find_next_sibling()
                     
-                    # Если нашли инструкции, выходим
+                    # If found instructions, exit
                     if instructions:
                         break
         
@@ -353,26 +356,26 @@ class Food2uExtractor(BaseRecipeExtractor):
     
     def extract_category(self) -> Optional[str]:
         """Extract category"""
-        # Ищем в meta article:section
+        # Look for meta article:section
         meta_section = self.soup.find('meta', property='article:section')
         if meta_section and meta_section.get('content'):
             return self.clean_text(meta_section['content'])
         
-        # Ищем в хлебных крошках (breadcrumbs)
+        # Look for breadcrumbs (breadcrumbs)
         breadcrumbs = self.soup.find('nav', class_=re.compile(r'breadcrumb', re.I))
         if breadcrumbs:
             links = breadcrumbs.find_all('a')
             if len(links) > 1:
-                # Берем предпоследнюю категорию
+                # Take second to last category
                 return self.clean_text(links[-2].get_text())
         
-        # Ищем в классах категорий
+        # Look for category classes
         content = self.soup.find('div', class_=re.compile(r'category-'))
         if content:
             classes = content.get('class', [])
             for cls in classes:
                 if cls.startswith('category-') and cls != 'category-food':
-                    # Извлекаем название категории из класса
+                    # Extract category name from class
                     cat_name = cls.replace('category-', '').replace('-', ' ')
                     return self.clean_text(cat_name)
         
@@ -385,17 +388,17 @@ class Food2uExtractor(BaseRecipeExtractor):
         Args:
             time_type: 'prep', 'cook', or 'total'
         """
-        # Ищем время в тексте инструкций
+        # Look for time in instructions text
         content_div = self.soup.find('div', class_=re.compile(r'post-content|entry-content|elementor-widget-theme-post-content', re.I))
         
         if not content_div:
             return None
         
-        # Получаем весь текст контента
+        # Get all content text
         text = content_div.get_text()
         
-        # Паттерны для поиска времени в минутах
-        # Примеры: "5-10 דקות", "35 דקות", "כ-35 דקות"
+        # Patterns for searching time in minutes
+        # Examples: "5-10 דקות", "35 דקות", "כ-35 דקות"
         time_patterns = [
             r'(\d+)-(\d+)\s*דקות',  # "5-10 דקות"
             r'כ-(\d+)\s*דקות',      # "כ-35 דקות" (около X минут)
@@ -405,12 +408,12 @@ class Food2uExtractor(BaseRecipeExtractor):
         for pattern in time_patterns:
             matches = re.findall(pattern, text)
             if matches:
-                # Берем первое совпадение
+                # Take first match
                 match = matches[0]
                 if isinstance(match, tuple):
-                    # Для паттернов с диапазоном или "около"
+                    # For patterns with range or "около"
                     if len(match) == 2:
-                        # Берем среднее значение для диапазона
+                        # Take average value for range
                         try:
                             avg = (int(match[0]) + int(match[1])) / 2
                             return f"{int(avg)} minutes"
@@ -437,11 +440,11 @@ class Food2uExtractor(BaseRecipeExtractor):
     
     def extract_notes(self) -> Optional[str]:
         """Extract notes and tips"""
-        # Ищем параграфы с советами после основных инструкций
+        # Look for paragraphs with tips after main instructions
         content_div = self.soup.find('div', class_=re.compile(r'post-content|entry-content|elementor-widget-theme-post-content', re.I))
         
         if content_div:
-            # Ищем заголовок инструкций
+            # Look for heading инструкций
             headers = content_div.find_all(['h2', 'h3'])
             found_instructions = False
             
@@ -450,7 +453,7 @@ class Food2uExtractor(BaseRecipeExtractor):
                 
                 if header_text and ('הוראות' in header_text or 'הכנה' in header_text):
                     found_instructions = True
-                    # Ищем параграфы после инструкций, которые могут быть заметками
+                    # Look for paragraphs after instructions that could be notes
                     next_elem = header.find_next_sibling()
                     paragraphs_after_instructions = []
                     
@@ -461,13 +464,13 @@ class Food2uExtractor(BaseRecipeExtractor):
                             break
                         next_elem = next_elem.find_next_sibling()
                     
-                    # Берем последний параграф после инструкций как заметку
+                    # Take last paragraph after instructions as note
                     if paragraphs_after_instructions:
                         for p in reversed(paragraphs_after_instructions):
                             text = self.clean_text(p.get_text())
-                            # Проверяем, что это не шаг инструкции
+                            # Check that this is not an instruction step
                             if text and len(text) > 20 and not re.match(r'^\d+\.', text):
-                                # Проверяем, что параграф содержит советы/рекомендации
+                                # Check that paragraph contains tips/recommendations
                                 if any(word in text for word in ['כדי', 'ניתן', 'מומלץ', 'טיפ', 'שדרג']):
                                     return text
                     
@@ -477,15 +480,15 @@ class Food2uExtractor(BaseRecipeExtractor):
     
     def extract_tags(self) -> Optional[str]:
         """Extract tags"""
-        # Ищем в meta keywords
+        # Look for meta keywords
         meta_keywords = self.soup.find('meta', {'name': 'keywords'})
         if meta_keywords and meta_keywords.get('content'):
             return self.clean_text(meta_keywords['content'])
         
-        # Ищем в классах категорий и тегах
+        # Look for category classes and tags
         tags = []
         
-        # Проверяем article:tag meta теги
+        # Check article:tag meta tags
         article_tags = self.soup.find_all('meta', property='article:tag')
         for tag in article_tags:
             if tag.get('content'):
@@ -510,16 +513,16 @@ class Food2uExtractor(BaseRecipeExtractor):
         if twitter_image and twitter_image.get('content'):
             urls.append(twitter_image['content'])
         
-        # 3. Ищем изображения в контенте
+        # 3. Look for images in content
         content_div = self.soup.find('div', class_=re.compile(r'post-content|entry-content|elementor-widget-theme-post-content', re.I))
         if content_div:
             images = content_div.find_all('img')
-            for img in images[:3]:  # Берем первые 3 изображения из контента
+            for img in images[:self.MAX_CONTENT_IMAGES]:  # Take first N images from content
                 src = img.get('src') or img.get('data-src')
                 if src and src.startswith('http'):
                     urls.append(src)
         
-        # Убираем дубликаты, сохраняя порядок
+        # Remove duplicates while preserving order
         seen = set()
         unique_urls = []
         for url in urls:
@@ -555,10 +558,10 @@ def main():
     """Process all HTML files in the preprocessed/food2u_co_il directory"""
     import os
     
-    # Путь к директории с preprocessed файлами
+    # Path to directory with preprocessed files
     preprocessed_dir = os.path.join("preprocessed", "food2u_co_il")
     
-    # Проверяем существование директории
+    # Check directory existence
     if os.path.exists(preprocessed_dir) and os.path.isdir(preprocessed_dir):
         process_directory(Food2uExtractor, preprocessed_dir)
     else:
