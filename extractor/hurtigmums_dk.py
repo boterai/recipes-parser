@@ -239,7 +239,7 @@ class HurtigmumsDkExtractor(BaseRecipeExtractor):
             # Удаляем лишние слова "minutter" и оставляем только число
             time_text = re.sub(r'\s*minutter\s*', '', time_text)
             # Добавляем " minutes" в конце
-            if time_text and not 'minute' in time_text.lower():
+            if time_text and 'minute' not in time_text.lower():
                 time_text = f"{time_text} minutes"
             return self.clean_text(time_text)
         
@@ -255,7 +255,7 @@ class HurtigmumsDkExtractor(BaseRecipeExtractor):
             # Удаляем лишние слова "minutter" и оставляем только число
             time_text = re.sub(r'\s*minutter\s*', '', time_text)
             # Добавляем " minutes" в конце
-            if time_text and not 'minute' in time_text.lower():
+            if time_text and 'minute' not in time_text.lower():
                 time_text = f"{time_text} minutes"
             return self.clean_text(time_text)
         
