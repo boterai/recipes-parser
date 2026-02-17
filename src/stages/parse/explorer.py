@@ -26,6 +26,7 @@ if __name__ == "__main__":
 from config.config import config
 from src.stages.extract.recipe_extractor import RecipeExtractor
 from src.stages.analyse.analyse import RecipeAnalyzer
+from src.stages.parse.sitemap_scanner import SitemapScanner
 from src.repositories.site import SiteRepository
 from src.repositories.page import PageRepository
 from src.models.site import Site
@@ -116,6 +117,7 @@ class SiteExplorer:
         self.recipe_extractor = RecipeExtractor()
         self.max_no_recipe_pages: Optional[int] = max_no_recipe_pages 
         self.no_recipe_page_count: int = 0  # Счетчик страниц без рецепта подряд
+        self.sitemap_parser = SitemapScanner(base_url=self.site.base_url, active_driver=self.driver, custom_logger=self.logger)
 
     def set_pattern(self, pattern: str):
         self.site.pattern = pattern
@@ -125,7 +127,6 @@ class SiteExplorer:
         except re.error as e:
             self.logger.error(f"Неверный regex паттерн: {e}")
             self.recipe_regex = None
-    
     
     def load_visited_urls_from_db(self):
         """
@@ -699,7 +700,6 @@ class SiteExplorer:
                 self.logger.warning(f"Пропущен URL другого домена: {url}")
                 continue
             
-            # Проверяем что URL еще не посещен и не в очереди
             self.exploration_queue.insert(0, (url, depth))
             added_count += 1
             self.logger.info(f"  + Добавлен в начало: {url}")
@@ -709,7 +709,8 @@ class SiteExplorer:
         self.logger.info(f"Всего в очереди: {len(self.exploration_queue)} URL")
     
     def import_state(self, state: dict):
-        """Импорт состояния из другого экземпляра
+        """
+        Импорт состояния из другого экземпляра
         
         Args:
             state: Словарь состояния из export_state()
@@ -901,6 +902,12 @@ class SiteExplorer:
         else:
             queue = [(self.site.base_url, 0)]
             self.logger.info("Начинаем новое исследование")
+
+        if len(queue) <= 5:
+            self.logger.info("Проверяем sitemap.xml для ускорения начального этапа...")
+            self.sitemap_parser.driver = self.driver
+            new_urls = self.sitemap_parser.discover_and_scan_all()
+            self.add_helper_urls(list(new_urls), depth=1)
         
         urls_explored = len(self.visited_urls)
 

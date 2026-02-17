@@ -485,7 +485,7 @@ class ClusterVariationGenerator:
             
             if not remaining_recipes:
                 logger.info(f"Canonical recipe для base_recipe_id={base_recipe_id} уже полностью расширен")
-                return existing_merged
+                return None
             
             max_aggregated_recipes = max(1, max_aggregated_recipes + 1 - len(used_page_ids)) # +1 для базового рецепта
             

@@ -267,7 +267,7 @@ if __name__ == "__main__":
         '--ports',
         type=int,
         nargs='+',
-        default=[9222, 9223, 9224, 9225, 9226],
+        default=[9222],
         help='Список портов для параллельного запуска (по умолчанию: 9222 9223 9224)'
     )
 
@@ -295,7 +295,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     if args.parallel:
-        run_parallel(ports=args.ports,  modules=None, max_recipes_per_module=args.max_recipes_per_module, max_urls=args.max_urls,
+        run_parallel(ports=args.ports,  modules=["alexanderlagarmat_se"], max_recipes_per_module=args.max_recipes_per_module, max_urls=args.max_urls,
                      max_depth=5)
     else:
         main("allrecipes_com", args.ports[0])

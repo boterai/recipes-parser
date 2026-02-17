@@ -118,14 +118,14 @@ async def execute_cluster_batch(tasks: list, clusters_in_batch: list[str]) -> tu
     for i, result in enumerate(completed_tasks):
         if isinstance(result, Exception):
             logger.error(f"Error in task for cluster {clusters_in_batch[i]}: {result}")
-        elif result is None:
-            continue
         else:
             for merged_recipes in completed_tasks:
                 if merged_recipes and not isinstance(merged_recipes, Exception):
                     logger.info(f"Created {len(merged_recipes)} variations.")
+                    processed_count += 1
+
             success_clusters.append(clusters_in_batch[i])
-            processed_count += 1
+
     return success_clusters, processed_count
 
 async def merge_cluster_recipes(
@@ -262,7 +262,7 @@ def evaluate_merge_results(response, cluster_len:int, max_aggregated_recipes: in
         if isinstance(res, Exception):
             logger.error(f"Error during GPT merge: {res}")
         elif res is None:
-            logger.info("Variation was not created due to validation failure.")
+            logger.info("Variation was not created or updated.")
         else:
             # рецепт отмечается как успешный, если в нем достаточно рецептов из кластера (включая базовый рецепт), даже если он не достиг максимального количества рецептов для объединения (max_aggregated_recipes), так как в некоторых кластерах может быть недостаточно рецептов для достижения этого порога
             res = merge_repository.get_by_id(res.id)
@@ -290,7 +290,7 @@ if __name__ == "__main__":
     #config.MERGE_CENTROID_THRESHOLD_STEP = 0.02
     #asyncio.run(generate_from_one_cluster(merger=merger, cluster=cluster, cluster_centroid=base_recipe, 
     #                          max_variations=1, max_aggregated_recipes=10))
-    config.MERGE_MAX_MERGE_RECIPES = 1
+    #config.MERGE_MAX_MERGE_RECIPES = 1
     config.MERGE_CENTROID_THRESHOLD_STEP = 0.02
     asyncio.run(merge_cluster_recipes(similarity_threshold=0.89, 
                                              build_type="full", 
@@ -298,4 +298,4 @@ if __name__ == "__main__":
                                              max_aggregated_recipes=9, # + 1 базовый 
                                              max_recipes_per_gpt_merge_request=4,
                                              check_cluster_update=False, 
-                                             limit=10))
+                                             limit=200))
