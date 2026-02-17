@@ -44,6 +44,11 @@ class RecipesbyclareComExtractor(BaseRecipeExtractor):
         if min_match:
             minutes = int(min_match.group(1))
         
+        # Конвертируем минуты в часы если >= 60
+        if minutes >= 60:
+            hours += minutes // 60
+            minutes = minutes % 60
+        
         # Форматируем результат
         parts = []
         if hours > 0:
