@@ -1,5 +1,5 @@
 """
-Экстрактор данных рецептов для сайта food2u.co.il
+Recipe data extractor for the food2u.co.il website
 """
 
 import sys
@@ -7,16 +7,17 @@ from pathlib import Path
 import json
 import re
 from typing import Optional
+from bs4 import BeautifulSoup
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
 
 
 class Food2uExtractor(BaseRecipeExtractor):
-    """Экстрактор для food2u.co.il"""
+    """Extractor for food2u.co.il"""
     
     def extract_dish_name(self) -> Optional[str]:
-        """Извлечение названия блюда"""
+        """Extract dish name"""
         # Ищем в meta og:title
         og_title = self.soup.find('meta', property='og:title')
         if og_title and og_title.get('content'):
@@ -53,7 +54,7 @@ class Food2uExtractor(BaseRecipeExtractor):
         return None
     
     def extract_description(self) -> Optional[str]:
-        """Извлечение описания рецепта"""
+        """Extract recipe description"""
         # Ищем в meta description
         meta_desc = self.soup.find('meta', {'name': 'description'})
         if meta_desc and meta_desc.get('content'):
@@ -79,13 +80,13 @@ class Food2uExtractor(BaseRecipeExtractor):
     
     def parse_ingredient_text(self, ingredient_text: str) -> Optional[dict]:
         """
-        Парсинг строки ингредиента в структурированный формат для Hebrew text
+        Parse ingredient string into structured format for Hebrew text
         
         Args:
-            ingredient_text: Строка вида "2 כוסות קוסקוס" или "500 גרם בשר טחון"
+            ingredient_text: String like "2 כוסות קוסקוס" or "500 גרם בשר טחון"
             
         Returns:
-            dict: {"name": "קוסקוס", "amount": 2, "unit": "כוסות"} или None
+            dict: {"name": "קוסקוס", "amount": 2, "units": "כוסות"} or None
         """
         if not ingredient_text:
             return None
@@ -193,7 +194,7 @@ class Food2uExtractor(BaseRecipeExtractor):
             }
     
     def extract_ingredients(self) -> Optional[str]:
-        """Извлечение ингредиентов"""
+        """Extract ingredients"""
         ingredients = []
         
         # Ищем заголовок "מרכיבים:" (Ингредиенты)
@@ -240,7 +241,6 @@ class Food2uExtractor(BaseRecipeExtractor):
                                 
                                 # Объединяем строки, разделенные br
                                 full_text = str(next_elem).replace('<br>', '\n').replace('<br/>', '\n')
-                                from bs4 import BeautifulSoup
                                 temp_soup = BeautifulSoup(full_text, 'lxml')
                                 text = temp_soup.get_text()
                                 
@@ -270,7 +270,7 @@ class Food2uExtractor(BaseRecipeExtractor):
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
     def extract_instructions(self) -> Optional[str]:
-        """Извлечение инструкций по приготовлению"""
+        """Extract cooking instructions"""
         instructions = []
         
         # Ищем заголовок "הוראות הכנה:" или подобный
@@ -284,7 +284,6 @@ class Food2uExtractor(BaseRecipeExtractor):
                 if 'אופן ההכנה:' in p_text or ('הוראות' in p_text and ':' in p_text):
                     # Извлекаем инструкции из параграфа, разделенного <br>
                     full_text = str(p).replace('<br>', '\n').replace('<br/>', '\n')
-                    from bs4 import BeautifulSoup
                     temp_soup = BeautifulSoup(full_text, 'lxml')
                     text = temp_soup.get_text()
                     
@@ -353,7 +352,7 @@ class Food2uExtractor(BaseRecipeExtractor):
         return ' '.join(instructions) if instructions else None
     
     def extract_category(self) -> Optional[str]:
-        """Извлечение категории"""
+        """Extract category"""
         # Ищем в meta article:section
         meta_section = self.soup.find('meta', property='article:section')
         if meta_section and meta_section.get('content'):
@@ -381,7 +380,7 @@ class Food2uExtractor(BaseRecipeExtractor):
     
     def extract_time_from_text(self, time_type: str) -> Optional[str]:
         """
-        Извлечение времени из текста инструкций
+        Extract time from instruction text
         
         Args:
             time_type: 'prep', 'cook', or 'total'
@@ -425,19 +424,19 @@ class Food2uExtractor(BaseRecipeExtractor):
         return None
     
     def extract_prep_time(self) -> Optional[str]:
-        """Извлечение времени подготовки"""
+        """Extract preparation time"""
         return self.extract_time_from_text('prep')
     
     def extract_cook_time(self) -> Optional[str]:
-        """Извлечение времени приготовления"""
+        """Extract cooking time"""
         return self.extract_time_from_text('cook')
     
     def extract_total_time(self) -> Optional[str]:
-        """Извлечение общего времени"""
+        """Extract total time"""
         return self.extract_time_from_text('total')
     
     def extract_notes(self) -> Optional[str]:
-        """Извлечение заметок и советов"""
+        """Extract notes and tips"""
         # Ищем параграфы с советами после основных инструкций
         content_div = self.soup.find('div', class_=re.compile(r'post-content|entry-content|elementor-widget-theme-post-content', re.I))
         
@@ -477,7 +476,7 @@ class Food2uExtractor(BaseRecipeExtractor):
         return None
     
     def extract_tags(self) -> Optional[str]:
-        """Извлечение тегов"""
+        """Extract tags"""
         # Ищем в meta keywords
         meta_keywords = self.soup.find('meta', {'name': 'keywords'})
         if meta_keywords and meta_keywords.get('content'):
@@ -498,7 +497,7 @@ class Food2uExtractor(BaseRecipeExtractor):
         return None
     
     def extract_image_urls(self) -> Optional[str]:
-        """Извлечение URL изображений"""
+        """Extract image URLs"""
         urls = []
         
         # 1. Ищем в meta og:image
@@ -532,10 +531,10 @@ class Food2uExtractor(BaseRecipeExtractor):
     
     def extract_all(self) -> dict:
         """
-        Извлечение всех данных рецепта
+        Extract all recipe data
         
         Returns:
-            Словарь с данными рецепта
+            Dictionary with recipe data
         """
         return {
             "dish_name": self.extract_dish_name(),
@@ -553,7 +552,7 @@ class Food2uExtractor(BaseRecipeExtractor):
 
 
 def main():
-    """Обработка всех HTML файлов в директории preprocessed/food2u_co_il"""
+    """Process all HTML files in the preprocessed/food2u_co_il directory"""
     import os
     
     # Путь к директории с preprocessed файлами
