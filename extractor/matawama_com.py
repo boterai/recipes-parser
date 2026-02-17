@@ -56,10 +56,10 @@ class MatawamaExtractor(BaseRecipeExtractor):
             amount_text: строка типа "500g", "2 stk", "1 ts"
             
         Returns:
-            Словарь с amount и unit
+            Словарь с amount и units
         """
         if not amount_text:
-            return {"amount": None, "unit": None}
+            return {"amount": None, "units": None}
         
         amount_text = self.clean_text(amount_text)
         
@@ -67,20 +67,20 @@ class MatawamaExtractor(BaseRecipeExtractor):
         # "500g", "500 g"
         match = re.match(r'^(\d+\.?\d*)\s*([a-zA-Z]+)$', amount_text)
         if match:
-            return {"amount": match.group(1), "unit": match.group(2)}
+            return {"amount": match.group(1), "units": match.group(2)}
         
         # "2 stk", "4 fedd"
         match = re.match(r'^(\d+\.?\d*)\s+(.+)$', amount_text)
         if match:
-            return {"amount": match.group(1), "unit": match.group(2)}
+            return {"amount": match.group(1), "units": match.group(2)}
         
         # Только число
         match = re.match(r'^(\d+\.?\d*)$', amount_text)
         if match:
-            return {"amount": match.group(1), "unit": None}
+            return {"amount": match.group(1), "units": None}
         
         # Если не удалось распарсить, возвращаем как есть
-        return {"amount": amount_text, "unit": None}
+        return {"amount": amount_text, "units": None}
     
     def extract_ingredients(self) -> Optional[str]:
         """Извлечение ингредиентов из таблиц или списков"""
@@ -117,7 +117,7 @@ class MatawamaExtractor(BaseRecipeExtractor):
                         ingredient = {
                             "name": name,
                             "amount": parsed_amount["amount"],
-                            "units": parsed_amount["unit"]
+                            "units": parsed_amount["units"]
                         }
                         ingredients.append(ingredient)
             
