@@ -228,9 +228,12 @@ class CulinaryFiExtractor(BaseRecipeExtractor):
         return None
     
     def extract_prep_time(self) -> Optional[str]:
-        """Извлечение времени подготовки"""
-        # На этом сайте нет отдельного prep_time, возвращаем "0 minutes"
-        return "0 minutes"
+        """Извлечение времени подготовки
+        
+        Note: Данный сайт не предоставляет отдельное prep_time в HTML,
+        возвращаем None согласно требованиям (если не найдено, должно быть None)
+        """
+        return None
     
     def extract_cook_time(self) -> Optional[str]:
         """Извлечение времени приготовления"""
