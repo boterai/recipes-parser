@@ -152,6 +152,15 @@ class MzssHrExtractor(BaseRecipeExtractor):
             # Обработка amount - убираем диапазоны, оставляем первое число
             amount = amount_str.split('-')[0].strip()
             
+            # Очистка названия от лишних слов и окончаний
+            if name:
+                # Убираем описания в конце (например ", sitno sjeckana")
+                name = re.sub(r',.*$', '', name)
+                # Убираем фразы "po izboru", "po želji"
+                name = re.sub(r'\s*\(.*?\)', '', name)
+                name = re.sub(r'\s+po\s+(izboru|želji).*$', '', name, flags=re.IGNORECASE)
+                name = name.strip()
+            
             return {
                 "name": name if name else None,
                 "amount": amount if amount else None,
@@ -159,6 +168,12 @@ class MzssHrExtractor(BaseRecipeExtractor):
             }
         else:
             # Нет количества, только название
+            # Очистка названия
+            text = re.sub(r',.*$', '', text)
+            text = re.sub(r'\s*\(.*?\)', '', text)
+            text = re.sub(r'\s+po\s+(izboru|želji).*$', '', text, flags=re.IGNORECASE)
+            text = text.strip()
+            
             return {
                 "name": text,
                 "amount": None,
