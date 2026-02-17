@@ -148,8 +148,8 @@ class RecipesbyclareComExtractor(BaseRecipeExtractor):
             text = text.replace(fraction, text_fraction)
         
         # Паттерн для извлечения количества, единицы и названия
-        # Примеры: "1 cup flour", "2 tablespoons butter", "1/2 teaspoon salt"
-        pattern = r'^([\d\s/.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|l|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|units?|drops?)?\s*(.+)'
+        # Примеры: "1 cup flour", "2 tablespoons butter", "1/2 teaspoon salt", "1 large egg"
+        pattern = r'^([\d\s/.,]+)?\s*(cups?|tablespoons?|teaspoons?|tbsps?|tsps?|pounds?|ounces?|lbs?|oz|grams?|kilograms?|g|kg|milliliters?|liters?|ml|pinch(?:es)?|dash(?:es)?|packages?|cans?|jars?|bottles?|inch(?:es)?|slices?|cloves?|bunches?|sprigs?|whole|halves?|quarters?|pieces?|head|heads|units?|drops?)?\s*(.+)'
         
         match = re.match(pattern, text, re.IGNORECASE)
         
