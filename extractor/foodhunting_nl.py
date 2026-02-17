@@ -21,7 +21,7 @@ class FoodhuntingNlExtractor(BaseRecipeExtractor):
         Конвертирует ISO 8601 duration в читаемый формат
         
         Args:
-            duration: строка вида "PT20M" или "PT1H30M"
+            duration: строка вида "PT20M" или "PT1H30M" или "PT100M"
             
         Returns:
             Время в формате "X hour(s) Y minutes" или "X minutes"
@@ -44,12 +44,17 @@ class FoodhuntingNlExtractor(BaseRecipeExtractor):
         if min_match:
             minutes = int(min_match.group(1))
         
+        # Если только минуты больше 60, конвертируем в часы и минуты
+        if hours == 0 and minutes >= 60:
+            hours = minutes // 60
+            minutes = minutes % 60
+        
         # Форматируем результат
         parts = []
         if hours > 0:
             parts.append(f"{hours} hour" if hours == 1 else f"{hours} hours")
         if minutes > 0:
-            parts.append(f"{minutes} minute" if minutes == 1 else f"{minutes} minutes")
+            parts.append(f"{minutes} minutes")
         
         return " ".join(parts) if parts else None
     
@@ -238,10 +243,20 @@ class FoodhuntingNlExtractor(BaseRecipeExtractor):
             instructions = recipe_data['recipeInstructions']
             if isinstance(instructions, list):
                 for step in instructions:
-                    if isinstance(step, dict) and 'text' in step:
-                        step_text = self.clean_text(step['text'])
-                        if step_text:
-                            steps.append(step_text)
+                    # Обрабатываем HowToSection (может содержать itemListElement)
+                    if isinstance(step, dict):
+                        if step.get('@type') == 'HowToSection' and 'itemListElement' in step:
+                            # Извлекаем шаги из секции
+                            for idx, substep in enumerate(step['itemListElement'], 1):
+                                if isinstance(substep, dict) and 'text' in substep:
+                                    step_text = self.clean_text(substep['text'])
+                                    if step_text:
+                                        # Добавляем номер для шагов в секциях
+                                        steps.append(f"{len(steps) + 1}. {step_text}")
+                        elif 'text' in step:
+                            step_text = self.clean_text(step['text'])
+                            if step_text:
+                                steps.append(step_text)
                     elif isinstance(step, str):
                         step_text = self.clean_text(step)
                         if step_text:
@@ -257,15 +272,8 @@ class FoodhuntingNlExtractor(BaseRecipeExtractor):
                     if step_text:
                         steps.append(step_text)
         
-        # Нумеруем шаги, если их нет
-        if steps:
-            # Проверяем, есть ли уже нумерация
-            if not re.match(r'^\d+\.', steps[0]):
-                steps = [f"{idx}. {step}" for idx, step in enumerate(steps, 1)]
-            
-            return " ".join(steps)
-        
-        return None
+        # Возвращаем шаги как есть (без дополнительной нумерации)
+        return " ".join(steps) if steps else None
     
     def extract_category(self) -> Optional[str]:
         """Извлечение категории рецепта"""
