@@ -43,8 +43,12 @@ class MalinikaExtractor(BaseRecipeExtractor):
         h1 = self.soup.find('h1', class_='entry-title')
         if h1:
             title = self.clean_text(h1.get_text())
-            # Убираем длинные суффиксы с тире
+            # Убираем длинные суффиксы с тире и двоеточия
             title = re.sub(r'\s*[–-]\s*.*$', '', title)
+            # Убираем длинные пояснения после двоеточия
+            title = re.sub(r':\s*\d+.*$', '', title)
+            # Убираем "Рецепт" в начале
+            title = re.sub(r'^Рецепт\s+', '', title, flags=re.IGNORECASE)
             return title
         
         # Альтернатива - из JSON-LD
@@ -52,6 +56,8 @@ class MalinikaExtractor(BaseRecipeExtractor):
         if json_ld and 'name' in json_ld:
             title = self.clean_text(json_ld['name'])
             title = re.sub(r'\s*[–-]\s*.*$', '', title)
+            title = re.sub(r':\s*\d+.*$', '', title)
+            title = re.sub(r'^Рецепт\s+', '', title, flags=re.IGNORECASE)
             return title
         
         # Из meta og:title
@@ -59,6 +65,8 @@ class MalinikaExtractor(BaseRecipeExtractor):
         if og_title and og_title.get('content'):
             title = self.clean_text(og_title['content'])
             title = re.sub(r'\s*[–-]\s*.*$', '', title)
+            title = re.sub(r':\s*\d+.*$', '', title)
+            title = re.sub(r'^Рецепт\s+', '', title, flags=re.IGNORECASE)
             return title
         
         return None
