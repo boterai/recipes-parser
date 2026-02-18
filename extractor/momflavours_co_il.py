@@ -427,10 +427,25 @@ class MomflavoursExtractor(BaseRecipeExtractor):
                     if note_text:
                         # Убираем префикс вроде "איך להפוך ליותר "בריא":"
                         note_text = re.sub(r'^[^:]+:\s*', '', note_text)
-                        notes.append(note_text)
-                        break  # Берем только первый параграф из секции заметок
+                        # Берем только первые 2 предложения
+                        sentences = note_text.split('.')
+                        notes.append('.'.join(sentences[:2]).strip() + '.')
+                        break
+                elif collecting and child.name == 'ul':
+                    # Заметки могут быть в списке - берем первые 2 элемента
+                    items = child.find_all('li', recursive=False)
+                    for item in items[:2]:
+                        note_text = item.get_text()
+                        note_text = self.clean_text(note_text)
+                        if note_text:
+                            # Убираем префикс и берем только первое предложение
+                            note_text = re.sub(r'^[^:]+:\s*', '', note_text)
+                            first_sentence = note_text.split('.')[0].strip()
+                            if first_sentence:
+                                notes.append(first_sentence + '.')
+                    break
         
-        return notes[0] if notes else None
+        return ' '.join(notes) if notes else None
     
     def extract_tags(self) -> Optional[str]:
         """Извлечение тегов"""
