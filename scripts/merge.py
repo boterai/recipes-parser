@@ -35,7 +35,6 @@ def get_ss_from_config(score_thresold: float, build_type: Literal["image", "full
             min_cluster_size=config.SIMILARITY_MIN_CLUSTER_SIZE,
             min_cluster_size_for_validation=config.SIMILARITY_MIN_CLUSTER_SIZE_FOR_VALIDATION,
             union_top_k=config.SIMILARITY_UNION_TOP_K,
-            centroid_threshold=score_thresold + config.MERGE_CENTROID_THRESHOLD_STEP,
             density_min_similarity=score_thresold + config.MERGE_CENTROID_THRESHOLD_STEP
         ), build_type=build_type) # "image", "full", "ingredients"
 
@@ -291,11 +290,11 @@ if __name__ == "__main__":
     #asyncio.run(generate_from_one_cluster(merger=merger, cluster=cluster, cluster_centroid=base_recipe, 
     #                          max_variations=1, max_aggregated_recipes=10))
     #config.MERGE_MAX_MERGE_RECIPES = 1
-    config.MERGE_CENTROID_THRESHOLD_STEP = 0.02
-    asyncio.run(merge_cluster_recipes(similarity_threshold=0.89, 
+    config.MERGE_CENTROID_THRESHOLD_STEP = 0.01
+    asyncio.run(merge_cluster_recipes(similarity_threshold=0.92, 
                                              build_type="full", 
                                              max_variation_per_cluster=1, 
                                              max_aggregated_recipes=9, # + 1 базовый 
                                              max_recipes_per_gpt_merge_request=4,
                                              check_cluster_update=False, 
-                                             limit=200))
+                                             limit=150))

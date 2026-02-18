@@ -72,20 +72,6 @@ CREATE TABLE IF NOT EXISTS images (
     UNIQUE KEY unique_image_url_hash (image_url_hash)
 ) ENGINE=InnoDB;
 
--- Промежуточная таблица для связи многие-ко-многим между изображением рецепта и объединённым рецептом
-CREATE TABLE IF NOT EXISTS merged_recipe_images (
-    merged_recipe_id BIGINT NOT NULL,
-    image_id INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
-    PRIMARY KEY (merged_recipe_id, image_id),
-    FOREIGN KEY (merged_recipe_id) REFERENCES merged_recipes(id) ON DELETE CASCADE,
-    FOREIGN KEY (image_id) REFERENCES images(id) ON DELETE CASCADE,
-    
-    INDEX idx_merged_recipe (merged_recipe_id),
-    INDEX idx_image (image_id)
-) ENGINE=InnoDB;
-
 CREATE TABLE IF NOT EXISTS merged_recipes (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     pages_hash_sha256 CHAR(64) NOT NULL, -- SHA2("1,15,23", 256)
@@ -111,4 +97,15 @@ CREATE TABLE IF NOT EXISTS merged_recipes (
     recipe_count INT DEFAULT 0, -- число рецептов в кластере (для удобства)
     UNIQUE KEY uq_pages_hash_base_recipe (pages_hash_sha256, base_recipe_id),
     INDEX idx_base_recipe (base_recipe_id)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS cluster_page (
+    cluster_id BIGINT NOT NULL,
+    page_id INT NOT NULL,
+    is_centroid BOOLEAN DEFAULT FALSE, -- отмечаем, что эта страница является центроидом кластера
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (cluster_id, page_id),
+    FOREIGN KEY (page_id) REFERENCES pages(id) ON DELETE CASCADE,
+    INDEX idx_page_id (page_id),
+    INDEX idx_centroid_lookup (cluster_id, is_centroid)
 ) ENGINE=InnoDB;

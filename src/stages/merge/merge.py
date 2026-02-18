@@ -512,6 +512,55 @@ class ClusterVariationGenerator:
             max_aggregated_recipes=max_aggregated_recipes
         )
     
+    async def create_recipe_variation(
+        self,
+        canonical_recipe_id: int,
+        variation_source_ids: list[int],
+        target_language: Optional[str] = None,
+        save_to_db: bool = True
+    ) -> Optional[MergedRecipe]:
+        """
+        Создает вариацию существующего канонического рецепта.
+        
+        Публичный метод для генерации вариаций рецептов.
+        Вариация - это альтернативный способ приготовления того же блюда
+        (например, с другими специями, заменой ингредиентов, другим методом готовки).
+        
+        Args:
+            canonical_recipe_id: ID канонического рецепта (из таблицы merged_recipes)
+            variation_source_ids: Список page_id рецептов для создания вариации (1-5 штук)
+            target_language: Целевой язык генерации (если None - используется язык canonical)
+            save_to_db: Сохранять ли результат в БД
+            
+        Returns:
+            MergedRecipe вариации или None если не удалось создать
+            
+        Example:
+            generator = ClusterVariationGenerator()
+            
+            # Создаем вариацию канонического рецепта пасты
+            variation = await generator.create_recipe_variation(
+                canonical_recipe_id=123,
+                variation_source_ids=[456, 789],  # 2 рецепта с другими специями
+                save_to_db=True
+            )
+        """
+        # Получаем canonical recipe из БД
+        canonical_orm = self.merge_repository.get_by_id(canonical_recipe_id)
+        if not canonical_orm:
+            logger.error(f"Canonical recipe {canonical_recipe_id} не найден в БД")
+            return None
+        
+        canonical_recipe = canonical_orm.to_pydantic(get_images=False)
+        
+        # Генерируем вариацию
+        return await self._generate_variation_from_canonical(
+            canonical_recipe=canonical_recipe,
+            variation_source_ids=variation_source_ids,
+            target_language=target_language,
+            save_to_db=save_to_db
+        )
+    
     async def _create_new_canonical_recipe(
         self,
         base_recipe_id: int,
@@ -752,6 +801,230 @@ class ClusterVariationGenerator:
         expanded.gpt_validated = False  # Валидация будет выполнена перед сохранением
         return expanded
     
+    async def _generate_variation_from_canonical(
+        self,
+        canonical_recipe: MergedRecipe,
+        variation_source_ids: list[int],
+        target_language: Optional[str] = None,
+        save_to_db: bool = True
+    ) -> Optional[MergedRecipe]:
+        """
+        Генерирует вариацию от существующего канонического рецепта.
+        
+        Вариация - это альтернативный способ приготовления того же блюда:
+        - Другие приправы/специи (базилик вместо орегано)
+        - Замена основного ингредиента (курица вместо свинины)
+        - Другой метод приготовки (запечь вместо жарить)
+        - Дополнительные топпинги или гарниры
+        
+        Args:
+            canonical_recipe: Базовый канонический рецепт для создания вариации
+            variation_source_ids: Список page_id рецептов (1-5), которые будут источниками идей для вариации
+            target_language: Целевой язык генерации
+            save_to_db: Сохранять ли результат в БД
+            
+        Returns:
+            MergedRecipe вариации или None если не удалось создать
+        """
+        if not variation_source_ids or len(variation_source_ids) > self.max_merge_recipes_per_request - 1:
+            logger.warning(f"Некорректное количество source рецептов для вариации: {len(variation_source_ids)}")
+            return None
+        
+        # Получаем source рецепты из ClickHouse
+        source_recipes = self.olap_db.get_recipes_by_ids(variation_source_ids)
+        if not source_recipes:
+            logger.error(f"Source рецепты {variation_source_ids} не найдены в ClickHouse")
+            return None
+        
+        # Заполняем ingredients_with_amounts если нужно
+        for recipe in source_recipes:
+            if not recipe.ingredients_with_amounts:
+                recipe.fill_ingredients_with_amounts(self.page_repository)
+        
+        recipe_language = target_language or canonical_recipe.language or 'en'
+        
+        # Генерируем вариацию через GPT
+        variation = await self._generate_variation_with_gpt(
+            canonical_recipe=canonical_recipe,
+            source_recipes=source_recipes,
+            target_language=recipe_language
+        )
+        
+        if not variation:
+            logger.warning("Не удалось сгенерировать вариацию через GPT")
+            return None
+        
+        # Устанавливаем метаданные вариации
+        variation.page_ids = variation_source_ids
+        variation.base_recipe_id = canonical_recipe.base_recipe_id  # Связываем с тем же base_recipe
+        variation.language = recipe_language
+        variation.cluster_type = self.clusters_build_type
+        variation.score_threshold = self.score_threshold
+        variation.merge_model = config.GPT_MODEL_MERGE
+        
+        # Валидация: вариация не должна быть совершенно другим блюдом
+        # Сравниваем с базовым рецептом canonical
+        base_recipes = self.olap_db.get_recipes_by_ids([canonical_recipe.base_recipe_id])
+        if base_recipes:
+            base_recipe = base_recipes[0]
+            if not base_recipe.ingredients_with_amounts:
+                base_recipe.fill_ingredients_with_amounts(self.page_repository)
+            
+            is_valid, reason = await self.merger.validate_with_gpt(base_recipe, variation)
+            if not is_valid:
+                logger.warning(f"Вариация не прошла валидацию: {reason}")
+                return None
+            
+            variation.gpt_validated = True
+        
+        # Сохраняем в БД
+        if save_to_db:
+            try:
+                saved = self.merge_repository.create_merged_recipe(variation)
+                variation.id = saved.id
+                logger.info(f"✓ Вариация рецепта сохранена, id={saved.id}")
+            except Exception as e:
+                logger.error(f"Ошибка сохранения вариации: {e}")
+        
+        return variation
+    
+    async def _generate_variation_with_gpt(
+        self,
+        canonical_recipe: MergedRecipe,
+        source_recipes: list[Recipe],
+        target_language: str
+    ) -> Optional[MergedRecipe]:
+        """Генерация вариации рецепта через GPT"""
+        
+        if target_language:
+            language_instruction = f"Output in {target_language.upper()} language. Translate ALL text including dish name, ingredients, instructions, AND measurement units."
+        else:
+            language_instruction = "Use the SAME language as the canonical recipe"
+            
+        system_prompt = f"""Create a VARIATION of the canonical recipe using ideas from source recipes.
+
+GOAL: Create an ALTERNATIVE way to make the same dish type, NOT a completely different dish.
+
+VARIATION TYPES (choose what fits):
+1. Ingredient substitution: chicken → turkey, beef → lamb, soy sauce → tamari
+2. Spice/herb variation: oregano → basil, cumin → coriander
+3. Cooking method: pan-fry → bake, grill → roast
+4. Texture variation: crispy → tender, smooth → chunky
+5. Flavor profile: spicy → mild, sweet → savory
+6. Garnish/topping: add nuts, different cheese, fresh herbs
+7. Side dish/accompaniment: different vegetables, grain, sauce
+
+STRICT RULES:
+1. {language_instruction}
+2. SAME DISH TYPE: If canonical is "pasta", variation MUST be pasta. If canonical is "soup", variation MUST be soup.
+3. CORE PRESERVED: Main cooking technique and dish structure stay similar
+4. CLEAR DIFFERENCE: Variation should be noticeably different from canonical (not just tiny tweaks)
+5. EXECUTABLE: Complete, working recipe with all steps
+6. NATURAL VOICE: Write as standalone recipe. NEVER say "variation", "alternative version", "based on"
+7. dish_name: Reflect the variation (e.g., "Spicy Chicken Pasta" vs "Creamy Chicken Pasta")
+8. DESCRIPTION: 1-2 sentences highlighting what makes THIS version special
+9. SOURCE-ONLY: Use ONLY ingredients/techniques from canonical + source recipes. NO invention.
+10. INSTRUCTIONS: Array of detailed step strings. Each step = complete sentence.
+11. NO OPTIONALS: Exact amounts only.
+12. REALISTIC: 8-18 core ingredients. Don't include every possible variation.
+13. NO BRANDS: Remove all brand names. Generic terms only.
+
+WHAT TO TAKE FROM SOURCES:
+- Different spices/seasonings
+- Alternative main ingredients (if same category: protein→protein, vegetable→vegetable)
+- Different cooking temperatures/times
+- Alternative garnishes or toppings
+- Complementary side elements
+
+Return JSON only:
+{{"dish_name": "variation name", "description": "what makes this version special", "ingredients_with_amounts": [{{"name": "x", "amount": 100, "unit": "g"}}], "instructions": ["step 1", "step 2"], "tags": ["tag1"], "cook_time": "X min" or null, "prep_time": "X min" or null, "variation_notes": "internal: key differences from canonical"}}"""
+
+        def format_merged(m: MergedRecipe) -> str:
+            ings = m.ingredients or []
+            ing_list = "\n".join([
+                f"  - {ing.get('name', '')}: {ing.get('amount', '')} {ing.get('unit', '')}"
+                for ing in ings[:30]
+            ])
+            return f"""Name: {m.dish_name}
+Description: {m.description or 'N/A'}
+Prep: {m.prep_time or 'N/A'}, Cook: {m.cook_time or 'N/A'}
+Tags: {', '.join(m.tags or [])}
+Ingredients:
+{ing_list}
+Instructions: {(m.instructions or '')[:5000]}"""
+
+        def format_recipe(r: Recipe, label: str) -> str:
+            ings = r.ingredients_with_amounts or []
+            ing_list = "\n".join([
+                f"  - {ing.get('name', '')}: {ing.get('amount', '')} {ing.get('unit', '')}"
+                for ing in ings[:30]
+            ])
+            return f"""{label}:
+Name: {r.dish_name}
+Description: {(r.description or 'N/A')[:500]}
+Prep: {r.prep_time or 'N/A'}, Cook: {r.cook_time or 'N/A'}
+Tags: {', '.join(r.tags or [])}
+Ingredients:
+{ing_list}
+Instructions: {(r.instructions or '')[:5000]}"""
+
+        sources_text = "\n\n".join([
+            format_recipe(r, f"SOURCE RECIPE {i+1} (use for variation ideas)")
+            for i, r in enumerate(source_recipes)
+        ])
+        
+        user_prompt = f"""CANONICAL RECIPE (the base to create variation from):
+{format_merged(canonical_recipe)}
+
+{sources_text}
+
+TASK: Create ONE variation of the canonical recipe using interesting elements from the {len(source_recipes)} source recipe(s).
+The variation should be a different but valid way to make a similar dish.
+Example: if canonical is "Tomato Basil Pasta", variation could be "Spicy Arrabbiata Pasta" or "Creamy Garlic Pasta"."""
+
+        try:
+            result = await self.merger.gpt_client.async_request(
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                temperature=0.7,  # Выше температура для большего разнообразия вариаций
+                max_tokens=2500,
+                request_timeout=90,
+                model=config.GPT_MODEL_MERGE,
+                response_schema=self.merged_recipe_schema
+            )
+            
+            if not result or not isinstance(result, dict):
+                return None
+            
+            variation_notes = result.get('variation_notes', '')
+            source_ids_str = ','.join([str(r.page_id) for r in source_recipes])
+            merge_comment = f"variation from canonical {canonical_recipe.id} using sources [{source_ids_str}]: {variation_notes}"
+            
+            variation = MergedRecipe(
+                page_ids=[],  # Будет заполнено в вызывающем методе
+                base_recipe_id=canonical_recipe.base_recipe_id,
+                dish_name=result.get('dish_name', canonical_recipe.dish_name),
+                description=result.get('description', ''),
+                ingredients=result.get('ingredients_with_amounts', []),
+                instructions=result.get('instructions', []),
+                tags=result.get('tags', canonical_recipe.tags or []),
+                cook_time=str(result.get('cook_time') or ''),
+                prep_time=str(result.get('prep_time') or ''),
+                merge_comments=merge_comment,
+                language=canonical_recipe.language,
+                cluster_type=canonical_recipe.cluster_type,
+                score_threshold=canonical_recipe.score_threshold,
+                gpt_validated=False,
+                merge_model=config.GPT_MODEL_MERGE
+            )
+            
+            return variation
+            
+        except Exception as e:
+            logger.error(f"GPT variation generation failed: {e}")
+            return None
+        
+    
     async def _generate_expanded_canonical(
         self,
         current_merged: MergedRecipe,
@@ -909,3 +1182,80 @@ If sources have conflicting info, prefer the most common or reasonable approach.
         valid_images_id = [img.id for img in images if img.image_url in valid_urls]
         self.merge_repository.add_images_to_recipe(merged_recipe.id, valid_images_id)
         return True
+
+
+# Пример использования
+async def example_create_variations():
+    """
+    Пример создания вариаций рецептов.
+    
+    Workflow:
+    1. Создается canonical (основной) рецепт из кластера
+    2. На основе canonical создаются вариации (с другими специями, методами готовки и т.д.)
+    """
+    generator = ClusterVariationGenerator(
+        score_threshold=0.94,
+        clusters_build_type="full",
+        max_recipes_per_gpt_merge_request=5
+    )
+    
+    # Шаг 1: Создаем canonical recipe из кластера
+    canonical = await generator.create_canonical_recipe_with_gpt(
+        existing_merged=None,
+        base_recipe_id=12345,  # Центроид кластера
+        cluster_recipes=[12345, 12346, 12347, 12348, 12349],  # Все рецепты кластера
+        target_language='en',
+        save_to_db=True,
+        max_aggregated_recipes=5
+    )
+    
+    if not canonical:
+        logger.error("Не удалось создать canonical recipe")
+        return
+    
+    logger.info(f"✓ Создан canonical recipe: '{canonical.dish_name}' (ID={canonical.id})")
+    
+    # Шаг 2: Создаем вариации на основе canonical
+    # Вариация 1: с рецептами использующими другие специи
+    variation_1 = await generator.create_recipe_variation(
+        canonical_recipe_id=canonical.id,
+        variation_source_ids=[12350, 12351],  # 2 рецепта с базиликом вместо орегано
+        target_language='en',
+        save_to_db=True
+    )
+    
+    if variation_1:
+        logger.info(f"✓ Вариация 1: '{variation_1.dish_name}' (ID={variation_1.id})")
+    
+    # Вариация 2: с другим методом приготовки
+    variation_2 = await generator.create_recipe_variation(
+        canonical_recipe_id=canonical.id,
+        variation_source_ids=[12352, 12353, 12354],  # 3 рецепта с запеканием вместо жарки
+        target_language='en',
+        save_to_db=True
+    )
+    
+    if variation_2:
+        logger.info(f"✓ Вариация 2: '{variation_2.dish_name}' (ID={variation_2.id})")
+    
+    # Вариация 3: с заменой основного ингредиента
+    variation_3 = await generator.create_recipe_variation(
+        canonical_recipe_id=canonical.id,
+        variation_source_ids=[12355],  # 1 рецепт с курицей вместо свинины
+        target_language='en',
+        save_to_db=True
+    )
+    
+    if variation_3:
+        logger.info(f"✓ Вариация 3: '{variation_3.dish_name}' (ID={variation_3.id})")
+    
+    logger.info(f"\n{'='*60}")
+    logger.info(f"Итого создано:")
+    logger.info(f"  - 1 canonical recipe: '{canonical.dish_name}'")
+    logger.info(f"  - {sum([1 for v in [variation_1, variation_2, variation_3] if v])} вариации")
+    logger.info(f"{'='*60}\n")
+
+
+if __name__ == "__main__":
+    # Пример использования
+    asyncio.run(example_create_variations())

@@ -55,6 +55,13 @@ class PageORM(Base):
         lazy="select"
     )
     
+    cluster_pages = relationship(
+        "ClusterPageORM",
+        back_populates="page",
+        cascade="all, delete-orphan",
+        lazy="select"
+    )
+    
     # Индексы
     __table_args__ = (
         Index('unique_site_url', 'site_id', 'url', unique=True, mysql_length={'url': 500}),
