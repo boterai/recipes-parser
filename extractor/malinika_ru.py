@@ -49,6 +49,14 @@ class MalinikaExtractor(BaseRecipeExtractor):
             title = re.sub(r':\s*\d+.*$', '', title)
             # Убираем "Рецепт" в начале
             title = re.sub(r'^Рецепт\s+', '', title, flags=re.IGNORECASE)
+            # Нормализуем первое слово (родительный падеж -> именительный)
+            words = title.split()
+            if words:
+                words[0] = self.normalize_ingredient_name(words[0])
+                title = ' '.join(words)
+            # Приводим первую букву к заглавной
+            if title:
+                title = title[0].upper() + title[1:] if len(title) > 1 else title.upper()
             return title
         
         # Альтернатива - из JSON-LD
@@ -58,6 +66,12 @@ class MalinikaExtractor(BaseRecipeExtractor):
             title = re.sub(r'\s*[–-]\s*.*$', '', title)
             title = re.sub(r':\s*\d+.*$', '', title)
             title = re.sub(r'^Рецепт\s+', '', title, flags=re.IGNORECASE)
+            words = title.split()
+            if words:
+                words[0] = self.normalize_ingredient_name(words[0])
+                title = ' '.join(words)
+            if title:
+                title = title[0].upper() + title[1:] if len(title) > 1 else title.upper()
             return title
         
         # Из meta og:title
@@ -67,6 +81,12 @@ class MalinikaExtractor(BaseRecipeExtractor):
             title = re.sub(r'\s*[–-]\s*.*$', '', title)
             title = re.sub(r':\s*\d+.*$', '', title)
             title = re.sub(r'^Рецепт\s+', '', title, flags=re.IGNORECASE)
+            words = title.split()
+            if words:
+                words[0] = self.normalize_ingredient_name(words[0])
+                title = ' '.join(words)
+            if title:
+                title = title[0].upper() + title[1:] if len(title) > 1 else title.upper()
             return title
         
         return None
