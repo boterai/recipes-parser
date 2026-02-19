@@ -424,7 +424,8 @@ class ChefExpertoExtractor(BaseRecipeExtractor):
         # 3. Ищем изображения в теге img в контенте
         for img in self.soup.find_all('img', src=True):
             src = img['src']
-            if src and src.startswith('http') and 'chefexperto.com' in src:
+            # Проверяем что URL начинается с правильного домена
+            if src and (src.startswith('https://chefexperto.com/') or src.startswith('http://chefexperto.com/')):
                 # Фильтруем логотипы и иконки
                 if not any(skip in src.lower() for skip in ['logo', 'icon', 'avatar', 'cropped']):
                     if src not in urls:
