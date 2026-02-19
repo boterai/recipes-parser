@@ -157,19 +157,31 @@ class CrockpotRomaniaExtractor(BaseRecipeExtractor):
         
         text = self.clean_text(ingredient_text)
         
-        # Паттерн для извлечения количества, единицы и названия
-        # Примеры: "1kg carne", "150g țelină", "2 lingurițe sare", "1 ceapă mare"
-        # Поддерживаем: числа с точкой/дробью, единицы измерения, остальное - название
-        pattern = r'^([\d\s/.,\-]+)?\s*(kg|g|ml|l|linguri[țt]?[eă]?|lingur[iă]|cup|cups|tablespoons?|teaspoons?|tbsp|tsp|pounds?|ounces?|lbs?|oz|grams?|kilograms?|milliliters?|liters?|clove|cloves|medium|large|small)?\s*(.+)?$'
+        # Сначала извлекаем unit из конструкций "după gust", "după preferință"
+        unit_after = None
+        match_after_unit = re.search(r',?\s+(după\s+(?:gust|preferință))$', text, re.IGNORECASE)
+        if match_after_unit:
+            unit_after = match_after_unit.group(1).strip()
+            # Удаляем это из текста
+            text = text[:match_after_unit.start()].strip()
         
-        match = re.match(pattern, text, re.IGNORECASE)
+        # Удаляем текст в скобках из названия, но сохраняем для извлечения количества/единицы
+        cleaned_text = re.sub(r'\s*\([^)]*\)', '', text)
+        
+        # Паттерн для извлечения количества, единицы и названия
+        # Примеры: "1kg carne", "150g țelină", "2 lingurițe de sare", "1 ceapă mare"
+        # Поддерживаем: числа с точкой/дробью/дефисом, единицы измерения, остальное - название
+        # ВАЖНО: более длинные единицы должны быть ПЕРЕД короткими (lingurițe перед l)
+        pattern = r'^([\d\s/.,\-]+)?\s*(linguri[țt]?[eă]?[s]?|lingur[iă]|tablespoons?|teaspoons?|kilograms?|milliliters?|pounds?|ounces?|grams?|liters?|cloves?|tbsp|tsp|cups?|lbs?|kg|ml|oz|g|l|medium|large|small)?\s*(?:de\s+)?(.+)?$'
+        
+        match = re.match(pattern, cleaned_text, re.IGNORECASE)
         
         if not match:
             # Если паттерн не совпал, возвращаем всё как название
             return {
-                "name": text,
+                "name": cleaned_text,
                 "amount": None,
-                "unit": None
+                "unit": unit_after
             }
         
         amount_str, unit, name = match.groups()
@@ -178,20 +190,22 @@ class CrockpotRomaniaExtractor(BaseRecipeExtractor):
         amount = None
         if amount_str:
             amount_str = amount_str.strip()
-            # Обработка дробей типа "1/2" или диапазонов "2.5-3"
-            if '/' in amount_str or '-' in amount_str or '.' in amount_str:
-                amount = amount_str  # Сохраняем как есть
-            else:
-                amount = amount_str
+            # Обработка дробей типа "1/2" или диапазонов "2.5-3" или "2,5-3"
+            amount = amount_str.replace(',', '.')  # Нормализуем запятые в точки
         
         # Обработка единицы измерения
-        unit = unit.strip() if unit else None
+        # Если нашли unit_after (например, "după gust"), используем его
+        if unit_after:
+            unit = unit_after
+        elif unit:
+            unit = unit.strip()
         
         # Очистка названия
         if name:
-            name = self.clean_text(name)
-            # Удаляем фразы "după gust", "după preferință", "optional"
-            name = re.sub(r'\b(după gust|după preferință|optional|dacă se dorește)\b', '', name, flags=re.IGNORECASE)
+            name = name.strip()
+            # Удаляем "de" в начале (например, "de sare" -> "sare")
+            name = re.sub(r'^de\s+', '', name, flags=re.IGNORECASE)
+            # Удаляем лишние пробелы
             name = re.sub(r'\s+', ' ', name).strip()
         
         return {
@@ -238,10 +252,29 @@ class CrockpotRomaniaExtractor(BaseRecipeExtractor):
     
     def extract_instructions(self) -> Optional[str]:
         """Извлечение шагов приготовления"""
-        # Сначала пробуем извлечь из meta tag с itemprop="recipeInstructions"
+        # Сначала пробуем извлечь из div после "Mod de preparare"
+        # Ищем h2 с текстом "Mod de preparare" и берем следующий div
+        headers = self.soup.find_all('h2')
+        for header in headers:
+            if 'mod de preparare' in header.get_text().lower():
+                # Берем следующий div с классом recipe-description
+                next_div = header.find_next_sibling('div', class_='recipe-description')
+                if next_div:
+                    # Извлекаем текст, удаляя теги <b> но сохраняя их содержимое
+                    # Заменяем <br> на пробелы
+                    text = next_div.get_text(separator=' ', strip=True)
+                    # Очищаем множественные пробелы
+                    text = re.sub(r'\s+', ' ', text)
+                    # Заменяем " Pasul N. " на " Pasul N: "
+                    text = re.sub(r'Pasul\s+(\d+)\s*\.', r'Pasul \1:', text)
+                    return self.clean_text(text) if text else None
+        
+        # Если не нашли выше, пробуем meta tag (но там без диакритиков)
         meta_instructions = self.soup.find('meta', itemprop='recipeInstructions')
         if meta_instructions and meta_instructions.get('content'):
             instructions = meta_instructions['content']
+            # Заменяем точки после номеров шагов на двоеточия
+            instructions = re.sub(r'Pasul\s+(\d+)\.', r'Pasul \1:', instructions)
             return self.clean_text(instructions)
         
         # Альтернативно - ищем div с классом "mod-preparare"
