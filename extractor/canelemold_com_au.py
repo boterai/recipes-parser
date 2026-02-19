@@ -346,16 +346,23 @@ class CaneleMoldExtractor(BaseRecipeExtractor):
         # Часто имеют заголовок типа "Pro Tips", "Tips", "Notes"
         for ol in self.soup.find_all('ol'):
             items = ol.find_all('li')
-            temp_notes = []
             
-            # Проверяем предыдущий элемент - может быть заголовок с "Tips" или "Notes"
+            # Проверяем предыдущий элемент - должен быть заголовок с "Tips" или "Notes"
             prev_elem = ol.find_previous(['h2', 'h3', 'h4'])
             has_tips_header = False
             if prev_elem:
                 header_text = prev_elem.get_text().lower()
-                if 'tip' in header_text or 'note' in header_text:
+                if any(word in header_text for word in ['tip', 'note', 'advice']):
                     has_tips_header = True
+                # Пропускаем инструкции
+                if any(word in header_text for word in ['preparation', 'instruction', 'method', 'step']):
+                    continue
             
+            # Пропускаем, если это не похоже на советы
+            if not has_tips_header:
+                continue
+            
+            temp_notes = []
             for item in items:
                 text = item.get_text(separator=' ', strip=True)
                 text = self.clean_text(text)
@@ -366,15 +373,10 @@ class CaneleMoldExtractor(BaseRecipeExtractor):
                 if colon_match:
                     text = colon_match.group(1)
                 
-                # Проверяем, похоже ли это на совет/заметку
-                keywords = ['ensure', 'make sure', 'choose', 'temperature', 'allow',
-                           'rest', 'cool', 'bake', 'mold', 'preparation', 'helps',
-                           'prevents', 'crucial', 'important', 'prevent', 'properly']
-                
-                if text and (has_tips_header or any(keyword in text.lower() for keyword in keywords)):
+                if text and len(text) > 10:
                     temp_notes.append(text)
             
-            # Если нашли заметки (минимум 2), используем их
+            # Если нашли заметки, используем их
             if len(temp_notes) >= 2:
                 notes = temp_notes
                 break
