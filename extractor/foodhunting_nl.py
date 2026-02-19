@@ -88,10 +88,24 @@ class FoodhuntingNlExtractor(BaseRecipeExtractor):
         if recipe_data and 'name' in recipe_data:
             return self.clean_text(recipe_data['name'])
         
-        # Альтернативно - из HTML
+        # Альтернативно - из HTML h1
         recipe_header = self.soup.find('h1')
         if recipe_header:
             return self.clean_text(recipe_header.get_text())
+        
+        # Пробуем из WPRM recipe name (для print-версий)
+        wprm_name = self.soup.find(class_='wprm-recipe-name')
+        if wprm_name:
+            return self.clean_text(wprm_name.get_text())
+        
+        # Последний вариант - из title тега
+        title_tag = self.soup.find('title')
+        if title_tag:
+            title_text = self.clean_text(title_tag.get_text())
+            # Убираем суффикс сайта из title
+            if ' - ' in title_text:
+                title_text = title_text.split(' - ')[0].strip()
+            return title_text
         
         return None
     
