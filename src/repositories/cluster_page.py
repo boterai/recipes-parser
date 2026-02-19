@@ -126,8 +126,31 @@ class ClusterPageRepository(BaseRepository[ClusterPageORM]):
         session.commit()
         return result_mapping
 
-    def add_cluster_pages(self, page_ids: list[int], cluster_centroid_page_id: int) -> int:
+    def add_cluster_pages(self, page_ids: list[int], cluster_centroid_page_id: int) -> list[int]:
         """Обёртка над batch-методом для одиночных кластеров"""
         result = self.add_cluster_pages_batch({cluster_centroid_page_id: page_ids})
         return result[cluster_centroid_page_id]
+    
+    def get_similar_pages(self, page_id: int) -> list[int]:
+        """Получить страницы, принадлежащие тому же кластеру, что и данная страница"""
+        session = self.get_session()
+        try:
+            cluster_id_subquery = (
+                session.query(ClusterPageORM.cluster_id)
+                .filter(ClusterPageORM.page_id == page_id)
+                .scalar_subquery()
+            )
+
+            similar_pages = (
+                session.query(ClusterPageORM.page_id)
+                .filter(
+                    ClusterPageORM.cluster_id == cluster_id_subquery,
+                    ClusterPageORM.page_id != page_id 
+                )
+                .all()
+            )
+
+            return [pid for (pid,) in similar_pages]
+        finally:
+            session.close()
         

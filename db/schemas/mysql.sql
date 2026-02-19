@@ -95,6 +95,7 @@ CREATE TABLE IF NOT EXISTS merged_recipes (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_completed BOOLEAN DEFAULT FALSE, -- отмечаем, что рецепт прошёл все этапы валидации и готов к использованию
     recipe_count INT DEFAULT 0, -- число рецептов в кластере (для удобства)
+    is_variation BOOLEAN DEFAULT FALSE, -- является ли запись вариацией рецепта (созданной через GPT) или результатом прямого слияния рецептов из кластера
     UNIQUE KEY uq_pages_hash_base_recipe (pages_hash_sha256, base_recipe_id),
     INDEX idx_base_recipe (base_recipe_id)
 ) ENGINE=InnoDB;

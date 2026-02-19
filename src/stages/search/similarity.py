@@ -125,9 +125,9 @@ class SimilaritySearcher:
         self.rng = random.Random(params.sample_seed)
         self.set_params(build_type=build_type)
         self.dsu_filename = os.path.join("recipe_clusters", f"dsu_state_{build_type}_{self.params.score_threshold}.json")
-        self.clusters_filename = os.path.join("recipe_clusters", f"{build_type}_clusters_{self.params.score_threshold}_{self.params.centroid_threshold}.json")
-        self.cluter_image_mapping = os.path.join("recipe_clusters", f"clusters_to_image_ids_{self.params.score_threshold}_{self.params.centroid_threshold}.json")
-        self.validated_centroids_filename = os.path.join("recipe_clusters", f"{build_type}_centroids_{self.params.score_threshold}_{self.params.centroid_threshold}.json")
+        self.clusters_filename = os.path.join("recipe_clusters", f"{build_type}_clusters_{self.params.score_threshold}_{self.params.density_min_similarity}.json")
+        self.cluter_image_mapping = os.path.join("recipe_clusters", f"clusters_to_image_ids_{self.params.score_threshold}_{self.params.density_min_similarity}.json")
+        self.validated_centroids_filename = os.path.join("recipe_clusters", f"{build_type}_centroids_{self.params.score_threshold}_{self.params.density_min_similarity}.json")
         self.build_type = build_type
         
         # Центроиды валидированных кластеров: cluster key -> page_id ближайшего к центроиду рецепта
@@ -677,15 +677,15 @@ if __name__ == "__main__":
     while True:
         ss = SimilaritySearcher(params=ClusterParams(
                     limit=40,
-                    score_threshold=0.92,
+                    score_threshold=0.9,
                     scroll_batch=3500,
-                    centroid_threshold=0.93,
                     min_cluster_size=4,
                     union_top_k=20,
                     query_batch=128,
-                    density_min_similarity=0.9,
+                    density_min_similarity=0.92,
                     max_async_tasks=15,
                 ), build_type="full") # "image", "full", "ingredients"
+        
         try:
             ss.load_dsu_state()
             last_id = ss.last_id # получаем last id после загрузки состояния (такая штука работает только опираясь на тот факт, что каждй вновь доавбленный рецепт имеет id не меньше уже векторизованных рецептов, иначе рецепты могут быть пропущены)

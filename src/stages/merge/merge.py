@@ -27,6 +27,7 @@ from src.common.db.clickhouse import ClickHouseManager
 from src.repositories.page import PageRepository
 from src.repositories.merged_recipe import MergedRecipeRepository
 from src.repositories.image import ImageRepository
+from src.repositories.cluster_page import ClusterPageRepository
 from config.config import config
 
 logger = logging.getLogger(__name__)
@@ -431,6 +432,7 @@ class ClusterVariationGenerator:
         self.page_repository = PageRepository()
         self.merge_repository = MergedRecipeRepository()
         self.image_repository = ImageRepository()
+        self.cluster_page_repository = ClusterPageRepository()
         self.score_threshold = score_threshold
         self.clusters_build_type = clusters_build_type
         self.merged_recipe_schema = json.load(open("src/models/schemas/merged_recipe.json", "r", encoding="utf-8"))
@@ -489,8 +491,7 @@ class ClusterVariationGenerator:
             
             max_aggregated_recipes = max(1, max_aggregated_recipes + 1 - len(used_page_ids)) # +1 для базового рецепта
             
-            logger.info(f"Расширяем существующий canonical recipe {existing_merged.id} "
-                       f"добавлением {len(remaining_recipes)} рецептов")
+            logger.info(f"Расширяем существующий canonical recipe {existing_merged.id} добавлением {max_aggregated_recipes} рецептов")
             
             # Расширяем существующий merged recipe
             return await self._expand_canonical_recipe(
@@ -515,8 +516,7 @@ class ClusterVariationGenerator:
     async def create_recipe_variation(
         self,
         canonical_recipe_id: int,
-        variation_source_ids: list[int],
-        target_language: Optional[str] = None,
+        variation_source_ids: Optional[list[int]] = None,
         save_to_db: bool = True
     ) -> Optional[MergedRecipe]:
         """
@@ -529,7 +529,6 @@ class ClusterVariationGenerator:
         Args:
             canonical_recipe_id: ID канонического рецепта (из таблицы merged_recipes)
             variation_source_ids: Список page_id рецептов для создания вариации (1-5 штук)
-            target_language: Целевой язык генерации (если None - используется язык canonical)
             save_to_db: Сохранять ли результат в БД
             
         Returns:
@@ -552,12 +551,26 @@ class ClusterVariationGenerator:
             return None
         
         canonical_recipe = canonical_orm.to_pydantic(get_images=False)
-        
+
+        if not variation_source_ids:
+            variation_count = random.randint(1, 4) # Случайное количество рецептов для вариации
+
+            logger.error("Нет рецептов для создания вариации, ищем подходящие рецепты для вариации...")
+            possible_sources = self.cluster_page_repository.get_similar_pages(canonical_recipe.base_recipe_id)
+            if not possible_sources:
+                logger.error(f"Не найдено похожих рецептов для base_recipe_id={canonical_recipe.base_recipe_id}")
+                return None
+            
+            variation_source_ids = [pid for pid in possible_sources if pid not in (canonical_recipe.page_ids or [])]
+            variation_source_ids = random.sample(variation_source_ids, min(variation_count, len(variation_source_ids)))
+            if len(variation_source_ids) < min(variation_count, len(possible_sources)):
+                possible_sources = [pid for pid in possible_sources if pid in (canonical_recipe.page_ids or [])]
+                variation_source_ids = random.sample(possible_sources, min(variation_count-len(variation_source_ids), len(possible_sources)))
+                
         # Генерируем вариацию
         return await self._generate_variation_from_canonical(
             canonical_recipe=canonical_recipe,
             variation_source_ids=variation_source_ids,
-            target_language=target_language,
             save_to_db=save_to_db
         )
     
@@ -805,7 +818,6 @@ class ClusterVariationGenerator:
         self,
         canonical_recipe: MergedRecipe,
         variation_source_ids: list[int],
-        target_language: Optional[str] = None,
         save_to_db: bool = True
     ) -> Optional[MergedRecipe]:
         """
@@ -820,7 +832,6 @@ class ClusterVariationGenerator:
         Args:
             canonical_recipe: Базовый канонический рецепт для создания вариации
             variation_source_ids: Список page_id рецептов (1-5), которые будут источниками идей для вариации
-            target_language: Целевой язык генерации
             save_to_db: Сохранять ли результат в БД
             
         Returns:
@@ -841,7 +852,7 @@ class ClusterVariationGenerator:
             if not recipe.ingredients_with_amounts:
                 recipe.fill_ingredients_with_amounts(self.page_repository)
         
-        recipe_language = target_language or canonical_recipe.language or 'en'
+        recipe_language = 'en'
         
         # Генерируем вариацию через GPT
         variation = await self._generate_variation_with_gpt(
@@ -855,12 +866,13 @@ class ClusterVariationGenerator:
             return None
         
         # Устанавливаем метаданные вариации
-        variation.page_ids = variation_source_ids
+        variation.page_ids = list(set(variation_source_ids + canonical_recipe.page_ids))  # Включаем страницы источников и канонического рецепта
         variation.base_recipe_id = canonical_recipe.base_recipe_id  # Связываем с тем же base_recipe
         variation.language = recipe_language
         variation.cluster_type = self.clusters_build_type
         variation.score_threshold = self.score_threshold
         variation.merge_model = config.GPT_MODEL_MERGE
+        variation.is_variation = True # отметить рецепт как вариацию
         
         # Валидация: вариация не должна быть совершенно другим блюдом
         # Сравниваем с базовым рецептом canonical
@@ -916,7 +928,7 @@ VARIATION TYPES (choose what fits):
 
 STRICT RULES:
 1. {language_instruction}
-2. SAME DISH TYPE: If canonical is "pasta", variation MUST be pasta. If canonical is "soup", variation MUST be soup.
+2. SAME DISH TYPE: If canonical is "pasta", variation MUST be pasta. No "pasta" → "stew" or "salad".
 3. CORE PRESERVED: Main cooking technique and dish structure stay similar
 4. CLEAR DIFFERENCE: Variation should be noticeably different from canonical (not just tiny tweaks)
 5. EXECUTABLE: Complete, working recipe with all steps

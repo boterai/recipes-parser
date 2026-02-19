@@ -13,6 +13,7 @@ from src.common.db.connection import get_db_connection
 import hashlib
 from sqlalchemy import insert, func, or_
 from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import aliased
 
 logger = logging.getLogger(__name__)
 
@@ -108,7 +109,6 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
                 session.expunge(result)
             return result
 
-    
     def update_merged_recipe(
         self,
         merged_recipe_id: int,
@@ -161,6 +161,8 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
                 existing.tags = merged_recipe.tags
             if merged_recipe.gpt_validated is not None:
                 existing.gpt_validated = merged_recipe.gpt_validated
+            if merged_recipe.is_variation is not None:
+                existing.is_variation = merged_recipe.is_variation
             
             session.commit()
             session.refresh(existing)
@@ -228,7 +230,8 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
                 cluster_type=merged_recipe.cluster_type,
                 gpt_validated=merged_recipe.gpt_validated,
                 score_threshold=merged_recipe.score_threshold,
-                recipe_count=recipe_count
+                recipe_count=recipe_count,
+                is_variation=merged_recipe.is_variation
             )
             
             session.add(merged_recipe_orm)
@@ -322,6 +325,7 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
                     merge_model=merged_recipe.merge_model,
                     tags=merged_recipe.tags,
                     recipe_count=recipe_count,
+                    is_variation=merged_recipe.is_variation
                 )
                 new_recipes.append(merged_recipe_orm)
                 
@@ -387,12 +391,14 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
         finally:
             session.close()
         
-    def get_pages_with_digits_in_csv(self, digits: list[int]) -> list[MergedRecipeORM]:
+    def get_pages_with_digits_in_csv(self, digits: list[int], skip_variations: bool = True) -> list[MergedRecipeORM]:
         with self.get_session() as session:
             pages_csv_wrapped = func.concat(',', MergedRecipeORM.pages_csv, ',')
             query = session.query(MergedRecipeORM).filter(
                 or_(*[pages_csv_wrapped.like(f'%,{d},%') for d in digits])
             )
+            if skip_variations:
+                query = query.filter(MergedRecipeORM.is_variation == False)
             return query.all()
     
     def get_by_page_ids(self, page_ids: list[int]) -> Optional[MergedRecipeORM]:
@@ -497,5 +503,46 @@ class MergedRecipeRepository(BaseRepository[MergedRecipeORM]):
             
             return recipe.images
             
+        finally:
+            session.close()
+
+    def get_canonical_recipes(self, max_variations: int, limit: int, last_id: int = None) -> List[MergedRecipeORM]:
+        """
+        Получить канонические рецепты у которых не более max_variations вариаций.
+
+        Args:
+            max_variations: Максимальное количество вариаций (включительно), обычно 0
+            limit: Максимальное количество записей
+            last_id: Если передан, вернёт только записи с id > last_id (пагинация)
+        Returns:
+            Список MergedRecipeORM объектов
+        """
+        session = self.get_session()
+        try:
+            v = aliased(MergedRecipeORM, name="v")
+
+            variation_count = func.count(v.id).label("variation_count")
+
+            query = (
+                session.query(MergedRecipeORM)
+                .outerjoin(
+                    v,
+                    (v.base_recipe_id == MergedRecipeORM.base_recipe_id) &
+                    (v.is_variation == True)
+                )
+                .filter(MergedRecipeORM.is_variation == False)
+                .group_by(MergedRecipeORM.id)
+                .having(variation_count <= max_variations)
+                .order_by(MergedRecipeORM.id.asc())
+            )
+
+            if last_id is not None:
+                query = query.filter(MergedRecipeORM.id > last_id)
+
+            results = query.limit(limit).all()
+
+            for r in results:
+                session.expunge(r)
+            return results
         finally:
             session.close()

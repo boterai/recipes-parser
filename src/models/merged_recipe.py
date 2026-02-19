@@ -55,6 +55,7 @@ class MergedRecipeORM(Base):
     cluster_type = Column(String(50))  # "image", "full", "ingredients"
     gpt_validated = Column(String(5), default='TRUE')  # было ли
     score_threshold = Column(String(10), default='0.00')  # порог схожести для объединения
+    is_variation = Column(BOOLEAN, default=False)  # является ли записью вариации рецепта (созданной на основе канонического рецепта)
     
     # Метаданные
     created_at = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'))
@@ -119,7 +120,8 @@ class MergedRecipeORM(Base):
             gpt_validated=self.gpt_validated,
             score_threshold=self.score_threshold,
             is_completed=self.is_completed,
-            recipe_count=self.recipe_count or 0
+            recipe_count=self.recipe_count or 0,
+            is_variation=self.is_variation
         )
 
 
@@ -158,6 +160,7 @@ class MergedRecipe(BaseModel):
 
     # является ли рецепт готовым к выгрузке 
     is_completed: bool = False
+    is_variation: bool = False  # является ли записью вариации рецепта (созданной на основе канонического рецепта)
     
     # количество рецептов в кластере (автоматически вычисляется из page_ids)
     recipe_count: int = 0
@@ -230,5 +233,6 @@ class MergedRecipe(BaseModel):
             gpt_validated=orm_obj.gpt_validated,
             score_threshold=orm_obj.score_threshold,
             is_completed=orm_obj.is_completed,
-            recipe_count=orm_obj.recipe_count or 0
+            recipe_count=orm_obj.recipe_count or 0,
+            is_variation=orm_obj.is_variation
         )

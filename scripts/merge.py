@@ -195,6 +195,39 @@ async def merge_cluster_recipes(
             logger.info(f"Достигнут лимит в {limit} успешно обработанных кластеров, останавливаемся.")
             break
 
+async def make_recipe_variations(similarity_threshold: float, build_type: Literal["image", "full", "ingredients"], max_variations_per_recipe: int =1,
+                                 limit: int | None = None):
+    merger = ClusterVariationGenerator(score_threshold=similarity_threshold, clusters_build_type=build_type, max_recipes_per_gpt_merge_request=5)
+    total = 0
+    last_id: Optional[int] = None
+    while True:
+        canonical_recipes = merger.merge_repository.get_canonical_recipes(max_variations=max(0, max_variations_per_recipe-1), limit=config.MERGE_MAX_MERGE_RECIPES, last_id=last_id)
+        if not canonical_recipes:
+            logger.info("Нет канонических рецептов для генерации вариаций, останавливаемся.")
+            break
+
+        tasks = []
+        for canonical in canonical_recipes:
+            tasks.append(merger.create_recipe_variation(
+                canonical_recipe_id=canonical.id,
+                save_to_db=True
+            ))
+            last_id = canonical.id
+
+        completed_tasks = await asyncio.gather(*tasks, return_exceptions=True)
+        for res in completed_tasks:
+            if isinstance(res, Exception):
+                logger.error(f"Error during variation generation: {res}")
+            elif res is None:
+                logger.info("Variation was not created or updated.")
+            else:
+                total += 1
+                logger.info(f"✓ Variation with id {res.id} created. Total variations created: {total}")
+
+        if limit and total >= limit:
+            logger.info(f"Достигнут лимит в {limit} успешно созданных вариаций, останавливаемся.")
+            break
+
 async def generate_from_one_cluster(
         merger: ClusterVariationGenerator, 
         cluster: list[int], 
@@ -280,17 +313,12 @@ def view_merge_recipe(recipe_id: int):
         print(f"Merged recipe with id {recipe_id} not found.")
 
 if __name__ == "__main__":
-    #view_merge_recipe(8462)
-    # "image", "full", "ingredients"
-    #cluster = [18621,18622,18627,18631,18709,21450,21469,22826,41619,64861,80441,113320,113839,113843,113870,118374,127450,127460,127807,130235,137954,139693,139698,139736,139784,139810,139827,139830,139832,140052,140086,140197,140198,140201,140344,146581,146582,161614,180924,183498,185474,194091,194098,194099,194100,194364,194376,194496,194690,197415,197417,197420,198223]
-    #base_recipe =  137954
-    #merger = ClusterVariationGenerator(score_threshold=0.89, clusters_build_type="full", max_recipes_per_gpt_merge_request=4)
-    #merger.merge_repository.mark_recipe_as_completed(8490)
-    #config.MERGE_CENTROID_THRESHOLD_STEP = 0.02
-    #asyncio.run(generate_from_one_cluster(merger=merger, cluster=cluster, cluster_centroid=base_recipe, 
-    #                          max_variations=1, max_aggregated_recipes=10))
     #config.MERGE_MAX_MERGE_RECIPES = 1
     config.MERGE_CENTROID_THRESHOLD_STEP = 0.01
+    #asyncio.run(make_recipe_variations(similarity_threshold=0.92, build_type="full", max_variations_per_recipe=1, limit=10))
+    #merger = merger = ClusterVariationGenerator(score_threshold=0.92, clusters_build_type="full", max_recipes_per_gpt_merge_request=5)
+    #asyncio.run(make_recipe_variation_from_canonical(merger=merger, canonical_recipe_id=9062))
+    
     asyncio.run(merge_cluster_recipes(similarity_threshold=0.92, 
                                              build_type="full", 
                                              max_variation_per_cluster=1, 

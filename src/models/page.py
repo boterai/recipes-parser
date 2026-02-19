@@ -13,6 +13,7 @@ from sqlalchemy.inspection import inspect
 from src.models.base import Base
 from src.models.recipe import Recipe
 from src.models.image import ImageORM, Image
+from src.models.cluster_page import ClusterPageORM
 from utils.languages import validate_and_normalize_language
 
 class PageORM(Base):
