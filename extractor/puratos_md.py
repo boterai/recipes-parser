@@ -97,8 +97,8 @@ class PuratosMdExtractor(BaseRecipeExtractor):
                                         
                                         ingredients.append({
                                             "name": name,
-                                            "amount": amount_num,
-                                            "units": unit
+                                            "units": unit,
+                                            "amount": amount_num
                                         })
                         if ingredients:
                             return json.dumps(ingredients, ensure_ascii=False)
@@ -150,8 +150,8 @@ class PuratosMdExtractor(BaseRecipeExtractor):
                         
                         ingredients.append({
                             "name": name,
-                            "amount": amount_num,
-                            "units": unit
+                            "units": unit,
+                            "amount": amount_num
                         })
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
@@ -196,26 +196,25 @@ class PuratosMdExtractor(BaseRecipeExtractor):
                     if step_text:
                         instructions.append(step_text)
             else:
-                # Если нет пошаговых элементов, берем весь текст из контейнера
-                # Ищем таблицу или параграфы с инструкциями
-                table = method_container.find('table')
-                if table:
-                    # Извлекаем текст из всех ячеек таблицы (включая заголовки)
+                # Если нет пошаговых элементов, ищем таблицы с инструкциями
+                # Ищем все таблицы с классом table-bare
+                tables = method_container.find_all('table', class_='table-bare')
+                for table in tables:
                     rows = table.find_all('tr')
                     for row in rows:
-                        # Проверяем заголовки (th) - они часто содержат названия этапов
-                        headers = row.find_all('th', class_='p-table-head')
-                        for header in headers:
-                            header_text = header.get_text(strip=True)
+                        # Извлекаем заголовок (название этапа)
+                        header = row.find('th', class_='p-table-text')
+                        if header:
+                            header_text = self.clean_text(header.get_text())
                             if header_text:
-                                instructions.append(self.clean_text(header_text) + ':')
+                                instructions.append(header_text + ':')
                         
-                        # Извлекаем текст из ячеек
+                        # Извлекаем текст инструкции
                         cells = row.find_all('td', class_='p-table-text')
                         for cell in cells:
                             text = cell.get_text(separator=' ', strip=True)
                             text = self.clean_text(text)
-                            if text:
+                            if text and text != ' ':
                                 instructions.append(text)
         
         return ' '.join(instructions) if instructions else None
@@ -238,46 +237,46 @@ class PuratosMdExtractor(BaseRecipeExtractor):
     def extract_prep_time(self) -> Optional[str]:
         """Извлечение времени подготовки"""
         # В HTML файлах puratos.md время не всегда явно указано
-        # Можно попробовать найти в тексте или вернуть None
-        return None
+        # Можно попробовать найти в тексте или вернуть "null"
+        return "null"
     
     def extract_cook_time(self) -> Optional[str]:
         """Извлечение времени приготовления"""
         # Ищем в тексте инструкций упоминания о времени выпечки/готовки
         instructions = self.extract_instructions()
         if instructions:
-            # Паттерны для поиска времени: "180°C timp de 25-30 de minute"
-            time_pattern = r'(?:la\s+)?(?:\d+)°[CF]\s+(?:timp\s+de\s+)?(\d+[-–]\d+)\s+(?:de\s+)?minut[eși]*'
+            # Паттерн для времени выпечки с температурой: "180°C... 25-30 de minute" или "25- 30 de minute"
+            time_pattern = r'(?:\d+)°[CF].*?(\d+)\s*[-–]\s*(\d+)\s+(?:de\s+)?minut[eși]*'
             match = re.search(time_pattern, instructions, re.IGNORECASE)
             if match:
-                time_str = match.group(1) + ' minutes'
+                time_str = match.group(1) + '-' + match.group(2) + ' minutes'
                 return time_str
             
-            # Паттерн для одного числа: "30 de minute"
-            time_pattern2 = r'(?:timp\s+de\s+)?(\d+)\s+(?:de\s+)?minut[eși]*'
+            # Паттерн для времени выпечки с температурой (одно число): "180°C... 17 minute"
+            time_pattern2 = r'(?:\d+)°[CF].*?timp\s+de\s+(\d+)\s+(?:de\s+)?minut[eși]*'
             match = re.search(time_pattern2, instructions, re.IGNORECASE)
             if match:
                 time_str = match.group(1) + ' minutes'
                 return time_str
             
             # Англоязычный паттерн: "for 17 minutes"
-            time_pattern_en = r'(?:for\s+)?(\d+[-–]\d+)\s+minutes?'
+            time_pattern_en = r'(?:for\s+)?(\d+)\s*[-–]\s*(\d+)\s+minutes?'
             match = re.search(time_pattern_en, instructions, re.IGNORECASE)
             if match:
-                return match.group(1) + ' minutes'
+                return match.group(1) + '-' + match.group(2) + ' minutes'
             
             # Англоязычный паттерн с одним числом
-            time_pattern_en2 = r'(?:for\s+)?(\d+)\s+minutes?'
+            time_pattern_en2 = r'(?:for\s+)(\d+)\s+minutes?'
             match = re.search(time_pattern_en2, instructions, re.IGNORECASE)
             if match:
                 return match.group(1) + ' minutes'
         
-        return None
+        return "null"
     
     def extract_total_time(self) -> Optional[str]:
         """Извлечение общего времени"""
         # В HTML файлах puratos.md общее время обычно не указано явно
-        return None
+        return "null"
     
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов"""
@@ -299,7 +298,7 @@ class PuratosMdExtractor(BaseRecipeExtractor):
         if notes:
             return ' '.join(notes)
         
-        return None
+        return "null"
     
     def extract_tags(self) -> Optional[str]:
         """Извлечение тегов"""
