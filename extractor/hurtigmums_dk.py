@@ -42,8 +42,18 @@ class HurtigmumsDkExtractor(BaseRecipeExtractor):
         """Извлечение названия блюда"""
         recipe_data = self.extract_json_ld_recipe()
         
+        name = None
+        
+        # Сначала пробуем из JSON-LD
         if recipe_data and 'name' in recipe_data:
             name = recipe_data['name']
+        else:
+            # Если JSON-LD нет (например, в print версии), ищем в WPRM HTML
+            wprm_name = self.soup.find('h2', class_='wprm-recipe-name')
+            if wprm_name:
+                name = wprm_name.get_text(strip=True)
+        
+        if name:
             # Убираем префиксы и суффиксы
             # "Traditionel burger opskrift" -> "Burger"
             # "Opskrift: Dadelkugler med kokos" -> "Dadelkugler"
@@ -142,10 +152,11 @@ class HurtigmumsDkExtractor(BaseRecipeExtractor):
     def extract_instructions(self) -> Optional[str]:
         """Извлечение шагов приготовления"""
         recipe_data = self.extract_json_ld_recipe()
+        steps = []
         
+        # Сначала пробуем из JSON-LD
         if recipe_data and 'recipeInstructions' in recipe_data:
             instructions = recipe_data['recipeInstructions']
-            steps = []
             
             for step in instructions:
                 if isinstance(step, dict) and 'text' in step:
@@ -172,11 +183,20 @@ class HurtigmumsDkExtractor(BaseRecipeExtractor):
                         steps.append(step_text)
                 elif isinstance(step, str):
                     steps.append(self.clean_text(step))
-            
-            # Объединяем все шаги в одну строку
-            return ' '.join(steps) if steps else None
+        else:
+            # Если JSON-LD нет (например, в print версии), ищем в WPRM HTML
+            instructions_container = self.soup.find('div', class_='wprm-recipe-instructions-container')
+            if instructions_container:
+                instruction_items = instructions_container.find_all('li', class_='wprm-recipe-instruction')
+                for item in instruction_items:
+                    # Получаем текст инструкции
+                    step_text = item.get_text(separator=' ', strip=True)
+                    step_text = self.clean_text(step_text)
+                    if step_text:
+                        steps.append(step_text)
         
-        return None
+        # Объединяем все шаги в одну строку
+        return ' '.join(steps) if steps else None
     
     def extract_category(self) -> Optional[str]:
         """Извлечение категории"""
