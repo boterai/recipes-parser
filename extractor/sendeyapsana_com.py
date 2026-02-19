@@ -207,60 +207,86 @@ class SendeyapsanaExtractor(BaseRecipeExtractor):
         }
     
     def extract_ingredients(self) -> Optional[str]:
-        """Извлечение ингредиентов из JSON-LD"""
+        """Извлечение ингредиентов из JSON-LD или HTML"""
         recipe_data = self._get_recipe_json_ld()
         
+        # Пробуем извлечь из JSON-LD
         if recipe_data and 'recipeIngredient' in recipe_data:
             ingredient_list = recipe_data['recipeIngredient']
             
-            if not isinstance(ingredient_list, list):
-                return None
-            
-            parsed_ingredients = []
-            for ingredient_text in ingredient_list:
+            if isinstance(ingredient_list, list):
+                parsed_ingredients = []
+                for ingredient_text in ingredient_list:
+                    parsed = self.parse_ingredient(ingredient_text)
+                    if parsed:
+                        parsed_ingredients.append(parsed)
+                
+                if parsed_ingredients:
+                    return json.dumps(parsed_ingredients, ensure_ascii=False)
+        
+        # Fallback: извлечение из HTML (если JSON-LD не содержит ингредиентов)
+        # Ищем параграфы с ингредиентами (начинаются с дефиса)
+        parsed_ingredients = []
+        for p in self.soup.find_all('p'):
+            text = p.get_text().strip()
+            if text.startswith('-') and len(text) > 2:
+                # Убираем начальный дефис и парсим
+                ingredient_text = text.lstrip('-').strip()
                 parsed = self.parse_ingredient(ingredient_text)
                 if parsed:
                     parsed_ingredients.append(parsed)
-            
-            return json.dumps(parsed_ingredients, ensure_ascii=False) if parsed_ingredients else None
         
-        return None
+        return json.dumps(parsed_ingredients, ensure_ascii=False) if parsed_ingredients else None
     
     def extract_instructions(self) -> Optional[str]:
-        """Извлечение шагов приготовления из JSON-LD"""
+        """Извлечение шагов приготовления из JSON-LD или HTML"""
         recipe_data = self._get_recipe_json_ld()
         
+        # Пробуем извлечь из JSON-LD
         if recipe_data and 'recipeInstructions' in recipe_data:
             instructions_data = recipe_data['recipeInstructions']
             
-            if not isinstance(instructions_data, list):
-                return None
-            
-            # Собираем только основные шаги приготовления (первая секция обычно)
-            # Пропускаем секции с калориями и пюф-нотами
-            all_steps = []
-            
-            for section in instructions_data:
-                if not isinstance(section, dict):
-                    continue
-                
-                section_name = section.get('name', '')
-                
+            if isinstance(instructions_data, list):
+                # Собираем только основные шаги приготовления (первая секция обычно)
                 # Пропускаем секции с калориями и пюф-нотами
-                if 'калори' in section_name.lower() or 'kaç kalori' in section_name.lower():
-                    continue
-                if 'püf' in section_name.lower() or 'пюф' in section_name.lower():
-                    continue
+                all_steps = []
                 
-                # Извлекаем шаги из секции
-                item_list = section.get('itemListElement', [])
-                for item in item_list:
-                    if isinstance(item, dict) and 'text' in item:
-                        text = self.clean_text(item['text'])
-                        if text:
-                            all_steps.append(text)
-            
-            return ' '.join(all_steps) if all_steps else None
+                for section in instructions_data:
+                    if not isinstance(section, dict):
+                        continue
+                    
+                    section_name = section.get('name', '')
+                    
+                    # Пропускаем секции с калориями и пюф-нотами
+                    if 'калори' in section_name.lower() or 'kaç kalori' in section_name.lower():
+                        continue
+                    if 'püf' in section_name.lower() or 'пюф' in section_name.lower():
+                        continue
+                    
+                    # Извлекаем шаги из секции
+                    item_list = section.get('itemListElement', [])
+                    for item in item_list:
+                        if isinstance(item, dict) and 'text' in item:
+                            text = self.clean_text(item['text'])
+                            if text:
+                                all_steps.append(text)
+                
+                if all_steps:
+                    return ' '.join(all_steps)
+        
+        # Fallback: извлечение из HTML
+        # Ищем параграф с инструкциями (обычно содержит текст приготовления)
+        # Характерные фразы для инструкций
+        instruction_keywords = ['kesiyoruz', 'koyalım', 'dökelim', 'alım', 'pişir']
+        
+        for p in self.soup.find_all('p'):
+            text = p.get_text().strip()
+            # Проверяем, что это не ингредиент (не начинается с дефиса)
+            # и содержит ключевые слова инструкций
+            if not text.startswith('-') and len(text) > 50:
+                # Проверяем наличие хотя бы одного ключевого слова
+                if any(keyword in text.lower() for keyword in instruction_keywords):
+                    return self.clean_text(text)
         
         return None
     
