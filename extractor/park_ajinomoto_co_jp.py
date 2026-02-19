@@ -179,7 +179,7 @@ class ParkAjinomotoCoJpExtractor(BaseRecipeExtractor):
         # Если не удалось разделить, возвращаем все как название
         return {"name": text, "amount": None, "unit": None}
     
-    def extract_ingredients(self) -> Optional[List[Dict[str, Optional[str]]]]:
+    def extract_ingredients(self) -> Optional[str]:
         """Извлечение ингредиентов"""
         ingredients = []
         
@@ -255,7 +255,8 @@ class ParkAjinomotoCoJpExtractor(BaseRecipeExtractor):
                             "unit": parsed['unit']
                         })
         
-        return ingredients if ingredients else None
+        # Возвращаем как JSON строку
+        return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
     def extract_instructions(self) -> Optional[str]:
         """Извлечение инструкций по приготовлению"""
@@ -437,21 +438,16 @@ class ParkAjinomotoCoJpExtractor(BaseRecipeExtractor):
         """
         dish_name = self.extract_dish_name()
         description = self.extract_description()
-        ingredients = self.extract_ingredients()
+        ingredients = self.extract_ingredients()  # Already returns JSON string
         instructions = self.extract_instructions()
         category = self.extract_category()
         notes = self.extract_notes()
         tags = self.extract_tags()
         
-        # Форматируем ingredients в JSON строку
-        ingredients_json = None
-        if ingredients:
-            ingredients_json = json.dumps(ingredients, ensure_ascii=False)
-        
         return {
             "dish_name": dish_name,
             "description": description,
-            "ingredients": ingredients_json,
+            "ingredients": ingredients,  # Already JSON string from extract_ingredients()
             "instructions": instructions,
             "category": category,
             "prep_time": self.extract_prep_time(),
