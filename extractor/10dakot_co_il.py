@@ -169,6 +169,10 @@ class TenDakotExtractor(BaseRecipeExtractor):
         # Чистим текст
         text = self.clean_text(ingredient_text)
         
+        # Заменяем "X וחצי" (X и половина) на "1.5 X"
+        # Например: "כוס וחצי" -> "1.5 כוס"
+        text = re.sub(r'(\S+)\s+וחצי', r'1.5 \1', text)
+        
         # Заменяем Unicode дроби на числа
         fraction_map = {
             '½': '0.5', '¼': '0.25', '¾': '0.75',
@@ -219,8 +223,20 @@ class TenDakotExtractor(BaseRecipeExtractor):
         amount = None
         if amount_str:
             amount_str = amount_str.strip()
+            # Обработка чисел с пробелами (например, "1 0.5" от "כוס וחצי")
+            if ' ' in amount_str and '/' not in amount_str:
+                parts = amount_str.split()
+                total = 0
+                for part in parts:
+                    part = part.replace(',', '.')
+                    try:
+                        total += float(part)
+                    except ValueError:
+                        pass
+                if total > 0:
+                    amount = int(total) if total == int(total) else total
             # Обработка дробей типа "1/2" или "1 1/2"
-            if '/' in amount_str:
+            elif '/' in amount_str:
                 parts = amount_str.split()
                 total = 0
                 for part in parts:
@@ -228,20 +244,17 @@ class TenDakotExtractor(BaseRecipeExtractor):
                         num, denom = part.split('/')
                         total += float(num) / float(denom)
                     else:
-                        # Удаляем дефисы, которые могут быть разделителями
-                        part = part.replace('-', '')
+                        part = part.replace('-', '').replace(',', '.')
                         if part:
                             try:
                                 total += float(part)
                             except ValueError:
                                 pass
                 if total > 0:
-                    # Если это целое число, возвращаем как int
                     amount = int(total) if total == int(total) else total
             else:
-                # Удаляем дефисы для диапазонов типа "4-5"
+                # Простое число или диапазон "4-5" (берем первое)
                 amount_str = amount_str.replace(',', '.')
-                # Берем первое число из диапазона
                 amount_match = re.search(r'([\d.]+)', amount_str)
                 if amount_match:
                     try:
@@ -260,8 +273,8 @@ class TenDakotExtractor(BaseRecipeExtractor):
         # Очистка названия
         # Удаляем скобки с содержимым
         name = re.sub(r'\([^)]*\)', '', name)
-        # Удаляем лишние пробелы и запятые
-        name = re.sub(r'[,;]+$', '', name)
+        # Удаляем точки, запятые и точки с запятой в конце
+        name = re.sub(r'[.,;]+$', '', name)
         name = re.sub(r'\s+', ' ', name).strip()
         
         if not name or len(name) < 2:
