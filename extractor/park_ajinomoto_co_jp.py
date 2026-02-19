@@ -239,7 +239,7 @@ class ParkAjinomotoCoJpExtractor(BaseRecipeExtractor):
                     ingredients.append({
                         "name": name,
                         "amount": amount,
-                        "units": unit
+                        "unit": unit
                     })
         
         # Если не нашли в HTML, пробуем JSON-LD
@@ -252,7 +252,7 @@ class ParkAjinomotoCoJpExtractor(BaseRecipeExtractor):
                         ingredients.append({
                             "name": parsed['name'],
                             "amount": parsed['amount'],
-                            "units": parsed['unit']
+                            "unit": parsed['unit']
                         })
         
         return ingredients if ingredients else None
