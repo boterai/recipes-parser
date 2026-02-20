@@ -74,15 +74,20 @@ class LesgourmandisesdisaComExtractor(BaseRecipeExtractor):
         in_ingredients_section = False
         
         # Ищем секцию с ингредиентами
-        # Обычно после "Pour X personnes" или "Pour X pots" начинаются ингредиенты
+        # Обычно после "Pour X personnes" или "Pour X pots" или "Pour un moule" начинаются ингредиенты
         for i, line in enumerate(lines):
             line = line.strip()
             if not line:
                 continue
             
-            # Начало секции ингредиентов
-            if re.match(r'^Pour\s+\d+', line, re.IGNORECASE):
+            # Начало секции ингредиентов - более гибкий паттерн
+            # Ищем "Pour" в начале строки (с цифрами, или словами типа "un moule", "personnes", и т.д.)
+            if re.match(r'^Pour\s+', line, re.IGNORECASE):
                 in_ingredients_section = True
+                continue
+            
+            # Пропускаем заголовки подсекций (например, "Grimolle :", "Croûte d'amandes")
+            if in_ingredients_section and re.match(r'^[A-Z][a-zéèêàù\s]+\s*:?\s*$', line):
                 continue
             
             # Конец секции ингредиентов - когда начинаются инструкции
@@ -111,7 +116,7 @@ class LesgourmandisesdisaComExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "8 pommes épluchées" или "1/2 tasse de sirop d'érable"
             
         Returns:
-            dict: {"name": "pommes", "amount": "8", "unit": "pieces"} или None
+            dict: {"name": "pommes", "amount": "8", "units": "pieces"} или None
         """
         if not ingredient_text or len(ingredient_text) < 3:
             return None
@@ -121,6 +126,9 @@ class LesgourmandisesdisaComExtractor(BaseRecipeExtractor):
         # Пропускаем слишком длинные строки (скорее всего это инструкции)
         if len(text) > 150:
             return None
+        
+        # Удаляем содержимое в скобках перед парсингом (например, "(100 g)")
+        text = re.sub(r'\([^)]*\)', '', text)
         
         # Заменяем дроби
         fraction_map = {
@@ -190,14 +198,23 @@ class LesgourmandisesdisaComExtractor(BaseRecipeExtractor):
             unit = re.sub(r'cuillères?\s+à\s+table', 'c. à s.', unit)
             unit = re.sub(r'cuillères?\s+à\s+thé', 'c. à thé', unit)
             unit = re.sub(r'cuillères?\s+à\s+café', 'c. à c.', unit)
+            # Убираем лишние точки в конце
+            unit = re.sub(r'\.+$', '', unit)
+            # Добавляем точку после "s" в "c. à s" если её нет
+            if unit == 'c. à s':
+                unit = 'c. à s.'
+            if unit == 'c. à c':
+                unit = 'c. à c.'
         
         # Очистка названия
         name = name.strip() if name else None
         if name:
-            # Удаляем скобки с содержимым
-            name = re.sub(r'\([^)]*\)', '', name)
             # Удаляем "de " в начале
             name = re.sub(r'^de\s+', '', name)
+            # Удаляем "d'" в начале  
+            name = re.sub(r'^d\'\s*', '', name)
+            # Удаляем ведущие точки и пробелы
+            name = re.sub(r'^[\.\s]+', '', name)
             # Удаляем лишние пробелы
             name = re.sub(r'\s+', ' ', name).strip()
         
@@ -230,8 +247,8 @@ class LesgourmandisesdisaComExtractor(BaseRecipeExtractor):
             if not line:
                 continue
             
-            # Пропускаем секцию "Pour X..."
-            if re.match(r'^Pour\s+\d+', line, re.IGNORECASE):
+            # Пропускаем секцию "Pour ..." (начало ингредиентов)
+            if re.match(r'^Pour\s+', line, re.IGNORECASE):
                 passed_ingredients = True
                 continue
             
@@ -240,7 +257,9 @@ class LesgourmandisesdisaComExtractor(BaseRecipeExtractor):
             if passed_ingredients and (
                 line.lower().startswith(('blanchir', 'mélanger', 'ajouter', 'préchauffer', 
                                         'versez', 'pelez', 'couvrir', 'réduire', 'enfourner',
-                                        'démoulez', 'préparez', 'fouettez', 'cuire', 'faire'))
+                                        'démoulez', 'préparez', 'fouettez', 'cuire', 'faire',
+                                        'chemisez', 'lissez', 'pendant', 'sortir', 'remettre',
+                                        'dans'))
             ):
                 in_instructions = True
             
