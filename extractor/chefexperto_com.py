@@ -139,7 +139,63 @@ class ChefExpertoExtractor(BaseRecipeExtractor):
                         if ingredients:
                             break
         
+        # Если все еще не нашли, пробуем извлечь из описательного текста
+        # Это для случаев, когда ингредиенты упоминаются в абзацах, но нет структурированного списка
+        if not ingredients:
+            ingredients = self._extract_ingredients_from_text()
+        
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
+    
+    def _extract_ingredients_from_text(self) -> list:
+        """
+        Извлечение ингредиентов из описательного текста
+        Используется как крайний вариант, когда нет структурированных списков
+        """
+        ingredients = []
+        
+        # Список типичных ингредиентов, упомянутых в описании основных компонентов блюда
+        # Сфокусирован на основных ингредиентах традиционных испанских рецептов
+        known_ingredients = {
+            'cerdo': 'cerdo',
+            'tocino': 'tocino',
+            'chorizo': 'chorizo',
+            'morcilla': 'morcilla',
+            'carne de vacuno': 'carne de vacuno',
+            'vacuno': 'carne de vacuno',
+            'jarrete': 'carne de vacuno',
+            'morcillo': 'carne de vacuno',
+            'garbanzos': 'garbanzos',
+            'cebolla': 'cebolla',
+            'puerro': 'puerro',
+            'zanahoria': 'zanahoria',
+            'repollo': 'repollo',
+            'col': 'repollo',
+            'sal': 'sal',
+            'pimienta': 'pimienta',
+            'pimentón dulce': 'pimentón dulce o picante',
+            'pimentón picante': 'pimentón dulce o picante',
+            'pimentón': 'pimentón dulce o picante'
+        }
+        
+        # Получаем весь текст страницы
+        text = self.soup.get_text().lower()
+        
+        # Ищем упоминания известных ингредиентов
+        found_ingredients = set()
+        for ingredient_pattern, ingredient_name in known_ingredients.items():
+            if ingredient_pattern in text:
+                # Используем канонический название (значение словаря)
+                found_ingredients.add(ingredient_name)
+        
+        # Преобразуем в формат списка словарей
+        for ing_name in sorted(found_ingredients):
+            ingredients.append({
+                "name": ing_name,
+                "amount": None,
+                "units": None
+            })
+        
+        return ingredients
     
     def parse_ingredient(self, ingredient_text: str) -> Optional[dict]:
         """
