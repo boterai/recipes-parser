@@ -128,6 +128,7 @@ class SimilaritySearcher:
         self.clusters_filename = os.path.join("recipe_clusters", f"{build_type}_clusters_{self.params.score_threshold}_{self.params.density_min_similarity}.json")
         self.cluter_image_mapping = os.path.join("recipe_clusters", f"clusters_to_image_ids_{self.params.score_threshold}_{self.params.density_min_similarity}.json")
         self.validated_centroids_filename = os.path.join("recipe_clusters", f"{build_type}_centroids_{self.params.score_threshold}_{self.params.density_min_similarity}.json")
+        self.refined_history_filename = os.path.join("recipe_clusters", f"{build_type}_refined_history_{self.params.score_threshold}_{self.params.density_min_similarity}.json")
         self.build_type = build_type
         
         # Центроиды валидированных кластеров: cluster key -> page_id ближайшего к центроиду рецепта
@@ -188,31 +189,30 @@ class SimilaritySearcher:
         with open(self.validated_centroids_filename, 'r') as f:
             raw = json.load(f)
         
-        self.validated_centroids = {k: int(v) for k, v in raw.items()}
+        self.validated_centroids = {int(k): v for k, v in raw.items()}
         logger.info(f"Loaded {len(self.validated_centroids)} validated centroids from {self.validated_centroids_filename}")
 
     def save_validated_centroids_to_databsae(self, batch_size: int = 10) -> None:
         """Сохраняет валидированные центроиды в базу данных (таблица cluster_page)"""
         if not self.validated_centroids:
-            logger.warning("No validated centroids to save to database")
-            return
+            self.load_validated_centroids()
+            if not self.validated_centroids:
+                logger.warning("No validated centroids to save to database")
+                return
         repo = ClusterPageRepository()
         # Подготовка данных для batch вставки
-        clusters_to_save: dict[int, list[int]] = {}
         for batch in batched(self.validated_centroids.items(), batch_size):
-            for cluster_idx, centroid_page_id in batch:
-                clusters_to_save[centroid_page_id] = [int(i) for i in cluster_idx.split(",")]  # предполагая, что cluster_idx - это строка с page_id через запятую
+            batch = {int(centroid_page_id): cluster for centroid_page_id, cluster in batch}
             try:
-                repo.add_cluster_pages_batch(clusters_to_save)
+                repo.add_cluster_pages_batch(batch)
             except Exception as e:
                 logger.error(f"Error preparing batch for database insertion, trying to load one by one: {e}")
-                for centroid_page_id, cluster in clusters_to_save.items():
+                for centroid_page_id, cluster in batch.items():
                     try:
                         repo.add_cluster_pages_batch({centroid_page_id: cluster}) 
                     except Exception as e_inner:
                         logger.error(f"Failed to save centroid {centroid_page_id} to database: {e_inner}")
 
-            clusters_to_save = {}
 
     def _cosine_similarity(self, vec1: np.ndarray, vec2: np.ndarray) -> float:
         """Вычисляет косинусную похожесть между двумя векторами."""
@@ -558,17 +558,32 @@ class SimilaritySearcher:
         refined = []
         skipped = 0
         split_count = 0
+
+        self.load_validated_centroids()
+        if os.path.exists(self.refined_history_filename):
+            async with aiofiles.open(self.refined_history_filename, 'r') as f:
+                history = json.loads(await f.read())
+            logger.info(f"Loaded refinement history from {self.refined_history_filename} (previously refined clusters: {len(history)})")            
+        else:
+            history: dict[int, list[int]] = {}
+            self.validated_centroids = {}
+
+        if self.validated_centroids: # фильтруем кластеры и валидированные центроиды по истории, чтобы не обрабатывать заново
+            pass
+
         
-        # Очищаем старые центроиды перед новой валидацией
-        self.validated_centroids.clear()
-        
-        for cluster in clusters:
+        # оставляем старые центроиды и распределение только для кластеров, которые не изменились
+        for num, cluster in enumerate(clusters):
             cluster_key = ','.join(map(str, sorted(cluster)))
+            if cluster_key in history:
+                continue
+            centroids: list = []
             # Маленькие кластеры пропускаем без проверки
             if len(cluster) < min_cluster_size_for_validation:
-                self.validated_centroids[cluster_key] = cluster[0]
+                self.validated_centroids[cluster[0]] = cluster
                 refined.append(cluster)
                 skipped += 1
+                centroids.append(cluster[0])
                 continue
             
             # Разбиваем на подкластеры вместо удаления выбросов
@@ -584,9 +599,20 @@ class SimilaritySearcher:
             
             for subcluster, closest_to_centroid in subclusters:
                 if len(subcluster) >= self.params.min_cluster_size:
-                    subcluster_key = ','.join(map(str, sorted(subcluster)))
-                    self.validated_centroids[subcluster_key] = closest_to_centroid
+                    self.validated_centroids[closest_to_centroid] = subcluster
                     refined.append(subcluster)
+                    centroids.append(closest_to_centroid)
+
+            history[cluster_key] = centroids
+            
+            if num % 2 == 0:
+                if self.validated_centroids:
+                    self.save_validated_centroids()
+
+                if history:
+                    async with aiofiles.open(self.refined_history_filename, 'w') as f:
+                        await f.write(json.dumps(history, indent=2))
+            
         
         logger.info(
             f"Cluster refinement with split: {len(clusters)} → {len(refined)} clusters, "
@@ -596,6 +622,10 @@ class SimilaritySearcher:
         # Сохраняем центроиды в файл
         if self.validated_centroids:
             self.save_validated_centroids()
+
+        if history: # сохраняем историю
+            async with aiofiles.open(self.refined_history_filename, 'w') as f:
+                await f.write(json.dumps(history, indent=2))
         
         return refined
     
@@ -674,6 +704,14 @@ class SimilaritySearcher:
         logger.info(f"Saved clusters to file {self.clusters_filename}.")
 
 if __name__ == "__main__":
+    """with open("recipe_clusters/full_centroids_0.91_0.93.json", "r") as f:
+        centroids = json.load(f)
+
+    reversed_centroids = {int(v): list(map(int, k.split(","))) for k, v in centroids.items()}
+    with open("recipe_clusters/full_centroids_0.91_0.93.json", "w") as f:
+        json.dump(reversed_centroids, f, indent=2)"""
+
+
     while True:
         ss = SimilaritySearcher(params=ClusterParams(
                     limit=40,
@@ -682,10 +720,12 @@ if __name__ == "__main__":
                     min_cluster_size=4,
                     union_top_k=20,
                     query_batch=128,
-                    density_min_similarity=0.92,
+                    density_min_similarity=0.91,
                     max_async_tasks=15,
-                ), build_type="full") # "image", "full", "ingredients"
-        
+                ), build_type="ingredients") # "image", "full", "ingredients"
+        final_clusters = build_clusters_from_dsu(ss.dsu, min_cluster_size=4)
+        asyncio.run(ss.save_clusters_to_file(final_clusters, recalculate_mapping=True, refine_clusters=True))
+        #ss.save_validated_centroids_to_databsae() # сохраняем в базу (на всякий случай, тк может быть много рецептов в кластере и сохранять их в json неэффективно, а так они будут сохранены даже при обрыве процесса до сохранения кластеров)
         try:
             ss.load_dsu_state()
             last_id = ss.last_id # получаем last id после загрузки состояния (такая штука работает только опираясь на тот факт, что каждй вновь доавбленный рецепт имеет id не меньше уже векторизованных рецептов, иначе рецепты могут быть пропущены)
@@ -704,4 +744,4 @@ if __name__ == "__main__":
 
     final_clusters = build_clusters_from_dsu(ss.dsu, min_cluster_size=4)
     asyncio.run(ss.save_clusters_to_file(final_clusters, recalculate_mapping=True, refine_clusters=True))
-    ss.save_validated_centroids_to_databsae()
+    #ss.save_validated_centroids_to_databsae()

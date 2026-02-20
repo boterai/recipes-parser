@@ -7,7 +7,6 @@ import json
 import random
 # Добавление корневой директории в PYTHONPATH
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from utils.normalization import normalize_ingredients_list
 import random
 
 from src.stages.search.similarity import SimilaritySearcher, ClusterParams, build_clusters_from_dsu
@@ -301,7 +300,7 @@ def evaluate_merge_results(response, cluster_len:int, max_aggregated_recipes: in
             if res.recipe_count >= max_aggregated_recipes or (cluster_len >= config.SIMILARITY_MIN_CLUSTER_SIZE and res.recipe_count >= cluster_len):
                 res.is_completed = True
                 merge_repository.update(res)
-                logger.info(f"✓ Variation with id {res.id} created and marked as completed with {res.recipe_count} recipes.")
+                logger.info(f"✓ Merged recipe with id {res.id} created and marked as completed with {res.recipe_count} recipes.")
 
 
 def view_merge_recipe(recipe_id: int):
@@ -314,12 +313,12 @@ def view_merge_recipe(recipe_id: int):
 
 if __name__ == "__main__":
     #config.MERGE_MAX_MERGE_RECIPES = 1
-    config.MERGE_CENTROID_THRESHOLD_STEP = 0.01
+    config.MERGE_CENTROID_THRESHOLD_STEP = 0.02
     #asyncio.run(make_recipe_variations(similarity_threshold=0.92, build_type="full", max_variations_per_recipe=1, limit=10))
     #merger = merger = ClusterVariationGenerator(score_threshold=0.92, clusters_build_type="full", max_recipes_per_gpt_merge_request=5)
     #asyncio.run(make_recipe_variation_from_canonical(merger=merger, canonical_recipe_id=9062))
     
-    asyncio.run(merge_cluster_recipes(similarity_threshold=0.92, 
+    asyncio.run(merge_cluster_recipes(similarity_threshold=0.9, 
                                              build_type="full", 
                                              max_variation_per_cluster=1, 
                                              max_aggregated_recipes=9, # + 1 базовый 
