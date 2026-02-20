@@ -52,14 +52,15 @@ class SyntagesmouGrExtractor(BaseRecipeExtractor):
         if not post_body:
             return None
         
-        # Ищем все заголовки h2
-        headers = post_body.find_all('h2')
+        # Ищем все заголовки h2, h3, h4
+        headers = post_body.find_all(['h2', 'h3', 'h4'])
         for header in headers:
             header_text = header.get_text(strip=True)
             # Проверяем, является ли это заголовком ингредиентов
-            if re.match(r'Υλικά', header_text, re.IGNORECASE):
+            if re.search(r'Υλικά', header_text, re.IGNORECASE):
                 # Ищем следующий ul после заголовка
                 next_element = header.find_next_sibling()
+                found_list = False
                 while next_element:
                     if next_element.name == 'ul':
                         # Нашли список ингредиентов
@@ -72,12 +73,20 @@ class SyntagesmouGrExtractor(BaseRecipeExtractor):
                                 parsed = self.parse_ingredient(ingredient_text)
                                 if parsed:
                                     ingredients.append(parsed)
+                        found_list = True
                         break
-                    elif next_element.name in ['h2', 'h3', 'hr']:
+                    elif next_element.name == 'p' and not next_element.get_text(strip=True):
+                        # Пропускаем пустые параграфы
+                        next_element = next_element.find_next_sibling()
+                        continue
+                    elif next_element.name in ['h2', 'h3', 'h4', 'hr']:
                         # Достигли следующей секции
                         break
                     next_element = next_element.find_next_sibling()
-                break
+                
+                # Если нашли список, прекращаем поиск
+                if found_list:
+                    break
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
     
@@ -188,14 +197,15 @@ class SyntagesmouGrExtractor(BaseRecipeExtractor):
         if not post_body:
             return None
         
-        # Ищем все заголовки h2
-        headers = post_body.find_all('h2')
+        # Ищем все заголовки h2, h3, h4
+        headers = post_body.find_all(['h2', 'h3', 'h4'])
         for header in headers:
             header_text = header.get_text(strip=True)
             # Проверяем, является ли это заголовком инструкций
-            if re.match(r'Εκτέλεση|Οδηγίες|Παρασκευή', header_text, re.IGNORECASE):
+            if re.search(r'Εκτέλεση|Οδηγίες|Παρασκευή', header_text, re.IGNORECASE):
                 # Ищем следующий ol после заголовка
                 next_element = header.find_next_sibling()
+                found_list = False
                 while next_element:
                     if next_element.name == 'ol':
                         # Нашли список инструкций
@@ -205,12 +215,20 @@ class SyntagesmouGrExtractor(BaseRecipeExtractor):
                             step_text = self.clean_text(step_text)
                             if step_text:
                                 steps.append(step_text)
+                        found_list = True
                         break
-                    elif next_element.name in ['h2', 'h3', 'hr']:
+                    elif next_element.name == 'p' and not next_element.get_text(strip=True):
+                        # Пропускаем пустые параграфы
+                        next_element = next_element.find_next_sibling()
+                        continue
+                    elif next_element.name in ['h2', 'h3', 'h4', 'hr']:
                         # Достигли следующей секции
                         break
                     next_element = next_element.find_next_sibling()
-                break
+                
+                # Если нашли список, прекращаем поиск
+                if found_list:
+                    break
         
         return ' '.join(steps) if steps else None
     
