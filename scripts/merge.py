@@ -12,6 +12,7 @@ import random
 from src.stages.search.similarity import SimilaritySearcher, ClusterParams, build_clusters_from_dsu
 from src.stages.merge.merge import ClusterVariationGenerator
 from src.repositories.merged_recipe import MergedRecipeRepository
+from src.repositories.cluster_page import ClusterPageRepository
 from typing import Literal, Optional
 from config.config import config
 # Базовая настройка только для консоли
@@ -37,14 +38,9 @@ def get_ss_from_config(score_thresold: float, build_type: Literal["image", "full
             density_min_similarity=score_thresold + config.MERGE_CENTROID_THRESHOLD_STEP
         ), build_type=build_type) # "image", "full", "ingredients"
 
-def load_centroids(score_thresold: float, build_type: Literal["image", "full", "ingredients"]) -> dict[int, list[float]]:
-    ss = get_ss_from_config(score_thresold, build_type)
-    ss.validated_centroids = ss.local_cluster_loader.load_validated_centroids()
-    return ss.validated_centroids
-
 async def generate_recipe_clusters(similarity_threshold: float, build_type: Literal["image", "full", "ingredients"], check_cluster_update: bool = True):
     """
-    create_clusters - создает кластеры рецептов на основе заданного порога схожести и типа построения кластеров.
+    create_clusters - создает кластеры рецептов на основе заданного порога схожести и типа построения кластеров и сохраняет их в бд.
     Args:
         similarity_threshold: Порог схожести для кластеризации (по умолчанию из конфигурации).
         build_type: Тип построения кластеров ("image", "full", "ingredients") (по умолчанию из конфигурации).
@@ -91,27 +87,13 @@ async def generate_recipe_clusters(similarity_threshold: float, build_type: Lite
     final_clusters = build_clusters_from_dsu(ss.dsu, min_cluster_size=config.SIMILARITY_MIN_CLUSTER_SIZE)
     await ss.save_clusters_to_file(final_clusters, recalculate_mapping=recalculate_mapping, refine_clusters=recalculate_mapping)
 
-def save_clusters_to_history(clusters: list[list[int]], filename: str):
-    os.makedirs(config.MERGE_HISTORY_FOLDER, exist_ok=True)
-    clusters = [list(cluster) for cluster in clusters] # преобразуем множества обратно в списки для сохранения в json
-    with open(filename, "w") as f:
-        json.dump(clusters, f)
-
-def load_clusters_from_history(filename: str) -> list[set[int]]:
-    if not os.path.exists(filename):
-        return []
-    with open(filename, "r") as f:
-        clusters = json.load(f)
-    return [set(cluster) for cluster in clusters]
-
-async def execute_cluster_batch(tasks: list, clusters_in_batch: list[str]) -> tuple[list[list[int]], int]:
+async def execute_cluster_batch(tasks: list, clusters_in_batch: list[str]) -> int:
     """Выполняет асинхронные задачи и обрабатывает результаты, возвращая список успешно обработанных кластеров.
     Args:
         tasks: Список асинхронных задач для выполнения.
         clusters_in_batch: Список кластеров, соответствующих каждой задаче.
     Returns:
         Список кластеров, для которых задачи были успешно выполнены."""
-    success_clusters = []
     processed_count = 0
     completed_tasks = await asyncio.gather(*tasks, return_exceptions=True)
     for i, result in enumerate(completed_tasks):
@@ -123,9 +105,7 @@ async def execute_cluster_batch(tasks: list, clusters_in_batch: list[str]) -> tu
                     logger.info(f"Created {len(merged_recipes)} variations.")
                     processed_count += 1
 
-            success_clusters.append(clusters_in_batch[i])
-
-    return success_clusters, processed_count
+    return processed_count
 
 async def merge_cluster_recipes(
         similarity_threshold: float | None, 
@@ -148,49 +128,35 @@ async def merge_cluster_recipes(
         Returns:
             None
     """
-
-    cluster_processing_history = os.path.join(config.MERGE_HISTORY_FOLDER, f"unprocessed_clusters_max_recipes_{max_aggregated_recipes}.json")
-    existing_clusters = load_clusters_from_history(cluster_processing_history)
-
-    merger = ClusterVariationGenerator(score_threshold=similarity_threshold, clusters_build_type=build_type, max_recipes_per_gpt_merge_request=max_recipes_per_gpt_merge_request)
-    
+    # проверяем есть ил кластеры, при необходимоси обновляем бд
     await generate_recipe_clusters(similarity_threshold, build_type, check_cluster_update=check_cluster_update)
-    centroids = load_centroids(similarity_threshold, build_type)
-    if not centroids:
-        logger.info(f"No centroids found for build type - {build_type}, score_threshold - {similarity_threshold}, exiting...")
+
+    cluster_repo = ClusterPageRepository()
+    if (total_tasks := cluster_repo.get_cluster_count()) == 0:
+        logger.info("No clusters found in the database, exiting...")
         return
-
-    total_tasks = len(centroids)
-    if existing_clusters:
-        logger.info(f"Загружено {len(existing_clusters)} кластеров из истории, всего кластеров {len(centroids)}, пропускаем уже обработанные.")
-        centroids = {k: v for k, v in centroids.items() if set(v) not in existing_clusters}
-        logger.info(f"Осталось {len(centroids)} кластеров для обработки после фильтрации истории.")
-
+    
+    logger.info(f"Total clusters to process: {total_tasks}")
+    merger = ClusterVariationGenerator(score_threshold=similarity_threshold, clusters_build_type=build_type, max_recipes_per_gpt_merge_request=max_recipes_per_gpt_merge_request)
+    get_cluster_function = cluster_repo.get_clusters_without_merged_recipes if max_variation_per_cluster == 1 else cluster_repo.get_clusters
     total = 0
-    tasks = []
-    clusters_in_current_batch = []
+    last_cluster_id = None
+    while True:
+        centroids, last_cluster_id = get_cluster_function(limit=config.MERGE_MAX_MERGE_RECIPES, last_cluster_id=last_cluster_id)
+        if not centroids:
+            logger.info("No more clusters to process, exiting...")
+            break
 
-    for centroid, cluster in centroids.items():
-        clusters_in_current_batch.append(cluster)
-
-        tasks.append(generate_from_one_cluster(
+        tasks = [
+            generate_from_one_cluster(
                 merger=merger,
                 cluster=cluster,
                 cluster_centroid=centroid,
                 max_variations= max_variation_per_cluster,
                 max_aggregated_recipes= max_aggregated_recipes
-            ))
-        
-        if len(tasks) >= config.MERGE_MAX_MERGE_RECIPES or len(existing_clusters) == total_tasks: # набран батч или все кластеры уже были в истории
-            success_clusters, processed = await execute_cluster_batch(tasks, clusters_in_current_batch)
-            total += processed
-            existing_clusters.extend(success_clusters)
-            save_clusters_to_history(existing_clusters, cluster_processing_history)
-
-            tasks = []
-            clusters_in_current_batch = []
-
-        
+            ) for centroid, cluster in centroids.items()
+        ]
+        total += await execute_cluster_batch(tasks, list(centroids.values()))
         if limit and total >= limit:
             logger.info(f"Достигнут лимит в {limit} успешно обработанных кластеров, останавливаемся.")
             break
@@ -313,11 +279,11 @@ def view_merge_recipe(recipe_id: int):
         print(f"Merged recipe with id {recipe_id} not found.")
 
 if __name__ == "__main__":
-    config.MERGE_MAX_MERGE_RECIPES = 1
     config.MERGE_CENTROID_THRESHOLD_STEP = 0.02
+    #config.MERGE_MAX_MERGE_RECIPES = 1
     #asyncio.run(make_recipe_variations(similarity_threshold=0.92, build_type="full", max_variations_per_recipe=1, limit=10))
-    #merger = merger = ClusterVariationGenerator(score_threshold=0.92, clusters_build_type="full", max_recipes_per_gpt_merge_request=5)
-    #asyncio.run(make_recipe_variation_from_canonical(merger=merger, canonical_recipe_id=9062))
+    #merger = merger = ClusterVariationGenerator(score_threshold=0.9, clusters_build_type="full", max_recipes_per_gpt_merge_request=5)
+    asyncio.run(make_recipe_variations(similarity_threshold=0.9, build_type="full", max_variations_per_recipe=1, limit=100))
     
     asyncio.run(merge_cluster_recipes(similarity_threshold=0.9, 
                                              build_type="full", 

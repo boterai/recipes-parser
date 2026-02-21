@@ -102,8 +102,13 @@ class ClusterParams:
     sample_per_scroll_batch: int | None = None  # случайно взять N ids из каждого scroll батча
     sample_seed: int = 42                       # seed для воспроизводимой выборки
 
-    union_top_k: int = 10        # сколько соседей юнифицировать в DSU
+    union_top_k: int = 7         # сколько соседей юнифицировать в DSU
     max_async_tasks: int = 10    # максимальное число одновременных асинхронных задач
+
+    # Параметры для повышения точности кластеризации (soft mutual KNN)
+    mutual_knn: bool = True              # включить soft mutual KNN проверку
+    non_mutual_top_k: int = 3            # не-взаимные соседи union-ятся только если в top-N (самые близкие)
+    max_cluster_size: int | None = 400   # ограничить максимальный размер кластера (None — без ограничения)
     
     # Параметры проверки центроида (отключены для уменьшения размера файлов DSU)
     centroid_threshold: float = 0.9      # минимальная похожесть с центроидом для объединения (только если use_centroid_check=True)
@@ -129,6 +134,8 @@ class SimilaritySearcher:
         self.local_cluster_loader = LocalClusterLoader(build_type=build_type, score_threshold=self.params.score_threshold, density_min_similarity=self.params.density_min_similarity)
         # Центроиды валидированных кластеров: cluster key -> page_id ближайшего к центроиду рецепта
         self.validated_centroids: dict[int, int] = {}
+        # Кэш соседей для mutual KNN проверки: src_id -> set(dst_ids)
+        self._neighbor_cache: dict[int, set[int]] = {}
 
     @property
     def clickhouse_manager(self): # layz initialization + lazy import
@@ -188,6 +195,34 @@ class SimilaritySearcher:
         if norm1 == 0 or norm2 == 0:
             return 0.0
         return float(np.dot(vec1, vec2) / (norm1 * norm2))
+
+    def _is_mutual_neighbor(self, src_id: int, dst_id: int) -> bool:
+        """Проверяет что dst_id является взаимным соседом src_id (оба в top-K друг друга)."""
+        if not self.params.mutual_knn:
+            return True
+        return src_id in self._neighbor_cache.get(dst_id, set())
+
+    def _should_union(self, src_id: int, dst_id: int, rank_in_hits: int) -> bool:
+        """
+        Soft mutual KNN: решает, нужно ли объединять src и dst.
+        - Взаимные соседи (оба в top-K друг друга) — всегда объединяем
+        - Не-взаимные — только если rank_in_hits < non_mutual_top_k (т.е. очень близкие)
+        - Если mutual_knn выключен — объединяем всегда
+        """
+        if not self.params.mutual_knn:
+            return True
+        
+        is_mutual = self._is_mutual_neighbor(src_id, dst_id)
+        if is_mutual:
+            return True
+        
+        # Не-взаимный сосед, но он в самых ближних top-N — всё равно объединяем
+        return rank_in_hits < self.params.non_mutual_top_k
+
+    def _update_neighbor_cache(self, src_id: int, hits: list[int]) -> None:
+        """Обновляет кэш соседей для mutual KNN."""
+        if self.params.mutual_knn:
+            self._neighbor_cache[src_id] = set(hits[:self.params.union_top_k])
 
     async def query_batch_async(self, q:QdrantRecipeManager, vectors: list[float]) -> Optional[list[int]]:
         for attempt in range(3):
@@ -272,18 +307,33 @@ class SimilaritySearcher:
                 if not batch_hits:
                     continue
 
-                # union только top-K (без проверки центроидов для уменьшения размера DSU)
+                # Обновляем кэш соседей для mutual KNN
+                for src_id, hits in zip(sub_ids, batch_hits):
+                    if hits:
+                        self._update_neighbor_cache(int(src_id), [int(h) for h in hits])
+
+                # union только top-K с soft mutual KNN и ограничением размера кластера
                 for src_id, hits in zip(sub_ids, batch_hits):
                     if not hits:
                         continue
                     
                     top_hits = hits[:self.params.union_top_k] if self.params.union_top_k else hits
-                    for dst_id in top_hits:
+                    for rank, dst_id in enumerate(top_hits):
                         if dst_id == src_id:
                             continue
                         
-                        # Простой union без проверки центроидов
-                        self.dsu.union(int(src_id), dst_id)
+                        # Soft mutual KNN: взаимные — всегда, не-взаимные — только top-N
+                        if not self._should_union(int(src_id), int(dst_id), rank):
+                            continue
+                        
+                        # Ограничение максимального размера кластера
+                        if self.params.max_cluster_size is not None:
+                            src_size = self.dsu.get_size(int(src_id))
+                            dst_size = self.dsu.get_size(int(dst_id))
+                            if src_size + dst_size > self.params.max_cluster_size:
+                                continue
+                        
+                        self.dsu.union(int(src_id), int(dst_id))
 
                 processed += len(sub_ids)
                 if self.params.max_recipes is not None and processed >= self.params.max_recipes:
@@ -620,26 +670,26 @@ class SimilaritySearcher:
         logger.info(f"Saved clusters to file {self.local_cluster_loader.path_clusters}.")
 
 if __name__ == "__main__":
-    """with open("recipe_clusters/full_centroids_0.91_0.93.json", "r") as f:
+    """with open("recipe_clusters/full_centroids_0.88_0.91.json", "r") as f:
         centroids = json.load(f)
 
     reversed_centroids = {int(v): list(map(int, k.split(","))) for k, v in centroids.items()}
-    with open("recipe_clusters/full_centroids_0.91_0.93.json", "w") as f:
+    with open("recipe_clusters/full_centroids_0.88_0.91.json", "w") as f:
         json.dump(reversed_centroids, f, indent=2)"""
 
-
+    # 0ю9 - 0.92 основаная вариация
     while True:
         ss = SimilaritySearcher(params=ClusterParams(
                     limit=40,
-                    score_threshold=0.92,
+                    score_threshold=0.88,
                     scroll_batch=3500,
                     min_cluster_size=4,
-                    union_top_k=20,
+                    union_top_k=10,
+                    non_mutual_top_k=5,
                     query_batch=128,
-                    density_min_similarity=0.93,
+                    density_min_similarity=0.91,
                     max_async_tasks=15,
                 ), build_type="full") # "image", "full", "ingredients"
-        ss.save_validated_centroids_to_databsae()
         try:
             ss.load_dsu_state()
             last_id = ss.last_id # получаем last id после загрузки состояния (такая штука работает только опираясь на тот факт, что каждй вновь доавбленный рецепт имеет id не меньше уже векторизованных рецептов, иначе рецепты могут быть пропущены)
@@ -657,4 +707,4 @@ if __name__ == "__main__":
 
     final_clusters = build_clusters_from_dsu(ss.dsu, min_cluster_size=4)
     asyncio.run(ss.save_clusters_to_file(final_clusters, recalculate_mapping=True, refine_clusters=True))
-    ss.save_validated_centroids_to_databsae()
+    #ss.save_validated_centroids_to_databsae()

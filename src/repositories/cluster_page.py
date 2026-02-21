@@ -1,5 +1,7 @@
+from typing import Optional
 from src.repositories.base import BaseRepository
 from src.models.cluster_page import ClusterPageORM, ClusterPage
+from src.models.merged_recipe import MergedRecipeORM
 from src.models.page import PageORM
 from src.common.db.connection import get_db_connection
 from sqlalchemy import func
@@ -149,6 +151,141 @@ class ClusterPageRepository(BaseRepository[ClusterPageORM]):
             )
 
             return [pid for (pid,) in similar_pages]
+        finally:
+            session.close()
+
+    def get_clusters_for_pages(self, page_ids: list[int]) -> dict[int, int]:
+        """Получить mapping {page_id: cluster_id} для списка page_id"""
+        session = self.get_session()
+        try:
+            clusters = (
+                session.query(ClusterPageORM.page_id, ClusterPageORM.cluster_id)
+                .filter(ClusterPageORM.page_id.in_(page_ids))
+                .all()
+            )
+            parsed_pages = dict(clusters)  # {page_id: cluster_id}
+            for page_id in page_ids:
+                if page_id not in parsed_pages:
+                    parsed_pages[page_id] = None  # Явно указываем, что кластер не найден
+            return parsed_pages
+        finally:
+            session.close()
+
+    def get_cluster_count(self) -> int:
+        """Получить общее количество кластеров"""
+        session = self.get_session()
+        try:
+            count = session.query(func.count(func.distinct(ClusterPageORM.cluster_id))).scalar()
+            return count
+        finally:
+            session.close()
+
+    def get_clusters(self, limit: int = 10, last_cluster_id: Optional[int] = None) -> tuple[dict[int, list[int]], Optional[int]]:
+        """
+        Получить кластеры с их страницами.
+        
+        Args:
+            limit: максимальное количество кластеров для возврата
+            last_cluster_id: если указано, возвращать только кластеры с id > last_cluster_id
+            
+        Returns:
+            Tuple of (Dict[int, List[int]], Optional[int]): ({centroid_page_id: [page_id1, page_id2, ...]}, last_cluster_id)
+        """
+        session = self.get_session()
+        try:
+            query = (
+                session.query(ClusterPageORM.cluster_id, ClusterPageORM.page_id)
+                .filter(ClusterPageORM.is_centroid == True)
+            )
+            if last_cluster_id is not None:
+                query = query.filter(ClusterPageORM.cluster_id > last_cluster_id)
+            centroids = query.order_by(ClusterPageORM.cluster_id).limit(limit).all()
+
+            if not centroids:
+                return {}, None
+
+            # cluster_id -> centroid_page_id, без лишних запросов
+            cluster_to_centroid = dict(centroids)  # {cluster_id: centroid_page_id}
+            cluster_ids = list(cluster_to_centroid.keys())
+
+            cluster_pages = (
+                session.query(ClusterPageORM.cluster_id, ClusterPageORM.page_id)
+                .filter(ClusterPageORM.cluster_id.in_(cluster_ids))
+                .all()
+            )
+
+            result = {}
+            for cluster_id, page_id in cluster_pages:
+                centroid_page_id = cluster_to_centroid[cluster_id]
+                if centroid_page_id not in result:
+                    result[centroid_page_id] = []
+                result[centroid_page_id].append(page_id)
+
+            return result, max(cluster_ids)
+        finally:
+            session.close()
+
+    def get_clusters_without_merged_recipes(self, limit: int = 10, last_cluster_id: Optional[int] = None) -> tuple[dict[int, list[int]], Optional[int]]:
+        """
+        Получить кластеры, центроиды которых не имеют merged_recipes.
+        
+        Args:
+            limit: максимальное количество кластеров для возврата
+            last_cluster_id: если указано, возвращать только кластеры с id > last_cluster_id
+            
+        Returns:
+            Tuple of (Dict[int, List[int]], Optional[int]): ({centroid_page_id: [page_id1, page_id2, ...]}, last_cluster_id)
+        """
+        session = self.get_session()
+        try:
+            
+            # Находим центроиды без merged_recipes
+            query = (
+                session.query(
+                    ClusterPageORM.cluster_id,
+                    ClusterPageORM.page_id
+                )
+                .outerjoin(
+                    MergedRecipeORM,
+                    ClusterPageORM.page_id == MergedRecipeORM.base_recipe_id
+                )
+                .filter(
+                    MergedRecipeORM.id.is_(None),
+                    ClusterPageORM.is_centroid == True
+                )
+            )
+            
+            if last_cluster_id is not None:
+                query = query.filter(ClusterPageORM.cluster_id > last_cluster_id)
+            
+            orphan_centroids = query.order_by(ClusterPageORM.cluster_id).limit(limit).all()
+            
+            if not orphan_centroids:
+                return {}, None
+            
+            # Маппинг cluster_id -> centroid_page_id
+            cluster_to_centroid = dict(orphan_centroids)
+            cluster_ids = list(cluster_to_centroid.keys())
+            
+            # Получаем все page_ids для этих кластеров
+            cluster_pages = (
+                session.query(
+                    ClusterPageORM.cluster_id,
+                    ClusterPageORM.page_id
+                )
+                .filter(ClusterPageORM.cluster_id.in_(cluster_ids))
+                .all()
+            )
+            
+            # Группируем по centroid_page_id
+            result = {}
+            for cluster_id, page_id in cluster_pages:
+                centroid_page_id = cluster_to_centroid[cluster_id]
+                if centroid_page_id not in result:
+                    result[centroid_page_id] = []
+                result[centroid_page_id].append(page_id)
+            
+            return result, max(cluster_ids)
         finally:
             session.close()
         
