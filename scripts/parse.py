@@ -18,7 +18,7 @@ from src.stages.parse.parse import RecipeParserRunner
 from config.config import config
 
 # Создаем директорию для логов
-LOGS_DIR = Path(__file__).parent.parent / "logs"
+LOGS_DIR = Path(__file__).parent.parent / config.PARSER_LOG_FOLDER
 LOGS_DIR.mkdir(exist_ok=True)
 
 # Базовая настройка только для консоли
@@ -291,8 +291,20 @@ if __name__ == "__main__":
         default=7_000,
         help='Максимальное количество просмотренных URL для каждого модуля, включая те, что не содержат рецептов (по умолчанию: 10 000)'
     )
+
+    parser.add_argument(
+        '--max_space_bytes',
+        type=int,
+        default=1,
+        help='Максимальный размер папки с данными для каждого модуля (по умолчанию: None - без ограничения, рекомендуется не указывать и следить за размером папки вручную, чтобы не удалять данные для модулей, которые все еще парсятся)'
+    )
     
     args = parser.parse_args()
+
+    if args.max_space_bytes is not None:
+        from utils.clear import clear_folder
+        clear_folder(config.PARSER_DIR, max_size_bytes=args.max_space_bytes, exclude_files=[r".*\.json$"])
+        clear_folder(config.PARSER_LOG_FOLDER, max_size_bytes=args.max_space_bytes)
     
     if args.parallel:
         run_parallel(ports=args.ports,  modules=None, max_recipes_per_module=args.max_recipes_per_module, max_urls=args.max_urls,

@@ -74,10 +74,8 @@ class ClusterPageRepository(BaseRepository[ClusterPageORM]):
                     existing_clusters.add(existing_by_page[page_id].cluster_id)
             
             if len(existing_clusters) > 1:
-                raise ValueError(
-                    f"Страницы для центроида {centroid_page_id} принадлежат "
-                    f"разным кластерам: {existing_clusters}"
-                )
+                logger.warning(f"Страницы кластера с центроидом {centroid_page_id} принадлежат разным кластерам: {existing_clusters}. Скорее всего созданный кластер включает в себя более мелкие из другой выборки.")
+                continue
             
             # Определяем cluster_id
             if existing_clusters:

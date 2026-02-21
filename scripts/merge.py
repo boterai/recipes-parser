@@ -39,7 +39,7 @@ def get_ss_from_config(score_thresold: float, build_type: Literal["image", "full
 
 def load_centroids(score_thresold: float, build_type: Literal["image", "full", "ingredients"]) -> dict[int, list[float]]:
     ss = get_ss_from_config(score_thresold, build_type)
-    ss.load_validated_centroids()
+    ss.validated_centroids = ss.local_cluster_loader.load_validated_centroids()
     return ss.validated_centroids
 
 async def generate_recipe_clusters(similarity_threshold: float, build_type: Literal["image", "full", "ingredients"], check_cluster_update: bool = True):
@@ -56,7 +56,7 @@ async def generate_recipe_clusters(similarity_threshold: float, build_type: Lite
     first_loaded_last_id = None
     while True:
         ss = get_ss_from_config(similarity_threshold, build_type)
-        if check_cluster_update is False and ss.load_clusters_from_file():
+        if check_cluster_update is False and ss.local_cluster_loader.load_clusters():
             return
 
         try:
@@ -67,8 +67,7 @@ async def generate_recipe_clusters(similarity_threshold: float, build_type: Lite
             last_id = ss.last_id # получаем last id после загрузки состояния (такая штука работает только опираясь на тот факт, что каждй вновь доавбленный рецепт имеет id не меньше уже векторизованных рецептов, иначе рецепты могут быть пропущены)
             clusters = await ss.build_clusters_async()
             ss.save_dsu_state()
-            print(f"Total clusters found: {len(clusters)}")
-            print("Last processed ID:", ss.last_id)
+            print(f"Total clusters found: {len(clusters)}, last processed ID: {ss.last_id}")
             await ss.save_clusters_to_file(clusters)
             if ss.last_id == last_id:
                 logger.info("Processing complete.")
@@ -90,18 +89,20 @@ async def generate_recipe_clusters(similarity_threshold: float, build_type: Lite
             continue
 
     final_clusters = build_clusters_from_dsu(ss.dsu, min_cluster_size=config.SIMILARITY_MIN_CLUSTER_SIZE)
-    await ss.save_clusters_to_file(final_clusters, recalculate_mapping=recalculate_mapping, refine_clusters=recalculate_mapping, refine_mode="split")
+    await ss.save_clusters_to_file(final_clusters, recalculate_mapping=recalculate_mapping, refine_clusters=recalculate_mapping)
 
 def save_clusters_to_history(clusters: list[list[int]], filename: str):
     os.makedirs(config.MERGE_HISTORY_FOLDER, exist_ok=True)
+    clusters = [list(cluster) for cluster in clusters] # преобразуем множества обратно в списки для сохранения в json
     with open(filename, "w") as f:
         json.dump(clusters, f)
 
-def load_clusters_from_history(filename: str) -> list[list[int]]:
+def load_clusters_from_history(filename: str) -> list[set[int]]:
     if not os.path.exists(filename):
         return []
     with open(filename, "r") as f:
-        return json.load(f)
+        clusters = json.load(f)
+    return [set(cluster) for cluster in clusters]
 
 async def execute_cluster_batch(tasks: list, clusters_in_batch: list[str]) -> tuple[list[list[int]], int]:
     """Выполняет асинхронные задачи и обрабатывает результаты, возвращая список успешно обработанных кластеров.
@@ -152,6 +153,7 @@ async def merge_cluster_recipes(
     existing_clusters = load_clusters_from_history(cluster_processing_history)
 
     merger = ClusterVariationGenerator(score_threshold=similarity_threshold, clusters_build_type=build_type, max_recipes_per_gpt_merge_request=max_recipes_per_gpt_merge_request)
+    
     await generate_recipe_clusters(similarity_threshold, build_type, check_cluster_update=check_cluster_update)
     centroids = load_centroids(similarity_threshold, build_type)
     if not centroids:
@@ -161,20 +163,19 @@ async def merge_cluster_recipes(
     total_tasks = len(centroids)
     if existing_clusters:
         logger.info(f"Загружено {len(existing_clusters)} кластеров из истории, всего кластеров {len(centroids)}, пропускаем уже обработанные.")
-        centroids = {k: v for k, v in centroids.items() if k not in existing_clusters}
+        centroids = {k: v for k, v in centroids.items() if set(v) not in existing_clusters}
         logger.info(f"Осталось {len(centroids)} кластеров для обработки после фильтрации истории.")
 
     total = 0
     tasks = []
     clusters_in_current_batch = []
 
-    for cluster, centroid in centroids.items():
-        cluster_list = list(map(int, cluster.split(",")))
+    for centroid, cluster in centroids.items():
         clusters_in_current_batch.append(cluster)
 
         tasks.append(generate_from_one_cluster(
                 merger=merger,
-                cluster=cluster_list,
+                cluster=cluster,
                 cluster_centroid=centroid,
                 max_variations= max_variation_per_cluster,
                 max_aggregated_recipes= max_aggregated_recipes
@@ -312,7 +313,7 @@ def view_merge_recipe(recipe_id: int):
         print(f"Merged recipe with id {recipe_id} not found.")
 
 if __name__ == "__main__":
-    #config.MERGE_MAX_MERGE_RECIPES = 1
+    config.MERGE_MAX_MERGE_RECIPES = 1
     config.MERGE_CENTROID_THRESHOLD_STEP = 0.02
     #asyncio.run(make_recipe_variations(similarity_threshold=0.92, build_type="full", max_variations_per_recipe=1, limit=10))
     #merger = merger = ClusterVariationGenerator(score_threshold=0.92, clusters_build_type="full", max_recipes_per_gpt_merge_request=5)

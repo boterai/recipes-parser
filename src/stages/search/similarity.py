@@ -9,7 +9,7 @@ from typing import Optional, Literal
 import os
 import asyncio
 import aiofiles
-
+import copy
 import numpy as np
 
 if __name__ == "__main__":
@@ -23,6 +23,7 @@ from src.repositories.similarity import RecipeSimilarity
 from src.repositories.image import ImageRepository
 from src.models.recipe import Recipe
 from src.repositories.cluster_page import ClusterPageRepository
+from src.stages.search.cluster_loader import LocalClusterLoader
 from itertools import batched
 
 logging.basicConfig(
@@ -124,13 +125,8 @@ class SimilaritySearcher:
         self.params: ClusterParams = params
         self.rng = random.Random(params.sample_seed)
         self.set_params(build_type=build_type)
-        self.dsu_filename = os.path.join("recipe_clusters", f"dsu_state_{build_type}_{self.params.score_threshold}.json")
-        self.clusters_filename = os.path.join("recipe_clusters", f"{build_type}_clusters_{self.params.score_threshold}_{self.params.density_min_similarity}.json")
-        self.cluter_image_mapping = os.path.join("recipe_clusters", f"clusters_to_image_ids_{self.params.score_threshold}_{self.params.density_min_similarity}.json")
-        self.validated_centroids_filename = os.path.join("recipe_clusters", f"{build_type}_centroids_{self.params.score_threshold}_{self.params.density_min_similarity}.json")
-        self.refined_history_filename = os.path.join("recipe_clusters", f"{build_type}_refined_history_{self.params.score_threshold}_{self.params.density_min_similarity}.json")
         self.build_type = build_type
-        
+        self.local_cluster_loader = LocalClusterLoader(build_type=build_type, score_threshold=self.params.score_threshold, density_min_similarity=self.params.density_min_similarity)
         # Центроиды валидированных кластеров: cluster key -> page_id ближайшего к центроиду рецепта
         self.validated_centroids: dict[int, int] = {}
 
@@ -151,51 +147,23 @@ class SimilaritySearcher:
             "rank": self.dsu.rank,
             "last_id": self.last_id
         }
-        with open(self.dsu_filename, 'w') as f:
-            json.dump(state, f, indent=2)
-        logger.info(f"Saved DSU state to {self.dsu_filename} (last_id={self.last_id})")
+        self.local_cluster_loader.save_dsu_state(state)
+        logger.info(f"Saved DSU state (last_id={self.last_id})")
 
     def load_dsu_state(self) -> None:
         """Загружает состояние DSU из файла."""
-        if not os.path.exists(self.dsu_filename):
-            logger.warning(f"DSU state file {self.dsu_filename} not found, starting fresh")
-            return
-        
-        with open(self.dsu_filename, 'r') as f:
-            state:dict = json.load(f)
-        
+        state = self.local_cluster_loader.load_dsu_state()
         # Восстанавливаем DSU
         self.dsu.parent = {int(k): int(v) for k, v in state.get("parent", {}).items()}
         self.dsu.rank = {int(k): int(v) for k, v in state.get("rank", {}).items()}
         self.last_id = state.get("last_id")
         
-        logger.info(f"Loaded DSU state from {self.dsu_filename} (last_id={self.last_id}, nodes={len(self.dsu.parent)})")
-
-    def save_validated_centroids(self) -> None:
-        """Сохраняет центроиды валидированных кластеров в файл.
-        
-        Формат: {cluster_index: page_id ближайшего к центроиду рецепта}
-        """
-        with open(self.validated_centroids_filename, 'w') as f:
-            json.dump(self.validated_centroids, f, indent=2)
-        logger.info(f"Saved {len(self.validated_centroids)} validated centroids to {self.validated_centroids_filename}")
-
-    def load_validated_centroids(self) -> None:
-        """Загружает центроиды валидированных кластеров из файла."""
-        if not os.path.exists(self.validated_centroids_filename):
-            logger.warning(f"Validated centroids file {self.validated_centroids_filename} not found")
-            return
-        
-        with open(self.validated_centroids_filename, 'r') as f:
-            raw = json.load(f)
-        
-        self.validated_centroids = {int(k): v for k, v in raw.items()}
-        logger.info(f"Loaded {len(self.validated_centroids)} validated centroids from {self.validated_centroids_filename}")
+        logger.info(f"Loaded DSU state from {self.local_cluster_loader.path_dsu} (last_id={self.last_id}, nodes={len(self.dsu.parent)})")
 
     def save_validated_centroids_to_databsae(self, batch_size: int = 10) -> None:
         """Сохраняет валидированные центроиды в базу данных (таблица cluster_page)"""
         if not self.validated_centroids:
-            self.load_validated_centroids()
+            self.validated_centroids = self.local_cluster_loader.load_validated_centroids()
             if not self.validated_centroids:
                 logger.warning("No validated centroids to save to database")
                 return
@@ -213,7 +181,6 @@ class SimilaritySearcher:
                     except Exception as e_inner:
                         logger.error(f"Failed to save centroid {centroid_page_id} to database: {e_inner}")
 
-
     def _cosine_similarity(self, vec1: np.ndarray, vec2: np.ndarray) -> float:
         """Вычисляет косинусную похожесть между двумя векторами."""
         norm1 = np.linalg.norm(vec1)
@@ -221,7 +188,6 @@ class SimilaritySearcher:
         if norm1 == 0 or norm2 == 0:
             return 0.0
         return float(np.dot(vec1, vec2) / (norm1 * norm2))
-
 
     async def query_batch_async(self, q:QdrantRecipeManager, vectors: list[float]) -> Optional[list[int]]:
         for attempt in range(3):
@@ -336,7 +302,6 @@ class SimilaritySearcher:
 
         return build_clusters_from_dsu(self.dsu, self.params.min_cluster_size)
             
-    
     def set_params(self, build_type: Literal["image", "full", "ingredients"] = "full"):
         """Кластеры по ингредиентам из Qdrant ingredients-коллекции."""
         if self.params is None:
@@ -351,7 +316,6 @@ class SimilaritySearcher:
             self.params.collection_name = "full"
             self.params.using = "dense"
     
-
     def _build_dsu_chunked(
         self,
         ids: list[int],
@@ -554,35 +518,19 @@ class SimilaritySearcher:
             min_cluster_size_for_validation = self.params.min_cluster_size_for_validation
         if min_avg_similarity is None:
             min_avg_similarity = self.params.density_min_similarity
-        
-        refined = []
-        skipped = 0
-        split_count = 0
 
-        self.load_validated_centroids()
-        if os.path.exists(self.refined_history_filename):
-            async with aiofiles.open(self.refined_history_filename, 'r') as f:
-                history = json.loads(await f.read())
-            logger.info(f"Loaded refinement history from {self.refined_history_filename} (previously refined clusters: {len(history)})")            
-        else:
-            history: dict[int, list[int]] = {}
-            self.validated_centroids = {}
+        total_clusters = len(clusters)
+        clusters, self.validated_centroids, history = self.local_cluster_loader.retrieve_unvalidated_clusters_with_centroids_and_history(clusters)
+        refined: list[list[int]] = list(self.validated_centroids.values()) # уже обработанные кластеры из истории (которые не изменились) добавляем в результат сразу
 
-        if self.validated_centroids: # фильтруем кластеры и валидированные центроиды по истории, чтобы не обрабатывать заново
-            pass
-
-        
         # оставляем старые центроиды и распределение только для кластеров, которые не изменились
         for num, cluster in enumerate(clusters):
             cluster_key = ','.join(map(str, sorted(cluster)))
-            if cluster_key in history:
-                continue
             centroids: list = []
             # Маленькие кластеры пропускаем без проверки
             if len(cluster) < min_cluster_size_for_validation:
                 self.validated_centroids[cluster[0]] = cluster
                 refined.append(cluster)
-                skipped += 1
                 centroids.append(cluster[0])
                 continue
             
@@ -594,8 +542,6 @@ class SimilaritySearcher:
                 min_subcluster_size=self.params.min_cluster_size
             )
             
-            if len(subclusters) > 1:
-                split_count += 1
             
             for subcluster, closest_to_centroid in subclusters:
                 if len(subcluster) >= self.params.min_cluster_size:
@@ -605,46 +551,20 @@ class SimilaritySearcher:
 
             history[cluster_key] = centroids
             
-            if num % 2 == 0:
-                if self.validated_centroids:
-                    self.save_validated_centroids()
-
-                if history:
-                    async with aiofiles.open(self.refined_history_filename, 'w') as f:
-                        await f.write(json.dumps(history, indent=2))
+            if num % 10 == 0:
+                self.local_cluster_loader.save_validated_centroids(self.validated_centroids)
+                self.local_cluster_loader.save_validated_centroids_history(history)
             
         
         logger.info(
-            f"Cluster refinement with split: {len(clusters)} → {len(refined)} clusters, "
-            f"skipped={skipped}, split={split_count}, centroids_saved={len(self.validated_centroids)}"
+            f"Cluster refinement with split: {total_clusters} → {len(refined)} clusters,  centroids_saved={len(self.validated_centroids)}"
         )
         
         # Сохраняем центроиды в файл
-        if self.validated_centroids:
-            self.save_validated_centroids()
-
-        if history: # сохраняем историю
-            async with aiofiles.open(self.refined_history_filename, 'w') as f:
-                await f.write(json.dumps(history, indent=2))
+        self.local_cluster_loader.save_validated_centroids(self.validated_centroids)
+        self.local_cluster_loader.save_validated_centroids_history(history)
         
         return refined
-    
-    def load_clusters_from_file(self) -> list[list[int]]:
-        """Загружает кластеры из файла в формате JSON."""
-        with open(self.clusters_filename, 'r') as f:
-            clusters = json.load(f)
-        return clusters
-    
-    def get_image_clusters_mapping(self) -> dict[str, dict[str, list[int]]]:
-        """Загружает маппинг кластеров рецептов к изображениям из файла."""
-        if not os.path.exists(self.cluter_image_mapping):
-            logger.warning(f"Cluster to image mapping file {self.cluter_image_mapping} not found.")
-            return {}
-        
-        with open(self.cluter_image_mapping, 'r') as f:
-            page_ids_to_image_ids = json.load(f)
-        
-        return page_ids_to_image_ids
         
     async def save_clusters_to_file(
         self, 
@@ -664,7 +584,8 @@ class SimilaritySearcher:
         """
         # конвертируем кластеры из изображений в кластеры по ID рецептов
         if self.build_type == "image":
-            if not os.path.exists(self.cluter_image_mapping) or recalculate_mapping:
+            page_ids_to_image_ids = self.local_cluster_loader.load_image_cluster_mapping()
+            if not page_ids_to_image_ids or recalculate_mapping:
                 page_ids_to_image_ids = {"image_to_page": {}, "page_to_image": {}}
                 recipe_clisters = []
                 for image_ids in clusters:
@@ -677,12 +598,9 @@ class SimilaritySearcher:
                     page_ids_to_image_ids['image_to_page'][','.join(map(str, image_ids))] = page_ids
 
                 # сохраняем маппинг кластеров рецептов к изображениям
-                async with aiofiles.open(self.cluter_image_mapping, 'w') as f:
-                    await f.write(json.dumps(page_ids_to_image_ids, indent=2))
-                logger.info(f"Saved clusters to image IDs mapping to file {self.cluter_image_mapping}.")
+                self.local_cluster_loader.save_image_cluster_mapping(page_ids_to_image_ids)
+                logger.info(f"Saved clusters to image IDs mapping to file {self.local_cluster_loader.path_image_mapping}.")
             else:
-                async with aiofiles.open(self.cluter_image_mapping, 'r') as f:
-                    page_ids_to_image_ids = json.loads(await f.read())
                 recipe_clisters = []
                 for image_ids in clusters:
                     image_ids = sorted(image_ids)
@@ -691,7 +609,6 @@ class SimilaritySearcher:
                     recipe_clisters.append(page_ids)
                 
             clusters = recipe_clisters
-            # поуллчаем 
         
         if refine_clusters:
             q = QdrantRecipeManager(collection_prefix=self.qd_collection_prefix)
@@ -699,9 +616,8 @@ class SimilaritySearcher:
 
             clusters = await self.refine_clusters_with_split(clusters=clusters, q=q)
 
-        async with aiofiles.open(self.clusters_filename, 'w') as f:
-            await f.write(json.dumps(clusters, indent=2))
-        logger.info(f"Saved clusters to file {self.clusters_filename}.")
+        self.local_cluster_loader.save_clusters(clusters)
+        logger.info(f"Saved clusters to file {self.local_cluster_loader.path_clusters}.")
 
 if __name__ == "__main__":
     """with open("recipe_clusters/full_centroids_0.91_0.93.json", "r") as f:
@@ -715,17 +631,15 @@ if __name__ == "__main__":
     while True:
         ss = SimilaritySearcher(params=ClusterParams(
                     limit=40,
-                    score_threshold=0.9,
+                    score_threshold=0.92,
                     scroll_batch=3500,
                     min_cluster_size=4,
                     union_top_k=20,
                     query_batch=128,
-                    density_min_similarity=0.91,
+                    density_min_similarity=0.93,
                     max_async_tasks=15,
-                ), build_type="ingredients") # "image", "full", "ingredients"
-        final_clusters = build_clusters_from_dsu(ss.dsu, min_cluster_size=4)
-        asyncio.run(ss.save_clusters_to_file(final_clusters, recalculate_mapping=True, refine_clusters=True))
-        #ss.save_validated_centroids_to_databsae() # сохраняем в базу (на всякий случай, тк может быть много рецептов в кластере и сохранять их в json неэффективно, а так они будут сохранены даже при обрыве процесса до сохранения кластеров)
+                ), build_type="full") # "image", "full", "ingredients"
+        ss.save_validated_centroids_to_databsae()
         try:
             ss.load_dsu_state()
             last_id = ss.last_id # получаем last id после загрузки состояния (такая штука работает только опираясь на тот факт, что каждй вновь доавбленный рецепт имеет id не меньше уже векторизованных рецептов, иначе рецепты могут быть пропущены)
@@ -733,7 +647,6 @@ if __name__ == "__main__":
             ss.save_dsu_state()
             print(f"Total clusters found: {len(clusters)}")
             print("Last processed ID:", ss.last_id)
-            # Центроиды вычисляются локально в методах валидации
             asyncio.run(ss.save_clusters_to_file(clusters))
             if last_id == ss.last_id: # конец обработки тк id не поменялся, значи новых значений нет
                 logger.info("Processing complete.")
@@ -744,4 +657,4 @@ if __name__ == "__main__":
 
     final_clusters = build_clusters_from_dsu(ss.dsu, min_cluster_size=4)
     asyncio.run(ss.save_clusters_to_file(final_clusters, recalculate_mapping=True, refine_clusters=True))
-    #ss.save_validated_centroids_to_databsae()
+    ss.save_validated_centroids_to_databsae()
