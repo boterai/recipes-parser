@@ -6,7 +6,7 @@
 
 ```bash
 # 1. Запустить Chrome с отладкой
-google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug_9222
+google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug_9222 --no-first-run --no-default-browser-check
 
 # 2. Полный pipeline через main.py
 python scripts/main.py <command> [options]
