@@ -19,9 +19,7 @@ if __name__ == "__main__":
 
 from src.common.db.qdrant import QdrantRecipeManager
 from src.common.gpt.client import GPTClient
-from src.repositories.similarity import RecipeSimilarity
 from src.repositories.image import ImageRepository
-from src.models.recipe import Recipe
 from src.repositories.cluster_page import ClusterPageRepository
 from src.stages.search.cluster_loader import LocalClusterLoader
 from itertools import batched
@@ -121,7 +119,6 @@ class SimilaritySearcher:
     def __init__(self, params: ClusterParams = None, build_type: Literal["image", "full", "ingredients"] = "full"):
         self.qd_collection_prefix = "recipes"
         self.gpt_client: GPTClient = GPTClient()
-        self.similarity_repository = RecipeSimilarity()
         self.image_repository = ImageRepository()
         self._clickhouse_manager = None
 
@@ -133,7 +130,7 @@ class SimilaritySearcher:
         self.build_type = build_type
         self.local_cluster_loader = LocalClusterLoader(build_type=build_type, score_threshold=self.params.score_threshold, density_min_similarity=self.params.density_min_similarity)
         # Центроиды валидированных кластеров: cluster key -> page_id ближайшего к центроиду рецепта
-        self.validated_centroids: dict[int, int] = {}
+        self.validated_centroids: dict[int, int] = self.local_cluster_loader.load_validated_centroids()
         # Кэш соседей для mutual KNN проверки: src_id -> set(dst_ids)
         self._neighbor_cache: dict[int, set[int]] = {}
 
@@ -167,24 +164,27 @@ class SimilaritySearcher:
         
         logger.info(f"Loaded DSU state from {self.local_cluster_loader.path_dsu} (last_id={self.last_id}, nodes={len(self.dsu.parent)})")
 
-    def save_validated_centroids_to_databsae(self, batch_size: int = 10) -> None:
-        """Сохраняет валидированные центроиды в базу данных (таблица cluster_page)"""
+    def save_validated_centroids_to_databsae(self, batch_size: int = 10, allow_update: bool = True) -> None:
+        """Сохраняет валидированные центроиды в базу данных (таблица cluster_page)
+            Args:
+                batch_size: размер батча для сохранения (по умолчанию: 10)
+                allow_update: разрешать ли обновление существующих кластеров (по умолчанию: True). Если False, кластеры, страницы которых уже принадлежат другому кластеру,
+                будут пропущены, создадутся только уникальные кластеры. Необходимо для обогащения кластеров без расширения существущих
+        """
         if not self.validated_centroids:
-            self.validated_centroids = self.local_cluster_loader.load_validated_centroids()
-            if not self.validated_centroids:
-                logger.warning("No validated centroids to save to database")
-                return
+            logger.warning("No validated centroids to save to database")
+            return
         repo = ClusterPageRepository()
         # Подготовка данных для batch вставки
         for batch in batched(self.validated_centroids.items(), batch_size):
             batch = {int(centroid_page_id): cluster for centroid_page_id, cluster in batch}
             try:
-                repo.add_cluster_pages_batch(batch)
+                repo.create_update_cluster_pages_batch(batch, update=allow_update)
             except Exception as e:
                 logger.error(f"Error preparing batch for database insertion, trying to load one by one: {e}")
                 for centroid_page_id, cluster in batch.items():
                     try:
-                        repo.add_cluster_pages_batch({centroid_page_id: cluster}) 
+                        repo.create_update_cluster_pages_batch({centroid_page_id: cluster}, update=allow_update) 
                     except Exception as e_inner:
                         logger.error(f"Failed to save centroid {centroid_page_id} to database: {e_inner}")
 
@@ -677,19 +677,20 @@ if __name__ == "__main__":
     with open("recipe_clusters/full_centroids_0.88_0.91.json", "w") as f:
         json.dump(reversed_centroids, f, indent=2)"""
 
-    # 0ю9 - 0.92 основаная вариация
+    # 0.9 разбиение 0.92 уточнение - базовое распредленеи на кластеры по full тексту рецепта, более узкими кластерами нет смысла рсширять, но можно расширить более крупными для получения пропущенных рецептов
     while True:
         ss = SimilaritySearcher(params=ClusterParams(
                     limit=40,
-                    score_threshold=0.88,
+                    score_threshold=0.92,
                     scroll_batch=3500,
                     min_cluster_size=4,
                     union_top_k=10,
                     non_mutual_top_k=5,
                     query_batch=128,
-                    density_min_similarity=0.91,
+                    density_min_similarity=0.93,
                     max_async_tasks=15,
                 ), build_type="full") # "image", "full", "ingredients"
+        #ss.save_validated_centroids_to_databsae(batch_size=10, allow_update=False) # можно не расширяя существущие кластеры обогатить их
         try:
             ss.load_dsu_state()
             last_id = ss.last_id # получаем last id после загрузки состояния (такая штука работает только опираясь на тот факт, что каждй вновь доавбленный рецепт имеет id не меньше уже векторизованных рецептов, иначе рецепты могут быть пропущены)

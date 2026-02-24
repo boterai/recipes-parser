@@ -111,7 +111,7 @@ async def merge_cluster_recipes(
         similarity_threshold: float | None, 
         build_type: Literal["full", "ingredients"] | None,
         max_variation_per_cluster: int | None = 1,
-        max_aggregated_recipes: int = 8,
+        max_aggregated_recipes: int = 9,
         max_recipes_per_gpt_merge_request: int = 4,
         check_cluster_update: bool = False, 
         limit: Optional[int] = None
@@ -128,7 +128,7 @@ async def merge_cluster_recipes(
         Returns:
             None
     """
-    # проверяем есть ил кластеры, при необходимоси обновляем бд
+    # проверяем есть ли кластеры, при необходимоси обновляем бд
     await generate_recipe_clusters(similarity_threshold, build_type, check_cluster_update=check_cluster_update)
 
     cluster_repo = ClusterPageRepository()
@@ -138,11 +138,13 @@ async def merge_cluster_recipes(
     
     logger.info(f"Total clusters to process: {total_tasks}")
     merger = ClusterVariationGenerator(score_threshold=similarity_threshold, clusters_build_type=build_type, max_recipes_per_gpt_merge_request=max_recipes_per_gpt_merge_request)
-    get_cluster_function = cluster_repo.get_clusters_without_merged_recipes if max_variation_per_cluster == 1 else cluster_repo.get_clusters
     total = 0
-    last_cluster_id = None
+    last_cluster_id = 14
     while True:
-        centroids, last_cluster_id = get_cluster_function(limit=config.MERGE_MAX_MERGE_RECIPES, last_cluster_id=last_cluster_id)
+        centroids, last_cluster_id = cluster_repo.get_clusters_with_merged_recipes(limit=config.MERGE_MAX_MERGE_RECIPES, 
+                                                                                   completed_recipes=max(0, max_variation_per_cluster-1), 
+                                                                                   last_cluster_id=last_cluster_id,
+                                                                                   max_agregated_recipes=max_aggregated_recipes)
         if not centroids:
             logger.info("No more clusters to process, exiting...")
             break
@@ -157,6 +159,7 @@ async def merge_cluster_recipes(
             ) for centroid, cluster in centroids.items()
         ]
         total += await execute_cluster_batch(tasks, list(centroids.values()))
+
         if limit and total >= limit:
             logger.info(f"Достигнут лимит в {limit} успешно обработанных кластеров, останавливаемся.")
             break
@@ -278,12 +281,12 @@ def view_merge_recipe(recipe_id: int):
     else:
         print(f"Merged recipe with id {recipe_id} not found.")
 
-if __name__ == "__main__":
+if __name__ == "__main__":    
     config.MERGE_CENTROID_THRESHOLD_STEP = 0.02
-    #config.MERGE_MAX_MERGE_RECIPES = 1
+    config.MERGE_MAX_MERGE_RECIPES = 1
     #asyncio.run(make_recipe_variations(similarity_threshold=0.92, build_type="full", max_variations_per_recipe=1, limit=10))
     #merger = merger = ClusterVariationGenerator(score_threshold=0.9, clusters_build_type="full", max_recipes_per_gpt_merge_request=5)
-    asyncio.run(make_recipe_variations(similarity_threshold=0.9, build_type="full", max_variations_per_recipe=1, limit=100))
+    #asyncio.run(make_recipe_variations(similarity_threshold=0.9, build_type="full", max_variations_per_recipe=1, limit=100))
     
     asyncio.run(merge_cluster_recipes(similarity_threshold=0.9, 
                                              build_type="full", 

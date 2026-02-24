@@ -255,9 +255,9 @@ class ClickHouseManager:
             recipe.instructions or "",
             recipe.ingredients or [],
             recipe.tags or [],
-            recipe.cook_time,
-            recipe.prep_time,
-            recipe.total_time,
+            recipe.cook_time or "",
+            recipe.prep_time or "",
+            recipe.total_time or "",
             recipe.vectorised,
             recipe.category,
             recipe.ingredients_with_amounts or []

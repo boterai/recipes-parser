@@ -174,7 +174,6 @@ class PageRepository(BaseRepository[PageORM]):
         finally:
             session.close()
     
-    
     def create_or_update(self, page_data: Page) -> Optional[PageORM]:
         """
         Создать новую страницу или обновить существующую
@@ -538,5 +537,25 @@ class PageRepository(BaseRepository[PageORM]):
             site_ids = query.distinct().order_by(PageORM.site_id.asc()).all()
             site_ids = [sid[0] for sid in site_ids]
             return site_ids
+        finally:
+            session.close()
+
+    def get_non_existing_page_ids(self, page_ids: List[int]) -> set[int]:
+        """
+        Получить список page_id, которых нет в БД
+        
+        Args:
+            page_ids: Список page_id для проверки
+            
+        Returns:
+            Список несуществующих page_id
+        """
+        if not page_ids:
+            return set()
+        
+        session = self.get_session()
+        try:
+            existing_page_ids = {row[0] for row in session.query(PageORM.id).filter(PageORM.id.in_(page_ids)).all()}
+            return  set(page_ids) - existing_page_ids
         finally:
             session.close()

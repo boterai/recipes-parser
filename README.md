@@ -11,7 +11,7 @@ google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug_922
 # 2. Полный pipeline через main.py
 python scripts/main.py <command> [options]
 ```
-
+# базовый сплит на кластеры по full 90 92
 ## Команды
 
 ### 1. **prepare** — Подготовка сайтов для парсинга

@@ -70,7 +70,7 @@ class Config:
     MERGE_VALIDATE_GPT: bool = int(os.getenv('MERGE_VALIDATE_GPT', '1').lower()) == 1
     MERGE_SAVE_TO_DB: bool = int(os.getenv('MERGE_SAVE_TO_DB', '1').lower()) == 1
     MERGE_HISTORY_FOLDER: str = os.getenv('MERGE_HISTORY_FOLDER', 'history')
-    MERGE_CENTROID_THRESHOLD_STEP: float = float(os.getenv('MERGE_CENTROID_THRESHOLD_STEP', '0.01'))
+    MERGE_CENTROID_THRESHOLD_STEP: float = float(os.getenv('MERGE_CENTROID_THRESHOLD_STEP', '0.02'))
     
     # Настройки кластеризации по схожести
     SIMILARITY_SCROLL_BATCH_SIZE: int = int(os.getenv('SIMILARITY_SCROLL_BATCH_SIZE', '3500'))
