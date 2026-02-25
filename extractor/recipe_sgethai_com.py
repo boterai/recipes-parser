@@ -414,6 +414,13 @@ class RecipeSgethaiExtractor(BaseRecipeExtractor):
         
         return None
     
+    _TIME_PATTERN = re.compile(
+        r'(prep[\s_-]*time|cook[\s_-]*time|total[\s_-]*time'
+        r'|เวลาเตรียม|เวลาปรุง|เวลารวม'
+        r'|\b\d+\s*(minutes?|mins?|hours?|hrs?|นาที|ชั่วโมง)\b)',
+        re.IGNORECASE
+    )
+
     def parse_ingredient(self, ingredient_text: str) -> Optional[dict]:
         """
         Парсинг строки ингредиента в структурированный формат
@@ -426,7 +433,11 @@ class RecipeSgethaiExtractor(BaseRecipeExtractor):
         """
         if not ingredient_text:
             return None
-        
+
+        # Пропускаем строки со временем приготовления (prep time / cook time / etc.)
+        if self._TIME_PATTERN.search(ingredient_text):
+            return None
+
         # Чистим текст
         text = self.clean_text(ingredient_text)
         

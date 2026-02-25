@@ -2,29 +2,46 @@ import unittest
 from src.common.gpt.clean_response import GPTJsonExtractor
 
 
+FULL_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "dish_name": {"type": "string"},
+        "description": {"type": "string"},
+        "ingredients": {
+            "type": "array",
+            "items": {"type": "string"}
+        },
+        "ingredients_with_amounts": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name":   {"type": "string"},
+                    "amount": {"anyOf": [{"type": "number"}, {"type": "null"}]},
+                    "unit":   {"anyOf": [{"type": "string"}, {"type": "null"}]}
+                },
+                "required": ["name"]
+            }
+        },
+        "instructions": {"type": "string"},
+        "cook_time": {"type": "string"},
+        "prep_time": {"type": "string"},
+        "total_time": {"type": "string"},
+        "tags": {
+            "type": "array",
+            "items": {"type": "string"}
+        },
+        "category": {"type": "string"}
+    }
+}
+
+
 class TestGPTJsonCleaner(unittest.TestCase):
     """Тесты для GPTJsonCleaner - извлечение данных из невалидных JSON от GPT"""
     
     def setUp(self):
         """Подготовка схемы для тестов"""
-        self.schema = {
-            "type": "object",
-            "properties": {
-                "dish_name": {"type": "string"},
-                "description": {"type": "string"},
-                "ingredients": {
-                    "type": "array",
-                    "items": {"type": "string"}
-                },
-                "instructions": {"type": "string"},
-                "cook_time": {"type": "string"},
-                "prep_time": {"type": "string"},
-                "tags": {
-                    "type": "array",
-                    "items": {"type": "string"}
-                }
-            }
-        }
+        self.schema = FULL_SCHEMA
         self.cleaner = GPTJsonExtractor(self.schema)
     
     def test_extract_value_with_double_quotes(self):
@@ -123,6 +140,83 @@ class TestGPTJsonCleaner(unittest.TestCase):
         self.assertIn("ingredients", result)
         self.assertIsInstance(result["ingredients"], list)
         self.assertGreater(len(result["ingredients"]), 0)
+
+
+class TestIngredientsWithAmounts(unittest.TestCase):
+    """Тесты для поля ingredients_with_amounts (массив объектов)"""
+
+    def setUp(self):
+        self.cleaner = GPTJsonExtractor(FULL_SCHEMA)
+
+    def test_valid_ingredients_with_amounts(self):
+        """Корректный массив объектов ингредиентов"""
+        json_str = '''{"ingredients_with_amounts": [{"name": "chicken", "amount": 500, "unit": "g"}, {"name": "carrot", "amount": 1, "unit": null}]}'''
+        result = self.cleaner.extract_all_values(json_str)
+        self.assertIn("ingredients_with_amounts", result)
+        ing = result["ingredients_with_amounts"]
+        self.assertIsInstance(ing, list)
+        self.assertEqual(len(ing), 2)
+        self.assertEqual(ing[0]["name"], "chicken")
+        self.assertEqual(ing[0]["amount"], 500)
+        self.assertEqual(ing[0]["unit"], "g")
+
+    def test_ingredients_with_amounts_null_unit(self):
+        """amount и unit могут быть null"""
+        json_str = '''{"ingredients_with_amounts": [{"name": "salt", "amount": null, "unit": null}]}'''
+        result = self.cleaner.extract_all_values(json_str)
+        self.assertIn("ingredients_with_amounts", result)
+        ing = result["ingredients_with_amounts"]
+        self.assertEqual(len(ing), 1)
+        self.assertEqual(ing[0]["name"], "salt")
+        self.assertIsNone(ing[0]["amount"])
+        self.assertIsNone(ing[0]["unit"])
+
+    def test_ingredients_with_amounts_float(self):
+        """amount может быть дробным числом"""
+        json_str = '''{"ingredients_with_amounts": [{"name": "butter", "amount": 0.5, "unit": "tbsp"}]}'''
+        result = self.cleaner.extract_all_values(json_str)
+        ing = result.get("ingredients_with_amounts", [])
+        self.assertEqual(len(ing), 1)
+        self.assertAlmostEqual(float(ing[0]["amount"]), 0.5)
+
+    def test_ingredients_with_amounts_only_name(self):
+        """Только name (amount и unit отсутствуют)"""
+        json_str = '''{"ingredients_with_amounts": [{"name": "fresh herbs"}]}'''
+        result = self.cleaner.extract_all_values(json_str)
+        ing = result.get("ingredients_with_amounts", [])
+        self.assertEqual(len(ing), 1)
+        self.assertEqual(ing[0]["name"], "fresh herbs")
+
+    def test_empty_ingredients_with_amounts(self):
+        """Пустой массив"""
+        json_str = '''{"ingredients_with_amounts": []}'''
+        result = self.cleaner.extract_all_values(json_str)
+        self.assertIn("ingredients_with_amounts", result)
+        self.assertEqual(result["ingredients_with_amounts"], [])
+
+    def test_ingredients_with_amounts_alongside_other_fields(self):
+        """ingredients_with_amounts вместе с dish_name и tags"""
+        json_str = '''{"dish_name": "Pasta", "ingredients_with_amounts": [{"name": "pasta", "amount": 200, "unit": "g"}, {"name": "olive oil", "amount": 2, "unit": "tbsp"}], "tags": ["italian", "quick"]}'''
+        result = self.cleaner.extract_all_values(json_str)
+        self.assertEqual(result["dish_name"], "Pasta")
+        self.assertIsInstance(result["ingredients_with_amounts"], list)
+        self.assertEqual(len(result["ingredients_with_amounts"]), 2)
+        self.assertIsInstance(result["tags"], list)
+
+    def test_ingredients_with_amounts_with_quotes_in_name(self):
+        """Кавычки в названии ингредиента"""
+        json_str = '''{"ingredients_with_amounts": [{"name": "00\\" flour", "amount": 500, "unit": "g"}]}'''
+        result = self.cleaner.extract_all_values(json_str)
+        ing = result.get("ingredients_with_amounts", [])
+        self.assertEqual(len(ing), 1)
+        self.assertIn("flour", ing[0]["name"])
+
+    def test_ingredients_with_amounts_trailing_comma(self):
+        """Trailing comma в массиве (невалидный JSON)"""
+        json_str = '''{"ingredients_with_amounts": [{"name": "egg", "amount": 2, "unit": "pcs"},]}'''
+        result = self.cleaner.extract_all_values(json_str)
+        ing = result.get("ingredients_with_amounts", [])
+        self.assertIsInstance(ing, list)
 
 
 class TestGPTJsonExtractorEdgeCases(unittest.TestCase):

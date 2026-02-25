@@ -669,6 +669,28 @@ class SimilaritySearcher:
         self.local_cluster_loader.save_clusters(clusters)
         logger.info(f"Saved clusters to file {self.local_cluster_loader.path_clusters}.")
 
+
+async def clean_vector_collections():
+    """удаляет все точки из Qdrant, которых нет в ClickHouse (например, удалённые рецепты)"""
+    from src.common.db.clickhouse import ClickHouseManager
+    q = QdrantRecipeManager(collection_prefix="recipes")
+    ch_manager = ClickHouseManager()
+    if not ch_manager.connect():
+        logger.error("Failed to connect to ClickHouse, cannot clean Qdrant collections")
+        return
+    await q.async_connect()
+    last_id = None
+    async for points in q.async_iter_points_no_vectors(collection_name="mv", batch_size=1000, last_point_id=last_id):
+        if not points:
+            break
+        last_id = max(points) if points else last_id
+        present_points = ch_manager.get_existing_page_ids(points)
+        missing_points = set(points) - set(present_points)
+        if missing_points:
+            logger.info(f"Cleaning Qdrant: deleting {len(missing_points)} points not present in ClickHouse (up to id {last_id})")
+            await q.delete_points(collection_name="mv", point_ids=list(missing_points))
+        
+
 if __name__ == "__main__":
     """with open("recipe_clusters/full_centroids_0.88_0.91.json", "r") as f:
         centroids = json.load(f)
@@ -676,18 +698,17 @@ if __name__ == "__main__":
     reversed_centroids = {int(v): list(map(int, k.split(","))) for k, v in centroids.items()}
     with open("recipe_clusters/full_centroids_0.88_0.91.json", "w") as f:
         json.dump(reversed_centroids, f, indent=2)"""
-
     # 0.9 разбиение 0.92 уточнение - базовое распредленеи на кластеры по full тексту рецепта, более узкими кластерами нет смысла рсширять, но можно расширить более крупными для получения пропущенных рецептов
     while True:
         ss = SimilaritySearcher(params=ClusterParams(
                     limit=40,
-                    score_threshold=0.92,
+                    score_threshold=0.9,
                     scroll_batch=3500,
                     min_cluster_size=4,
                     union_top_k=10,
                     non_mutual_top_k=5,
                     query_batch=128,
-                    density_min_similarity=0.93,
+                    density_min_similarity=0.92,
                     max_async_tasks=15,
                 ), build_type="full") # "image", "full", "ingredients"
         #ss.save_validated_centroids_to_databsae(batch_size=10, allow_update=False) # можно не расширяя существущие кластеры обогатить их

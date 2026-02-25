@@ -1,19 +1,12 @@
 {
-  "description": "Recipe entity with fields optimized for similarity search.\nрецепты хранятся в Clickhouse, переведенные на какой-то конкретный язык",
+  "description": "Recipe entity with fields optimized for similarity search.",
   "properties": {
     "dish_name": {
       "title": "Dish Name",
       "type": "string"
     },
     "description": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
       "default": null,
       "title": "Description"
     },
@@ -22,81 +15,59 @@
       "type": "string"
     },
     "ingredients": {
-      "items": {
-        "type": "string"
-      },
+      "items": { "type": "string" },
       "title": "Ingredients",
       "type": "array"
     },
-    "tags": {
+    "ingredients_with_amounts": {
       "anyOf": [
         {
+          "type": "array",
           "items": {
-            "type": "string"
-          },
-          "type": "array"
+            "type": "object",
+            "properties": {
+              "name":   { "type": "string" },
+              "amount": { "anyOf": [{ "type": "number" }, { "type": "null" }] },
+              "unit":   { "anyOf": [{ "type": "string" }, { "type": "null" }] }
+            },
+            "required": ["name"]
+          }
         },
-        {
-          "type": "null"
-        }
+        { "type": "null" }
+      ],
+      "default": null,
+      "title": "Ingredients with Amounts"
+    },
+    "tags": {
+      "anyOf": [
+        { "items": { "type": "string" }, "type": "array" },
+        { "type": "null" }
       ],
       "default": null,
       "title": "Tags"
     },
+    "category": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Category"
+    },
     "cook_time": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
       "default": null,
       "title": "Cook Time"
     },
     "prep_time": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
       "default": null,
       "title": "Prep Time"
     },
     "total_time": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
       "default": null,
       "title": "Total Time"
-    },
-    "category": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Category"
     }
   },
-  "required": [
-    "dish_name",
-    "instructions",
-    "ingredients"
-  ],
+  "required": ["dish_name", "instructions"],
   "title": "Recipe",
   "type": "object"
 }

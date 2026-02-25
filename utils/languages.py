@@ -23,7 +23,7 @@ LanguageCodes = {
     "de": ["de", "ger", "german", "de-DE"],
     "fr": ["fr", "fre", "french", "fr-FR", "fr-CA"],
     "es": ["es", "spa", "spanish", "es-ES"],
-    "it": ["it", "ita", "italian", "it-IT"],
+    "it": ["it", "ita", "italian", "it-IT", "it-CH"],
     "tr": ["tr", "tur", "turkish", "tr-TR"],
     "pt": ["pt", "por", "portuguese", "pt-PT", "pt-BR"],
     "ja": ["ja", "jpn", "japanese", "ja-JP"],

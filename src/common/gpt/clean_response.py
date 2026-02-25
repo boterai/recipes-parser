@@ -55,7 +55,7 @@ class GPTJsonExtractor:
         return ''.join(value)
     
     def _extract_array_value(self, json_str: str, start_pos: int) -> list:
-        """Извлечь массив начиная с позиции"""
+        """Извлечь массив начиная с позиции (строки или объекты)"""
         i = start_pos
         while i < len(json_str) and json_str[i] in ' \t\n':
             i += 1
@@ -64,14 +64,83 @@ class GPTJsonExtractor:
             return []
         
         array_str = self._extract_balanced_brackets(json_str, i, '[', ']')
-        
+        inner = array_str[1:-1].strip()
+
+        if not inner:
+            return []
+
+        # Определяем, массив объектов или строк
+        first_non_space = inner.lstrip()[0] if inner.strip() else ''
+        if first_non_space == '{':
+            return self._extract_array_of_objects(inner)
+
+        # Массив строк
         items = []
         item_pattern = r'"([^"\\]*(?:\\.[^"\\]*)*)"'
-        for match in re.finditer(item_pattern, array_str):
+        for match in re.finditer(item_pattern, inner):
             item = match.group(1).replace('\\"', '"').replace('\\\\', '\\')
             items.append(item)
-        
         return items
+
+    def _extract_array_of_objects(self, inner: str) -> list:
+        """Извлечь список объектов из содержимого массива"""
+        objects = []
+        i = 0
+        while i < len(inner):
+            while i < len(inner) and inner[i] in ' \t\n,':
+                i += 1
+            if i >= len(inner):
+                break
+            if inner[i] != '{':
+                i += 1
+                continue
+            obj_str = self._extract_balanced_brackets(inner, i, '{', '}')
+            parsed = self._parse_object(obj_str)
+            if parsed is not None:
+                objects.append(parsed)
+            i += len(obj_str)
+        return objects
+
+    def _parse_object(self, obj_str: str) -> Optional[dict]:
+        """Разобрать JSON-объект в dict, поддерживая null/number/string значения"""
+        # Сначала пробуем стандартный json.loads
+        try:
+            return json.loads(obj_str)
+        except (json.JSONDecodeError, ValueError):
+            pass
+
+        result = {}
+        # Ищем пары ключ: значение
+        key_pattern = re.compile(r'"([^"\\]*(?:\\.[^"\\]*)*)"\s*:\s*')
+        for m in key_pattern.finditer(obj_str):
+            key = m.group(1)
+            val_start = m.end()
+            # Пропускаем пробелы
+            while val_start < len(obj_str) and obj_str[val_start] in ' \t\n':
+                val_start += 1
+            if val_start >= len(obj_str):
+                result[key] = None
+                continue
+            c = obj_str[val_start]
+            if c == '"':
+                # Строка
+                val = self._extract_string_value(obj_str, val_start)
+                result[key] = val
+            elif obj_str[val_start:val_start+4] == 'null':
+                result[key] = None
+            elif obj_str[val_start:val_start+4] == 'true':
+                result[key] = True
+            elif obj_str[val_start:val_start+5] == 'false':
+                result[key] = False
+            else:
+                # Число
+                num_match = re.match(r'-?\d+(?:\.\d+)?', obj_str[val_start:])
+                if num_match:
+                    num_str = num_match.group(0)
+                    result[key] = float(num_str) if '.' in num_str else int(num_str)
+                else:
+                    result[key] = None
+        return result if result else None
     
     def _extract_balanced_brackets(self, text: str, start: int, 
                                    open_br: str, close_br: str) -> str:

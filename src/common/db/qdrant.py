@@ -15,7 +15,7 @@ import asyncio
 from qdrant_client.models import QueryRequest, QueryResponse
 from collections.abc import AsyncIterator
 from qdrant_client.models import (
-    Distance, VectorParams, PointStruct)
+    Distance, VectorParams, PointStruct, PointsSelector, PointIdsList)
 import os
 from config.config import config
 
@@ -597,6 +597,51 @@ class QdrantRecipeManager:
 
             if offset is None:
                 return
+            
+    async def async_iter_points_no_vectors(
+            self, 
+            collection_name: str, 
+            batch_size: int, 
+            last_point_id: Optional[int] = None,
+            scroll_timeout: int = 120) -> AsyncIterator[list[int]]:
+        """
+        Асинхронный итератор по всем точкам в коллекции, возвращающий батчи векторов.
+        Args:
+            collection_name: Имя коллекции
+            batch_size: Размер батча для скрола
+            last_point_id: Начальный point_id для скрола (если нужно продолжить с определенного места)
+        """
+        if not self.async_client:
+            raise QdrantNotConnectedError()
+
+        collection = self.collections.get(collection_name)
+        offset = last_point_id
+
+        while True:
+            points, offset = await self.async_client.scroll(
+                collection_name=collection,
+                limit=batch_size,
+                offset=offset,
+                with_payload=False,
+                with_vectors=False,
+                timeout=scroll_timeout
+            )
+            if not points:
+                return
+            
+            point_list: list[int] = []
+            for p in points:
+                pid = int(p.id)
+                if last_point_id is not None and pid <= last_point_id:
+                    continue
+
+                point_list.append(pid)
+
+            if point_list:
+                yield point_list
+
+            if offset is None:
+                return
     
     async def async_query_batch(
         self,
@@ -721,3 +766,31 @@ class QdrantRecipeManager:
         except Exception as e:
             logger.error(f"Error retrieving vectors for points {point_ids}: {e}")
             return {}
+        
+
+    async def delete_points(self, point_ids: list[int], collection_name: str) -> bool:
+        """
+        Удаляет точки по ID из коллекции.
+        
+        Args:
+            point_ids: Список ID точек для удаления
+            collection_name: Имя коллекции (без префикса)
+            
+        Returns:
+            True если удаление успешно, False иначе
+        """
+        if not self.async_client:
+            raise QdrantNotConnectedError()
+
+        collection = self.collections.get(collection_name)
+        if not collection:
+            logger.error(f"Collection '{collection_name}' not found in collections map")
+            return False
+
+        try:
+            await self.async_client.delete(collection_name=collection, points_selector=PointIdsList(points=point_ids), wait=True)
+            logger.info(f"✓ Удалено {len(point_ids)} точек из '{collection_name}'")
+            return True
+        except Exception as e:
+            logger.error(f"✗ Ошибка при удалении точек {point_ids} из '{collection_name}': {e}")
+            return False
