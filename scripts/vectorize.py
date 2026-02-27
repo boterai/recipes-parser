@@ -16,6 +16,7 @@ from src.stages.search.vectorise import RecipeVectorizer
 from src.stages.search.vectorise import RecipeVectorizer
 from src.models.image import ImageORM, download_image_async
 from src.stages.translate import Translator
+from src.common.db.qdrant import QdrantRecipeManager
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -33,13 +34,20 @@ def vectorise_all_recipes(translate: bool = True, target_language: str = config.
 
     if translate:
         translate_all_recipes(target_language=target_language, translate_batch_size=translate_batch_size)
-    rv = RecipeVectorizer()
+    
+    qm = QdrantRecipeManager(collection_prefix="recipes2")
+    if not qm.connect():
+        logger.error("Failed to connect to Qdrant. Aborting vectorization.")
+        return
+    rv = RecipeVectorizer(vector_db=qm)
 
     embed_func, dims = get_embedding_function(batch_size=config.VECTORIZE_BATCH_SIZE)
     rv.vectorise_all_recipes(
+        vectorised=True,
         embedding_function=embed_func,
         batch_size=config.VECTORIZE_BATCH_SIZE,
-        dims=dims)
+        dims=dims,
+        min_site_id=866)
 
 
 async def validate_and_save_image(image_url: str, save_dir: str = None, use_proxy: bool = True) -> str | None:
@@ -101,7 +109,11 @@ def translate_all_recipes(target_language: str, translate_batch_size: int):
 if __name__ == '__main__':
     import dotenv
     dotenv.load_dotenv()
-    #translate_all_recipes("en", 10)
-    #vectorise_all_recipes()
-    asyncio.run(vectorise_all_images())
-    #translate_all_recipes("en", 1) # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)
+
+    #translate_all_recipes(target_language=config.TARGET_LANGUAGE, translate_batch_size=config.TRANSLATE_BATCH_SIZE)
+    
+    vectorise_all_recipes(translate=False) # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)
+    #vectorise_all_images() # Векторизация изображений (по дефолту всех изображений, содержащихся в clickhouse)
+
+
+    # 632 обновить 477
