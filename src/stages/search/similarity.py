@@ -186,6 +186,7 @@ class SimilaritySearcher:
                         repo.create_update_cluster_pages_batch({centroid_page_id: cluster}, update=allow_update) 
                     except Exception as e_inner:
                         logger.error(f"Failed to save centroid {centroid_page_id} to database: {e_inner}")
+        logger.info(f"Saved {len(self.validated_centroids)} validated centroids to database (allow_update={allow_update})")
 
     def _cosine_similarity(self, vec1: np.ndarray, vec2: np.ndarray) -> float:
         """Вычисляет косинусную похожесть между двумя векторами."""
@@ -691,13 +692,6 @@ async def clean_vector_collections():
         
 
 if __name__ == "__main__":
-    """with open("recipe_clusters/full_centroids_0.88_0.91.json", "r") as f:
-        centroids = json.load(f)
-
-    reversed_centroids = {int(v): list(map(int, k.split(","))) for k, v in centroids.items()}
-    with open("recipe_clusters/full_centroids_0.88_0.91.json", "w") as f:
-        json.dump(reversed_centroids, f, indent=2)"""
-    # 0.9 разбиение 0.92 уточнение - базовое распредленеи на кластеры по full тексту рецепта, более узкими кластерами нет смысла рсширять, но можно расширить более крупными для получения пропущенных рецептов
     while True:
         ss = SimilaritySearcher(params=ClusterParams(
                     limit=40,

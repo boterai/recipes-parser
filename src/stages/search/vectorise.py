@@ -68,10 +68,11 @@ class RecipeVectorizer:
             self, 
             embedding_function: EmbeddingFunction, 
             batch_size: int = 8,
-            site_id: Optional[int] = None,
+            site_ids: Optional[list[int]] = None,
             dims: int = 1024,
-            vectorised: bool = False 
-        ) -> int:
+            vectorised: bool = False, 
+            min_site_id: Optional[int] = 1
+        ):
         """
         Добавление всех рецептов в векторную БД для конкретного сайта или вообще всех сайтов
 
@@ -81,37 +82,41 @@ class RecipeVectorizer:
             site_id: Идентификатор сайта для векторизации (если None, то для всех сайтов)
             dims: Размерность плотных векторов
             vectorised: Флаг, указывающий, векторизованы ли уже рецепты
+            min_site_id: Минимальный идентификатор сайта для векторизации (по умолчанию None)
         """
 
         sites = []
-        if site_id is not None:
-            sites = [site_id]
+        if site_ids is not None:
+            sites = site_ids
         else:
-            sites = self.page_repository.get_recipe_sites()
+            sites = self.page_repository.get_recipe_sites(min_site_id=min_site_id)
         
         if not sites:
             logger.warning("Нет сайтов для векторизации")
             return 0
 
         self.vector_db.create_collections(dims=dims)
-        total = 0
-        total_vectorised = 0
         for site_id in sites:
-            logger.info(f"Начинаем векторизацию рецептов для сайта {site_id}")
-            while (recipes := self.olap_database.get_recipes_by_site(site_id=site_id, vectorised=vectorised, limit=batch_size)):
+            vectorised_for_site = 0
+            total_recipes = self.olap_database.get_page_ids_count(site_id=site_id, vectorised=vectorised)
+            if total_recipes == 0:
+                logger.info(f"Нет рецептов для векторизации для сайта {site_id}")
+                continue
+            logger.info(f"Начинаем векторизацию рецептов для сайта {site_id}. Всего для векторизации рецептов: {total_recipes}")
+            last_page_id = None
+            while (recipes := self.olap_database.get_recipes_by_site(site_id=site_id, vectorised=vectorised, limit=batch_size, last_page_id=last_page_id)):
                 if len(recipes) == 0:
-                    logger.info(f"Все рецепты для сайта {site_id} уже векторизованы или отсутствуют")
+                    logger.info(f"Все рецепты для сайта {site_id} уже векторизованы")
                     break
-                print(f"Векторизуем партию из {len(recipes)} страниц, сайт {site_id}")
+                print(f"Векторизуем партию из {len(recipes)} страниц")
                 batch = self.vector_db.vectorise_recipes(pages=recipes, embedding_function=embedding_function, batch_size=batch_size,
-                                              mark_vectorised_callback=self.olap_database.insert_recipes_batch)
-                total_vectorised += batch
-                total += len(recipes)
+                                             mark_vectorised_callback=self.olap_database.insert_recipes_batch)
+                vectorised_for_site += batch
+                last_page_id = recipes[-1].page_id
                 logger.info(f"Векторизовано рецептов в этой партии: {batch}/{len(recipes)}")
+                logger.info(f"Всего векторизовано рецептов для сайта {site_id}: {vectorised_for_site}/{total_recipes}")
+            
             logger.info(f"Завершена векторизация партии для сайта {site_id}")
-
-        logger.info(f"Всего векторизовано рецептов: {total_vectorised}/{total}")
-        return total_vectorised
     
     async def vectorise_images_async(
             self, 

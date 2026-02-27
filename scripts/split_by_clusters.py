@@ -10,7 +10,7 @@ import asyncio
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from config.config import config
+from src.stages.search.similarity import SimilaritySearcher, ClusterParams, build_clusters_from_dsu
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -18,13 +18,12 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[logging.StreamHandler()]
 )
-from src.stages.search.similarity import SimilaritySearcher, ClusterParams, build_clusters_from_dsu
 
 
 if __name__ == '__main__':
     import dotenv
     dotenv.load_dotenv()
-    #config.QDRANT_COLLECTION_PREFIX = "recipes2"
+    # скорее всего наиболее оптимальный варинат 0.89 0.91 для разбиения на кластеры
 
     for score_threshold, density in [(0.9, 0.92), (0.88, 0.91), (0.89, 0.91), (0.88, 0.9), (0.89, 0.92), (0.91, 0.93)]: # можно поэкспериментировать с этими параметрами для получения оптимального количества кластеров и их качества
         while True:
@@ -34,12 +33,12 @@ if __name__ == '__main__':
                         scroll_batch=3500,
                         min_cluster_size=3,
                         union_top_k=15,
-                        non_mutual_top_k=7,
+                        non_mutual_top_k=6,
                         query_batch=128,
                         density_min_similarity=density,
                         max_async_tasks=15,
                     ), build_type="full") # "image", "full", "ingredients"
-            #ss.save_validated_centroids_to_databsae(batch_size=10, allow_update=True) # можно не расширяя существущие кластеры обогатить их
+            ss.save_validated_centroids_to_databsae(batch_size=10, allow_update=True) # можно не расширяя существущие кластеры обогатить их
             try:
                 ss.load_dsu_state()
                 last_id = ss.last_id # получаем last id после загрузки состояния (такая штука работает только опираясь на тот факт, что каждй вновь доавбленный рецепт имеет id не меньше уже векторизованных рецептов, иначе рецепты могут быть пропущены)
