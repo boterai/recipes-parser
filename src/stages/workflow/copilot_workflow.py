@@ -215,7 +215,7 @@ class CopilotWorkflow:
             if not self.is_pr_updated_since_last_check(pr['number']):
                 logger.info(f"В PR #{pr['number']} нет новых коммитов с момента последней проверки. Пропуск валидации.")
                 continue
-            errors: list[ValidationReport] = self.branch_manager.check_branch(pr['head']['ref'], chck_all_with_gpt=False) # проверяем гпт только если нет каких-то нужных полей
+            errors: list[ValidationReport] = self.branch_manager.check_branch(pr['head']['ref'], chck_all_with_gpt=True) # проверяем гпт только если нет каких-то нужных полей
             # проверка, чтобы в результате не было системной ошибки иначе пропускаем обновление статуса pr
             if any(err.system_errors for err in errors):
                 logger.error(f"PR #{pr['number']} не прошел валидацию из-за системной ошибки. Пропуск обновления статуса, попробуем позже.")

@@ -159,7 +159,7 @@ class ValidateParser:
                 # Валидируем через GPT
                 gpt_result = self.gpt_validator.validate_with_reference(parsed_data, reference_data, module_name, filename=filepath)
                 
-                if gpt_result.is_valid:
+                if gpt_result.is_valid and gpt_result.is_recipe:
                     logger.info(f"✓ Валидация пройдена для {filepath}")
                     validation_report.passed += 1
                 else:
@@ -198,6 +198,4 @@ if __name__ == '__main__':
             shutil.rmtree(os.path.join("preprocessed", folder))
         else:
             logger.info(f"РЕЗУЛЬТАТЫ ВАЛИДАЦИИ ДЛЯ {folder}:\n")
-            print(result.to_dict())
-
     
