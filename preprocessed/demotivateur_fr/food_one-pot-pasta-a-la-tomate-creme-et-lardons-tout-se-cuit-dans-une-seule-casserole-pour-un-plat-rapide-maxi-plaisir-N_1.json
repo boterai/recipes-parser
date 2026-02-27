@@ -1,0 +1,12 @@
+{
+    "dish_name": "One pot pasta à la tomate, crème et lardons",
+    "description": "Une recette de one pot pasta crémeuse avec des lardons et du coulis de tomate, facile et rapide à préparer.",
+    "ingredients": "[{\"name\": \"pâtes\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"lardons\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"eau\", \"units\": \"cl\", \"amount\": 40}, {\"name\": \"crème fraîche\", \"units\": \"cl\", \"amount\": 20}, {\"name\": \"coulis de tomate\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Faire griller les lardons pendant quelques minutes dans une sauteuse. Ajouter les pâtes et verser le reste des ingrédients. 2. Laisser cuire à feu moyen jusqu'à ce que les pâtes soient bien tendres et le liquide bien absorbé. Remuer de temps en temps. 3. Servir bien chaud avec du parmesan ou du fromage râpé pour encore plus de gourmandise !",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Peut être adapté avec d'autres ingrédients comme du chorizo, des champignons ou des crevettes.",
+    "tags": "pasta, one pot, rapide, crémeux"
+}

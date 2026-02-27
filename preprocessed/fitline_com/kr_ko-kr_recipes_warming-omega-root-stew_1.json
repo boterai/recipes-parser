@@ -1,0 +1,12 @@
+{
+    "dish_name": "따뜻한 오메가 뿌리채소 스튜",
+    "description": "추운 날에 어울리는 뿌리채소와 건강한 지방.",
+    "ingredients": "[{\"name\": \"당근\", \"units\": \"컵\", \"amount\": \"½\"}, {\"name\": \"고구마\", \"units\": \"컵\", \"amount\": \"½\"}, {\"name\": \"FitLine microSolve⁺ Omega 3\", \"units\": \"방울\", \"amount\": \"37\"}, {\"name\": \"신선하거나 건조한 허브\", \"units\": null, \"amount\": null}, {\"name\": \"물 또는 채소 육수\", \"units\": null, \"amount\": null}, {\"name\": \"소금과 후추\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. 중간 크기의 냄비에 당근과 고구마를 넣습니다. 물 또는 채소 육수를 부어 채소가 잠기도록 합니다.\n2. 끓기 시작하면 불을 줄이고 채소가 부드러워질 때까지 약 10~15분간 은근히 끓입니다.\n3. 불에서 내린 후 FitLine microSolve⁺ Omega 3를 넣고 잘 섞어줍니다.\n4. 허브와 소금, 후추로 기호에 맞게 간을 합니다.\n5. 따뜻하게 제공하세요. 더 부드럽고 크리미한 식감을 원하시면 제공 전에 블렌더로 갈아주세요.",
+    "category": null,
+    "prep_time": "10 minutes",
+    "cook_time": "15 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "비건, 스튜"
+}

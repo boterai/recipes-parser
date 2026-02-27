@@ -1,0 +1,12 @@
+{
+    "dish_name": "Grønn smoothie med spinat og eple",
+    "description": null,
+    "ingredients": "[{\"name\": \"spinat\", \"units\": \"håndfull\", \"amount\": 3}, {\"name\": \"eple\", \"units\": \"stk\", \"amount\": 1}, {\"name\": \"sitron\", \"units\": \"stk\", \"amount\": 0.5}, {\"name\": \"eplejuice\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"skyr\", \"units\": \"ss\", \"amount\": 3}]",
+    "instructions": "Skjær eplet i biter og kjør alt jevnt i en hurtigmikser.",
+    "category": "Drikke",
+    "prep_time": "10 min",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "En god og spennende vri er å tilsette 3-4 friske basilikumblader.",
+    "tags": "smoothie,kald drikke,sunn,enkel"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Brownie",
+    "description": "Bonkers’ın çıtır kadayıflı ve kakaolu fıstık ezmesi ile yapılan bu brownie, klasik tariflere lezzet dolu bir dokunuş katıyor.",
+    "ingredients": "[{\"name\": \"tereyağı\", \"units\": \"gr\", \"amount\": 150}, {\"name\": \"Bonkers Dubai Çikolatası\", \"units\": \"su bardağı\", \"amount\": 0.5}, {\"name\": \"toz şeker\", \"units\": \"su bardağı\", \"amount\": 1}, {\"name\": \"yumurta\", \"units\": \"büyük\", \"amount\": 2}, {\"name\": \"un\", \"units\": \"su bardağı\", \"amount\": 1}, {\"name\": \"kakao\", \"units\": \"yemek kaşığı\", \"amount\": 3}, {\"name\": \"tuz\", \"units\": null, \"amount\": null}, {\"name\": \"ekstra Bonkers Dubai Çikolatası\", \"units\": null, \"amount\": null}]",
+    "instructions": "Fırını 180 dereceye ısıtın ve kare bir fırın tepsisini yağlayıp hafifçe unlayın. Tereyağını bir sos tenceresinde eritin ve ocaktan alın. Hafifçe ılıdığında, içerisine Bonkers Dubai Çikolatası’nı ekleyin ve karıştırarak homojen bir karışım elde edin. Toz şekeri çikolatalı tereyağ karışımına ekleyip iyice karıştırın. Ardından, yumurtaları teker teker ekleyin ve her eklemeden sonra iyice çırpın. Un, kakao ve tuzu ekleyerek spatula ile nazikçe karıştırın. Karışımı hazırladığınız tepsiye dökün ve önceden ısıtılmış fırında yaklaşık 25-30 dakika pişirin. Brownie’yi fırından çıkarıp oda sıcaklığında soğumaya bırakın. Üzerine ekstra bir kaşık Bonkers Dubai Çikolatası ekleyerek veya sade bir şekilde dilimleyip servis edin.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "30 minutes",
+    "total_time": null,
+    "notes": "Bu brownie tarifi ile Bonkers’ın çıtır kadayıflı ve kakaolu fıstık ezmesini en yoğun haliyle deneyimleyin!",
+    "tags": "brownie, dessert, chocolate"
+}

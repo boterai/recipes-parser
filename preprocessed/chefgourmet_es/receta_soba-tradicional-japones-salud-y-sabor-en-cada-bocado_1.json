@@ -1,0 +1,12 @@
+{
+    "dish_name": "Soba Tradicional Japonés",
+    "description": "Descubre la receta original del Soba japonés, un plato clásico y saludable de la gastronomía japonesa.",
+    "ingredients": "[{\"name\": \"Fideos soba\", \"units\": \"gr\", \"amount\": 400}, {\"name\": \"Caldo dashi\", \"units\": \"litro\", \"amount\": 1}, {\"name\": \"Salsa de soja japonesa\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"Mirin\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"Cebollino fresco picado\", \"units\": \"gr\", \"amount\": 50}, {\"name\": \"Alga nori en tiras finas\", \"units\": \"gr\", \"amount\": 10}, {\"name\": \"Wasabi\", \"units\": \"gr\", \"amount\": 5}]",
+    "instructions": "Hierve abundante agua en una olla grande. Añade los fideos soba y cocina durante 5 minutos o hasta que estén al dente. Escurre los fideos y enjuágalos con agua fría para detener la cocción y retirar el almidón. En otra olla, calienta el caldo dashi hasta llevarlo a ebullición. Añade la salsa de soja y el mirin. Reduce a fuego bajo y deja cocinar durante 5 minutos. Divide los fideos soba en cuatro cuencos y vierte el caldo caliente sobre ellos. Añade el cebollino fresco picado y decora con tiras finas de alga nori. Opcionalmente, coloca una pequeña cantidad de wasabi en el borde del cuenco para quien desee añadir un toque picante.",
+    "category": "Platos Principales",
+    "prep_time": "10 mins",
+    "cook_time": "15 mins",
+    "total_time": "30 mins",
+    "notes": "Sirve inmediatamente para disfrutar el sabor auténtico y textura ideal. Para un sabor más intenso, añade unas gotas extra de salsa de soja antes de servir.",
+    "tags": "Soba japonés, receta tradicional, fideos soba, comida japonesa, saludable, fácil, rápida, cocina asiática, trigo sarraceno, caldo dashi, gastronomía japonesa"
+}

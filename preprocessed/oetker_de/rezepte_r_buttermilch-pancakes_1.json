@@ -1,0 +1,12 @@
+{
+    "dish_name": "Buttermilch-Pancakes",
+    "description": "Probier dieses einfache Buttermilch-Pancakes Rezept aus und genieße fluffige Pfannkuchen mit Honig oder Ahornsirup.",
+    "ingredients": "[{\"name\": \"Eiweiß\", \"units\": \"шт.\", \"amount\": 3}, {\"name\": \"Weizenmehl\", \"units\": \"г\", \"amount\": 250}, {\"name\": \"Dr. Oetker Natron\", \"units\": \" gestr. TL\", \"amount\": 1}, {\"name\": \"Zucker\", \"units\": \"ст.л.\", \"amount\": 1}, {\"name\": \"Dr. Oetker Vanillin-Zucker\", \"units\": \"пакет\", \"amount\": 1}, {\"name\": \"Eigelb\", \"units\": \"шт.\", \"amount\": 3}, {\"name\": \"Buttermilch\", \"units\": \"мл\", \"amount\": 500}, {\"name\": \"Speiseöl\", \"units\": \"по вкусу\", \"amount\": null}, {\"name\": \"Butter\", \"units\": \"по вкусу\", \"amount\": null}, {\"name\": \"Honig oder Ahornsirup\", \"units\": \"по вкусу\", \"amount\": null}]",
+    "instructions": "1. Eiweiß in einem Rührbecher mit einem Mixer (Rührstäbe) auf höchster Stufe sehr steif schlagen. Mehl in einer Rührschüssel mit Natron, Zucker und Vanillin-Zucker mischen. Eigelb zugeben, zunächst mit wenig Mehl verrühren, dann Buttermilch nach und nach unterrühren, darauf achten, dass keine Klümpchen entstehen. Eischnee unterheben. 2. Öl in einer beschichteten Pfanne erhitzen. Für jeden Pfannkuchen etwa 2 Esslöffel Teig hineingeben und bei mittlerer Hitze von beiden Seiten goldbraun backen. Die heißen Pfannkuchen mit Butter und Honig oder Ahornsirup servieren.",
+    "category": "Dessert",
+    "prep_time": "20 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Für Heidelbeerpfannkuchen 1 Gl. Heidelbeeren (Abtropfgew. 205 g) auf einem Sieb gut abtropfen lassen und die Früchte kurz mit kaltem Wasser abspülen. Das Obst vorsichtig unter die Pfannkuchenmasse heben.",
+    "tags": "Pancakes, Buttermilch, Frühstück, Dessert"
+}

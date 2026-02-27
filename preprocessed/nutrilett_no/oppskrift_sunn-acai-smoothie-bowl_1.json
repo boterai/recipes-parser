@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sunn Acai smoothie bowl",
+    "description": "Denne sunne smoothie er full av gode smaker. Tykk nok for å spises med skje, toppet med frukt, bær og hvare.",
+    "ingredients": "[{\"name\": \"Acai pulver\", \"units\": \"ss\", \"amount\": \"1\"}, {\"name\": \"frossen banan\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"honning\", \"units\": \"ts\", \"amount\": \"2\"}, {\"name\": \"frosne blåbær\", \"units\": \"g\", \"amount\": \"75\"}]",
+    "instructions": "Kjør frossen banan og blåbær, honning og acai pulver i en food prosessor. Topp med frukt og bær, gryn eller andre sunne alternativer.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Raw Acai er superfood – rik på vitamin E, kalium, kalsium og jern!",
+    "tags": null
+}

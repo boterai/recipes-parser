@@ -1,0 +1,12 @@
+{
+    "dish_name": "Nudelauflauf vegan",
+    "description": "Kulinarische Perfektion entsteht durch den fein abgestimmten Mix aus Aromen und Texturen. Weicher Käse trifft cremige Soße und bissfeste Nudeln.",
+    "ingredients": "[{\"name\": \"Penne\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"Zwiebeln\", \"units\": null, \"amount\": 2}, {\"name\": \"Knoblauchzehen\", \"units\": null, \"amount\": 2}, {\"name\": \"Zitronen\", \"units\": null, \"amount\": 0.5}, {\"name\": \"Spinat\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"Olivenöl\", \"units\": \"EL\", \"amount\": 2}, {\"name\": \"Kichererbsen\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"Tomaten, stückig\", \"units\": \"g\", \"amount\": 600}, {\"name\": \"Sahne, vegan\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"Basilikum\", \"units\": \"Bund\", \"amount\": 0.5}, {\"name\": \"Salz\", \"units\": \"Prise\", \"amount\": 1}, {\"name\": \"Pfeffer\", \"units\": \"Prise\", \"amount\": 1}, {\"name\": \"Käse, gerieben, vegan\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"Pinienkerne\", \"units\": \"g\", \"amount\": 40}]",
+    "instructions": "Penne in einem Topf mit kochendem Salzwasser ca. 7-8 Minuten bissfest garen. Inzwischen Zwiebeln und Knoblauch pellen und fein würfeln. Zitrone heiß abspülen, trocken tupfen und die Schale abreiben sowie 1 EL Saft auspressen. Spinat waschen und trocken schleudern. Backofen auf 200 Grad Ober-/Unterhitze (Umluft 180 Grad) vorheizen. Olivenöl in einer beschichteten Pfanne erhitzen. Zwiebeln und Knoblauch hineingeben und glasig schwitzen. Spinat, Zitronenabrieb und Zitronensaft zugeben und unter Rühren so lange anschwitzen, bis der Spinat vollständig zerfallen ist. Stückige Tomaten und Kichererbsen zugeben und alles 5 Minuten köcheln lassen. Vegane Sahne zugießen, einrühren und einmal aufkochen lassen. Basilikum waschen, trocken tupfen und in feine Streifen schneiden. Unter die Soße rühren. Mit Salz und Pfeffer abschmecken. Penne mit der Soße in einer Ofenform vermengen und mit dem veganen Reibekäse bestreuen. Für 15-20 Minuten auf mittlerer Schiene goldbraun backen. In den letzten 5 Minuten vor Ende der Backzeit die Pinienkerne auf dem Auflauf verteilen.",
+    "category": "Main Course",
+    "prep_time": "25 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "45 minutes",
+    "notes": "Das Rezept ist vegan und enthält alternative Käseprodukte. Achte darauf, dass die Nudeln ohne Ei sind.",
+    "tags": "vegan, pasta, main course"
+}

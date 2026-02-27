@@ -1,0 +1,12 @@
+{
+    "dish_name": "Schokoladenkekse",
+    "description": "Ein Genuss für die Sinne, köstliche, weiche Leckereien perfekt für eine Tasse Tee oder Kaffee.",
+    "ingredients": "[{\"name\": \"Mehl\", \"units\": \"g\", \"amount\": 270}, {\"name\": \"Zucker\", \"units\": \"g\", \"amount\": 130}, {\"name\": \"Kakaopulver\", \"units\": \"g\", \"amount\": 25}, {\"name\": \"Vanillezucker\", \"units\": \"Päckchen\", \"amount\": 1}, {\"name\": \"Ei\", \"units\": null, \"amount\": 1}, {\"name\": \"griechischer Joghurt\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"Öl\", \"units\": \"ml\", \"amount\": 50}, {\"name\": \"Backpulver\", \"units\": \"Päckchen\", \"amount\": 0.5}, {\"name\": \"Kochschokolade\", \"units\": \"g\", \"amount\": 120}, {\"name\": \"Salz\", \"units\": \"Prise\", \"amount\": null}]",
+    "instructions": "1. In einer Schüssel das Ei mit dem griechischen Joghurt verrühren, bis eine homogene Masse entsteht. 2. In einer anderen Schüssel Mehl mit Backpulver vermengen. 3. Kakao, Vanillezucker und eine Prise Salz zur Mehlmischung geben und gut vermischen. 4. Die trockenen Zutaten langsam zur Ei-Joghurt-Mischung geben und zu einem gleichmäßigen Teig verrühren. 5. Geschmolzene und abgekühlte Kochschokolade hinzufügen und gut unterrühren. 6. Mit einem Löffel Teigportionen entnehmen und zu Kugeln formen. Diese auf ein mit Backpapier ausgelegtes Blech legen und dabei genügend Platz zwischen den Kugeln lassen. 7. Jede Kugel leicht mit der Rückseite eines Löffels flach drücken. 8. Die Kekse im vorgeheizten Backofen bei 180°C etwa 10 Minuten backen, bis sie leicht goldbraun sind. 9. Die Kekse kurz auf dem Blech abkühlen lassen, bevor sie auf ein Abkühlrost zum vollständigen Auskühlen gelegt werden.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "25 minutes",
+    "notes": "Für knusprigere Kekse können Sie einen Teil des Mehls durch Mandelmehl ersetzen. Fügen Sie dem Teig zusätzlich Schokoladentropfen für einen extra Schokoladengenuss hinzu. Versuchen Sie, die Kekse mit Puderzucker oder geschmolzener Schokolade zu verzieren.",
+    "tags": "Kekse, Dessert, Schokolade"
+}

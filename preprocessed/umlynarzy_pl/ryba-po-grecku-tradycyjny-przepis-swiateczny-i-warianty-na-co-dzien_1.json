@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ryba po grecku",
+    "description": "Tradycyjna potrawa, która łączy chrupiące warzywa z delikatnym mięsem rybnym w aromatycznym sosie pomidorowym.",
+    "ingredients": "[{\"name\": \"Filety rybne\", \"units\": \"kg (mrożone) / 700 g (świeże)\", \"amount\": \"1\"}, {\"name\": \"Marchew\", \"units\": \"g\", \"amount\": \"500\"}, {\"name\": \"Koncentrat pomidorowy\", \"units\": \"łyżki\", \"amount\": \"4\"}]",
+    "instructions": "Marchewkę i pietruszkę ścieraj na tarce do warzyw korzeniowych. Por kroimy w cienkie plasterki, cebulę w kostkę. Smaż filety rybne obtoczone w mące pszennej. Zeszklić pora na złoty kolor, dodać marchew i pietruszkę. Po 15 minutach duszenia dodać koncentrat pomidorowy.",
+    "category": "Dania główne",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Możliwość przygotowania z wyprzedzeniem. Danie można podawać na ciepło lub zimno.",
+    "tags": "Polskie potrawy świąteczne, Potrawa świąteczna, Przepis na rybę po grecku"
+}

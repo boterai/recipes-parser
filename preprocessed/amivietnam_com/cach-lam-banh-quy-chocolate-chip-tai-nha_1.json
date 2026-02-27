@@ -1,0 +1,12 @@
+{
+    "dish_name": "Bánh Quy Chocolate Chip",
+    "description": "Cách làm bánh quy chocolate chip tại nhà với hương vị thơm ngon và dễ làm.",
+    "ingredients": "[{\"name\": \"Bơ\", \"units\": \"g\", \"amount\": 225}, {\"name\": \"Đường trắng\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"Đường nâu\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"Trứng\", \"units\": \"quả\", \"amount\": 2}, {\"name\": \"Vanilla\", \"units\": \"thìa cà phê\", \"amount\": 1}, {\"name\": \"Bột mì\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"Baking soda\", \"units\": \"thìa cà phê\", \"amount\": 1}, {\"name\": \"Muối\", \"units\": \"thìa cà phê\", \"amount\": 0.5}, {\"name\": \"Chocolate chip\", \"units\": \"g\", \"amount\": 200}]",
+    "instructions": "1. Trộn bơ và đường cho đến khi nhẹ và mịn. 2. Thêm trứng và vanilla, đánh đều. 3. Kết hợp nguyên liệu khô. 4. Thêm chocolate chip. 5. Tạo hình và nướng bánh. 6. Thưởng thức và bảo quản.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "12 minutes",
+    "total_time": "27 minutes",
+    "notes": "Sử dụng chocolate chất lượng để có hương vị tốt nhất.",
+    "tags": "bánh quy, chocolate chip, dessert"
+}

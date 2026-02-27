@@ -1,0 +1,12 @@
+{
+    "dish_name": "Curry Indiano",
+    "description": "Passo a passo essencial para preparar um curry indiano autêntico e aromático.",
+    "ingredients": "[{\"name\": \"cominho\", \"units\": \"colher de chá\", \"amount\": \"1\"}, {\"name\": \"coentro em pó\", \"units\": null, \"amount\": null}, {\"name\": \"açafrão-da-terra\", \"units\": null, \"amount\": null}, {\"name\": \"pimenta vermelha\", \"units\": null, \"amount\": null}, {\"name\": \"cebola\", \"units\": null, \"amount\": null}, {\"name\": \"alho\", \"units\": null, \"amount\": null}, {\"name\": \"gengibre\", \"units\": null, \"amount\": null}]",
+    "instructions": "1. Escolha ingredientes frescos e de qualidade. 2. Toste levemente e moa as especiarias. 3. Refogue a cebola até dourar, adicione gengibre e alho. 4. Incorpore as especiarias. 5. Cozinhe lentamente para equilibrar sabores.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Respeitar as proporções é crucial para equilibrar os sabores.",
+    "tags": "curry, indiano, especiarias, aromático"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Keto székelykáposzta",
+    "description": "A székelykáposzta az egyik legkedveltebb magyaros étel, ami szerencsére kis módosítással tökéletesen beilleszthető a ketogén étrendbe is.",
+    "ingredients": "[{\"name\": \"sertéscomb\", \"units\": \"g\", \"amount\": 800}, {\"name\": \"savanyú káposzta\", \"units\": \"kg\", \"amount\": 1}, {\"name\": \"vöröshagyma\", \"units\": \"fej\", \"amount\": 1}, {\"name\": \"sertészsír\", \"units\": \"ek.\", \"amount\": 2}, {\"name\": \"fűszerpaprika\", \"units\": \"tk.\", \"amount\": 2}, {\"name\": \"tejföl\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"tv paprika\", \"units\": \"db\", \"amount\": 1}, {\"name\": \"paradicsom\", \"units\": \"db\", \"amount\": 1}]",
+    "instructions": "1. A vöröshagymát finomra vágjuk, a sertéscombot kockákra daraboljuk. Tipp: A húst ne vágjuk túl kicsire, hogy szaftos maradjon. 2. A zsíron üvegesre pároljuk a hagymát, majd hozzáadjuk a felkockázott paprikát és paradicsomot. Tipp: Ez a pörkölt alap adja meg az étel lelkét. 3. Húzzuk le a tűzről, szórjuk meg fűszerpaprikával, majd adjuk hozzá a húst és pirítsuk fehéredésig. Tipp: Vigyázzunk, hogy a paprika ne égjen meg, mert keserű lesz. 4. Öntsük fel kevés vízzel, és pároljuk félpuhára a húst. 5. Adjuk hozzá az átmosott savanyú káposztát, és főzzük készre az egészet. Tipp: Ha túl savanyú a káposzta, áztassuk be előtte hideg vízbe. 6. Tálaláskor locsoljuk meg bőségesen tejföllel.",
+    "category": "Main Course",
+    "prep_time": "20 minutes",
+    "cook_time": "1 hour",
+    "total_time": "1 hour 20 minutes",
+    "notes": "A ketogén verzióban nem használunk lisztes rántást. A sűrű szaftot a hagyma és a hús kollagén tartalma adja. Fagyasztható? Igen, a székelykáposzta kiválóan fagyasztható, és felmelegítve talán még finomabb is.",
+    "tags": "ketogén, főétel, magyaros"
+}

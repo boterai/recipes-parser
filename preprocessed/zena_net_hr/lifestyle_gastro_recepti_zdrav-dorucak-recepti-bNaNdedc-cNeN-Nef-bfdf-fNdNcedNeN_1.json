@@ -1,0 +1,12 @@
+{
+    "dish_name": "Zobena kaša s voćem i orašastim plodovima",
+    "description": "Zobena kaša s voćem i orašastim plodovima je hranjiv doručak bogat vlaknima koji će te držati siti do ručka.",
+    "ingredients": "[{\"name\": \"zobene pahuljice\", \"units\": \"šalice\", \"amount\": \"½\"}, {\"name\": \"biljno mlijeko\", \"units\": \"šalica\", \"amount\": \"1\"}, {\"name\": \"chia sjemenke\", \"units\": \"žlica\", \"amount\": \"1\"}, {\"name\": \"med\", \"units\": \"žlica\", \"amount\": \"1\"}, {\"name\": \"svježe voće\", \"units\": \"šalice\", \"amount\": \"½\"}, {\"name\": \"orašasti plodovi\", \"units\": \"žlice\", \"amount\": \"2-3\"}]",
+    "instructions": "U posudi pomiješaj zobene pahuljice, biljno mlijeko i chia sjemenke. Ostaviti da stoji preko noći ili minimalno 30 minuta. Dodaj med i svježe voće po izboru – banane, borovnice ili maline. Pospi orašastim plodovima kako bi dodao hrskavu teksturu. Dobro promiješaj i posluži hladno ili na sobnoj temperaturi.",
+    "category": "Breakfast",
+    "prep_time": "30 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "healthy, breakfast, oatmeal, fruit"
+}

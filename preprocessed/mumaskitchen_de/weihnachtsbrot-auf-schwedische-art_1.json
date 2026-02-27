@@ -1,0 +1,12 @@
+{
+    "dish_name": "Weihnachtsbrot auf schwedische Art",
+    "description": "Ein traditionelles Weihnachtsbrot auf schwedische Art mit Roggenmehl, Malzbier, Rosinen und wärmenden Gewürzen. Perfekt für die Adventszeit – saftig, würzig und einfach zuzubereiten.",
+    "ingredients": "[{\"name\": \"Butter\", \"units\": \"g\", \"amount\": 75}, {\"name\": \"Zuckerrübensirup\", \"units\": \"g\", \"amount\": 75}, {\"name\": \"Malzbier\", \"units\": \"ml\", \"amount\": 350}, {\"name\": \"frische Hefe\", \"units\": \"Würfel\", \"amount\": 1}, {\"name\": \"Roggenmehl\", \"units\": \"g\", \"amount\": 600}, {\"name\": \"Salz\", \"units\": null, \"amount\": null}, {\"name\": \"Nelkenpulver\", \"units\": \"TL\", \"amount\": 0.25}, {\"name\": \"Zimtpulver\", \"units\": \"TL\", \"amount\": 0.25}, {\"name\": \"Ingwerpulver\", \"units\": \"TL\", \"amount\": 0.25}, {\"name\": \"Rosinen\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"Butter für die Form\", \"units\": null, \"amount\": null}, {\"name\": \"Mehl für die Form\", \"units\": null, \"amount\": null}]",
+    "instructions": "Butter mit Zuckerrübensirup in einem Topf schmelzen und lauwarm abkühlen lassen. Malzbier hinzufügen und Hefe hineinbröckeln. Alles gut verrühren, bis die Hefe aufgelöst ist. Roggenmehl mit Gewürzen, Salz und Rosinen in einer Schüssel mischen. Eine Mulde in der Mitte formen. Die Hefemischung langsam in die Mulde gießen und mit den Knethaken zu einem glatten Teig verarbeiten. Teig abgedeckt an einem warmen Ort ca. 45 Minuten gehen lassen. Backofen auf 200 °C Ober-/Unterhitze vorheizen. Kastenform mit Butter einfetten und mit Mehl ausstäuben. Teig zu einem Laib formen, in die Form legen, mit einem Messer ein Schachbrettmuster einschneiden und mit kaltem Wasser bestreichen. Im vorgeheizten Ofen 30–40 Minuten backen. Vor dem Anschneiden vollständig abkühlen lassen.",
+    "category": "Brot, Weihnachtsgebäck",
+    "prep_time": "30 Minuten",
+    "cook_time": "40 Minuten",
+    "total_time": "1 Stunde 55 Minuten",
+    "notes": "Roggenmehl durch Vollkorn-Weizenmehl ersetzbar. Malzbier kann durch alkoholfreies Bier oder schwarzen Tee mit Melasse ersetzt werden. Rosinen durch Cranberries oder Datteln austauschbar. Perfekt zum Einfrieren geeignet – ideal zum Vorbereiten.",
+    "tags": "Weihnachtsbrot, schwedisch, Advent, Backen"
+}

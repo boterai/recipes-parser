@@ -1,0 +1,12 @@
+{
+    "dish_name": "Keto rakott kelkáposzta",
+    "description": "A rakott kelkáposzta a magyar konyha egyik klasszikusa. A keto változatban a magas szénhidráttartalmú rizst aprított karfiollal váltjuk ki.",
+    "ingredients": "[{\"name\": \"kelkáposzta\", \"units\": \"fej\", \"amount\": 1}, {\"name\": \"sertés darálthús\", \"units\": \"g\", \"amount\": 600}, {\"name\": \"karfiol\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"vöröshagyma\", \"units\": \"fej\", \"amount\": 1}, {\"name\": \"tejföl\", \"units\": \"dl\", \"amount\": 4}, {\"name\": \"zsír\", \"units\": \"ek.\", \"amount\": 2}, {\"name\": \"fűszerpaprika\", \"units\": \"tk.\", \"amount\": 1}, {\"name\": \"köménymag\", \"units\": \"tk.\", \"amount\": 1}]",
+    "instructions": "1. A kelkáposztát leveleire szedjük, a vastag ereket kivágjuk, és sós vízben blansírozzuk (előfőzzük). 2. A karfiolt aprítóban rizs méretűre daráljuk, és kevés zsíron megpirítjuk. 3. A hagymát apróra vágjuk, zsíron megdinszteljük, hozzáadjuk a darálthúst, a pirospaprikát, köményt, sót, borsot, és készre pároljuk. 4. Egy tepsit kizsírozunk. Rétegezzük: kelkáposzta, karfiolrizs, darálthús, tejföl. 5. 180 fokos sütőben süssük kb. 30-40 percig.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "45 minutes",
+    "total_time": "1 hour 15 minutes",
+    "notes": "Ha szereted, szórhatsz a tetejére egy kis reszelt sajtot is a sütés vége előtt.",
+    "tags": "keto, rakott kelkáposzta, főétel, magyar konyha"
+}

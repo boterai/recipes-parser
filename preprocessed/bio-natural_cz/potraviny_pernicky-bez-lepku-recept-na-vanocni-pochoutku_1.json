@@ -1,0 +1,12 @@
+{
+    "dish_name": "Perníčky bez lepku",
+    "description": "Tradiční vánoční cukroví bez lepku, které si mohou vychutnat i lidé s intolerancí na lepek.",
+    "ingredients": "[{\"name\": \"med\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"třtinový cukr\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"kokosový olej\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"vejce\", \"units\": null, \"amount\": 2}, {\"name\": \"bezlepková mouka\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"jedlá soda\", \"units\": \"lžička\", \"amount\": 1}, {\"name\": \"perníkové koření\", \"units\": \"lžičky\", \"amount\": 2}, {\"name\": \"sůl\", \"units\": null, \"amount\": \"špetka\"}]",
+    "instructions": "1. V hrnci zahřejte med, cukr a kokosový olej, dokud se cukr a olej nerozpustí. Poté nechte směs vychladnout. 2. Ve velké míse smíchejte bezlepkovou mouku, jedlou sodu, perníkové koření a sůl. 3. Přidejte rozpuštěnou směs s medem a cukrem a vejce. Důkladně promíchejte, až vznikne homogenní těsto. 4. Zabalte těsto do fólie a nechte ho odpočívat v lednici alespoň 1 hodinu. 5. Po odpočinku rozválejte těsto na tloušťku asi 5 mm a vykrajujte různé tvary. 6. Perníčky pečte na plechu vyloženém pečicím papírem v předehřáté troubě na 180 °C asi 10-12 minut. 7. Po vychladnutí je můžete ozdobit polevou nebo si je vychutnat jen tak.",
+    "category": "Dessert",
+    "prep_time": "1 hour",
+    "cook_time": "12 minutes",
+    "total_time": "1 hour 12 minutes",
+    "notes": "Můžete experimentovat s různými druhy koření a přidat ořechy nebo sušené ovoce.",
+    "tags": "vánoční, bezlepkové, perníčky"
+}

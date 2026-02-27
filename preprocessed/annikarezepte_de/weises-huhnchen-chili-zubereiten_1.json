@@ -1,0 +1,12 @@
+{
+    "dish_name": "Weißes Hühnchen-Chili",
+    "description": "Ein herzhaftes und cremiges Chili mit Hähnchen und weißen Bohnen, perfekt für kalte Tage. Schnell und einfach zuzubereiten.",
+    "ingredients": "[{\"name\": \"Hähnchenbrustfilet\", \"units\": \"g\", \"amount\": 450}, {\"name\": \"weiße Bohnen\", \"units\": \"Dose (425 g)\", \"amount\": 1}, {\"name\": \"Zwiebel\", \"units\": \"stück\", \"amount\": 1}, {\"name\": \"Knoblauchzehen\", \"units\": \"stück\", \"amount\": 2}, {\"name\": \"grüne Paprika\", \"units\": \"stück\", \"amount\": 1}, {\"name\": \"gewürfelte grüne Chilis\", \"units\": \"Dose (115 g)\", \"amount\": 1}, {\"name\": \"Hühnerbrühe\", \"units\": \"Liter\", \"amount\": 1}, {\"name\": \"gemahlener Kreuzkümmel\", \"units\": \"Teelöffel\", \"amount\": 1}, {\"name\": \"Chilipulver\", \"units\": \"Teelöffel\", \"amount\": 1}, {\"name\": \"Salz und Pfeffer\", \"units\": \"nach Geschmack\", \"amount\": null}, {\"name\": \"Maiskörner\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"saure Sahne\", \"units\": \"g\", \"amount\": 120}, {\"name\": \"frischer Koriander\", \"units\": \"zur Garnitur\", \"amount\": null}]",
+    "instructions": "Öl in einem großen Topf bei mittlerer Hitze erhitzen. Hähnchenbruststücke hinzufügen und 5 Minuten anbraten, bis sie goldbraun sind. Zwiebel, Knoblauch und grüne Paprika in den Topf geben und 3-4 Minuten anbraten. Grüne Chilis, Kreuzkümmel und Chilipulver einrühren und 1-2 Minuten weiterkochen. Hühnerbrühe dazugießen und die Mischung zum Köcheln bringen. Weiße Bohnen und Mais hinzufügen, mit Salz und Pfeffer abschmecken und 15-20 Minuten köcheln lassen. Sobald das Chili eingedickt ist, die saure Sahne unterrühren. Heiß servieren, garniert mit frischem Koriander.",
+    "category": "Hauptgericht",
+    "prep_time": "10 minutes",
+    "cook_time": "25 minutes",
+    "total_time": "35 minutes",
+    "notes": "Servieren Sie das Chili in tiefen Schalen mit saurer Sahne und frischem Koriander.",
+    "tags": "Bohnen, chili, cremig, einfach, Hühnchen, schnell"
+}

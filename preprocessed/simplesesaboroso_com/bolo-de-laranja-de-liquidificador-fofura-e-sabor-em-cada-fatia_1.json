@@ -1,0 +1,12 @@
+{
+    "dish_name": "Bolo de laranja de liquidificador",
+    "description": "Receita prática de bolo de laranja com aroma, textura macia e sabor cítrico.",
+    "ingredients": "[{\"name\": \"ovos\", \"units\": \"grandes\", \"amount\": 3}, {\"name\": \"açúcar\", \"units\": \"xícara (chá)\", \"amount\": 1}, {\"name\": \"óleo vegetal\", \"units\": \"xícara (chá)\", \"amount\": 0.5}, {\"name\": \"suco de laranja natural\", \"units\": \"xícara (chá)\", \"amount\": 1}, {\"name\": \"raspas de laranja\", \"units\": \"unidade (opcional)\", \"amount\": 1}, {\"name\": \"farinha de trigo\", \"units\": \"xícaras (chá)\", \"amount\": 2}, {\"name\": \"fermento em pó químico\", \"units\": \"colher (sopa)\", \"amount\": 1}, {\"name\": \"sal\", \"units\": \"pitada\", \"amount\": null}]",
+    "instructions": "Preaqueça o forno a 180°C e unte uma forma média. No liquidificador, bata os ovos, açúcar, óleo e suco de laranja por 1 minuto. Transfira para uma tigela e incorpore a farinha aos poucos. Adicione as raspas, fermento e sal. Despeje na forma e asse por 30 a 40 minutos. Faça o teste do palito. Para a calda, misture suco de laranja e açúcar e leve ao fogo até dissolver. Regue o bolo ainda quente.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Use ovos em temperatura ambiente e não bata demais a massa para evitar bolo pesado.",
+    "tags": "bolo de laranja, liquidificador, receita de bolo, receitas baratas, sobremesa fácil"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Maismehlplätzchen",
+    "description": "Knusprige Maiskekse, die einfach zuzubereiten sind und einen rustikalen Genuss bieten.",
+    "ingredients": "[{\"name\": \"feines Maismehl\", \"units\": \"Tassen\", \"amount\": 1.5}, {\"name\": \"Zucker\", \"units\": \"Esslöffel\", \"amount\": 3}, {\"name\": \"Ei\", \"units\": null, \"amount\": 1}, {\"name\": \"Maisstärke\", \"units\": \"Esslöffel\", \"amount\": 3}, {\"name\": \"Margarine oder Butter\", \"units\": \"Esslöffel\", \"amount\": 3}, {\"name\": \"Backpulver\", \"units\": \"Esslöffel\", \"amount\": 1}]",
+    "instructions": "In einer großen Schüssel das Ei mit dem Zucker schaumig schlagen. Maisstärke hinzufügen und gut vermengen. Geschmolzene Margarine oder Butter unterrühren, bis die Masse cremig ist. Nach und nach das Maismehl und Backpulver einarbeiten, bis ein weicher, homogener Teig entsteht. Den Teig in kleine Kugeln formen und leicht flach drücken. Auf ein leicht gefettetes Backblech legen, dabei genügend Abstand lassen. Im vorgeheizten Ofen bei 180°C etwa 20 Minuten backen, bis die Ränder goldbraun sind. Die Kekse leicht abkühlen lassen und dann auf einem Gitter vollständig auskühlen.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "35 minutes",
+    "notes": "Für zusätzliche Süße kannst du Rosinen oder Schokoladenstückchen hinzufügen. Für knusprigere Kekse kannst du einen Teil des Maismehls durch Weizenmehl ersetzen. Verfeinere den Geschmack mit einem Hauch Vanille oder Zimt.",
+    "tags": "Kekse, Dessert, Mais, rustikal"
+}

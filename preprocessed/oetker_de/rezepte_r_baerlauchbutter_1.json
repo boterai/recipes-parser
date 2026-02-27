@@ -1,0 +1,12 @@
+{
+    "dish_name": "Bärlauchbutter",
+    "description": "Schnell zubereitet, frisch und lecker – perfekt zum Selbermachen.",
+    "ingredients": "[{\"name\": \"Bärlauch\", \"units\": null, \"amount\": \"½ Bund\"}, {\"name\": \"weiche Butter\", \"units\": \"g\", \"amount\": \"125\"}, {\"name\": \"Dr. Oetker Finesse Geriebene Zitronenschale\", \"units\": \"Pck.\", \"amount\": \"etwa 1\"}, {\"name\": \"Salz\", \"units\": null, \"amount\": \"etwas\"}]",
+    "instructions": "Bärlauch putzen, waschen, trocken tupfen und fein schneiden. Butter mit Bärlauch, Finesse Geriebene Zitronenschale und Salz verrühren.",
+    "category": null,
+    "prep_time": "10 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Die Bärlauchbutter passt z.B. toll zu Drei-Käse-Brot. Die Bärlauchbutter kann 2 Tage im Voraus zubereitet oder auch eingefroren werden.",
+    "tags": "Glutenfrei, Vegetarisch"
+}

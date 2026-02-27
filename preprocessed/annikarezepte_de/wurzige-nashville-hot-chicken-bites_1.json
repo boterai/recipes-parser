@@ -1,0 +1,12 @@
+{
+    "dish_name": "Würzige Nashville Hot Chicken Bites",
+    "description": "Diese knusprigen Hähnchenbissen sind perfekt gewürzt und bieten einen würzigen Kick. Ideal für Partys oder als Snack.",
+    "ingredients": "[{\"name\": \"Hähnchenbrustfilets\", \"units\": \"g\", \"amount\": 450}, {\"name\": \"Buttermilch\", \"units\": \"ml\", \"amount\": 240}, {\"name\": \"Weizenmehl\", \"units\": \"g\", \"amount\": 120}, {\"name\": \"Paprika\", \"units\": \"Esslöffel\", \"amount\": 1}, {\"name\": \"Cayennepfeffer\", \"units\": \"Teelöffel\", \"amount\": 1}, {\"name\": \"Knoblauchpulver\", \"units\": \"Teelöffel\", \"amount\": 1}, {\"name\": \"Zwiebelpulver\", \"units\": \"Teelöffel\", \"amount\": 1}, {\"name\": \"schwarzer Pfeffer\", \"units\": \"Teelöffel\", \"amount\": 1}, {\"name\": \"Salz\", \"units\": \"Teelöffel\", \"amount\": 0.5}, {\"name\": \"Pflanzenöl\", \"units\": \"zum Frittieren\", \"amount\": null}, {\"name\": \"scharfe Soße\", \"units\": \"ml\", \"amount\": 60}, {\"name\": \"ungesalzene Butter\", \"units\": \"Esslöffel\", \"amount\": 2}, {\"name\": \"Essiggurken\", \"units\": null, \"amount\": null}, {\"name\": \"Weißbrot\", \"units\": null, \"amount\": null}]",
+    "instructions": "Hähnchen in Buttermilch mit einer Prise Salz marinieren und mindestens 2 Stunden im Kühlschrank ziehen lassen. Mehl, Paprika, Cayennepfeffer, Knoblauchpulver, Zwiebelpulver, schwarzen Pfeffer und Salz in einer Schüssel vermischen. Pflanzenöl in einer tiefen Pfanne auf 175°C erhitzen. Hähnchen aus der Buttermilch nehmen, abtropfen lassen und in der Mehlmischung wälzen. Hähnchenstücke in kleinen Portionen im heißen Öl 5-7 Minuten frittieren, bis sie goldbraun sind. Frittierte Hähnchenbissen auf Küchenpapier abtropfen lassen. Scharfe Soße mit geschmolzener Butter vermengen und nach Belieben anpassen. Hähnchenbissen in eine Schüssel geben und mit der scharfen Soße gut vermischen. Warm servieren, dazu Essiggurken und Weißbrot anbieten.",
+    "category": "Hauptgericht",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Für eine ansprechende Präsentation auf einem rustikalen Holzbrett anrichten.",
+    "tags": "frittieren, Hähnchen, Nashville, Snack, würzig"
+}

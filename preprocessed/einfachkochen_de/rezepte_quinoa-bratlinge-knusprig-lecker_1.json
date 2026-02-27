@@ -1,0 +1,12 @@
+{
+    "dish_name": "Quinoa-Bratlinge",
+    "description": "Diese Quinoa-Bratlinge sind knusprig und superlecker! Mit einem Dip serviert, wird aus dem vegetarischen Gemüsebratling-Rezept schnell eine komplette Mahlzeit.",
+    "ingredients": "[{\"name\": \"Quinoa\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"Zwiebel\", \"units\": \"große\", \"amount\": 1}, {\"name\": \"Lauch\", \"units\": \"Stange\", \"amount\": 0.5}, {\"name\": \"Möhre\", \"units\": \"mittelgroße\", \"amount\": 1}, {\"name\": \"Petersilie\", \"units\": \"Bund\", \"amount\": 0.5}, {\"name\": \"Olivenöl\", \"units\": \"EL\", \"amount\": 2}, {\"name\": \"Gemüsebrühe\", \"units\": \"ml\", \"amount\": 450}, {\"name\": \"Currypulver\", \"units\": \"TL\", \"amount\": 1}, {\"name\": \"Kurkuma\", \"units\": \"TL\", \"amount\": 1}, {\"name\": \"Ei\", \"units\": \"(Größe M)\", \"amount\": 1}, {\"name\": \"Speisestärke\", \"units\": \"EL\", \"amount\": 2}, {\"name\": \"Haferflocken\", \"units\": \"EL\", \"amount\": 6}, {\"name\": \"Salz\", \"units\": \"TL\", \"amount\": 0.25}, {\"name\": \"Pfeffer\", \"units\": \"etwas\", \"amount\": null}, {\"name\": \"Sonnenblumenöl\", \"units\": \"EL\", \"amount\": 4}]",
+    "instructions": "1. Quinoa mit kaltem Wasser über einem Sieb abspülen und abtropfen lassen. Zwiebel schälen und fein würfeln. Lauch halbieren, waschen und in feine Würfel schneiden. Möhre schälen und raspeln. Petersilie waschen und fein hacken. 2. Olivenöl in einem Topf erhitzen und das geschnittene Gemüse ca. 5 Minuten anschwitzen. 3. Gemüsebrühe erhitzen, Currypulver und Kurkuma hinzugeben. Quinoa in den Topf geben und mit der heißen Gemüsebrühe ablöschen. Ca. 10 Minuten quellen lassen. 4. Masse in eine Schüssel geben, abkühlen lassen und Ei unterrühren. Speisestärke und Haferflocken einrühren, mit Salz und Pfeffer abschmecken. 5. In einer Pfanne Sonnenblumenöl erhitzen, Bratlinge formen und pro Seite ca. 4 Minuten knusprig ausbacken.",
+    "category": "Vegetarisch",
+    "prep_time": "30 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "45 minutes",
+    "notes": "Dazu schmeckt ganz lecker Joghurtssauce mit frischen Kräutern und Blattsalate.",
+    "tags": "vegetarisch, Bratlinge, Quinoa"
+}

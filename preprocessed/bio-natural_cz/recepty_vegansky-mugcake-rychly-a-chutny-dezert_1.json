@@ -1,0 +1,12 @@
+{
+    "dish_name": "Veganský Mugcake",
+    "description": "Rychlý a chutný dezert, který si můžete připravit během několika minut přímo ve svém hrnku.",
+    "ingredients": "[{\"name\": \"banán\", \"units\": \"piece\", \"amount\": 1}, {\"name\": \"ovsená mouka\", \"units\": \"tablespoons\", \"amount\": 4}, {\"name\": \"kakao\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"prášek do pečiva\", \"units\": \"teaspoon\", \"amount\": 0.25}, {\"name\": \"rostlinné mléko\", \"units\": null, \"amount\": null}]",
+    "instructions": "V míse rozmačkejte banán a přidejte ovsenou mouku, kakao, prášek do pečiva a mléko. Dobře promíchejte, dokud nevznikne hladké těsto. Přeneste směs do hrníčku a položte ji do mikrovlnné trouby na 1 – 2 minuty.",
+    "category": "Dessert",
+    "prep_time": "5 minutes",
+    "cook_time": "2 minutes",
+    "total_time": "7 minutes",
+    "notes": "Můžete experimentovat s různými přísadami jako jsou ovoce, ořechy nebo čokoláda.",
+    "tags": "vegan, dessert, quick"
+}

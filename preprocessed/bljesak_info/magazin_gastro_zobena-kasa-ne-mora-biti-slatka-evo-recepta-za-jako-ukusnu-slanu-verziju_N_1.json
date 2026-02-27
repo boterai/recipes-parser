@@ -1,0 +1,12 @@
+{
+    "dish_name": "Slana zobena kaša",
+    "description": "Slana zobena kaša koju ćemo upotpuniti jajima, avokadom, i raznim povrćem.",
+    "ingredients": "[{\"name\": \"sitne zobene pahuljice\", \"units\": \"grams\", \"amount\": 150}, {\"name\": \"maslinovo ulje\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"manja glavica luka\", \"units\": null, \"amount\": 1}, {\"name\": \"češanj češnjaka\", \"units\": null, \"amount\": 1}, {\"name\": \"voda\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"sol\", \"units\": \"prstohvat\", \"amount\": null}, {\"name\": \"papar\", \"units\": \"prstohvat\", \"amount\": null}, {\"name\": \"dodaci po ukusu\", \"units\": null, \"amount\": null}]",
+    "instructions": "Na vatri srednje jačine zagrij ulje pa poprži luk dok ne omekša. Dodaj zobene pahuljice i češnjak pa sve dobro promiješaj. Ulij vodu i dodaj sol i pričekaj da prokuha. Kada je prokuhalo, smanji vatru, poklopi i ostavi da se lagano kuha između 15 i 20 minuta uz povremeno miješanje. Dodaj papar i još soli po ukusu pa posluži. Na kuhanu zobenu kašu potom dodaj dodatke po želji kao što su meko kuhano ili poširano jaje, avokado, malo soka od limete, blanširani špinat ili ljuti umak.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "20 minutes",
+    "total_time": null,
+    "notes": "Slana verzija zobene kaše je nutritivno bogatija od slatke.",
+    "tags": "zobena kaša, slana, recept"
+}

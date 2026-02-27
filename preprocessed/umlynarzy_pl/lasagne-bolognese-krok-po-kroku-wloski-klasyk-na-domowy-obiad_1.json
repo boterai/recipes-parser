@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lasagne Bolognese",
+    "description": "Włoski klasyk łączący soczysty mięsny farsz, aksamitny sos i delikatne płaty makaronu.",
+    "ingredients": "[{\"name\": \"cebula\", \"units\": null, \"amount\": null}, {\"name\": \"seler naciowy\", \"units\": null, \"amount\": null}, {\"name\": \"marchew\", \"units\": null, \"amount\": null}, {\"name\": \"boczek\", \"units\": null, \"amount\": null}, {\"name\": \"mięso mielone\", \"units\": null, \"amount\": null}, {\"name\": \"wino\", \"units\": \"szklanki\", \"amount\": \"½\"}, {\"name\": \"bulion\", \"units\": null, \"amount\": null}, {\"name\": \"przecier pomidorowy\", \"units\": null, \"amount\": null}, {\"name\": \"passata\", \"units\": null, \"amount\": null}, {\"name\": \"masło\", \"units\": null, \"amount\": null}, {\"name\": \"mąka\", \"units\": null, \"amount\": null}, {\"name\": \"mleko\", \"units\": null, \"amount\": null}, {\"name\": \"sól\", \"units\": null, \"amount\": null}, {\"name\": \"gałka muszkatołowa\", \"units\": null, \"amount\": null}, {\"name\": \"makaron\", \"units\": null, \"amount\": null}, {\"name\": \"parmezan\", \"units\": null, \"amount\": null}]",
+    "instructions": "Rozgrzej oliwę w garnku, dodaj cebulę, seler i marchew. Po 5 minutach dodaj boczek, a następnie mięso. Obsmażaj, dodaj wino, bulion, przecier i passatę, duś 2 godziny. Przygotuj beszamel, mieszając masło, mąkę i mleko. Układaj warstwy makaronu, sosu bolońskiego i beszamelu. Piecz w piekarniku przez 40-50 minut.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "2 hours",
+    "total_time": "2 hours 15 minutes",
+    "notes": "Można wzbogacić o pieczone warzywa lub użyć soczewicy zamiast mięsa.",
+    "tags": "Domowy obiad, Lasagne bolognese, Makaron, Przepis na lasagne, Sos boloński, Włoska kuchnia"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Molho de Salada",
+    "description": "Receita passo a passo de molho de salada saudável e caseiro irresistível.",
+    "ingredients": "[{\"name\": \"azeite extra-virgem\", \"units\": null, \"amount\": null}, {\"name\": \"suco de limão ou vinagre de maçã\", \"units\": null, \"amount\": null}, {\"name\": \"mostarda Dijon\", \"units\": null, \"amount\": null}, {\"name\": \"mel ou xarope de bordo\", \"units\": null, \"amount\": null}, {\"name\": \"ervas frescas como salsa ou manjericão\", \"units\": null, \"amount\": null}, {\"name\": \"sal\", \"units\": null, \"amount\": null}, {\"name\": \"pimenta-do-reino\", \"units\": null, \"amount\": null}]",
+    "instructions": "Misture primeiro o azeite com o ácido escolhido (limão ou vinagre) em uma proporção de três para um. Acrescente a mostarda e o adoçante natural aos poucos, mexendo vigorosamente para emulsionar a mistura e obter uma textura cremosa que envolva bem as folhas. Por fim, tempere com sal, pimenta-do-reino e as ervas frescas, ajustando o sabor conforme preferir.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Para a textura ideal, é fundamental emulsificar bem o molho e experimentar ajustes pequenos nos ingredientes para equilibrar o sabor.",
+    "tags": "molho, salada, saudável, caseiro"
+}

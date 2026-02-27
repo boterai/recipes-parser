@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tiramisu",
+    "description": "Một loại bánh ngọt tráng miệng nổi tiếng của Ý với lớp cà phê thơm lừng và vị béo ngậy của mascarpone.",
+    "ingredients": "[{\"name\": \"Mascarpone\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"Whipping cream\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"Đường\", \"units\": \"g\", \"amount\": 45}, {\"name\": \"Cafe đen hòa tan\", \"units\": \"gói\", \"amount\": 3}, {\"name\": \"Bánh sampa (Ladyfinger)\", \"units\": null, \"amount\": null}, {\"name\": \"Rượu rum\", \"units\": \"ml\", \"amount\": 60}]",
+    "instructions": "Bước 1 – Làm hỗn hợp cà phê nhúng bánh: Hoà tan 3 gói cafe với 200ml nước ấm và 30ml rượu rum. Thêm chút đường nếu bạn hảo ngọt. Bước 2 – Làm lớp kem mịn màng béo ngậy: Đánh bông 200ml whipping cream và 45g đường, đến khi kem bông mềm, tạo chóp rủ xuống là được. Cho 30ml rượu rum và 250g phô mai mascarpone vào trộn đều. Bước 3 – Hoàn thành cốc tiramisu trong 3 bước: Nhúng bánh sampa nhanh qua hỗn hợp cafe vừa pha, xếp 1 lượt bánh xuống đáy khuôn, phết đều 1 lượt kem vừa làm. Bọc kín và cho vào tủ lạnh tối thiểu 3 tiếng. Khi ăn phủ lớp bột cacao lên bề mặt.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": "3 hours",
+    "notes": "Nhúng bánh thật nhanh, mỗi mặt không quá 1s. Đánh bông kem đến khi có chóp rủ xuống. Bánh làm xong để tủ lạnh, khi ăn mới rắc cacao.",
+    "tags": "tiramisu, dessert, bánh ngọt"
+}

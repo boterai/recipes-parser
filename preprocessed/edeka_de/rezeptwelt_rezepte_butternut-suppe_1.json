@@ -1,0 +1,12 @@
+{
+    "dish_name": "Butternut Suppe",
+    "description": "Exotisches Butternut-Suppe-Rezept mit Kokosmilch und Curry.",
+    "ingredients": "[{\"name\": \"Butternut-Kürbis\", \"units\": \"g\", \"amount\": 800}, {\"name\": \"Rapsöl\", \"units\": \"EL\", \"amount\": 2}, {\"name\": \"Zwiebel\", \"units\": \"mittelgroß\", \"amount\": 1}, {\"name\": \"Knoblauch\", \"units\": \"Zehe\", \"amount\": 1}, {\"name\": \"Gemüsebrühe\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"Kokosmilch\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"Currypulver\", \"units\": \"EL\", \"amount\": 2}, {\"name\": \"Muskatnuss\", \"units\": \"TL\", \"amount\": 1}, {\"name\": \"Ingwer\", \"units\": null, \"amount\": 1}, {\"name\": \"Salz\", \"units\": \"Prise\", \"amount\": 1}, {\"name\": \"Pfeffer\", \"units\": \"Prise\", \"amount\": 1}, {\"name\": \"Minze\", \"units\": null, \"amount\": null}]",
+    "instructions": "Den Kürbis halbieren und entkernen. In Würfel schneiden. Zwiebel würfeln. Rapsöl erhitzen, Kürbiswürfel 2 Minuten anschwitzen, Zwiebel nach 1 Minute dazugeben. Knoblauch pressen und Ingwer hacken, beides hinzufügen. Mit Gemüsebrühe ablöschen und 10 Minuten kochen. Hitze reduzieren, Kokosmilch hinzufügen und 20 Minuten köcheln lassen. Pürieren und mit Gewürzen abschmecken. Mit Minze garnieren.",
+    "category": "Soup",
+    "prep_time": "25 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "55 minutes",
+    "notes": "Kürbis kann auch geschält werden, ist aber nicht notwendig. Variationen mit anderen Kürbissorten sind möglich.",
+    "tags": "vegetarisch, suppe, einfach, schnell"
+}

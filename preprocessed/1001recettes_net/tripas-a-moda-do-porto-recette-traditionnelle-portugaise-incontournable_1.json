@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tripas à moda do Porto",
+    "description": "Un mets traditionnel qui ravira les amateurs de saveurs authentiques et réconfortantes.",
+    "ingredients": "[{\"name\": \"tripas\", \"units\": \"kg\", \"amount\": 1}, {\"name\": \"haricots blancs secs\", \"units\": \"grammes\", \"amount\": 200}, {\"name\": \"saucisse fumée\", \"units\": null, \"amount\": 2}, {\"name\": \"morceaux de lard fumé\", \"units\": \"grammes\", \"amount\": 100}, {\"name\": \"carottes\", \"units\": null, \"amount\": 2}, {\"name\": \"oignons\", \"units\": null, \"amount\": 2}, {\"name\": \"gousses de ail\", \"units\": null, \"amount\": 4}, {\"name\": \"pied de porc désossé\", \"units\": null, \"amount\": null}, {\"name\": \"huile d’olive\", \"units\": null, \"amount\": null}, {\"name\": \"tomate pelée en conserve\", \"units\": null, \"amount\": null}, {\"name\": \"feuille de laurier\", \"units\": null, \"amount\": null}, {\"name\": \"clous de girofle\", \"units\": null, \"amount\": null}, {\"name\": \"sel\", \"units\": null, \"amount\": null}, {\"name\": \"poivre noir\", \"units\": null, \"amount\": null}]",
+    "instructions": "La veille : Faites tremper les haricots blancs dans de l’eau froide pendant toute une nuit pour les réhydrater. Le jour même, commencez par nettoyer les tripes à l’eau froide. Ensuite, faites-les blanchir durant 5 minutes dans une eau bouillante salée puis égouttez-les. Dans votre cocotte, mettez un filet d’huile d’olive et ajoutez y les oignons préalablement émincés. Épluchez et coupez les carottes en rondelles puis incorporez-les aux oignons. Ajoutez ensuite l’ail haché, les morceaux de saucisse fumée, le lard et le pied de porc. Déglaçage : Versez un peu d’eau dans la cocotte. Incorporez les tomates pelées concassées avec leur jus ainsi qu’une feuille de laurier. Mijotage : Ajoutez les tripes et laissez mijoter gentiment pendant environ 2 heures sur feu doux. À mi-cuisson, rajoutez les haricots préalablement trempés. Assaisonnement : Goûtez régulièrement votre plat et ajustez l’assaisonnement avec du sel et du poivre noir.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "120 minutes",
+    "total_time": "150 minutes",
+    "notes": "Pour sublimer votre Tripas à moda do Porto, n’hésitez pas à utiliser des produits frais et si possible locaux.",
+    "tags": "portugais, traditionnel, mijoté"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Jordbærsmoothie",
+    "description": "Frisk opp hverdagen med denne velsmakende jordbærsmoothien. Med kun 32 kalorier per porsjon får du en sunn, enkel og god drikke som kan nytes med god samvittighet.",
+    "ingredients": "[{\"name\": \"frosne jordbær\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"koffeinfri frukt-te\", \"units\": \"dl\", \"amount\": 1.5}, {\"name\": \"mynte\", \"units\": \"g\", \"amount\": 5}, {\"name\": \"valgfri søtning\", \"units\": \"ts\", \"amount\": 1}]",
+    "instructions": "Kjør jordbær, frekt-te, mynteblader og sukrin i en blender.",
+    "category": "Smoothie",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Veldig få kalorier!",
+    "tags": null
+}

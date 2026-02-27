@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pečena zobena kaša s kruškama, bananama i orasima",
+    "description": "Pečena zobena kaša je poput deserta za doručak, ali onog sa zdravim sastojcima.",
+    "ingredients": "[{\"name\": \"banane\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"kruške\", \"units\": \"cups\", \"amount\": 1.5}, {\"name\": \"javorov ili agavin sirup\", \"units\": \"tablespoons\", \"amount\": 5}, {\"name\": \"zobene pahuljice\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"orahe\", \"units\": \"tablespoons\", \"amount\": 5}, {\"name\": \"praha za pečenje\", \"units\": \"teaspoon\", \"amount\": 0.5}, {\"name\": \"cimet\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"sol\", \"units\": \"pinch\", \"amount\": 1}, {\"name\": \"mlijeko\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"jaje\", \"units\": \"large\", \"amount\": 1}, {\"name\": \"ekstrakt od vanilije\", \"units\": \"teaspoon\", \"amount\": 1}]",
+    "instructions": "1. Zagrij pećnicu na 1900 stupnjeva. Pripremi pleh za pečenje na koji si stavila papr za pečenje i stavi sa strane. 2. Posloži komadiće banane u jednom sloju na dno posude u kojoj pečeš. Na njih smjesti narezane kruške, cimet, javorov ili agavin sirup (2 žlice) i prekrij s folijom. Peci oko 20-ak minuta. 3. U međuvremenu, u zdjeli srednje veličine pomiješaj zobene pahuljice, pola oraha, prašak za pečenje, cimet i sol. 4. U drugoj zdjeli pomiješaj ostatak sirrupa, mlijeko, jaje i ekstrakt od vanilije. 5. Makni pečeno voće iz pećnice, prelij ga sa zobenim pahuljicama i zatim preko svega prelij smjesu s mlijekom. Ravnomjerno sve rasporedi. Dodaj ostatak cimeta i oraha na vrh i peci oko 35 minuta ili dok sve ne dobije zlatno smeđu boju. Posluži toplo!",
+    "category": "Breakfast",
+    "prep_time": null,
+    "cook_time": "55 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": "zobena kaša, doručak, zdravi recepti"
+}

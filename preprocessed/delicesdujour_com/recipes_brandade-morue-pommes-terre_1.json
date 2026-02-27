@@ -1,0 +1,12 @@
+{
+    "dish_name": "Brandade de morue",
+    "description": "Une brandade de morue crémeuse avec pommes de terre et fines herbes.",
+    "ingredients": "[{\"name\": \"filets de morue dessalée\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"pommes de terre\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"oignon\", \"units\": null, \"amount\": 1}, {\"name\": \"gousses d'ail\", \"units\": null, \"amount\": 3}, {\"name\": \"persil plat frais\", \"units\": null, \"amount\": null}, {\"name\": \"ciboulette ciselée\", \"units\": null, \"amount\": null}, {\"name\": \"huile d'olive\", \"units\": \"cl\", \"amount\": 15}, {\"name\": \"grosse noix de beurre\", \"units\": null, \"amount\": 1}, {\"name\": \"lait\", \"units\": \"cl\", \"amount\": 10}]",
+    "instructions": "1. Faites dessaler la morue en la faisant tremper dans l'eau froide pendant 36 à 48 heures avant le moment de la préparation (en changeant l'eau régulièrement). 2. Épluchez et coupez les pommes de terre en morceaux. Faites-les cuire pendant une vingtaine de minutes dans une casserole d'eau bouillante. Une fois cuites, écrasez-les à l'aide d'une fourchette. Ajoutez une grosse noix de beurre et le lait tiède. Mélangez énergiquement tout en incorporant l'huile d'olive petit à petit. Réservez au chaud. 3. Faites blondir l’oignon finement émincé et l’ail puis versez-les sur les pommes de terre. 4. Émiettez la morue dessalée et mélangez-la avec les pommes de terre écrasées ainsi que le persil haché. Poivrez selon votre goût. 5. Placez la préparation dans un plat à gratin et faites cuire pendant 15 à 20 minutes dans un four préchauffé à 180°C. Passez sous le grill en surveillant bien la cuisson. Servez avec quelques brins de ciboulette ciselés sur le dessus.",
+    "category": "Plats Principaux",
+    "prep_time": "20 minutes",
+    "cook_time": "35 minutes",
+    "total_time": "55 minutes",
+    "notes": "Changez régulièrement l'eau pendant le dessalage de la morue pour de meilleurs résultats.",
+    "tags": "française, plat principal, réconfortant"
+}
