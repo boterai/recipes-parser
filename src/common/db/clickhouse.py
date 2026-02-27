@@ -17,6 +17,7 @@ from config.config import config
 logger = logging.getLogger(__name__)
 
 CONNECTION_ERROR = "Ошибка подключения к ClickHouse"
+CLIENT_ERROR = "ClickHouse клиент не инициализирован"
 
 class ClickHouseManager:    
     _instance = None
@@ -415,7 +416,7 @@ class ClickHouseManager:
             Список объектов Recipe
         """
         if not self.client:
-            logger.error("ClickHouse не подключен")
+            logger.error(CLIENT_ERROR)
             return []
         
         try:
@@ -461,13 +462,7 @@ class ClickHouseManager:
                 logger.info(f"Рецепты не найдены для site_id={site_id}")
                 return []
             
-            recipes = self.parse_recipes_from_dataframe(df)
-            
-            vectorised_str = "все" if vectorised is None else ("векторизованные" if vectorised else "невекторизованные")
-            logger.info(f"Получено {len(recipes)} {vectorised_str} рецептов для site_id={site_id}")
-            
-            return recipes
-            
+            return self.parse_recipes_from_dataframe(df)            
         except Exception as e:
             logger.error(f"Ошибка получения рецептов для site_id={site_id}: {e}")
             import traceback
@@ -484,7 +479,7 @@ class ClickHouseManager:
             Список всех page_id для данного сайта (отсортированный по возрастанию)
         """
         if not self.client:
-            logger.error("ClickHouse не подключен")
+            logger.error(CLIENT_ERROR)
             return []
         
         try:
@@ -511,84 +506,38 @@ class ClickHouseManager:
             traceback.print_exc()
             return []
         
-    def update_ingredientfrom_ingredients_with_amounts(self):
-        from src.repositories.page import PageRepository
-        page_repo = PageRepository()
-        
-        sites = page_repo.get_recipe_sites(min_site_id=30)
-        
-        if not sites:
-            logger.warning("Нет сайтов для векторизации")
+    def get_page_ids_count(self, site_id: int, vectorised: Optional[bool] = None) -> int:
+
+        if not self.client:
+            logger.error(CLIENT_ERROR)
             return 0
 
-        batch_size = 5000
-        failed = 0
-        for site_id in sites:
-            logger.info(f"Начинаем векторизацию рецептов для сайта {site_id}")
-            failed = 0
-            last_page_id = None
-            recipes_for_deletion = []
-            while (recipes := self.get_recipes_by_site(site_id=site_id, vectorised=None, limit=batch_size, last_page_id=last_page_id)):
-                if len(recipes) == 0:
-                    logger.info(f"Все рецепты для сайта {site_id} уже векторизованы или отсутствуют")
-                    break
-                
-                last_page_id = recipes[-1].page_id
-                batch_insert = []
-                for recipe in recipes:
-                    ingredients = [i.lower() for i in recipe.ingredients]
-                    if any('prep time' in i  for i in ingredients):
-                        recipes_for_deletion.append(recipe.page_id)
-                        continue
-
-                    ingredients_from_amounts = [ia.get("name").lower() for ia in recipe.ingredients_with_amounts if ia.get("name")]
-                    if set(ingredients) != set(ingredients_from_amounts):
-                        recipe.ingredients = list(set(ingredients_from_amounts))
-                        recipe.vectorised = False
-                        batch_insert.append(recipe)
-                        failed += 1
-
-                logger.info(f"Обновлено {len(batch_insert)} рецептов для сайта {site_id} (не совпадение ингредиентов: {failed})")
-                logger.info(f"Рецепты для удаления (prep_time в ингредиентах): {len(recipes_for_deletion)}")
-                print(",".join(str(pid) for pid in recipes_for_deletion))
-
-                if batch_insert:
-                    self.insert_recipes_batch(batch_insert)
-                        
-            logger.info(f"Завершена векторизация партии для сайта {site_id}")
-
-    def get_existing_page_ids(self, ids: list[int]) -> set[int]:
-        """
-        Получение множества существующих page_id из ClickHouse для заданного списка
-        
-        Args:
-            ids: Список page_id для проверки
-            
-        Returns:
-            Множество существующих page_id
-        """
-        if not self.client:
-            logger.error("ClickHouse не подключен")
-            return set()
-        
         try:
             query = f"""
-                SELECT DISTINCT page_id
+                SELECT COUNT(DISTINCT page_id) as counted
                 FROM {self.default_table}
-                WHERE page_id IN %(ids)s
+                WHERE site_id = %(site_id)s
             """
+
+            parameters={'site_id': site_id}
+
+            if vectorised is not None:
+                query += " AND vectorised = %(vectorised)s"
+                parameters['vectorised'] = vectorised
+
             
-            df = self.client.query_df(query, parameters={'ids': ids})
+            df = self.client.query_df(query=query, parameters=parameters)
             
-            existing_ids = set(df['page_id'].astype(int).tolist())
-            logger.info(f"Найдено {len(existing_ids)}/{len(ids)} существующих page_id")
-            return existing_ids
-            
+            if len(df) == 1:
+                return int(df.iloc[0]['counted']) 
+
+            return 0
+
         except Exception as e:
-            logger.error(f"Ошибка получения существующих page_id: {e}")
+            logger.error(f"Ошибка получения количества page_id для site_id={site_id}: {e}")
             import traceback
             traceback.print_exc()
-            return set()
+            return 0
 
     def close(self):
         """Закрытие подключения"""

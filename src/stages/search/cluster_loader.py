@@ -16,11 +16,11 @@ class LocalClusterLoader:
         self.score_threshold = score_threshold
         self.density_min_similarity = density_min_similarity
 
-        self.path_dsu = os.path.join("recipe_clusters", f"dsu_state_{build_type}_{self.score_threshold}.json")
-        self.path_clusters = os.path.join("recipe_clusters", f"{build_type}_clusters_{self.score_threshold}_{self.density_min_similarity}.json")
-        self.path_image_mapping = os.path.join("recipe_clusters", f"clusters_to_image_ids_{self.score_threshold}_{self.density_min_similarity}.json")
-        self.path_validated_centroids = os.path.join("recipe_clusters", f"{build_type}_centroids_{self.score_threshold}_{self.density_min_similarity}.json")
-        self.path_validated_centroids_history = os.path.join("recipe_clusters", f"{build_type}_refined_history_{self.score_threshold}_{self.density_min_similarity}.json")
+        self.path_dsu = os.path.join("clusters", config.QDRANT_COLLECTION_PREFIX, f"dsu_state_{build_type}_{self.score_threshold}.json")
+        self.path_clusters = os.path.join("clusters",  config.QDRANT_COLLECTION_PREFIX, f"{build_type}_clusters_{self.score_threshold}_{self.density_min_similarity}.json")
+        self.path_image_mapping = os.path.join("clusters",  config.QDRANT_COLLECTION_PREFIX, f"clusters_to_image_ids_{self.score_threshold}_{self.density_min_similarity}.json")
+        self.path_validated_centroids = os.path.join("clusters",  config.QDRANT_COLLECTION_PREFIX, f"{build_type}_centroids_{self.score_threshold}_{self.density_min_similarity}.json")
+        self.path_validated_centroids_history = os.path.join("clusters",   config.QDRANT_COLLECTION_PREFIX, f"{build_type}_refined_history_{self.score_threshold}_{self.density_min_similarity}.json")
 
     @staticmethod
     def load_json_file(filename: str) -> dict:

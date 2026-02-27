@@ -45,6 +45,7 @@ class Config:
     QDRANT_FULL_COLLECTION: str = os.getenv('QDRANT_FULL_COLLECTION', 'full')
     QDRANT_MV_COLLECTION: str = os.getenv('QDRANT_MV_COLLECTION', 'mv')
     QDRANT_IMAGES_COLLECTION: str = os.getenv('QDRANT_IMAGES_COLLECTION', 'images_1152')
+    QDRANT_COLLECTION_PREFIX: str = os.getenv('QDRANT_COLLECTION_PREFIX', 'recipes')
     
     # GitHub настройки
     GITHUB_TOKEN: str = os.getenv('GITHUB_TOKEN', '')
@@ -53,8 +54,11 @@ class Config:
     
     # Настройки векторизации
     TARGET_LANGUAGE: str = os.getenv('TARGET_LANGUAGE', 'en')
-    VECTORIZE_BATCH_SIZE: int = int(os.getenv('VECTORIZE_BATCH_SIZE', '15'))
+    VECTORIZE_BATCH_SIZE: int = int(os.getenv('VECTORIZE_BATCH_SIZE', '32'))
     VECTORIZE_BATCH_SIZE_IMAGES: int = int(os.getenv('VECTORIZE_BATCH_SIZE_IMAGES', '16'))
+    VECTORIZE_IMAGE_MODEL: str = os.getenv('VECTORIZE_IMAGE_MODEL', 'google/siglip-so400m-patch14-384')
+    VECTORIZE_RECIPE_MODEL: str = os.getenv('VECTORIZE_RECIPE_MODEL', 'BAAI/bge-large-en-v1.5') # recommended BAAI/bge-large-en-v1.5 or Alibaba-NLP/gte-large-en-v1.5 
+
     TRANSLATE_BATCH_SIZE: int = int(os.getenv('TRANSLATE_BATCH_SIZE', '20'))
     TRANSLATE_MAX_RETRIES: int = int(os.getenv('TRANSLATE_MAX_RETRIES', '5'))
     IMAGE_DOWNLOAD_DIR: str = os.getenv('IMAGE_DOWNLOAD_DIR', 'images')

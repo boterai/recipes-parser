@@ -13,10 +13,12 @@ from transformers import AutoProcessor, AutoModel
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
+from config.config import config
+
 EmbeddingFunctionReturn = list[list[float]] # (dense_vector, colbert_vectors) при том, что colbert_vectors может быть None и тогда его надо опредлять
 ContentType = Literal["full", "ingredients", "instructions", "descriptions", "description+name"]
-MODEL = 'BAAI/bge-large-en-v1.5'
-IMAGE_MODEL = "google/siglip-so400m-patch14-384"
+MODEL = config.VECTORIZE_RECIPE_MODEL
+IMAGE_MODEL = config.VECTORIZE_IMAGE_MODEL
 
 ImageInput = Union[str, Path, "PILImage"]
 ImageEmbeddingFunctionReturn = list[list[float]]
@@ -102,7 +104,6 @@ def get_embedding_function(model_name: str = MODEL, batch_size: int=8) -> tuple[
         Args:
             texts: Текст или список текстов
             is_query: True для поисковых запросов (добавляет префикс "Represent this sentence for searching relevant passages:")
-            use_colbert: Игнорируется (bge-large-en-v1.5 не поддерживает ColBERT)
         
         Returns:
             Список dense векторов (ColBERT не поддерживается)
@@ -112,7 +113,6 @@ def get_embedding_function(model_name: str = MODEL, batch_size: int=8) -> tuple[
         
         # BGE модели используют специальный префикс для query
         if is_query and model_name.startswith('BAAI/bge'):
-            # Для BGE моделей рекомендуется добавлять инструкцию для query
             instruction = "Represent this sentence for searching relevant passages: "
             texts = [instruction + text for text in texts]
         

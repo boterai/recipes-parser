@@ -80,20 +80,34 @@ class Recipe(BaseModel):
         return "; ".join(meta_parts)
     
     def get_full_recipe_str(self) -> str:
-        """Возвращает полное текстовое представление рецепта для поиска"""
+        """Возвращает полное текстовое представление рецепта для поиска.
+        
+        Порядок важен: ингредиенты идут первыми — выше вес в attention модели.
+        Используется для поиска похожих рецептов по составу + контексту блюда.
+        """
         parts = []
         if self.dish_name:
-            parts.append(self.dish_name)
-        if self.description:
-            parts.append(self.description[:200])
+            parts.append(f"Recipe: {self.dish_name}.")
+
+        # Ингредиенты первыми — ключевой сигнал для похожих рецептов
         if self.ingredients:
-            parts.append(self.ingredient_to_str())
-        if self.instructions:
-            parts.append(self.instructions[:600])
+            ingredients_str = ", ".join(self.ingredients)
+            parts.append(f"Ingredients:\n{ingredients_str}")
+        elif self.ingredients_with_amounts:
+            # fallback если нет нормализованных ингредиентов
+            names = [i.get("name", "") for i in self.ingredients_with_amounts if i.get("name")]
+            parts.append(f"Ingredients:\n{chr(10).join(names)}")
+
+        if self.description:
+            parts.append(f"Description: {self.description[:150]}.")
+
         if self.tags:
-            parts.append(self.tags_to_str()[:100])
-        
-        return " ".join(parts)
+            parts.append(f"Tags: {self.tags_to_str()[:100]}.")
+
+        if self.instructions:
+            parts.append(f"Instructions:\n{self.instructions[:1_000]}")
+
+        return "\n\n".join(parts)
     
     def normalaize_instructions(self) -> str:
         """Нормализует инструкции, убирая лишние пробелы и переносы строк"""

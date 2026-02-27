@@ -53,13 +53,14 @@ class QdrantRecipeManager:
             cls._instance = super(QdrantRecipeManager, cls).__new__(cls)
         return cls._instance
     
-    def __init__(self, collection_prefix: str = "recipes"):
+    def __init__(self, collection_prefix: Optional[str] = None):
         """
         Инициализация подключения к Qdrant
         
         Args:
             collection_prefix: Префикс для названий коллекций (используется чтобы разделить два типа коллекций для тестов)
         """
+        if not collection_prefix: collection_prefix = config.QDRANT_COLLECTION_PREFIX
         if not QdrantRecipeManager._initialized:
             self.collection_prefix = collection_prefix
             self.full_collection = config.QDRANT_FULL_COLLECTION
@@ -425,12 +426,12 @@ class QdrantRecipeManager:
             try:
                 # Обрабатываем каждую коллекцию
                 self._add_to_full_collection(batch, self.collections[self.full_collection], embedding_function, batch_num)
-                self._add_to_multivector_collection(batch, self.collections[self.mv_collection], embedding_function, batch_num)
+                #self._add_to_multivector_collection(batch, self.collections[self.mv_collection], embedding_function, batch_num) # закомменитирвоана мультиветорная коллекция по ингредиентаам ищется не очень классно
                 
                 added_count += len(batch)
                 logger.info(f"✓ Батч {batch_num} завершен: всего {added_count} рецептов")
                 
-                # Помечаем рецепты как векторизованные
+                # Помечаем рецепты как векторизованные помечать как векторизованные не надо только для нового типа веткоризации
                 self._mark_vectorised(batch, mark_vectorised_callback)
             
             except Exception as e:
@@ -439,7 +440,7 @@ class QdrantRecipeManager:
                 traceback.print_exc()
                 continue
         
-        logger.info(f"✓ Итого добавлено: {added_count} рецептов в {len(self.collections) - 1} коллекций")
+        logger.info(f"✓ Итого добавлено: {added_count} рецептов в {len(self.collections) - 2} коллекций")
         return added_count
     
     async def vectorise_images_async(

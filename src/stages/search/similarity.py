@@ -117,7 +117,6 @@ class ClusterParams:
 
 class SimilaritySearcher:
     def __init__(self, params: ClusterParams = None, build_type: Literal["image", "full", "ingredients"] = "full"):
-        self.qd_collection_prefix = "recipes"
         self.gpt_client: GPTClient = GPTClient()
         self.image_repository = ImageRepository()
         self._clickhouse_manager = None
@@ -252,7 +251,7 @@ class SimilaritySearcher:
         Кластеры по коллекциям из Qdrant.
         Предпосылка: point_id в Qdrant == pages.id, и named vector = params.using
         """
-        q = QdrantRecipeManager(collection_prefix=self.qd_collection_prefix)
+        q = QdrantRecipeManager()
         await q.async_connect(connect_timeout=210) # увеличенный таймаут для долгих операций
         
         if not reuse_dsu or self.dsu is None:
@@ -661,7 +660,7 @@ class SimilaritySearcher:
             clusters = recipe_clisters
         
         if refine_clusters:
-            q = QdrantRecipeManager(collection_prefix=self.qd_collection_prefix)
+            q = QdrantRecipeManager()
             await q.async_connect(connect_timeout=210)
 
             clusters = await self.refine_clusters_with_split(clusters=clusters, q=q)
@@ -673,7 +672,7 @@ class SimilaritySearcher:
 async def clean_vector_collections():
     """удаляет все точки из Qdrant, которых нет в ClickHouse (например, удалённые рецепты)"""
     from src.common.db.clickhouse import ClickHouseManager
-    q = QdrantRecipeManager(collection_prefix="recipes")
+    q = QdrantRecipeManager()
     ch_manager = ClickHouseManager()
     if not ch_manager.connect():
         logger.error("Failed to connect to ClickHouse, cannot clean Qdrant collections")
