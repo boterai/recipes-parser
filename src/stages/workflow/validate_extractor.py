@@ -182,14 +182,19 @@ if __name__ == '__main__':
 
     folders = os.listdir("preprocessed")
     folders = sorted([f for f in folders if os.path.isdir(os.path.join("preprocessed", f))])
+    result = vp.validate(
+            module_name="amivietnam_com",
+            use_gpt=True,
+            required_fields=['dish_name', 'ingredients', 'instructions'],
+            use_gpt_on_missing_fields=True
+        )
     
+
     for folder in folders:
-        if folder == "xrysoskoufaki_gr":
-            continue
         logger.info(f"\n\n=== ВАЛИДАЦИЯ ПАРСЕРА: {folder} ===")
         result = vp.validate(
             module_name=folder,
-            use_gpt=False,
+            use_gpt=True,
             required_fields=['dish_name', 'ingredients', 'instructions'],
             use_gpt_on_missing_fields=True
         )

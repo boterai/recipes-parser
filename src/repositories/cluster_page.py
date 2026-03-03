@@ -5,7 +5,7 @@ from src.models.merged_recipe import MergedRecipeORM, MergedRecipePagesORM
 from src.models.page import PageORM
 from sqlalchemy.orm import Session
 from src.common.db.connection import get_db_connection
-from sqlalchemy import func, or_, case
+from sqlalchemy import func, or_, case, text
 import logging
 from collections import defaultdict 
 

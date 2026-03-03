@@ -290,15 +290,15 @@ def view_merge_recipe(recipe_id: int):
         print(f"Merged recipe with id {recipe_id} not found.")
 
 if __name__ == "__main__":    
-    config.MERGE_CENTROID_THRESHOLD_STEP = 0.03
+    config.MERGE_CENTROID_THRESHOLD_STEP = 0.02
     config.MERGE_MAX_MERGE_RECIPES = 4
     #asyncio.run(make_recipe_variations(similarity_threshold=0.89, build_type="full", max_variations_per_recipe=1, limit=150))
     
     asyncio.run(merge_cluster_recipes(similarity_threshold=0.89, 
                                              build_type="full", 
-                                             max_variation_per_cluster=2, 
+                                             max_variation_per_cluster=1, 
                                              max_aggregated_recipes=9, # + 1 базовый 
                                              max_recipes_per_gpt_merge_request=4,
                                              check_cluster_update=False, 
-                                             last_cluster_id=3446,
+                                             last_cluster_id=5062,
                                              limit=1200))
