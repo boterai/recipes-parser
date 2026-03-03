@@ -27,7 +27,7 @@ class GitHubClient:
             "X-GitHub-Api-Version": "2022-11-28"
         }
 
-    def get_json_response(self, url: str, params: Optional[dict] = None) -> Optional[dict]:
+    def get_json_response(self, url: str, params: Optional[dict] = None, headers: Optional[dict] = None) -> Optional[dict]:
         """
         Выполняет GET запрос и возвращает JSON ответ
         
@@ -37,7 +37,10 @@ class GitHubClient:
         Returns:
             JSON ответ или None при ошибке
         """
-        response = requests.get(url, headers=self.headers, params=params)
+        if headers is None:
+            headers = self.headers
+
+        response = requests.get(url, headers=headers, params=params)
         
         if response.status_code == 200:
             return response.json()
@@ -423,8 +426,26 @@ class GitHubClient:
 
         return None
 
+    def get_pr_timeline_events(self, pr_number: int) -> list[dict]:
+        """Получает все timeline events для PR (включая события Copilot).
+        
+        Args:
+            pr_number: Номер pull request
+            
+        Returns:
+            Список событий timeline
+        """
+        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/issues/{pr_number}/timeline"
+        headers = {
+            "Authorization": f"token {self.token}",
+            "Accept": "application/vnd.github.mockingbird-preview+json"  # Required for timeline API
+        }
+        
+        return self.get_json_response(url, headers=headers)
+
 if __name__ == "__main__":
     gh_client = GitHubClient()
-    last_commit_date = gh_client.get_last_commit_date(pr_number=388)
-    print(f"Last commit date: {last_commit_date}")
+    timeline_events = gh_client.get_pr_timeline_events(738)  # Пример для PR #1
+    for i in timeline_events:
+        pass
     

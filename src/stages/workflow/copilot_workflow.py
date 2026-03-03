@@ -82,22 +82,6 @@ class CopilotWorkflow:
             else:
                 logger.error(f"Не удалось создать issue для модуля: {module_name}")
 
-    def clear_preprocessed_data(self):
-        """Очищает директорию с preprocessed данными."""
-
-        present_moules = [i.removesuffix('.py') for i in os.listdir("extractor") if not i.startswith("__") and i.endswith(".py")]
-        preprocessed_dir = self.prompt_generator.preprocessed_dir
-        if preprocessed_dir.exists() and preprocessed_dir.is_dir():
-            for item in preprocessed_dir.iterdir():
-                if item.is_dir() and item.name in present_moules:
-                    for subitem in item.iterdir():
-                        if subitem.is_file():
-                            subitem.unlink()
-                    item.rmdir()
-                    logger.info(f"Очищена директория: {str(item)}")
-        else:
-            logger.info(f"Директория не найдена или не является директорией: {preprocessed_dir}")
-
     def make_pr_comment_from_errors(self, errors: list[ValidationReport]) -> str:
         """Формирует комментарий к PR на основе ошибок валидации парсера.
         
@@ -200,16 +184,38 @@ class CopilotWorkflow:
         saved_commit_date = datetime.fromisoformat(saved_commit_date_str)
         
         return current_commit_date > saved_commit_date
+
+    def is_pr_completed_by_copilot(self, pr_number: int) -> bool:
+        """Проверяет, завершил ли Copilot работу над PR.
         
+        Args:
+            pr_number: Номер pull request
+        """
+        timeline_events = self.github_client.get_pr_timeline_events(pr_number)
+        if not timeline_events:
+            logger.warning(f"Не удалось получить timeline для PR #{pr_number}")
+            return False
+        
+        # проверяем до последнего коммита, а если коммита нет то фолс
+        for event in reversed(timeline_events):
+            if event.get('event') == 'committed':
+                break
+            if event.get('event') == 'copilot_work_finished':
+                return True
+
+        logger.info(f"Для PR #{pr_number}, Copilot еще не завершил работу.")
+        return False
+
+
     def check_review_requested_prs(self):
         """Проверяет завершенные PR и обновляет статусы задач.
         Для каждого PR с запрошенным ревью выполняет валидацию парсера.
         Note: аккаунт назначающий copilot и reviewer должен быть одним и тем же, иначе не сработает.
         """
         prs = self.github_client.list_pr()
-        prs = [pr for pr in prs if len(pr.get('requested_reviewers')) > 0]
+        completed_prs = [pr for pr in prs if self.is_pr_completed_by_copilot(pr['number'])]
         logger.info(f"Найдено {len(prs)} PR с запрошенным ревью.")
-        for pr in prs:
+        for pr in completed_prs:
             logger.info(f"Проверка PR #{pr['number']}: {pr['title']}")
             # проверяем были ли новые коммиты с момента последней проверки
             if not self.is_pr_updated_since_last_check(pr['number']):
