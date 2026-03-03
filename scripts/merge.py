@@ -114,7 +114,8 @@ async def merge_cluster_recipes(
         max_aggregated_recipes: int = 9,
         max_recipes_per_gpt_merge_request: int = 4,
         check_cluster_update: bool = False, 
-        limit: Optional[int] = None
+        limit: Optional[int] = None,
+        last_cluster_id: Optional[int] = None
         ):
     
     """
@@ -139,7 +140,7 @@ async def merge_cluster_recipes(
     logger.info(f"Total clusters to process: {total_tasks}")
     merger = ClusterVariationGenerator(score_threshold=similarity_threshold, clusters_build_type=build_type, max_recipes_per_gpt_merge_request=max_recipes_per_gpt_merge_request)
     total = 0
-    last_cluster_id = None
+
     while True:
         centroids, last_cluster_id = cluster_repo.get_clusters_with_merged_recipes(limit=config.MERGE_MAX_MERGE_RECIPES, 
                                                                                    completed_recipes=max(0, max_variation_per_cluster-1), 
@@ -295,8 +296,9 @@ if __name__ == "__main__":
     
     asyncio.run(merge_cluster_recipes(similarity_threshold=0.89, 
                                              build_type="full", 
-                                             max_variation_per_cluster=1, 
+                                             max_variation_per_cluster=2, 
                                              max_aggregated_recipes=9, # + 1 базовый 
                                              max_recipes_per_gpt_merge_request=4,
                                              check_cluster_update=False, 
-                                             limit=500))
+                                             last_cluster_id=3446,
+                                             limit=1200))
