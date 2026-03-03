@@ -13,10 +13,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from config.config import config
 from src.common.embedding import get_embedding_function, get_siglip_embedding_function
 from src.stages.search.vectorise import RecipeVectorizer
-from src.stages.search.vectorise import RecipeVectorizer
 from src.models.image import ImageORM, download_image_async
 from src.stages.translate import Translator
-from src.common.db.qdrant import QdrantRecipeManager
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -34,20 +32,13 @@ def vectorise_all_recipes(translate: bool = True, target_language: str = config.
 
     if translate:
         translate_all_recipes(target_language=target_language, translate_batch_size=translate_batch_size)
-    
-    qm = QdrantRecipeManager(collection_prefix="recipes2")
-    if not qm.connect():
-        logger.error("Failed to connect to Qdrant. Aborting vectorization.")
-        return
-    rv = RecipeVectorizer(vector_db=qm)
+    rv = RecipeVectorizer()
 
     embed_func, dims = get_embedding_function(batch_size=config.VECTORIZE_BATCH_SIZE)
     rv.vectorise_all_recipes(
-        vectorised=True,
         embedding_function=embed_func,
         batch_size=config.VECTORIZE_BATCH_SIZE,
-        dims=dims,
-        min_site_id=866)
+        dims=dims)
 
 
 async def validate_and_save_image(image_url: str, save_dir: str = None, use_proxy: bool = True) -> str | None:
@@ -95,12 +86,12 @@ async def validate_and_save_image(image_url: str, save_dir: str = None, use_prox
         logger.error(f"Failed to validate/save image {image_url}: {e}")
         return None
 
-async def vectorise_all_images():
+def vectorise_all_images():
     rv = RecipeVectorizer()
     embed_function, dims = get_siglip_embedding_function(
         batch_size=config.VECTORIZE_BATCH_SIZE_IMAGES
     )
-    await rv.vectorise_images_async(embed_function=embed_function, image_dims=dims)
+    asyncio.run(rv.vectorise_images_async(embed_function=embed_function, image_dims=dims))
 
 def translate_all_recipes(target_language: str, translate_batch_size: int):
     translator = Translator(target_language=target_language)
@@ -109,11 +100,5 @@ def translate_all_recipes(target_language: str, translate_batch_size: int):
 if __name__ == '__main__':
     import dotenv
     dotenv.load_dotenv()
-
-    #translate_all_recipes(target_language=config.TARGET_LANGUAGE, translate_batch_size=config.TRANSLATE_BATCH_SIZE)
-    
-    vectorise_all_recipes(translate=False) # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)
-    #vectorise_all_images() # Векторизация изображений (по дефолту всех изображений, содержащихся в clickhouse)
-
-
-    # 632 обновить 477
+    vectorise_all_recipes()
+    #vectorise_all_images()

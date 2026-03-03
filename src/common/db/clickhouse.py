@@ -388,7 +388,8 @@ class ClickHouseManager:
                 return []
             
             recipes = self.parse_recipes_from_dataframe(df)
-            logger.info(f"Получено {len(recipes)} рецептов по списку из {len(page_ids)} ID")
+            if len(recipes) < len(page_ids):
+                logger.warning(f"Найдено {len(recipes)} рецептов по списку из {len(page_ids)} ID, некоторые рецепты не найдены")
             return recipes
             
         except Exception as e:

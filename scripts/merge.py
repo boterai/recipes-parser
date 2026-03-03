@@ -102,8 +102,8 @@ async def execute_cluster_batch(tasks: list, clusters_in_batch: list[str]) -> in
         else:
             for merged_recipes in completed_tasks:
                 if merged_recipes and not isinstance(merged_recipes, Exception):
-                    logger.info(f"Created {len(merged_recipes)} variations.")
-                    processed_count += 1
+                    logger.info(f"Created {merged_recipes} variations.")
+                    processed_count += merged_recipes
 
     return processed_count
 
@@ -114,7 +114,8 @@ async def merge_cluster_recipes(
         max_aggregated_recipes: int = 9,
         max_recipes_per_gpt_merge_request: int = 4,
         check_cluster_update: bool = False, 
-        limit: Optional[int] = None
+        limit: Optional[int] = None,
+        last_cluster_id: Optional[int] = None
         ):
     
     """
@@ -139,16 +140,17 @@ async def merge_cluster_recipes(
     logger.info(f"Total clusters to process: {total_tasks}")
     merger = ClusterVariationGenerator(score_threshold=similarity_threshold, clusters_build_type=build_type, max_recipes_per_gpt_merge_request=max_recipes_per_gpt_merge_request)
     total = 0
-    last_cluster_id = 14
+
     while True:
         centroids, last_cluster_id = cluster_repo.get_clusters_with_merged_recipes(limit=config.MERGE_MAX_MERGE_RECIPES, 
                                                                                    completed_recipes=max(0, max_variation_per_cluster-1), 
                                                                                    last_cluster_id=last_cluster_id,
-                                                                                   max_agregated_recipes=max_aggregated_recipes)
+                                                                                   max_agregated_recipes=3)
         if not centroids:
             logger.info("No more clusters to process, exiting...")
             break
-
+        logger.info(f"Last cluster ID from previous batch: {last_cluster_id}, clusters processed: {last_cluster_id}/{total_tasks}")
+        logger.info(f"Processing batch of {len(centroids)} clusters ...")
         tasks = [
             generate_from_one_cluster(
                 merger=merger,
@@ -203,15 +205,18 @@ async def generate_from_one_cluster(
         cluster_centroid: int, 
         max_variations: int, 
         max_aggregated_recipes: int  
-    ):
+    ) -> int:
     """Генерирует вариации рецептов для одного кластера, расширяя базовый рецепт.
     Args:
         merger: Экземпляр ClusterVariationGenerator для генерации рецептов.
         cluster: Список page_id рецептов в кластере.
         cluster_centroid: page_id рецепта, являющегося центроидом кластера (наиболее репрезентативного рецепта).
         max_variations: Максимальное количество вариаций для генерации на кластер. (вариацией считается рецепт, который в своем составе содержит centroid)
+    Returns:
+        Количество успешно созданных вариаций для кластера.
+    
     """
-    recipe_variations = merger.merge_repository.get_pages_with_digits_in_csv(cluster) or [] # получает все рецепты, где есть любой рецепт из кластера
+    recipe_variations = merger.merge_repository.get_recipes_for_cluster(cluster, skip_variations=True) or [] # получает все рецепты, где есть любой рецепт из кластера
 
     used_base_recipes = [mr.base_recipe_id for mr in recipe_variations]
     not_used_base_recipes_ids = [bid for bid in cluster if bid  not in used_base_recipes]
@@ -222,7 +227,7 @@ async def generate_from_one_cluster(
     remaining_slots = max_variations - len(completed)
     if remaining_slots <= 0:
         logger.info(f"Cluster already has {len(completed)} completed variations, skipping...")
-        return
+        return 0
     
     tasks = []
     for mr in incomplete:
@@ -256,9 +261,10 @@ async def generate_from_one_cluster(
 
     if tasks:
         response = await asyncio.gather(*tasks, return_exceptions=True)
-        evaluate_merge_results(response, cluster_len=len(cluster), max_aggregated_recipes=max_aggregated_recipes, merge_repository=merger.merge_repository)
+        return evaluate_merge_results(response, cluster_len=len(cluster), max_aggregated_recipes=max_aggregated_recipes, merge_repository=merger.merge_repository)
 
-def evaluate_merge_results(response, cluster_len:int, max_aggregated_recipes: int, merge_repository: MergedRecipeRepository):
+def evaluate_merge_results(response, cluster_len:int, max_aggregated_recipes: int, merge_repository: MergedRecipeRepository) -> int:
+    successfully_created = 0
     for res in response:
         if isinstance(res, Exception):
             logger.error(f"Error during GPT merge: {res}")
@@ -271,6 +277,8 @@ def evaluate_merge_results(response, cluster_len:int, max_aggregated_recipes: in
                 res.is_completed = True
                 merge_repository.update(res)
                 logger.info(f"✓ Merged recipe with id {res.id} created and marked as completed with {res.recipe_count} recipes.")
+                successfully_created += 1
+    return successfully_created
 
 
 def view_merge_recipe(recipe_id: int):
@@ -282,16 +290,15 @@ def view_merge_recipe(recipe_id: int):
         print(f"Merged recipe with id {recipe_id} not found.")
 
 if __name__ == "__main__":    
-    config.MERGE_CENTROID_THRESHOLD_STEP = 0.02
-    config.MERGE_MAX_MERGE_RECIPES = 1
-    #asyncio.run(make_recipe_variations(similarity_threshold=0.92, build_type="full", max_variations_per_recipe=1, limit=10))
-    #merger = merger = ClusterVariationGenerator(score_threshold=0.9, clusters_build_type="full", max_recipes_per_gpt_merge_request=5)
-    #asyncio.run(make_recipe_variations(similarity_threshold=0.9, build_type="full", max_variations_per_recipe=1, limit=100))
+    config.MERGE_CENTROID_THRESHOLD_STEP = 0.03
+    config.MERGE_MAX_MERGE_RECIPES = 4
+    #asyncio.run(make_recipe_variations(similarity_threshold=0.89, build_type="full", max_variations_per_recipe=1, limit=150))
     
-    asyncio.run(merge_cluster_recipes(similarity_threshold=0.9, 
+    asyncio.run(merge_cluster_recipes(similarity_threshold=0.89, 
                                              build_type="full", 
-                                             max_variation_per_cluster=1, 
+                                             max_variation_per_cluster=2, 
                                              max_aggregated_recipes=9, # + 1 базовый 
                                              max_recipes_per_gpt_merge_request=4,
                                              check_cluster_update=False, 
-                                             limit=150))
+                                             last_cluster_id=3446,
+                                             limit=1200))
