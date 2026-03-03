@@ -1,12 +1,12 @@
 {
-    "dish_name": "Smoothiebowl med mango",
-    "description": null,
-    "ingredients": "[{\"name\": \"eplejuice\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"frosne mangobiter\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"frossen banan\", \"units\": \"stk.\", \"amount\": 1}, {\"name\": \"kokosmelk\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"egg\", \"units\": \"stk.\", \"amount\": 1}, {\"name\": \"gurkemeie\", \"units\": \"klype\", \"amount\": 1}, {\"name\": \"mango til pynt\", \"units\": \"stk.\", \"amount\": 0.5}, {\"name\": \"frisk fiken\", \"units\": \"stk.\", \"amount\": 1}, {\"name\": \"ristet kokosmasse\", \"units\": \"ts\", \"amount\": 2}, {\"name\": \"valmuefrø\", \"units\": \"ts\", \"amount\": 1}]",
-    "instructions": "1. Hell eplejuice i blenderen.\n2. Ha frossen mango og banan i blenderen. Har du ikke frossen banan, kan du bruke fersk banan og noen isbiter, alternativt kan smoothien søtes med honning.\n3. Ha også i kokosmelk, egg og eventuelt litt gurkemeie for ekstra gul farge.\n4. Kjør sammen til en jevn og tykk smoothie.\n5. Hell blandingen i to dype boller, og pynt eventuelt med mango, fiken og ristet kokosmasse. Dryss også litt valmuefrø på toppen.",
-    "category": null,
-    "prep_time": null,
-    "cook_time": "Under 20 min",
-    "total_time": null,
-    "notes": null,
-    "tags": null
+  "dish_name": "Smoothiebowl med mango",
+  "description": null,
+  "ingredients": "[{\"name\": \"eplejuice\", \"amount\": 2, \"unit\": \"dl\"}, {\"name\": \"frosne mangobiter\", \"amount\": 400, \"unit\": \"g\"}, {\"name\": \"frossen banan\", \"amount\": 1, \"unit\": \"stk.\"}, {\"name\": \"kokosmelk\", \"amount\": 2, \"unit\": \"dl\"}, {\"name\": \"egg\", \"amount\": 1, \"unit\": \"stk.\"}, {\"name\": \"gurkemeie\", \"amount\": 1, \"unit\": \"klype\"}, {\"name\": \"mango til pynt\", \"amount\": 0.5, \"unit\": \"stk.\"}, {\"name\": \"frisk fiken\", \"amount\": 1, \"unit\": \"stk.\"}, {\"name\": \"ristet kokosmasse\", \"amount\": 2, \"unit\": \"ts\"}, {\"name\": \"valmuefr\\u00f8\", \"amount\": 1, \"unit\": \"ts\"}]",
+  "instructions": "1. Hell eplejuice i blenderen.\n2. Ha frossen mango og banan i blenderen. Har du ikke frossen banan, kan du bruke fersk banan og noen isbiter, alternativt kan smoothien søtes med honning.\n3. Ha også i kokosmelk, egg og eventuelt litt gurkemeie for ekstra gul farge.\n4. Kjør sammen til en jevn og tykk smoothie.\n5. Hell blandingen i to dype boller, og pynt eventuelt med mango, fiken og ristet kokosmasse. Dryss også litt valmuefrø på toppen.",
+  "category": null,
+  "prep_time": null,
+  "cook_time": "Under 20 min",
+  "total_time": null,
+  "notes": null,
+  "tags": null
 }

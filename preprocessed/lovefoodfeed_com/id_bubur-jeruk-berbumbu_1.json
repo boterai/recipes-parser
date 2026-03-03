@@ -1,12 +1,12 @@
 {
-    "dish_name": "Bubur Jeruk Berbumbu",
-    "description": "Bubur jeruk yang lembut dan gurih, ini adalah resep bubur yang cepat dan mudah dibuat serta rasanya yang lezat.",
-    "ingredients": "[{\"name\": \"Bubur gandum\", \"units\": \"G\", \"amount\": 50}, {\"name\": \"Susu\", \"units\": \"mililiter\", \"amount\": 250}, {\"name\": \"Jus jeruk\", \"units\": \"mililiter\", \"amount\": 50}, {\"name\": \"Gula pasir\", \"units\": \"seni\", \"amount\": 1}, {\"name\": \"Kayu manis bubuk\", \"units\": \"sdt\", \"amount\": 0.25}, {\"name\": \"Ekstrak vanili\", \"units\": \"sdt\", \"amount\": 0.25}, {\"name\": \"Jeruk Utuh\", \"units\": \"Utuh\", \"amount\": 1}]",
-    "instructions": "Masukkan oat ke dalam panci lalu tambahkan Susu, jus jeruk, gula, kayu manis, ekstrak vanila, dan kulit setengah jeruk segar. Kemudian cukup didihkan lalu biarkan bubur mendidih selama 3-4 menit, aduk terus selama proses memasak agar bubur matang merata. Jika sudah selesai dimasak, angkat bubur dari api dan diamkan sebentar. Kupas dan iris jeruk Anda. Ambil mangkuk dan isi dengan bubur berbumbu jeruk yang cantik dan lembut, lalu taburi dengan irisan jeruk. Jika ingin menambahkan sedikit rasa, taburi dengan sedikit bubuk kayu manis dan kulit jeruk.",
-    "category": "Sarapan",
-    "prep_time": "2 minutes",
-    "cook_time": "8 minutes",
-    "total_time": "10 minutes",
-    "notes": "Kalau tidak punya zester bisa pakai parutan, helaian jeruknya akan sedikit lebih tebal tapi tetap terasa enak.",
-    "tags": "ide sarapan, sarapan sehat, jus jeruk, jeruk, bubur, Cepat & Mudah, jeruk berbumbu"
+  "dish_name": "Bubur Jeruk Berbumbu",
+  "description": "Bubur jeruk yang lembut dan gurih, ini adalah resep bubur yang cepat dan mudah dibuat serta rasanya yang lezat.",
+  "ingredients": "[{\"name\": \"Bubur gandum\", \"amount\": 50, \"unit\": \"G\"}, {\"name\": \"Susu\", \"amount\": 250, \"unit\": \"mililiter\"}, {\"name\": \"Jus jeruk\", \"amount\": 50, \"unit\": \"mililiter\"}, {\"name\": \"Gula pasir\", \"amount\": 1, \"unit\": \"seni\"}, {\"name\": \"Kayu manis bubuk\", \"amount\": 0.25, \"unit\": \"sdt\"}, {\"name\": \"Ekstrak vanili\", \"amount\": 0.25, \"unit\": \"sdt\"}, {\"name\": \"Jeruk Utuh\", \"amount\": 1, \"unit\": \"Utuh\"}]",
+  "instructions": "Masukkan oat ke dalam panci lalu tambahkan Susu, jus jeruk, gula, kayu manis, ekstrak vanila, dan kulit setengah jeruk segar. Kemudian cukup didihkan lalu biarkan bubur mendidih selama 3-4 menit, aduk terus selama proses memasak agar bubur matang merata. Jika sudah selesai dimasak, angkat bubur dari api dan diamkan sebentar. Kupas dan iris jeruk Anda. Ambil mangkuk dan isi dengan bubur berbumbu jeruk yang cantik dan lembut, lalu taburi dengan irisan jeruk. Jika ingin menambahkan sedikit rasa, taburi dengan sedikit bubuk kayu manis dan kulit jeruk.",
+  "category": "Sarapan",
+  "prep_time": "2 minutes",
+  "cook_time": "8 minutes",
+  "total_time": "10 minutes",
+  "notes": "Kalau tidak punya zester bisa pakai parutan, helaian jeruknya akan sedikit lebih tebal tapi tetap terasa enak.",
+  "tags": "ide sarapan, sarapan sehat, jus jeruk, jeruk, bubur, Cepat & Mudah, jeruk berbumbu"
 }

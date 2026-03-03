@@ -1,12 +1,12 @@
 {
-    "dish_name": "Foies de volaille avec mélasse de grenade façon libanaise",
-    "description": "Préparez des foies de volaille à la libanaise, une combinaison exquise de saveurs.",
-    "ingredients": "[{\"name\": \"foies de volaille\", \"units\": \"g\", \"amount\": 400}, {\"name\": \"gousses d'ail\", \"units\": null, \"amount\": 3}, {\"name\": \"échalote ou oignon émincé(e)\", \"units\": null, \"amount\": 1}, {\"name\": \"cumin en poudre\", \"units\": \"cuillère à café\", \"amount\": 0.5}, {\"name\": \"paprika\", \"units\": \"cuillère à café\", \"amount\": 0.5}, {\"name\": \"beurre\", \"units\": \"cuillère à soupe\", \"amount\": 1}, {\"name\": \"huile végétale\", \"units\": \"cuillère à soupe\", \"amount\": 1}, {\"name\": \"sel\", \"units\": null, \"amount\": null}, {\"name\": \"poivre du moulin\", \"units\": null, \"amount\": null}, {\"name\": \"mélasse de grenade\", \"units\": \"cuillères à soupe\", \"amount\": 3}, {\"name\": \"coriandre ou Persil plat haché\", \"units\": null, \"amount\": null}]",
-    "instructions": "Étape 01: Dans une poêle, faites préchauffer le beurre avec l'huile. Faites y doucement blondir l'échalote émincée. Étape 02: Coupez les foies de volailles en deux et faites-les sauter à la poêle jusqu'à ce qu'ils changent de couleur. Étape 03: Assaisonnez avec le sel, le poivre, le cumin et le paprika. Remuez doucement. Étape 04: Continuez la cuisson jusqu'à ce que les foies soient tendres. Étape 05: Ajoutez la mélasse de grenade et faites encore revenir 2 minutes. Étape 06: Servez bien chaud avec un peu de persil plat ciselé.",
-    "category": "Plats Principaux",
-    "prep_time": "10 minutes",
-    "cook_time": "15 minutes",
-    "total_time": "25 minutes",
-    "notes": "Évitez de trop cuire les foies qui deviendraient durs et amers. Laissez les foies atteindre la température ambiante avant la cuisson pour un résultat plus tendre.",
-    "tags": "libanais, plat principal, rapide, facile"
+  "dish_name": "Foies de volaille avec mélasse de grenade façon libanaise",
+  "description": "Préparez des foies de volaille à la libanaise, une combinaison exquise de saveurs.",
+  "ingredients": "[{\"name\": \"foies de volaille\", \"amount\": 400, \"unit\": \"g\"}, {\"name\": \"gousses d'ail\", \"amount\": 3, \"unit\": null}, {\"name\": \"\\u00e9chalote ou oignon \\u00e9minc\\u00e9(e)\", \"amount\": 1, \"unit\": null}, {\"name\": \"cumin en poudre\", \"amount\": 0.5, \"unit\": \"cuill\\u00e8re \\u00e0 caf\\u00e9\"}, {\"name\": \"paprika\", \"amount\": 0.5, \"unit\": \"cuill\\u00e8re \\u00e0 caf\\u00e9\"}, {\"name\": \"beurre\", \"amount\": 1, \"unit\": \"cuill\\u00e8re \\u00e0 soupe\"}, {\"name\": \"huile v\\u00e9g\\u00e9tale\", \"amount\": 1, \"unit\": \"cuill\\u00e8re \\u00e0 soupe\"}, {\"name\": \"sel\", \"amount\": null, \"unit\": null}, {\"name\": \"poivre du moulin\", \"amount\": null, \"unit\": null}, {\"name\": \"m\\u00e9lasse de grenade\", \"amount\": 3, \"unit\": \"cuill\\u00e8res \\u00e0 soupe\"}, {\"name\": \"coriandre ou Persil plat hach\\u00e9\", \"amount\": null, \"unit\": null}]",
+  "instructions": "Étape 01: Dans une poêle, faites préchauffer le beurre avec l'huile. Faites y doucement blondir l'échalote émincée. Étape 02: Coupez les foies de volailles en deux et faites-les sauter à la poêle jusqu'à ce qu'ils changent de couleur. Étape 03: Assaisonnez avec le sel, le poivre, le cumin et le paprika. Remuez doucement. Étape 04: Continuez la cuisson jusqu'à ce que les foies soient tendres. Étape 05: Ajoutez la mélasse de grenade et faites encore revenir 2 minutes. Étape 06: Servez bien chaud avec un peu de persil plat ciselé.",
+  "category": "Plats Principaux",
+  "prep_time": "10 minutes",
+  "cook_time": "15 minutes",
+  "total_time": "25 minutes",
+  "notes": "Évitez de trop cuire les foies qui deviendraient durs et amers. Laissez les foies atteindre la température ambiante avant la cuisson pour un résultat plus tendre.",
+  "tags": "libanais, plat principal, rapide, facile"
 }

@@ -1,12 +1,12 @@
 {
-    "dish_name": "Intialainen curry",
-    "description": null,
-    "ingredients": "[{\"name\": \"sipuli\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"valkosipulinkynttä\", \"units\": null, \"amount\": \"2-3\"}, {\"name\": \"chili\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"kesäkurpitsa\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"kukkakaali\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"kikherneitä\", \"units\": null, \"amount\": \"1 prk\"}, {\"name\": \"hienonnettua pakastepinaattia\", \"units\": null, \"amount\": \"1 ps\"}, {\"name\": \"tomaattipyrettä\", \"units\": null, \"amount\": null}, {\"name\": \"tomaattimurskaa\", \"units\": null, \"amount\": \"1 prk\"}, {\"name\": \"kookoskermaa\", \"units\": null, \"amount\": \"1 tlk\"}, {\"name\": \"intialaista currytahnaa\", \"units\": null, \"amount\": \"1 prk\"}, {\"name\": \"turkkilaista jugurttia\", \"units\": null, \"amount\": null}, {\"name\": \"tuoretta korianteria\", \"units\": null, \"amount\": null}]",
-    "instructions": "Hienonna sipuli, valkosipuli ja chili ja kuullota pannulla öljyssä. Pilko sekaan kesäkurpitsa ja kukkakaali. Lisää kasvisten joukkoon muutama lusikallinen currytahnaa ja tomaattipyrettä, paista hetki. Lisää tomaattimurska ja pakastepinaatti. Odota kunnes pinaatti on sulanut ja lisää sitten kookoskerma. Anna kastikkeen porista hiljalleen ja laita riisille vettä kiehumaan runsaasti kattilaan. Lisää veteen vähän suolaa ja riisiä keitto-ohjeen mukaan. Keitä riisi kuitenkin runsaassa vedessä jotta saat siitä irtonaista. Kaada ylimääräinen vesi pois kun riisi on kypsää. Maista ja mausta currykastiketta tarvittaessa vielä currytahnalla tai suolalla. Lisää lopuksi halutessasi vielä tuoretta korianteria. Nauti annos kylmän jugurttikastikken kanssa.",
-    "category": "Main Course",
-    "prep_time": null,
-    "cook_time": null,
-    "total_time": null,
-    "notes": null,
-    "tags": null
+  "dish_name": "Intialainen curry",
+  "description": null,
+  "ingredients": "[{\"name\": \"sipuli\", \"amount\": \"1\", \"unit\": null}, {\"name\": \"valkosipulinkyntt\\u00e4\", \"amount\": \"2-3\", \"unit\": null}, {\"name\": \"chili\", \"amount\": \"1\", \"unit\": null}, {\"name\": \"kes\\u00e4kurpitsa\", \"amount\": \"1\", \"unit\": null}, {\"name\": \"kukkakaali\", \"amount\": \"1\", \"unit\": null}, {\"name\": \"kikherneit\\u00e4\", \"amount\": \"1 prk\", \"unit\": null}, {\"name\": \"hienonnettua pakastepinaattia\", \"amount\": \"1 ps\", \"unit\": null}, {\"name\": \"tomaattipyrett\\u00e4\", \"amount\": null, \"unit\": null}, {\"name\": \"tomaattimurskaa\", \"amount\": \"1 prk\", \"unit\": null}, {\"name\": \"kookoskermaa\", \"amount\": \"1 tlk\", \"unit\": null}, {\"name\": \"intialaista currytahnaa\", \"amount\": \"1 prk\", \"unit\": null}, {\"name\": \"turkkilaista jugurttia\", \"amount\": null, \"unit\": null}, {\"name\": \"tuoretta korianteria\", \"amount\": null, \"unit\": null}]",
+  "instructions": "Hienonna sipuli, valkosipuli ja chili ja kuullota pannulla öljyssä. Pilko sekaan kesäkurpitsa ja kukkakaali. Lisää kasvisten joukkoon muutama lusikallinen currytahnaa ja tomaattipyrettä, paista hetki. Lisää tomaattimurska ja pakastepinaatti. Odota kunnes pinaatti on sulanut ja lisää sitten kookoskerma. Anna kastikkeen porista hiljalleen ja laita riisille vettä kiehumaan runsaasti kattilaan. Lisää veteen vähän suolaa ja riisiä keitto-ohjeen mukaan. Keitä riisi kuitenkin runsaassa vedessä jotta saat siitä irtonaista. Kaada ylimääräinen vesi pois kun riisi on kypsää. Maista ja mausta currykastiketta tarvittaessa vielä currytahnalla tai suolalla. Lisää lopuksi halutessasi vielä tuoretta korianteria. Nauti annos kylmän jugurttikastikken kanssa.",
+  "category": "Main Course",
+  "prep_time": null,
+  "cook_time": null,
+  "total_time": null,
+  "notes": null,
+  "tags": null
 }

@@ -1,12 +1,12 @@
 {
-    "dish_name": "Veganský řízek",
-    "description": "Křupavá a chutná náhrada masa, která potěší vaše chuťové pohárky.",
-    "ingredients": "[{\"name\": \"Tofu nebo tempeh\", \"units\": null, \"amount\": null}, {\"name\": \"Strouhanka\", \"units\": null, \"amount\": null}, {\"name\": \"Ořechy nebo semínka\", \"units\": null, \"amount\": null}, {\"name\": \"Koření\", \"units\": null, \"amount\": null}, {\"name\": \"Rostlinné mléko\", \"units\": null, \"amount\": null}]",
-    "instructions": "Nakrájejte vybraný základ na plátky, marinujte v oblíbených kořenících a obalte ve strouhance. Poté osmažte na pánvi do zlatohnědé barvy.",
-    "category": "Main Course",
-    "prep_time": null,
-    "cook_time": null,
-    "total_time": null,
-    "notes": "Experimentujte s různými přísadami a najděte tu pravou kombinaci pro svůj ideální křupavý zážitek.",
-    "tags": "veganské, alternativy masa, zdravé jídlo"
+  "dish_name": "Veganský řízek",
+  "description": "Křupavá a chutná náhrada masa, která potěší vaše chuťové pohárky.",
+  "ingredients": "[{\"name\": \"Tofu nebo tempeh\", \"amount\": null, \"unit\": null}, {\"name\": \"Strouhanka\", \"amount\": null, \"unit\": null}, {\"name\": \"O\\u0159echy nebo sem\\u00ednka\", \"amount\": null, \"unit\": null}, {\"name\": \"Ko\\u0159en\\u00ed\", \"amount\": null, \"unit\": null}, {\"name\": \"Rostlinn\\u00e9 ml\\u00e9ko\", \"amount\": null, \"unit\": null}]",
+  "instructions": "Nakrájejte vybraný základ na plátky, marinujte v oblíbených kořenících a obalte ve strouhance. Poté osmažte na pánvi do zlatohnědé barvy.",
+  "category": "Main Course",
+  "prep_time": null,
+  "cook_time": null,
+  "total_time": null,
+  "notes": "Experimentujte s různými přísadami a najděte tu pravou kombinaci pro svůj ideální křupavý zážitek.",
+  "tags": "veganské, alternativy masa, zdravé jídlo"
 }

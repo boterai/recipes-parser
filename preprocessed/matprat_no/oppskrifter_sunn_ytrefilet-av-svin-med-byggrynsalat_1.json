@@ -1,12 +1,12 @@
 {
-    "dish_name": "Ytrefilet av svin med byggrynsalat",
-    "description": "Tynne skiver av svinefilet i kombinasjon med en mettende og herlig byggrynsalat med friske urter og syrlig eple blir til en herlig, enkel hverdagsrett med masse smak!",
-    "ingredients": "[{\"name\": \"ytrefilet av svin i skiver\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"nøytral olje\", \"units\": \"ss\", \"amount\": 2}, {\"name\": \"byggryn\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"bladpersille\", \"units\": \"bunt\", \"amount\": 1}, {\"name\": \"frisk mynte\", \"units\": \"bunt\", \"amount\": 1}, {\"name\": \"rødløk\", \"units\": \"stk.\", \"amount\": 1}, {\"name\": \"grønn chili\", \"units\": \"stk.\", \"amount\": 1}, {\"name\": \"eple\", \"units\": \"stk.\", \"amount\": 2}, {\"name\": \"saft av sitron\", \"units\": \"stk.\", \"amount\": 1}, {\"name\": \"olivenolje\", \"units\": \"ss\", \"amount\": 3}, {\"name\": \"lettrømme\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"hakket bladpersille\", \"units\": \"ss\", \"amount\": 2}, {\"name\": \"honning\", \"units\": \"ts\", \"amount\": 1}]",
-    "instructions": "1. Kok byggryn etter anvisningen på pakken. 2. Finhakk persille (hold gjerne av litt til urtedressingen), mynte, løk og chili. Del eple i små biter. 3. Sil av kokevannet på byggrynene og skyll dem i rennende, kaldt vann. Bland byggryn med urter, løk, chili og eplebiter. Klem over sitronsaft og hell i olivenolje. Bland godt og smak til med salt og pepper. Hold igjen litt sitron til urtedressingen. 4. Bland sammen rømme, hakket bladpersille, sitron og honning til en dressing. Smak til med salt og pepper. 5. Tørk av filetskivene med litt tørkepapir. Varm en stekepanne med olje og stek skivene raskt på høy varme til de blir gylne. Snu og stek dem ferdig. Krydre med litt salt og pepper. Server filetskivene med frisk byggrynsalat og urtedressing. Topp med litt kvernet pepper.",
-    "category": "Main Course",
-    "prep_time": null,
-    "cook_time": "20–40 min",
-    "total_time": null,
-    "notes": "I dressingen kan du bruke både rømme, créme fraîche, yoghurt eller kefir, eller en blanding av disse.",
-    "tags": "svin, byggryn, salat, hverdagsrett"
+  "dish_name": "Ytrefilet av svin med byggrynsalat",
+  "description": "Tynne skiver av svinefilet i kombinasjon med en mettende og herlig byggrynsalat med friske urter og syrlig eple blir til en herlig, enkel hverdagsrett med masse smak!",
+  "ingredients": "[{\"name\": \"ytrefilet av svin i skiver\", \"amount\": 500, \"unit\": \"g\"}, {\"name\": \"n\\u00f8ytral olje\", \"amount\": 2, \"unit\": \"ss\"}, {\"name\": \"byggryn\", \"amount\": 2, \"unit\": \"dl\"}, {\"name\": \"bladpersille\", \"amount\": 1, \"unit\": \"bunt\"}, {\"name\": \"frisk mynte\", \"amount\": 1, \"unit\": \"bunt\"}, {\"name\": \"r\\u00f8dl\\u00f8k\", \"amount\": 1, \"unit\": \"stk.\"}, {\"name\": \"gr\\u00f8nn chili\", \"amount\": 1, \"unit\": \"stk.\"}, {\"name\": \"eple\", \"amount\": 2, \"unit\": \"stk.\"}, {\"name\": \"saft av sitron\", \"amount\": 1, \"unit\": \"stk.\"}, {\"name\": \"olivenolje\", \"amount\": 3, \"unit\": \"ss\"}, {\"name\": \"lettr\\u00f8mme\", \"amount\": 2, \"unit\": \"dl\"}, {\"name\": \"hakket bladpersille\", \"amount\": 2, \"unit\": \"ss\"}, {\"name\": \"honning\", \"amount\": 1, \"unit\": \"ts\"}]",
+  "instructions": "1. Kok byggryn etter anvisningen på pakken. 2. Finhakk persille (hold gjerne av litt til urtedressingen), mynte, løk og chili. Del eple i små biter. 3. Sil av kokevannet på byggrynene og skyll dem i rennende, kaldt vann. Bland byggryn med urter, løk, chili og eplebiter. Klem over sitronsaft og hell i olivenolje. Bland godt og smak til med salt og pepper. Hold igjen litt sitron til urtedressingen. 4. Bland sammen rømme, hakket bladpersille, sitron og honning til en dressing. Smak til med salt og pepper. 5. Tørk av filetskivene med litt tørkepapir. Varm en stekepanne med olje og stek skivene raskt på høy varme til de blir gylne. Snu og stek dem ferdig. Krydre med litt salt og pepper. Server filetskivene med frisk byggrynsalat og urtedressing. Topp med litt kvernet pepper.",
+  "category": "Main Course",
+  "prep_time": null,
+  "cook_time": "20–40 min",
+  "total_time": null,
+  "notes": "I dressingen kan du bruke både rømme, créme fraîche, yoghurt eller kefir, eller en blanding av disse.",
+  "tags": "svin, byggryn, salat, hverdagsrett"
 }

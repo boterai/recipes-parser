@@ -1,12 +1,12 @@
 {
-    "dish_name": "krafne",
-    "description": "Provjereni recept za izradu krafni koji jamči uspjeh malih slasnih kuglica obogaćenih omiljenim pekmezom.",
-    "ingredients": "[{\"name\": \"glatko brašno\", \"units\": \"kg\", \"amount\": 1}, {\"name\": \"maslac\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"jaja\", \"units\": \"pieces\", \"amount\": 4}, {\"name\": \"šećer\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"sol\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"ulje\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"mlako mlijeko\", \"units\": \"dl\", \"amount\": 3}, {\"name\": \"svježi kvasac\", \"units\": \"g\", \"amount\": 40}, {\"name\": \"korica limuna\", \"units\": \"pieces\", \"amount\": 1}, {\"name\": \"rum\", \"units\": \"teaspoons\", \"amount\": 5}]",
-    "instructions": "1. U toplom mlijeku otopite maslac, izmiješajte pa dodajte kvasac i ostavite da odstoji. U drugoj posudi izmiksajte jaja te dodajte šećer i polovicu brašno, te postepeno miješajući dolijevajte mlijeko i mlijeko sa kvascem. Na kraju dodajte rum i limunovu korice te umijesite tijesto dodajući ostatak brašna. 2. Tijesto ne smije biti premekano niti pretvrdo, mora biti podatno za pravljenje malih kuglica koje po izboru možete odvojati od tijesta i raditi ih ručno oblikujući svaku posebno među dlanovima ili na način da tijesto razvaljate i kalupima radite oblike krafni. 3. Nakon što ste oblikovali kuglice pokrijte ih krpom i pustite da odstoje na toplom najmanje pola sata nakon čega su spremne na pečenje. Zagrijte u dubokoj posudi ulje i dodajite kuglice pazeći da ne pretrpate količinom zbog čega će temperatura ulja pasti. 4. Kada se ohlade napunite ih omiljenim pekmezom i posipajte šećerom.",
-    "category": "Dessert",
-    "prep_time": null,
-    "cook_time": null,
-    "total_time": null,
-    "notes": null,
-    "tags": "krafne,poklade"
+  "dish_name": "krafne",
+  "description": "Provjereni recept za izradu krafni koji jamči uspjeh malih slasnih kuglica obogaćenih omiljenim pekmezom.",
+  "ingredients": "[{\"name\": \"glatko bra\\u0161no\", \"amount\": 1, \"unit\": \"kg\"}, {\"name\": \"maslac\", \"amount\": 150, \"unit\": \"g\"}, {\"name\": \"jaja\", \"amount\": 4, \"unit\": \"pieces\"}, {\"name\": \"\\u0161e\\u0107er\", \"amount\": 2, \"unit\": \"tablespoons\"}, {\"name\": \"sol\", \"amount\": 1, \"unit\": \"teaspoon\"}, {\"name\": \"ulje\", \"amount\": 1, \"unit\": \"dl\"}, {\"name\": \"mlako mlijeko\", \"amount\": 3, \"unit\": \"dl\"}, {\"name\": \"svje\\u017ei kvasac\", \"amount\": 40, \"unit\": \"g\"}, {\"name\": \"korica limuna\", \"amount\": 1, \"unit\": \"pieces\"}, {\"name\": \"rum\", \"amount\": 5, \"unit\": \"teaspoons\"}]",
+  "instructions": "1. U toplom mlijeku otopite maslac, izmiješajte pa dodajte kvasac i ostavite da odstoji. U drugoj posudi izmiksajte jaja te dodajte šećer i polovicu brašno, te postepeno miješajući dolijevajte mlijeko i mlijeko sa kvascem. Na kraju dodajte rum i limunovu korice te umijesite tijesto dodajući ostatak brašna. 2. Tijesto ne smije biti premekano niti pretvrdo, mora biti podatno za pravljenje malih kuglica koje po izboru možete odvojati od tijesta i raditi ih ručno oblikujući svaku posebno među dlanovima ili na način da tijesto razvaljate i kalupima radite oblike krafni. 3. Nakon što ste oblikovali kuglice pokrijte ih krpom i pustite da odstoje na toplom najmanje pola sata nakon čega su spremne na pečenje. Zagrijte u dubokoj posudi ulje i dodajite kuglice pazeći da ne pretrpate količinom zbog čega će temperatura ulja pasti. 4. Kada se ohlade napunite ih omiljenim pekmezom i posipajte šećerom.",
+  "category": "Dessert",
+  "prep_time": null,
+  "cook_time": null,
+  "total_time": null,
+  "notes": null,
+  "tags": "krafne,poklade"
 }

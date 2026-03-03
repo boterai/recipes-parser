@@ -1,12 +1,12 @@
 {
-    "dish_name": "Lempeä quornkeitto",
-    "description": null,
-    "ingredients": "[{\"name\": \"sipuli\", \"units\": null, \"amount\": 1}, {\"name\": \"porkkanaa\", \"units\": null, \"amount\": 4}, {\"name\": \"varsisellerin varsi\", \"units\": \"muutama\", \"amount\": null}, {\"name\": \"kurkumaa\", \"units\": \"rkl\", \"amount\": 1}, {\"name\": \"curryjauhetta\", \"units\": \"rkl\", \"amount\": 1}, {\"name\": \"inkiväärimurskaa\", \"units\": \"tl\", \"amount\": 1}, {\"name\": \"kasvislientä\", \"units\": \"l\", \"amount\": 2}, {\"name\": \"riisiä\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"ruokakermaa tai kookoskermaa\", \"units\": \"dl\", \"amount\": 2}, {\"name\": \"pakasteherneitä\", \"units\": \"dl\", \"amount\": 1}, {\"name\": \"Quorn kuutioita\", \"units\": \"pussi\", \"amount\": 1}]",
-    "instructions": "Pilko sipuli, porkkana ja varsiselleri ja kuullota kasviksia kattilassa hetki. Lisää kattilaan inkiväärimurska, kurkuma ja curryjauhe. Kaada kattilaan n. 2 litraa vettä ja kaksi kasvisliemikuutiota, sekä 2 dl riisiä. Anna keittyä n. 10 min. Lisää lopuksi kattilaan quorn kuutiot sekä pakasteherneet ja ruokakerma/kookoskerma. Anna keiton porista vielä muutama minuutti, tai kunnes riisi on kypsää.",
-    "category": "Keitto",
-    "prep_time": null,
-    "cook_time": "10 minutes",
-    "total_time": null,
-    "notes": null,
-    "tags": null
+  "dish_name": "Lempeä quornkeitto",
+  "description": null,
+  "ingredients": "[{\"name\": \"sipuli\", \"amount\": 1, \"unit\": null}, {\"name\": \"porkkanaa\", \"amount\": 4, \"unit\": null}, {\"name\": \"varsisellerin varsi\", \"amount\": null, \"unit\": \"muutama\"}, {\"name\": \"kurkumaa\", \"amount\": 1, \"unit\": \"rkl\"}, {\"name\": \"curryjauhetta\", \"amount\": 1, \"unit\": \"rkl\"}, {\"name\": \"inkiv\\u00e4\\u00e4rimurskaa\", \"amount\": 1, \"unit\": \"tl\"}, {\"name\": \"kasvislient\\u00e4\", \"amount\": 2, \"unit\": \"l\"}, {\"name\": \"riisi\\u00e4\", \"amount\": 2, \"unit\": \"dl\"}, {\"name\": \"ruokakermaa tai kookoskermaa\", \"amount\": 2, \"unit\": \"dl\"}, {\"name\": \"pakasteherneit\\u00e4\", \"amount\": 1, \"unit\": \"dl\"}, {\"name\": \"Quorn kuutioita\", \"amount\": 1, \"unit\": \"pussi\"}]",
+  "instructions": "Pilko sipuli, porkkana ja varsiselleri ja kuullota kasviksia kattilassa hetki. Lisää kattilaan inkiväärimurska, kurkuma ja curryjauhe. Kaada kattilaan n. 2 litraa vettä ja kaksi kasvisliemikuutiota, sekä 2 dl riisiä. Anna keittyä n. 10 min. Lisää lopuksi kattilaan quorn kuutiot sekä pakasteherneet ja ruokakerma/kookoskerma. Anna keiton porista vielä muutama minuutti, tai kunnes riisi on kypsää.",
+  "category": "Keitto",
+  "prep_time": null,
+  "cook_time": "10 minutes",
+  "total_time": null,
+  "notes": null,
+  "tags": null
 }

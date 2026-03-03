@@ -1,12 +1,12 @@
 {
-    "dish_name": "Trhané vepřové maso v pomalém hrnci",
-    "description": "Trhané maso s lehkou marinádou, ideální do hamburgerů nebo tortil.",
-    "ingredients": "[{\"name\": \"vepřová krkovice\", \"units\": \"g\", \"amount\": 800}, {\"name\": \"třtinový cukr\", \"units\": \"lžíce\", \"amount\": 1}, {\"name\": \"sladká paprika\", \"units\": \"lžíce\", \"amount\": 1}, {\"name\": \"plnotučná hořčice\", \"units\": \"lžíce\", \"amount\": 1}, {\"name\": \"kečup\", \"units\": \"lžíce\", \"amount\": 4}, {\"name\": \"sůl\", \"units\": \"lžičky\", \"amount\": 2}, {\"name\": \"sušený česnek\", \"units\": \"lžička\", \"amount\": 1}, {\"name\": \"sušený zázvor\", \"units\": \"lžička\", \"amount\": 0.5}, {\"name\": \"skořice\", \"units\": \"lžička\", \"amount\": 0.5}, {\"name\": \"worchestru\", \"units\": \"lžička\", \"amount\": 1}, {\"name\": \"pepř\", \"units\": null, \"amount\": null}, {\"name\": \"chilli\", \"units\": null, \"amount\": null}, {\"name\": \"voda\", \"units\": null, \"amount\": null}]",
-    "instructions": "Ze všech uvedených surovin vytvoříme 'pastu', kterou pořádně promícháme. Potom očištěné maso marinádou potřeme a necháme odležet. Maso dáme do pomalého hrnce, podlijeme 100 ml vody a vaříme na I. stupni 9 hodin nebo na II. stupni 5-6 hodin. Jakmile je maso měkké, natrháme ho vidličkou a přilijeme trochu uvařené vody.",
-    "category": "Main Course",
-    "prep_time": "overnight",
-    "cook_time": "5-9 hours",
-    "total_time": null,
-    "notes": "Uvedené množství surovin stačí na 10 porcí. Maso je výborné i v tortille nebo pitta chlebu se zeleninou.",
-    "tags": "Recepty - různé, Recepty - vepřové"
+  "dish_name": "Trhané vepřové maso v pomalém hrnci",
+  "description": "Trhané maso s lehkou marinádou, ideální do hamburgerů nebo tortil.",
+  "ingredients": "[{\"name\": \"vep\\u0159ov\\u00e1 krkovice\", \"amount\": 800, \"unit\": \"g\"}, {\"name\": \"t\\u0159tinov\\u00fd cukr\", \"amount\": 1, \"unit\": \"l\\u017e\\u00edce\"}, {\"name\": \"sladk\\u00e1 paprika\", \"amount\": 1, \"unit\": \"l\\u017e\\u00edce\"}, {\"name\": \"plnotu\\u010dn\\u00e1 ho\\u0159\\u010dice\", \"amount\": 1, \"unit\": \"l\\u017e\\u00edce\"}, {\"name\": \"ke\\u010dup\", \"amount\": 4, \"unit\": \"l\\u017e\\u00edce\"}, {\"name\": \"s\\u016fl\", \"amount\": 2, \"unit\": \"l\\u017ei\\u010dky\"}, {\"name\": \"su\\u0161en\\u00fd \\u010desnek\", \"amount\": 1, \"unit\": \"l\\u017ei\\u010dka\"}, {\"name\": \"su\\u0161en\\u00fd z\\u00e1zvor\", \"amount\": 0.5, \"unit\": \"l\\u017ei\\u010dka\"}, {\"name\": \"sko\\u0159ice\", \"amount\": 0.5, \"unit\": \"l\\u017ei\\u010dka\"}, {\"name\": \"worchestru\", \"amount\": 1, \"unit\": \"l\\u017ei\\u010dka\"}, {\"name\": \"pep\\u0159\", \"amount\": null, \"unit\": null}, {\"name\": \"chilli\", \"amount\": null, \"unit\": null}, {\"name\": \"voda\", \"amount\": null, \"unit\": null}]",
+  "instructions": "Ze všech uvedených surovin vytvoříme 'pastu', kterou pořádně promícháme. Potom očištěné maso marinádou potřeme a necháme odležet. Maso dáme do pomalého hrnce, podlijeme 100 ml vody a vaříme na I. stupni 9 hodin nebo na II. stupni 5-6 hodin. Jakmile je maso měkké, natrháme ho vidličkou a přilijeme trochu uvařené vody.",
+  "category": "Main Course",
+  "prep_time": "overnight",
+  "cook_time": "5-9 hours",
+  "total_time": null,
+  "notes": "Uvedené množství surovin stačí na 10 porcí. Maso je výborné i v tortille nebo pitta chlebu se zeleninou.",
+  "tags": "Recepty - různé, Recepty - vepřové"
 }

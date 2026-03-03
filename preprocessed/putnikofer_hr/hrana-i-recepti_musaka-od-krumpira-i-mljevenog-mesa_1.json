@@ -1,12 +1,12 @@
 {
-    "dish_name": "Musaka od krumpira i mljevenog mesa",
-    "description": "Musaka je jedno od onih jela koja nas uvijek vraćaju u djetinjstvo. Ovo jelo idealno je za ručak u tjednu, ali i za vikend kada želite nešto zasitno, ukusno i jednostavno za pripremu.",
-    "ingredients": "[{\"name\": \"mljeveno meso\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"krumpir\", \"units\": \"srednje velikih\", \"amount\": 10}, {\"name\": \"glavica luka\", \"units\": null, \"amount\": 1}, {\"name\": \"češnjak\", \"units\": \"režnja\", \"amount\": 2}, {\"name\": \"jaja\", \"units\": null, \"amount\": 2}, {\"name\": \"kiselo vrhnje\", \"units\": \"g\", \"amount\": 180}, {\"name\": \"sol\", \"units\": null, \"amount\": null}, {\"name\": \"papar\", \"units\": null, \"amount\": null}, {\"name\": \"crvena mljevena paprika\", \"units\": null, \"amount\": null}, {\"name\": \"ulje\", \"units\": \"za dinstanje\", \"amount\": null}, {\"name\": \"ribani sir\", \"units\": \"po želji\", \"amount\": null}]",
-    "instructions": "U tavu dodajte malo ulja da pokrije dno, pa dodajte narezani luk i češnjak te pirjajte dok ne omekšaju. Dodajte mljeveno meso i dinstajte 10-15 minuta uz miješanje dok ne promijeni boju. Začinite solju, paprom i crvenom paprikom po želji. Maknite s vatre. Ogulite krumpire, operite ih i narežite na ploške debljine oko 5 mm. Posolite i dobro promiješajte. Zagrijte pećnicu na 190 °C. Nauljite vatrostalnu posudu. Slažite slojeve: red krumpira, red mesa, i tako dok ne potrošite sastojke. Završite slojem krumpira. Pokrijte folijom i pecite u pećnici na 200 °C oko 1 sat. Pred kraj pečenja prelijte smjesom umućenih jaja i kiselog vrhnja (po želji s ribanim sirom). Pecite još nekoliko minuta dok se ne uhvati zlatna korica. Ostavite da se malo ohladi (15-20 minuta) prije rezanja. Poslužite uz zelenu salatu.",
-    "category": "Main Course",
-    "prep_time": null,
-    "cook_time": "60 minutes",
-    "total_time": null,
-    "notes": "Domaća musaka idealna je i jer podnosi prilagodbe. Možete koristiti ono što imate u hladnjaku, prilagoditi je dječjem ukusu, dodati povrće ili više začina.",
-    "tags": "musaka, krumpir, mljeveno meso, glavno jelo"
+  "dish_name": "Musaka od krumpira i mljevenog mesa",
+  "description": "Musaka je jedno od onih jela koja nas uvijek vraćaju u djetinjstvo. Ovo jelo idealno je za ručak u tjednu, ali i za vikend kada želite nešto zasitno, ukusno i jednostavno za pripremu.",
+  "ingredients": "[{\"name\": \"mljeveno meso\", \"amount\": 500, \"unit\": \"g\"}, {\"name\": \"krumpir\", \"amount\": 10, \"unit\": \"srednje velikih\"}, {\"name\": \"glavica luka\", \"amount\": 1, \"unit\": null}, {\"name\": \"\\u010de\\u0161njak\", \"amount\": 2, \"unit\": \"re\\u017enja\"}, {\"name\": \"jaja\", \"amount\": 2, \"unit\": null}, {\"name\": \"kiselo vrhnje\", \"amount\": 180, \"unit\": \"g\"}, {\"name\": \"sol\", \"amount\": null, \"unit\": null}, {\"name\": \"papar\", \"amount\": null, \"unit\": null}, {\"name\": \"crvena mljevena paprika\", \"amount\": null, \"unit\": null}, {\"name\": \"ulje\", \"amount\": null, \"unit\": \"za dinstanje\"}, {\"name\": \"ribani sir\", \"amount\": null, \"unit\": \"po \\u017eelji\"}]",
+  "instructions": "U tavu dodajte malo ulja da pokrije dno, pa dodajte narezani luk i češnjak te pirjajte dok ne omekšaju. Dodajte mljeveno meso i dinstajte 10-15 minuta uz miješanje dok ne promijeni boju. Začinite solju, paprom i crvenom paprikom po želji. Maknite s vatre. Ogulite krumpire, operite ih i narežite na ploške debljine oko 5 mm. Posolite i dobro promiješajte. Zagrijte pećnicu na 190 °C. Nauljite vatrostalnu posudu. Slažite slojeve: red krumpira, red mesa, i tako dok ne potrošite sastojke. Završite slojem krumpira. Pokrijte folijom i pecite u pećnici na 200 °C oko 1 sat. Pred kraj pečenja prelijte smjesom umućenih jaja i kiselog vrhnja (po želji s ribanim sirom). Pecite još nekoliko minuta dok se ne uhvati zlatna korica. Ostavite da se malo ohladi (15-20 minuta) prije rezanja. Poslužite uz zelenu salatu.",
+  "category": "Main Course",
+  "prep_time": null,
+  "cook_time": "60 minutes",
+  "total_time": null,
+  "notes": "Domaća musaka idealna je i jer podnosi prilagodbe. Možete koristiti ono što imate u hladnjaku, prilagoditi je dječjem ukusu, dodati povrće ili više začina.",
+  "tags": "musaka, krumpir, mljeveno meso, glavno jelo"
 }

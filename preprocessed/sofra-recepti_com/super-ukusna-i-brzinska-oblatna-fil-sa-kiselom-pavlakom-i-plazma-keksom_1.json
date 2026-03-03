@@ -1,12 +1,12 @@
 {
-    "dish_name": "Super ukusna i brzinska oblatna",
-    "description": "Fil sa kiselom pavlakom i plazma keksom",
-    "ingredients": "[{\"name\": \"kisela pavlaka\", \"units\": \"dl\", \"amount\": 4}, {\"name\": \"šećer u prahu\", \"units\": \"čaše\", \"amount\": 2.5}, {\"name\": \"margarina\", \"units\": \"gr\", \"amount\": 250}, {\"name\": \"mljevenog keksa\", \"units\": \"gr\", \"amount\": 300}, {\"name\": \"oblatni\", \"units\": \"pakovanje\", \"amount\": 1}]",
-    "instructions": "U posudi za mješanje umutiti pavlaku i šećer. U šerpici staviti margarin, te ga otopiti na laganoj vatri. Zatim dodati mljeveni keks i sve dobro promješati. Sjediniti umućene filove. Gotovim filom premazati oblatne. Poslednju koru takođe premazati filom, pa posuti mljevenim keksom. Oblatnu ostaviti da se odstoji i da se stegne, pa je sjeći na štangle.",
-    "category": "Dessert",
-    "prep_time": null,
-    "cook_time": null,
-    "total_time": null,
-    "notes": "Mekani kolač kojem se djeca i stariji obraduju.",
-    "tags": "desert, kolač, oblatna"
+  "dish_name": "Super ukusna i brzinska oblatna",
+  "description": "Fil sa kiselom pavlakom i plazma keksom",
+  "ingredients": "[{\"name\": \"kisela pavlaka\", \"amount\": 4, \"unit\": \"dl\"}, {\"name\": \"\\u0161e\\u0107er u prahu\", \"amount\": 2.5, \"unit\": \"\\u010da\\u0161e\"}, {\"name\": \"margarina\", \"amount\": 250, \"unit\": \"gr\"}, {\"name\": \"mljevenog keksa\", \"amount\": 300, \"unit\": \"gr\"}, {\"name\": \"oblatni\", \"amount\": 1, \"unit\": \"pakovanje\"}]",
+  "instructions": "U posudi za mješanje umutiti pavlaku i šećer. U šerpici staviti margarin, te ga otopiti na laganoj vatri. Zatim dodati mljeveni keks i sve dobro promješati. Sjediniti umućene filove. Gotovim filom premazati oblatne. Poslednju koru takođe premazati filom, pa posuti mljevenim keksom. Oblatnu ostaviti da se odstoji i da se stegne, pa je sjeći na štangle.",
+  "category": "Dessert",
+  "prep_time": null,
+  "cook_time": null,
+  "total_time": null,
+  "notes": "Mekani kolač kojem se djeca i stariji obraduju.",
+  "tags": "desert, kolač, oblatna"
 }

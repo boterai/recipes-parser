@@ -1,12 +1,12 @@
 {
-    "dish_name": "다진 닭고기 상추 랩",
-    "description": "아삭하고 가벼운 저탄수 치킨 랩!",
-    "ingredients": "[{\"name\": \"다진 닭고기\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"상추잎\", \"units\": \"장\", \"amount\": 2}, {\"name\": \"토마토\", \"units\": \"개\", \"amount\": 1}, {\"name\": \"간장\", \"units\": \"큰술\", \"amount\": 1}, {\"name\": \"마늘가루\", \"units\": \"작은술\", \"amount\": 0.5}]",
-    "instructions": "1. 팬에 다진 닭고기, 간장, 마늘가루를 넣고 중불에서 익힙니다.\n2. 익힌 닭고기에 잘게 썬 토마토를 섞습니다.\n3. 상추잎에 준비한 닭고기를 한 숟가락씩 올립니다.\n4. 바로 즐기세요!",
-    "category": "Main Course",
-    "prep_time": "10 minutes",
-    "cook_time": null,
-    "total_time": null,
-    "notes": null,
-    "tags": "닭고기, 저탄수, 건강식"
+  "dish_name": "다진 닭고기 상추 랩",
+  "description": "아삭하고 가벼운 저탄수 치킨 랩!",
+  "ingredients": "[{\"name\": \"\\ub2e4\\uc9c4 \\ub2ed\\uace0\\uae30\", \"amount\": 100, \"unit\": \"g\"}, {\"name\": \"\\uc0c1\\ucd94\\uc78e\", \"amount\": 2, \"unit\": \"\\uc7a5\"}, {\"name\": \"\\ud1a0\\ub9c8\\ud1a0\", \"amount\": 1, \"unit\": \"\\uac1c\"}, {\"name\": \"\\uac04\\uc7a5\", \"amount\": 1, \"unit\": \"\\ud070\\uc220\"}, {\"name\": \"\\ub9c8\\ub298\\uac00\\ub8e8\", \"amount\": 0.5, \"unit\": \"\\uc791\\uc740\\uc220\"}]",
+  "instructions": "1. 팬에 다진 닭고기, 간장, 마늘가루를 넣고 중불에서 익힙니다.\n2. 익힌 닭고기에 잘게 썬 토마토를 섞습니다.\n3. 상추잎에 준비한 닭고기를 한 숟가락씩 올립니다.\n4. 바로 즐기세요!",
+  "category": "Main Course",
+  "prep_time": "10 minutes",
+  "cook_time": null,
+  "total_time": null,
+  "notes": null,
+  "tags": "닭고기, 저탄수, 건강식"
 }

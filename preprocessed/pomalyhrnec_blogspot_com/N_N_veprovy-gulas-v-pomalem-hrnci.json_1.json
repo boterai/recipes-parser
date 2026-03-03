@@ -1,12 +1,12 @@
 {
-    "dish_name": "Vepřový guláš v pomalém hrnci",
-    "description": "Guláš jsem nikdy moc nemusela. Ať už hovězí nebo vepřový. Ale od té doby co mám PH, si na něm pochutnávám celkem často a ráda.",
-    "ingredients": "[{\"name\": \"vepřové plece\", \"units\": \"kg\", \"amount\": 1.25}, {\"name\": \"cibulí\", \"units\": \"-\", \"amount\": 4}, {\"name\": \"gulášová paprika\", \"units\": null, \"amount\": null}, {\"name\": \"sladká paprika\", \"units\": null, \"amount\": null}, {\"name\": \"pálivá paprika\", \"units\": null, \"amount\": null}, {\"name\": \"majoránka\", \"units\": null, \"amount\": null}, {\"name\": \"sádla\", \"units\": \"lžička\", \"amount\": 1}, {\"name\": \"masox\", \"units\": null, \"amount\": null}, {\"name\": \"sůl\", \"units\": null, \"amount\": null}, {\"name\": \"pepř\", \"units\": null, \"amount\": null}, {\"name\": \"voda\", \"units\": null, \"amount\": null}, {\"name\": \"hladké mouky\", \"units\": \"lžíce\", \"amount\": 2}, {\"name\": \"houskový knedlík\", \"units\": null, \"amount\": null}]",
-    "instructions": "Cibuli nakrájíme na malé kostičky a vložíme do pomalého hrnce. Přidáme kousek sádla. Omyté maso nakrájíme na větší kostky, důkladně osolíme, jemně opepříme a posypeme dostatečným množstvím sladké papriky, trochou gulášové a pálivé. Okořeněné maso promneme v rukou, aby se vše pěkně propojilo a vložíme maso na cibuli v hrnci. Podlijeme vodou s rozmíchanou moukou tak, aby bylo maso ponořené, rozdrolíme k masu kousek masoxu. Tento krok není nutný, maso vše dochutí samo. Pomalý hrnec zapneme na II. stupeň na 4-5h nebo na I. stupeň na 8-9h. Ke konci vaření přidáme do guláše majoránku, která omáčku provoní. Dle potřeby dohustíme či naředíme a dochutíme. Podáváme s houskovým knedlíkem nebo čerstvým chlebem.",
-    "category": "Main Course",
-    "prep_time": null,
-    "cook_time": "4-5 hours",
-    "total_time": null,
-    "notes": "Uvedené množství surovin stačí na 6-7 porcí. Mouku lze přidat až ke konci vaření, ale je nutné ji nechat min. 30 min povařit.",
-    "tags": "Recepty - vepřové"
+  "dish_name": "Vepřový guláš v pomalém hrnci",
+  "description": "Guláš jsem nikdy moc nemusela. Ať už hovězí nebo vepřový. Ale od té doby co mám PH, si na něm pochutnávám celkem často a ráda.",
+  "ingredients": "[{\"name\": \"vep\\u0159ov\\u00e9 plece\", \"amount\": 1.25, \"unit\": \"kg\"}, {\"name\": \"cibul\\u00ed\", \"amount\": 4, \"unit\": \"-\"}, {\"name\": \"gul\\u00e1\\u0161ov\\u00e1 paprika\", \"amount\": null, \"unit\": null}, {\"name\": \"sladk\\u00e1 paprika\", \"amount\": null, \"unit\": null}, {\"name\": \"p\\u00e1liv\\u00e1 paprika\", \"amount\": null, \"unit\": null}, {\"name\": \"major\\u00e1nka\", \"amount\": null, \"unit\": null}, {\"name\": \"s\\u00e1dla\", \"amount\": 1, \"unit\": \"l\\u017ei\\u010dka\"}, {\"name\": \"masox\", \"amount\": null, \"unit\": null}, {\"name\": \"s\\u016fl\", \"amount\": null, \"unit\": null}, {\"name\": \"pep\\u0159\", \"amount\": null, \"unit\": null}, {\"name\": \"voda\", \"amount\": null, \"unit\": null}, {\"name\": \"hladk\\u00e9 mouky\", \"amount\": 2, \"unit\": \"l\\u017e\\u00edce\"}, {\"name\": \"houskov\\u00fd knedl\\u00edk\", \"amount\": null, \"unit\": null}]",
+  "instructions": "Cibuli nakrájíme na malé kostičky a vložíme do pomalého hrnce. Přidáme kousek sádla. Omyté maso nakrájíme na větší kostky, důkladně osolíme, jemně opepříme a posypeme dostatečným množstvím sladké papriky, trochou gulášové a pálivé. Okořeněné maso promneme v rukou, aby se vše pěkně propojilo a vložíme maso na cibuli v hrnci. Podlijeme vodou s rozmíchanou moukou tak, aby bylo maso ponořené, rozdrolíme k masu kousek masoxu. Tento krok není nutný, maso vše dochutí samo. Pomalý hrnec zapneme na II. stupeň na 4-5h nebo na I. stupeň na 8-9h. Ke konci vaření přidáme do guláše majoránku, která omáčku provoní. Dle potřeby dohustíme či naředíme a dochutíme. Podáváme s houskovým knedlíkem nebo čerstvým chlebem.",
+  "category": "Main Course",
+  "prep_time": null,
+  "cook_time": "4-5 hours",
+  "total_time": null,
+  "notes": "Uvedené množství surovin stačí na 6-7 porcí. Mouku lze přidat až ke konci vaření, ale je nutné ji nechat min. 30 min povařit.",
+  "tags": "Recepty - vepřové"
 }

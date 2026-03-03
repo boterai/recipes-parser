@@ -1,12 +1,12 @@
 {
-    "dish_name": "Orangenkuchen",
-    "description": "Die Orangentorte ist ein zeitloser Klassiker, der durch seinen zarten, fruchtigen Geschmack und sein angenehmes Aroma besticht.",
-    "ingredients": "[{\"name\": \"Eier\", \"units\": null, \"amount\": 3}, {\"name\": \"Orange\", \"units\": null, \"amount\": 1}, {\"name\": \"Mehl\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"Zucker\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"Öl\", \"units\": \"ml\", \"amount\": 130}, {\"name\": \"Backpulver\", \"units\": \"g\", \"amount\": 5}, {\"name\": \"Orangenlikör\", \"units\": \"ml\", \"amount\": 25}, {\"name\": \"Salz\", \"units\": \"Prise\", \"amount\": null}]",
-    "instructions": "Heize den Ofen auf 170°C vor und fette die Kuchenform leicht ein. Schlage die Eier mit dem Zucker in einer großen Schüssel, bis die Mischung schaumig und hell ist. Reibe die Orange und füge die Schale zur Ei-Zucker-Mischung hinzu. Presse den Saft der Orange aus und mische ihn zusammen mit dem Orangenlikör und dem Öl unter die Ei-Zucker-Mischung. Siebe das Mehl und das Backpulver dazu und rühre sanft, bis der Teig glatt ist. Gieße den Teig in die vorbereitete Form und streiche ihn glatt. Backe die Torte etwa 60 Minuten lang, bis sie goldbraun ist und ein in die Mitte gesteckter Stäbchen sauber herauskommt. Lass die Torte einige Minuten in der Form abkühlen und transferiere sie dann auf ein Kuchengitter, um vollständig auszukühlen. Vor dem Servieren kannst du die Torte mit Puderzucker bestreuen und mit einer dünnen Orangenschale dekorieren.",
-    "category": "Dessert",
-    "prep_time": "15 minutes",
-    "cook_time": "60 minutes",
-    "total_time": "75 minutes",
-    "notes": "Intensiviere den Orangenaroma, indem du etwas frischen Orangensaft zum Teig hinzufügst. Für eine alkoholfreie Version ersetze den Orangenlikör durch zusätzlichen Orangensaft oder Orangenaroma. Verleihe der Torte eine knusprige Note, indem du einige gehackte Mandeln in den Teig mischst.",
-    "tags": "Orangenkuchen, Dessert, Kuchen, Backen"
+  "dish_name": "Orangenkuchen",
+  "description": "Die Orangentorte ist ein zeitloser Klassiker, der durch seinen zarten, fruchtigen Geschmack und sein angenehmes Aroma besticht.",
+  "ingredients": "[{\"name\": \"Eier\", \"amount\": 3, \"unit\": null}, {\"name\": \"Orange\", \"amount\": 1, \"unit\": null}, {\"name\": \"Mehl\", \"amount\": 150, \"unit\": \"g\"}, {\"name\": \"Zucker\", \"amount\": 150, \"unit\": \"g\"}, {\"name\": \"\\u00d6l\", \"amount\": 130, \"unit\": \"ml\"}, {\"name\": \"Backpulver\", \"amount\": 5, \"unit\": \"g\"}, {\"name\": \"Orangenlik\\u00f6r\", \"amount\": 25, \"unit\": \"ml\"}, {\"name\": \"Salz\", \"amount\": null, \"unit\": \"Prise\"}]",
+  "instructions": "Heize den Ofen auf 170°C vor und fette die Kuchenform leicht ein. Schlage die Eier mit dem Zucker in einer großen Schüssel, bis die Mischung schaumig und hell ist. Reibe die Orange und füge die Schale zur Ei-Zucker-Mischung hinzu. Presse den Saft der Orange aus und mische ihn zusammen mit dem Orangenlikör und dem Öl unter die Ei-Zucker-Mischung. Siebe das Mehl und das Backpulver dazu und rühre sanft, bis der Teig glatt ist. Gieße den Teig in die vorbereitete Form und streiche ihn glatt. Backe die Torte etwa 60 Minuten lang, bis sie goldbraun ist und ein in die Mitte gesteckter Stäbchen sauber herauskommt. Lass die Torte einige Minuten in der Form abkühlen und transferiere sie dann auf ein Kuchengitter, um vollständig auszukühlen. Vor dem Servieren kannst du die Torte mit Puderzucker bestreuen und mit einer dünnen Orangenschale dekorieren.",
+  "category": "Dessert",
+  "prep_time": "15 minutes",
+  "cook_time": "60 minutes",
+  "total_time": "75 minutes",
+  "notes": "Intensiviere den Orangenaroma, indem du etwas frischen Orangensaft zum Teig hinzufügst. Für eine alkoholfreie Version ersetze den Orangenlikör durch zusätzlichen Orangensaft oder Orangenaroma. Verleihe der Torte eine knusprige Note, indem du einige gehackte Mandeln in den Teig mischst.",
+  "tags": "Orangenkuchen, Dessert, Kuchen, Backen"
 }
