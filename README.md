@@ -8,6 +8,10 @@
 # 1. Запустить Chrome с отладкой
 google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug_9222 --no-first-run --no-default-browser-check
 
+# 1.1. Запустить с отладкой через баш скрипт сразу для несколкьих портов
+chmod +x scripts/main.py
+scripts_bash/run_chrome.sh 9222 9223 9224 9225 9226
+
 # 2. Полный pipeline через main.py
 python scripts/main.py <command> [options]
 ```
