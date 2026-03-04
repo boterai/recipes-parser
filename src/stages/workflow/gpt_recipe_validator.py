@@ -63,67 +63,43 @@ class GPTRecipeValidator:
             logger.error(f"System error in GPT validation: {e}")
             return FileValidationResult.system_error_fail(filename, str(e))
     
+    _VALIDATION_RULES = """RULES:
+- Not a recipe page -> is_valid:true, is_recipe:false
+- REQUIRED non-empty: dish_name, ingredients, instructions. Missing any -> is_valid:false, add to missing_fields
+- ingredients: PASS if same core ingredients (different names/units/amounts/language OK, minor omissions OK). FAIL only if fundamentally different dish
+- instructions: PASS if same cooking process (different wording/detail/order OK, more detail is fine). FAIL only if completely different process
+- dish_name: same dish (synonyms/translations OK)
+- description & all other fields (prep_time, cook_time, tags, etc.): NEVER fail on differences
+- More detailed extraction is always valid. Be lenient: pass if someone could cook the same dish."""
+
     def _build_reference_validation_prompt(self, site_name: str) -> str:
         """Build system prompt for reference-based validation"""
-        return f"""You are a recipe extraction validator for {site_name}.
-Compare extracted recipe data against reference data.
-
-RULES:
-- If the page is NOT a recipe -> is_valid: true, is_recipe: false (empty extraction is correct)
-- CRITICAL fields: ingredients, instructions — must have >50% semantic overlap with reference
-  * Order, formatting, case, wording differences are OK
-  * Paraphrasing, translations, synonyms are OK
-  * Missing 1-2 minor ingredients is OK
-  * Fail only if major ingredients or key steps are completely missing
-- dish_name: must be semantically similar (synonyms, translations OK)
-- description: partial match is OK, can be shorter or longer
-- OPTIONAL fields (prep_time, cook_time, tags, servings, etc.) — completely ignore differences, never fail
-
-Be lenient: pass if extraction captures the recipe essence, even if not 100% identical.
+        return f"""Recipe extraction validator for {site_name}. Compare extracted data against reference.
+{self._VALIDATION_RULES}
 
 Return STRICT JSON:
 {FileValidationResult.GPT_RESPONSE_FORMAT}"""
     
     def _build_html_validation_prompt(self, site_name: str) -> str:
         """Build system prompt for HTML-based validation"""
-        return f"""You are a recipe extraction validator for {site_name}.
-You receive plain text from a page and extracted recipe data. Validate the extraction.
-
-RULES:
-- If the page is NOT a recipe (homepage, category page, no ingredients/instructions) -> is_valid: true, is_recipe: false
-- CRITICAL fields: ingredients, instructions — must have >50% overlap with page content
-  * Order, formatting, case, paraphrasing, translations are OK
-  * Missing 1-2 minor ingredients is OK
-  * Fail only if major ingredients or key cooking steps are missing
-- dish_name: must be present and semantically match (synonyms OK)
-- description: partial match is OK, can be shorter, paraphrased, or missing
-- OPTIONAL fields (prep_time, cook_time, tags, servings, author, notes, etc.) — completely ignore, never fail
-
-Be lenient: pass if extraction captures the recipe essence, even if not perfect.
+        return f"""Recipe extraction validator for {site_name}. Compare extracted data against page text.
+{self._VALIDATION_RULES}
 
 Return STRICT JSON:
 {FileValidationResult.GPT_RESPONSE_FORMAT}"""
     
     def _build_reference_user_prompt(self, extracted_data: dict, reference_data: dict) -> str:
         """Build user prompt for reference-based validation"""
-        return f"""Compare extracted data with reference data.
+        return f"""Extracted:
+{json.dumps(extracted_data, ensure_ascii=False)}
 
-Extracted data:
-{json.dumps(extracted_data, ensure_ascii=False, indent=2)}
-
-Reference data:
-{json.dumps(reference_data, ensure_ascii=False, indent=2)}
-
-Validate the extraction quality and return JSON with validation results."""
+Reference:
+{json.dumps(reference_data, ensure_ascii=False)}"""
     
     def _build_html_user_prompt(self, extracted_data: dict, html_content: str) -> str:
         """Build user prompt for HTML-based validation"""
-        return f"""Analyze the page TEXT content and validate the extracted data.
+        return f"""Extracted:
+{json.dumps(extracted_data, ensure_ascii=False)}
 
-Extracted data:
-{json.dumps(extracted_data, ensure_ascii=False, indent=2)}
-
-Page text content (may be truncated):
-{html_content}
-
-Return JSON validation results."""
+Page text:
+{html_content}"""

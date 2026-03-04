@@ -144,7 +144,7 @@ class LoveFoodFeedExtractor(BaseRecipeExtractor):
     def extract_ingredients(self) -> Optional[str]:
         """
         Извлечение ингредиентов из WPRM HTML (с резервным вариантом на JSON-LD).
-        Возвращает JSON-строку со списком словарей {name, amount, units}.
+        Возвращает JSON-строку со списком словарей {name, amount, unit}.
         """
         ingredients = []
 
@@ -169,11 +169,11 @@ class LoveFoodFeedExtractor(BaseRecipeExtractor):
                 raw_amount = amount_el.get_text().strip() if amount_el else None
                 amount = self._parse_amount(raw_amount) if raw_amount else None
 
-                units = self.clean_text(unit_el.get_text()) if unit_el else None
+                unit = self.clean_text(unit_el.get_text()) if unit_el else None
 
                 ingredients.append({
                     "name": name,
-                    "units": units,
+                    "unit": unit,
                     "amount": amount
                 })
 
@@ -212,7 +212,7 @@ class LoveFoodFeedExtractor(BaseRecipeExtractor):
         )
         match = re.match(pattern, text, re.IGNORECASE)
         if not match:
-            return {"name": text, "amount": None, "units": None}
+            return {"name": text, "amount": None, "unit": None}
 
         amount_str, units, name = match.groups()
 
@@ -252,7 +252,7 @@ class LoveFoodFeedExtractor(BaseRecipeExtractor):
         if not name or len(name) < 2:
             return None
 
-        return {"name": name, "amount": amount, "units": units}
+        return {"name": name, "amount": amount, "unit": units}
 
     def extract_steps(self) -> Optional[str]:
         """Извлечение шагов приготовления из JSON-LD"""
