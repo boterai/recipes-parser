@@ -107,7 +107,7 @@ class AfkarjadidaExtractor(BaseRecipeExtractor):
                 
                 ingredients.append({
                     "name": self.clean_text(name),
-                    "units": self.clean_text(unit),
+                    "unit": self.clean_text(unit),
                     "amount": amount
                 })
             else:
@@ -124,7 +124,7 @@ class AfkarjadidaExtractor(BaseRecipeExtractor):
                     
                     ingredients.append({
                         "name": self.clean_text(name),
-                        "units": "عدد",  # По умолчанию "штуки"
+                        "unit": "عدد",  # По умолчанию "штуки"
                         "amount": amount
                     })
                 else:
@@ -133,7 +133,7 @@ class AfkarjadidaExtractor(BaseRecipeExtractor):
                     if len(part) > 1 and part not in ['و', 'أو', 'مع']:
                         ingredients.append({
                             "name": self.clean_text(part),
-                            "units": None,
+                            "unit": None,
                             "amount": None
                         })
         

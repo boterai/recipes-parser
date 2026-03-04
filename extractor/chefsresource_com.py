@@ -79,7 +79,7 @@ class ChefsResourceExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "3 fluid ounces hot strong coffee"
             
         Returns:
-            dict: {"name": "hot strong coffee", "amount": 3, "units": "fluid ounces"}
+            dict: {"name": "hot strong coffee", "amount": 3, "unit": "fluid ounces"}
         """
         if not ingredient_text:
             return None
@@ -98,7 +98,7 @@ class ChefsResourceExtractor(BaseRecipeExtractor):
         for fraction, decimal in fraction_map.items():
             text = text.replace(fraction, decimal)
         
-        # Паттерн для извлечения amount, units и name
+        # Паттерн для извлечения amount, unit и name
         # Сначала пробуем паттерн с "x" (например, "4 x chicken breast")
         pattern_x = r'^(\d+(?:\.\d+)?)\s*x\s+(.+)'
         match_x = re.match(pattern_x, text, re.IGNORECASE)
@@ -120,7 +120,7 @@ class ChefsResourceExtractor(BaseRecipeExtractor):
                 return {
                     "name": text,
                     "amount": None,
-                    "units": None
+                    "unit": None
                 }
             
             amount_str, units, name = match.groups()
@@ -172,7 +172,7 @@ class ChefsResourceExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_ingredients(self) -> Optional[str]:

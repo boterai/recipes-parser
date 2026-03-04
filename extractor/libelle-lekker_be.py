@@ -102,7 +102,7 @@ class LibelleLekkerExtractor(BaseRecipeExtractor):
                         ingredients.append({
                             "name": name,
                             "amount": amount,
-                            "units": unit
+                            "unit": unit
                         })
             
             return ingredients if ingredients else None

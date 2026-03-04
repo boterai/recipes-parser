@@ -102,7 +102,7 @@ class JulieKarlaExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "250 gr broccoli buketter" или "1 stk æg"
             
         Returns:
-            dict: {"name": "broccoli buketter", "amount": 250, "units": "gr"}
+            dict: {"name": "broccoli buketter", "amount": 250, "unit": "gr"}
         """
         if not ingredient_text:
             return None
@@ -125,7 +125,7 @@ class JulieKarlaExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, units, name = match.groups()
@@ -168,7 +168,7 @@ class JulieKarlaExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_ingredients(self) -> Optional[str]:

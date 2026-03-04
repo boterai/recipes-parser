@@ -84,10 +84,10 @@ class LezzetComTrExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "2 kabak" или "500 ml süt"
             
         Returns:
-            dict: {"name": "kabak", "amount": "2", "units": None}
+            dict: {"name": "kabak", "amount": "2", "unit": None}
         """
         if not ingredient_text:
-            return {"name": None, "amount": None, "units": None}
+            return {"name": None, "amount": None, "unit": None}
         
         # Чистим текст
         text = self.clean_text(ingredient_text).lower()
@@ -148,7 +148,7 @@ class LezzetComTrExtractor(BaseRecipeExtractor):
         return {
             "name": name if name else None,
             "amount": amount if amount else None,
-            "units": units if units else None
+            "unit": units if units else None
         }
     
     def extract_ingredients(self) -> Optional[str]:

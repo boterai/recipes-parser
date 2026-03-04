@@ -65,7 +65,7 @@ class TlDelachieveExtractor(BaseRecipeExtractor):
             ingredient_text: Строка с ингредиентом
             
         Returns:
-            list of dict: [{"name": "...", "amount": ..., "units": "..."}, ...] или None
+            list of dict: [{"name": "...", "amount": ..., "unit": "..."}, ...] или None
         """
         if not ingredient_text:
             return None
@@ -97,12 +97,12 @@ class TlDelachieveExtractor(BaseRecipeExtractor):
                     ingredients.append({
                         "name": part,
                         "amount": None,
-                        "units": None
+                        "unit": None
                     })
             return ingredients if ingredients else [{
                 "name": name,
                 "amount": None,
-                "units": None
+                "unit": None
             }]
         
         # Паттерн для количественных ингредиентов: все до последнего " - " или "-\d" 
@@ -114,7 +114,7 @@ class TlDelachieveExtractor(BaseRecipeExtractor):
             return [{
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }]
         
         name = match.group(1).strip()
@@ -166,7 +166,7 @@ class TlDelachieveExtractor(BaseRecipeExtractor):
                             ingredients.append({
                                 "name": part,
                                 "amount": amount,
-                                "units": unit if unit else None
+                                "unit": unit if unit else None
                             })
                     return ingredients if ingredients else None
                 
@@ -198,14 +198,14 @@ class TlDelachieveExtractor(BaseRecipeExtractor):
             return [{
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }]
         else:
             # Не удалось разобрать количество, возвращаем как есть
             return [{
                 "name": name,
                 "amount": quantity_part if quantity_part else None,
-                "units": None
+                "unit": None
             }]
     
     def extract_ingredients(self) -> Optional[str]:

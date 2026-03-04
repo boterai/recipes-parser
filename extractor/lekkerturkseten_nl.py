@@ -105,7 +105,7 @@ class LekkerturksetenNlExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "500 g baklava filodeeg" или "2 eetlepels olijfolie"
             
         Returns:
-            dict: {"name": "baklava filodeeg", "amount": 500, "units": "g"} или None
+            dict: {"name": "baklava filodeeg", "amount": 500, "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -135,7 +135,7 @@ class LekkerturksetenNlExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -177,7 +177,7 @@ class LekkerturksetenNlExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:

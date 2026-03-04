@@ -115,7 +115,7 @@ class MagazinNovostiRsExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "2 krompira" или "200 ml jogurt"
             
         Returns:
-            dict: {"name": "krompir", "units": "pieces", "amount": 2} или None
+            dict: {"name": "krompir", "unit": "pieces", "amount": 2} или None
         """
         if not ingredient_text:
             return None
@@ -134,7 +134,7 @@ class MagazinNovostiRsExtractor(BaseRecipeExtractor):
             # Если паттерн не совпал, возвращаем только название
             return {
                 "name": text,
-                "units": None,
+                "unit": None,
                 "amount": None
             }
         
@@ -217,7 +217,7 @@ class MagazinNovostiRsExtractor(BaseRecipeExtractor):
         
         return {
             "name": name,
-            "units": unit,
+            "unit": unit,
             "amount": amount
         }
     

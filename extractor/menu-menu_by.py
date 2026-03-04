@@ -201,7 +201,7 @@ class MenuMenuByExtractor(BaseRecipeExtractor):
                 # Преобразуем в формат, соответствующий эталонному JSON
                 ingredients.append({
                     "name": parsed["name"],
-                    "units": parsed["unit"],  # Используем "units" как в эталоне
+                    "unit": parsed["unit"],  # Используем "units" как в эталоне
                     "amount": parsed["amount"]
                 })
         

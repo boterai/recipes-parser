@@ -136,7 +136,7 @@ class KinnusenmyllyExtractor(BaseRecipeExtractor):
                     amount_value = self._convert_amount(amount)
                     ingredients.append({
                         "name": name,
-                        "units": unit,
+                        "unit": unit,
                         "amount": amount_value
                     })
         

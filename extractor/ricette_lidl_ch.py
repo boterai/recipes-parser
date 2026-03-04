@@ -139,7 +139,7 @@ class RicetteLidlChExtractor(BaseRecipeExtractor):
                     ingredient = {
                         "name": name,
                         "amount": int(amount) if amount and amount.isdigit() else amount,
-                        "units": units
+                        "unit": units
                     }
                     ingredients.append(ingredient)
         else:
@@ -191,7 +191,7 @@ class RicetteLidlChExtractor(BaseRecipeExtractor):
                 ingredient = {
                     "name": name,
                     "amount": int(amount) if amount and amount.isdigit() else amount,
-                    "units": units
+                    "unit": units
                 }
                 
                 ingredients.append(ingredient)

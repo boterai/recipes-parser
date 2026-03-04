@@ -14,7 +14,7 @@
 Извлекаемые поля:
 - dish_name: Название блюда (с правильной капитализацией для филиппинских слов)
 - description: Описание рецепта из meta-тегов
-- ingredients: Список ингредиентов (JSON) с полями name, units, amount
+- ingredients: Список ингредиентов (JSON) с полями name, unit, amount
 - instructions: Текстовая инструкция по приготовлению
 - category: Категория блюда (Main Course, Appetizer и т.д.)
 - prep_time, cook_time, total_time: Время приготовления
@@ -134,7 +134,7 @@ class AjinomotoComPhExtractor(BaseRecipeExtractor):
             line: Строка вида "2 cups (450ml) Oil" или "1/2 cup (62g) Cornstarch"
             
         Returns:
-            dict: {"name": "Oil", "amount": 2, "units": "cups (450ml)"} или None
+            dict: {"name": "Oil", "amount": 2, "unit": "cups (450ml)"} или None
         """
         if not line:
             return None
@@ -160,17 +160,17 @@ class AjinomotoComPhExtractor(BaseRecipeExtractor):
             if match2:
                 return {
                     "name": self.clean_text(match2.group(2)),
-                    "units": None,
+                    "unit": None,
                     "amount": match2.group(1)
                 }
             # Если не совпало, возвращаем только название
             return {
                 "name": text,
-                "units": None,
+                "unit": None,
                 "amount": None
             }
         
-        amount_str, units, name = match.groups()
+        amount_str, unit, name = match.groups()
         
         # Обработка количества
         amount = None
@@ -194,14 +194,14 @@ class AjinomotoComPhExtractor(BaseRecipeExtractor):
                     amount = amount_str
         
         # Обработка единицы измерения
-        units = units.strip() if units else None
+        unit = unit.strip() if unit else None
         
         # Очистка названия
         name = self.clean_text(name)
         
         return {
             "name": name,
-            "units": units,
+            "unit": unit,
             "amount": amount
         }
     

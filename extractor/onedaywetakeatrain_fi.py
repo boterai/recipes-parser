@@ -51,7 +51,7 @@ class OnedaywetakeatrainFiExtractor(BaseRecipeExtractor):
             line: Строка вида "2 viipaleina pakastettua, kypsää banaania" или "250 g rasvatonta maitorahkaa"
             
         Returns:
-            dict: {"name": "...", "amount": "...", "units": "..."} или None
+            dict: {"name": "...", "amount": "...", "unit": "..."} или None
         """
         if not line or len(line.strip()) < 3:
             return None
@@ -109,7 +109,7 @@ class OnedaywetakeatrainFiExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         
         # Паттерн: количество + единица измерения + название
@@ -143,7 +143,7 @@ class OnedaywetakeatrainFiExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         else:
             # Если паттерн не совпал, попробуем без количества
@@ -160,7 +160,7 @@ class OnedaywetakeatrainFiExtractor(BaseRecipeExtractor):
                 return {
                     "name": name,
                     "amount": unit,  # "kourallinen", "hieman" etc as amount
-                    "units": None
+                    "unit": None
                 }
         
         return None

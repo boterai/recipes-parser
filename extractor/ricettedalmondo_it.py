@@ -141,7 +141,7 @@ class RicetteDalMondoExtractor(BaseRecipeExtractor):
             text: строка типа "500 gr di farina 00" или "3 uova (intere)"
             
         Returns:
-            Dict с полями name, amount, units
+            Dict с полями name, amount, unit
         """
         text = self.clean_text(text)
         
@@ -155,7 +155,7 @@ class RicetteDalMondoExtractor(BaseRecipeExtractor):
             name = match.group(3).strip()
             return {
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount if amount else None
             }
         
@@ -175,7 +175,7 @@ class RicetteDalMondoExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }
         
@@ -186,7 +186,7 @@ class RicetteDalMondoExtractor(BaseRecipeExtractor):
             name = match.group(1).strip()
             return {
                 "name": name,
-                "units": "q.b.",
+                "unit": "q.b.",
                 "amount": None
             }
         
@@ -194,7 +194,7 @@ class RicetteDalMondoExtractor(BaseRecipeExtractor):
         # "sale"
         return {
             "name": text,
-            "units": None,
+            "unit": None,
             "amount": None
         }
     

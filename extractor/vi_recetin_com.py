@@ -135,7 +135,7 @@ class ViRecetinComExtractor(BaseRecipeExtractor):
                 if not text:
                     continue
                 
-                # Parse ingredient text to extract name, amount, units
+                # Parse ingredient text to extract name, amount, unit
                 ingredient_data = self._parse_ingredient_text(text)
                 if ingredient_data:
                     ingredients_list.append(ingredient_data)
@@ -153,7 +153,7 @@ class ViRecetinComExtractor(BaseRecipeExtractor):
         """
         Parse ingredient text to extract name, amount, and units.
         Example: "2 ức gà" -> {name: "ức gà", units: "pieces", amount: 2}
-        Format matches reference: name, units, amount (with amount as numeric when possible)
+        Format matches reference: name, unit, amount (with amount as numeric when possible)
         """
         try:
             # Pattern to match number at the beginning
@@ -178,14 +178,14 @@ class ViRecetinComExtractor(BaseRecipeExtractor):
                 
                 return {
                     'name': name,
-                    'units': units,
+                    'unit': units,
                     'amount': amount
                 }
             else:
                 # No amount found, just ingredient name
                 return {
                     'name': text,
-                    'units': None,
+                    'unit': None,
                     'amount': None
                 }
                 
@@ -193,7 +193,7 @@ class ViRecetinComExtractor(BaseRecipeExtractor):
             logger.warning(f"Error parsing ingredient text '{text}': {e}")
             return {
                 'name': text,
-                'units': None,
+                'unit': None,
                 'amount': None
             }
     

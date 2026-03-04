@@ -138,7 +138,7 @@ class LafertaExtractor(BaseRecipeExtractor):
             text: Строка вида "300 g šviežių grybų (pvz., pievagrybių)"
             
         Returns:
-            list of dict: [{"name": "šviežių grybų", "amount": 300, "units": "g"}]
+            list of dict: [{"name": "šviežių grybų", "amount": 300, "unit": "g"}]
         """
         if not text:
             return []
@@ -149,8 +149,8 @@ class LafertaExtractor(BaseRecipeExtractor):
         if 'druska' in text.lower() and 'pipirai' in text.lower():
             # Разделяем на два ингредиента
             return [
-                {"name": "druskos", "units": None, "amount": None},
-                {"name": "pipirų", "units": None, "amount": None}
+                {"name": "druskos", "unit": None, "amount": None},
+                {"name": "pipirų", "unit": None, "amount": None}
             ]
         
         # Паттерн для извлечения: количество, единица, название
@@ -181,7 +181,7 @@ class LafertaExtractor(BaseRecipeExtractor):
             
             return [{
                 "name": name,
-                "units": units,
+                "unit": units,
                 "amount": amount
             }]
         
@@ -200,7 +200,7 @@ class LafertaExtractor(BaseRecipeExtractor):
             
             return [{
                 "name": name,
-                "units": size_desc,
+                "unit": size_desc,
                 "amount": amount
             }]
         
@@ -222,7 +222,7 @@ class LafertaExtractor(BaseRecipeExtractor):
             
             return [{
                 "name": name,
-                "units": None,
+                "unit": None,
                 "amount": amount
             }]
         
@@ -234,7 +234,7 @@ class LafertaExtractor(BaseRecipeExtractor):
         
         return [{
             "name": name,
-            "units": None,
+            "unit": None,
             "amount": None
         }]
     

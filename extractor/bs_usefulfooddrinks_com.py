@@ -64,7 +64,7 @@ class BsUsefulfooddrinksComExtractor(BaseRecipeExtractor):
             text: Строка вида "200 grama smeđeg šećera" или "jedan gotov keks"
             
         Returns:
-            dict: {"name": "...", "amount": ..., "units": "..."}
+            dict: {"name": "...", "amount": ..., "unit": "..."}
         """
         if not text:
             return None
@@ -258,7 +258,7 @@ class BsUsefulfooddrinksComExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:
@@ -323,7 +323,7 @@ class BsUsefulfooddrinksComExtractor(BaseRecipeExtractor):
                         parsed = {
                             "name": "bijeli šećer",
                             "amount": pending_ref.get('amount'),
-                            "units": pending_ref.get('units')
+                            "unit": pending_ref.get('units')
                         }
                         pending_ref = None
                     else:

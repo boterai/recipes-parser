@@ -103,7 +103,7 @@ class PianetaGourmetExtractor(BaseRecipeExtractor):
                 for item in items:
                     item = self.clean_text(item)
                     if item and len(item) > 2:
-                        ingredients.append({"name": item, "amount": "100", "units": "grams"})
+                        ingredients.append({"name": item, "amount": "100", "unit": "grams"})
                 # Удаляем из предложения
                 sentence = sentence[:stessa_match.start()] + sentence[stessa_match.end():]
             
@@ -111,7 +111,7 @@ class PianetaGourmetExtractor(BaseRecipeExtractor):
             metà_matches = list(re.finditer(r'la\s+metà\s+di\s+([^,]+?)(?=,|\s+e\s+|$)', sentence, re.I))
             for match in metà_matches:
                 name = self.clean_text(match.group(1))
-                ingredients.append({"name": name, "amount": "200", "units": "grams"})
+                ingredients.append({"name": name, "amount": "200", "unit": "grams"})
                 # Удаляем из предложения
                 sentence = sentence[:match.start()] + sentence[match.end():]
             
@@ -134,7 +134,7 @@ class PianetaGourmetExtractor(BaseRecipeExtractor):
                     unit_map = {'grammi': 'grams', 'grammo': 'grams', 'kg': 'kilogram', 
                                'litri': 'liters', 'litro': 'liters', 'ml': 'ml', 'bicchiere': 'glass'}
                     
-                    ingredients.append({"name": name, "amount": amount, "units": unit_map.get(unit, unit)})
+                    ingredients.append({"name": name, "amount": amount, "unit": unit_map.get(unit, unit)})
                     continue
                 
                 # B. "6 sfoglie di pasta all'uovo"
@@ -142,7 +142,7 @@ class PianetaGourmetExtractor(BaseRecipeExtractor):
                 if match:
                     amount = match.group(1)
                     name = self.clean_text(match.group(3))
-                    ingredients.append({"name": name, "amount": amount, "units": "pieces"})
+                    ingredients.append({"name": name, "amount": amount, "unit": "pieces"})
                     continue
                 
                 # C. "1 uovo e 1 tuorlo"
@@ -152,7 +152,7 @@ class PianetaGourmetExtractor(BaseRecipeExtractor):
                         amount = m.group(1)
                         item = m.group(2).lower()
                         name_map = {'uovo': 'uovo', 'uova': 'uovo', 'tuorlo': 'tuorlo', 'tuorli': 'tuorlo'}
-                        ingredients.append({"name": name_map.get(item, item), "amount": amount, "units": "pieces"})
+                        ingredients.append({"name": name_map.get(item, item), "amount": amount, "unit": "pieces"})
                     continue
                 
                 # D. "oltre a parmigiano reggiano" или списки без количества
@@ -166,13 +166,13 @@ class PianetaGourmetExtractor(BaseRecipeExtractor):
                         sub_item = self.clean_text(sub_item)
                         if sub_item and len(sub_item) > 2:
                             if not any(ing['name'] == sub_item for ing in ingredients):
-                                ingredients.append({"name": sub_item, "amount": None, "units": None})
+                                ingredients.append({"name": sub_item, "amount": None, "unit": None})
                 else:
                     # Одиночный ингредиент без количества
                     part = self.clean_text(part)
                     if part and len(part) > 2 and not re.match(r'^(invece|poi|anche|ancora|quindi)$', part, re.I):
                         if not any(ing['name'] == part for ing in ingredients):
-                            ingredients.append({"name": part, "amount": None, "units": None})
+                            ingredients.append({"name": part, "amount": None, "unit": None})
         
         return ingredients
     
@@ -486,7 +486,7 @@ class PianetaGourmetExtractor(BaseRecipeExtractor):
             ingredient_text: Строка с ингредиентом
             
         Returns:
-            dict: {"name": "...", "amount": "...", "units": "..."}
+            dict: {"name": "...", "amount": "...", "unit": "..."}
         """
         if not ingredient_text:
             return None
@@ -520,14 +520,14 @@ class PianetaGourmetExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit_std
+                "unit": unit_std
             }
         else:
             # Нет количества
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
     
     def extract_all(self) -> dict:

@@ -110,7 +110,7 @@ class KakPrigotovitReceptExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "2 1/2 чашки свежесваренного кофе"
             
         Returns:
-            dict: {"name": "свежесваренный кофе", "amount": "2 1/2", "units": "чашки"}
+            dict: {"name": "свежесваренный кофе", "amount": "2 1/2", "unit": "чашки"}
         """
         if not ingredient_text:
             return None
@@ -141,7 +141,7 @@ class KakPrigotovitReceptExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, units, name = match.groups()
@@ -173,7 +173,7 @@ class KakPrigotovitReceptExtractor(BaseRecipeExtractor):
         # the typical amount-then-unit convention, but is required for compatibility
         return {
             "name": name,
-            "units": units,
+            "unit": units,
             "amount": amount
         }
     

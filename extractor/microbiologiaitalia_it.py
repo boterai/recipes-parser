@@ -252,7 +252,7 @@ class MicrobiologiaItaliaItExtractor(BaseRecipeExtractor):
                 # Конвертируем название в lowercase
                 ingredient_dict = {
                     "name": parsed["name"].lower() if parsed["name"] else None,
-                    "units": parsed["unit"],
+                    "unit": parsed["unit"],
                     "amount": parsed["amount"]
                 }
                 ingredients.append(ingredient_dict)

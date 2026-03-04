@@ -142,7 +142,7 @@ class ClickPoftabunaExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "250 g de ravioli al funghi" или "6 cartofi"
             
         Returns:
-            dict: {"name": "ravioli al funghi", "amount": 250, "units": "g"} или None
+            dict: {"name": "ravioli al funghi", "amount": 250, "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -219,7 +219,7 @@ class ClickPoftabunaExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit  # Используем "units" (plural) как в expected
+            "unit": unit  # Используем "units" (plural) как в expected
         }
     
     def extract_instructions(self) -> Optional[str]:

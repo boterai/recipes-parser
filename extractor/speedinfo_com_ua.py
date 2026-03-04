@@ -215,7 +215,7 @@ class SpeedinfoComUaExtractor(BaseRecipeExtractor):
                     # Меняем ключ "unit" на "units" для соответствия эталонному формату
                     ingredients.append({
                         "name": parsed["name"],
-                        "units": parsed["unit"],
+                        "unit": parsed["unit"],
                         "amount": parsed["amount"]
                     })
         

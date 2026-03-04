@@ -257,7 +257,7 @@ class PunkuferExtractor(BaseRecipeExtractor):
                         ingredients.append({
                             "name": parsed["name"],
                             "amount": parsed["amount"],
-                            "units": parsed["unit"]
+                            "unit": parsed["unit"]
                         })
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None

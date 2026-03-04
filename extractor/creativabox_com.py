@@ -180,7 +180,7 @@ class CreativaboxComExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "250 g masti" или "2 jaja" или "1 čaša pavlake (200 ml)"
             
         Returns:
-            dict: {"name": "masti", "amount": 250, "units": "g"} или None
+            dict: {"name": "masti", "amount": 250, "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -213,7 +213,7 @@ class CreativaboxComExtractor(BaseRecipeExtractor):
             return {
                 "name": name_part.strip(),
                 "amount": int(amount),
-                "units": unit.strip()
+                "unit": unit.strip()
             }
         
         # Специальный случай: "1 čaša pavlake (200 ml)" или "3 čaše brašna (oko 450 g)"
@@ -231,7 +231,7 @@ class CreativaboxComExtractor(BaseRecipeExtractor):
                 return {
                     "name": name,
                     "amount": amount_in_bracket,
-                    "units": unit_in_bracket
+                    "unit": unit_in_bracket
                 }
         
         # Обычный паттерн: количество + опционально единица + название
@@ -249,7 +249,7 @@ class CreativaboxComExtractor(BaseRecipeExtractor):
                 return {
                     "name": name,
                     "amount": None,
-                    "units": unit
+                    "unit": unit
                 }
             # Пропускаем, если это не похоже на ингредиент
             return None
@@ -283,7 +283,7 @@ class CreativaboxComExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_instructions(self) -> Optional[str]:

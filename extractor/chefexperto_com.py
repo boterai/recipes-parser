@@ -192,7 +192,7 @@ class ChefExpertoExtractor(BaseRecipeExtractor):
             ingredients.append({
                 "name": ing_name,
                 "amount": None,
-                "units": None
+                "unit": None
             })
         
         return ingredients
@@ -203,7 +203,7 @@ class ChefExpertoExtractor(BaseRecipeExtractor):
         Формат chefexperto: "Название: Описание" или просто "Название"
         
         Returns:
-            dict: {"name": "...", "amount": None, "units": None}
+            dict: {"name": "...", "amount": None, "unit": None}
         """
         if not ingredient_text:
             return None
@@ -237,7 +237,7 @@ class ChefExpertoExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_instructions(self) -> Optional[str]:

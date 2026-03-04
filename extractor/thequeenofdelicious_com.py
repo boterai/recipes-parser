@@ -179,7 +179,7 @@ class TheQueenOfDeliciousExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "500 g raparperia" 
             
         Returns:
-            dict: {"name": "raparperia", "amount": 500, "units": "g"} или None
+            dict: {"name": "raparperia", "amount": 500, "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -215,7 +215,7 @@ class TheQueenOfDeliciousExtractor(BaseRecipeExtractor):
             return {
                 "name": text_without_parens,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -259,7 +259,7 @@ class TheQueenOfDeliciousExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:

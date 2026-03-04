@@ -122,7 +122,7 @@ class FoodAndMoodExtractor(BaseRecipeExtractor):
                 # Создаем словарь ингредиента
                 ingredient_dict = {
                     "name": name,
-                    "units": unit if unit else None,
+                    "unit": unit if unit else None,
                     "amount": amount if amount else None
                 }
                 

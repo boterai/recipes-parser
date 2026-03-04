@@ -80,10 +80,10 @@ class BoschHomeExtractor(BaseRecipeExtractor):
         Парсинг строки ингредиента в структурированный формат
         
         Примеры:
-        "100ml Chicken Stock" -> {"name": "Chicken Stock", "amount": 100, "units": "ml"}
-        "20g Coriander" -> {"name": "Coriander", "amount": 20, "units": "g"}
-        "1 Teaspoon Chilli Powder" -> {"name": "Chilli Powder", "amount": 1, "units": "Teaspoon"}
-        "To Taste Salt" -> {"name": "Salt", "amount": None, "units": "To Taste"}
+        "100ml Chicken Stock" -> {"name": "Chicken Stock", "amount": 100, "unit": "ml"}
+        "20g Coriander" -> {"name": "Coriander", "amount": 20, "unit": "g"}
+        "1 Teaspoon Chilli Powder" -> {"name": "Chilli Powder", "amount": 1, "unit": "Teaspoon"}
+        "To Taste Salt" -> {"name": "Salt", "amount": None, "unit": "To Taste"}
         """
         if not ingredient_text:
             return None
@@ -96,7 +96,7 @@ class BoschHomeExtractor(BaseRecipeExtractor):
             return {
                 "name": match.group(1),
                 "amount": None,
-                "units": "To Taste"
+                "unit": "To Taste"
             }
         
         # Паттерн 2: "<Число><Единица> <Название>"
@@ -114,7 +114,7 @@ class BoschHomeExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         
         # Паттерн 3: "<Число> <Название>"
@@ -130,7 +130,7 @@ class BoschHomeExtractor(BaseRecipeExtractor):
             return {
                 "name": match.group(2),
                 "amount": amount,
-                "units": None
+                "unit": None
             }
         
         # Паттерн 4: "<Число> <Единица> <Название>"
@@ -146,7 +146,7 @@ class BoschHomeExtractor(BaseRecipeExtractor):
             return {
                 "name": match.group(3),
                 "amount": amount,
-                "units": match.group(2)
+                "unit": match.group(2)
             }
         
         # Паттерн 5: "<Число>g <Название>"
@@ -161,14 +161,14 @@ class BoschHomeExtractor(BaseRecipeExtractor):
             return {
                 "name": match.group(2),
                 "amount": amount,
-                "units": "g"
+                "unit": "g"
             }
         
         # Если не подошло ни одно правило, возвращаем только название
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_instructions(self) -> Optional[str]:

@@ -134,7 +134,7 @@ class BakingTasteExtractor(BaseRecipeExtractor):
                 if name:
                     ingredients.append({
                         "name": name,
-                        "units": units,
+                        "unit": units,
                         "amount": amount
                     })
         

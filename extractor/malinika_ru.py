@@ -269,7 +269,7 @@ class MalinikaExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": int(amount) if amount and '.' not in amount else amount,
-                "units": unit
+                "unit": unit
             }
         
         # Паттерн "По вкусу – изюм"
@@ -281,7 +281,7 @@ class MalinikaExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": None,
-                "units": "по вкусу"
+                "unit": "по вкусу"
             }
         
         # Если паттерны не совпали, пробуем просто текст как название
@@ -290,7 +290,7 @@ class MalinikaExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         return None

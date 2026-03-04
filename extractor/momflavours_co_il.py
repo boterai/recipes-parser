@@ -154,7 +154,7 @@ class MomflavoursExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip(),
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         else:
             # Нет количества - просто название
@@ -166,13 +166,13 @@ class MomflavoursExtractor(BaseRecipeExtractor):
                 return {
                     "name": name.strip() if name.strip() else line,
                     "amount": "a pinch",
-                    "units": None
+                    "unit": None
                 }
             
             return {
                 "name": line,
                 "amount": None,
-                "units": None
+                "unit": None
             }
     
     def extract_ingredients(self) -> Optional[str]:

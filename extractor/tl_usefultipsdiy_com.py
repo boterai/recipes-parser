@@ -101,7 +101,7 @@ class TlUsefulTipsDiyExtractor(BaseRecipeExtractor):
         """
         Извлечение ингредиентов
         Возвращает JSON-строку со списком ингредиентов
-        Формат: [{"name": "...", "units": "...", "amount": ...}, ...]
+        Формат: [{"name": "...", "unit": "...", "amount": ...}, ...]
         """
         ingredients = []
         

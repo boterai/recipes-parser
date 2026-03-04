@@ -134,7 +134,7 @@ class CookeatWorldExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1 tbsp ghee or oil" или "4 eggs ((beaten))"
             
         Returns:
-            dict: {"name": "ghee or oil", "amount": 1, "units": "tbsp"} или None
+            dict: {"name": "ghee or oil", "amount": 1, "unit": "tbsp"} или None
         """
         if not ingredient_text:
             return None
@@ -191,7 +191,7 @@ class CookeatWorldExtractor(BaseRecipeExtractor):
                 return {
                     "name": text,
                     "amount": None,
-                    "units": None
+                    "unit": None
                 }
         
         # Обработка количества
@@ -240,7 +240,7 @@ class CookeatWorldExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:

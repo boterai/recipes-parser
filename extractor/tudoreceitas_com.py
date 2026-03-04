@@ -165,7 +165,7 @@ class TudoReceitasExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1 xícara de Farinha" или "800 gramas de frango"
             
         Returns:
-            dict: {"name": "Farinha", "units": "xícara", "amount": 1} или None
+            dict: {"name": "Farinha", "unit": "xícara", "amount": 1} или None
         """
         if not ingredient_text:
             return None
@@ -183,7 +183,7 @@ class TudoReceitasExtractor(BaseRecipeExtractor):
             # Если паттерн не совпал, возвращаем только название
             return {
                 "name": text,
-                "units": None,
+                "unit": None,
                 "amount": None
             }
         
@@ -228,7 +228,7 @@ class TudoReceitasExtractor(BaseRecipeExtractor):
         
         return {
             "name": name,
-            "units": unit,
+            "unit": unit,
             "amount": amount
         }
     

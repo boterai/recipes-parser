@@ -59,7 +59,7 @@ class ReceitasGloboExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "500g de udon" или "2 litros de água"
             
         Returns:
-            dict: {"name": "udon", "amount": 500, "units": "g"} или None
+            dict: {"name": "udon", "amount": 500, "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -94,7 +94,7 @@ class ReceitasGloboExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit_str
+                "unit": unit_str
             }
         
         # Паттерн 2: Стандартный формат "500g de udon", "2 litros de água", "4 gramas de kanten"
@@ -136,7 +136,7 @@ class ReceitasGloboExtractor(BaseRecipeExtractor):
                 return {
                     "name": name,
                     "amount": amount,
-                    "units": None
+                    "unit": None
                 }
         
         if not match:
@@ -201,7 +201,7 @@ class ReceitasGloboExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": units
+                "unit": units
             }
         
         # Паттерн 3: Ингредиенты без количества (например, "sal e pimenta a gosto")
@@ -212,14 +212,14 @@ class ReceitasGloboExtractor(BaseRecipeExtractor):
             return {
                 "name": name if name else text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         # Возвращаем только название
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_ingredients(self) -> Optional[str]:

@@ -131,7 +131,7 @@ class TillmiddagExtractor(BaseRecipeExtractor):
                 if name:
                     ingredient_dict = {
                         "name": name,
-                        "units": unit,
+                        "unit": unit,
                         "amount": amount
                     }
                     ingredients.append(ingredient_dict)

@@ -100,10 +100,10 @@ class ApetitBgExtractor(BaseRecipeExtractor):
             text: Строка вида "1 кг пресни фетучини" или "120 г несолено масло"
             
         Returns:
-            dict: {"name": "пресни фетучини", "units": "кг", "amount": 1}
+            dict: {"name": "пресни фетучини", "unit": "кг", "amount": 1}
         """
         if not text:
-            return {"name": text, "units": None, "amount": None}
+            return {"name": text, "unit": None, "amount": None}
         
         text = self.clean_text(text)
         
@@ -119,7 +119,7 @@ class ApetitBgExtractor(BaseRecipeExtractor):
         
         if not match:
             # Если паттерн не совпал, возвращаем весь текст как название
-            return {"name": text, "units": None, "amount": None}
+            return {"name": text, "unit": None, "amount": None}
         
         amount_str, units, _, name = match.groups()
         
@@ -155,10 +155,10 @@ class ApetitBgExtractor(BaseRecipeExtractor):
         # Очистка названия
         name = name.strip() if name else text
         
-        # Возвращаем в порядке: name, units, amount (как в reference)
+        # Возвращаем в порядке: name, unit, amount (как в reference)
         return {
             "name": name,
-            "units": units,
+            "unit": units,
             "amount": amount
         }
     

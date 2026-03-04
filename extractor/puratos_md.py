@@ -97,7 +97,7 @@ class PuratosMdExtractor(BaseRecipeExtractor):
                                         
                                         ingredients.append({
                                             "name": name,
-                                            "units": unit,
+                                            "unit": unit,
                                             "amount": amount_num
                                         })
                         if ingredients:
@@ -150,7 +150,7 @@ class PuratosMdExtractor(BaseRecipeExtractor):
                         
                         ingredients.append({
                             "name": name,
-                            "units": unit,
+                            "unit": unit,
                             "amount": amount_num
                         })
         

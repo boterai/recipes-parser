@@ -57,7 +57,7 @@ class NonnaAntoinetteExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "3 3/4 cups 00 flour (450 gr)"
             
         Returns:
-            dict: {"name": "00 flour", "amount": 3.75, "units": "cups"}
+            dict: {"name": "00 flour", "amount": 3.75, "unit": "cups"}
         """
         if not ingredient_text:
             return None
@@ -90,7 +90,7 @@ class NonnaAntoinetteExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -139,7 +139,7 @@ class NonnaAntoinetteExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:

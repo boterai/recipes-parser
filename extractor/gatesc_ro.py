@@ -143,7 +143,7 @@ class GatescRoExtractor(BaseRecipeExtractor):
                                     ingredients.append({
                                         "name": section_name,
                                         "amount": amount,
-                                        "units": unit
+                                        "unit": unit
                                     })
                                     seen_names.add(section_name.lower())
                         
@@ -167,7 +167,7 @@ class GatescRoExtractor(BaseRecipeExtractor):
                                             ingredients.append({
                                                 "name": name_text,
                                                 "amount": amount,
-                                                "units": unit
+                                                "unit": unit
                                             })
                                             seen_names.add(name_lower)
             else:
@@ -188,7 +188,7 @@ class GatescRoExtractor(BaseRecipeExtractor):
                                 ingredients.append({
                                     "name": name_text,
                                     "amount": amount,
-                                    "units": unit
+                                    "unit": unit
                                 })
                     elif len(spans) == 1:
                         name_text = self.clean_text(spans[0].get_text())
@@ -196,7 +196,7 @@ class GatescRoExtractor(BaseRecipeExtractor):
                             ingredients.append({
                                 "name": name_text,
                                 "amount": None,
-                                "units": None
+                                "unit": None
                             })
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None

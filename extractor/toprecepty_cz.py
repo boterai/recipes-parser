@@ -111,7 +111,7 @@ class TopreceptyExtractor(BaseRecipeExtractor):
         Формат Czech: "500 g kuřecího masa", "1 lžíce sladké papriky"
         
         Returns:
-            dict: {"name": "...", "amount": "...", "units": "..."}
+            dict: {"name": "...", "amount": "...", "unit": "..."}
         """
         if not ingredient_text:
             return None
@@ -169,20 +169,20 @@ class TopreceptyExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         
         # Если паттерн не совпал, возвращаем как есть
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_ingredients(self) -> Optional[str]:
         """
         Извлечение ингредиентов в формате JSON строки
-        Структура: [{"name": "...", "amount": "...", "units": "..."}]
+        Структура: [{"name": "...", "amount": "...", "unit": "..."}]
         """
         ingredients = []
         

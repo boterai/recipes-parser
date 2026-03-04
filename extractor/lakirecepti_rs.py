@@ -211,7 +211,7 @@ class LakireceptiExtractor(BaseRecipeExtractor):
                 # Используем формат с "units" вместо "unit" для совместимости с примером
                 ingredients_list.append({
                     "name": parsed["name"],
-                    "units": parsed["unit"],
+                    "unit": parsed["unit"],
                     "amount": parsed["amount"]
                 })
         

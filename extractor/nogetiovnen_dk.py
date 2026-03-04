@@ -120,7 +120,7 @@ class NogetiovnenExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1.2-1,5 kg oksesteg" или "320 gram perleløg"
             
         Returns:
-            dict: {"name": "oksesteg", "amount": "1.2-1.5", "units": "kg"} или None
+            dict: {"name": "oksesteg", "amount": "1.2-1.5", "unit": "kg"} или None
         """
         if not ingredient_text:
             return None
@@ -159,7 +159,7 @@ class NogetiovnenExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -189,7 +189,7 @@ class NogetiovnenExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit  # Note: используем "units" как в примере
+            "unit": unit  # Note: используем "units" как в примере
         }
     
     def extract_ingredients(self) -> Optional[str]:

@@ -54,7 +54,7 @@ class OblizniprsteExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "šop peteršilja (cca. 10 g)" или "1 strok česna" или "kokosova moka cca. 60 g"
             
         Returns:
-            dict: {"name": "šop peteršilja", "amount": 10, "units": "g"} или None
+            dict: {"name": "šop peteršilja", "amount": 10, "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -80,7 +80,7 @@ class OblizniprsteExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         
         # Паттерн 2: в конце "cca. 60 g" или "cca 60 g"
@@ -98,7 +98,7 @@ class OblizniprsteExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         
         # Паттерн 3: в начале "500 g piškotov" или "200 g mleka"
@@ -116,7 +116,7 @@ class OblizniprsteExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         
         # Паттерн 4: в начале с числом "1 strok česna", "3 jedilne žlice"
@@ -133,14 +133,14 @@ class OblizniprsteExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": None
+                "unit": None
             }
         
         # Если ничего не совпало, возвращаем как есть
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_ingredients(self) -> Optional[str]:

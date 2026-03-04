@@ -189,7 +189,7 @@ class PitaboomExtractor(BaseRecipeExtractor):
                         if name_text:
                             ingredients.append({
                                 "name": name_text,
-                                "units": unit,
+                                "unit": unit,
                                 "amount": amount
                             })
         
@@ -203,7 +203,7 @@ class PitaboomExtractor(BaseRecipeExtractor):
             ingredient_str: Строка вида "500 g Domaćih tankih kora" или "6 kom Jaja" или "3 jaja"
             
         Returns:
-            dict: {"name": "...", "units": "...", "amount": ...}
+            dict: {"name": "...", "unit": "...", "amount": ...}
         """
         if not ingredient_str:
             return None
@@ -232,7 +232,7 @@ class PitaboomExtractor(BaseRecipeExtractor):
             
             return {
                 "name": self.clean_text(name),
-                "units": unit.strip() if unit else None,
+                "unit": unit.strip() if unit else None,
                 "amount": amount
             }
         
@@ -255,7 +255,7 @@ class PitaboomExtractor(BaseRecipeExtractor):
             
             return {
                 "name": self.clean_text(name),
-                "units": "kom",  # По умолчанию "kom" для штучных ингредиентов
+                "unit": "kom",  # По умолчанию "kom" для штучных ингредиентов
                 "amount": amount
             }
         
@@ -268,7 +268,7 @@ class PitaboomExtractor(BaseRecipeExtractor):
             name, unit = match3.groups()
             return {
                 "name": self.clean_text(name),
-                "units": unit.strip() if unit else None,
+                "unit": unit.strip() if unit else None,
                 "amount": None
             }
         
@@ -276,14 +276,14 @@ class PitaboomExtractor(BaseRecipeExtractor):
         if ingredient_str.lower().startswith('prstohvat'):
             return {
                 "name": self.clean_text(re.sub(r'^prstohvat\s+', '', ingredient_str, flags=re.IGNORECASE)),
-                "units": "po ukusu",
+                "unit": "po ukusu",
                 "amount": None
             }
         
         # Если ничего не совпало, возвращаем только название
         return {
             "name": self.clean_text(ingredient_str),
-            "units": None,
+            "unit": None,
             "amount": None
         }
     

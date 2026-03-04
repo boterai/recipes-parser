@@ -93,7 +93,7 @@ class HelloFreshExtractor(BaseRecipeExtractor):
             keep_fractions: Сохранять ли дроби как есть (True) или преобразовать в десятичные (False)
             
         Returns:
-            dict: {"name": "Kokosmelk", "amount": "50", "units": "ml"}
+            dict: {"name": "Kokosmelk", "amount": "50", "unit": "ml"}
         """
         if not ingredient_str:
             return None
@@ -122,7 +122,7 @@ class HelloFreshExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, units, name = match.groups()
@@ -169,7 +169,7 @@ class HelloFreshExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_ingredients(self) -> Optional[list]:
@@ -216,12 +216,12 @@ class HelloFreshExtractor(BaseRecipeExtractor):
                 ingredients.append({
                     "name": "Peper",
                     "amount": None,
-                    "units": amount_unit
+                    "unit": amount_unit
                 })
                 ingredients.append({
                     "name": "Zout",
                     "amount": None,
-                    "units": None
+                    "unit": None
                 })
             else:
                 parsed = self.parse_ingredient_string(text, keep_fractions=True)

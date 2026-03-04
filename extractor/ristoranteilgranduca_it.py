@@ -158,8 +158,8 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
                         
                         # Специальная обработка для "sale e pepe"
                         if re.match(r'^sale\s+(e|o)\s+pepe', part, re.I):
-                            ingredients.append({"name": "sale", "amount": None, "units": None})
-                            ingredients.append({"name": "pepe", "amount": None, "units": None})
+                            ingredients.append({"name": "sale", "amount": None, "unit": None})
+                            ingredients.append({"name": "pepe", "amount": None, "unit": None})
                             continue
                         
                         # Парсим каждый ингредиент
@@ -177,7 +177,7 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
             text: Строка вида "1 cespo di scarola" или "2 cucchiai di olio" или "1 uovo sbattuto"
             
         Returns:
-            dict: {"name": "scarola", "amount": 1, "units": "cespo"} или None
+            dict: {"name": "scarola", "amount": 1, "unit": "cespo"} или None
         """
         if not text:
             return None
@@ -190,7 +190,7 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
             return {
                 "name": "sale",
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         # Паттерн: "1 cespo di scarola" или "100g di parmigiano" или "1 spicchio d'aglio"
@@ -217,7 +217,7 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip(),
                 "amount": amount,
-                "units": unit.strip() if unit else None
+                "unit": unit.strip() if unit else None
             }
         
         # Паттерн: "1 cespo di scarola" или "100g di parmigiano"
@@ -254,7 +254,7 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit.strip() if unit else None
+                "unit": unit.strip() if unit else None
             }
         
         # Паттерн для "1 uovo sbattuto" или "1 rotolo di pasta sfoglia rettangolare"
@@ -282,7 +282,7 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip(),
                 "amount": amount,
-                "units": state.strip() if state else None
+                "unit": state.strip() if state else None
             }
         
         # Паттерн без "di": "sale e pepe q.b" или другие простые названия
@@ -314,7 +314,7 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
                     return {
                         "name": name,
                         "amount": None,
-                        "units": None
+                        "unit": None
                     }
             
             # Обработка количества
@@ -346,14 +346,14 @@ class RistoranteilgranducaExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit.strip() if unit else None
+                "unit": unit.strip() if unit else None
             }
         
         # Если не совпадает ни один паттерн, возвращаем только название
         return {
             "name": text if len(text) <= 50 else None,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_instructions(self) -> Optional[str]:

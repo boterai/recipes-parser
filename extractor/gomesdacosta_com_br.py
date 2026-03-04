@@ -101,7 +101,7 @@ class GomesDaCostaExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "500g rigattoni" или "1 cebola média picada"
             
         Returns:
-            dict: {"name": "rigattoni", "amount": 500, "units": "g"} или None
+            dict: {"name": "rigattoni", "amount": 500, "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -128,7 +128,7 @@ class GomesDaCostaExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": None,
-                "units": "a gosto"
+                "unit": "a gosto"
             }
         
         # Паттерн для извлечения количества в начале строки
@@ -148,7 +148,7 @@ class GomesDaCostaExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit.lower()
+                "unit": unit.lower()
             }
         
         # Паттерн для единиц сразу после числа (500g, 2kg)
@@ -165,7 +165,7 @@ class GomesDaCostaExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit.lower()
+                "unit": unit.lower()
             }
         
         # Паттерн для чисел с единицами после пробела
@@ -219,7 +219,7 @@ class GomesDaCostaExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         
         # Паттерн для ингредиентов без явных единиц: "1 cebola média", "2 dentes de alho"
@@ -248,14 +248,14 @@ class GomesDaCostaExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         
         # Если ничего не подошло, возвращаем как есть
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_dish_name(self) -> Optional[str]:

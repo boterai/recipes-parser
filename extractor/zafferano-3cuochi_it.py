@@ -77,13 +77,13 @@ class Zafferano3CuochiExtractor(BaseRecipeExtractor):
                 ingredients.append({
                     "name": "sale",
                     "amount": None,
-                    "units": "q.b."
+                    "unit": "q.b."
                 })
                 # Добавляем pepe
                 ingredients.append({
                     "name": "pepe",
                     "amount": None,
-                    "units": "q.b."
+                    "unit": "q.b."
                 })
                 continue
             
@@ -147,7 +147,7 @@ class Zafferano3CuochiExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": float(amount) if amount and amount != 'None' else None,
-            "units": units if units else None
+            "unit": units if units else None
         }
     
     def extract_instructions(self) -> Optional[str]:

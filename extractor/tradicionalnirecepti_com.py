@@ -126,7 +126,7 @@ class TradicionalnireceptiExtractor(BaseRecipeExtractor):
             return {
                 "name": self.clean_text(name),
                 "amount": amount_num,
-                "units": unit
+                "unit": unit
             }
         
         # Пробуем паттерн 1 (без пробела между числом и единицей)
@@ -143,7 +143,7 @@ class TradicionalnireceptiExtractor(BaseRecipeExtractor):
             return {
                 "name": self.clean_text(name),
                 "amount": amount_num,
-                "units": unit
+                "unit": unit
             }
         
         # Пробуем паттерн 3 (в скобках)
@@ -160,7 +160,7 @@ class TradicionalnireceptiExtractor(BaseRecipeExtractor):
             return {
                 "name": self.clean_text(name),
                 "amount": amount_num,
-                "units": unit
+                "unit": unit
             }
         
         # Пробуем паттерн 4 (количество в начале)
@@ -177,14 +177,14 @@ class TradicionalnireceptiExtractor(BaseRecipeExtractor):
             return {
                 "name": self.clean_text(name),
                 "amount": amount_num,
-                "units": unit
+                "unit": unit
             }
         
         # Если ничего не совпало, возвращаем только название
         return {
             "name": self.clean_text(line),
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_ingredients(self) -> Optional[str]:

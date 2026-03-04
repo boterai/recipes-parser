@@ -134,7 +134,7 @@ class KingArthurBakingExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "3 cups (360g) King Arthur Unbleached All-Purpose Flour"
             
         Returns:
-            dict: {"name": "King Arthur Unbleached All-Purpose Flour", "units": "cups", "amount": 3}
+            dict: {"name": "King Arthur Unbleached All-Purpose Flour", "unit": "cups", "amount": 3}
         """
         if not ingredient_text:
             return None
@@ -163,7 +163,7 @@ class KingArthurBakingExtractor(BaseRecipeExtractor):
             # Если паттерн не совпал, возвращаем только название
             return {
                 "name": text,
-                "units": None,
+                "unit": None,
                 "amount": None
             }
         
@@ -210,7 +210,7 @@ class KingArthurBakingExtractor(BaseRecipeExtractor):
         
         return {
             "name": name,
-            "units": units,
+            "unit": units,
             "amount": amount
         }
     

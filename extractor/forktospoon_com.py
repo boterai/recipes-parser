@@ -247,7 +247,7 @@ class ForkToSpoonExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit  # Using "units" to match reference format
+            "unit": unit  # Using "units" to match reference format
         }
     
     def extract_ingredients(self) -> Optional[str]:

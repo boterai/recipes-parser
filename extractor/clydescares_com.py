@@ -150,7 +150,7 @@ class ClydescaresExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "오징어 1마리" или "무 200g"
             
         Returns:
-            dict: {"name": "오징어", "units": "마리", "amount": "1"} или None
+            dict: {"name": "오징어", "unit": "마리", "amount": "1"} или None
         """
         if not ingredient_text:
             return None
@@ -169,11 +169,11 @@ class ClydescaresExtractor(BaseRecipeExtractor):
         match = re.match(pattern, text, re.IGNORECASE)
         
         if match:
-            name, amount, units = match.groups()
-            # Возвращаем в правильном порядке: name, units, amount (как в reference)
+            name, amount, unit = match.groups()
+            # Возвращаем в правильном порядке: name, unit, amount (как в reference)
             return {
                 "name": name.strip(),
-                "units": units.strip() if units else None,
+                "unit": units.strip() if units else None,
                 "amount": amount.strip()
             }
         
@@ -185,14 +185,14 @@ class ClydescaresExtractor(BaseRecipeExtractor):
             name, amount = match2.groups()
             return {
                 "name": name.strip(),
-                "units": None,
+                "unit": None,
                 "amount": amount.strip()
             }
         
         # Если паттерн не совпал, возвращаем только название
         return {
             "name": text,
-            "units": None,
+            "unit": None,
             "amount": None
         }
     

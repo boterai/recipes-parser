@@ -150,7 +150,7 @@ class ArlaDkExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "120 g hvedemel (ca. 2 dl)"
             
         Returns:
-            dict: {"name": "Hvedemel", "units": "g", "amount": 120} или None
+            dict: {"name": "Hvedemel", "unit": "g", "amount": 120} или None
         """
         if not ingredient_text:
             return None
@@ -180,7 +180,7 @@ class ArlaDkExtractor(BaseRecipeExtractor):
             return {
                 "name": text.capitalize(),
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -226,7 +226,7 @@ class ArlaDkExtractor(BaseRecipeExtractor):
         
         return {
             "name": name,
-            "units": unit,
+            "unit": unit,
             "amount": amount
         }
     

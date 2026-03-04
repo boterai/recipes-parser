@@ -107,7 +107,7 @@ class CulinaryFiExtractor(BaseRecipeExtractor):
                     ingredient = {
                         "name": name,
                         "amount": amount,
-                        "units": unit  # Используем "units" согласно примеру JSON
+                        "unit": unit  # Используем "units" согласно примеру JSON
                     }
                     ingredients.append(ingredient)
         

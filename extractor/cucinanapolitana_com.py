@@ -189,7 +189,7 @@ class CucinaNapolitanaExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "– 500 g di carne macinata" или "&#8211; 1 cipolla"
             
         Returns:
-            dict: {"name": "carne macinata", "amount": 500, "units": "g"}
+            dict: {"name": "carne macinata", "amount": 500, "unit": "g"}
         """
         if not ingredient_text:
             return None
@@ -230,7 +230,7 @@ class CucinaNapolitanaExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": units if units else None,
+                "unit": units if units else None,
                 "amount": amount
             }
         
@@ -255,7 +255,7 @@ class CucinaNapolitanaExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": None,
+                "unit": None,
                 "amount": amount
             }
         
@@ -269,14 +269,14 @@ class CucinaNapolitanaExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name if name else text_without_parens,
-                "units": None,
+                "unit": None,
                 "amount": None
             }
         
         # Если паттерн не совпал, возвращаем только название
         return {
             "name": text_without_parens if text_without_parens else text,
-            "units": None,
+            "unit": None,
             "amount": None
         }
     

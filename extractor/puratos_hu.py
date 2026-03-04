@@ -119,7 +119,7 @@ class PuratosHuExtractor(BaseRecipeExtractor):
             if name:
                 ingredient = {
                     "name": name,
-                    "units": unit if unit else None,
+                    "unit": unit if unit else None,
                     "amount": int(amount) if amount and amount.isdigit() else amount
                 }
                 ingredients.append(ingredient)

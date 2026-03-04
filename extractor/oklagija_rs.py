@@ -65,7 +65,7 @@ class OklagijaExtractor(BaseRecipeExtractor):
             text: Строка вида "100 g ovsenih pahuljica" или "1 kašičica praška"
             
         Returns:
-            dict: {"name": "...", "amount": ..., "units": "..."} или None
+            dict: {"name": "...", "amount": ..., "unit": "..."} или None
         """
         if not text:
             return None
@@ -85,7 +85,7 @@ class OklagijaExtractor(BaseRecipeExtractor):
             # Если паттерн не совпал, возвращаем только название
             return {
                 "name": text,
-                "units": None,
+                "unit": None,
                 "amount": None
             }
         
@@ -136,7 +136,7 @@ class OklagijaExtractor(BaseRecipeExtractor):
         
         return {
             "name": name,
-            "units": unit,
+            "unit": unit,
             "amount": amount
         }
     

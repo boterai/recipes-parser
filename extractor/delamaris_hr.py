@@ -188,7 +188,7 @@ class DelamarisHrExtractor(BaseRecipeExtractor):
             dict: {"name": "...", "amount": "...", "unit": "..."}
         """
         if not ingredient_text:
-            return {"name": None, "amount": None, "units": None}
+            return {"name": None, "amount": None, "unit": None}
         
         # Чистим текст
         text = self.clean_text(ingredient_text)
@@ -206,7 +206,7 @@ class DelamarisHrExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip(),
                 "amount": count.strip(),
-                "units": f"x {weight} {unit}".strip()
+                "unit": f"x {weight} {unit}".strip()
             }
         
         # Паттерн обычного количества с единицей
@@ -218,14 +218,14 @@ class DelamarisHrExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip(),
                 "amount": amount.strip(),
-                "units": unit.strip()
+                "unit": unit.strip()
             }
         
         # Если паттерны не совпали - только название (без количества и единицы)
         return {
             "name": text.strip(),
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_ingredients(self) -> Optional[str]:

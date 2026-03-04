@@ -129,7 +129,7 @@ class DanskiTyrkietExtractor(BaseRecipeExtractor):
                     amount, unit, name = match
                     ingredients.append({
                         "name": name,
-                        "units": unit,
+                        "unit": unit,
                         "amount": amount.replace(',', '.')
                     })
         
@@ -143,7 +143,7 @@ class DanskiTyrkietExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "500 gram fetaost" или "1 bundt bredbladet persille"
             
         Returns:
-            dict: {"name": "fetaost", "amount": "500", "units": "gram"} или None
+            dict: {"name": "fetaost", "amount": "500", "unit": "gram"} или None
         """
         if not ingredient_text:
             return None
@@ -174,7 +174,7 @@ class DanskiTyrkietExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, units, name = match.groups()
@@ -228,7 +228,7 @@ class DanskiTyrkietExtractor(BaseRecipeExtractor):
         
         return {
             "name": name,
-            "units": units,
+            "unit": units,
             "amount": amount
         }
     

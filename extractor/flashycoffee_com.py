@@ -133,7 +133,7 @@ class FlashyCoffeeExtractor(BaseRecipeExtractor):
             
             ingredient = {
                 "name": name,
-                "units": unit,  # Use "units" plural to match expected format
+                "unit": unit,  # Use "units" plural to match expected format
                 "amount": amount_value
             }
             

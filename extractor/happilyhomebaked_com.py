@@ -82,7 +82,7 @@ class HappilyHomeBakedExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "2 1/2 cups all-purpose flour" или "1 tsp salt"
             
         Returns:
-            dict: {"name": "all-purpose flour", "amount": 2.5, "units": "cups"} или None
+            dict: {"name": "all-purpose flour", "amount": 2.5, "unit": "cups"} или None
         """
         if not ingredient_text:
             return None
@@ -113,7 +113,7 @@ class HappilyHomeBakedExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -172,7 +172,7 @@ class HappilyHomeBakedExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:

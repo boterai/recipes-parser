@@ -74,7 +74,7 @@ class MorsblogExtractor(BaseRecipeExtractor):
             text: Строка вида "200 g mel" или "2 store gulerødder, revet"
             
         Returns:
-            dict: {"name": "mel", "amount": "200", "units": "g"}
+            dict: {"name": "mel", "amount": "200", "unit": "g"}
         """
         if not text:
             return None
@@ -111,7 +111,7 @@ class MorsblogExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount_val,
-                "units": unit
+                "unit": unit
             }
         
         # Пробуем паттерн: число + название (без единицы, но проверим слово после числа)
@@ -182,7 +182,7 @@ class MorsblogExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount_val,
-                "units": unit
+                "unit": unit
             }
         
         # Если ничего не совпало, возвращаем только название
@@ -193,7 +193,7 @@ class MorsblogExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_ingredients(self) -> Optional[str]:

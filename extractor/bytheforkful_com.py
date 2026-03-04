@@ -174,7 +174,7 @@ class ByTheForkfulExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "200 g flour" или "2 tablespoons butter"
             
         Returns:
-            dict: {"name": "flour", "amount": 200, "units": "g"} или None
+            dict: {"name": "flour", "amount": 200, "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -214,7 +214,7 @@ class ByTheForkfulExtractor(BaseRecipeExtractor):
                 return {
                     "name": text.lower(),
                     "amount": None,
-                    "units": None
+                    "unit": None
                 }
             
             amount_str, unit, name = match.groups()
@@ -258,7 +258,7 @@ class ByTheForkfulExtractor(BaseRecipeExtractor):
         return {
             "name": name.lower(),
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_instructions(self) -> Optional[str]:

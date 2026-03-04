@@ -151,7 +151,7 @@ class HindiFoodvivaExtractor(BaseRecipeExtractor):
             ingredient_text: Строка ингредиента
             
         Returns:
-            dict: {"name": "...", "amount": "...", "units": "..."} или None
+            dict: {"name": "...", "amount": "...", "unit": "..."} или None
         """
         if not ingredient_text:
             return None
@@ -185,7 +185,7 @@ class HindiFoodvivaExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -215,7 +215,7 @@ class HindiFoodvivaExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_instructions(self) -> Optional[str]:

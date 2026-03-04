@@ -43,7 +43,7 @@ class ReteteEvaRoExtractor(BaseRecipeExtractor):
             text: Строка вида "125 g de spaghete" или "1 lingură cu ulei"
             
         Returns:
-            dict: {"name": "spaghete", "amount": 125, "units": "g"} или None
+            dict: {"name": "spaghete", "amount": 125, "unit": "g"} или None
         """
         if not text:
             return None
@@ -110,14 +110,14 @@ class ReteteEvaRoExtractor(BaseRecipeExtractor):
             return {
                 'name': name,
                 'amount': amount,
-                'units': unit
+                'unit': unit
             }
         else:
             # No amount found, just return the name
             return {
                 'name': text,
                 'amount': None,
-                'units': None
+                'unit': None
             }
     
     def extract_ingredients(self) -> Optional[str]:

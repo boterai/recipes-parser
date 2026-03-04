@@ -149,7 +149,7 @@ class FoodedCoExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "หมูสับละเอียด 500 กรัม" или "เลดี้ฟิงเกอร์ (Ladyfingers): ขนมปัง..."
             
         Returns:
-            dict или list[dict]: {"name": "หมูสับละเอียด", "units": "กรัม", "amount": 500}
+            dict или list[dict]: {"name": "หมูสับละเอียด", "unit": "กรัม", "amount": 500}
         """
         if not ingredient_text:
             return None
@@ -188,7 +188,7 @@ class FoodedCoExtractor(BaseRecipeExtractor):
             
             return {
                 "name": self.clean_text(name),
-                "units": self.clean_text(unit),
+                "unit": self.clean_text(unit),
                 "amount": amount
             }
         else:
@@ -204,7 +204,7 @@ class FoodedCoExtractor(BaseRecipeExtractor):
                 return [
                     {
                         "name": word,
-                        "units": None,
+                        "unit": None,
                         "amount": None
                     }
                     for word in words if word
@@ -213,7 +213,7 @@ class FoodedCoExtractor(BaseRecipeExtractor):
                 # Один ингредиент
                 return {
                     "name": clean_name,
-                    "units": None,
+                    "unit": None,
                     "amount": None
                 }
     

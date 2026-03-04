@@ -140,7 +140,7 @@ class DengodematreisenNoExtractor(BaseRecipeExtractor):
                     ingredients_list.append({
                         "name": name,
                         "amount": amount,
-                        "units": unit  # Используем "units" для соответствия эталону
+                        "unit": unit  # Используем "units" для соответствия эталону
                     })
         
         # Fallback: JSON-LD
@@ -158,7 +158,7 @@ class DengodematreisenNoExtractor(BaseRecipeExtractor):
     def _parse_ingredient_string(self, ingredient_str: str) -> Optional[Dict]:
         """
         Парсинг строки ингредиента из JSON-LD
-        Пример: "6 dl soyamelk" -> {"name": "soyamelk", "amount": 6, "units": "dl"}
+        Пример: "6 dl soyamelk" -> {"name": "soyamelk", "amount": 6, "unit": "dl"}
         """
         if not ingredient_str:
             return None
@@ -176,7 +176,7 @@ class DengodematreisenNoExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -208,7 +208,7 @@ class DengodematreisenNoExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit.strip() if unit else None
+            "unit": unit.strip() if unit else None
         }
     
     def extract_instructions(self) -> Optional[str]:

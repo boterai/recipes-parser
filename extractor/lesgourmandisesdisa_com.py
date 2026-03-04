@@ -116,7 +116,7 @@ class LesgourmandisesdisaComExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "8 pommes épluchées" или "1/2 tasse de sirop d'érable"
             
         Returns:
-            dict: {"name": "pommes", "amount": "8", "units": "pieces"} или None
+            dict: {"name": "pommes", "amount": "8", "unit": "pieces"} или None
         """
         if not ingredient_text or len(ingredient_text) < 3:
             return None
@@ -225,7 +225,7 @@ class LesgourmandisesdisaComExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": float(amount) if amount and '.' in amount else int(amount) if amount and amount.replace('.','').isdigit() else amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_instructions(self) -> Optional[str]:

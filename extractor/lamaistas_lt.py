@@ -160,7 +160,7 @@ class LamaistasLtExtractor(BaseRecipeExtractor):
             # Если паттерн не совпал, возвращаем только название
             return {
                 "name": text_without_notes,
-                "units": None,
+                "unit": None,
                 "amount": None
             }
         
@@ -199,7 +199,7 @@ class LamaistasLtExtractor(BaseRecipeExtractor):
         
         return {
             "name": name,
-            "units": unit,
+            "unit": unit,
             "amount": amount
         }
     

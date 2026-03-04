@@ -102,7 +102,7 @@ class TutireceptHuExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "50 dkg háztartási keksz" или "mazsola ízlés szerint"
             
         Returns:
-            dict: {"name": "háztartási keksz", "amount": 50, "units": "dkg"} или None
+            dict: {"name": "háztartási keksz", "amount": 50, "unit": "dkg"} или None
         """
         if not ingredient_text:
             return None
@@ -126,7 +126,7 @@ class TutireceptHuExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, units, name = match.groups()
@@ -162,7 +162,7 @@ class TutireceptHuExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_ingredients(self) -> Optional[str]:

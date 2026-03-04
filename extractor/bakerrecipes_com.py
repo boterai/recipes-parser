@@ -140,7 +140,7 @@ class BakerRecipesExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1 tb Plain gelatin" или "1/4 ts Salt"
             
         Returns:
-            dict: {"name": "Plain gelatin", "amount": "1", "units": "tb"}
+            dict: {"name": "Plain gelatin", "amount": "1", "unit": "tb"}
         """
         if not ingredient_text:
             return None
@@ -171,7 +171,7 @@ class BakerRecipesExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -182,7 +182,7 @@ class BakerRecipesExtractor(BaseRecipeExtractor):
             amount = amount_str.strip()
         
         # Обработка единицы измерения
-        units = unit.strip() if unit else None
+        unit = unit.strip() if unit else None
         
         # Очистка названия
         # Удаляем запятые и все что после них в некоторых случаях
@@ -197,7 +197,7 @@ class BakerRecipesExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units
+            "unit": unit
         }
     
     def extract_instructions(self) -> Optional[str]:

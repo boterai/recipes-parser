@@ -48,7 +48,7 @@ class CucinandoItalianoExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "Salmone affumicato 300 g" или "Aneto q.b."
             
         Returns:
-            dict: {"name": "Salmone affumicato", "units": "g", "amount": 300} или None
+            dict: {"name": "Salmone affumicato", "unit": "g", "amount": 300} или None
         """
         if not ingredient_text:
             return None
@@ -77,7 +77,7 @@ class CucinandoItalianoExtractor(BaseRecipeExtractor):
             # Если паттерн не совпал, возвращаем только название
             return {
                 "name": text,
-                "units": None,
+                "unit": None,
                 "amount": None
             }
         
@@ -120,7 +120,7 @@ class CucinandoItalianoExtractor(BaseRecipeExtractor):
         
         return {
             "name": name,
-            "units": unit,
+            "unit": unit,
             "amount": amount
         }
     

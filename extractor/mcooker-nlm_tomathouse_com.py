@@ -120,7 +120,7 @@ class McookerNlmExtractor(BaseRecipeExtractor):
             
             ingredients.append({
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             })
         

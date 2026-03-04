@@ -130,8 +130,8 @@ class ForkAndRootsExtractor(BaseRecipeExtractor):
             # Специальная обработка для "Salt and pepper"
             if re.match(r'^salt\s+and\s+pepper', ingredient_text.lower()):
                 # Разделяем на два отдельных ингредиента
-                ingredients_list.append({"name": "salt", "amount": None, "units": None})
-                ingredients_list.append({"name": "pepper", "amount": None, "units": None})
+                ingredients_list.append({"name": "salt", "amount": None, "unit": None})
+                ingredients_list.append({"name": "pepper", "amount": None, "unit": None})
                 continue
             
             # Парсим каждый ингредиент
@@ -149,7 +149,7 @@ class ForkAndRootsExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1 cup all-purpose flour" или "2 pounds chicken"
             
         Returns:
-            dict: {"name": "flour", "amount": "1", "units": "cup"} или None
+            dict: {"name": "flour", "amount": "1", "unit": "cup"} или None
         """
         if not ingredient_text:
             return None
@@ -181,7 +181,7 @@ class ForkAndRootsExtractor(BaseRecipeExtractor):
             return {
                 "name": text_for_parsing,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -227,7 +227,7 @@ class ForkAndRootsExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_instructions(self) -> Optional[str]:

@@ -75,7 +75,7 @@ class KotanyiExtractor(BaseRecipeExtractor):
             ingredient_str: Строка ингредиента
             
         Returns:
-            dict: {"name": "...", "amount": ..., "units": "..."} или None
+            dict: {"name": "...", "amount": ..., "unit": "..."} или None
         """
         if not ingredient_str:
             return None
@@ -94,7 +94,7 @@ class KotanyiExtractor(BaseRecipeExtractor):
             return {
                 "name": self.clean_text(ingredient_str),
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         # Есть число в начале
@@ -109,7 +109,7 @@ class KotanyiExtractor(BaseRecipeExtractor):
             return {
                 "name": self.clean_text(ingredient_str),
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         unit = unit_match.group(1)
@@ -138,7 +138,7 @@ class KotanyiExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_dish_name(self) -> Optional[str]:

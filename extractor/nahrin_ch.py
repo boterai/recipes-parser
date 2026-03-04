@@ -133,7 +133,7 @@ class NahrinChExtractor(BaseRecipeExtractor):
             # Формируем словарь ингредиента
             ingredient = {
                 "name": name_text,
-                "units": unit,  # Используем "units" как в примере JSON
+                "unit": unit,  # Используем "units" как в примере JSON
                 "amount": amount
             }
             

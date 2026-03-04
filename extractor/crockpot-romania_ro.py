@@ -228,7 +228,7 @@ class CrockpotRomaniaExtractor(BaseRecipeExtractor):
                     parsed = self.parse_ingredient_text(content)
                     ingredients_list.append({
                         "name": parsed["name"],
-                        "units": parsed["unit"],
+                        "unit": parsed["unit"],
                         "amount": parsed["amount"]
                     })
         
@@ -241,7 +241,7 @@ class CrockpotRomaniaExtractor(BaseRecipeExtractor):
                     parsed = self.parse_ingredient_text(text)
                     ingredients_list.append({
                         "name": parsed["name"],
-                        "units": parsed["unit"],
+                        "unit": parsed["unit"],
                         "amount": parsed["amount"]
                     })
         

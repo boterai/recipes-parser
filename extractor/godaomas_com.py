@@ -165,7 +165,7 @@ class GodaomasExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -219,7 +219,7 @@ class GodaomasExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount_value,
-            "units": unit  # Используем "units" вместо "unit" как в эталоне
+            "unit": unit  # Используем "units" вместо "unit" как в эталоне
         }
     
     def extract_instructions(self) -> Optional[str]:

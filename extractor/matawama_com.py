@@ -59,7 +59,7 @@ class MatawamaExtractor(BaseRecipeExtractor):
             Словарь с amount и units
         """
         if not amount_text:
-            return {"amount": None, "units": None}
+            return {"amount": None, "unit": None}
         
         amount_text = self.clean_text(amount_text)
         
@@ -67,20 +67,20 @@ class MatawamaExtractor(BaseRecipeExtractor):
         # "500g", "500 g"
         match = re.match(r'^(\d+\.?\d*)\s*([a-zA-Z]+)$', amount_text)
         if match:
-            return {"amount": match.group(1), "units": match.group(2)}
+            return {"amount": match.group(1), "unit": match.group(2)}
         
         # "2 stk", "4 fedd"
         match = re.match(r'^(\d+\.?\d*)\s+(.+)$', amount_text)
         if match:
-            return {"amount": match.group(1), "units": match.group(2)}
+            return {"amount": match.group(1), "unit": match.group(2)}
         
         # Только число
         match = re.match(r'^(\d+\.?\d*)$', amount_text)
         if match:
-            return {"amount": match.group(1), "units": None}
+            return {"amount": match.group(1), "unit": None}
         
         # Если не удалось распарсить, возвращаем как есть
-        return {"amount": amount_text, "units": None}
+        return {"amount": amount_text, "unit": None}
     
     def extract_ingredients(self) -> Optional[str]:
         """Извлечение ингредиентов из таблиц или списков"""
@@ -117,7 +117,7 @@ class MatawamaExtractor(BaseRecipeExtractor):
                         ingredient = {
                             "name": name,
                             "amount": parsed_amount["amount"],
-                            "units": parsed_amount["units"]
+                            "unit": parsed_amount["units"]
                         }
                         ingredients.append(ingredient)
             
@@ -158,7 +158,7 @@ class MatawamaExtractor(BaseRecipeExtractor):
                             ingredient = {
                                 "name": match.group(3),
                                 "amount": match.group(1),
-                                "units": match.group(2)
+                                "unit": match.group(2)
                             }
                             ingredients.append(ingredient)
                         else:
@@ -171,13 +171,13 @@ class MatawamaExtractor(BaseRecipeExtractor):
                                     ingredient = {
                                         "name": parts[1],
                                         "amount": match.group(1),
-                                        "units": parts[0]
+                                        "unit": parts[0]
                                     }
                                 else:
                                     ingredient = {
                                         "name": match.group(2),
                                         "amount": match.group(1),
-                                        "units": None
+                                        "unit": None
                                     }
                                 ingredients.append(ingredient)
                             else:
@@ -187,7 +187,7 @@ class MatawamaExtractor(BaseRecipeExtractor):
                                     ingredient = {
                                         "name": parts[0],
                                         "amount": parts[1] if len(parts) > 1 else None,
-                                        "units": None
+                                        "unit": None
                                     }
                                     ingredients.append(ingredient)
         

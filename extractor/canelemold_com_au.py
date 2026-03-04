@@ -464,7 +464,7 @@ class CaneleMoldExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "500g of whole milk"
             
         Returns:
-            dict: {"name": "whole milk", "amount": 500, "units": "g"}
+            dict: {"name": "whole milk", "amount": 500, "unit": "g"}
         """
         if not ingredient_text:
             return None
@@ -485,7 +485,7 @@ class CaneleMoldExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -515,7 +515,7 @@ class CaneleMoldExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit if unit else None
+            "unit": unit if unit else None
         }
     
     def parse_ingredient(self, ingredient_text: str) -> Optional[Dict]:

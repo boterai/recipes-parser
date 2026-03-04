@@ -113,10 +113,10 @@ class ImaotCoIlExtractor(BaseRecipeExtractor):
             text: Строка вида "2 ביצים XL/L" или "כוס סוכר"
             
         Returns:
-            dict: {"name": "ביצים", "amount": 2, "units": "XL/L"}
+            dict: {"name": "ביצים", "amount": 2, "unit": "XL/L"}
         """
         if not text:
-            return {"name": None, "amount": None, "units": None}
+            return {"name": None, "amount": None, "unit": None}
         
         text = self.clean_text(text).strip()
         
@@ -206,7 +206,7 @@ class ImaotCoIlExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_ingredients(self) -> Optional[str]:

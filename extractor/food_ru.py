@@ -146,7 +146,7 @@ class FoodRuExtractor(BaseRecipeExtractor):
         
         Returns:
             JSON-строка с массивом ингредиентов в формате 
-            [{"name": "...", "units": "...", "amount": ...}, ...]
+            [{"name": "...", "unit": "...", "amount": ...}, ...]
         """
         if not self._recipe_data:
             return None
@@ -159,7 +159,7 @@ class FoodRuExtractor(BaseRecipeExtractor):
             for product in main_block['products']:
                 ingredient = {
                     'name': product.get('title', ''),
-                    'units': product.get('custom_measure', ''),
+                    'unit': product.get('custom_measure', ''),
                     'amount': product.get('custom_measure_count', 0)
                 }
                 ingredients.append(ingredient)
@@ -172,7 +172,7 @@ class FoodRuExtractor(BaseRecipeExtractor):
                     for product in block['products']:
                         ingredient = {
                             'name': product.get('title', ''),
-                            'units': product.get('custom_measure', ''),
+                            'unit': product.get('custom_measure', ''),
                             'amount': product.get('custom_measure_count', 0)
                         }
                         ingredients.append(ingredient)

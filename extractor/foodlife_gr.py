@@ -95,7 +95,7 @@ class FoodlifeGrExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "100g βιολογικό βούτυρο" или "4 αυγά"
             
         Returns:
-            dict: {"name": "βούτυρο", "amount": "100", "units": "g"} или None
+            dict: {"name": "βούτυρο", "amount": "100", "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -114,7 +114,7 @@ class FoodlifeGrExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -157,7 +157,7 @@ class FoodlifeGrExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:

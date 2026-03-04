@@ -181,7 +181,7 @@ class CuisineazExtractor(BaseRecipeExtractor):
                     
                     ingredients.append({
                         "name": name,
-                        "units": unit,
+                        "unit": unit,
                         "amount": amount_value
                     })
         
@@ -214,14 +214,14 @@ class CuisineazExtractor(BaseRecipeExtractor):
                         
                         ingredients.append({
                             "name": name,
-                            "units": unit,
+                            "unit": unit,
                             "amount": amount_value
                         })
                     else:
                         # Если не смогли распарсить, добавляем как есть
                         ingredients.append({
                             "name": ingredient_text,
-                            "units": None,
+                            "unit": None,
                             "amount": None
                         })
         

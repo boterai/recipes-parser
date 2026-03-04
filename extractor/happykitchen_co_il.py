@@ -180,7 +180,7 @@ class HappyKitchenExtractor(BaseRecipeExtractor):
                 
                 ingredients.append({
                     "name": name,
-                    "units": unit,
+                    "unit": unit,
                     "amount": amount
                 })
         
@@ -231,7 +231,7 @@ class HappyKitchenExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name.strip(),
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }
         
@@ -270,7 +270,7 @@ class HappyKitchenExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name.strip(),
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }
         
@@ -279,14 +279,14 @@ class HappyKitchenExtractor(BaseRecipeExtractor):
         if len(parts) == 2 and parts[0] in ['כפית', 'כפות', 'קורט', 'כוס']:
             return {
                 "name": parts[1].strip(),
-                "units": parts[0],
+                "unit": parts[0],
                 "amount": 1  # Подразумеваем 1
             }
         
         # Если нет числа в начале, возвращаем как есть с null для amount и units
         return {
             "name": line,
-            "units": None,
+            "unit": None,
             "amount": None
         }
     

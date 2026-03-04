@@ -176,7 +176,7 @@ class ReceptikCzExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "500 g steaku ribeye" или "1/2 lžičky mořské soli"
             
         Returns:
-            dict: {"name": "...", "amount": "...", "units": "..."}
+            dict: {"name": "...", "amount": "...", "unit": "..."}
         """
         if not ingredient_text:
             return None
@@ -227,7 +227,7 @@ class ReceptikCzExtractor(BaseRecipeExtractor):
                     return {
                         "name": text,
                         "amount": None,
-                        "units": None
+                        "unit": None
                     }
             else:
                 amount_str, unit, name = match.groups()
@@ -285,7 +285,7 @@ class ReceptikCzExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_ingredients(self) -> Optional[str]:

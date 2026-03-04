@@ -113,7 +113,7 @@ class GourmandelleExtractor(BaseRecipeExtractor):
                         ingredients.append({
                             "name": name,
                             "amount": amount,
-                            "units": unit  # Используем "units" как в эталонном JSON
+                            "unit": unit  # Используем "units" как в эталонном JSON
                         })
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
@@ -126,7 +126,7 @@ class GourmandelleExtractor(BaseRecipeExtractor):
             ingredient_str: Строка вида "1 ½ cups flour" или "2 Tbsps olive oil"
             
         Returns:
-            dict: {"name": "flour", "amount": "1 ½", "units": "cups"} или None
+            dict: {"name": "flour", "amount": "1 ½", "unit": "cups"} или None
         """
         if not ingredient_str:
             return None
@@ -145,7 +145,7 @@ class GourmandelleExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -177,7 +177,7 @@ class GourmandelleExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_instructions(self) -> Optional[str]:

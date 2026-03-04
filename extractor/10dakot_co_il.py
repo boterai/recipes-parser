@@ -161,7 +161,7 @@ class TenDakotExtractor(BaseRecipeExtractor):
             ingredient_text: Строка с ингредиентом
             
         Returns:
-            dict: {"name": "...", "amount": ..., "units": "..."} или None
+            dict: {"name": "...", "amount": ..., "unit": "..."} или None
         """
         if not ingredient_text:
             return None
@@ -214,7 +214,7 @@ class TenDakotExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -281,7 +281,7 @@ class TenDakotExtractor(BaseRecipeExtractor):
             return None
         
         # Если количество и единица не определены, но название предполагает единичный предмет
-        # (бצל, גזר, תפוח, etc.), устанавливаем по умолчанию amount=1, units="unit"
+        # (бצל, גזר, תפוח, etc.), устанавливаем по умолчанию amount=1, unit="unit"
         if amount is None and english_unit is None:
             # Список слов, которые обычно подразумевают единичный предмет
             countable_items = ['בצל', 'גזר', 'תפוח', 'גמבה', 'קישוא', 'תפו"א', 'עגבני', 
@@ -298,7 +298,7 @@ class TenDakotExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": english_unit
+            "unit": english_unit
         }
     
     def extract_instructions(self) -> Optional[str]:

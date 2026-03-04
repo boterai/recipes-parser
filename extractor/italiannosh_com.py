@@ -77,7 +77,7 @@ class ItalianNoshExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1 cup all-purpose flour" или "2 pounds chicken"
             
         Returns:
-            dict: {"name": "flour", "amount": "1", "units": "cup"} или None
+            dict: {"name": "flour", "amount": "1", "unit": "cup"} или None
         """
         if not ingredient_text:
             return None
@@ -106,7 +106,7 @@ class ItalianNoshExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -150,7 +150,7 @@ class ItalianNoshExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:

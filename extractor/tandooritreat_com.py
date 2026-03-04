@@ -156,7 +156,7 @@ class TandooriTreatExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "2 tbsp neutral oil (vegetable or canola)"
             
         Returns:
-            dict: {"name": "neutral oil", "amount": 2, "units": "tbsp"} или None
+            dict: {"name": "neutral oil", "amount": 2, "unit": "tbsp"} или None
         """
         if not ingredient_text:
             return None
@@ -249,7 +249,7 @@ class TandooriTreatExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": units
+                "unit": units
             }
         
         # Если не нашли числовое количество с единицей, пробуем другие паттерны
@@ -277,7 +277,7 @@ class TandooriTreatExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": units
+                "unit": units
             }
         
         # Еще один паттерн: "3 garlic cloves, minced" (число без единицы, но с предметом)
@@ -309,7 +309,7 @@ class TandooriTreatExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip(),
                 "amount": amount,
-                "units": modifier.strip()
+                "unit": modifier.strip()
             }
         
         # Последний паттерн: просто "число название" без модификаторов
@@ -341,14 +341,14 @@ class TandooriTreatExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip(),
                 "amount": amount,
-                "units": None
+                "unit": None
             }
         
         # Если ничего не подошло, возвращаем как есть
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_ingredients(self) -> Optional[str]:

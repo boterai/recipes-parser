@@ -184,7 +184,7 @@ class KuchniaFaktPlExtractor(BaseRecipeExtractor):
             
             ingredient = {
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }
             ingredients.append(ingredient)

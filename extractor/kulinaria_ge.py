@@ -184,7 +184,7 @@ class KulinariaGeExtractor(BaseRecipeExtractor):
                     
                     ingredients.append({
                         "name": name,
-                        "units": unit,
+                        "unit": unit,
                         "amount": amount
                     })
                     continue
@@ -203,7 +203,7 @@ class KulinariaGeExtractor(BaseRecipeExtractor):
                     
                     ingredients.append({
                         "name": name,
-                        "units": unit,
+                        "unit": unit,
                         "amount": amount
                     })
                     continue
@@ -229,7 +229,7 @@ class KulinariaGeExtractor(BaseRecipeExtractor):
                 
                 ingredient_dict = {
                     "name": name,
-                    "units": unit,
+                    "unit": unit,
                     "amount": amount
                 }
                 ingredients.append(ingredient_dict)
@@ -263,7 +263,7 @@ class KulinariaGeExtractor(BaseRecipeExtractor):
                     
                     ingredients.append({
                         "name": name,
-                        "units": unit,
+                        "unit": unit,
                         "amount": amount
                     })
         

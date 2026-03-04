@@ -62,7 +62,7 @@ class ReceptiComExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "4 svinjske šnicle" или "1 kašičica senfa"
             
         Returns:
-            dict: {"name": "...", "amount": ..., "units": "..."} или None
+            dict: {"name": "...", "amount": ..., "unit": "..."} или None
         """
         if not ingredient_text:
             return None
@@ -95,7 +95,7 @@ class ReceptiComExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, _, name = match.groups()
@@ -142,7 +142,7 @@ class ReceptiComExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_instructions(self) -> Optional[str]:

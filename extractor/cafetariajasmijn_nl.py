@@ -149,7 +149,7 @@ class CafetariajasmijnNlExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": unit_normalized,  # Используем "units" как в эталонном JSON
+                "unit": unit_normalized,  # Используем "units" как в эталонном JSON
                 "amount": amount_value
             }
         else:
@@ -157,7 +157,7 @@ class CafetariajasmijnNlExtractor(BaseRecipeExtractor):
             # Проверяем, нет ли просто названия без количества
             return {
                 "name": text_clean,
-                "units": None,
+                "unit": None,
                 "amount": None
             }
     

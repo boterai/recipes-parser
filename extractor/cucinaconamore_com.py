@@ -120,7 +120,7 @@ class CucinaConAmoreExtractor(BaseRecipeExtractor):
             ingredient_text: Строка ингредиента
             
         Returns:
-            dict: {"name": "...", "amount": ..., "units": "..."}
+            dict: {"name": "...", "amount": ..., "unit": "..."}
         """
         if not ingredient_text:
             return None
@@ -244,7 +244,7 @@ class CucinaConAmoreExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:

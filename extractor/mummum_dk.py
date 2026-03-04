@@ -162,7 +162,7 @@ class MummumDkExtractor(BaseRecipeExtractor):
                 
                 ingredients.append({
                     "name": name,
-                    "units": unit if unit else None,
+                    "unit": unit if unit else None,
                     "amount": amount_value
                 })
         

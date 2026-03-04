@@ -201,7 +201,7 @@ class CleanFoodDirtyGirlExtractor(BaseRecipeExtractor):
             
             ingredient_dict = {
                 "name": name,
-                "units": units,
+                "unit": units,
                 "amount": amount
             }
             

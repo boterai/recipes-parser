@@ -135,14 +135,14 @@ class PimInThExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         
         # Если паттерн не совпал, возвращаем только название
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def parse_amount(self, amount_str: str) -> Optional[str]:

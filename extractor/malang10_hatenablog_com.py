@@ -120,11 +120,11 @@ class Malang10HatenablogComExtractor(BaseRecipeExtractor):
         """
         Парсинг строки ингредиента в структурированный формат
         Примеры японского формата:
-        - "牛肉 500g" -> {"name": "牛肉", "amount": 500, "units": "g"}
-        - "玉ねぎ 1個" -> {"name": "玉ねぎ", "amount": 1, "units": "個"}
-        - "塩・黒胡椒 適量" -> {"name": "塩・黒胡椒", "amount": None, "units": "適量"}
-        - "牛肉（肩ロース）500g" -> {"name": "牛肉", "amount": 500, "units": "g"}
-        - "鶏もも肉：500g" -> {"name": "鶏もも肉", "amount": 500, "units": "g"}
+        - "牛肉 500g" -> {"name": "牛肉", "amount": 500, "unit": "g"}
+        - "玉ねぎ 1個" -> {"name": "玉ねぎ", "amount": 1, "unit": "個"}
+        - "塩・黒胡椒 適量" -> {"name": "塩・黒胡椒", "amount": None, "unit": "適量"}
+        - "牛肉（肩ロース）500g" -> {"name": "牛肉", "amount": 500, "unit": "g"}
+        - "鶏もも肉：500g" -> {"name": "鶏もも肉", "amount": 500, "unit": "g"}
         """
         text = self.clean_text(text)
         if not text:
@@ -148,7 +148,7 @@ class Malang10HatenablogComExtractor(BaseRecipeExtractor):
             pattern2 = r'^(.+?)(\d+(?:[.,]\d+)?)(g|kg|ml|l|個|本|片|枚|株|カップ|個分)$'
             match2 = re.match(pattern2, text_clean)
             if match2:
-                name, amount, units = match2.groups()
+                name, amount, unit = match2.groups()
             else:
                 # Возвращаем только название
                 # Убираем trailing двоеточия и пробелы
@@ -156,10 +156,10 @@ class Malang10HatenablogComExtractor(BaseRecipeExtractor):
                 return {
                     "name": clean_name if clean_name else text_clean,
                     "amount": None,
-                    "units": None
+                    "unit": None
                 }
         else:
-            name, amount, units = match.groups()
+            name, amount, unit = match.groups()
         
         # Очищаем имя от trailing двоеточий и пробелов
         name = self.clean_text(name).rstrip('：: ')
@@ -185,7 +185,7 @@ class Malang10HatenablogComExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_ingredients(self) -> Optional[str]:

@@ -149,7 +149,7 @@ class GezondWeekmenuExtractor(BaseRecipeExtractor):
             dict: {"name": "havermout", "amount": 40, "unit": "gram"}
         """
         if not ingredient_text:
-            return {"name": None, "amount": None, "units": None}
+            return {"name": None, "amount": None, "unit": None}
         
         text = self.clean_text(ingredient_text).strip()
         
@@ -164,7 +164,7 @@ class GezondWeekmenuExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -195,7 +195,7 @@ class GezondWeekmenuExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:

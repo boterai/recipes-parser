@@ -145,14 +145,14 @@ class CholaithieuExtractor(BaseRecipeExtractor):
                             
                             ingredients_list.append({
                                 "name": self.clean_text(name),
-                                "units": unit_str,
+                                "unit": unit_str,
                                 "amount": amount
                             })
                         else:
                             # Если не нашли количество, добавляем только имя
                             ingredients_list.append({
                                 "name": self.clean_text(name),
-                                "units": None,
+                                "unit": None,
                                 "amount": None
                             })
         

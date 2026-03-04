@@ -177,7 +177,7 @@ class MadensverdenExtractor(BaseRecipeExtractor):
                 if name:
                     ingredients.append({
                         "name": name,
-                        "units": unit,  # Используем "units" как в примере JSON
+                        "unit": unit,  # Используем "units" как в примере JSON
                         "amount": amount
                     })
         
@@ -190,7 +190,7 @@ class MadensverdenExtractor(BaseRecipeExtractor):
                     if parsed:
                         ingredients.append({
                             "name": parsed['name'],
-                            "units": parsed['unit'],
+                            "unit": parsed['unit'],
                             "amount": parsed['amount']
                         })
         

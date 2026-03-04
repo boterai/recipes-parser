@@ -115,7 +115,7 @@ class ReceptyEuExtractor(BaseRecipeExtractor):
                 ingredients.append({
                     "name": name,
                     "amount": amount,
-                    "units": unit
+                    "unit": unit
                 })
         
         # Ищем упоминания ингредиентов без количества
@@ -132,7 +132,7 @@ class ReceptyEuExtractor(BaseRecipeExtractor):
                     ingredients.append({
                         "name": ingredient_name,
                         "amount": amount,
-                        "units": unit
+                        "unit": unit
                     })
         
         # Ищем общие упоминания ингредиентов
@@ -155,7 +155,7 @@ class ReceptyEuExtractor(BaseRecipeExtractor):
                     ingredients.append({
                         "name": ingredient_text,
                         "amount": None,
-                        "units": None
+                        "unit": None
                     })
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
@@ -334,10 +334,10 @@ class ReceptyEuExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "vepřové maso (kotleta)" или "5 lžic tmavé sójové omáčky"
             
         Returns:
-            dict: {"name": "...", "amount": "...", "units": "..."}
+            dict: {"name": "...", "amount": "...", "unit": "..."}
         """
         if not ingredient_text:
-            return {"name": None, "amount": None, "units": None}
+            return {"name": None, "amount": None, "unit": None}
         
         text = self.clean_text(ingredient_text)
         
@@ -389,7 +389,7 @@ class ReceptyEuExtractor(BaseRecipeExtractor):
         return {
             "name": name if name else None,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_ingredients(self) -> Optional[str]:

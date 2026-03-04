@@ -165,7 +165,7 @@ class FoodhuntingNlExtractor(BaseRecipeExtractor):
                 
                 ingredients.append({
                     "name": name,
-                    "units": unit,
+                    "unit": unit,
                     "amount": amount
                 })
         
@@ -188,7 +188,7 @@ class FoodhuntingNlExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "500 gram gehakt" или "1 ui"
             
         Returns:
-            dict: {"name": "gehakt", "amount": 500, "units": "gram"} или None
+            dict: {"name": "gehakt", "amount": 500, "unit": "gram"} или None
         """
         if not ingredient_text:
             return None
@@ -215,7 +215,7 @@ class FoodhuntingNlExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -244,7 +244,7 @@ class FoodhuntingNlExtractor(BaseRecipeExtractor):
         return {
             "name": name if name else text,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_instructions(self) -> Optional[str]:

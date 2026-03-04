@@ -210,7 +210,7 @@ class CojimeCzExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_instructions(self) -> Optional[str]:

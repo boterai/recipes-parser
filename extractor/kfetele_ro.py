@@ -201,7 +201,7 @@ class KfeteleRoExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "250 g făină" или "3 cepe medii"
             
         Returns:
-            dict: {"name": "făină", "amount": 250, "units": "g"} или None
+            dict: {"name": "făină", "amount": 250, "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -236,7 +236,7 @@ class KfeteleRoExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -292,7 +292,7 @@ class KfeteleRoExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_instructions(self) -> Optional[str]:

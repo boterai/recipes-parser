@@ -71,7 +71,7 @@ class LasagneReceptyExtractor(BaseRecipeExtractor):
         if not match:
             return {
                 "name": text,
-                "units": None,
+                "unit": None,
                 "amount": None
             }
         
@@ -141,7 +141,7 @@ class LasagneReceptyExtractor(BaseRecipeExtractor):
         
         return {
             "name": final_name,
-            "units": final_unit,
+            "unit": final_unit,
             "amount": final_amount
         }
     

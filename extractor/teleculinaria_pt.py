@@ -153,7 +153,7 @@ class TeleculinariaExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1 kg  Lingueirão" или "600 g  Feijão-branco cozido"
             
         Returns:
-            dict: {"name": "Lingueirão", "amount": 1, "units": "kg"}
+            dict: {"name": "Lingueirão", "amount": 1, "unit": "kg"}
         """
         if not ingredient_text:
             return None
@@ -172,7 +172,7 @@ class TeleculinariaExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -209,7 +209,7 @@ class TeleculinariaExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_steps(self) -> Optional[str]:

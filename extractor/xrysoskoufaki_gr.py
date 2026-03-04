@@ -77,11 +77,11 @@ class XrysoskoufakiExtractor(BaseRecipeExtractor):
             text: Строка вида "2 ποτήρια Ελαιόλαδο" или "500 γρ. Σιμιγδάλι ψιλό"
             
         Returns:
-            dict: {"name": "...", "units": "...", "amount": ...}
+            dict: {"name": "...", "unit": "...", "amount": ...}
         """
         text = self.clean_text(text)
         if not text:
-            return {"name": text, "units": None, "amount": None}
+            return {"name": text, "unit": None, "amount": None}
         
         # Греческие единицы измерения (без внешних скобок, чтобы не создавать группу)
         units_pattern = r'(?:ποτήρι(?:α)?|φλιτζάνι(?:α)?|κούπ(?:α|ες)?|φλ\.|κ\.σ\.|κ\.γ\.|γρ\.|κιλό|λίτρ(?:α|ο)|ml|kg|g|τεμάχι(?:α)?|φέτ(?:α|ες)|κλωνάρι(?:α)?|δέσμη)'
@@ -138,12 +138,12 @@ class XrysoskoufakiExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name if name else text,
-                "units": unit.strip() if unit else None,
+                "unit": unit.strip() if unit else None,
                 "amount": amount
             }
         
         # Если паттерн не совпал, просто возвращаем название
-        return {"name": text, "units": None, "amount": None}
+        return {"name": text, "unit": None, "amount": None}
     
     def extract_ingredients(self) -> Optional[str]:
         """Извлечение ингредиентов"""

@@ -146,7 +146,7 @@ class CucinaGiapponeseExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "300g di cavolo" или "2 uova"
             
         Returns:
-            dict: {"name": "cavolo", "amount": "300", "units": "g"} или None
+            dict: {"name": "cavolo", "amount": "300", "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -227,7 +227,7 @@ class CucinaGiapponeseExtractor(BaseRecipeExtractor):
                 return {
                     "name": name,
                     "amount": amount,
-                    "units": unit if unit else None
+                    "unit": unit if unit else None
                 }
         
         # Если не совпал паттерн с числом, проверяем текстовое количество
@@ -251,7 +251,7 @@ class CucinaGiapponeseExtractor(BaseRecipeExtractor):
                 return {
                     "name": "uova",
                     "amount": amount,
-                    "units": None
+                    "unit": None
                 }
             
             # Нормализуем единицу
@@ -279,7 +279,7 @@ class CucinaGiapponeseExtractor(BaseRecipeExtractor):
                 return {
                     "name": name,
                     "amount": amount,
-                    "units": unit
+                    "unit": unit
                 }
             elif not name and unit != 'uova':
                 # Если нет названия, но есть количество и единица - возвращаем None
@@ -305,7 +305,7 @@ class CucinaGiapponeseExtractor(BaseRecipeExtractor):
                 return {
                     "name": name,
                     "amount": amount,
-                    "units": None
+                    "unit": None
                 }
         
         # Если совсем не распарсилось, возвращаем как ингредиент без количества
@@ -322,7 +322,7 @@ class CucinaGiapponeseExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         return None

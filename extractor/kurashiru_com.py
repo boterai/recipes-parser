@@ -142,7 +142,7 @@ class KurashiruExtractor(BaseRecipeExtractor):
                     ingredients.append({
                         "name": name,
                         "amount": amount,
-                        "units": unit
+                        "unit": unit
                     })
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
@@ -155,7 +155,7 @@ class KurashiruExtractor(BaseRecipeExtractor):
             ingredient_str: Строка вида "ホットケーキミックス 150g" или "卵 1個" или "砂糖 大さじ1"
             
         Returns:
-            dict: {"name": "...", "amount": "...", "units": "..."} или None
+            dict: {"name": "...", "amount": "...", "unit": "..."} или None
         """
         if not ingredient_str:
             return None
@@ -201,14 +201,14 @@ class KurashiruExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         else:
             # Если паттерн не совпал, возвращаем только название
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
     
     def parse_quantity(self, quantity_str: str) -> tuple:

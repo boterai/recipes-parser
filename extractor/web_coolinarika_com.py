@@ -130,7 +130,7 @@ class WebCoolnarikaExtractor(BaseRecipeExtractor):
             
             ingredients_list.append({
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             })
         

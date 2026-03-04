@@ -95,14 +95,14 @@ class DomacicaComExtractor(BaseRecipeExtractor):
             ingredient_text: текст ингредиента, например "1 mali luk" или "500 gr krem sira"
             
         Returns:
-            Словарь с полями name, amount, units
+            Словарь с полями name, amount, unit
         """
         ingredient_text = self.clean_text(ingredient_text)
         
         # Инициализация результата
         result = {
             "name": None,
-            "units": None,
+            "unit": None,
             "amount": None
         }
         

@@ -133,7 +133,7 @@ class EverydayYummyRecipesExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1 cup unsalted butter, cold" or "1 ¼  cups   (175g) all-purpose flour ((or gluten-free))"
             
         Returns:
-            dict: {"name": "unsalted butter", "amount": "1", "units": "cup"}
+            dict: {"name": "unsalted butter", "amount": "1", "unit": "cup"}
         """
         if not ingredient_text:
             return None
@@ -173,7 +173,7 @@ class EverydayYummyRecipesExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -245,7 +245,7 @@ class EverydayYummyRecipesExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit  # Используем "units" как в примерах JSON
+            "unit": unit  # Используем "units" как в примерах JSON
         }
     
     def extract_ingredients(self) -> Optional[str]:

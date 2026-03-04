@@ -156,7 +156,7 @@ class SmachnohoExtractor(BaseRecipeExtractor):
                 
                 ingredient_dict = {
                     "name": name,
-                    "units": unit,  # используем "units" вместо "unit" как в примерах
+                    "unit": unit,  # используем "units" вместо "unit" как в примерах
                     "amount": amount_value
                 }
                 ingredients.append(ingredient_dict)

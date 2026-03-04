@@ -165,7 +165,7 @@ class BistroBadiaExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -197,7 +197,7 @@ class BistroBadiaExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount if amount else None,
-            "units": unit
+            "unit": unit
         }
     
     def extract_instructions(self) -> Optional[str]:

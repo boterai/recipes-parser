@@ -160,7 +160,7 @@ class ShibasKitchenExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "500 g Blattspinat" или "1 Zwiebel" или "Salz & Pfeffer"
             
         Returns:
-            list: Список словарей [{"name": "Blattspinat", "amount": "500", "units": "g"}]
+            list: Список словарей [{"name": "Blattspinat", "amount": "500", "unit": "g"}]
         """
         if not ingredient_text:
             return []
@@ -203,7 +203,7 @@ class ShibasKitchenExtractor(BaseRecipeExtractor):
                             result.append({
                                 "name": part,
                                 "amount": None,
-                                "units": None
+                                "unit": None
                             })
                     if result:
                         return result
@@ -235,7 +235,7 @@ class ShibasKitchenExtractor(BaseRecipeExtractor):
             return [{
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }]
         
         amount_str, unit, name = match.groups()
@@ -281,7 +281,7 @@ class ShibasKitchenExtractor(BaseRecipeExtractor):
         return [{
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }]
     
     def extract_instructions(self) -> Optional[str]:

@@ -68,7 +68,7 @@ class MevashelatExtractor(BaseRecipeExtractor):
             line: Строка вида "3 חלבונים" или "1/2 כוס סוכר"
             
         Returns:
-            dict: {"name": "חלבונים", "amount": 3, "units": None} или None
+            dict: {"name": "חלבונים", "amount": 3, "unit": None} или None
         """
         if not line:
             return None
@@ -107,7 +107,7 @@ class MevashelatExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }
         
@@ -127,14 +127,14 @@ class MevashelatExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": None,
+                "unit": None,
                 "amount": amount
             }
         
         # Если не удалось распарсить, возвращаем просто название
         return {
             "name": line,
-            "units": None,
+            "unit": None,
             "amount": None
         }
     

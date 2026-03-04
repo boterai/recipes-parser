@@ -101,10 +101,10 @@ class MzssHrExtractor(BaseRecipeExtractor):
             text: Строка вида "1 velika glavica brokule" или "2 žlice maslinovog ulja"
             
         Returns:
-            dict: {"name": "brokula", "amount": "1", "units": "velika glavica"}
+            dict: {"name": "brokula", "amount": "1", "unit": "velika glavica"}
         """
         if not text:
-            return {"name": None, "amount": None, "units": None}
+            return {"name": None, "amount": None, "unit": None}
         
         text = self.clean_text(text).strip()
         
@@ -164,7 +164,7 @@ class MzssHrExtractor(BaseRecipeExtractor):
             return {
                 "name": name if name else None,
                 "amount": amount if amount else None,
-                "units": unit
+                "unit": unit
             }
         else:
             # Нет количества, только название
@@ -177,7 +177,7 @@ class MzssHrExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
     
     def extract_ingredients(self) -> Optional[str]:

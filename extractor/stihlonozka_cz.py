@@ -49,7 +49,7 @@ class StihlonozkaExtractor(BaseRecipeExtractor):
     def extract_ingredients(self) -> Optional[str]:
         """
         Извлечение ингредиентов в формате JSON строки
-        Структура: [{"name": "...", "amount": "...", "units": "..."}]
+        Структура: [{"name": "...", "amount": "...", "unit": "..."}]
         """
         ingredients = []
         
@@ -109,7 +109,7 @@ class StihlonozkaExtractor(BaseRecipeExtractor):
         или "Sójové maso – nahrazuje tradiční..."
         
         Returns:
-            dict: {"name": "...", "amount": "...", "units": "..."}
+            dict: {"name": "...", "amount": "...", "unit": "..."}
         """
         if not text or len(text) < 2:
             return None
@@ -160,14 +160,14 @@ class StihlonozkaExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         
         # Если паттерн не совпал, возвращаем как есть
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_instructions(self) -> Optional[str]:

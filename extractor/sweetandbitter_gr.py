@@ -51,7 +51,7 @@ class SweetAndBitterExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "500γρ. αλεύρι" или "6 αβγά"
             
         Returns:
-            dict: {"name": "αλεύρι", "amount": "500", "units": "γρ."} или None
+            dict: {"name": "αλεύρι", "amount": "500", "unit": "γρ."} или None
         """
         if not ingredient_text:
             return None
@@ -75,7 +75,7 @@ class SweetAndBitterExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip(),
                 "amount": int(amount) if amount.isdigit() else amount,
-                "units": unit.strip()
+                "unit": unit.strip()
             }
         
         # Паттерн с единицей, разделенной пробелом
@@ -89,7 +89,7 @@ class SweetAndBitterExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip(),
                 "amount": int(amount) if amount.isdigit() else amount,
-                "units": unit.strip()
+                "unit": unit.strip()
             }
         
         # Паттерн без единицы измерения (только число + название)
@@ -103,7 +103,7 @@ class SweetAndBitterExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip(),
                 "amount": int(amount) if amount.isdigit() else amount,
-                "units": None
+                "unit": None
             }
         
         # Паттерн для специальных случаев типа "μια πρέζα αλάτι" (щепотка соли)
@@ -111,14 +111,14 @@ class SweetAndBitterExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": text,  # Вся строка как количество для таких случаев
-                "units": None
+                "unit": None
             }
         
         # Если ничего не совпало, возвращаем как название без количества
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_ingredients(self) -> Optional[str]:

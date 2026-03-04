@@ -90,7 +90,7 @@ class RachelCooksExtractor(BaseRecipeExtractor):
                     ingredients.append({
                         "name": name,
                         "amount": amount,
-                        "units": unit  # Используем "units" как в примере JSON
+                        "unit": unit  # Используем "units" как в примере JSON
                     })
         
         return ingredients if ingredients else None

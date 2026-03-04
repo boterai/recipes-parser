@@ -125,7 +125,7 @@ class CoupDePouceExtractor(BaseRecipeExtractor):
         if m:
             return {
                 "name": self._clean_ingredient_name(m.group(3)),
-                "units": m.group(2),
+                "unit": m.group(2),
                 "amount": m.group(1)
             }
         
@@ -137,7 +137,7 @@ class CoupDePouceExtractor(BaseRecipeExtractor):
             unit = re.sub(r'c\.\s*à\s*thé', 'c. à thé', unit, flags=re.I)
             return {
                 "name": self._clean_ingredient_name(m.group(3)),
-                "units": unit,
+                "unit": unit,
                 "amount": m.group(1)
             }
         
@@ -149,7 +149,7 @@ class CoupDePouceExtractor(BaseRecipeExtractor):
             unit = re.sub(r'c\.\s*à\s*thé', 'c. à thé', unit, flags=re.I)
             return {
                 "name": self._clean_ingredient_name(m.group(3)),
-                "units": unit,
+                "unit": unit,
                 "amount": m.group(1)
             }
         
@@ -165,13 +165,13 @@ class CoupDePouceExtractor(BaseRecipeExtractor):
             if unit.lower() == 'gros':
                 return {
                     "name": self._clean_ingredient_name(m.group(3)),
-                    "units": None,
+                    "unit": None,
                     "amount": m.group(1)
                 }
             
             return {
                 "name": self._clean_ingredient_name(m.group(3)),
-                "units": unit,
+                "unit": unit,
                 "amount": m.group(1)
             }
         
@@ -180,14 +180,14 @@ class CoupDePouceExtractor(BaseRecipeExtractor):
         if m:
             return {
                 "name": self._clean_ingredient_name(m.group(2)),
-                "units": None,
+                "unit": None,
                 "amount": m.group(1)
             }
         
         # Pattern 6: just name
         return {
             "name": self._clean_ingredient_name(text),
-            "units": None,
+            "unit": None,
             "amount": None
         }
     

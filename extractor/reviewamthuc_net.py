@@ -66,7 +66,7 @@ class ReviewamthucNetExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "2 miếng đậu hũ chiên" или "250ml nước cốt dừa"
             
         Returns:
-            dict: {"name": "đậu hũ chiên", "amount": "2", "units": "miếng"} или None
+            dict: {"name": "đậu hũ chiên", "amount": "2", "unit": "miếng"} или None
         """
         if not ingredient_text:
             return None
@@ -95,7 +95,7 @@ class ReviewamthucNetExtractor(BaseRecipeExtractor):
             return {
                 "name": self.clean_text(name),
                 "amount": amount.replace(',', '.'),
-                "units": units
+                "unit": units
             }
         
         # Попытка 2: Число + название (без единицы, или единица в скобках/в конце)
@@ -117,14 +117,14 @@ class ReviewamthucNetExtractor(BaseRecipeExtractor):
                 return {
                     "name": self.clean_text(name),
                     "amount": amount.replace(',', '.'),
-                    "units": units
+                    "unit": units
                 }
             else:
                 # Нет единицы, только количество и название
                 return {
                     "name": self.clean_text(name_with_unit),
                     "amount": amount.replace(',', '.'),
-                    "units": None
+                    "unit": None
                 }
         
         # Попытка 3: Только название (без количества и единицы)
@@ -134,14 +134,14 @@ class ReviewamthucNetExtractor(BaseRecipeExtractor):
             return {
                 "name": self.clean_text(text),
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         # Если ничего не совпало, возвращаем как есть
         return {
             "name": self.clean_text(text),
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_ingredients(self) -> Optional[str]:

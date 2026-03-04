@@ -71,7 +71,7 @@ class TheFoodieSiExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "500 g listov vlečenega testa" или "2 veliki čebuli"
             
         Returns:
-            dict: {"name": "...", "amount": "...", "units": "..."} или None
+            dict: {"name": "...", "amount": "...", "unit": "..."} или None
         """
         if not ingredient_text:
             return None
@@ -92,7 +92,7 @@ class TheFoodieSiExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -159,7 +159,7 @@ class TheFoodieSiExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:

@@ -133,7 +133,7 @@ class DrinkowniaExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "60 ml wódki" или "1-2 ćwiartki limonki"
             
         Returns:
-            dict: {"name": "wódki", "amount": "60", "units": "ml"}
+            dict: {"name": "wódki", "amount": "60", "unit": "ml"}
         """
         if not ingredient_text:
             return None
@@ -153,7 +153,7 @@ class DrinkowniaExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, parenthetical, name = match.groups()
@@ -182,7 +182,7 @@ class DrinkowniaExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:

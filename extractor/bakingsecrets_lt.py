@@ -156,7 +156,7 @@ class BakingSecretsExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "65 g miltų" или "1 šaukštas cukraus"
             
         Returns:
-            dict: {"name": "miltų", "amount": 65, "units": "g"} или None
+            dict: {"name": "miltų", "amount": 65, "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -176,7 +176,7 @@ class BakingSecretsExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -230,7 +230,7 @@ class BakingSecretsExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit_normalized
+            "unit": unit_normalized
         }
     
     def extract_instructions(self) -> Optional[str]:

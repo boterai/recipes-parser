@@ -61,7 +61,7 @@ class MalinlandqvistExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1 kg fast potatis" или "2 msk olivolja"
             
         Returns:
-            dict: {"name": "potatis", "amount": "1", "units": "kg"} или None
+            dict: {"name": "potatis", "amount": "1", "unit": "kg"} или None
         """
         if not ingredient_text:
             return None
@@ -106,7 +106,7 @@ class MalinlandqvistExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip(),
                 "amount": amount,
-                "units": units
+                "unit": units
             }
         
         # Паттерн для обычных ингредиентов: "2 msk hackad timjan" или "1 kg potatis"
@@ -132,7 +132,7 @@ class MalinlandqvistExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip(),
                 "amount": amount,
-                "units": unit.strip()
+                "unit": unit.strip()
             }
         
         # Паттерн без явной единицы: "2 gula lökar" (число + название)
@@ -147,14 +147,14 @@ class MalinlandqvistExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip(),
                 "amount": amount,
-                "units": "st"
+                "unit": "st"
             }
         
         # Ингредиенты без количества: "salt och peppar"
         return {
             "name": text.strip(),
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_ingredients(self) -> Optional[str]:

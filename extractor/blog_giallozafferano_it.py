@@ -115,7 +115,7 @@ class BlogGiallozafferanoExtractor(BaseRecipeExtractor):
                     # Формируем структуру согласно эталону (units, а не unit!)
                     ingredient = {
                         "name": name,
-                        "units": unit,
+                        "unit": unit,
                         "amount": amount
                     }
                     ingredients.append(ingredient)
@@ -156,7 +156,7 @@ class BlogGiallozafferanoExtractor(BaseRecipeExtractor):
                         
                         ingredient = {
                             "name": name,
-                            "units": unit,
+                            "unit": unit,
                             "amount": amount
                         }
                         ingredients.append(ingredient)

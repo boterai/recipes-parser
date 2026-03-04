@@ -90,7 +90,7 @@ class RecepttarKiskegyedHuExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1 kg burgonya" или "2 db tojás"
             
         Returns:
-            dict: {"name": "burgonya", "amount": 1, "units": "kg"} или None
+            dict: {"name": "burgonya", "amount": 1, "unit": "kg"} или None
         """
         if not ingredient_text:
             return None
@@ -120,7 +120,7 @@ class RecepttarKiskegyedHuExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, units, name = match.groups()
@@ -166,7 +166,7 @@ class RecepttarKiskegyedHuExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_ingredients(self) -> Optional[str]:

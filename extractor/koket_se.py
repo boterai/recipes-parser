@@ -71,7 +71,7 @@ class KoketSeExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "30 g jäst" или "0,5 dl strösocker"
             
         Returns:
-            dict: {"name": "jäst", "amount": 30, "units": "g"} или None
+            dict: {"name": "jäst", "amount": 30, "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -109,7 +109,7 @@ class KoketSeExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -149,7 +149,7 @@ class KoketSeExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:

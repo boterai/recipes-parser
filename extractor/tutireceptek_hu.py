@@ -240,12 +240,12 @@ class TutireceptekExtractor(BaseRecipeExtractor):
                     ingredients.append(parsed)
         
         if ingredients:
-            # Преобразуем в формат JSON с полями name, units, amount
+            # Преобразуем в формат JSON с полями name, unit, amount
             formatted_ingredients = []
             for ing in ingredients:
                 formatted_ingredients.append({
                     "name": ing["name"],
-                    "units": ing["unit"],
+                    "unit": ing["unit"],
                     "amount": ing["amount"]
                 })
             return json.dumps(formatted_ingredients, ensure_ascii=False)

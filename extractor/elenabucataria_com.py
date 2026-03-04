@@ -72,7 +72,7 @@ class ElenaExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "680 grame mușchi de vita" или "4 cartofi medii"
             
         Returns:
-            dict: {"name": "...", "amount": ..., "units": "..."} или None
+            dict: {"name": "...", "amount": ..., "unit": "..."} или None
         """
         if not ingredient_text:
             return None
@@ -103,7 +103,7 @@ class ElenaExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, units, name = match.groups()
@@ -145,7 +145,7 @@ class ElenaExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_ingredients(self) -> Optional[str]:

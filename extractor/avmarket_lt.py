@@ -86,7 +86,7 @@ class AvmarketLtExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "Булвės: 6 vnt." или "Pievagrybiai"
             
         Returns:
-            Словарь с полями name, amount, units
+            Словарь с полями name, amount, unit
         """
         ingredient_text = self.clean_text(ingredient_text)
         
@@ -106,21 +106,21 @@ class AvmarketLtExtractor(BaseRecipeExtractor):
                 units = self.clean_text(qty_match.group(2)) if qty_match.group(2) else None
                 return {
                     "name": name,
-                    "units": units,
+                    "unit": units,
                     "amount": amount
                 }
             else:
                 # Только единицы без количества
                 return {
                     "name": name,
-                    "units": quantity_part if quantity_part else None,
+                    "unit": quantity_part if quantity_part else None,
                     "amount": None
                 }
         else:
             # Ингредиент без количества
             return {
                 "name": ingredient_text,
-                "units": None,
+                "unit": None,
                 "amount": None
             }
     

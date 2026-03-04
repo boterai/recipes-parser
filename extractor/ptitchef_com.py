@@ -144,7 +144,7 @@ class PtitchefExtractor(BaseRecipeExtractor):
             ingredient_text: строка вида "100 g de beurre", "150g de farine", "1/2 l de lait", "2 cuillères à soupe d'extrait"
             
         Returns:
-            Словарь с полями name, amount, units
+            Словарь с полями name, amount, unit
         """
         if not ingredient_text:
             return None
@@ -161,7 +161,7 @@ class PtitchefExtractor(BaseRecipeExtractor):
             amount = self._parse_amount(amount_str)
             return {
                 'name': self.clean_text(name),
-                'units': self.clean_text(unit),
+                'unit': self.clean_text(unit),
                 'amount': amount
             }
         
@@ -172,7 +172,7 @@ class PtitchefExtractor(BaseRecipeExtractor):
             amount = self._parse_amount(amount_str)
             return {
                 'name': self.clean_text(name),
-                'units': self.clean_text(unit),
+                'unit': self.clean_text(unit),
                 'amount': amount
             }
         
@@ -184,7 +184,7 @@ class PtitchefExtractor(BaseRecipeExtractor):
             amount = self._parse_amount(amount_str)
             return {
                 'name': self.clean_text(name),
-                'units': self.clean_text(unit),
+                'unit': self.clean_text(unit),
                 'amount': amount
             }
         
@@ -195,7 +195,7 @@ class PtitchefExtractor(BaseRecipeExtractor):
             amount = self._parse_amount(amount_str)
             return {
                 'name': self.clean_text(name),
-                'units': self.clean_text(unit),
+                'unit': self.clean_text(unit),
                 'amount': amount
             }
         
@@ -206,14 +206,14 @@ class PtitchefExtractor(BaseRecipeExtractor):
             amount = self._parse_amount(amount_str)
             return {
                 'name': self.clean_text(name),
-                'units': None,
+                'unit': None,
                 'amount': amount
             }
         
         # Если не удалось распарсить, возвращаем как есть
         return {
             'name': ingredient_text,
-            'units': None,
+            'unit': None,
             'amount': None
         }
     

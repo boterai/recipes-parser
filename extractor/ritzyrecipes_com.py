@@ -171,7 +171,7 @@ class RitzyRecipesExtractor(BaseRecipeExtractor):
         
         return {
             "name": name,
-            "units": unit,
+            "unit": unit,
             "amount": amount_str
         }
     

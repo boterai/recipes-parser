@@ -54,7 +54,7 @@ class TaimetaExtractor(BaseRecipeExtractor):
             item_text: Строка вида "פילה בקר טרי ונקי מגידים – 850 גרם"
             
         Returns:
-            dict: {"name": "פילה בקר", "amount": 850, "units": "grams"} или None
+            dict: {"name": "פילה בקר", "amount": 850, "unit": "grams"} или None
         """
         if not item_text:
             return None
@@ -90,21 +90,21 @@ class TaimetaExtractor(BaseRecipeExtractor):
                 return {
                     "name": name_part,
                     "amount": amount,
-                    "units": None
+                    "unit": None
                 }
             
             # Совсем нет количества
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         if len(parts) != 2:
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         name_part = parts[0].strip()
@@ -217,7 +217,7 @@ class TaimetaExtractor(BaseRecipeExtractor):
         return {
             "name": name_part,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def _normalize_amount(self, amount_str: str) -> any:

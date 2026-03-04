@@ -133,7 +133,7 @@ class VarieniCzExtractor(BaseRecipeExtractor):
         Извлечение ингредиентов в формате JSON array
         
         Returns:
-            JSON строка с массивом ингредиентов [{name, amount, units}]
+            JSON строка с массивом ингредиентов [{name, amount, unit}]
         """
         ingredients = []
         
@@ -175,7 +175,7 @@ class VarieniCzExtractor(BaseRecipeExtractor):
                 
                 ingredient = {
                     "name": self.clean_text(name_text),
-                    "units": units,
+                    "unit": units,
                     "amount": amount
                 }
                 ingredients.append(ingredient)
@@ -199,7 +199,7 @@ class VarieniCzExtractor(BaseRecipeExtractor):
                 
                 ingredient = {
                     "name": name,
-                    "units": units,
+                    "unit": units,
                     "amount": amount
                 }
                 ingredients.append(ingredient)

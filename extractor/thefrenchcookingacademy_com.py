@@ -156,7 +156,7 @@ class TheFrenchCookingAcademyExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "100 g (3.5 oz) caster sugar" or "sheet all-butter puff pastry (about 250 g / 9 oz)"
             
         Returns:
-            dict: {"name": "caster sugar", "amount": 100, "units": "g"}
+            dict: {"name": "caster sugar", "amount": 100, "unit": "g"}
         """
         if not ingredient_text:
             return None
@@ -168,7 +168,7 @@ class TheFrenchCookingAcademyExtractor(BaseRecipeExtractor):
             return {
                 "name": text.lower(),
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         # Заменяем Unicode дроби на числа
@@ -195,7 +195,7 @@ class TheFrenchCookingAcademyExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip().lower(),
                 "amount": amount,
-                "units": unit.lower()
+                "unit": unit.lower()
             }
         
         # Стандартный паттерн для "100 g (3.5 oz) caster sugar" или "4 large eggs"
@@ -209,7 +209,7 @@ class TheFrenchCookingAcademyExtractor(BaseRecipeExtractor):
             return {
                 "name": text.lower(),
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -220,7 +220,7 @@ class TheFrenchCookingAcademyExtractor(BaseRecipeExtractor):
             return {
                 "name": text.lower(),
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         # Обработка количества
@@ -265,7 +265,7 @@ class TheFrenchCookingAcademyExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_steps(self) -> Optional[str]:

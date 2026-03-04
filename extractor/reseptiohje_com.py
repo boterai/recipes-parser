@@ -127,7 +127,7 @@ class ReseptiohjExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "450-550 g jauhoja" или "1 tl suolaa"
             
         Returns:
-            dict: {"name": "jauhoja", "amount": "450-550", "units": "g"} или None
+            dict: {"name": "jauhoja", "amount": "450-550", "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -151,7 +151,7 @@ class ReseptiohjExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -181,7 +181,7 @@ class ReseptiohjExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit  # Используем "units" как в примере JSON
+            "unit": unit  # Используем "units" как в примере JSON
         }
     
     def extract_instructions(self) -> Optional[str]:

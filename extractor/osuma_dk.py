@@ -141,7 +141,7 @@ class OsumaDkExtractor(BaseRecipeExtractor):
                 # Convert to format matching the expected JSON: "units" instead of "unit"
                 ingredients.append({
                     "name": parsed["name"],
-                    "units": parsed["unit"],
+                    "unit": parsed["unit"],
                     "amount": parsed["amount"]
                 })
         

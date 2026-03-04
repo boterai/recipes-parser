@@ -123,7 +123,7 @@ class SchlemmenjentztDeExtractor(BaseRecipeExtractor):
             ingredient_str: Строка вида "500 g Kartoffeln, geschält und gewürfelt"
             
         Returns:
-            dict: {"name": "Kartoffeln", "amount": 500, "units": "g"}
+            dict: {"name": "Kartoffeln", "amount": 500, "unit": "g"}
         """
         if not ingredient_str:
             return None
@@ -204,7 +204,7 @@ class SchlemmenjentztDeExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:

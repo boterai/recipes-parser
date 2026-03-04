@@ -125,7 +125,7 @@ class NummerukeNoExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1 ss ekstra jomfru olivenolje"
             
         Returns:
-            dict: {"name": "ekstra jomfru olivenolje", "amount": "1", "units": "ss"}
+            dict: {"name": "ekstra jomfru olivenolje", "amount": "1", "unit": "ss"}
         """
         if not ingredient_text:
             return None
@@ -154,7 +154,7 @@ class NummerukeNoExtractor(BaseRecipeExtractor):
             # Если паттерн не совпал, возвращаем только название
             return {
                 "name": text,
-                "units": None,
+                "unit": None,
                 "amount": None
             }
         
@@ -181,10 +181,10 @@ class NummerukeNoExtractor(BaseRecipeExtractor):
         if not name or len(name) < 2:
             return None
         
-        # Return in the same order as reference: name, units, amount
+        # Return in the same order as reference: name, unit, amount
         return {
             "name": name,
-            "units": units,
+            "unit": units,
             "amount": amount
         }
     

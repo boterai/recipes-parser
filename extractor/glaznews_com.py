@@ -131,7 +131,7 @@ class GlaznewsExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "— вершкове масло, 100 г;" или "Масло вершкове — 75 г"
             
         Returns:
-            dict: {"name": "вершкове масло", "amount": "100", "units": "г"}
+            dict: {"name": "вершкове масло", "amount": "100", "unit": "г"}
         """
         if not ingredient_text:
             return None
@@ -171,7 +171,7 @@ class GlaznewsExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount if amount else None,
-                "units": units
+                "unit": units
             }
         
         # Паттерн 2: "название — количество единица" (Масло вершкове — 75 г)
@@ -189,7 +189,7 @@ class GlaznewsExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount if amount else None,
-                "units": units
+                "unit": units
             }
         
         # Паттерн 3: "количество единица название"
@@ -207,14 +207,14 @@ class GlaznewsExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount if amount else None,
-                "units": units
+                "unit": units
             }
         
         # Если ничего не совпало, возвращаем только название
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_instructions(self) -> Optional[str]:

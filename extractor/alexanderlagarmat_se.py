@@ -136,7 +136,7 @@ class AlexanderLagarmatSeExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "4,5 dl vetemjöl" или "120 gram smör"
             
         Returns:
-            dict: {"name": "vetemjöl", "amount": 4.5, "units": "dl"} или None
+            dict: {"name": "vetemjöl", "amount": 4.5, "unit": "dl"} или None
         """
         if not ingredient_text:
             return None
@@ -163,7 +163,7 @@ class AlexanderLagarmatSeExtractor(BaseRecipeExtractor):
             return {
                 "name": self.clean_text(cleaned_name),
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -198,7 +198,7 @@ class AlexanderLagarmatSeExtractor(BaseRecipeExtractor):
         return {
             "name": self.clean_text(name),
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_instructions(self) -> Optional[str]:

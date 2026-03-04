@@ -94,7 +94,7 @@ class DomacicaComHrExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "500 gr tikve" или "4 kašike putera"
             
         Returns:
-            dict: {"name": "tikva", "amount": 500, "units": "gr"} или None
+            dict: {"name": "tikva", "amount": 500, "unit": "gr"} или None
         """
         if not ingredient_text:
             return None
@@ -155,7 +155,7 @@ class DomacicaComHrExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }
         
@@ -177,14 +177,14 @@ class DomacicaComHrExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": None,
+                "unit": None,
                 "amount": amount
             }
         
         # Если паттерн не совпал, возвращаем только название
         return {
             "name": text,
-            "units": None,
+            "unit": None,
             "amount": None
         }
     

@@ -179,7 +179,7 @@ class SallysBakingAddictionExtractor(BaseRecipeExtractor):
             return {
                 "name": text_without_parens,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -230,7 +230,7 @@ class SallysBakingAddictionExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:

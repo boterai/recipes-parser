@@ -51,7 +51,7 @@ class AnkarsrumExtractor(BaseRecipeExtractor):
             ingredient_text: текст ингредиента, например "500 g durumvehnäjauhoja"
             
         Returns:
-            Словарь с полями name, units, amount (порядок важен для совместимости)
+            Словарь с полями name, unit, amount (порядок важен для совместимости)
         """
         # Паттерн для парсинга: количество + единица + название
         # Примеры:
@@ -105,17 +105,17 @@ class AnkarsrumExtractor(BaseRecipeExtractor):
             if unit:
                 unit = unit_map.get(unit.lower(), unit)
             
-            # Return in specific order: name, units, amount
+            # Return in specific order: name, unit, amount
             return {
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }
         else:
             # Если паттерн не подошел, возвращаем как есть без количества и единиц
             return {
                 "name": ingredient_text,
-                "units": None,
+                "unit": None,
                 "amount": None
             }
     

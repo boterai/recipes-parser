@@ -170,7 +170,7 @@ class NutripGrExtractor(BaseRecipeExtractor):
             ingredient_text: Строка с ингредиентом
             
         Returns:
-            dict: {"name": "...", "amount": "...", "units": "..."}
+            dict: {"name": "...", "amount": "...", "unit": "..."}
         """
         if not ingredient_text:
             return None
@@ -200,7 +200,7 @@ class NutripGrExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": units,
+                "unit": units,
                 "amount": amount
             }
         
@@ -229,7 +229,7 @@ class NutripGrExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": units,
+                "unit": units,
                 "amount": amount
             }
         
@@ -254,14 +254,14 @@ class NutripGrExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": None,
+                "unit": None,
                 "amount": amount
             }
         
         # Если ничего не совпало, возвращаем весь текст как name (с очисткой)
         return {
             "name": self.clean_text(text),
-            "units": None,
+            "unit": None,
             "amount": None
         }
     

@@ -72,7 +72,7 @@ class StilKurirExtractor(BaseRecipeExtractor):
             text: Строка вида "200 g (1 ½ šolje) „00" mekog pšeničnog brašna"
             
         Returns:
-            dict: {"name": "...", "amount": ..., "units": "..."}
+            dict: {"name": "...", "amount": ..., "unit": "..."}
         """
         if not text:
             return None
@@ -193,7 +193,7 @@ class StilKurirExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": units
+                "unit": units
             }
         
         # Паттерн 2: просто число + название (для "4 jaja od najmanje 70 g")
@@ -209,7 +209,7 @@ class StilKurirExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": "pieces"
+                "unit": "pieces"
             }
         
         # Паттерн 3: только название без количества (So i biber po ukusu)
@@ -227,7 +227,7 @@ class StilKurirExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         return None
@@ -255,7 +255,7 @@ class StilKurirExtractor(BaseRecipeExtractor):
                                     ingredients.append({
                                         "name": part,
                                         "amount": None,
-                                        "units": None
+                                        "unit": None
                                     })
                         else:
                             parsed = self.parse_ingredient_line(ingredient_text)

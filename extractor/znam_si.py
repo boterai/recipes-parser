@@ -126,7 +126,7 @@ class ZnamSiExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "500 g mehke bele moke" или "1 večja čebula"
             
         Returns:
-            dict: {"name": "mehka bela moka", "amount": "500", "units": "g"} или None
+            dict: {"name": "mehka bela moka", "amount": "500", "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -145,7 +145,7 @@ class ZnamSiExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -190,7 +190,7 @@ class ZnamSiExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:

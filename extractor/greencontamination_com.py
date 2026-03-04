@@ -64,7 +64,7 @@ class GreenContaminationExtractor(BaseRecipeExtractor):
             line: Строка вида "200 g farina di ceci" или "2C Olio di oliva" или "1c-2c sale"
             
         Returns:
-            dict: {"name": "farina di ceci", "amount": "200", "units": "g"} или None
+            dict: {"name": "farina di ceci", "amount": "200", "unit": "g"} или None
         """
         if not line:
             return None
@@ -86,7 +86,7 @@ class GreenContaminationExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         
         # Паттерн для "1 o 2 cipolle rosse" - количество с "o" (или)
@@ -99,7 +99,7 @@ class GreenContaminationExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         
         # Паттерн для извлечения количества, единицы и названия
@@ -138,7 +138,7 @@ class GreenContaminationExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         
         # Если нет числа в начале (например, "Pepe", "Basilico", "Olio, sale, pepe, zucchero")
@@ -151,7 +151,7 @@ class GreenContaminationExtractor(BaseRecipeExtractor):
                 return {
                     "name": name,
                     "amount": None,
-                    "units": "q.b."
+                    "unit": "q.b."
                 }
             
             # Может быть "(facoltativo)" в названии
@@ -161,7 +161,7 @@ class GreenContaminationExtractor(BaseRecipeExtractor):
                 return {
                     "name": name,
                     "amount": None,
-                    "units": "(facoltativo)"
+                    "unit": "(facoltativo)"
                 }
             
             # Если это список через запятую (например, "Olio, sale, pepe, zucchero")
@@ -170,7 +170,7 @@ class GreenContaminationExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         return None

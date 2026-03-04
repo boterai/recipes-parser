@@ -81,7 +81,7 @@ class KokaiHopExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "125 gram smör"
             
         Returns:
-            dict: {"name": "smör", "amount": 125, "units": "gram"}
+            dict: {"name": "smör", "amount": 125, "unit": "gram"}
         """
         if not ingredient_text:
             return None
@@ -114,14 +114,14 @@ class KokaiHopExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }
         
         # Если паттерн не совпал, возвращаем как есть
         return {
             "name": text,
-            "units": None,
+            "unit": None,
             "amount": 0
         }
     

@@ -85,7 +85,7 @@ class ThWomenCommunityExtractor(BaseRecipeExtractor):
     
     def parse_ingredient_line(self, line: str) -> Optional[dict]:
         """
-        Парсит строку ингредиента в формат {name, amount, units}
+        Парсит строку ингредиента в формат {name, amount, unit}
         
         Примеры:
         "ไข่ - 4 ชิ้น" -> {name: "ไข่", amount: 4, units: "pieces"}
@@ -101,7 +101,7 @@ class ThWomenCommunityExtractor(BaseRecipeExtractor):
         
         if not match:
             # Нет тире - возвращаем только название
-            return {"name": line, "units": None, "amount": None}
+            return {"name": line, "unit": None, "amount": None}
         
         name = match.group(1).strip()
         amount_unit_str = match.group(2).strip()
@@ -190,7 +190,7 @@ class ThWomenCommunityExtractor(BaseRecipeExtractor):
         
         return {
             "name": name,
-            "units": units,
+            "unit": units,
             "amount": amount
         }
     

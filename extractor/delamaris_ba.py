@@ -64,7 +64,7 @@ class DelamarisbaExtractor(BaseRecipeExtractor):
             name_text: Название ингредиента
             
         Returns:
-            dict: {"name": "...", "amount": ..., "units": "..."} или None
+            dict: {"name": "...", "amount": ..., "unit": "..."} или None
         """
         if not name_text:
             return None
@@ -122,7 +122,7 @@ class DelamarisbaExtractor(BaseRecipeExtractor):
         return {
             "name": name_text,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_ingredients(self) -> Optional[str]:

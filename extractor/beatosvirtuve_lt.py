@@ -87,7 +87,7 @@ class BeatosvirtuveLtExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "800 g kiaulienos nugarinės" или "2 svogūnų"
             
         Returns:
-            dict: {"name": "...", "amount": ..., "units": "..."} или None
+            dict: {"name": "...", "amount": ..., "unit": "..."} или None
         """
         if not ingredient_text:
             return None
@@ -163,14 +163,14 @@ class BeatosvirtuveLtExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit_normalized
+                "unit": unit_normalized
             }
         
         # Если паттерн не совпал, возвращаем только название
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_ingredients(self) -> Optional[str]:

@@ -127,7 +127,7 @@ class DobredrinkiPlExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "wódka (40 ml)" или "250 ml spirytusu"
             
         Returns:
-            dict: {"name": "wódka", "amount": 40, "units": "ml"} или None
+            dict: {"name": "wódka", "amount": 40, "unit": "ml"} или None
         """
         if not ingredient_text:
             return None
@@ -147,7 +147,7 @@ class DobredrinkiPlExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": int(float(amount)) if float(amount).is_integer() else float(amount),
-                "units": unit
+                "unit": unit
             }
         
         # Паттерн 2: "количество единица название" - например "250 ml spirytusu"
@@ -162,7 +162,7 @@ class DobredrinkiPlExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": int(float(amount)) if float(amount).is_integer() else float(amount),
-                "units": unit
+                "unit": unit
             }
         
         # Паттерн 3: "количество название" - например "1 połówka limonki"
@@ -176,14 +176,14 @@ class DobredrinkiPlExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": int(float(amount)) if float(amount).is_integer() else float(amount),
-                "units": None
+                "unit": None
             }
         
         # Если ничего не совпало, возвращаем просто название
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_instructions(self) -> Optional[str]:

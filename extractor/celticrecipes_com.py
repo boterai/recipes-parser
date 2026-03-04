@@ -133,7 +133,7 @@ class CelticRecipesExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "2 cups kale" или "4 medium Potatoes"
             
         Returns:
-            dict: {"name": "kale", "amount": 2, "units": "cups"} или None
+            dict: {"name": "kale", "amount": 2, "unit": "cups"} или None
         
         Note: Поле называется "units", не "unit" (по примеру из JSON)
         """
@@ -170,7 +170,7 @@ class CelticRecipesExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -241,7 +241,7 @@ class CelticRecipesExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_instructions(self) -> Optional[str]:

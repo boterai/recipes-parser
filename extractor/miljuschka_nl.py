@@ -112,7 +112,7 @@ class MiljuschkaNlExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "210 g roomboter (op kamertemperatuur)"
             
         Returns:
-            dict: {"name": "roomboter", "amount": 210, "units": "g"}
+            dict: {"name": "roomboter", "amount": 210, "unit": "g"}
         """
         if not ingredient_text:
             return None
@@ -131,7 +131,7 @@ class MiljuschkaNlExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -163,7 +163,7 @@ class MiljuschkaNlExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit if unit else None
+            "unit": unit if unit else None
         }
     
     def extract_ingredients(self) -> Optional[str]:

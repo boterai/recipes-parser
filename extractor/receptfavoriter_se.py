@@ -98,7 +98,7 @@ class ReceptfavoriterSeExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "400 gram halloumi, 1,5 ostar" или "2 msk smör"
             
         Returns:
-            dict: {"name": "halloumi", "amount": 1.5, "units": "ostar"} или None
+            dict: {"name": "halloumi", "amount": 1.5, "unit": "ostar"} или None
         """
         if not ingredient_text:
             return None
@@ -166,7 +166,7 @@ class ReceptfavoriterSeExtractor(BaseRecipeExtractor):
                     return {
                         "name": name,
                         "amount": amount,
-                        "units": unit if unit else None
+                        "unit": unit if unit else None
                     }
         
         # Стандартный парсинг: количество + единица + название
@@ -210,7 +210,7 @@ class ReceptfavoriterSeExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit if unit else None
+                "unit": unit if unit else None
             }
         
         # Если паттерн не совпал, пробуем только количество + название (без единицы)
@@ -238,14 +238,14 @@ class ReceptfavoriterSeExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": None
+                "unit": None
             }
         
         # Если ничего не подошло, возвращаем как есть
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_ingredients(self) -> Optional[str]:

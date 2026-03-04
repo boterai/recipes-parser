@@ -122,10 +122,10 @@ class TeresasRecipesExtractor(BaseRecipeExtractor):
             ingredient_line: Строка вида "Paprika, 1 teaspoon" или "Egg, 1, beaten"
             
         Returns:
-            dict: {"name": "Paprika", "amount": "1", "units": "teaspoon"}
+            dict: {"name": "Paprika", "amount": "1", "unit": "teaspoon"}
         """
         if not ingredient_line:
-            return {"name": None, "amount": None, "units": None}
+            return {"name": None, "amount": None, "unit": None}
         
         # Очищаем текст
         text = self.clean_text(ingredient_line)
@@ -138,7 +138,7 @@ class TeresasRecipesExtractor(BaseRecipeExtractor):
             return {
                 "name": parts[0].strip(),
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         name = parts[0].strip()
@@ -153,7 +153,7 @@ class TeresasRecipesExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": rest,
-                "units": None
+                "unit": None
             }
         
         # Убираем скобки и их содержимое для корректного парсинга
@@ -181,7 +181,7 @@ class TeresasRecipesExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": units
+                "unit": units
             }
         
         # Если предыдущий паттерн не сработал, пробуем только число и extra
@@ -197,14 +197,14 @@ class TeresasRecipesExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": units
+                "unit": units
             }
         
         # Последний вариант - возвращаем все как amount
         return {
             "name": name,
             "amount": rest,
-            "units": None
+            "unit": None
         }
     
     def extract_ingredients(self) -> Optional[str]:
@@ -219,7 +219,7 @@ class TeresasRecipesExtractor(BaseRecipeExtractor):
                 if parsed and parsed['name']:
                     ingredients.append({
                         "name": parsed['name'],
-                        "units": parsed['units'],
+                        "unit": parsed['units'],
                         "amount": parsed['amount']
                     })
             
@@ -264,7 +264,7 @@ class TeresasRecipesExtractor(BaseRecipeExtractor):
                 
                 ingredients.append({
                     "name": name,
-                    "units": unit,
+                    "unit": unit,
                     "amount": amount
                 })
             

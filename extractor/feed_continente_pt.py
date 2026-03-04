@@ -152,7 +152,7 @@ class FeedContinentePtExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "400 g de brócolos" или "4 ovos"
             
         Returns:
-            dict: {"name": "brócolos", "units": "g", "amount": 400} или None
+            dict: {"name": "brócolos", "unit": "g", "amount": 400} или None
         """
         if not ingredient_text:
             return None
@@ -189,7 +189,7 @@ class FeedContinentePtExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": units,
+                "unit": units,
                 "amount": amount
             }
         
@@ -214,7 +214,7 @@ class FeedContinentePtExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": None,
+                "unit": None,
                 "amount": amount
             }
         
@@ -226,7 +226,7 @@ class FeedContinentePtExtractor(BaseRecipeExtractor):
         
         return {
             "name": text,
-            "units": None,
+            "unit": None,
             "amount": None
         }
     

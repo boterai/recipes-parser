@@ -251,7 +251,7 @@ class LeukereceptenExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "400 gr spaghetti" или "3 eieren"
             
         Returns:
-            dict: {"name": "spaghetti", "amount": 400, "units": "gr"} или None
+            dict: {"name": "spaghetti", "amount": 400, "unit": "gr"} или None
         """
         if not ingredient_text:
             return None
@@ -279,7 +279,7 @@ class LeukereceptenExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": unit,  # units перед amount для соответствия reference
+                "unit": unit,  # units перед amount для соответствия reference
                 "amount": amount
             }
         
@@ -300,7 +300,7 @@ class LeukereceptenExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": None,
+                "unit": None,
                 "amount": amount
             }
         
@@ -309,14 +309,14 @@ class LeukereceptenExtractor(BaseRecipeExtractor):
         if text.startswith('snuf '):
             return {
                 "name": text[5:],  # Убираем "snuf "
-                "units": None,
+                "unit": None,
                 "amount": "snuf"
             }
         
         # Возвращаем только название
         return {
             "name": text,
-            "units": None,
+            "unit": None,
             "amount": None
         }
     

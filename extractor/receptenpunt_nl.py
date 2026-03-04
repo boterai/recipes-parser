@@ -259,10 +259,10 @@ class ReceptenpuntNlExtractor(BaseRecipeExtractor):
                 # Парсим в структурированный формат
                 parsed = self.parse_ingredient(ingredient_text)
                 if parsed:
-                    # Используем формат: name, units, amount (как в эталонных JSON)
+                    # Используем формат: name, unit, amount (как в эталонных JSON)
                     ingredients.append({
                         "name": parsed["name"],
-                        "units": parsed["unit"],
+                        "unit": parsed["unit"],
                         "amount": parsed["amount"]
                     })
         

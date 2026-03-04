@@ -114,7 +114,7 @@ class KuvarancipjeExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "2 šolje integralnog pšeničnog brašna"
             
         Returns:
-            dict: {"name": "integralnog pšeničnog brašna", "amount": 2, "units": "šolje"}
+            dict: {"name": "integralnog pšeničnog brašna", "amount": 2, "unit": "šolje"}
         """
         if not ingredient_text:
             return None
@@ -147,7 +147,7 @@ class KuvarancipjeExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -191,7 +191,7 @@ class KuvarancipjeExtractor(BaseRecipeExtractor):
         
         return {
             "name": name,
-            "units": units,
+            "unit": units,
             "amount": amount
         }
     

@@ -155,7 +155,7 @@ class KotikokkiExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1pkt esipaistettuja patonkeja" или "350-400g broilerin suikaleita"
             
         Returns:
-            dict: {"name": "...", "amount": ..., "units": "..."}
+            dict: {"name": "...", "amount": ..., "unit": "..."}
         """
         if not ingredient_text:
             return None
@@ -187,7 +187,7 @@ class KotikokkiExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, units, name = match.groups()
@@ -228,7 +228,7 @@ class KotikokkiExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_steps(self) -> Optional[str]:

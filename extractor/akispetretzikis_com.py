@@ -77,7 +77,7 @@ class AkisPetretzikisExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "200 γρ. πουτίγκα πρωτεΐνης" или "2 αυγά"
             
         Returns:
-            dict: {"name": "πουτίγκα πρωτεΐνης", "amount": 200, "units": "γρ."} или None
+            dict: {"name": "πουτίγκα πρωτεΐνης", "amount": 200, "unit": "γρ."} или None
         """
         if not ingredient_text:
             return None
@@ -122,14 +122,14 @@ class AkisPetretzikisExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }
         
         # Если паттерн не совпал, возвращаем только название
         return {
             "name": text,
-            "units": None,
+            "unit": None,
             "amount": None
         }
     

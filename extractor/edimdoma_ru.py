@@ -134,7 +134,7 @@ class EdimdomaRuExtractor(BaseRecipeExtractor):
                         if isinstance(item, dict):
                             ingredient = {
                                 "name": self.clean_text(item.get('name', '')),
-                                "units": item.get('unitCode'),
+                                "unit": item.get('unitCode'),
                                 "amount": item.get('value')
                             }
                             # Конвертируем amount в строку или int

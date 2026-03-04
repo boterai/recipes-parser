@@ -139,7 +139,7 @@ class IcaSeExtractor(BaseRecipeExtractor):
                              или "pressad juice av 3 lime" или "1/2 dl ättika"
             
         Returns:
-            dict: {"name": "sill", "amount": 2, "units": "burkar (à 450 g)"}
+            dict: {"name": "sill", "amount": 2, "unit": "burkar (à 450 g)"}
         """
         if not ingredient_text:
             return None
@@ -170,7 +170,7 @@ class IcaSeExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip(),
                 "amount": amount,
-                "units": unit.strip()
+                "unit": unit.strip()
             }
         
         # Паттерн 2: "название (без количества)" или сложные описания
@@ -179,7 +179,7 @@ class IcaSeExtractor(BaseRecipeExtractor):
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     @staticmethod

@@ -205,7 +205,7 @@ class MiJourneyExtractor(BaseRecipeExtractor):
                                     if parsed and parsed['name']:
                                         ingredient = {
                                             "name": parsed['name'],
-                                            "units": parsed['unit'],
+                                            "unit": parsed['unit'],
                                             "amount": parsed['amount']
                                         }
                                         ingredients.append(ingredient)
@@ -237,7 +237,7 @@ class MiJourneyExtractor(BaseRecipeExtractor):
                                 if 'unit' in parsed:
                                     ingredient = {
                                         "name": parsed['name'],
-                                        "units": parsed['unit'],
+                                        "unit": parsed['unit'],
                                         "amount": parsed['amount']
                                     }
                                     ingredients.append(ingredient)
@@ -266,7 +266,7 @@ class MiJourneyExtractor(BaseRecipeExtractor):
                         if parsed and parsed['name']:
                             ingredient = {
                                 "name": parsed['name'],
-                                "units": parsed['unit'],
+                                "unit": parsed['unit'],
                                 "amount": parsed['amount']
                             }
                             ingredients.append(ingredient)

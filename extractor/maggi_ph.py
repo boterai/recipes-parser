@@ -224,7 +224,7 @@ class MaggiPhExtractor(BaseRecipeExtractor):
                     # Переименовываем поле unit в units для соответствия эталону
                     parsed_dict = {
                         "name": parsed["name"],
-                        "units": parsed["unit"],
+                        "unit": parsed["unit"],
                         "amount": parsed["amount"]
                     }
                     parsed_ingredients.append(parsed_dict)

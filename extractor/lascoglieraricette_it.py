@@ -79,7 +79,7 @@ class LascoglieraricetteItExtractor(BaseRecipeExtractor):
             text: Строка вида "Funghi freschi 300 g" или "Sale q.b." или "200 g di farina"
             
         Returns:
-            dict: {"name": "...", "units": "...", "amount": ...}
+            dict: {"name": "...", "unit": "...", "amount": ...}
         """
         text = self.clean_text(text)
         
@@ -99,7 +99,7 @@ class LascoglieraricetteItExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": unit.strip(),
+                "unit": unit.strip(),
                 "amount": amount
             }
         
@@ -119,7 +119,7 @@ class LascoglieraricetteItExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": unit.strip(),
+                "unit": unit.strip(),
                 "amount": amount
             }
         
@@ -139,7 +139,7 @@ class LascoglieraricetteItExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": None,
+                "unit": None,
                 "amount": amount
             }
         
@@ -153,7 +153,7 @@ class LascoglieraricetteItExtractor(BaseRecipeExtractor):
             name = re.sub(r'\([^)]*\).*$', '', name).strip()
             return {
                 "name": name,
-                "units": "q.b.",
+                "unit": "q.b.",
                 "amount": None
             }
         
@@ -165,7 +165,7 @@ class LascoglieraricetteItExtractor(BaseRecipeExtractor):
             name = re.sub(r'\([^)]*\).*$', '', name).strip()
             return {
                 "name": name,
-                "units": None,
+                "unit": None,
                 "amount": None
             }
         
@@ -173,7 +173,7 @@ class LascoglieraricetteItExtractor(BaseRecipeExtractor):
         name = re.sub(r'\([^)]*\).*$', '', text).strip()
         return {
             "name": name,
-            "units": None,
+            "unit": None,
             "amount": None
         }
     

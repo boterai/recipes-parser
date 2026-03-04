@@ -118,7 +118,7 @@ class OkusnoJeExtractor(BaseRecipeExtractor):
                 # Формируем словарь
                 ingredient = {
                     "name": name if name else None,
-                    "units": unit if unit else None,
+                    "unit": unit if unit else None,
                     "amount": amount if amount else None
                 }
                 ingredients.append(ingredient)
@@ -185,7 +185,7 @@ class OkusnoJeExtractor(BaseRecipeExtractor):
             text: Строка вида "250 g gladke moke"
             
         Returns:
-            dict: {"name": "gladke moke", "amount": "250", "units": "g"}
+            dict: {"name": "gladke moke", "amount": "250", "unit": "g"}
         """
         if not text:
             return None
@@ -200,7 +200,7 @@ class OkusnoJeExtractor(BaseRecipeExtractor):
         match = re.match(pattern, text, re.IGNORECASE)
         
         if not match:
-            return {"name": text, "amount": None, "units": None}
+            return {"name": text, "amount": None, "unit": None}
         
         amount_str, unit, name = match.groups()
         
@@ -218,7 +218,7 @@ class OkusnoJeExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_instructions(self) -> Optional[str]:

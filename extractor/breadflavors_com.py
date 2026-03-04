@@ -146,7 +146,7 @@ class BreadFlavorsExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "½ cup (100grams) light or dark brown sugar"
             
         Returns:
-            dict: {"name": "light or dark brown sugar", "amount": "½", "units": "cup"} или None
+            dict: {"name": "light or dark brown sugar", "amount": "½", "unit": "cup"} или None
         """
         if not ingredient_text:
             return None
@@ -176,14 +176,14 @@ class BreadFlavorsExtractor(BaseRecipeExtractor):
                 return {
                     "name": self.clean_text(name),
                     "amount": amount_str.strip() if amount_str else None,
-                    "units": None
+                    "unit": None
                 }
             
             # Если и это не сработало, возвращаем только название
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -210,7 +210,7 @@ class BreadFlavorsExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_instructions(self) -> Optional[str]:

@@ -89,7 +89,7 @@ class AniagotujeExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "600 g świeżych lub mrożonych grzybów"
             
         Returns:
-            dict: {"name": "świeże lub mrożone grzyby", "amount": 600, "units": "g"} или None
+            dict: {"name": "świeże lub mrożone grzyby", "amount": 600, "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -123,7 +123,7 @@ class AniagotujeExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -205,7 +205,7 @@ class AniagotujeExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": normalized_unit
+            "unit": normalized_unit
         }
     
     def extract_ingredients(self) -> Optional[str]:
@@ -223,11 +223,11 @@ class AniagotujeExtractor(BaseRecipeExtractor):
                 # Парсим в структурированный формат
                 parsed = self.parse_ingredient(ingredient_text)
                 if parsed:
-                    # Адаптируем формат к ожидаемому (units вместо unit)
+                    # Адаптируем формат к ожидаемому (unit вместо unit)
                     ingredients.append({
                         "name": parsed["name"],
                         "amount": parsed["amount"],
-                        "units": parsed["units"]
+                        "unit": parsed["unit"]
                     })
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None

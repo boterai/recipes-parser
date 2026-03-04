@@ -142,7 +142,7 @@ class HurtigmumsDkExtractor(BaseRecipeExtractor):
                 ingredient = {
                     "name": name,
                     "amount": amount,
-                    "units": unit  # Используем "units" как в эталонном JSON
+                    "unit": unit  # Используем "units" как в эталонном JSON
                 }
                 
                 ingredients.append(ingredient)

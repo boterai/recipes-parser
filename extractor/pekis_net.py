@@ -135,10 +135,10 @@ class PekisNetExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "Oljčno olje 30 ml (2 žlici)"
             
         Returns:
-            dict: {"name": "...", "amount": ..., "units": "..."}
+            dict: {"name": "...", "amount": ..., "unit": "..."}
         """
         if not ingredient_text:
-            return {"name": ingredient_text, "amount": None, "units": None}
+            return {"name": ingredient_text, "amount": None, "unit": None}
         
         text = self.clean_text(ingredient_text)
         
@@ -165,7 +165,7 @@ class PekisNetExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         
         # Альтернативный паттерн: только число без единицы
@@ -186,14 +186,14 @@ class PekisNetExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": None
+                "unit": None
             }
         
         # Если паттерн не совпал, возвращаем только название
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_ingredients(self) -> Optional[str]:

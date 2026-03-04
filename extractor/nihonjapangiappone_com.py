@@ -261,7 +261,7 @@ class NihonjapangiapponeExtractor(BaseRecipeExtractor):
                     # Меняем "unit" на "units" для совместимости с форматом из примера
                     ingredients_list.append({
                         "name": parsed["name"],
-                        "units": parsed["unit"],
+                        "unit": parsed["unit"],
                         "amount": parsed["amount"]
                     })
         else:
@@ -276,7 +276,7 @@ class NihonjapangiapponeExtractor(BaseRecipeExtractor):
                     if parsed:
                         ingredients_list.append({
                             "name": parsed["name"],
-                            "units": parsed["unit"],
+                            "unit": parsed["unit"],
                             "amount": parsed["amount"]
                         })
         

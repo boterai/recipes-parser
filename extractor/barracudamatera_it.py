@@ -71,7 +71,7 @@ class BarracudaMateraExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "200 g di fiocchi di avena"
             
         Returns:
-            dict: {"name": "fiocchi di avena", "amount": 200, "units": "g"} или None
+            dict: {"name": "fiocchi di avena", "amount": 200, "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -128,7 +128,7 @@ class BarracudaMateraExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }
         else:
@@ -172,7 +172,7 @@ class BarracudaMateraExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": None
             }
     

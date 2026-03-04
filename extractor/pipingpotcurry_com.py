@@ -182,7 +182,7 @@ class PipingPotCurryExtractor(BaseRecipeExtractor):
                         parsed = {
                             "name": self.clean_text(name_elem.get_text()),
                             "amount": self.clean_text(amount_elem.get_text()) if amount_elem.get_text() else None,
-                            "units": self.clean_text(unit_elem.get_text()) if unit_elem and unit_elem.get_text() else None
+                            "unit": self.clean_text(unit_elem.get_text()) if unit_elem and unit_elem.get_text() else None
                         }
                         if parsed["name"]:
                             ingredients.append(parsed)
@@ -207,7 +207,7 @@ class PipingPotCurryExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1 cup all-purpose flour"
             
         Returns:
-            dict: {"name": "flour", "amount": "1", "units": "cup"}
+            dict: {"name": "flour", "amount": "1", "unit": "cup"}
         """
         if not ingredient_text:
             return None
@@ -266,7 +266,7 @@ class PipingPotCurryExtractor(BaseRecipeExtractor):
                 return {
                     "name": name,
                     "amount": amount,
-                    "units": None
+                    "unit": None
                 }
         
         # Обычный паттерн для ингредиентов с единицами измерения
@@ -279,7 +279,7 @@ class PipingPotCurryExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -322,7 +322,7 @@ class PipingPotCurryExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_steps(self) -> Optional[str]:

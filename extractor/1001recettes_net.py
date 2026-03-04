@@ -149,7 +149,7 @@ class Recettes1001Extractor(BaseRecipeExtractor):
 
                 ingredients.append({
                     "name": name_text,
-                    "units": unit,
+                    "unit": unit,
                     "amount": amount
                 })
 
@@ -162,7 +162,7 @@ class Recettes1001Extractor(BaseRecipeExtractor):
             for raw in recipe['recipeIngredient']:
                 raw = self.clean_text(raw)
                 if raw:
-                    ingredients.append({"name": raw, "units": None, "amount": None})
+                    ingredients.append({"name": raw, "unit": None, "amount": None})
             return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
 
         return None

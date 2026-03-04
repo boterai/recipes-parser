@@ -75,7 +75,7 @@ class DetGlutenfrieVerkstedExtractor(BaseRecipeExtractor):
             return {
                 "name": name_part,
                 "amount": float(amount_in_parens),
-                "units": unit_in_parens  # Changed from "unit" to "units"
+                "unit": unit_in_parens  # Changed from "unit" to "units"
             }
         
         # Заменяем Unicode дроби на числа
@@ -102,7 +102,7 @@ class DetGlutenfrieVerkstedExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None  # Changed from "unit" to "units"
+                "unit": None  # Changed from "unit" to "units"
             }
         
         amount_str, unit, name = match.groups()
@@ -148,7 +148,7 @@ class DetGlutenfrieVerkstedExtractor(BaseRecipeExtractor):
         return {
             "name": name_clean,
             "amount": amount,
-            "units": units  # Changed from "unit" to "units"
+            "unit": units  # Changed from "unit" to "units"
         }
     
     def extract_ingredients(self) -> Optional[str]:

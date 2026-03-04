@@ -225,7 +225,7 @@ class JonathanGarnierExtractor(BaseRecipeExtractor):
                         ingredients.append({
                             "name": name,
                             "amount": amount,
-                            "units": unit if unit else None
+                            "unit": unit if unit else None
                         })
         
         return ingredients
@@ -287,7 +287,7 @@ class JonathanGarnierExtractor(BaseRecipeExtractor):
                 ingredients.append({
                     "name": clean_name,
                     "amount": None,
-                    "units": None
+                    "unit": None
                 })
         
         return ingredients

@@ -123,7 +123,7 @@ class ChefkochDeExtractor(BaseRecipeExtractor):
                     ingredient_obj = {
                         'name': name if isinstance(name, str) else '',
                         'amount': amount,
-                        'units': unit if isinstance(unit, str) else None
+                        'unit': unit if isinstance(unit, str) else None
                     }
                     all_ingredients.append(ingredient_obj)
             

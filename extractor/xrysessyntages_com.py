@@ -95,7 +95,7 @@ class XrysessyntagesExtractor(BaseRecipeExtractor):
             line: Строка вида "1 κουταλиά µπιζέλια" или "½ µέτρια πατάτα"
             
         Returns:
-            dict: {"name": "μπιζέλια", "units": "κουταλιά", "amount": 1} или None
+            dict: {"name": "μπιζέλια", "unit": "κουταλιά", "amount": 1} или None
         """
         if not line or len(line.strip()) < 2:
             return None
@@ -134,7 +134,7 @@ class XrysessyntagesExtractor(BaseRecipeExtractor):
             if line and len(line) > 1:
                 return {
                     "name": line,
-                    "units": None,
+                    "unit": None,
                     "amount": None
                 }
             return None
@@ -186,10 +186,10 @@ class XrysessyntagesExtractor(BaseRecipeExtractor):
         if not name or len(name) < 2:
             return None
         
-        # Возвращаем в правильном порядке: name, units, amount
+        # Возвращаем в правильном порядке: name, unit, amount
         return {
             "name": name,
-            "units": units,
+            "unit": units,
             "amount": amount
         }
     

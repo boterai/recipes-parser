@@ -40,13 +40,13 @@ class TujaHuExtractor(BaseRecipeExtractor):
     
     def parse_ingredient_line(self, line: str) -> Optional[dict]:
         """
-        Парсит строку ингредиента в формат {name, amount, units}
+        Парсит строку ингредиента в формат {name, amount, unit}
         
         Args:
             line: строка типа "25 dkg kenőmájas (vagy májkrém)" или "só"
             
         Returns:
-            Словарь с полями name, amount, units или None
+            Словарь с полями name, amount, unit или None
         """
         if not line:
             return None
@@ -76,7 +76,7 @@ class TujaHuExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": units
+                "unit": units
             }
         else:
             # Нет количества - просто название (например, "só", "bors")
@@ -91,7 +91,7 @@ class TujaHuExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": None,
-                "units": None
+                "unit": None
             }
     
     def extract_ingredients(self) -> Optional[str]:

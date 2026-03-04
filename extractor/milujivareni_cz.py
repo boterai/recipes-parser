@@ -78,7 +78,7 @@ class MilujivareniCzExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1000 gramů Krůtí prsa" или "1 špetka Sůl"
             
         Returns:
-            dict: {"name": "Krůtí prsa", "amount": 1000, "units": "gramů"} или None
+            dict: {"name": "Krůtí prsa", "amount": 1000, "unit": "gramů"} или None
         """
         if not ingredient_text:
             return None
@@ -98,7 +98,7 @@ class MilujivareniCzExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, units, name = match.groups()
@@ -121,7 +121,7 @@ class MilujivareniCzExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units.strip()
+            "unit": units.strip()
         }
     
     def extract_dish_name(self) -> Optional[str]:

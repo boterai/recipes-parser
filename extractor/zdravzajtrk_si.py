@@ -206,7 +206,7 @@ class ZdravZajtrkExtractor(BaseRecipeExtractor):
                 if name and len(name) > 1:
                     return {
                         "name": name,
-                        "units": unit,
+                        "unit": unit,
                         "amount": amount
                     }
         
@@ -218,7 +218,7 @@ class ZdravZajtrkExtractor(BaseRecipeExtractor):
         if clean_name:
             return {
                 "name": clean_name,
-                "units": None,
+                "unit": None,
                 "amount": None
             }
         

@@ -200,13 +200,13 @@ class NinjaTestKitchenExtractor(BaseRecipeExtractor):
                             if part:
                                 ingredients.append({
                                     "name": part,
-                                    "units": None,
+                                    "unit": None,
                                     "amount": "A piacere"
                                 })
                     else:
                         ingredients.append({
                             "name": name,
-                            "units": unit,
+                            "unit": unit,
                             "amount": amount
                         })
         

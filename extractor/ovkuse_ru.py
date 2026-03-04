@@ -124,14 +124,14 @@ class OvkuseRuExtractor(BaseRecipeExtractor):
                 
                 ingredients.append({
                     "name": self.clean_text(name),
-                    "units": unit,
+                    "unit": unit,
                     "amount": amount
                 })
             else:
                 # Только название без количества
                 ingredients.append({
                     "name": self.clean_text(text),
-                    "units": None,
+                    "unit": None,
                     "amount": None
                 })
         

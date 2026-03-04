@@ -125,7 +125,7 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
                             ingredients.append({
                                 "name": self.clean_text(name),
                                 "amount": amount_num,
-                                "units": unit
+                                "unit": unit
                             })
                         else:
                             # If pattern didn't match, just save the name
@@ -133,7 +133,7 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
                                 ingredients.append({
                                     "name": self.clean_text(part),
                                     "amount": None,
-                                    "units": None
+                                    "unit": None
                                 })
                     
                     # If found ingredients, return
@@ -179,7 +179,7 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
                                         ingredients.append({
                                             "name": self.clean_text(name),
                                             "amount": amount_num,
-                                            "units": unit
+                                            "unit": unit
                                         })
                                 
                                 if ingredients:
@@ -216,7 +216,7 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
                     ingredients.append({
                         "name": ingredient,
                         "amount": amount,
-                        "units": unit
+                        "unit": unit
                     })
                 
                 return json.dumps(ingredients, ensure_ascii=False)
@@ -256,7 +256,7 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
             ingredient_text: String like "오레오 6개" or "우유 200ml"
             
         Returns:
-            dict: {"name": "오레오", "amount": 6, "units": "개"} or None
+            dict: {"name": "오레오", "amount": 6, "unit": "개"} or None
         """
         if not ingredient_text:
             return None
@@ -288,7 +288,7 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount if amount else None,
-                "units": unit if unit else None
+                "unit": unit if unit else None
             }
         
         # Если паттерн не совпал, пробуем просто взять название
@@ -297,7 +297,7 @@ class CooktailCoKrExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         return None

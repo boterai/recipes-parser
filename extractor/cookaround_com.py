@@ -137,7 +137,7 @@ class CookaroundExtractor(BaseRecipeExtractor):
             ingredient_str: Строка вида "Funghi champignon 200 gr"
             
         Returns:
-            dict: {"name": "Funghi champignon", "amount": 200, "units": "gr"}
+            dict: {"name": "Funghi champignon", "amount": 200, "unit": "gr"}
         """
         ingredient_str = self.clean_text(ingredient_str)
         
@@ -169,14 +169,14 @@ class CookaroundExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": unit if unit else None,  # units перед amount
+                "unit": unit if unit else None,  # units перед amount
                 "amount": amount
             }
         
         # Если паттерн не совпал, возвращаем только название
         return {
             "name": ingredient_str,
-            "units": None,
+            "unit": None,
             "amount": None
         }
 
@@ -235,7 +235,7 @@ class CookaroundExtractor(BaseRecipeExtractor):
                         
                         ingredients.append({
                             "name": name,
-                            "units": unit,  # units перед amount
+                            "unit": unit,  # units перед amount
                             "amount": amount
                         })
         

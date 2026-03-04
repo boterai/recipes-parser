@@ -154,7 +154,7 @@ class YeyfoodExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1 cup all-purpose flour" или "1 (15 oz) can pumpkin puree"
             
         Returns:
-            dict: {"name": "flour", "amount": "1", "units": "cup"}
+            dict: {"name": "flour", "amount": "1", "unit": "cup"}
         """
         if not ingredient_text:
             return None
@@ -186,7 +186,7 @@ class YeyfoodExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip(),
                 "amount": amount.strip(),
-                "units": f"{size_amount.strip()} {size_unit} {container}"
+                "unit": f"{size_amount.strip()} {size_unit} {container}"
             }
         
         # Паттерн для обычных ингредиентов
@@ -201,7 +201,7 @@ class YeyfoodExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -228,7 +228,7 @@ class YeyfoodExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_ingredients(self) -> Optional[str]:

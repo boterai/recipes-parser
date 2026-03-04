@@ -88,7 +88,7 @@ class DomaciReceptiExtractor(BaseRecipeExtractor):
             is_posip: True если это ингредиент из секции "Posip"
             
         Returns:
-            dict: {"name": "...", "units": "...", "amount": ...} или None
+            dict: {"name": "...", "unit": "...", "amount": ...} или None
         """
         if not line or len(line.strip()) < 2:
             return None
@@ -130,7 +130,7 @@ class DomaciReceptiExtractor(BaseRecipeExtractor):
                     name = f"{name} (posip)"
                 return {
                     "name": name,
-                    "units": unit_default,
+                    "unit": unit_default,
                     "amount": float(num) if '.' in num else int(num)
                 }
         
@@ -213,7 +213,7 @@ class DomaciReceptiExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }
         else:
@@ -223,7 +223,7 @@ class DomaciReceptiExtractor(BaseRecipeExtractor):
                 name = f"{name} (posip)"
             return {
                 "name": name,
-                "units": None,
+                "unit": None,
                 "amount": None
             }
     

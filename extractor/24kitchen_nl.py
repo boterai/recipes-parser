@@ -211,7 +211,7 @@ class Kitchen24Extractor(BaseRecipeExtractor):
                             if not any(keyword in name.lower() for keyword in self.KITCHEN_EQUIPMENT_KEYWORDS):
                                 ingredients.append({
                                     "name": name,
-                                    "units": unit,
+                                    "unit": unit,
                                     "amount": amount
                                 })
         
@@ -235,7 +235,7 @@ class Kitchen24Extractor(BaseRecipeExtractor):
             text: строка вида "150 g bloem" или "2 eieren"
             
         Returns:
-            dict с полями name, units, amount
+            dict с полями name, unit, amount
         """
         if not text:
             return None
@@ -270,14 +270,14 @@ class Kitchen24Extractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }
         
         # Если паттерн не совпал, возвращаем только название
         return {
             "name": text,
-            "units": None,
+            "unit": None,
             "amount": None
         }
     

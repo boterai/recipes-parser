@@ -120,10 +120,10 @@ class AnItalianInMyKitchenExtractor(BaseRecipeExtractor):
             ingredient_str: Строка вида "2 cups lukewarm water"
             
         Returns:
-            dict: {"name": "Water", "amount": "2", "units": "cups"}
+            dict: {"name": "Water", "amount": "2", "unit": "cups"}
         """
         if not ingredient_str:
-            return {"name": None, "amount": None, "units": None}
+            return {"name": None, "amount": None, "unit": None}
         
         text = self.clean_text(ingredient_str)
         
@@ -138,7 +138,7 @@ class AnItalianInMyKitchenExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -177,7 +177,7 @@ class AnItalianInMyKitchenExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:

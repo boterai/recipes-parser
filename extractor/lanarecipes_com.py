@@ -160,7 +160,7 @@ class LanaRecipesExtractor(BaseRecipeExtractor):
                     for name in ingredient_names:
                         ingredients_list.append({
                             "name": name,
-                            "units": None,
+                            "unit": None,
                             "amount": None
                         })
                     break
@@ -245,7 +245,7 @@ class LanaRecipesExtractor(BaseRecipeExtractor):
                             if name not in ingredients_map:
                                 ingredients_map[name] = {
                                     "name": name,
-                                    "units": unit.lower() if unit else None,
+                                    "unit": unit.lower() if unit else None,
                                     "amount": amount
                                 }
         
@@ -296,7 +296,7 @@ class LanaRecipesExtractor(BaseRecipeExtractor):
             if name and len(name) > 1:
                 return {
                     "name": name.lower(),
-                    "units": unit.lower() if unit else None,
+                    "unit": unit.lower() if unit else None,
                     "amount": amount
                 }
         
@@ -335,7 +335,7 @@ class LanaRecipesExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "4 cups whole milk" или "2 tbsp white vinegar (Lemon juice...)"
             
         Returns:
-            dict: {"name": "whole milk", "amount": 4, "units": "cups"}
+            dict: {"name": "whole milk", "amount": 4, "unit": "cups"}
         """
         if not ingredient_text:
             return None
@@ -364,7 +364,7 @@ class LanaRecipesExtractor(BaseRecipeExtractor):
             # Если паттерн не совпал, возвращаем только название
             return {
                 "name": text,
-                "units": None,
+                "unit": None,
                 "amount": None
             }
         
@@ -401,7 +401,7 @@ class LanaRecipesExtractor(BaseRecipeExtractor):
         
         return {
             "name": name,
-            "units": units,
+            "unit": units,
             "amount": amount
         }
     

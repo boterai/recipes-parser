@@ -147,7 +147,7 @@ class NoraCooksExtractor(BaseRecipeExtractor):
             ingredient_text: Строка ингредиента
             
         Returns:
-            dict: {"name": "flour", "amount": 1, "units": "cup"} или None
+            dict: {"name": "flour", "amount": 1, "unit": "cup"} или None
         """
         if not ingredient_text:
             return None
@@ -186,7 +186,7 @@ class NoraCooksExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -264,7 +264,7 @@ class NoraCooksExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit if unit else None
+            "unit": unit if unit else None
         }
     
     def extract_instructions(self) -> Optional[str]:

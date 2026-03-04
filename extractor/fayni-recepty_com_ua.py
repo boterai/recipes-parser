@@ -76,7 +76,7 @@ class FayniReceptyExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "150 g нарізаних печериць" или "4 яйця"
             
         Returns:
-            dict: {"name": "...", "amount": ..., "units": "..."} или None
+            dict: {"name": "...", "amount": ..., "unit": "..."} или None
         """
         if not ingredient_text:
             return None
@@ -95,7 +95,7 @@ class FayniReceptyExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -125,7 +125,7 @@ class FayniReceptyExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_dish_name(self) -> Optional[str]:

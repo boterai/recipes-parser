@@ -89,7 +89,7 @@ class GlossyEspresoCoRsExtractor(BaseRecipeExtractor):
             text: Строка вида "500 grama mesa" или "1 pakovanje lazanja"
             
         Returns:
-            list: Список словарей [{"name": "mesa", "units": "grama", "amount": 500}] или None
+            list: Список словарей [{"name": "mesa", "unit": "grama", "amount": 500}] или None
         """
         if not text:
             return None
@@ -135,7 +135,7 @@ class GlossyEspresoCoRsExtractor(BaseRecipeExtractor):
             
             return [{
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }]
         
@@ -152,7 +152,7 @@ class GlossyEspresoCoRsExtractor(BaseRecipeExtractor):
             
             return [{
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": int(amount) if amount == int(amount) else amount
             }]
         
@@ -172,7 +172,7 @@ class GlossyEspresoCoRsExtractor(BaseRecipeExtractor):
             
             return [{
                 "name": name,
-                "units": 'komad',
+                "unit": 'komad',
                 "amount": int(amount) if amount == int(amount) else amount
             }]
         
@@ -181,7 +181,7 @@ class GlossyEspresoCoRsExtractor(BaseRecipeExtractor):
         name = re.sub(r'\b(malo|po ukusu|po želji)\b', '', text, flags=re.IGNORECASE).strip()
         return [{
             "name": name if name else text,
-            "units": None,
+            "unit": None,
             "amount": None
         }]
     

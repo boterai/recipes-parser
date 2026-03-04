@@ -112,7 +112,7 @@ class SpendSmartExtractor(BaseRecipeExtractor):
             
             ingredients.append({
                 "name": name,
-                "units": unit if unit else 'cups',
+                "unit": unit if unit else 'cups',
                 "amount": amount
             })
         
@@ -130,7 +130,7 @@ class SpendSmartExtractor(BaseRecipeExtractor):
             
             ingredients.append({
                 "name": name,
-                "units": None,
+                "unit": None,
                 "amount": None
             })
         

@@ -185,7 +185,7 @@ class EvelynsCookingExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, units, name = match.groups()
@@ -229,7 +229,7 @@ class EvelynsCookingExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_instructions(self) -> Optional[str]:

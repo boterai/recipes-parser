@@ -130,7 +130,7 @@ class RezepteomaComExtractor(BaseRecipeExtractor):
     def parse_ingredient_from_description(self, text: str) -> Optional[dict]:
         """
         Парсинг ингредиента из og:description
-        Формат: "Geschälte Tomaten 400 gr" -> {"name": "Geschälte Tomaten", "amount": 400, "units": "gr"}
+        Формат: "Geschälte Tomaten 400 gr" -> {"name": "Geschälte Tomaten", "amount": 400, "unit": "gr"}
         """
         if not text:
             return None
@@ -156,21 +156,21 @@ class RezepteomaComExtractor(BaseRecipeExtractor):
             
             return {
                 "name": self.clean_text(name),
-                "units": unit if unit else None,
+                "unit": unit if unit else None,
                 "amount": amount
             }
         
         # Если не совпал паттерн, возвращаем просто название
         return {
             "name": text,
-            "units": None,
+            "unit": None,
             "amount": None
         }
     
     def parse_ingredient(self, ingredient_text: str) -> Optional[dict]:
         """
         Парсинг строки ингредиента в структурированный формат
-        Формат: "100g Speck" -> {"name": "Speck", "amount": 100, "units": "g"}
+        Формат: "100g Speck" -> {"name": "Speck", "amount": 100, "unit": "g"}
         """
         if not ingredient_text:
             return None
@@ -208,7 +208,7 @@ class RezepteomaComExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }
         
@@ -216,7 +216,7 @@ class RezepteomaComExtractor(BaseRecipeExtractor):
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_instructions(self) -> Optional[str]:

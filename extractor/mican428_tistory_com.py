@@ -75,7 +75,7 @@ class Mican428TistoryComExtractor(BaseRecipeExtractor):
             text: Строка вида "말린 시래기 100g, 된장 2큰술, 고추장 1큰술"
             
         Returns:
-            list: [{"name": "말린 시래기", "amount": 100, "units": "g"}, ...]
+            list: [{"name": "말린 시래기", "amount": 100, "unit": "g"}, ...]
         """
         ingredients = []
         
@@ -110,7 +110,7 @@ class Mican428TistoryComExtractor(BaseRecipeExtractor):
                 
                 ingredients.append({
                     "name": name,
-                    "units": units,
+                    "unit": units,
                     "amount": amount
                 })
                 continue
@@ -133,7 +133,7 @@ class Mican428TistoryComExtractor(BaseRecipeExtractor):
                 
                 ingredients.append({
                     "name": name,
-                    "units": units,
+                    "unit": units,
                     "amount": amount
                 })
                 continue
@@ -146,7 +146,7 @@ class Mican428TistoryComExtractor(BaseRecipeExtractor):
                 
                 ingredients.append({
                     "name": name,
-                    "units": units,
+                    "unit": units,
                     "amount": None
                 })
                 continue
@@ -154,7 +154,7 @@ class Mican428TistoryComExtractor(BaseRecipeExtractor):
             # Если ничего не подошло, добавляем как есть
             ingredients.append({
                 "name": part,
-                "units": None,
+                "unit": None,
                 "amount": None
             })
         

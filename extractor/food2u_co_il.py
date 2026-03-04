@@ -89,7 +89,7 @@ class Food2uExtractor(BaseRecipeExtractor):
             ingredient_text: String like "2 כוסות קוסקוס" or "500 גרם בשר טחון"
             
         Returns:
-            dict: {"name": "קוסקוס", "amount": 2, "units": "כוסות"} or None
+            dict: {"name": "קוסקוס", "amount": 2, "unit": "כוסות"} or None
         """
         if not ingredient_text:
             return None
@@ -154,7 +154,7 @@ class Food2uExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         else:
             # If there's no number at the beginning, it could be "מלח לפי הטעם"
@@ -166,7 +166,7 @@ class Food2uExtractor(BaseRecipeExtractor):
                 return {
                     "name": name,
                     "amount": None,
-                    "units": "לפי הטעם"
+                    "unit": "לפי הטעם"
                 }
             
             # Look for unit without amount
@@ -184,7 +184,7 @@ class Food2uExtractor(BaseRecipeExtractor):
                     return {
                         "name": name,
                         "amount": None,
-                        "units": unit_or_phrase
+                        "unit": unit_or_phrase
                     }
             
             # If nothing matched, return only name
@@ -193,7 +193,7 @@ class Food2uExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": None,
-                "units": None
+                "unit": None
             }
     
     def extract_ingredients(self) -> Optional[str]:

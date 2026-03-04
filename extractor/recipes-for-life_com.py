@@ -96,7 +96,7 @@ class RecipesForLifeExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "2 cups all-purpose flour"
             
         Returns:
-            dict: {"name": "flour", "amount": 2, "units": "cups"} или None
+            dict: {"name": "flour", "amount": 2, "unit": "cups"} или None
         """
         if not ingredient_text:
             return None
@@ -149,7 +149,7 @@ class RecipesForLifeExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -206,7 +206,7 @@ class RecipesForLifeExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:

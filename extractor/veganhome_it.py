@@ -73,7 +73,7 @@ class VeganhomeItExtractor(BaseRecipeExtractor):
             name = re.sub(r'\s*\([^)]+\)\s*', ' ', name).strip()
             return {
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }
         
@@ -87,7 +87,7 @@ class VeganhomeItExtractor(BaseRecipeExtractor):
             name = re.sub(r'\s*\([^)]+\)\s*', ' ', name).strip()
             return {
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }
         
@@ -104,7 +104,7 @@ class VeganhomeItExtractor(BaseRecipeExtractor):
             if 'cucchiai' in unit.lower() or 'cucchiaino' in unit.lower() or 'cucchiaini' in unit.lower():
                 return {
                     "name": name,
-                    "units": unit,
+                    "unit": unit,
                     "amount": 1
                 }
             
@@ -121,20 +121,20 @@ class VeganhomeItExtractor(BaseRecipeExtractor):
                     # Simple ingredient: extract units
                     return {
                         "name": name,
-                        "units": "pizzico",
+                        "unit": "pizzico",
                         "amount": 1
                     }
                 else:
                     # Complex ingredient: keep "un pizzico" as amount
                     return {
                         "name": name,
-                        "units": None,
+                        "unit": None,
                         "amount": "un pizzico"
                     }
             
             return {
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": 1
             }
         
@@ -149,7 +149,7 @@ class VeganhomeItExtractor(BaseRecipeExtractor):
             amount = 1 if quant.lower().startswith('un') else 0.5
             return {
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }
         
@@ -162,7 +162,7 @@ class VeganhomeItExtractor(BaseRecipeExtractor):
             name = re.sub(r'\s*\([^)]+\)\s*', ' ', name).strip()
             return {
                 "name": name,
-                "units": None,
+                "unit": None,
                 "amount": "una manciata"
             }
         
@@ -176,7 +176,7 @@ class VeganhomeItExtractor(BaseRecipeExtractor):
             name = re.sub(r'\s*\([^)]+\)\s*', ' ', name).strip()
             return {
                 "name": name,
-                "units": None,
+                "unit": None,
                 "amount": amount
             }
         
@@ -188,7 +188,7 @@ class VeganhomeItExtractor(BaseRecipeExtractor):
             name = match.group(1).strip()
             return {
                 "name": name,
-                "units": "a piacere",
+                "unit": "a piacere",
                 "amount": None
             }
         
@@ -196,7 +196,7 @@ class VeganhomeItExtractor(BaseRecipeExtractor):
         # Examples: "sale", "olio extravergine d'oliva"
         return {
             "name": text,
-            "units": None,
+            "unit": None,
             "amount": None
         }
     

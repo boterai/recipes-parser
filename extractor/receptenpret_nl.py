@@ -69,10 +69,10 @@ class ReceptenpretNlExtractor(BaseRecipeExtractor):
             ingredient_str: строка ингредиента из JSON-LD
             
         Returns:
-            dict с полями name, amount, units
+            dict с полями name, amount, unit
         """
         if not ingredient_str:
-            return {"name": None, "amount": None, "units": None}
+            return {"name": None, "amount": None, "unit": None}
         
         # Чистим текст
         text = self.clean_text(ingredient_str)
@@ -96,7 +96,7 @@ class ReceptenpretNlExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": units,
+                "unit": units,
                 "amount": amount
             }
         
@@ -114,14 +114,14 @@ class ReceptenpretNlExtractor(BaseRecipeExtractor):
             
             return {
                 "name": simple_match.group(2),
-                "units": None,
+                "unit": None,
                 "amount": amount
             }
         
         # Если совсем не распарсилось, возвращаем только название
         return {
             "name": text,
-            "units": None,
+            "unit": None,
             "amount": None
         }
     

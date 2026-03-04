@@ -52,10 +52,10 @@ class ImommyGrExtractor(BaseRecipeExtractor):
         Может вернуть несколько ингредиентов если они слиплись.
         
         Примеры:
-        "500 γρ. μοσχαρίσιο κιμά" -> [{"name": "μοσχαρίσιο κιμά", "units": "г", "amount": 500}]
-        "2 αυγά" -> [{"name": "αυγά", "units": null, "amount": 2}]
-        "αλάτι" -> [{"name": "αλάτι", "units": null, "amount": null}]
-        "αλάτιπιπέρι" -> [{"name": "αλάτι", "units": null, "amount": null}, {"name": "πιπέρι", "units": null, "amount": null}]
+        "500 γρ. μοσχαρίσιο κιμά" -> [{"name": "μοσχαρίσιο κιμά", "unit": "г", "amount": 500}]
+        "2 αυγά" -> [{"name": "αυγά", "unit": null, "amount": 2}]
+        "αλάτι" -> [{"name": "αλάτι", "unit": null, "amount": null}]
+        "αλάτιπιπέρι" -> [{"name": "αλάτι", "unit": null, "amount": null}, {"name": "πιπέρι", "unit": null, "amount": null}]
         "πράσοχυμός από 2 λεμόνια" -> [{"name": "πράσο", ...}, {"name": "χυμός από λεμόνια", "amount": 2}]
         """
         if not line:
@@ -154,7 +154,7 @@ class ImommyGrExtractor(BaseRecipeExtractor):
                 if parts[0].strip():
                     results.append({
                         "name": parts[0].strip(),
-                        "units": unit,
+                        "unit": unit,
                         "amount": amount
                     })
                 
@@ -190,7 +190,7 @@ class ImommyGrExtractor(BaseRecipeExtractor):
                                     if idx > 0:
                                         results.append({
                                             "name": clean_main[:idx+len(si)],
-                                            "units": unit,
+                                            "unit": unit,
                                             "amount": amount
                                         })
                                         # Остальное - без количества
@@ -199,21 +199,21 @@ class ImommyGrExtractor(BaseRecipeExtractor):
                                             if si2 in remaining:
                                                 results.append({
                                                     "name": si2,
-                                                    "units": None,
+                                                    "unit": None,
                                                     "amount": None
                                                 })
                                                 remaining = remaining.replace(si2, '', 1).strip()
                                         if remaining:
                                             results.append({
                                                 "name": remaining,
-                                                "units": None,
+                                                "unit": None,
                                                 "amount": None
                                             })
                                         return results
                         
                         results.append({
                             "name": main_name,
-                            "units": unit,
+                            "unit": unit,
                             "amount": amount
                         })
                         
@@ -223,7 +223,7 @@ class ImommyGrExtractor(BaseRecipeExtractor):
                             if si in remaining:
                                 results.append({
                                     "name": si,
-                                    "units": None,
+                                    "unit": None,
                                     "amount": None
                                 })
                                 remaining = remaining.replace(si, '', 1).strip()
@@ -231,7 +231,7 @@ class ImommyGrExtractor(BaseRecipeExtractor):
                         if remaining:
                             results.append({
                                 "name": remaining,
-                                "units": None,
+                                "unit": None,
                                 "amount": None
                             })
                         
@@ -239,7 +239,7 @@ class ImommyGrExtractor(BaseRecipeExtractor):
             
             return [{
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }]
         
@@ -268,7 +268,7 @@ class ImommyGrExtractor(BaseRecipeExtractor):
                 if standalone in remaining_text:
                     results.append({
                         "name": standalone,
-                        "units": None,
+                        "unit": None,
                         "amount": None
                     })
                     remaining_text = remaining_text.replace(standalone, '', 1).strip()
@@ -279,7 +279,7 @@ class ImommyGrExtractor(BaseRecipeExtractor):
         if remaining_text and results:
             results.append({
                 "name": remaining_text,
-                "units": None,
+                "unit": None,
                 "amount": None
             })
         elif remaining_text and not results:
@@ -291,7 +291,7 @@ class ImommyGrExtractor(BaseRecipeExtractor):
             if name and len(name) > 1:
                 results.append({
                     "name": name,
-                    "units": None,
+                    "unit": None,
                     "amount": None
                 })
         

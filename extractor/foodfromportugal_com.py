@@ -79,7 +79,7 @@ class FoodFromPortugalExtractor(BaseRecipeExtractor):
             return {
                 "name": "raspa de " + raspa_match.group(1).lower(),
                 "amount": 1,
-                "units": "unit"
+                "unit": "unit"
             }
         
         # Попробуем несколько паттернов
@@ -125,7 +125,7 @@ class FoodFromPortugalExtractor(BaseRecipeExtractor):
                     return {
                         "name": name.lower(),
                         "amount": amount,
-                        "units": unit
+                        "unit": unit
                     }
                 
                 elif len(groups) == 2:  # Число + название (без единицы)
@@ -144,21 +144,21 @@ class FoodFromPortugalExtractor(BaseRecipeExtractor):
                     return {
                         "name": self.clean_text(name).lower(),
                         "amount": amount,
-                        "units": None
+                        "unit": None
                     }
                 
                 else:  # Только название
                     return {
                         "name": self.clean_text(groups[0]).lower(),
                         "amount": None,
-                        "units": None
+                        "unit": None
                     }
         
         # Если ничего не подошло, возвращаем как есть
         return {
             "name": text.lower(),
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_ingredients(self) -> Optional[str]:

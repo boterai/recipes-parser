@@ -123,7 +123,7 @@ class BitemybunExtractor(BaseRecipeExtractor):
                 if name:
                     ingredients.append({
                         "name": name,
-                        "units": unit,
+                        "unit": unit,
                         "amount": amount
                     })
         

@@ -163,7 +163,7 @@ class GoodHousekeepingExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -173,7 +173,7 @@ class GoodHousekeepingExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         # Обработка количества
@@ -263,7 +263,7 @@ class GoodHousekeepingExtractor(BaseRecipeExtractor):
         # Reference JSON uses "units" before "amount"
         return {
             "name": name,
-            "units": unit,
+            "unit": unit,
             "amount": amount
         }
     

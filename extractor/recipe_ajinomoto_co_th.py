@@ -103,7 +103,7 @@ class RecipeAjinomotoCoThExtractor(BaseRecipeExtractor):
             ingredient_str: строка вида "น้ำ  250 มิลลิลิตร" или "ผงชูรส อายิโนะโมะโต๊ะ  1 1/2 ช้อนชา"
         
         Returns:
-            Словарь с полями name, amount, units
+            Словарь с полями name, amount, unit
         """
         ingredient_str = self.clean_text(ingredient_str)
         
@@ -122,14 +122,14 @@ class RecipeAjinomotoCoThExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": units,
+                "unit": units,
                 "amount": amount
             }
         
         # Если не удалось распарсить, возвращаем как есть
         return {
             "name": ingredient_str,
-            "units": "",
+            "unit": "",
             "amount": 0
         }
     

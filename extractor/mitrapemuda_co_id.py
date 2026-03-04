@@ -81,7 +81,7 @@ class MitrapemudaExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "10 buah ampela ayam" или "2 sendok makan kecap manis"
             
         Returns:
-            dict: {"name": "ampela ayam", "amount": 10, "units": "buah"} или None
+            dict: {"name": "ampela ayam", "amount": 10, "unit": "buah"} или None
         """
         if not ingredient_text:
             return None
@@ -111,7 +111,7 @@ class MitrapemudaExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, units, name = match.groups()
@@ -155,7 +155,7 @@ class MitrapemudaExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_ingredients(self) -> Optional[str]:

@@ -91,7 +91,7 @@ class BlogDiarioutilExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "250 g di pasta" или "1 tazza di yogurt"
             
         Returns:
-            dict: {"name": "pasta", "amount": "250", "units": "g"} или None
+            dict: {"name": "pasta", "amount": "250", "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -129,7 +129,7 @@ class BlogDiarioutilExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -172,7 +172,7 @@ class BlogDiarioutilExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_instructions(self) -> Optional[str]:

@@ -84,7 +84,7 @@ class EpirusportalExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "• 1 κιλό φρέσκο πράσινο λουβί" или "50 γρ. βούτυρο"
             
         Returns:
-            dict: {"name": "φρέσκο πράσινο λουβί", "amount": "1", "units": "κιλό"}
+            dict: {"name": "φρέσκο πράσινο λουβί", "amount": "1", "unit": "κιλό"}
         """
         if not ingredient_text:
             return None
@@ -150,7 +150,7 @@ class EpirusportalExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount_str,
-                "units": units
+                "unit": units
             }
         
         # Паттерн 2: Количество + составная единица + название
@@ -168,7 +168,7 @@ class EpirusportalExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount_str,
-                "units": units
+                "unit": units
             }
         
         # Паттерн 3: Количество + описательная единица + название
@@ -190,7 +190,7 @@ class EpirusportalExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount_str,
-                "units": units
+                "unit": units
             }
         
         # Паттерн 4: Количество + название (без единиц)
@@ -204,7 +204,7 @@ class EpirusportalExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount_str,
-                "units": None
+                "unit": None
             }
         
         # Паттерн 5: Название без количества (может содержать "και" для разделения)
@@ -214,7 +214,7 @@ class EpirusportalExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_ingredients(self) -> Optional[str]:

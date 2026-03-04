@@ -117,7 +117,7 @@ class MojbarPlExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "40 ml czystej wódki" или "wódka czysta – 40 ml"
             
         Returns:
-            dict: {"name": "czysta wódka", "amount": 40, "units": "ml"} или None
+            dict: {"name": "czysta wódka", "amount": 40, "unit": "ml"} или None
         """
         if not ingredient_text:
             return None
@@ -151,7 +151,7 @@ class MojbarPlExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": units
+                "unit": units
             }
         
         # Формат 2: "количество единица название" (используется в black-russian)
@@ -207,14 +207,14 @@ class MojbarPlExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": units
+                "unit": units
             }
         
         # Если ничего не подошло, возвращаем как название
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_ingredients(self) -> Optional[str]:

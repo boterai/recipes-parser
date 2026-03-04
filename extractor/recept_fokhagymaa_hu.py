@@ -141,7 +141,7 @@ class ReceptFokhagymaExtractor(BaseRecipeExtractor):
                 # Формируем объект ингредиента
                 ingredient_obj = {
                     "name": name,
-                    "units": unit,  # Используем 'units' как в эталонном JSON
+                    "unit": unit,  # Используем 'units' как в эталонном JSON
                     "amount": amount
                 }
                 

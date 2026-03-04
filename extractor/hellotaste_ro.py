@@ -89,7 +89,7 @@ class HellotasteRoExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "500 g făină albă" или "1 linguriță extract de vanilie"
             
         Returns:
-            dict: {"name": "făină albă", "amount": 500, "units": "g"} или None
+            dict: {"name": "făină albă", "amount": 500, "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -109,7 +109,7 @@ class HellotasteRoExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -157,7 +157,7 @@ class HellotasteRoExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_instructions(self) -> Optional[str]:

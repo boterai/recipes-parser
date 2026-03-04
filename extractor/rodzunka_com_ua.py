@@ -106,7 +106,7 @@ class RodzunkaComUaExtractor(BaseRecipeExtractor):
             return {
                 "name": self.clean_text(name),
                 "amount": amount,
-                "units": self.clean_text(unit)
+                "unit": self.clean_text(unit)
             }
         
         # Паттерн: название – количество единица (rodzunka style)
@@ -132,7 +132,7 @@ class RodzunkaComUaExtractor(BaseRecipeExtractor):
             return {
                 "name": self.clean_text(name),
                 "amount": amount,
-                "units": self.clean_text(unit) if unit else None
+                "unit": self.clean_text(unit) if unit else None
             }
         
         # Паттерн: количество + единица + название (старый стиль)
@@ -165,7 +165,7 @@ class RodzunkaComUaExtractor(BaseRecipeExtractor):
                     return {
                         "name": self.clean_text(name),
                         "amount": amount,
-                        "units": self.clean_text(unit) if unit else None
+                        "unit": self.clean_text(unit) if unit else None
                     }
                 elif len(groups) == 2:
                     # Есть количество и название (без единиц)
@@ -177,7 +177,7 @@ class RodzunkaComUaExtractor(BaseRecipeExtractor):
                     return {
                         "name": self.clean_text(name),
                         "amount": amount,
-                        "units": None
+                        "unit": None
                     }
                 else:
                     # Только название (редкий случай)
@@ -185,7 +185,7 @@ class RodzunkaComUaExtractor(BaseRecipeExtractor):
                     return {
                         "name": self.clean_text(name),
                         "amount": None,
-                        "units": None
+                        "unit": None
                     }
         
         return None
@@ -258,19 +258,19 @@ class RodzunkaComUaExtractor(BaseRecipeExtractor):
                         ingredients.append({
                             "name": "виноград",
                             "amount": None,
-                            "units": None
+                            "unit": None
                         })
                     if sugar_match:
                         ingredients.append({
                             "name": "цукор",
                             "amount": int(sugar_match.group(1)),
-                            "units": "г"
+                            "unit": "г"
                         })
                     if water_match:
                         ingredients.append({
                             "name": "вода",
                             "amount": int(water_match.group(1)),
-                            "units": "л"
+                            "unit": "л"
                         })
                     if ingredients:
                         break

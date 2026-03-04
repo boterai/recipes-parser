@@ -225,7 +225,7 @@ class MinimalistBakerExtractor(BaseRecipeExtractor):
                     ingredients_list.append({
                         "name": parsed["name"],
                         "amount": parsed["amount"],
-                        "units": parsed["unit"]
+                        "unit": parsed["unit"]
                     })
             
             return json.dumps(ingredients_list, ensure_ascii=False) if ingredients_list else None

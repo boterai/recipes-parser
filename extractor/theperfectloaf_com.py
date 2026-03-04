@@ -121,7 +121,7 @@ class ThePerfectLoafExtractor(BaseRecipeExtractor):
                     
                     ingredients.append({
                         "name": self.clean_text(name),
-                        "units": unit if unit else None,
+                        "unit": unit if unit else None,
                         "amount": amount
                     })
                 else:
@@ -159,7 +159,7 @@ class ThePerfectLoafExtractor(BaseRecipeExtractor):
             # Если паттерн не совпал, возвращаем только название
             return {
                 "name": text,
-                "units": None,
+                "unit": None,
                 "amount": None
             }
         
@@ -198,7 +198,7 @@ class ThePerfectLoafExtractor(BaseRecipeExtractor):
         
         return {
             "name": name,
-            "units": unit,
+            "unit": unit,
             "amount": amount
         }
     

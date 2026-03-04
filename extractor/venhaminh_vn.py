@@ -135,7 +135,7 @@ class VenhaMinhExtractor(BaseRecipeExtractor):
             text: Полный текст ингредиента с количеством и названием
             
         Returns:
-            dict: {"name": "...", "amount": "...", "units": "..."}
+            dict: {"name": "...", "amount": "...", "unit": "..."}
         """
         if not text:
             return None
@@ -178,7 +178,7 @@ class VenhaMinhExtractor(BaseRecipeExtractor):
         
         return {
             "name": name,
-            "units": units,
+            "unit": units,
             "amount": self._convert_amount(amount) if amount else None
         }
     
@@ -191,7 +191,7 @@ class VenhaMinhExtractor(BaseRecipeExtractor):
             description: Описание с количеством и единицами
             
         Returns:
-            dict: {"name": "...", "amount": "...", "units": "..."}
+            dict: {"name": "...", "amount": "...", "unit": "..."}
         """
         if not name:
             return None
@@ -244,7 +244,7 @@ class VenhaMinhExtractor(BaseRecipeExtractor):
         
         return {
             "name": name,
-            "units": units,
+            "unit": units,
             "amount": self._convert_amount(amount) if amount else None
         }
     

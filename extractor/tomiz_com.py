@@ -133,7 +133,7 @@ class TomizExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "春よ恋 100% 200g" или "水 140g"
             
         Returns:
-            dict: {"name": "春よ恋", "amount": 200, "units": "g"} или None
+            dict: {"name": "春よ恋", "amount": 200, "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -156,7 +156,7 @@ class TomizExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": float(amount) if '.' in amount else int(amount),
-                "units": unit
+                "unit": unit
             }
         
         # Паттерн для случаев с единицами без количества (например "適量")
@@ -168,7 +168,7 @@ class TomizExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip(),
                 "amount": None,
-                "units": unit
+                "unit": unit
             }
         
         # Паттерн для японских единиц измерения с числом после них (小さじ1, 大さじ2)
@@ -180,14 +180,14 @@ class TomizExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip(),
                 "amount": float(amount) if amount and '.' in amount else (int(amount) if amount else None),
-                "units": unit
+                "unit": unit
             }
         
         # Если паттерн не совпал, возвращаем только название
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_ingredients(self) -> Optional[str]:

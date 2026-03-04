@@ -210,7 +210,7 @@ class DomacikolaciNetExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -333,10 +333,10 @@ class DomacikolaciNetExtractor(BaseRecipeExtractor):
         # Lowercase the first letter to match reference format
         name = name[0].lower() + name[1:] if len(name) > 1 else name.lower()
         
-        # Return with keys in the same order as reference: name, units, amount
+        # Return with keys in the same order as reference: name, unit, amount
         return {
             "name": name,
-            "units": units,
+            "unit": units,
             "amount": amount
         }
     

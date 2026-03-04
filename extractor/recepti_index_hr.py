@@ -91,7 +91,7 @@ class ReceptiIndexHrExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "500 g brašna" или "1 vrećica suhog kvasca"
             
         Returns:
-            dict: {"name": "brašna", "amount": 500, "units": "g"} или None
+            dict: {"name": "brašna", "amount": 500, "unit": "g"} или None
         """
         if not ingredient_text:
             return None
@@ -128,7 +128,7 @@ class ReceptiIndexHrExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         
         # Если паттерн не совпал, пробуем без единиц измерения
@@ -153,14 +153,14 @@ class ReceptiIndexHrExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip(),
                 "amount": amount,
-                "units": None
+                "unit": None
             }
         
         # Если не удалось распарсить, возвращаем весь текст как название
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_dish_name(self) -> Optional[str]:

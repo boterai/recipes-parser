@@ -224,7 +224,7 @@ class SuperbrugsenspentrupExtractor(BaseRecipeExtractor):
                                     ingredients.append({
                                         "name": parsed["name"],
                                         "amount": parsed["amount"],
-                                        "units": parsed["unit"]
+                                        "unit": parsed["unit"]
                                     })
                     # Проверяем также вложенные списки в div
                     elif current.name == 'div':
@@ -244,7 +244,7 @@ class SuperbrugsenspentrupExtractor(BaseRecipeExtractor):
                                         ingredients.append({
                                             "name": parsed["name"],
                                             "amount": parsed["amount"],
-                                            "units": parsed["unit"]
+                                            "unit": parsed["unit"]
                                         })
                     current = current.find_next_sibling()
                 
@@ -277,7 +277,7 @@ class SuperbrugsenspentrupExtractor(BaseRecipeExtractor):
                                         ingredients.append({
                                             "name": parsed["name"],
                                             "amount": parsed["amount"],
-                                            "units": parsed["unit"]
+                                            "unit": parsed["unit"]
                                         })
                         current = current.find_next_sibling()
                     
@@ -322,7 +322,7 @@ class SuperbrugsenspentrupExtractor(BaseRecipeExtractor):
                             temp_ingredients.append({
                                 "name": parsed["name"],
                                 "amount": parsed["amount"],
-                                "units": parsed["unit"]
+                                "unit": parsed["unit"]
                             })
                 
                 # Берем только если нашли достаточно разумных ингредиентов

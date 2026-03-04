@@ -97,7 +97,7 @@ class KokteiliureceptaiLtExtractor(BaseRecipeExtractor):
                 
                 ingredients.append({
                     "name": name,
-                    "units": unit,
+                    "unit": unit,
                     "amount": amount
                 })
         

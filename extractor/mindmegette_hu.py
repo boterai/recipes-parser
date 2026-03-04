@@ -111,16 +111,16 @@ class MindmegetteExtractor(BaseRecipeExtractor):
     def parse_ingredient_text(self, ingredient_text: str) -> dict:
         """
         Парсинг строки ингредиента в структурированный формат
-        Пример: "2 fej Vöröshagyma" -> {"name": "vöröshagyma", "amount": 2, "units": "fej"}
+        Пример: "2 fej Vöröshagyma" -> {"name": "vöröshagyma", "amount": 2, "unit": "fej"}
         
         Args:
             ingredient_text: Строка ингредиента из JSON-LD
             
         Returns:
-            dict с полями name, amount, units
+            dict с полями name, amount, unit
         """
         if not ingredient_text:
-            return {"name": None, "amount": None, "units": None}
+            return {"name": None, "amount": None, "unit": None}
         
         text = self.clean_text(ingredient_text)
         
@@ -153,14 +153,14 @@ class MindmegetteExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }
         else:
             # Если паттерн не совпал, это просто название без количества
             return {
                 "name": text.lower(),
-                "units": None,
+                "unit": None,
                 "amount": None
             }
     
@@ -201,7 +201,7 @@ class MindmegetteExtractor(BaseRecipeExtractor):
                 if name:
                     ingredients.append({
                         "name": name,
-                        "units": unit,
+                        "unit": unit,
                         "amount": amount
                     })
             

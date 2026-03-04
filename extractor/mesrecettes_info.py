@@ -56,7 +56,7 @@ class MesRecettesExtractor(BaseRecipeExtractor):
             line: String like "1 kg de pommes de terre" or "Sel"
             
         Returns:
-            dict: {"name": "pommes de terre", "amount": "1", "units": "kg"} or None
+            dict: {"name": "pommes de terre", "amount": "1", "unit": "kg"} or None
         """
         if not line:
             return None
@@ -93,7 +93,7 @@ class MesRecettesExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -163,7 +163,7 @@ class MesRecettesExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:

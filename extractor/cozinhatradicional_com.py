@@ -105,7 +105,7 @@ class CozinhaTradicionalExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1 pacote de massa para lasanha" или "500 ml de leite"
             
         Returns:
-            dict: {"name": "massa para lasanha", "amount": 1, "units": "pacote"} или None
+            dict: {"name": "massa para lasanha", "amount": 1, "unit": "pacote"} или None
         """
         if not ingredient_text:
             return None
@@ -139,7 +139,7 @@ class CozinhaTradicionalExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit.strip()
+                "unit": unit.strip()
             }
         
         # Паттерн без единицы измерения (только количество + название)
@@ -166,13 +166,13 @@ class CozinhaTradicionalExtractor(BaseRecipeExtractor):
                 return {
                     "name": name.strip(),
                     "amount": amount,
-                    "units": unit.strip()
+                    "unit": unit.strip()
                 }
             
             return {
                 "name": name,
                 "amount": amount,
-                "units": None
+                "unit": None
             }
         
         # Если нет количества (например, "sal a gosto", "sal e pimenta-do-reino a gosto")
@@ -185,7 +185,7 @@ class CozinhaTradicionalExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         return None

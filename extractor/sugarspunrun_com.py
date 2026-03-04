@@ -100,10 +100,10 @@ class SugarSpunRunExtractor(BaseRecipeExtractor):
             ingredient_str: Строка типа "3 cups all-purpose flour"
             
         Returns:
-            dict с ключами name, amount, units
+            dict с ключами name, amount, unit
         """
         if not ingredient_str:
-            return {"name": None, "amount": None, "units": None}
+            return {"name": None, "amount": None, "unit": None}
         
         # Очищаем строку и нормализуем пробелы
         ingredient_str = ingredient_str.strip()
@@ -146,7 +146,7 @@ class SugarSpunRunExtractor(BaseRecipeExtractor):
                 return {
                     "name": ingredient_str,
                     "amount": None,
-                    "units": None
+                    "unit": None
                 }
         else:
             amount_str, unit, name = match.groups()
@@ -203,7 +203,7 @@ class SugarSpunRunExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_dish_name(self) -> Optional[str]:
@@ -285,7 +285,7 @@ class SugarSpunRunExtractor(BaseRecipeExtractor):
                     ingredients_list.append({
                         "name": name,
                         "amount": amount,
-                        "units": unit
+                        "unit": unit
                     })
         
         return json.dumps(ingredients_list, ensure_ascii=False) if ingredients_list else None

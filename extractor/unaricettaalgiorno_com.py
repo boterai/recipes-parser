@@ -138,7 +138,7 @@ class UnaricettaalGiornoExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": units.strip(),
+                "unit": units.strip(),
                 "amount": amount
             }
         
@@ -154,7 +154,7 @@ class UnaricettaalGiornoExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": "pezzo",  # Use Italian "pezzo" instead of English "piece"
+                "unit": "pezzo",  # Use Italian "pezzo" instead of English "piece"
                 "amount": amount
             }
         
@@ -162,7 +162,7 @@ class UnaricettaalGiornoExtractor(BaseRecipeExtractor):
         name = self._clean_ingredient_name(text)
         return {
             "name": name,
-            "units": "to taste",
+            "unit": "to taste",
             "amount": None
         }
     

@@ -98,7 +98,7 @@ class SyntagesmouGrExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1 κεσεδάκι γιαούρτι στραγγιστό (200 γρ.)"
             
         Returns:
-            dict: {"name": "γιαούρτι στραγγιστό", "amount": "1", "units": "κεσεδάκι"} или None
+            dict: {"name": "γιαούρτι στραγγιστό", "amount": "1", "unit": "κεσεδάκι"} или None
         """
         if not ingredient_text:
             return None

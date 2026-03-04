@@ -113,7 +113,7 @@ class CoopSeExtractor(BaseRecipeExtractor):
             ingredient_str: Строка вида "600 g kycklinglårfilé" или "2 msk olivolja"
             
         Returns:
-            dict: {"name": "kycklinglårfilé", "amount": 600, "units": "g"}
+            dict: {"name": "kycklinglårfilé", "amount": 600, "unit": "g"}
         """
         if not ingredient_str:
             return {"name": None, "amount": None, "unit": None}
@@ -143,7 +143,7 @@ class CoopSeExtractor(BaseRecipeExtractor):
                 return {
                     "name": name,
                     "amount": amount,
-                    "units": unit
+                    "unit": unit
                 }
         
         # Паттерн 2: количество + название (без единицы)
@@ -168,7 +168,7 @@ class CoopSeExtractor(BaseRecipeExtractor):
                     return {
                         "name": name,
                         "amount": amount,
-                        "units": None  # Для items без explicit unit возвращаем None
+                        "unit": None  # Для items без explicit unit возвращаем None
                     }
         
         # Если ничего не совпало, возвращаем только название
@@ -177,7 +177,7 @@ class CoopSeExtractor(BaseRecipeExtractor):
         return {
             "name": name.strip(),
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def _parse_amount(self, amount_str: str) -> Optional[float]:
@@ -226,7 +226,7 @@ class CoopSeExtractor(BaseRecipeExtractor):
                     # Используем формат из примера: units вместо unit
                     parsed_ingredients.append({
                         "name": parsed['name'],
-                        "units": parsed['units'],
+                        "unit": parsed['units'],
                         "amount": parsed['amount']
                     })
             
@@ -245,7 +245,7 @@ class CoopSeExtractor(BaseRecipeExtractor):
                 if parsed and parsed.get('name'):
                     parsed_ingredients.append({
                         "name": parsed['name'],
-                        "units": parsed['units'],
+                        "unit": parsed['units'],
                         "amount": parsed['amount']
                     })
             

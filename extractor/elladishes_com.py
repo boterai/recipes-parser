@@ -246,7 +246,7 @@ class ElladishesExtractor(BaseRecipeExtractor):
                 return {
                     "name": text,
                     "amount": 0,
-                    "units": None
+                    "unit": None
                 }
         
         # Очистка названия
@@ -268,7 +268,7 @@ class ElladishesExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:

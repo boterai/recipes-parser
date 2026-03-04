@@ -101,14 +101,14 @@ class KidarilightExtractor(BaseRecipeExtractor):
                         ingredients.append({
                             "name": ing,
                             "amount": amount,
-                            "units": units
+                            "unit": units
                         })
                     else:
                         # Только название без количества
                         ingredients.append({
                             "name": ing,
                             "amount": None,
-                            "units": None
+                            "unit": None
                         })
                     
                     found_ingredients.add(ing)

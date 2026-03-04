@@ -61,7 +61,7 @@ class G4FoodExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "4 linguri de unt nesărat" или "250 de gr de ciuperci"
             
         Returns:
-            dict: {"name": "unt nesărat", "amount": "4", "units": "linguri"} або None
+            dict: {"name": "unt nesărat", "amount": "4", "unit": "linguri"} або None
         """
         if not ingredient_text:
             return None
@@ -81,7 +81,7 @@ class G4FoodExtractor(BaseRecipeExtractor):
                 return {
                     "name": name_match.group(1).strip(),
                     "amount": f"{name_match.group(2)}-{name_match.group(3)}",
-                    "units": "pieces"
+                    "unit": "pieces"
                 }
         
         # Случай 2: "250 de gr de ciuperci" или "1 de gr de ceva"
@@ -94,7 +94,7 @@ class G4FoodExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": int(float(de_gr_match.group(1))),
-                "units": "gr"
+                "unit": "gr"
             }
         
         # Случай 3: "Smântână de gătit cam 100 de g"
@@ -103,7 +103,7 @@ class G4FoodExtractor(BaseRecipeExtractor):
             return {
                 "name": cam_match.group(1).strip(),
                 "amount": cam_match.group(2),
-                "units": "g"
+                "unit": "g"
             }
         
         # Случай 4: "Câteva linguri de ulei" (количество словами)
@@ -112,7 +112,7 @@ class G4FoodExtractor(BaseRecipeExtractor):
             return {
                 "name": cateva_match.group(3).strip(),
                 "amount": None,
-                "units": "linguri" if 'lingur' in cateva_match.group(2).lower() else "linguriță"
+                "unit": "linguri" if 'lingur' in cateva_match.group(2).lower() else "linguriță"
             }
         
         # Случай 5: "1 cățel de usturoi sau pudră" (количество + единица + де + название)
@@ -126,7 +126,7 @@ class G4FoodExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": int(float(catel_match.group(1))),
-                "units": "cățel"
+                "unit": "cățel"
             }
         
         # Случай 6: "1 ceapă tocată mărunt" (количество + название + описание)
@@ -136,7 +136,7 @@ class G4FoodExtractor(BaseRecipeExtractor):
             return {
                 "name": simple_qty_match.group(2).strip(),
                 "amount": int(float(simple_qty_match.group(1))),
-                "units": "unit"
+                "unit": "unit"
             }
         
         # Случай 6: "Sare și piper proaspăt măcinat" (без количества)
@@ -144,7 +144,7 @@ class G4FoodExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         # Единицы измерения на румынском
@@ -186,7 +186,7 @@ class G4FoodExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         # Обработка единицы измерения (нормализация)
@@ -237,7 +237,7 @@ class G4FoodExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": unit
+            "unit": unit
         }
     
     def extract_ingredients(self) -> Optional[str]:
@@ -303,7 +303,7 @@ class G4FoodExtractor(BaseRecipeExtractor):
                                     ingredients.append({
                                         "name": sub_item,
                                         "amount": None,
-                                        "units": None
+                                        "unit": None
                                     })
                     # Обрабатываем "Sare și piper..." - разбиваем на два ингредиента
                     elif ' și ' in ingredient_text.lower() and not any(char.isdigit() for char in ingredient_text):
@@ -314,7 +314,7 @@ class G4FoodExtractor(BaseRecipeExtractor):
                                 ingredients.append({
                                     "name": part,
                                     "amount": None,
-                                    "units": None
+                                    "unit": None
                                 })
                     else:
                         parsed = self.parse_ingredient_item(ingredient_text)

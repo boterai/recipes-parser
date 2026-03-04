@@ -135,7 +135,7 @@ class VmgonlineLtExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "500 g lašišos filė" или "10–12 savojinių kopūstų lapų"
             
         Returns:
-            dict: {"name": "...", "amount": "...", "units": "..."} или None
+            dict: {"name": "...", "amount": "...", "unit": "..."} или None
         """
         if not ingredient_text:
             return None
@@ -166,7 +166,7 @@ class VmgonlineLtExtractor(BaseRecipeExtractor):
             if amount_word.lower() in ['žiupsnelio', 'šlakelio', 'saujos']:
                 return {
                     "name": name.strip(),
-                    "units": None,
+                    "unit": None,
                     "amount": amount_word.lower()
                 }
         
@@ -183,7 +183,7 @@ class VmgonlineLtExtractor(BaseRecipeExtractor):
                 amount = self._convert_amount(amount_str)
                 return {
                     "name": name.strip(),
-                    "units": potential_unit.strip(),
+                    "unit": potential_unit.strip(),
                     "amount": amount
                 }
             else:
@@ -191,7 +191,7 @@ class VmgonlineLtExtractor(BaseRecipeExtractor):
                 amount = self._convert_amount(amount_str)
                 return {
                     "name": (potential_unit + ' ' + name).strip(),
-                    "units": None,
+                    "unit": None,
                     "amount": amount
                 }
         
@@ -204,14 +204,14 @@ class VmgonlineLtExtractor(BaseRecipeExtractor):
             amount = self._convert_amount(amount_str)
             return {
                 "name": name.strip(),
-                "units": None,
+                "unit": None,
                 "amount": amount
             }
         
         # Если ничего не совпало, возвращаем весь текст как название
         return {
             "name": text,
-            "units": None,
+            "unit": None,
             "amount": None
         }
     

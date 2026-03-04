@@ -129,7 +129,7 @@ class RecipesbyclareComExtractor(BaseRecipeExtractor):
             dict: {"name": "flour", "amount": "1", "unit": "cup"}
         """
         if not ingredient_text:
-            return {"name": None, "units": None, "amount": None}
+            return {"name": None, "unit": None, "amount": None}
         
         # Чистим текст
         text = self.clean_text(ingredient_text).lower()
@@ -157,7 +157,7 @@ class RecipesbyclareComExtractor(BaseRecipeExtractor):
             # Если паттерн не совпал, возвращаем только название
             return {
                 "name": text,
-                "units": None,
+                "unit": None,
                 "amount": None
             }
         
@@ -208,11 +208,11 @@ class RecipesbyclareComExtractor(BaseRecipeExtractor):
         name = re.sub(r'\s+', ' ', name).strip()
         
         if not name or len(name) < 2:
-            return {"name": ingredient_text, "units": None, "amount": None}
+            return {"name": ingredient_text, "unit": None, "amount": None}
         
         return {
             "name": name,
-            "units": unit,
+            "unit": unit,
             "amount": amount
         }
     

@@ -182,7 +182,7 @@ class VioletaCostasExtractor(BaseRecipeExtractor):
                                 parsed = self._parse_ingredient_string(text)
                                 ingredients_list.append({
                                     "name": parsed["name"],
-                                    "units": parsed["unit"],
+                                    "unit": parsed["unit"],
                                     "amount": parsed["amount"]
                                 })
                     
@@ -253,7 +253,7 @@ class VioletaCostasExtractor(BaseRecipeExtractor):
                                 parsed = self._parse_ingredient_string(text)
                                 ingredients_list.append({
                                     "name": parsed["name"],
-                                    "units": parsed["unit"],
+                                    "unit": parsed["unit"],
                                     "amount": parsed["amount"]
                                 })
                                 
@@ -284,7 +284,7 @@ class VioletaCostasExtractor(BaseRecipeExtractor):
                         parsed = self._parse_ingredient_string(text)
                         ingredients_list.append({
                             "name": parsed["name"],
-                            "units": parsed["unit"],
+                            "unit": parsed["unit"],
                             "amount": parsed["amount"]
                         })
         
@@ -343,7 +343,7 @@ class VioletaCostasExtractor(BaseRecipeExtractor):
         Извлечение ингредиентов из JSON-LD или HTML
         
         Returns:
-            JSON строка с массивом ингредиентов в формате [{name, amount, units}]
+            JSON строка с массивом ингредиентов в формате [{name, amount, unit}]
         """
         recipe_data = self._get_json_ld_recipe()
         
@@ -354,10 +354,9 @@ class VioletaCostasExtractor(BaseRecipeExtractor):
             for ingredient_str in recipe_data['recipeIngredient']:
                 parsed = self._parse_ingredient_string(ingredient_str)
                 
-                # Используем 'units' вместо 'unit' для совместимости с эталоном
                 ingredients_list.append({
                     "name": parsed["name"],
-                    "units": parsed["unit"],
+                    "unit": parsed["unit"],
                     "amount": parsed["amount"]
                 })
             

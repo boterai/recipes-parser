@@ -83,7 +83,7 @@ class BlsknowledgesharingExtractor(BaseRecipeExtractor):
             ingredient_text: строка вида "2 cups flour" или "flour"
             
         Returns:
-            Dict с ключами: name, amount, units
+            Dict с ключами: name, amount, unit
         """
         ingredient_text = self.clean_text(ingredient_text)
         if not ingredient_text:
@@ -102,24 +102,24 @@ class BlsknowledgesharingExtractor(BaseRecipeExtractor):
             match = re.match(pattern, ingredient_text)
             if match:
                 if len(match.groups()) == 3:
-                    amount, units, name = match.groups()
+                    amount, unit, name = match.groups()
                     return {
                         "name": self.clean_text(name),
-                        "units": self.clean_text(units),
+                        "unit": self.clean_text(units),
                         "amount": float(amount) if '.' in amount else int(amount)
                     }
                 elif len(match.groups()) == 2:
                     amount, name = match.groups()
                     return {
                         "name": self.clean_text(name),
-                        "units": None,
+                        "unit": None,
                         "amount": float(amount) if '.' in amount else int(amount)
                     }
         
         # Если не удалось распарсить, возвращаем просто название
         return {
             "name": ingredient_text,
-            "units": None,
+            "unit": None,
             "amount": None
         }
     
@@ -307,7 +307,7 @@ class BlsknowledgesharingExtractor(BaseRecipeExtractor):
                             ingredients.append({
                                 'name': part,
                                 'amount': None,
-                                'units': None
+                                'unit': None
                             })
                     
                     if ingredients:

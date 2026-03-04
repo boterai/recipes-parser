@@ -166,7 +166,7 @@ class TastesBetterFromScratchExtractor(BaseRecipeExtractor):
                     ingredients.append({
                         "name": name,
                         "amount": amount,
-                        "units": unit
+                        "unit": unit
                     })
         
         # Если не нашли в WPRM, пробуем JSON-LD
@@ -189,7 +189,7 @@ class TastesBetterFromScratchExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1 cup all-purpose flour"
             
         Returns:
-            dict: {"name": "flour", "amount": "1", "units": "cup"}
+            dict: {"name": "flour", "amount": "1", "unit": "cup"}
         """
         if not ingredient_text:
             return None
@@ -233,7 +233,7 @@ class TastesBetterFromScratchExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -311,7 +311,7 @@ class TastesBetterFromScratchExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_steps(self) -> Optional[str]:

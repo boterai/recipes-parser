@@ -128,7 +128,7 @@ class SendeyapsanaExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "-150 gram tereyağı" или "-2 tane yumurta sarısı"
             
         Returns:
-            dict: {"name": "tereyağı", "amount": "150", "units": "gram"} или None
+            dict: {"name": "tereyağı", "amount": "150", "unit": "gram"} или None
         """
         if not ingredient_text:
             return None
@@ -181,7 +181,7 @@ class SendeyapsanaExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         
         # Если паттерн не совпал, пробуем без единиц измерения
@@ -196,14 +196,14 @@ class SendeyapsanaExtractor(BaseRecipeExtractor):
             return {
                 "name": name.strip(),
                 "amount": amount,
-                "units": None
+                "unit": None
             }
         
         # Если ничего не совпало, возвращаем только название
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_ingredients(self) -> Optional[str]:

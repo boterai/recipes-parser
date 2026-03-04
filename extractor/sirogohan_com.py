@@ -73,7 +73,7 @@ class SirogohanComExtractor(BaseRecipeExtractor):
             item_text: Строка вида "ごぼう　…　１本（150ｇ）"
             
         Returns:
-            dict: {"name": "ごぼう", "amount": "1", "units": "本（150ｇ）"} или None
+            dict: {"name": "ごぼう", "amount": "1", "unit": "本（150ｇ）"} или None
         """
         if not item_text:
             return None
@@ -90,7 +90,7 @@ class SirogohanComExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         name = parts[0].strip()
@@ -120,7 +120,7 @@ class SirogohanComExtractor(BaseRecipeExtractor):
         
         return {
             "name": name,
-            "units": units,
+            "unit": units,
             "amount": amount
         }
     

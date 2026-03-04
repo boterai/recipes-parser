@@ -121,7 +121,7 @@ class PontosnewsGrExtractor(BaseRecipeExtractor):
                             ingredients.append({
                                 "name": ingredient,
                                 "amount": None,
-                                "units": None
+                                "unit": None
                             })
         
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
@@ -134,7 +134,7 @@ class PontosnewsGrExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "300 γρ. λαζάνια μακριά" или "1 κρεμμύδι ψιλοκομμένο"
             
         Returns:
-            dict: {"name": "λαζάνια μακριά", "amount": 300, "units": "γρ."} или None
+            dict: {"name": "λαζάνια μακριά", "amount": 300, "unit": "γρ."} или None
         """
         if not ingredient_text:
             return None
@@ -165,7 +165,7 @@ class PontosnewsGrExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, units, _, name = match.groups()
@@ -200,7 +200,7 @@ class PontosnewsGrExtractor(BaseRecipeExtractor):
         return {
             "name": name,
             "amount": amount,
-            "units": units
+            "unit": units
         }
     
     def extract_instructions(self) -> Optional[str]:

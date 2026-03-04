@@ -125,7 +125,7 @@ class KoktajlTvExtractor(BaseRecipeExtractor):
                     
                     ingredients.append({
                         "name": name,
-                        "units": unit,
+                        "unit": unit,
                         "amount": amount
                     })
         
@@ -181,7 +181,7 @@ class KoktajlTvExtractor(BaseRecipeExtractor):
                                     
                                     ingredients.append({
                                         "name": self.clean_text(name),
-                                        "units": unit,
+                                        "unit": unit,
                                         "amount": amount
                                     })
         

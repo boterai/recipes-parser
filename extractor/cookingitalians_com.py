@@ -149,7 +149,7 @@ class CookingItaliansExtractor(BaseRecipeExtractor):
                 
                 ingredient_dict = {
                     "name": ing.get('name', ''),
-                    "units": ing.get('unit') if ing.get('unit') else None,
+                    "unit": ing.get('unit') if ing.get('unit') else None,
                     "amount": amount
                 }
                 ingredients.append(ingredient_dict)
@@ -189,7 +189,7 @@ class CookingItaliansExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "1 cup all-purpose flour" или "14 oz flour"
             
         Returns:
-            dict: {"name": "flour", "amount": 1, "units": "cup"} или None
+            dict: {"name": "flour", "amount": 1, "unit": "cup"} или None
         """
         if not ingredient_text:
             return None
@@ -216,7 +216,7 @@ class CookingItaliansExtractor(BaseRecipeExtractor):
             return {
                 "name": text,
                 "amount": None,
-                "units": None
+                "unit": None
             }
         
         amount_str, unit, name = match.groups()
@@ -254,7 +254,7 @@ class CookingItaliansExtractor(BaseRecipeExtractor):
         return {
             "name": name if name else text,
             "amount": amount,
-            "units": unit.strip() if unit else None
+            "unit": unit.strip() if unit else None
         }
     
     def extract_steps(self) -> Optional[str]:

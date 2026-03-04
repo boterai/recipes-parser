@@ -115,7 +115,7 @@ class MrMExtractor(BaseRecipeExtractor):
             ingredient_text: Строка вида "8 גזרים" или "כף גדושה מלח" или "500 גרם אורז לסושי"
             
         Returns:
-            dict: {"name": "...", "amount": "...", "units": "..."} или None
+            dict: {"name": "...", "amount": "...", "unit": "..."} или None
         """
         if not ingredient_text:
             return None
@@ -153,7 +153,7 @@ class MrMExtractor(BaseRecipeExtractor):
                 return {
                     "name": name,
                     "amount": amount,
-                    "units": unit_en
+                    "unit": unit_en
                 }
         
         # Паттерн для извлечения количества в начале
@@ -214,14 +214,14 @@ class MrMExtractor(BaseRecipeExtractor):
             return {
                 "name": name,
                 "amount": amount,
-                "units": unit
+                "unit": unit
             }
         
         # Если паттерн не совпал, возвращаем как есть
         return {
             "name": text,
             "amount": None,
-            "units": None
+            "unit": None
         }
     
     def extract_instructions(self) -> Optional[str]:

@@ -37,10 +37,10 @@ class MesterszakacsExtractor(BaseRecipeExtractor):
             text: Строка вида "2 vöröshagyma" или "10 dkg zsír vagy 6-7 evőkanál olaj"
             
         Returns:
-            dict: {"name": "...", "units": "...", "amount": "..."}
+            dict: {"name": "...", "unit": "...", "amount": "..."}
         """
         if not text:
-            return {"name": None, "units": None, "amount": None}
+            return {"name": None, "unit": None, "amount": None}
         
         text = self.clean_text(text).strip()
         
@@ -77,7 +77,7 @@ class MesterszakacsExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name if name else text,
-                "units": unit,
+                "unit": unit,
                 "amount": amount
             }
         
@@ -104,14 +104,14 @@ class MesterszakacsExtractor(BaseRecipeExtractor):
             
             return {
                 "name": name,
-                "units": "pieces",
+                "unit": "pieces",
                 "amount": amount
             }
         
         # Если ничего не нашли, возвращаем только название
         return {
             "name": text,
-            "units": None,
+            "unit": None,
             "amount": None
         }
     
