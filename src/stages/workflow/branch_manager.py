@@ -9,7 +9,7 @@ if __name__ == '__main__':
 
 from src.stages.workflow.validate_extractor import ValidateParser
 from src.stages.workflow.validation_models import ValidationReport
-
+from config.config import config
 logger = logging.getLogger(__name__)
 
 
@@ -35,6 +35,43 @@ class BranchManager:
             logger.error(f"Ошибка при выполнении команды '{' '.join(command)}': {e.stderr.strip()}")
             raise e
         
+    def pull_extractor_changes(self, target_branch: str, only_new: bool = False) -> bool:
+        """
+            Проверяет наличие изменений в папке extractor в целевой ветке и забирает их в текущую ветку.
+            Args:
+                target_branch: имя ветки, из которой нужно забрать изменения
+                only_new: если True, то забираются только новые файлы, добавленные в target_branch, иначе - все изменения в папке extractor
+            Returns:
+                True если изменения успешно забраны, False если изменений нет или произошла ошибка
+        """
+        try:
+            if only_new:
+                current_branch = self.get_current_branch()
+                # Получаем только новые .py файлы
+                new_files = self._run_git_command([
+                    'git', 'diff', '--name-only', '--diff-filter=A',
+                    f'{current_branch}..{target_branch}',
+                    '--', f'{config.EXTRACTOR_FOLDER}/*.py'
+                ])
+                
+                if not new_files:
+                    logger.info(f"Нет новых .py файлов в {config.EXTRACTOR_FOLDER} для ветки {target_branch}")
+                    return False
+                
+                # Восстанавливаем каждый новый файл
+                for file in new_files.split('\n'):
+                    if file.strip():
+                        self._run_git_command(['git', 'checkout', target_branch, '--', file.strip()])
+                        logger.info(f"Восстановлен новый файл: {file.strip()}")
+            else:
+                # берем все изменения
+                self._run_git_command(['git', 'checkout', target_branch, '--', f'{config.EXTRACTOR_FOLDER}/'])
+            
+            return True
+        except Exception as e:
+            logger.error(f"Ошибка при проверке изменений в папке {config.EXTRACTOR_FOLDER} для ветки {target_branch}: {e}")
+            return False
+
     def commit_specific_directory(self, directory: str, commit_message: str, push: bool = False) -> None:
         """Коммитит изменения в указанной директории с заданным сообщением.
         
@@ -93,7 +130,7 @@ class BranchManager:
                 logger.info(f"Переключились на ветку {branch} после fetch.")
 
             added_files = [f for f in self.get_added_files(current_branch, branch) 
-                        if 'extractor' in f and f.endswith('.py') and 'test' not in f]
+                        if config.EXTRACTOR_FOLDER in f and f.endswith('.py') and 'test' not in f]
             
             if not added_files:
                 logger.info(f"В ветке {branch} нет добавленных файлов парсеров.")

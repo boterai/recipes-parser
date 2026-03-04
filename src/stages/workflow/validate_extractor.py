@@ -4,6 +4,7 @@ import os
 import importlib
 import json
 import logging
+from typing import Optional
 
 if __name__ == "__main__":
     from pathlib import Path
@@ -14,15 +15,16 @@ if __name__ == "__main__":
 from src.stages.workflow.gpt_recipe_validator import GPTRecipeValidator
 from utils.html import extract_text_from_html
 from src.stages.workflow.validation_models import ValidationReport, FileValidationResult
-
+from config.config import config
 logger = logging.getLogger(__name__)
-
-EXTRACTOR_FOLDER = "extractor"
-EXTRACTE_JSON_EXTENSION = "_extracted.json"
 
 class ValidateParser:
     """Класс для валидации парсеров рецептов, созданных ChatGPT"""
-    def __init__(self, extractor_folder: str = EXTRACTOR_FOLDER, extracted_json_extension: str = EXTRACTE_JSON_EXTENSION):
+    def __init__(self, extractor_folder: Optional[str] = None, extracted_json_extension: Optional[str] = None):
+        if not extractor_folder:
+            extractor_folder = config.EXTRACTOR_FOLDER
+        if not extracted_json_extension:
+            extracted_json_extension = config.EXTRACT_JSON_EXTENSION
         self.gpt_validator = GPTRecipeValidator()
         self.extractor_folder = extractor_folder
         self.extracted_json_extension = extracted_json_extension
@@ -34,7 +36,7 @@ class ValidateParser:
             logger.error(f"Модуль экстрактора {module_name} не найден по пути {extractor_path}")
             return None
         
-        module = importlib.import_module(f"extractor.{module_name}")
+        module = importlib.import_module(f"{config.EXTRACTOR_FOLDER}.{module_name}")
         return module
     
 
@@ -182,14 +184,12 @@ if __name__ == '__main__':
 
     folders = os.listdir("preprocessed")
     folders = sorted([f for f in folders if os.path.isdir(os.path.join("preprocessed", f))])
-    
+
     for folder in folders:
-        if folder == "xrysoskoufaki_gr":
-            continue
         logger.info(f"\n\n=== ВАЛИДАЦИЯ ПАРСЕРА: {folder} ===")
         result = vp.validate(
             module_name=folder,
-            use_gpt=False,
+            use_gpt=True,
             required_fields=['dish_name', 'ingredients', 'instructions'],
             use_gpt_on_missing_fields=True
         )

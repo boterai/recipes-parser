@@ -55,7 +55,7 @@ class GPTRecipeValidator:
                 retry_attempts=5,
                 timeout=60
             )
-            logger.info(f"GPT validation result: {result.get('is_valid')}")
+            logger.info(f"GPT validation result: {result.get('is_valid')}\n feedback: {result.get('feedback')}")
             
             return FileValidationResult.from_gpt_result(filename, result)
             

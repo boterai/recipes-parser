@@ -85,6 +85,8 @@ class Config:
     SIMILARITY_MIN_CLUSTER_SIZE: int = int(os.getenv('SIMILARITY_MIN_CLUSTER_SIZE', '4'))
     # настройки парсера
     PARSER_DIR: str = os.getenv('PARSER_DIR', 'parsed')
+    EXTRACTOR_FOLDER: str = os.getenv('EXTRACTOR_FOLDER', 'extractor')
+    EXTRACT_JSON_EXTENSION: str = os.getenv('EXTRACT_JSON_EXTENSION', '_extracted.json')
     PARSER_LOG_FOLDER: str = os.getenv('PARSER_LOG_FOLDER', 'logs')
     PARSER_PREPROCESSED_FOLDER: str = os.getenv('PARSER_PREPROCESSED_FOLDER', 'preprocessed')
     PARSER_DEFAULT_CHROME_PORT: int = int(os.getenv('PARSER_DEFAULT_CHROME_PORT', '9222'))

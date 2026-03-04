@@ -10,7 +10,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 from src.repositories.site import SiteRepository
-
+from config.config import config
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
@@ -43,7 +43,7 @@ class PromptGenerator:
         Returns:
             Список имен модулей
         """
-        extractor_dir = Path("extractor")
+        extractor_dir = Path(config.EXTRACTOR_FOLDER)
         if not extractor_dir.exists():
             logger.error(f"Директория экстракторов не найдена: {extractor_dir}")
             return []
@@ -53,7 +53,7 @@ class PromptGenerator:
             if file.stem not in ["__init__", "base"]:
                 module_names.append(file.stem)
         
-        logger.info(f"Найдено {len(module_names)} модулей в extractor/")
+        logger.info(f"Найдено {len(module_names)} модулей в {config.EXTRACTOR_FOLDER}/")
         return module_names
     
     def scan_preprocessed_folders(self) -> list[str]:

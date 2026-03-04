@@ -27,7 +27,7 @@ class GitHubClient:
             "X-GitHub-Api-Version": "2022-11-28"
         }
 
-    def get_json_response(self, url: str, params: Optional[dict] = None) -> Optional[dict]:
+    def get_json_response(self, url: str, params: Optional[dict] = None, headers: Optional[dict] = None) -> Optional[dict]:
         """
         Выполняет GET запрос и возвращает JSON ответ
         
@@ -37,7 +37,10 @@ class GitHubClient:
         Returns:
             JSON ответ или None при ошибке
         """
-        response = requests.get(url, headers=self.headers, params=params)
+        if headers is None:
+            headers = self.headers
+
+        response = requests.get(url, headers=headers, params=params)
         
         if response.status_code == 200:
             return response.json()
@@ -423,6 +426,49 @@ class GitHubClient:
 
         return None
 
+    def get_pr_timeline_events(self, pr_number: int) -> list[dict]:
+        """Получает все timeline events для PR (включая события Copilot).
+        
+        Args:
+            pr_number: Номер pull request
+            
+        Returns:
+            Список событий timeline
+        """
+        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/issues/{pr_number}/timeline"
+        headers = {
+            "Authorization": f"token {self.token}",
+            "Accept": "application/vnd.github.mockingbird-preview+json"  # Required for timeline API
+        }
+        
+        return self.get_json_response(url, headers=headers)
+
+    def close_pr(self, pr_number: int) -> bool:
+        """
+        Закрывает pull request без мерджа
+        
+        Args:
+            pr_number: номер pull request
+        
+        Returns:
+            True если успешно
+        """
+        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/pulls/{pr_number}"
+        
+        payload = {
+            "state": "closed"
+        }
+        
+        response = requests.patch(url, headers=self.headers, json=payload)
+        
+        if response.status_code == 200:
+            logger.info(f"PR #{pr_number} успешно закрыт")
+            return True
+        else:
+            logger.error(f"Failed to close PR #{pr_number}: {response.status_code} - {response.text}")
+            return False
+        
+        
 if __name__ == "__main__":
     gh_client = GitHubClient()
     last_commit_date = gh_client.get_last_commit_date(pr_number=388)
