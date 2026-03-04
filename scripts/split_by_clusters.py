@@ -1,9 +1,7 @@
 """
 скрипт для разбиения на кластеры в оснвоном нужен для тетсирвоаняи наилучшего ращбиения на класеры
 """
-
 import sys
-import os
 from pathlib import Path
 import logging
 import asyncio
@@ -11,6 +9,7 @@ import asyncio
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.stages.search.similarity import SimilaritySearcher, ClusterParams, build_clusters_from_dsu
+from config.config import config
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -24,8 +23,9 @@ if __name__ == '__main__':
     import dotenv
     dotenv.load_dotenv()
     # скорее всего наиболее оптимальный варинат 0.89 0.91 для разбиения на кластеры
-
-    for score_threshold, density in [(0.9, 0.92), (0.88, 0.91), (0.89, 0.91), (0.88, 0.9), (0.89, 0.92), (0.91, 0.93)]: # можно поэкспериментировать с этими параметрами для получения оптимального количества кластеров и их качества
+    config.QDRANT_COLLECTION_PREFIX = "recipes2" # для тестирования кластеризации лучше использовать отдельную коллекцию, чтобы не мешать основным данным и иметь возможность экспериментировать с параметрами кластеризации
+    # (0.89, 0.92), (0.9, 0.92), (0.88, 0.91), (0.89, 0.91), (0.88, 0.9), (0.91, 0.93)
+    for score_threshold, density in [(0.89, 0.91)]: # можно поэкспериментировать с этими параметрами для получения оптимального количества кластеров и их качества
         while True:
             ss = SimilaritySearcher(params=ClusterParams(
                         limit=40,
@@ -38,7 +38,7 @@ if __name__ == '__main__':
                         density_min_similarity=density,
                         max_async_tasks=15,
                     ), build_type="full") # "image", "full", "ingredients"
-            ss.save_validated_centroids_to_databsae(batch_size=10, allow_update=True) # можно не расширяя существущие кластеры обогатить их
+            #ss.save_validated_centroids_to_databsae(batch_size=10, allow_update=True) # можно не расширяя существущие кластеры обогатить их
             try:
                 ss.load_dsu_state()
                 last_id = ss.last_id # получаем last id после загрузки состояния (такая штука работает только опираясь на тот факт, что каждй вновь доавбленный рецепт имеет id не меньше уже векторизованных рецептов, иначе рецепты могут быть пропущены)

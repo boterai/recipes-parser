@@ -13,7 +13,6 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from config.config import config
 from src.common.embedding import get_embedding_function, get_siglip_embedding_function
 from src.stages.search.vectorise import RecipeVectorizer
-from src.stages.search.vectorise import RecipeVectorizer
 from src.models.image import ImageORM, download_image_async
 from src.stages.translate import Translator
 
@@ -87,12 +86,12 @@ async def validate_and_save_image(image_url: str, save_dir: str = None, use_prox
         logger.error(f"Failed to validate/save image {image_url}: {e}")
         return None
 
-async def vectorise_all_images():
+def vectorise_all_images():
     rv = RecipeVectorizer()
     embed_function, dims = get_siglip_embedding_function(
         batch_size=config.VECTORIZE_BATCH_SIZE_IMAGES
     )
-    await rv.vectorise_images_async(embed_function=embed_function, image_dims=dims)
+    asyncio.run(rv.vectorise_images_async(embed_function=embed_function, image_dims=dims))
 
 def translate_all_recipes(target_language: str, translate_batch_size: int):
     translator = Translator(target_language=target_language)
@@ -101,7 +100,5 @@ def translate_all_recipes(target_language: str, translate_batch_size: int):
 if __name__ == '__main__':
     import dotenv
     dotenv.load_dotenv()
-    #translate_all_recipes("en", 10)
-    #vectorise_all_recipes()
-    asyncio.run(vectorise_all_images())
-    #translate_all_recipes("en", 1) # Векторизация рецептов (по дефолту всех рецептов, содержащихся в clickhouse)
+    vectorise_all_recipes()
+    #vectorise_all_images()

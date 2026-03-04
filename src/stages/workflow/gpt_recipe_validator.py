@@ -70,10 +70,16 @@ Compare extracted recipe data against reference data.
 
 RULES:
 - If the page is NOT a recipe -> is_valid: true, is_recipe: false (empty extraction is correct)
-- CRITICAL fields: dish_name, ingredients, instructions — must be present and semantically similar to reference
-  * Order, formatting, case, minor wording differences are OK
-  * Fail only if >50% of content is missing or completely wrong
-- OPTIONAL fields (prep_time, cook_time, tags, etc.) — ignore differences, never fail for these
+- CRITICAL fields: ingredients, instructions — must have >50% semantic overlap with reference
+  * Order, formatting, case, wording differences are OK
+  * Paraphrasing, translations, synonyms are OK
+  * Missing 1-2 minor ingredients is OK
+  * Fail only if major ingredients or key steps are completely missing
+- dish_name: must be semantically similar (synonyms, translations OK)
+- description: partial match is OK, can be shorter or longer
+- OPTIONAL fields (prep_time, cook_time, tags, servings, etc.) — completely ignore differences, never fail
+
+Be lenient: pass if extraction captures the recipe essence, even if not 100% identical.
 
 Return STRICT JSON:
 {FileValidationResult.GPT_RESPONSE_FORMAT}"""
@@ -85,10 +91,15 @@ You receive plain text from a page and extracted recipe data. Validate the extra
 
 RULES:
 - If the page is NOT a recipe (homepage, category page, no ingredients/instructions) -> is_valid: true, is_recipe: false
-- CRITICAL fields: dish_name, ingredients, instructions — must be present and match page content semantically
-  * Order, formatting, case, paraphrasing are OK
-  * Fail only if >50% of content is missing or completely wrong
-- OPTIONAL fields (prep_time, cook_time, tags, servings, author, etc.) — ignore differences, never fail for these
+- CRITICAL fields: ingredients, instructions — must have >50% overlap with page content
+  * Order, formatting, case, paraphrasing, translations are OK
+  * Missing 1-2 minor ingredients is OK
+  * Fail only if major ingredients or key cooking steps are missing
+- dish_name: must be present and semantically match (synonyms OK)
+- description: partial match is OK, can be shorter, paraphrased, or missing
+- OPTIONAL fields (prep_time, cook_time, tags, servings, author, notes, etc.) — completely ignore, never fail
+
+Be lenient: pass if extraction captures the recipe essence, even if not perfect.
 
 Return STRICT JSON:
 {FileValidationResult.GPT_RESPONSE_FORMAT}"""

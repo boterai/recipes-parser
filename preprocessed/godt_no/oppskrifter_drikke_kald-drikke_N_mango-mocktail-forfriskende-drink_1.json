@@ -1,12 +1,12 @@
 {
-    "dish_name": "Mango mocktail",
-    "description": "Denne mocktailen, eller mangoslushen om du vil, er en herlig sak å lage når solen varmer og du trenger noe friskt.",
-    "ingredients": "[{\"name\": \"mango\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"eplejuice\", \"units\": \"dl\", \"amount\": 4}, {\"name\": \"isbiter\", \"units\": \"stk\", \"amount\": 8}, {\"name\": \"limesaft\", \"units\": \"stk\", \"amount\": 0.5}, {\"name\": \"Tajin\", \"units\": null, \"amount\": null}]",
-    "instructions": "Finn frem en blender. Ha alle ingrediensene i beholderen, og kjør sammen til du får en jevn slush. Smak til med lime. Hell over i glass, topp med litt chiliflak eller tajin og nyt! Tips: Varier gjerne med frossen frukt og bær. Hvis du ønsker å lage denne litt mer «drink-aktig» kan du skjære en lime i to og smøre lime på glassranden. Drysse litt tajin på en tallerken og dyppe glasset ned chilimiksen før du har i slushen i glasset.",
-    "category": "Drikke",
-    "prep_time": "5 min",
-    "cook_time": null,
-    "total_time": null,
-    "notes": "Varier gjerne med frossen frukt og bær.",
-    "tags": "Kald drikke, Rask, Mango, Smoothie, Mocktail"
+  "dish_name": "Mango mocktail",
+  "description": "Denne mocktailen, eller mangoslushen om du vil, er en herlig sak å lage når solen varmer og du trenger noe friskt.",
+  "ingredients": "[{\"name\": \"mango\", \"amount\": 300, \"unit\": \"g\"}, {\"name\": \"eplejuice\", \"amount\": 4, \"unit\": \"dl\"}, {\"name\": \"isbiter\", \"amount\": 8, \"unit\": \"stk\"}, {\"name\": \"limesaft\", \"amount\": 0.5, \"unit\": \"stk\"}, {\"name\": \"Tajin\", \"amount\": null, \"unit\": null}]",
+  "instructions": "Finn frem en blender. Ha alle ingrediensene i beholderen, og kjør sammen til du får en jevn slush. Smak til med lime. Hell over i glass, topp med litt chiliflak eller tajin og nyt! Tips: Varier gjerne med frossen frukt og bær. Hvis du ønsker å lage denne litt mer «drink-aktig» kan du skjære en lime i to og smøre lime på glassranden. Drysse litt tajin på en tallerken og dyppe glasset ned chilimiksen før du har i slushen i glasset.",
+  "category": "Drikke",
+  "prep_time": "5 min",
+  "cook_time": null,
+  "total_time": null,
+  "notes": "Varier gjerne med frossen frukt og bær.",
+  "tags": "Kald drikke, Rask, Mango, Smoothie, Mocktail"
 }

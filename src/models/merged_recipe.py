@@ -124,6 +124,14 @@ class MergedRecipeORM(Base):
             is_variation=self.is_variation
         )
 
+class MergedRecipePagesORM(Base):
+    """SQLAlchemy модель для промежуточной таблицы merged_recipe_pages"""
+    
+    __tablename__ = 'merged_recipe_pages'
+    
+    merged_recipe_id = Column(BIGINT, ForeignKey('merged_recipes.id', ondelete='CASCADE'), primary_key=True)
+    page_id = Column(Integer, ForeignKey('pages.id', ondelete='CASCADE'), primary_key=True)
+    last_updated = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'),server_onupdate=text('CURRENT_TIMESTAMP'))
 
 # Pydantic модели для API/сериализации
 class MergedRecipe(BaseModel):
@@ -236,3 +244,16 @@ class MergedRecipe(BaseModel):
             recipe_count=orm_obj.recipe_count or 0,
             is_variation=orm_obj.is_variation
         )
+
+class MergedRecipePages(BaseModel):
+    """Pydantic модель для связи между объединенными рецептами и страницами"""
+    
+    merged_recipe_id: int
+    page_id: int
+    last_updated: Optional[datetime] = None
+    
+    class Config:
+        from_attributes = True
+        json_encoders = {
+            datetime: lambda v: v.isoformat() if v else None
+        }

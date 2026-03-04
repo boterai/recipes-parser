@@ -1,12 +1,12 @@
 {
-    "dish_name": "Bulgur Salad with Chickpeas",
-    "description": "A nutritious and quick salad made with bulgur, chickpeas, cherry tomatoes, red onion, and basil.",
-    "ingredients": "[{\"name\": \"Bulgur\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"Water\", \"units\": \"cups\", \"amount\": 2}, {\"name\": \"Honey\", \"units\": \"tablespoons\", \"amount\": 2}, {\"name\": \"Nuts\", \"units\": null, \"amount\": \"a handful\"}, {\"name\": \"Canned Chickpeas\", \"units\": \"can\", \"amount\": 1}, {\"name\": \"Cherry Tomatoes\", \"units\": \"cup\", \"amount\": 1}, {\"name\": \"Red Onion\", \"units\": null, \"amount\": 1}, {\"name\": \"Basil\", \"units\": null, \"amount\": \"to taste\"}, {\"name\": \"Olive Oil\", \"units\": null, \"amount\": \"to taste\"}, {\"name\": \"Vinegar\", \"units\": null, \"amount\": \"to taste\"}, {\"name\": \"Salt\", \"units\": null, \"amount\": \"to taste\"}]",
-    "instructions": "1. Cook bulgur according to package instructions. 2. Mix cooked bulgur with canned chickpeas, cherry tomatoes, red onion, and basil. 3. Add dressing made from olive oil, vinegar, and salt.",
-    "category": "Salad",
-    "prep_time": "15 minutes",
-    "cook_time": "15 minutes",
-    "total_time": "30 minutes",
-    "notes": "You can add other vegetables or proteins as desired.",
-    "tags": "bulgur, salad, healthy, quick"
+  "dish_name": "Bulgur Salad with Chickpeas",
+  "description": "A nutritious and quick salad made with bulgur, chickpeas, cherry tomatoes, red onion, and basil.",
+  "ingredients": "[{\"name\": \"Bulgur\", \"amount\": 1, \"unit\": \"cup\"}, {\"name\": \"Water\", \"amount\": 2, \"unit\": \"cups\"}, {\"name\": \"Honey\", \"amount\": 2, \"unit\": \"tablespoons\"}, {\"name\": \"Nuts\", \"amount\": \"a handful\", \"unit\": null}, {\"name\": \"Canned Chickpeas\", \"amount\": 1, \"unit\": \"can\"}, {\"name\": \"Cherry Tomatoes\", \"amount\": 1, \"unit\": \"cup\"}, {\"name\": \"Red Onion\", \"amount\": 1, \"unit\": null}, {\"name\": \"Basil\", \"amount\": \"to taste\", \"unit\": null}, {\"name\": \"Olive Oil\", \"amount\": \"to taste\", \"unit\": null}, {\"name\": \"Vinegar\", \"amount\": \"to taste\", \"unit\": null}, {\"name\": \"Salt\", \"amount\": \"to taste\", \"unit\": null}]",
+  "instructions": "1. Cook bulgur according to package instructions. 2. Mix cooked bulgur with canned chickpeas, cherry tomatoes, red onion, and basil. 3. Add dressing made from olive oil, vinegar, and salt.",
+  "category": "Salad",
+  "prep_time": "15 minutes",
+  "cook_time": "15 minutes",
+  "total_time": "30 minutes",
+  "notes": "You can add other vegetables or proteins as desired.",
+  "tags": "bulgur, salad, healthy, quick"
 }

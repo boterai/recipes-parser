@@ -1,12 +1,12 @@
 {
-    "dish_name": "Bubur Blueberry",
-    "description": "Resep bubur Blueberry super cepat dan sehat ini lembut, hangat, dan benar-benar nikmat.",
-    "ingredients": "[{\"name\": \"Bubur Oat\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"Susu\", \"units\": \"ml\", \"amount\": 300}, {\"name\": \"Garam\", \"units\": null, \"amount\": \"sejumput\"}, {\"name\": \"Bluberi\", \"units\": \"g\", \"amount\": 40}, {\"name\": \"Jus lemon\", \"units\": \"ml\", \"amount\": 2.5}, {\"name\": \"Gula merah lembut\", \"units\": \"sendok teh\", \"amount\": 1}]",
-    "instructions": "Masukkan 50g oat ke dalam panci lalu tambahkan 300ml susu. Kemudian cukup didihkan campuran bubur lalu biarkan bubur mendidih selama 3-4 menit dengan api kecil, aduk terus selama proses memasak agar bubur matang merata. Jika waktu memasak tersisa sekitar 3 menit, tambahkan sedikit garam ke bubur. Kemudian ambil panci kecil dan tambahkan 40g blueberry, sedikit jus lemon, 1 sendok makan air, dan 1 sendok teh gula merah lembut, lalu masak dengan api sedang. Tekan beberapa buah blueberry dengan sendok sambil diaduk untuk membantu melepaskan beberapa rasa blueberry yang enak. Jangan lupa mengaduk bubur saat memasak blueberry. Angkat bubur dan blueberry dari api dan diamkan selama 1 menit. Ambil mangkuk untuk diri Anda sendiri dan isi dengan bubur, lalu tambahkan kolak blueberry. Sekarang yang perlu dilakukan hanyalah mengaduk dan menikmati.",
-    "category": "Sarapan",
-    "prep_time": "3 minutes",
-    "cook_time": "10 minutes",
-    "total_time": "13 minutes",
-    "notes": null,
-    "tags": "blueberry, ide sarapan, sarapan sehat dan sehat, bubur"
+  "dish_name": "Bubur Blueberry",
+  "description": "Resep bubur Blueberry super cepat dan sehat ini lembut, hangat, dan benar-benar nikmat.",
+  "ingredients": "[{\"name\": \"Bubur Oat\", \"amount\": 50, \"unit\": \"g\"}, {\"name\": \"Susu\", \"amount\": 300, \"unit\": \"ml\"}, {\"name\": \"Garam\", \"amount\": \"sejumput\", \"unit\": null}, {\"name\": \"Bluberi\", \"amount\": 40, \"unit\": \"g\"}, {\"name\": \"Jus lemon\", \"amount\": 2.5, \"unit\": \"ml\"}, {\"name\": \"Gula merah lembut\", \"amount\": 1, \"unit\": \"sendok teh\"}]",
+  "instructions": "Masukkan 50g oat ke dalam panci lalu tambahkan 300ml susu. Kemudian cukup didihkan campuran bubur lalu biarkan bubur mendidih selama 3-4 menit dengan api kecil, aduk terus selama proses memasak agar bubur matang merata. Jika waktu memasak tersisa sekitar 3 menit, tambahkan sedikit garam ke bubur. Kemudian ambil panci kecil dan tambahkan 40g blueberry, sedikit jus lemon, 1 sendok makan air, dan 1 sendok teh gula merah lembut, lalu masak dengan api sedang. Tekan beberapa buah blueberry dengan sendok sambil diaduk untuk membantu melepaskan beberapa rasa blueberry yang enak. Jangan lupa mengaduk bubur saat memasak blueberry. Angkat bubur dan blueberry dari api dan diamkan selama 1 menit. Ambil mangkuk untuk diri Anda sendiri dan isi dengan bubur, lalu tambahkan kolak blueberry. Sekarang yang perlu dilakukan hanyalah mengaduk dan menikmati.",
+  "category": "Sarapan",
+  "prep_time": "3 minutes",
+  "cook_time": "10 minutes",
+  "total_time": "13 minutes",
+  "notes": null,
+  "tags": "blueberry, ide sarapan, sarapan sehat dan sehat, bubur"
 }

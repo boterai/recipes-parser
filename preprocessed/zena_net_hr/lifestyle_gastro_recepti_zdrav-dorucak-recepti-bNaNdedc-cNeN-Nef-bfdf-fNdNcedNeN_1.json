@@ -1,12 +1,12 @@
 {
-    "dish_name": "Zobena kaša s voćem i orašastim plodovima",
-    "description": "Zobena kaša s voćem i orašastim plodovima je hranjiv doručak bogat vlaknima koji će te držati siti do ručka.",
-    "ingredients": "[{\"name\": \"zobene pahuljice\", \"units\": \"šalice\", \"amount\": \"½\"}, {\"name\": \"biljno mlijeko\", \"units\": \"šalica\", \"amount\": \"1\"}, {\"name\": \"chia sjemenke\", \"units\": \"žlica\", \"amount\": \"1\"}, {\"name\": \"med\", \"units\": \"žlica\", \"amount\": \"1\"}, {\"name\": \"svježe voće\", \"units\": \"šalice\", \"amount\": \"½\"}, {\"name\": \"orašasti plodovi\", \"units\": \"žlice\", \"amount\": \"2-3\"}]",
-    "instructions": "U posudi pomiješaj zobene pahuljice, biljno mlijeko i chia sjemenke. Ostaviti da stoji preko noći ili minimalno 30 minuta. Dodaj med i svježe voće po izboru – banane, borovnice ili maline. Pospi orašastim plodovima kako bi dodao hrskavu teksturu. Dobro promiješaj i posluži hladno ili na sobnoj temperaturi.",
-    "category": "Breakfast",
-    "prep_time": "30 minutes",
-    "cook_time": null,
-    "total_time": null,
-    "notes": null,
-    "tags": "healthy, breakfast, oatmeal, fruit"
+  "dish_name": "Zobena kaša s voćem i orašastim plodovima",
+  "description": "Zobena kaša s voćem i orašastim plodovima je hranjiv doručak bogat vlaknima koji će te držati siti do ručka.",
+  "ingredients": "[{\"name\": \"zobene pahuljice\", \"amount\": \"\\u00bd\", \"unit\": \"\\u0161alice\"}, {\"name\": \"biljno mlijeko\", \"amount\": \"1\", \"unit\": \"\\u0161alica\"}, {\"name\": \"chia sjemenke\", \"amount\": \"1\", \"unit\": \"\\u017elica\"}, {\"name\": \"med\", \"amount\": \"1\", \"unit\": \"\\u017elica\"}, {\"name\": \"svje\\u017ee vo\\u0107e\", \"amount\": \"\\u00bd\", \"unit\": \"\\u0161alice\"}, {\"name\": \"ora\\u0161asti plodovi\", \"amount\": \"2-3\", \"unit\": \"\\u017elice\"}]",
+  "instructions": "U posudi pomiješaj zobene pahuljice, biljno mlijeko i chia sjemenke. Ostaviti da stoji preko noći ili minimalno 30 minuta. Dodaj med i svježe voće po izboru – banane, borovnice ili maline. Pospi orašastim plodovima kako bi dodao hrskavu teksturu. Dobro promiješaj i posluži hladno ili na sobnoj temperaturi.",
+  "category": "Breakfast",
+  "prep_time": "30 minutes",
+  "cook_time": null,
+  "total_time": null,
+  "notes": null,
+  "tags": "healthy, breakfast, oatmeal, fruit"
 }

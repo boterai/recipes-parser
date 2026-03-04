@@ -1,11 +1,11 @@
 from typing import Optional
 from src.repositories.base import BaseRepository
 from src.models.cluster_page import ClusterPageORM, ClusterPage
-from src.models.merged_recipe import MergedRecipeORM
+from src.models.merged_recipe import MergedRecipeORM, MergedRecipePagesORM
 from src.models.page import PageORM
 from sqlalchemy.orm import Session
 from src.common.db.connection import get_db_connection
-from sqlalchemy import func, or_, case
+from sqlalchemy import func, or_, case, text
 import logging
 from collections import defaultdict 
 
@@ -215,13 +215,14 @@ class ClusterPageRepository(BaseRepository[ClusterPageORM]):
         session = self.get_session()
         try:
             
-            # Находим кластеры по количеству merged_recipes
-            completed_col = func.count(MergedRecipeORM.base_recipe_id).label('completed_recipes')
-            
-            # Считаем только "готовые" рецепты через CASE WHEN
-            completed_col = func.count(
-                case((MergedRecipeORM.recipe_count >= max_agregated_recipes, 1))
-            ).label('completed_recipes') if max_agregated_recipes is not None else func.count(MergedRecipeORM.base_recipe_id).label('completed_recipes')
+            # Считаем distinct merged_recipes через промежуточную таблицу merged_recipe_pages
+            # Условие recipe_count < max_agregated_recipes переносим в ON второго JOIN
+            completed_col = func.count(func.distinct(MergedRecipeORM.id)).label('completed_recipes')
+
+            mrp_join_cond = ClusterPageORM.page_id == MergedRecipePagesORM.page_id
+            mr_join_cond = MergedRecipeORM.id == MergedRecipePagesORM.merged_recipe_id
+            if max_agregated_recipes is not None:
+                mr_join_cond = mr_join_cond & (MergedRecipeORM.recipe_count >= max_agregated_recipes)
 
             query = (
                 session.query(
@@ -229,12 +230,10 @@ class ClusterPageRepository(BaseRepository[ClusterPageORM]):
                     func.count(ClusterPageORM.page_id).label('page_ids'),
                     completed_col
                 )
-                .outerjoin(
-                    MergedRecipeORM,
-                    ClusterPageORM.page_id == MergedRecipeORM.base_recipe_id
-                )
+                .outerjoin(MergedRecipePagesORM, mrp_join_cond)
+                .outerjoin(MergedRecipeORM, mr_join_cond)
                 .group_by(ClusterPageORM.cluster_id)
-                .having(completed_col <= completed_recipes)  # фильтр ПОСЛЕ группировки
+                .having(completed_col <= completed_recipes)
                 .order_by(ClusterPageORM.cluster_id)
             )
 

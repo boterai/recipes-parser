@@ -1,12 +1,12 @@
 {
-    "dish_name": "Tortilja pizza",
-    "description": "Brza pizza bez dizanog tijesta koja se priprema s pšeničnom tortiljom.",
-    "ingredients": "[{\"name\": \"pšenične tortilje\", \"units\": \"large\", \"amount\": 2}, {\"name\": \"umak od rajčice za pizzu\", \"units\": \"cup\", \"amount\": 0.5}, {\"name\": \"suha salama\", \"units\": \"slices\", \"amount\": null}, {\"name\": \"naribani sir za pizzu\", \"units\": \"g\", \"amount\": 100}, {\"name\": \"origano\", \"units\": \"teaspoon\", \"amount\": 1}, {\"name\": \"zelene ili crne masline\", \"units\": \"optional\", \"amount\": null}]",
-    "instructions": "Zagrijemo pećnicu na 220 stupnjeva. Pleh obložimo papirom za pečenje i na njega položimo pšeničnu tortilju. Tortilju prvo premažemo umakom od rajčice, posipamo naribani sir, dodamo narezanu salamu i masline, ako ih koristimo. Po vrhu posipamo origano. Pleh stavimo u zagrijanu pećnicu na 5 minuta. Kada je tortilja pizza gotova, izvadimo je iz pećnice, pričekamo 1-2 minute da se ohladi, narežemo na komade i poslužimo.",
-    "category": "Main Course",
-    "prep_time": null,
-    "cook_time": "5 minutes",
-    "total_time": null,
-    "notes": "Pizza se može prilagoditi dodavanjem različitih sastojaka po želji.",
-    "tags": "pizza, tortilja, brzi ručak"
+  "dish_name": "Tortilja pizza",
+  "description": "Brza pizza bez dizanog tijesta koja se priprema s pšeničnom tortiljom.",
+  "ingredients": "[{\"name\": \"p\\u0161eni\\u010dne tortilje\", \"amount\": 2, \"unit\": \"large\"}, {\"name\": \"umak od raj\\u010dice za pizzu\", \"amount\": 0.5, \"unit\": \"cup\"}, {\"name\": \"suha salama\", \"amount\": null, \"unit\": \"slices\"}, {\"name\": \"naribani sir za pizzu\", \"amount\": 100, \"unit\": \"g\"}, {\"name\": \"origano\", \"amount\": 1, \"unit\": \"teaspoon\"}, {\"name\": \"zelene ili crne masline\", \"amount\": null, \"unit\": \"optional\"}]",
+  "instructions": "Zagrijemo pećnicu na 220 stupnjeva. Pleh obložimo papirom za pečenje i na njega položimo pšeničnu tortilju. Tortilju prvo premažemo umakom od rajčice, posipamo naribani sir, dodamo narezanu salamu i masline, ako ih koristimo. Po vrhu posipamo origano. Pleh stavimo u zagrijanu pećnicu na 5 minuta. Kada je tortilja pizza gotova, izvadimo je iz pećnice, pričekamo 1-2 minute da se ohladi, narežemo na komade i poslužimo.",
+  "category": "Main Course",
+  "prep_time": null,
+  "cook_time": "5 minutes",
+  "total_time": null,
+  "notes": "Pizza se može prilagoditi dodavanjem različitih sastojaka po želji.",
+  "tags": "pizza, tortilja, brzi ručak"
 }

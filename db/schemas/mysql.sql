@@ -100,6 +100,16 @@ CREATE TABLE IF NOT EXISTS merged_recipes (
     INDEX idx_base_recipe (base_recipe_id)
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS merged_recipe_pages (
+    merged_recipe_id BIGINT NOT NULL,
+    page_id INT NOT NULL,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (merged_recipe_id, page_id),
+    FOREIGN KEY (merged_recipe_id) REFERENCES merged_recipes(id) ON DELETE CASCADE,
+    FOREIGN KEY (page_id) REFERENCES pages(id) ON DELETE CASCADE,
+    INDEX idx_page_id (page_id)
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS cluster_page (
     cluster_id BIGINT NOT NULL,
     page_id INT NOT NULL,

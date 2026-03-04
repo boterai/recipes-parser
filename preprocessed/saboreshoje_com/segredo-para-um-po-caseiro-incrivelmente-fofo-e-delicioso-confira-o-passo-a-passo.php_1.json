@@ -1,12 +1,12 @@
 {
-    "dish_name": "Pão Caseiro Fofo",
-    "description": "Receita para um pão caseiro incrivelmente fofo e delicioso.",
-    "ingredients": "[{\"name\": \"Farinha de trigo\", \"units\": null, \"amount\": null}, {\"name\": \"Fermento biológico\", \"units\": null, \"amount\": null}, {\"name\": \"Água\", \"units\": null, \"amount\": null}, {\"name\": \"Sal\", \"units\": null, \"amount\": null}, {\"name\": \"Leite\", \"units\": null, \"amount\": null}, {\"name\": \"Manteiga ou óleo\", \"units\": null, \"amount\": null}, {\"name\": \"Açúcar\", \"units\": null, \"amount\": null}]",
-    "instructions": "Misture o fermento com o líquido na temperatura adequada. Adicione a farinha, o sal e os demais ingredientes até formar uma massa homogênea. Sove a massa até atingir elasticidade. Deixe a massa descansar até dobrar de tamanho. Modele o pão e deixe fermentar novamente antes de assar entre 180°C e 200°C por 30 a 40 minutos.",
-    "category": "Pão",
-    "prep_time": "15 minutes",
-    "cook_time": "30-40 minutes",
-    "total_time": "45-55 minutes",
-    "notes": "A qualidade da farinha e a temperatura da água são cruciais para o sucesso da receita.",
-    "tags": "pão, caseiro, fofo, receita"
+  "dish_name": "Pão Caseiro Fofo",
+  "description": "Receita para um pão caseiro incrivelmente fofo e delicioso.",
+  "ingredients": "[{\"name\": \"Farinha de trigo\", \"amount\": null, \"unit\": null}, {\"name\": \"Fermento biol\\u00f3gico\", \"amount\": null, \"unit\": null}, {\"name\": \"\\u00c1gua\", \"amount\": null, \"unit\": null}, {\"name\": \"Sal\", \"amount\": null, \"unit\": null}, {\"name\": \"Leite\", \"amount\": null, \"unit\": null}, {\"name\": \"Manteiga ou \\u00f3leo\", \"amount\": null, \"unit\": null}, {\"name\": \"A\\u00e7\\u00facar\", \"amount\": null, \"unit\": null}]",
+  "instructions": "Misture o fermento com o líquido na temperatura adequada. Adicione a farinha, o sal e os demais ingredientes até formar uma massa homogênea. Sove a massa até atingir elasticidade. Deixe a massa descansar até dobrar de tamanho. Modele o pão e deixe fermentar novamente antes de assar entre 180°C e 200°C por 30 a 40 minutos.",
+  "category": "Pão",
+  "prep_time": "15 minutes",
+  "cook_time": "30-40 minutes",
+  "total_time": "45-55 minutes",
+  "notes": "A qualidade da farinha e a temperatura da água são cruciais para o sucesso da receita.",
+  "tags": "pão, caseiro, fofo, receita"
 }

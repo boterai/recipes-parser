@@ -1,12 +1,12 @@
 {
-    "dish_name": "Cóctel Manhattan",
-    "description": "El Manhattan es un cóctel icónico que combina whiskey, vermut dulce y bitters, creando un sabor complejo y aromático.",
-    "ingredients": "[{\"name\": \"Whiskey de centeno o bourbon\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"Vermut dulce\", \"units\": \"ml\", \"amount\": 100}, {\"name\": \"Bitters de Angostura\", \"units\": \"dashes\", \"amount\": 8}, {\"name\": \"Cerezas para cóctel\", \"units\": null, \"amount\": 4}]",
-    "instructions": "1. Coloca un vaso coupe o martini en el congelador para que se enfríe. 2. En un vaso mezclador, agrega hielo hasta la mitad. Vierte el whiskey, el vermut dulce y los bitters. 3. Revuelve la mezcla en un movimiento circular durante unos 30 segundos hasta que esté bien fría. 4. Cuela la mezcla en el vaso preparado y decora con una cereza para cóctel.",
-    "category": "Bebidas y Cocteles",
-    "prep_time": "5 mins",
-    "cook_time": null,
-    "total_time": "5 mins",
-    "notes": "Asegúrate de usar ingredientes de calidad para obtener el mejor sabor. Si prefieres un sabor más suave, puedes usar bourbon en lugar de rye.",
-    "tags": "Manhattan, cóctel clásico, rye whiskey, bourbon, vermut dulce, bitters, receta fácil, cóctel aromático"
+  "dish_name": "Cóctel Manhattan",
+  "description": "El Manhattan es un cóctel icónico que combina whiskey, vermut dulce y bitters, creando un sabor complejo y aromático.",
+  "ingredients": "[{\"name\": \"Whiskey de centeno o bourbon\", \"amount\": 200, \"unit\": \"ml\"}, {\"name\": \"Vermut dulce\", \"amount\": 100, \"unit\": \"ml\"}, {\"name\": \"Bitters de Angostura\", \"amount\": 8, \"unit\": \"dashes\"}, {\"name\": \"Cerezas para c\\u00f3ctel\", \"amount\": 4, \"unit\": null}]",
+  "instructions": "1. Coloca un vaso coupe o martini en el congelador para que se enfríe. 2. En un vaso mezclador, agrega hielo hasta la mitad. Vierte el whiskey, el vermut dulce y los bitters. 3. Revuelve la mezcla en un movimiento circular durante unos 30 segundos hasta que esté bien fría. 4. Cuela la mezcla en el vaso preparado y decora con una cereza para cóctel.",
+  "category": "Bebidas y Cocteles",
+  "prep_time": "5 mins",
+  "cook_time": null,
+  "total_time": "5 mins",
+  "notes": "Asegúrate de usar ingredientes de calidad para obtener el mejor sabor. Si prefieres un sabor más suave, puedes usar bourbon en lugar de rye.",
+  "tags": "Manhattan, cóctel clásico, rye whiskey, bourbon, vermut dulce, bitters, receta fácil, cóctel aromático"
 }

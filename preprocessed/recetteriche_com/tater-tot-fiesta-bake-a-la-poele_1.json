@@ -1,12 +1,12 @@
 {
-    "dish_name": "Tater Tot Fiesta Bake",
-    "description": "Un plat réconfortant et savoureux, fusion entre la cuisine américaine et les saveurs mexicaines, parfait pour les soirs de semaine.",
-    "ingredients": "[{\"name\": \"bœuf haché\", \"units\": \"livre (environ 450 g)\", \"amount\": \"1\"}, {\"name\": \"assaisonnement pour tacos\", \"units\": \"sachet\", \"amount\": \"1\"}, {\"name\": \"haricots noirs\", \"units\": \"boîte (15 oz / 425 g)\", \"amount\": \"1\"}, {\"name\": \"maïs surgelé\", \"units\": \"tasse (environ 150 g)\", \"amount\": \"1\"}, {\"name\": \"tomates en dés avec piments verts\", \"units\": \"boîte (10 oz / 280 g)\", \"amount\": \"1\"}, {\"name\": \"fromage mexicain râpé\", \"units\": \"tasses (environ 200 g)\", \"amount\": \"2\"}, {\"name\": \"Tater Tots surgelés\", \"units\": \"sac (32 oz / 900 g)\", \"amount\": \"1\"}]",
-    "instructions": "1️⃣ Préchauffez votre four à 190 °C (375 °F). Graissez un plat de cuisson. 2️⃣ Faites cuire le bœuf haché à feu moyen-vif jusqu'à ce qu'il soit doré. 3️⃣ Ajoutez l'assaisonnement pour tacos et un peu d'eau, laissez mijoter. 4️⃣ Incorporez les haricots, le maïs et les tomates. 5️⃣ Étalez le mélange dans le plat, ajoutez le fromage. 6️⃣ Disposez les Tater Tots sur le fromage. 7️⃣ Enfournez pendant 25-30 minutes. 8️⃣ Laissez refroidir avant de servir.",
-    "category": "Main Course",
-    "prep_time": "15 minutes",
-    "cook_time": "30 minutes",
-    "total_time": "45 minutes",
-    "notes": "Peut être préparé à l'avance et congelé. Remplacez le bœuf par du chorizo ou des lentilles pour une version végétarienne.",
-    "tags": "casserole, rapide, économique, famille"
+  "dish_name": "Tater Tot Fiesta Bake",
+  "description": "Un plat réconfortant et savoureux, fusion entre la cuisine américaine et les saveurs mexicaines, parfait pour les soirs de semaine.",
+  "ingredients": "[{\"name\": \"b\\u0153uf hach\\u00e9\", \"amount\": \"1\", \"unit\": \"livre (environ 450 g)\"}, {\"name\": \"assaisonnement pour tacos\", \"amount\": \"1\", \"unit\": \"sachet\"}, {\"name\": \"haricots noirs\", \"amount\": \"1\", \"unit\": \"bo\\u00eete (15 oz / 425 g)\"}, {\"name\": \"ma\\u00efs surgel\\u00e9\", \"amount\": \"1\", \"unit\": \"tasse (environ 150 g)\"}, {\"name\": \"tomates en d\\u00e9s avec piments verts\", \"amount\": \"1\", \"unit\": \"bo\\u00eete (10 oz / 280 g)\"}, {\"name\": \"fromage mexicain r\\u00e2p\\u00e9\", \"amount\": \"2\", \"unit\": \"tasses (environ 200 g)\"}, {\"name\": \"Tater Tots surgel\\u00e9s\", \"amount\": \"1\", \"unit\": \"sac (32 oz / 900 g)\"}]",
+  "instructions": "1️⃣ Préchauffez votre four à 190 °C (375 °F). Graissez un plat de cuisson. 2️⃣ Faites cuire le bœuf haché à feu moyen-vif jusqu'à ce qu'il soit doré. 3️⃣ Ajoutez l'assaisonnement pour tacos et un peu d'eau, laissez mijoter. 4️⃣ Incorporez les haricots, le maïs et les tomates. 5️⃣ Étalez le mélange dans le plat, ajoutez le fromage. 6️⃣ Disposez les Tater Tots sur le fromage. 7️⃣ Enfournez pendant 25-30 minutes. 8️⃣ Laissez refroidir avant de servir.",
+  "category": "Main Course",
+  "prep_time": "15 minutes",
+  "cook_time": "30 minutes",
+  "total_time": "45 minutes",
+  "notes": "Peut être préparé à l'avance et congelé. Remplacez le bœuf par du chorizo ou des lentilles pour une version végétarienne.",
+  "tags": "casserole, rapide, économique, famille"
 }

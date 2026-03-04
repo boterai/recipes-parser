@@ -1,12 +1,12 @@
 {
-    "dish_name": "Mangkuk Smoothie Berry",
-    "description": "Resep mangkuk smoothie buah Very Berry ini adalah makanan yang lembut, sehat, dan rendah kalori yang membuat Anda merasa nyaman.",
-    "ingredients": "[{\"name\": \"Pisang Beku\", \"units\": \"pieces\", \"amount\": 2}, {\"name\": \"Ceri\", \"units\": \"grams\", \"amount\": 100}, {\"name\": \"Campur Berry Beku\", \"units\": \"grams\", \"amount\": 100}, {\"name\": \"Yoghurt Alami\", \"units\": \"tablespoons\", \"amount\": 4}, {\"name\": \"Granola\", \"units\": \"tablespoon\", \"amount\": 1}, {\"name\": \"Raspberi\", \"units\": \"pieces\", \"amount\": 5}, {\"name\": \"Stroberi\", \"units\": \"slice\", \"amount\": 1}, {\"name\": \"Kelapa Kering\", \"units\": \"teaspoon\", \"amount\": 1}]",
-    "instructions": "Hal pertama yang pertama tambahkan pisang beku, buah beri beku, ceri segar dengan bijinya dibuang ke dalam cangkir blender. Tambahkan yoghurt alami. Tutup blender Anda dan haluskan hingga halus. Tuangkan smoothie berry dari blender ke dalam mangkuk. Taburi dengan topping kesukaanmu.",
-    "category": "Breakfast",
-    "prep_time": "5 minutes",
-    "cook_time": null,
-    "total_time": "5 minutes",
-    "notes": "Anda bisa menambahkan kombinasi buah dan sayuran apa saja, menambahkan sedikit cairan, bahkan mungkin sedikit pemanis.",
-    "tags": "smoothie, vegan, sehat, sarapan"
+  "dish_name": "Mangkuk Smoothie Berry",
+  "description": "Resep mangkuk smoothie buah Very Berry ini adalah makanan yang lembut, sehat, dan rendah kalori yang membuat Anda merasa nyaman.",
+  "ingredients": "[{\"name\": \"Pisang Beku\", \"amount\": 2, \"unit\": \"pieces\"}, {\"name\": \"Ceri\", \"amount\": 100, \"unit\": \"grams\"}, {\"name\": \"Campur Berry Beku\", \"amount\": 100, \"unit\": \"grams\"}, {\"name\": \"Yoghurt Alami\", \"amount\": 4, \"unit\": \"tablespoons\"}, {\"name\": \"Granola\", \"amount\": 1, \"unit\": \"tablespoon\"}, {\"name\": \"Raspberi\", \"amount\": 5, \"unit\": \"pieces\"}, {\"name\": \"Stroberi\", \"amount\": 1, \"unit\": \"slice\"}, {\"name\": \"Kelapa Kering\", \"amount\": 1, \"unit\": \"teaspoon\"}]",
+  "instructions": "Hal pertama yang pertama tambahkan pisang beku, buah beri beku, ceri segar dengan bijinya dibuang ke dalam cangkir blender. Tambahkan yoghurt alami. Tutup blender Anda dan haluskan hingga halus. Tuangkan smoothie berry dari blender ke dalam mangkuk. Taburi dengan topping kesukaanmu.",
+  "category": "Breakfast",
+  "prep_time": "5 minutes",
+  "cook_time": null,
+  "total_time": "5 minutes",
+  "notes": "Anda bisa menambahkan kombinasi buah dan sayuran apa saja, menambahkan sedikit cairan, bahkan mungkin sedikit pemanis.",
+  "tags": "smoothie, vegan, sehat, sarapan"
 }

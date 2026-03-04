@@ -1,12 +1,12 @@
 {
-    "dish_name": "Brzi desert",
-    "description": "Kremast, lagan i gotov desert za 5 minuta bez pečenja.",
-    "ingredients": "[{\"name\": \"banane\", \"units\": null, \"amount\": 2}, {\"name\": \"slatka pavlaka\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"eurokrem ili bilo kojeg čokoladnog namaza\", \"units\": \"kašike\", \"amount\": 3}, {\"name\": \"mljevenog keksa\", \"units\": \"kašike\", \"amount\": 4}, {\"name\": \"med\", \"units\": \"kašika\", \"amount\": 1}, {\"name\": \"čokolade za dekoraciju\", \"units\": null, \"amount\": null}]",
-    "instructions": "Prvo izgnječim banane viljuškom dok ne postanu fina, kremasta smjesa. Ako volite slađe, dodam kašiku meda i promiješam. U drugoj posudi umutím slatku pavlaku dok ne postane čvrsta. Ne treba dugo, samo da dobijem lijepu, pahuljastu teksturu. Sada slijedi slaganje – u čašu prvo stavim red mljevenog keksa, zatim sloj banana, pa malo čokoladnog namaza i na kraju umućenu pavlaku. Tako ponovim još jednom dok ne napunim čašu. Na vrh narendam malo čokolade ili dodam mrvice keksa. Desert je spreman odmah, ali ako imate vremena, stavite ga 10 minuta u frižider – biće još ukusniji.",
-    "category": "Dessert",
-    "prep_time": "5 minutes",
-    "cook_time": null,
-    "total_time": "5 minutes",
-    "notes": "Idealno za iznenadne goste, dječije rođendane ili večernju želju za slatkim.",
-    "tags": "desert, brzi desert, slatko"
+  "dish_name": "Brzi desert",
+  "description": "Kremast, lagan i gotov desert za 5 minuta bez pečenja.",
+  "ingredients": "[{\"name\": \"banane\", \"amount\": 2, \"unit\": null}, {\"name\": \"slatka pavlaka\", \"amount\": 200, \"unit\": \"ml\"}, {\"name\": \"eurokrem ili bilo kojeg \\u010dokoladnog namaza\", \"amount\": 3, \"unit\": \"ka\\u0161ike\"}, {\"name\": \"mljevenog keksa\", \"amount\": 4, \"unit\": \"ka\\u0161ike\"}, {\"name\": \"med\", \"amount\": 1, \"unit\": \"ka\\u0161ika\"}, {\"name\": \"\\u010dokolade za dekoraciju\", \"amount\": null, \"unit\": null}]",
+  "instructions": "Prvo izgnječim banane viljuškom dok ne postanu fina, kremasta smjesa. Ako volite slađe, dodam kašiku meda i promiješam. U drugoj posudi umutím slatku pavlaku dok ne postane čvrsta. Ne treba dugo, samo da dobijem lijepu, pahuljastu teksturu. Sada slijedi slaganje – u čašu prvo stavim red mljevenog keksa, zatim sloj banana, pa malo čokoladnog namaza i na kraju umućenu pavlaku. Tako ponovim još jednom dok ne napunim čašu. Na vrh narendam malo čokolade ili dodam mrvice keksa. Desert je spreman odmah, ali ako imate vremena, stavite ga 10 minuta u frižider – biće još ukusniji.",
+  "category": "Dessert",
+  "prep_time": "5 minutes",
+  "cook_time": null,
+  "total_time": "5 minutes",
+  "notes": "Idealno za iznenadne goste, dječije rođendane ili večernju želju za slatkim.",
+  "tags": "desert, brzi desert, slatko"
 }

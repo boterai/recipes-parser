@@ -1,12 +1,12 @@
 {
-    "dish_name": "Avokadopasta",
-    "description": null,
-    "ingredients": "[{\"name\": \"valkosipulinkynsi\", \"units\": null, \"amount\": \"1-2\"}, {\"name\": \"kypsä avokado\", \"units\": null, \"amount\": \"4\"}, {\"name\": \"tuore chili\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"kuivattuja chilihiutaleita\", \"units\": \"tl\", \"amount\": \"2\"}, {\"name\": \"lime\", \"units\": null, \"amount\": \"1\"}, {\"name\": \"tuore basilika\", \"units\": null, \"amount\": null}, {\"name\": \"suola\", \"units\": null, \"amount\": null}, {\"name\": \"mustapippuri\", \"units\": null, \"amount\": null}, {\"name\": \"laadukas spaghetti tai linguine pasta\", \"units\": \"g\", \"amount\": \"400\"}, {\"name\": \"raastettu parmesan\", \"units\": \"dl\", \"amount\": \"2\"}, {\"name\": \"kookoskerma\", \"units\": \"ml\", \"amount\": \"250\"}, {\"name\": \"halloumi tai tofu\", \"units\": null, \"amount\": \"1 paketti\"}]",
-    "instructions": "Laita pasta keittymään pakkauksen ohjeen mukaan runsaasti suolattuun veteen. Muussaa kulhossa kypsät avokadot ja lisää joukkoon hienonnettu chili tai chilihiutaleet sekä hienonnettu valkosipuli. Purista sekaan puolikkaan limen mehu, lisää suolaa ja mustapippuria. Maista, ja lisää limemehua tarpeen mukaan. Kun pasta on kypsää, ota 1-2 dl keitinvettä talteen ja valuta pasta. Sekoita pastan joukkoon kookoskerma. Yhdistä pasta, avokado ja raastettu parmesan keskenään kulhossa ja lisää hieman pastan keitinvettä sekoittaessasi kaikki yhteen. Viimeistele annokset tuoreella basilikalla ja halutessasi paistetulla halloumilla tai tofulla.",
-    "category": "Pasta & Risotto",
-    "prep_time": null,
-    "cook_time": null,
-    "total_time": null,
-    "notes": null,
-    "tags": "vegaaniset"
+  "dish_name": "Avokadopasta",
+  "description": null,
+  "ingredients": "[{\"name\": \"valkosipulinkynsi\", \"amount\": \"1-2\", \"unit\": null}, {\"name\": \"kyps\\u00e4 avokado\", \"amount\": \"4\", \"unit\": null}, {\"name\": \"tuore chili\", \"amount\": \"1\", \"unit\": null}, {\"name\": \"kuivattuja chilihiutaleita\", \"amount\": \"2\", \"unit\": \"tl\"}, {\"name\": \"lime\", \"amount\": \"1\", \"unit\": null}, {\"name\": \"tuore basilika\", \"amount\": null, \"unit\": null}, {\"name\": \"suola\", \"amount\": null, \"unit\": null}, {\"name\": \"mustapippuri\", \"amount\": null, \"unit\": null}, {\"name\": \"laadukas spaghetti tai linguine pasta\", \"amount\": \"400\", \"unit\": \"g\"}, {\"name\": \"raastettu parmesan\", \"amount\": \"2\", \"unit\": \"dl\"}, {\"name\": \"kookoskerma\", \"amount\": \"250\", \"unit\": \"ml\"}, {\"name\": \"halloumi tai tofu\", \"amount\": \"1 paketti\", \"unit\": null}]",
+  "instructions": "Laita pasta keittymään pakkauksen ohjeen mukaan runsaasti suolattuun veteen. Muussaa kulhossa kypsät avokadot ja lisää joukkoon hienonnettu chili tai chilihiutaleet sekä hienonnettu valkosipuli. Purista sekaan puolikkaan limen mehu, lisää suolaa ja mustapippuria. Maista, ja lisää limemehua tarpeen mukaan. Kun pasta on kypsää, ota 1-2 dl keitinvettä talteen ja valuta pasta. Sekoita pastan joukkoon kookoskerma. Yhdistä pasta, avokado ja raastettu parmesan keskenään kulhossa ja lisää hieman pastan keitinvettä sekoittaessasi kaikki yhteen. Viimeistele annokset tuoreella basilikalla ja halutessasi paistetulla halloumilla tai tofulla.",
+  "category": "Pasta & Risotto",
+  "prep_time": null,
+  "cook_time": null,
+  "total_time": null,
+  "notes": null,
+  "tags": "vegaaniset"
 }

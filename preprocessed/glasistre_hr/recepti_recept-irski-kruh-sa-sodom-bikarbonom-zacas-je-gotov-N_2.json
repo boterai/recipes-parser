@@ -1,12 +1,12 @@
 {
-    "dish_name": "Irski kruh sa sodom bikarbonom",
-    "description": "Tradicionalni kruh u kojem se umjesto kvasca koristi soda.",
-    "ingredients": "[{\"name\": \"bijelo glatko brašno\", \"units\": \"dag\", \"amount\": 25}, {\"name\": \"integralno brašno ili pirovo\", \"units\": \"dag\", \"amount\": 25}, {\"name\": \"sol\", \"units\": \"žličica\", \"amount\": 1}, {\"name\": \"soda bikarbona\", \"units\": \"žličica\", \"amount\": 1.5}, {\"name\": \"kefir, jogurt ili slično\", \"units\": \"dcl\", \"amount\": 4}]",
-    "instructions": "U posudu za miješanje staviti dvije vrste brašna i dodati sol i soda bikarbonu. Može se dodati i žlica lanenih sjemenki. Sve dobro izmiješati pa uliti jogurt, kefir ili kiselo vrhnje. Nastaviti miješati rukom u posudi za miješanje, a nakon toga kratko izmijesiti razvlačenjem i preklapanjem na dasci posipanoj brašnom. Oblikovati kuglu laganim pokretima ruke prema dolje (podižući malo kuglu). Lim za pečenje prekriti papirom za pečenje, pa postaviti oblikovano tijesto. Zarezati nožem duboki križ na sredini kruha. Sve se to mora odraditi brzo jer „kemija“ sode bikarbone i kefira brzo radi. Staviti u zagrijanu pećnicu na 200°C i peći 50 minuta.",
-    "category": null,
-    "prep_time": null,
-    "cook_time": "50 minutes",
-    "total_time": null,
-    "notes": "Vrlo dobra zamjena za mlaćenicu su kiselo vrhnje, jogurt ili kefir.",
-    "tags": "kruh, irski, brzi recept"
+  "dish_name": "Irski kruh sa sodom bikarbonom",
+  "description": "Tradicionalni kruh u kojem se umjesto kvasca koristi soda.",
+  "ingredients": "[{\"name\": \"bijelo glatko bra\\u0161no\", \"amount\": 25, \"unit\": \"dag\"}, {\"name\": \"integralno bra\\u0161no ili pirovo\", \"amount\": 25, \"unit\": \"dag\"}, {\"name\": \"sol\", \"amount\": 1, \"unit\": \"\\u017eli\\u010dica\"}, {\"name\": \"soda bikarbona\", \"amount\": 1.5, \"unit\": \"\\u017eli\\u010dica\"}, {\"name\": \"kefir, jogurt ili sli\\u010dno\", \"amount\": 4, \"unit\": \"dcl\"}]",
+  "instructions": "U posudu za miješanje staviti dvije vrste brašna i dodati sol i soda bikarbonu. Može se dodati i žlica lanenih sjemenki. Sve dobro izmiješati pa uliti jogurt, kefir ili kiselo vrhnje. Nastaviti miješati rukom u posudi za miješanje, a nakon toga kratko izmijesiti razvlačenjem i preklapanjem na dasci posipanoj brašnom. Oblikovati kuglu laganim pokretima ruke prema dolje (podižući malo kuglu). Lim za pečenje prekriti papirom za pečenje, pa postaviti oblikovano tijesto. Zarezati nožem duboki križ na sredini kruha. Sve se to mora odraditi brzo jer „kemija“ sode bikarbone i kefira brzo radi. Staviti u zagrijanu pećnicu na 200°C i peći 50 minuta.",
+  "category": null,
+  "prep_time": null,
+  "cook_time": "50 minutes",
+  "total_time": null,
+  "notes": "Vrlo dobra zamjena za mlaćenicu su kiselo vrhnje, jogurt ili kefir.",
+  "tags": "kruh, irski, brzi recept"
 }

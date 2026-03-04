@@ -1,12 +1,12 @@
 {
-    "dish_name": "Bánh mì hoa cúc",
-    "description": "Bánh mì hoa cúc với hương vị thơm ngon, mềm mịn, xốp nhẹ.",
-    "ingredients": "[{\"name\": \"bột mì đa dụng\", \"units\": \"g\", \"amount\": 500}, {\"name\": \"nước ấm\", \"units\": \"ml\", \"amount\": 250}, {\"name\": \"men nở khô\", \"units\": \"g\", \"amount\": 10}, {\"name\": \"đường\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"bơ lạt\", \"units\": \"g\", \"amount\": 50}, {\"name\": \"trứng\", \"units\": \"quả\", \"amount\": 1}, {\"name\": \"muối\", \"units\": \"muỗng cà phê\", \"amount\": 1}, {\"name\": \"tinh dầu hoa cúc\", \"units\": \"vài giọt\", \"amount\": null}]",
-    "instructions": "Bước 1: Chuẩn bị men nở. Bước 2: Trộn bột. Bước 3: Nhào bột. Bước 4: Lên men bột. Bước 5: Tạo hình. Bước 6: Nướng bánh. Bước 7: Thưởng thức.",
-    "category": "Dessert",
-    "prep_time": "15 minutes",
-    "cook_time": "25 minutes",
-    "total_time": "40 minutes",
-    "notes": "Nhiệt độ nước ấm nên ở khoảng 35-38°C. Kiểm tra độ chín của bánh thường xuyên.",
-    "tags": "bánh mì, hoa cúc, công thức, làm bánh"
+  "dish_name": "Bánh mì hoa cúc",
+  "description": "Bánh mì hoa cúc với hương vị thơm ngon, mềm mịn, xốp nhẹ.",
+  "ingredients": "[{\"name\": \"b\\u1ed9t m\\u00ec \\u0111a d\\u1ee5ng\", \"amount\": 500, \"unit\": \"g\"}, {\"name\": \"n\\u01b0\\u1edbc \\u1ea5m\", \"amount\": 250, \"unit\": \"ml\"}, {\"name\": \"men n\\u1edf kh\\u00f4\", \"amount\": 10, \"unit\": \"g\"}, {\"name\": \"\\u0111\\u01b0\\u1eddng\", \"amount\": 50, \"unit\": \"g\"}, {\"name\": \"b\\u01a1 l\\u1ea1t\", \"amount\": 50, \"unit\": \"g\"}, {\"name\": \"tr\\u1ee9ng\", \"amount\": 1, \"unit\": \"qu\\u1ea3\"}, {\"name\": \"mu\\u1ed1i\", \"amount\": 1, \"unit\": \"mu\\u1ed7ng c\\u00e0 ph\\u00ea\"}, {\"name\": \"tinh d\\u1ea7u hoa c\\u00fac\", \"amount\": null, \"unit\": \"v\\u00e0i gi\\u1ecdt\"}]",
+  "instructions": "Bước 1: Chuẩn bị men nở. Bước 2: Trộn bột. Bước 3: Nhào bột. Bước 4: Lên men bột. Bước 5: Tạo hình. Bước 6: Nướng bánh. Bước 7: Thưởng thức.",
+  "category": "Dessert",
+  "prep_time": "15 minutes",
+  "cook_time": "25 minutes",
+  "total_time": "40 minutes",
+  "notes": "Nhiệt độ nước ấm nên ở khoảng 35-38°C. Kiểm tra độ chín của bánh thường xuyên.",
+  "tags": "bánh mì, hoa cúc, công thức, làm bánh"
 }

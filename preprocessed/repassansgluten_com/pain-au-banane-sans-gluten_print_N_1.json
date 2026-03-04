@@ -1,12 +1,12 @@
 {
-    "dish_name": "Pain au banane sans gluten",
-    "description": "Pain au banane sans gluten moelleux, à base de poudre d’amandes et bananes mûres. Parfait pour les petits-déjeuners ou goûters gourmands.",
-    "ingredients": "[{\"name\": \"poudre d’amandes\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"fécule de maïs\", \"units\": \"ml\", \"amount\": 60}, {\"name\": \"poudre à pâte\", \"units\": \"ml\", \"amount\": 10}, {\"name\": \"beurre non salé, ramolli\", \"units\": \"ml\", \"amount\": 125}, {\"name\": \"sucre\", \"units\": \"ml\", \"amount\": 125}, {\"name\": \"œufs\", \"units\": null, \"amount\": 2}, {\"name\": \"bananes mûres écrasées\", \"units\": \"ml\", \"amount\": 310}, {\"name\": \"amandes tranchées\", \"units\": \"ml\", \"amount\": 30}]",
-    "instructions": "1. Préchauffez le four à 180 °C (350 °F). Beurrez un moule à pain et tapissez-le de papier parchemin. 2. Mélangez dans un bol la poudre d’amandes, la fécule et la poudre à pâte. Réservez. 3. Dans un autre bol, fouettez le beurre avec le sucre jusqu’à texture crémeuse. 4. Ajoutez les œufs un à un en fouettant entre chaque. 5. Incorporez les ingrédients secs et la purée de bananes en alternance à basse vitesse. 6. Versez dans le moule et saupoudrez d’amandes tranchées. 7. Faites cuire environ 55 minutes, jusqu’à ce qu’un cure-dent en ressorte propre. 8. Laissez refroidir complètement avant de démouler.",
-    "category": "Dessert",
-    "prep_time": "20 minutes",
-    "cook_time": "55 minutes",
-    "total_time": null,
-    "notes": "Vous pouvez ajouter des pépites de chocolat, des noix ou remplacer le beurre par de la purée d’amande pour une version sans lactose.",
-    "tags": null
+  "dish_name": "Pain au banane sans gluten",
+  "description": "Pain au banane sans gluten moelleux, à base de poudre d’amandes et bananes mûres. Parfait pour les petits-déjeuners ou goûters gourmands.",
+  "ingredients": "[{\"name\": \"poudre d\\u2019amandes\", \"amount\": 500, \"unit\": \"ml\"}, {\"name\": \"f\\u00e9cule de ma\\u00efs\", \"amount\": 60, \"unit\": \"ml\"}, {\"name\": \"poudre \\u00e0 p\\u00e2te\", \"amount\": 10, \"unit\": \"ml\"}, {\"name\": \"beurre non sal\\u00e9, ramolli\", \"amount\": 125, \"unit\": \"ml\"}, {\"name\": \"sucre\", \"amount\": 125, \"unit\": \"ml\"}, {\"name\": \"\\u0153ufs\", \"amount\": 2, \"unit\": null}, {\"name\": \"bananes m\\u00fbres \\u00e9cras\\u00e9es\", \"amount\": 310, \"unit\": \"ml\"}, {\"name\": \"amandes tranch\\u00e9es\", \"amount\": 30, \"unit\": \"ml\"}]",
+  "instructions": "1. Préchauffez le four à 180 °C (350 °F). Beurrez un moule à pain et tapissez-le de papier parchemin. 2. Mélangez dans un bol la poudre d’amandes, la fécule et la poudre à pâte. Réservez. 3. Dans un autre bol, fouettez le beurre avec le sucre jusqu’à texture crémeuse. 4. Ajoutez les œufs un à un en fouettant entre chaque. 5. Incorporez les ingrédients secs et la purée de bananes en alternance à basse vitesse. 6. Versez dans le moule et saupoudrez d’amandes tranchées. 7. Faites cuire environ 55 minutes, jusqu’à ce qu’un cure-dent en ressorte propre. 8. Laissez refroidir complètement avant de démouler.",
+  "category": "Dessert",
+  "prep_time": "20 minutes",
+  "cook_time": "55 minutes",
+  "total_time": null,
+  "notes": "Vous pouvez ajouter des pépites de chocolat, des noix ou remplacer le beurre par de la purée d’amande pour une version sans lactose.",
+  "tags": null
 }

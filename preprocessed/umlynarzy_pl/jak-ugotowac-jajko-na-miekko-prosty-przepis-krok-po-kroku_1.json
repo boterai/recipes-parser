@@ -1,12 +1,12 @@
 {
-    "dish_name": "Jajko na miękko",
-    "description": "Jajko na miękko to jedno z najprostszych i najsmaczniejszych śniadań z płynnym, kremowym żółtkiem.",
-    "ingredients": "[{\"name\": \"Jajka kurze\", \"units\": \"M lub L\", \"amount\": null}, {\"name\": \"Woda\", \"units\": null, \"amount\": null}, {\"name\": \"Szczypta soli\", \"units\": null, \"amount\": null}, {\"name\": \"Ocet\", \"units\": null, \"amount\": null}, {\"name\": \"Garnek\", \"units\": null, \"amount\": null}, {\"name\": \"Łyżka lub łyżka cedzakowa\", \"units\": null, \"amount\": null}, {\"name\": \"Timer lub minutnik\", \"units\": null, \"amount\": null}, {\"name\": \"Miska z zimną wodą\", \"units\": null, \"amount\": null}]",
-    "instructions": "1. Przygotuj jajka. 2. Zagotuj wodę. 3. Włóż jajka do wrzątku. 4. Gotuj przez odpowiedni czas. 5. Schłodź jajka. 6. Podawaj.",
-    "category": "Śniadanie",
-    "prep_time": "15-20 minutes",
-    "cook_time": "6-7 minutes",
-    "total_time": null,
-    "notes": "Jajka w temperaturze pokojowej rzadziej pękają. Można dodać ocet do wody, aby ułatwić obieranie.",
-    "tags": "jajka, śniadanie, przepis, gotowanie"
+  "dish_name": "Jajko na miękko",
+  "description": "Jajko na miękko to jedno z najprostszych i najsmaczniejszych śniadań z płynnym, kremowym żółtkiem.",
+  "ingredients": "[{\"name\": \"Jajka kurze\", \"amount\": null, \"unit\": \"M lub L\"}, {\"name\": \"Woda\", \"amount\": null, \"unit\": null}, {\"name\": \"Szczypta soli\", \"amount\": null, \"unit\": null}, {\"name\": \"Ocet\", \"amount\": null, \"unit\": null}, {\"name\": \"Garnek\", \"amount\": null, \"unit\": null}, {\"name\": \"\\u0141y\\u017cka lub \\u0142y\\u017cka cedzakowa\", \"amount\": null, \"unit\": null}, {\"name\": \"Timer lub minutnik\", \"amount\": null, \"unit\": null}, {\"name\": \"Miska z zimn\\u0105 wod\\u0105\", \"amount\": null, \"unit\": null}]",
+  "instructions": "1. Przygotuj jajka. 2. Zagotuj wodę. 3. Włóż jajka do wrzątku. 4. Gotuj przez odpowiedni czas. 5. Schłodź jajka. 6. Podawaj.",
+  "category": "Śniadanie",
+  "prep_time": "15-20 minutes",
+  "cook_time": "6-7 minutes",
+  "total_time": null,
+  "notes": "Jajka w temperaturze pokojowej rzadziej pękają. Można dodać ocet do wody, aby ułatwić obieranie.",
+  "tags": "jajka, śniadanie, przepis, gotowanie"
 }

@@ -1,12 +1,12 @@
 {
-    "dish_name": "Široki rezanci s grahom u aromatičnom umaku",
-    "description": "Kombinacija tjestenine, rajčice i graha u jednostavnom jelu koje se priprema za manje od pola sata.",
-    "ingredients": "[{\"name\": \"široki rezanci\", \"units\": \"g\", \"amount\": 300}, {\"name\": \"crveni grah\", \"units\": \"konzerva\", \"amount\": 1}, {\"name\": \"luk\", \"units\": \"manji\", \"amount\": 1}, {\"name\": \"češnjak\", \"units\": \"režnja\", \"amount\": 2}, {\"name\": \"pasirana rajčica\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"svježa rajčica\", \"units\": \"komad\", \"amount\": 1}, {\"name\": \"maslinovo ulje\", \"units\": \"žlice\", \"amount\": 2}, {\"name\": \"sol\", \"units\": null, \"amount\": null}, {\"name\": \"svježe mljeveni papar\", \"units\": null, \"amount\": null}, {\"name\": \"suhi origano ili timijan\", \"units\": \"prstohvat\", \"amount\": null}, {\"name\": \"svježi peršin ili bosiljak\", \"units\": null, \"amount\": null}, {\"name\": \"čili\", \"units\": \"malo\", \"amount\": null}]",
-    "instructions": "U većem loncu zakuhajte vodu, posolite je i skuhajte rezance prema uputama na pakiranju. Sačuvajte malo vode od kuhanja prije cijeđenja. U tavi zagrijte maslinovo ulje pa dodajte sitno sjeckani luk. Pirjajte nekoliko minuta dok ne omekša. Dodajte nasjeckani češnjak i kratko popržite. Umiješajte pasiranu rajčicu i po potrebi svježu sjeckanu rajčicu. Posolite, popaprite i dodajte začinsko bilje. Pustite da lagano krčka 5–7 minuta. U umak dodajte ocijeđeni crveni grah i po potrebi malo vode od kuhanja tjestenine kako bi se dobila kremastija tekstura. Kuhajte još nekoliko minuta da se okusi povežu. Umiješajte ocijeđene rezance u umak i dobro promiješajte da se sve obloži aromatičnom mješavinom. Poslužite toplo, posuto svježim peršinom ili bosiljkom. Po želji možete dodati malo naribanog tvrdog sira ili nekoliko kapi dodatnog maslinova ulja.",
-    "category": "Main Course",
-    "prep_time": "10 minutes",
-    "cook_time": "20 minutes",
-    "total_time": "30 minutes",
-    "notes": "Ako želite jači okus, u umak možete dodati dimljenu papriku ili sitno sjeckanu pancetu na početku pirjanja.",
-    "tags": "pasta, grah, brzi ručak"
+  "dish_name": "Široki rezanci s grahom u aromatičnom umaku",
+  "description": "Kombinacija tjestenine, rajčice i graha u jednostavnom jelu koje se priprema za manje od pola sata.",
+  "ingredients": "[{\"name\": \"\\u0161iroki rezanci\", \"amount\": 300, \"unit\": \"g\"}, {\"name\": \"crveni grah\", \"amount\": 1, \"unit\": \"konzerva\"}, {\"name\": \"luk\", \"amount\": 1, \"unit\": \"manji\"}, {\"name\": \"\\u010de\\u0161njak\", \"amount\": 2, \"unit\": \"re\\u017enja\"}, {\"name\": \"pasirana raj\\u010dica\", \"amount\": 200, \"unit\": \"ml\"}, {\"name\": \"svje\\u017ea raj\\u010dica\", \"amount\": 1, \"unit\": \"komad\"}, {\"name\": \"maslinovo ulje\", \"amount\": 2, \"unit\": \"\\u017elice\"}, {\"name\": \"sol\", \"amount\": null, \"unit\": null}, {\"name\": \"svje\\u017ee mljeveni papar\", \"amount\": null, \"unit\": null}, {\"name\": \"suhi origano ili timijan\", \"amount\": null, \"unit\": \"prstohvat\"}, {\"name\": \"svje\\u017ei per\\u0161in ili bosiljak\", \"amount\": null, \"unit\": null}, {\"name\": \"\\u010dili\", \"amount\": null, \"unit\": \"malo\"}]",
+  "instructions": "U većem loncu zakuhajte vodu, posolite je i skuhajte rezance prema uputama na pakiranju. Sačuvajte malo vode od kuhanja prije cijeđenja. U tavi zagrijte maslinovo ulje pa dodajte sitno sjeckani luk. Pirjajte nekoliko minuta dok ne omekša. Dodajte nasjeckani češnjak i kratko popržite. Umiješajte pasiranu rajčicu i po potrebi svježu sjeckanu rajčicu. Posolite, popaprite i dodajte začinsko bilje. Pustite da lagano krčka 5–7 minuta. U umak dodajte ocijeđeni crveni grah i po potrebi malo vode od kuhanja tjestenine kako bi se dobila kremastija tekstura. Kuhajte još nekoliko minuta da se okusi povežu. Umiješajte ocijeđene rezance u umak i dobro promiješajte da se sve obloži aromatičnom mješavinom. Poslužite toplo, posuto svježim peršinom ili bosiljkom. Po želji možete dodati malo naribanog tvrdog sira ili nekoliko kapi dodatnog maslinova ulja.",
+  "category": "Main Course",
+  "prep_time": "10 minutes",
+  "cook_time": "20 minutes",
+  "total_time": "30 minutes",
+  "notes": "Ako želite jači okus, u umak možete dodati dimljenu papriku ili sitno sjeckanu pancetu na početku pirjanja.",
+  "tags": "pasta, grah, brzi ručak"
 }

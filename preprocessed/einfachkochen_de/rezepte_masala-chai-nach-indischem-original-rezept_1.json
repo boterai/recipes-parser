@@ -1,12 +1,12 @@
 {
-    "dish_name": "Masala Chai",
-    "description": "Der Masala Chai Gewürztee vereint schwarzen Tee mit einer duftenden Gewürzmischung aus Kardamom, Zimt, Nelken, Ingwer und Pfefferkörnern.",
-    "ingredients": "[{\"name\": \"grüne Kardamomkapseln\", \"units\": null, \"amount\": 3}, {\"name\": \"Zimtstange\", \"units\": null, \"amount\": 0.5}, {\"name\": \"Nelken\", \"units\": null, \"amount\": 2}, {\"name\": \"schwarze Pfefferkörner\", \"units\": null, \"amount\": 3}, {\"name\": \"gemahlener Ingwer\", \"units\": \"TL\", \"amount\": 0.5}, {\"name\": \"lose Schwarztee-Blätter\", \"units\": \"TL\", \"amount\": 2}, {\"name\": \"Wasser\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"Milch oder pflanzliche Alternativen\", \"units\": \"ml\", \"amount\": 200}, {\"name\": \"Zucker oder Sirup\", \"units\": \"EL\", \"amount\": 1}]",
-    "instructions": "1. Die Kardamomkapseln zusammen mit der Zimtstange, den Nelken und den Pfefferkörnern in einen Mörser geben und zerstoßen, um die Öle freizusetzen. 2. Die zerstoßenen Gewürze in einen Topf geben und den Ingwer und die Schwarzteeblätter einrühren. 3. Das Wasser aufgießen und bei schwacher Hitze zum Köcheln bringen. 4. Die Milch und den Zucker oder den Sirup nach Geschmack einrühren und den Topf vom Herd nehmen. 5. 2 Minuten ziehen lassen, dann den Tee in Tassen durch ein Sieb abseihen.",
-    "category": null,
-    "prep_time": "10 minutes",
-    "cook_time": "5 minutes",
-    "total_time": "15 minutes",
-    "notes": null,
-    "tags": null
+  "dish_name": "Masala Chai",
+  "description": "Der Masala Chai Gewürztee vereint schwarzen Tee mit einer duftenden Gewürzmischung aus Kardamom, Zimt, Nelken, Ingwer und Pfefferkörnern.",
+  "ingredients": "[{\"name\": \"gr\\u00fcne Kardamomkapseln\", \"amount\": 3, \"unit\": null}, {\"name\": \"Zimtstange\", \"amount\": 0.5, \"unit\": null}, {\"name\": \"Nelken\", \"amount\": 2, \"unit\": null}, {\"name\": \"schwarze Pfefferk\\u00f6rner\", \"amount\": 3, \"unit\": null}, {\"name\": \"gemahlener Ingwer\", \"amount\": 0.5, \"unit\": \"TL\"}, {\"name\": \"lose Schwarztee-Bl\\u00e4tter\", \"amount\": 2, \"unit\": \"TL\"}, {\"name\": \"Wasser\", \"amount\": 400, \"unit\": \"ml\"}, {\"name\": \"Milch oder pflanzliche Alternativen\", \"amount\": 200, \"unit\": \"ml\"}, {\"name\": \"Zucker oder Sirup\", \"amount\": 1, \"unit\": \"EL\"}]",
+  "instructions": "1. Die Kardamomkapseln zusammen mit der Zimtstange, den Nelken und den Pfefferkörnern in einen Mörser geben und zerstoßen, um die Öle freizusetzen. 2. Die zerstoßenen Gewürze in einen Topf geben und den Ingwer und die Schwarzteeblätter einrühren. 3. Das Wasser aufgießen und bei schwacher Hitze zum Köcheln bringen. 4. Die Milch und den Zucker oder den Sirup nach Geschmack einrühren und den Topf vom Herd nehmen. 5. 2 Minuten ziehen lassen, dann den Tee in Tassen durch ein Sieb abseihen.",
+  "category": null,
+  "prep_time": "10 minutes",
+  "cook_time": "5 minutes",
+  "total_time": "15 minutes",
+  "notes": null,
+  "tags": null
 }

@@ -17,6 +17,8 @@ from collections.abc import AsyncIterator
 from qdrant_client.models import (
     Distance, VectorParams, PointStruct, PointsSelector, PointIdsList)
 import os
+from qdrant_client.http.exceptions import ResponseHandlingException
+
 from config.config import config
 
 logger = logging.getLogger(__name__)
@@ -745,28 +747,32 @@ class QdrantRecipeManager:
             logger.error(f"Collection '{collection_name}' not found in collections map")
             return {}
 
-        try:
-            points = await self.async_client.retrieve(
-                collection_name=collection,
-                ids=point_ids,
-                with_vectors=[using],
-                with_payload=False,
-            )
-            
-            id_to_vector = {}
-            for point in points:
-                pid = int(point.id)
-                if isinstance(point.vector, dict):
-                    id_to_vector[pid] = point.vector.get(using)
-                else:
-                    id_to_vector[pid] = point.vector
-            
-            # Заполняем None для не найденных ID
-            return {pid: id_to_vector.get(pid) for pid in point_ids}
-            
-        except Exception as e:
-            logger.error(f"Error retrieving vectors for points {point_ids}: {e}")
-            return {}
+        for attempt in range(3):
+            try:
+                points = await self.async_client.retrieve(
+                    collection_name=collection,
+                    ids=point_ids,
+                    with_vectors=[using],
+                    with_payload=False,
+                )
+                
+                id_to_vector = {}
+                for point in points:
+                    pid = int(point.id)
+                    if isinstance(point.vector, dict):
+                        id_to_vector[pid] = point.vector.get(using)
+                    else:
+                        id_to_vector[pid] = point.vector
+                
+                # Заполняем None для не найденных ID
+                return {pid: id_to_vector.get(pid) for pid in point_ids}
+            except ResponseHandlingException as e:
+                logger.warning(f"ResponseHandlingException при получении векторов для точек {point_ids} (попытка {attempt + 1}/3): {e}")
+                await asyncio.sleep(2 ** attempt) 
+
+            except Exception as e:
+                logger.error(f"Error retrieving vectors for points {point_ids}: {e}")
+                return {}
         
 
     async def delete_points(self, point_ids: list[int], collection_name: str) -> bool:

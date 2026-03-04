@@ -1,12 +1,12 @@
 {
-    "dish_name": "Pain aux bananes sans gluten",
-    "description": "Recette sans gluten, sans produits laitiers (sans caséine), hypotoxique et végétalienne.",
-    "ingredients": "[{\"name\": \"miel\", \"units\": \"g\", \"amount\": 80}, {\"name\": \"huile d'olive douce\", \"units\": \"g\", \"amount\": 65}, {\"name\": \"boisson de soya\", \"units\": \"g\", \"amount\": 65}, {\"name\": \"chia\", \"units\": \"ml\", \"amount\": 15}, {\"name\": \"vanille\", \"units\": \"ml\", \"amount\": 5}, {\"name\": \"bananes mûres\", \"units\": \"g\", \"amount\": 420}, {\"name\": \"farine tout-usage\", \"units\": \"g\", \"amount\": 210}, {\"name\": \"poudre à pâte\", \"units\": \"ml\", \"amount\": 10}, {\"name\": \"bicarbonate de soude\", \"units\": \"ml\", \"amount\": 5}, {\"name\": \"muscade\", \"units\": \"ml\", \"amount\": 2.5}, {\"name\": \"sel\", \"units\": \"ml\", \"amount\": 1}]",
-    "instructions": "Dans un bol, mêler ensemble le miel, l'huile, la boisson de soya, la vanille et le chia. Laisser reposer environ 15 minutes. Préchauffer le four à 180 °C (350 °F). Mélanger ensemble la farine, la poudre à pâte, le bicarbonate de soude, la muscade et le sel. Réserver. Après le 15 minutes de repos, ajouter les bananes au mélange de chia. Battre à l'aide d'un batteur électrique environ une minute. Incorporer le mélange sec aux liquides et battre, toujours à l'aide d'un batteur électrique, jusqu'à ce que la pâte commence à épaissir (environ une minute supplémentaire). Verser le mélange dans un moule à pain de 23 cm X 13 cm (9 x 5 po.), huilé et recouvert d'un papier parchemin au fond. Cuire au four sur la grille centrale, environ 50 minutes ou jusqu'à ce qu'un cure-dent inséré au milieu en ressorte propre.",
-    "category": "Dessert",
-    "prep_time": "15 minutes",
-    "cook_time": "50 minutes",
-    "total_time": "65 minutes",
-    "notes": "Vous pouvez ajouter à la recette 125 ml (1/2 tasse) d'un des ingrédients suivants : pépites de chocolat, noix ou graines au choix.",
-    "tags": "sans gluten, végétalien, dessert"
+  "dish_name": "Pain aux bananes sans gluten",
+  "description": "Recette sans gluten, sans produits laitiers (sans caséine), hypotoxique et végétalienne.",
+  "ingredients": "[{\"name\": \"miel\", \"amount\": 80, \"unit\": \"g\"}, {\"name\": \"huile d'olive douce\", \"amount\": 65, \"unit\": \"g\"}, {\"name\": \"boisson de soya\", \"amount\": 65, \"unit\": \"g\"}, {\"name\": \"chia\", \"amount\": 15, \"unit\": \"ml\"}, {\"name\": \"vanille\", \"amount\": 5, \"unit\": \"ml\"}, {\"name\": \"bananes m\\u00fbres\", \"amount\": 420, \"unit\": \"g\"}, {\"name\": \"farine tout-usage\", \"amount\": 210, \"unit\": \"g\"}, {\"name\": \"poudre \\u00e0 p\\u00e2te\", \"amount\": 10, \"unit\": \"ml\"}, {\"name\": \"bicarbonate de soude\", \"amount\": 5, \"unit\": \"ml\"}, {\"name\": \"muscade\", \"amount\": 2.5, \"unit\": \"ml\"}, {\"name\": \"sel\", \"amount\": 1, \"unit\": \"ml\"}]",
+  "instructions": "Dans un bol, mêler ensemble le miel, l'huile, la boisson de soya, la vanille et le chia. Laisser reposer environ 15 minutes. Préchauffer le four à 180 °C (350 °F). Mélanger ensemble la farine, la poudre à pâte, le bicarbonate de soude, la muscade et le sel. Réserver. Après le 15 minutes de repos, ajouter les bananes au mélange de chia. Battre à l'aide d'un batteur électrique environ une minute. Incorporer le mélange sec aux liquides et battre, toujours à l'aide d'un batteur électrique, jusqu'à ce que la pâte commence à épaissir (environ une minute supplémentaire). Verser le mélange dans un moule à pain de 23 cm X 13 cm (9 x 5 po.), huilé et recouvert d'un papier parchemin au fond. Cuire au four sur la grille centrale, environ 50 minutes ou jusqu'à ce qu'un cure-dent inséré au milieu en ressorte propre.",
+  "category": "Dessert",
+  "prep_time": "15 minutes",
+  "cook_time": "50 minutes",
+  "total_time": "65 minutes",
+  "notes": "Vous pouvez ajouter à la recette 125 ml (1/2 tasse) d'un des ingrédients suivants : pépites de chocolat, noix ou graines au choix.",
+  "tags": "sans gluten, végétalien, dessert"
 }

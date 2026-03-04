@@ -1,12 +1,12 @@
 {
-    "dish_name": "One pot pasta",
-    "description": "Découvrez l’art du one pot pasta, une technique culinaire qui simplifie la préparation des pâtes en réunissant tous les ingrédients dans une seule casserole.",
-    "ingredients": "[{\"name\": \"pâtes penne\", \"units\": \"grammes\", \"amount\": 400}, {\"name\": \"tomates pelées en boîte\", \"units\": \"grammes\", \"amount\": 400}, {\"name\": \"olives noires dénoyautées\", \"units\": \"grammes\", \"amount\": 100}, {\"name\": \"câpres\", \"units\": \"grammes\", \"amount\": 50}, {\"name\": \"parmesan râpé\", \"units\": \"grammes\", \"amount\": 50}, {\"name\": \"basilic séché\", \"units\": \"cuillère à soupe\", \"amount\": 1}, {\"name\": \"huile d’olive\", \"units\": \"cuillères à soupe\", \"amount\": 2}, {\"name\": \"sel\", \"units\": \"cuillère à café\", \"amount\": 1}, {\"name\": \"poivre\", \"units\": \"cuillère à café\", \"amount\": 1}, {\"name\": \"eau\", \"units\": \"millilitres\", \"amount\": 800}]",
-    "instructions": "Étape 1: Dans une grande casserole, verser l’huile d’olive et chauffer à feu moyen. Étape 2: Ajouter les pâtes, les tomates pelées avec leur jus, les olives, les câpres, le basilic, le sel et le poivre. Étape 3: Verser l’eau et bien mélanger pour que les ingrédients soient uniformément répartis. Étape 4: Porter à ébullition, puis réduire le feu et laisser mijoter pendant 12 à 15 minutes en remuant régulièrement, jusqu’à ce que les pâtes soient cuites et que l’eau soit presque entièrement absorbée. Étape 5: Retirer du feu et incorporer le parmesan râpé. Mélanger délicatement pour bien enrober les pâtes. Étape 6: Servir chaud, garni de quelques feuilles de basilic si désiré.",
-    "category": "Main Course",
-    "prep_time": "15 minutes",
-    "cook_time": "15 minutes",
-    "total_time": null,
-    "notes": "Pour une touche de fraîcheur, ajoutez un filet de citron en fin de cuisson.",
-    "tags": "pasta, one pot, quick, easy"
+  "dish_name": "One pot pasta",
+  "description": "Découvrez l’art du one pot pasta, une technique culinaire qui simplifie la préparation des pâtes en réunissant tous les ingrédients dans une seule casserole.",
+  "ingredients": "[{\"name\": \"p\\u00e2tes penne\", \"amount\": 400, \"unit\": \"grammes\"}, {\"name\": \"tomates pel\\u00e9es en bo\\u00eete\", \"amount\": 400, \"unit\": \"grammes\"}, {\"name\": \"olives noires d\\u00e9noyaut\\u00e9es\", \"amount\": 100, \"unit\": \"grammes\"}, {\"name\": \"c\\u00e2pres\", \"amount\": 50, \"unit\": \"grammes\"}, {\"name\": \"parmesan r\\u00e2p\\u00e9\", \"amount\": 50, \"unit\": \"grammes\"}, {\"name\": \"basilic s\\u00e9ch\\u00e9\", \"amount\": 1, \"unit\": \"cuill\\u00e8re \\u00e0 soupe\"}, {\"name\": \"huile d\\u2019olive\", \"amount\": 2, \"unit\": \"cuill\\u00e8res \\u00e0 soupe\"}, {\"name\": \"sel\", \"amount\": 1, \"unit\": \"cuill\\u00e8re \\u00e0 caf\\u00e9\"}, {\"name\": \"poivre\", \"amount\": 1, \"unit\": \"cuill\\u00e8re \\u00e0 caf\\u00e9\"}, {\"name\": \"eau\", \"amount\": 800, \"unit\": \"millilitres\"}]",
+  "instructions": "Étape 1: Dans une grande casserole, verser l’huile d’olive et chauffer à feu moyen. Étape 2: Ajouter les pâtes, les tomates pelées avec leur jus, les olives, les câpres, le basilic, le sel et le poivre. Étape 3: Verser l’eau et bien mélanger pour que les ingrédients soient uniformément répartis. Étape 4: Porter à ébullition, puis réduire le feu et laisser mijoter pendant 12 à 15 minutes en remuant régulièrement, jusqu’à ce que les pâtes soient cuites et que l’eau soit presque entièrement absorbée. Étape 5: Retirer du feu et incorporer le parmesan râpé. Mélanger délicatement pour bien enrober les pâtes. Étape 6: Servir chaud, garni de quelques feuilles de basilic si désiré.",
+  "category": "Main Course",
+  "prep_time": "15 minutes",
+  "cook_time": "15 minutes",
+  "total_time": null,
+  "notes": "Pour une touche de fraîcheur, ajoutez un filet de citron en fin de cuisson.",
+  "tags": "pasta, one pot, quick, easy"
 }

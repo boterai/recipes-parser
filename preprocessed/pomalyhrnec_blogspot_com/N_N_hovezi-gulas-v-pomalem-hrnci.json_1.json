@@ -1,12 +1,12 @@
 {
-    "dish_name": "Hovězí guláš v pomalém hrnci",
-    "description": "Guláš se u nás doma nikdy moc nedělal. Nevím proč. Jako dítě jsem ho ani nevyhledávala, ale postupem času jsem si ho sem tam v restauraci dala a většinou byl výborný.",
-    "ingredients": "[{\"name\": \"hovězí maso\", \"units\": \"g\", \"amount\": 800}, {\"name\": \"cibule\", \"units\": \"menší\", \"amount\": 4}, {\"name\": \"česnek\", \"units\": \"stroužky\", \"amount\": 2}, {\"name\": \"sladká paprika\", \"units\": \"lžičky\", \"amount\": 3}, {\"name\": \"gulášová paprika\", \"units\": \"lžičky\", \"amount\": 2}, {\"name\": \"kmín\", \"units\": \"lžička\", \"amount\": 1}, {\"name\": \"olej\", \"units\": \"lžíce\", \"amount\": 1}, {\"name\": \"máslo\", \"units\": \"lžíce\", \"amount\": 2}, {\"name\": \"voda\", \"units\": \"ml\", \"amount\": 500}, {\"name\": \"hladká mouka\", \"units\": null, \"amount\": null}, {\"name\": \"sůl\", \"units\": null, \"amount\": null}, {\"name\": \"pepř\", \"units\": null, \"amount\": null}, {\"name\": \"houskový knedlík či chléb\", \"units\": null, \"amount\": null}]",
-    "instructions": "Na oleji osmahneme cibulku a vložíme ji do pomalého hrnce. Omyté maso nakrájíme na větší kostky a osolíme. Maso vložíme na cibulku v pomalém hrnci, posypeme sladkou a gulášovou paprikou, přidáme kmín, rozmačkaný česnek a špetku pepře. Nakonec vše zalijeme vodou tak, aby bylo maso téměř ponořené. Pomalý hrnec zapneme na I. stupeň na 8-10h nebo na II. stupeň na 6-7h. Zhruba půl hodiny před koncem vaření přidáme rozmíchanou mouku s vodou a necháme povařit. Nakonec přidáme máslo na zjemnění omáčky, dle potřeby dokořeníme. Podáváme s houskovým knedlíkem či chlebem.",
-    "category": "Main Course",
-    "prep_time": null,
-    "cook_time": "6-10 hours",
-    "total_time": null,
-    "notes": "Uvedené množství ingrediencí stačí na cca 6-8 porcí. Cibulku není nutné osmahnout dopředu, ale je pak měkčí a dodá jídlu skvělou chuť. Množství hladké mouky na zahuštění upravte dle potřeby. Koření lze přidat i více, jak kdo má rád.",
-    "tags": "hovězí, guláš, pomalý hrnec, recept"
+  "dish_name": "Hovězí guláš v pomalém hrnci",
+  "description": "Guláš se u nás doma nikdy moc nedělal. Nevím proč. Jako dítě jsem ho ani nevyhledávala, ale postupem času jsem si ho sem tam v restauraci dala a většinou byl výborný.",
+  "ingredients": "[{\"name\": \"hov\\u011bz\\u00ed maso\", \"amount\": 800, \"unit\": \"g\"}, {\"name\": \"cibule\", \"amount\": 4, \"unit\": \"men\\u0161\\u00ed\"}, {\"name\": \"\\u010desnek\", \"amount\": 2, \"unit\": \"strou\\u017eky\"}, {\"name\": \"sladk\\u00e1 paprika\", \"amount\": 3, \"unit\": \"l\\u017ei\\u010dky\"}, {\"name\": \"gul\\u00e1\\u0161ov\\u00e1 paprika\", \"amount\": 2, \"unit\": \"l\\u017ei\\u010dky\"}, {\"name\": \"km\\u00edn\", \"amount\": 1, \"unit\": \"l\\u017ei\\u010dka\"}, {\"name\": \"olej\", \"amount\": 1, \"unit\": \"l\\u017e\\u00edce\"}, {\"name\": \"m\\u00e1slo\", \"amount\": 2, \"unit\": \"l\\u017e\\u00edce\"}, {\"name\": \"voda\", \"amount\": 500, \"unit\": \"ml\"}, {\"name\": \"hladk\\u00e1 mouka\", \"amount\": null, \"unit\": null}, {\"name\": \"s\\u016fl\", \"amount\": null, \"unit\": null}, {\"name\": \"pep\\u0159\", \"amount\": null, \"unit\": null}, {\"name\": \"houskov\\u00fd knedl\\u00edk \\u010di chl\\u00e9b\", \"amount\": null, \"unit\": null}]",
+  "instructions": "Na oleji osmahneme cibulku a vložíme ji do pomalého hrnce. Omyté maso nakrájíme na větší kostky a osolíme. Maso vložíme na cibulku v pomalém hrnci, posypeme sladkou a gulášovou paprikou, přidáme kmín, rozmačkaný česnek a špetku pepře. Nakonec vše zalijeme vodou tak, aby bylo maso téměř ponořené. Pomalý hrnec zapneme na I. stupeň na 8-10h nebo na II. stupeň na 6-7h. Zhruba půl hodiny před koncem vaření přidáme rozmíchanou mouku s vodou a necháme povařit. Nakonec přidáme máslo na zjemnění omáčky, dle potřeby dokořeníme. Podáváme s houskovým knedlíkem či chlebem.",
+  "category": "Main Course",
+  "prep_time": null,
+  "cook_time": "6-10 hours",
+  "total_time": null,
+  "notes": "Uvedené množství ingrediencí stačí na cca 6-8 porcí. Cibulku není nutné osmahnout dopředu, ale je pak měkčí a dodá jídlu skvělou chuť. Množství hladké mouky na zahuštění upravte dle potřeby. Koření lze přidat i více, jak kdo má rád.",
+  "tags": "hovězí, guláš, pomalý hrnec, recept"
 }

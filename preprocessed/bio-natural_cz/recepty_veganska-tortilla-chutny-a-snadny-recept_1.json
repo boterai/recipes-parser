@@ -1,12 +1,12 @@
 {
-    "dish_name": "Veganská Tortilla",
-    "description": "Chutný a snadný recept na veganskou tortillu, která spojuje výborné chutě a jednoduchost přípravy.",
-    "ingredients": "[{\"name\": \"Hladká mouka\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"Voda\", \"units\": \"ml\", \"amount\": 150}, {\"name\": \"Olive oil\", \"units\": \"lžíce\", \"amount\": 2}, {\"name\": \"Zelenina\", \"units\": \"Podle chuti\", \"amount\": null}, {\"name\": \"Luštěniny\", \"units\": \"konzerva\", \"amount\": 1}]",
-    "instructions": "Pro přípravu veganské tortilly začněte se základními ingrediencemi. Smíchejte mouku a sůl, přidejte rostlinný olej a postupně vlévejte teplou vodu. Hněťte těsto, dokud nebude hladké a elastické. Nechte odpočívat minimálně 30 minut. Poté rozdělte těsto na menší kousky a vyválejte na tenké placky. Opečte na pánvi.",
-    "category": "Main Course",
-    "prep_time": "30 minutes",
-    "cook_time": "1-2 minutes",
-    "total_time": null,
-    "notes": "Můžete experimentovat s různými náplněmi a omáčkami podle chuti.",
-    "tags": "vegan, tortilla, recept"
+  "dish_name": "Veganská Tortilla",
+  "description": "Chutný a snadný recept na veganskou tortillu, která spojuje výborné chutě a jednoduchost přípravy.",
+  "ingredients": "[{\"name\": \"Hladk\\u00e1 mouka\", \"amount\": 250, \"unit\": \"g\"}, {\"name\": \"Voda\", \"amount\": 150, \"unit\": \"ml\"}, {\"name\": \"Olive oil\", \"amount\": 2, \"unit\": \"l\\u017e\\u00edce\"}, {\"name\": \"Zelenina\", \"amount\": null, \"unit\": \"Podle chuti\"}, {\"name\": \"Lu\\u0161t\\u011bniny\", \"amount\": 1, \"unit\": \"konzerva\"}]",
+  "instructions": "Pro přípravu veganské tortilly začněte se základními ingrediencemi. Smíchejte mouku a sůl, přidejte rostlinný olej a postupně vlévejte teplou vodu. Hněťte těsto, dokud nebude hladké a elastické. Nechte odpočívat minimálně 30 minut. Poté rozdělte těsto na menší kousky a vyválejte na tenké placky. Opečte na pánvi.",
+  "category": "Main Course",
+  "prep_time": "30 minutes",
+  "cook_time": "1-2 minutes",
+  "total_time": null,
+  "notes": "Můžete experimentovat s různými náplněmi a omáčkami podle chuti.",
+  "tags": "vegan, tortilla, recept"
 }

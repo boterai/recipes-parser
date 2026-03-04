@@ -138,7 +138,7 @@ URL: {url}
     "confidence_score": 0-100 (процент уверенности),
     "dish_name": "название блюда или null",
     "description": "краткое описание рецепта/блюда или null",
-    "ingredients": "список ингредиентов в формате JSON спиком [name: name, amount: amount, units: units] или null",
+    "ingredients": "список ингредиентов в формате JSON спиком [name: name, amount: amount, unit: unit] или null",
     "instructions": "пошаговая инструкция приготовления или null",
     "prep_time": "время подготовки (например, '15 minutes') или null",
     "cook_time": "время приготовления (например, '30 minutes') или null",

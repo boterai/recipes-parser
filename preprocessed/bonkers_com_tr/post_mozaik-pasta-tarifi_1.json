@@ -1,12 +1,12 @@
 {
-    "dish_name": "Mozaik Pasta",
-    "description": "Mozaik pasta, çocukluğumuzdan beri sevdiklerimizle paylaştığımız en pratik ve vazgeçilmez tatlılardan biri.",
-    "ingredients": "[{\"name\": \"petibör bisküvi\", \"units\": \"paket\", \"amount\": 2}, {\"name\": \"Bonkers Dubai Çikolatası\", \"units\": \"gr\", \"amount\": 100}, {\"name\": \"Bonkers Fıstık Kreması\", \"units\": \"yemek kaşığı\", \"amount\": 3}, {\"name\": \"süt\", \"units\": \"su bardağı\", \"amount\": 1}, {\"name\": \"eritilmiş tereyağı\", \"units\": \"su bardağı\", \"amount\": 0.5}, {\"name\": \"toz şeker\", \"units\": \"su bardağı\", \"amount\": 0.5}, {\"name\": \"kakao\", \"units\": \"yemek kaşığı\", \"amount\": 3}]",
-    "instructions": "Büyük bir karıştırma kabında bisküvileri iri parçalar halinde kırın. Bonkers Dubai Çikolatasını benmari usulü eritin. Eriyen çikolatayı ocaktan alın ve içerisine Bonkers Fıstık Kreması ekleyin. Süt, eritilmiş tereyağı, şeker ve kakaoyu karışımın içine ekleyin. Hazırladığınız karışımı kırılmış bisküvilerin üzerine dökün. Karışımı streç filme alın ve rulo şekli verin. Pastayı dondurucuya koyun. En az 3 saat dinlendirdikten sonra dilimlemeye hazır hale gelir. Mozaik pastanızı dilimleyerek servis edin.",
-    "category": "Dessert",
-    "prep_time": null,
-    "cook_time": null,
-    "total_time": "3 hours",
-    "notes": "Bu tarifle, mozaik pastanın nostaljik tadını Bonkers’ın yenilikçi dokunuşuyla buluşturuyoruz.",
-    "tags": "dessert, sweet, chocolate"
+  "dish_name": "Mozaik Pasta",
+  "description": "Mozaik pasta, çocukluğumuzdan beri sevdiklerimizle paylaştığımız en pratik ve vazgeçilmez tatlılardan biri.",
+  "ingredients": "[{\"name\": \"petib\\u00f6r bisk\\u00fcvi\", \"amount\": 2, \"unit\": \"paket\"}, {\"name\": \"Bonkers Dubai \\u00c7ikolatas\\u0131\", \"amount\": 100, \"unit\": \"gr\"}, {\"name\": \"Bonkers F\\u0131st\\u0131k Kremas\\u0131\", \"amount\": 3, \"unit\": \"yemek ka\\u015f\\u0131\\u011f\\u0131\"}, {\"name\": \"s\\u00fct\", \"amount\": 1, \"unit\": \"su barda\\u011f\\u0131\"}, {\"name\": \"eritilmi\\u015f tereya\\u011f\\u0131\", \"amount\": 0.5, \"unit\": \"su barda\\u011f\\u0131\"}, {\"name\": \"toz \\u015feker\", \"amount\": 0.5, \"unit\": \"su barda\\u011f\\u0131\"}, {\"name\": \"kakao\", \"amount\": 3, \"unit\": \"yemek ka\\u015f\\u0131\\u011f\\u0131\"}]",
+  "instructions": "Büyük bir karıştırma kabında bisküvileri iri parçalar halinde kırın. Bonkers Dubai Çikolatasını benmari usulü eritin. Eriyen çikolatayı ocaktan alın ve içerisine Bonkers Fıstık Kreması ekleyin. Süt, eritilmiş tereyağı, şeker ve kakaoyu karışımın içine ekleyin. Hazırladığınız karışımı kırılmış bisküvilerin üzerine dökün. Karışımı streç filme alın ve rulo şekli verin. Pastayı dondurucuya koyun. En az 3 saat dinlendirdikten sonra dilimlemeye hazır hale gelir. Mozaik pastanızı dilimleyerek servis edin.",
+  "category": "Dessert",
+  "prep_time": null,
+  "cook_time": null,
+  "total_time": "3 hours",
+  "notes": "Bu tarifle, mozaik pastanın nostaljik tadını Bonkers’ın yenilikçi dokunuşuyla buluşturuyoruz.",
+  "tags": "dessert, sweet, chocolate"
 }

@@ -1,12 +1,12 @@
 {
-    "dish_name": "Banánkenyér gluténmentesen",
-    "description": "Friss, puha gluténmentes banánkenyér.",
-    "ingredients": "[{\"name\": \"Túlérett banán\", \"units\": \"db\", \"amount\": 3}, {\"name\": \"Gluténmentes lisztkeverék\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"Cukor\", \"units\": \"g\", \"amount\": 150}, {\"name\": \"Tojás\", \"units\": \"db\", \"amount\": 2}, {\"name\": \"Sütőpor\", \"units\": \"tk.\", \"amount\": 1}, {\"name\": \"Szódabikarbóna\", \"units\": \"tk.\", \"amount\": 1}, {\"name\": \"Só\", \"units\": \"csipet\", \"amount\": 1}, {\"name\": \"Olaj\", \"units\": \"ml\", \"amount\": 60}]",
-    "instructions": "1. A banánokat törd teljesen pépesre egy villával. 2. Keverd el a banánt a tojásokkal, cukorral és olajjal. 3. Egy másik tálban keverd össze a száraz hozzávalókat (liszt, sütőpor, szódabikarbóna, só). 4. Forgasd a száraz keveréket a nedveshez. 5. Öntsd sütőpapírral bélelt formába. Süsd 180°C-on kb. 60 percig.",
-    "category": "Dessert",
-    "prep_time": "15 minutes",
-    "cook_time": "60 minutes",
-    "total_time": "1 hour 15 minutes",
-    "notes": "Minél érettebb (feketébb) a banán, annál édesebb és erősebb az aromája.",
-    "tags": "gluténmentes, sütemény, banánkenyér"
+  "dish_name": "Banánkenyér gluténmentesen",
+  "description": "Friss, puha gluténmentes banánkenyér.",
+  "ingredients": "[{\"name\": \"T\\u00fal\\u00e9rett ban\\u00e1n\", \"amount\": 3, \"unit\": \"db\"}, {\"name\": \"Glut\\u00e9nmentes lisztkever\\u00e9k\", \"amount\": 250, \"unit\": \"g\"}, {\"name\": \"Cukor\", \"amount\": 150, \"unit\": \"g\"}, {\"name\": \"Toj\\u00e1s\", \"amount\": 2, \"unit\": \"db\"}, {\"name\": \"S\\u00fct\\u0151por\", \"amount\": 1, \"unit\": \"tk.\"}, {\"name\": \"Sz\\u00f3dabikarb\\u00f3na\", \"amount\": 1, \"unit\": \"tk.\"}, {\"name\": \"S\\u00f3\", \"amount\": 1, \"unit\": \"csipet\"}, {\"name\": \"Olaj\", \"amount\": 60, \"unit\": \"ml\"}]",
+  "instructions": "1. A banánokat törd teljesen pépesre egy villával. 2. Keverd el a banánt a tojásokkal, cukorral és olajjal. 3. Egy másik tálban keverd össze a száraz hozzávalókat (liszt, sütőpor, szódabikarbóna, só). 4. Forgasd a száraz keveréket a nedveshez. 5. Öntsd sütőpapírral bélelt formába. Süsd 180°C-on kb. 60 percig.",
+  "category": "Dessert",
+  "prep_time": "15 minutes",
+  "cook_time": "60 minutes",
+  "total_time": "1 hour 15 minutes",
+  "notes": "Minél érettebb (feketébb) a banán, annál édesebb és erősebb az aromája.",
+  "tags": "gluténmentes, sütemény, banánkenyér"
 }

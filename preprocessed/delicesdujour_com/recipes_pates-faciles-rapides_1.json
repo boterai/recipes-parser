@@ -1,12 +1,12 @@
 {
-    "dish_name": "Pâtes crémeuses aux tomates et basilic",
-    "description": "Délicieuses pâtes en une casserole prêtes en 15 minutes.",
-    "ingredients": "[{\"name\": \"pâtes\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"gousse d'ail\", \"units\": null, \"amount\": 1}, {\"name\": \"oignon\", \"units\": null, \"amount\": 1}, {\"name\": \"crème fraîche\", \"units\": \"g\", \"amount\": 200}, {\"name\": \"tomates cerises\", \"units\": \"g\", \"amount\": 250}, {\"name\": \"parmesan râpé\", \"units\": \"g\", \"amount\": 30}, {\"name\": \"concentré de tomates\", \"units\": \"c. à soupe\", \"amount\": 2}, {\"name\": \"eau\", \"units\": \"ml\", \"amount\": 400}, {\"name\": \"basilic\", \"units\": null, \"amount\": \"1/2 bouquet\"}, {\"name\": \"poivre\", \"units\": null, \"amount\": null}, {\"name\": \"sel\", \"units\": \"c. à café\", \"amount\": \"1/2\"}]",
-    "instructions": "1. Émincez l'oignon en fines lanières et hachez l'ail. Coupez les tomates cerises en deux et déchirez les feuilles de basilic. 2. Rassemblez les pâtes, tomates préparées, oignon, ail, concentré de tomates, eau, crème, basilic, sel et poivre dans une casserole. Portez à ébullition avec le couvercle. 3. Faites mijoter les pâtes à feu moyen sans couvrir pendant 8-10 minutes. Remuez de temps en temps pour éviter que ça colle. Ajoutez le parmesan râpé à la toute fin de la cuisson et mélangez bien.",
-    "category": "Plats Principaux",
-    "prep_time": "5 minutes",
-    "cook_time": "10 minutes",
-    "total_time": "15 minutes",
-    "notes": "Ce plat est parfait pour les journées chargées, car tout se cuisine directement dans une seule casserole. Variez facilement en ajoutant des légumes comme des épinards, des courgettes ou des poivrons.",
-    "tags": "pâtes, rapide, crémeux, végétarien"
+  "dish_name": "Pâtes crémeuses aux tomates et basilic",
+  "description": "Délicieuses pâtes en une casserole prêtes en 15 minutes.",
+  "ingredients": "[{\"name\": \"p\\u00e2tes\", \"amount\": 250, \"unit\": \"g\"}, {\"name\": \"gousse d'ail\", \"amount\": 1, \"unit\": null}, {\"name\": \"oignon\", \"amount\": 1, \"unit\": null}, {\"name\": \"cr\\u00e8me fra\\u00eeche\", \"amount\": 200, \"unit\": \"g\"}, {\"name\": \"tomates cerises\", \"amount\": 250, \"unit\": \"g\"}, {\"name\": \"parmesan r\\u00e2p\\u00e9\", \"amount\": 30, \"unit\": \"g\"}, {\"name\": \"concentr\\u00e9 de tomates\", \"amount\": 2, \"unit\": \"c. \\u00e0 soupe\"}, {\"name\": \"eau\", \"amount\": 400, \"unit\": \"ml\"}, {\"name\": \"basilic\", \"amount\": \"1/2 bouquet\", \"unit\": null}, {\"name\": \"poivre\", \"amount\": null, \"unit\": null}, {\"name\": \"sel\", \"amount\": \"1/2\", \"unit\": \"c. \\u00e0 caf\\u00e9\"}]",
+  "instructions": "1. Émincez l'oignon en fines lanières et hachez l'ail. Coupez les tomates cerises en deux et déchirez les feuilles de basilic. 2. Rassemblez les pâtes, tomates préparées, oignon, ail, concentré de tomates, eau, crème, basilic, sel et poivre dans une casserole. Portez à ébullition avec le couvercle. 3. Faites mijoter les pâtes à feu moyen sans couvrir pendant 8-10 minutes. Remuez de temps en temps pour éviter que ça colle. Ajoutez le parmesan râpé à la toute fin de la cuisson et mélangez bien.",
+  "category": "Plats Principaux",
+  "prep_time": "5 minutes",
+  "cook_time": "10 minutes",
+  "total_time": "15 minutes",
+  "notes": "Ce plat est parfait pour les journées chargées, car tout se cuisine directement dans une seule casserole. Variez facilement en ajoutant des légumes comme des épinards, des courgettes ou des poivrons.",
+  "tags": "pâtes, rapide, crémeux, végétarien"
 }
