@@ -46,6 +46,7 @@ class Config:
     QDRANT_MV_COLLECTION: str = os.getenv('QDRANT_MV_COLLECTION', 'mv')
     QDRANT_IMAGES_COLLECTION: str = os.getenv('QDRANT_IMAGES_COLLECTION', 'images_1152')
     QDRANT_COLLECTION_PREFIX: str = os.getenv('QDRANT_COLLECTION_PREFIX', 'recipes')
+    QDRANT_IMAGES_COLLECTION_PREFIX: str = os.getenv('QDRANT_IMAGES_COLLECTION_PREFIX', 'recipes')
     
     # GitHub настройки
     GITHUB_TOKEN: str = os.getenv('GITHUB_TOKEN', '')

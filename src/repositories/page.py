@@ -90,6 +90,27 @@ class PageRepository(BaseRepository[PageORM]):
             return query.all()
         finally:
             session.close()
+
+    def get_recipes_count_by_site(self, site_id: int) -> int:
+        """
+        Получить количество рецептов для сайта
+        
+        Args:
+            site_id: ID сайта
+        
+        Returns:
+            Количество рецептов
+        """
+        session = self.get_session()
+        try:
+            return session.query(func.count(PageORM.id)).filter(
+                and_(
+                    PageORM.site_id == site_id,
+                    PageORM.is_recipe == True
+                )
+            ).scalar()
+        finally:
+            session.close()
     
     def get_recipes(self, site_id: Optional[int] = None, language: Optional[str] = None, 
                     limit: Optional[int] = None, random_order: bool = False, order_by_id: bool = False,

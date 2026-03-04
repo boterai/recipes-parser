@@ -165,12 +165,15 @@ class SiteRepository(BaseRepository[SiteORM]):
             session.close()
 
     def get_extractors(self, max_recipes: Optional[int] = None, min_recipes: Optional[int] = None,
-                       order: Literal["asc", "desc"] = "desc") -> list[str]:
+                       order: Literal["asc", "desc"] = "desc", maximum_parsing_failures: Optional[int] = None) -> list[str]:
         """
         получить доменные имена сайтов, для которых есть экстракторы и которые еще не набрали максимум рецептов
         
         Args:
             max_recipes_per_module: Максимальное количество рецептов на модуль (опционально)
+            min_recipes: Минимальное количество рецептов на модуль (опционально)
+            order: Порядок сортировки по количеству рецептов ("asc" или "desc
+            maximum_parsing_failures: Максимальное количество неудачных попыток парсинга для сайта (опционально)
         
         Returns:
             Список SiteORM объектов
@@ -196,6 +199,9 @@ class SiteRepository(BaseRepository[SiteORM]):
             if min_recipes is not None:
                 query = query.having(func.count(PageORM.id) >= min_recipes)
 
+            if maximum_parsing_failures is not None:
+                query = query.filter(SiteORM.parsing_fail_count < maximum_parsing_failures)
+
             results = query.all()
 
             extractors = [site.name for site in results]
@@ -219,6 +225,31 @@ class SiteRepository(BaseRepository[SiteORM]):
         except Exception as e:
             session.rollback()
             logger.error(f"Ошибка обновления языка для сайта {site_id}: {e}")
+            return False
+        finally:
+            session.close()
+
+    def increment_parsing_fail_count(self, site_id: int) -> bool:
+        """
+        Увеличить счетчик неудачных попыток парсинга для сайта
+        
+        Args:
+            site_id: ID сайта
+        
+        Returns:
+            True если успешно
+        """
+        session = self.get_session()
+        try:
+            site = session.query(SiteORM).filter(SiteORM.id == site_id).first()
+            if site:
+                site.parsing_fail_count += 1
+                session.commit()
+                return True
+            return False
+        except Exception as e:
+            session.rollback()
+            logger.error(f"Ошибка увеличения счетчика неудачных попыток парсинга для сайта {site_id}: {e}")
             return False
         finally:
             session.close()

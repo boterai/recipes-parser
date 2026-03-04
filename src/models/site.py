@@ -38,6 +38,7 @@ class SiteORM(Base):
     search_url = Column(String(1000))
     searched = Column(Boolean, default=False)
     language = Column(String(10))
+    parsing_fail_count = Column(Integer, default=0)  # число неудачных попыток парсинга страниц с этого сайта
     created_at = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'))
     updated_at = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
 
@@ -55,6 +56,7 @@ class Site(BaseModel):
     searched: Optional[bool] = None
     pattern: Optional[str] = None  # строка с паттернами для страниц
     language: Optional[str] = None
+    parsing_fail_count: Optional[int] = None  # число неудачных попыток парсинга страниц с этого сайта (для мониторинга + пропуск вечно падающих сайтов)
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
     

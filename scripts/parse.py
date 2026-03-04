@@ -78,7 +78,7 @@ def setup_thread_logger(module_name: str, port: int) -> logging.Logger:
 
 
 def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_depth: int = 4, 
-                      max_no_recipe_pages: Optional[int] = 30) -> tuple[bool, bool]:
+                      max_no_recipe_pages: Optional[int] = 30) -> tuple[int, bool]:
     """
     Запуск парсера в отдельном потоке с собственным логгером
     
@@ -90,7 +90,7 @@ def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_dep
         max_no_recipe_pages: Максимальное количество страниц без рецептов перед остановкой
 
     Returns:
-        tuple[bool, bool]: (успех парсинга, фатальная ли это ошибка)
+        tuple[bool, bool]: (кол-во полученных новых рецептов, фатальная ли это ошибка)
     """
     # Создаем отдельный логгер для этого потока
     thread_logger = setup_thread_logger(module_name, port)
@@ -110,7 +110,8 @@ def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_dep
             max_urls=max_urls, 
             max_depth=max_depth,
             custom_logger=thread_logger,
-            max_no_recipe_pages=max_no_recipe_pages
+            max_no_recipe_pages=max_no_recipe_pages,
+            success_page_count_threshold=15 # если собрано больше 15 страниц, то сайт считается успешным
         )
     except Exception as e:
         thread_logger.error(f"✗ Ошибка при парсинге {module_name}: {e}", exc_info=True)
@@ -142,7 +143,7 @@ def main(module_name: str = "24kitchen_nl", port: int = 9222):
 
 
 def run_parallel(ports: list[int], modules: Optional[list[str]] = None, max_urls: int = 4000, 
-                 max_depth: int = 4, max_recipes_per_module: Optional[int] = 4000):
+                 max_depth: int = 4, max_recipes_per_module: Optional[int] = 4000, max_failed_parsing_attempts: Optional[int] = None):
     """
     Запуск парсеров в нескольких потоках с отдельными логами
     
@@ -150,6 +151,7 @@ def run_parallel(ports: list[int], modules: Optional[list[str]] = None, max_urls
         ports: Список портов для парсинга
         max_workers: Максимальное количество потоков (по умолчанию = len(ports))
         max_recipes_per_module: Максимальное количество URL для каждого модуля (далее уже этотт модуль игнорируется)
+        max_failed_parsing_attempts: Максимальное количество неудачных попыток парсинга для модуля перед исключением его из списка (по умолчанию: None)
     """
     logger.info(f"{'='*60}")
     logger.info(f"ПАРАЛЛЕЛЬНЫЙ ЗАПУСК {len(ports)} ПАРСЕРОВ")
@@ -158,7 +160,7 @@ def run_parallel(ports: list[int], modules: Optional[list[str]] = None, max_urls
     parser = RecipeParserRunner(extractor_dir="extractor")
 
     # получаем модули для парсинга с учетом max_recipes_per_module и сортируя по убыванию количества рецептов
-    site_names = parser.site_repository.get_extractors(max_recipes=max_recipes_per_module, order="desc", min_recipes=100)
+    site_names = parser.site_repository.get_extractors(max_recipes=max_recipes_per_module, order="asc", min_recipes=2, maximum_parsing_failures=max_failed_parsing_attempts)
 
     if not modules:
         modules = [site_name for site_name in site_names if site_name in parser.available_extractors]
@@ -209,9 +211,9 @@ def run_parallel(ports: list[int], modules: Optional[list[str]] = None, max_urls
             for future in as_completed(futures.keys()):
                 module, port = futures.pop(future)
                 
-                success, is_fatal = future.result()
+                recipes_count, is_fatal = future.result()
 
-                if success:
+                if recipes_count > 0:
                     with results["lock"]:
                         results["success"] += 1
                         success_count = results["success"]
@@ -308,6 +310,6 @@ if __name__ == "__main__":
     
     if args.parallel:
         run_parallel(ports=args.ports,  modules=None, max_recipes_per_module=args.max_recipes_per_module, max_urls=args.max_urls,
-                     max_depth=5)
+                     max_depth=5, max_failed_parsing_attempts=1)
     else:
         main("allrecipes_com", args.ports[0])

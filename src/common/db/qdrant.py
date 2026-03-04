@@ -55,7 +55,7 @@ class QdrantRecipeManager:
             cls._instance = super(QdrantRecipeManager, cls).__new__(cls)
         return cls._instance
     
-    def __init__(self, collection_prefix: Optional[str] = None):
+    def __init__(self, collection_prefix: Optional[str] = None, images_collection_prefix: Optional[str] = None):
         """
         Инициализация подключения к Qdrant
         
@@ -63,6 +63,7 @@ class QdrantRecipeManager:
             collection_prefix: Префикс для названий коллекций (используется чтобы разделить два типа коллекций для тестов)
         """
         if not collection_prefix: collection_prefix = config.QDRANT_COLLECTION_PREFIX
+        if not images_collection_prefix: images_collection_prefix = config.QDRANT_IMAGES_COLLECTION_PREFIX
         if not QdrantRecipeManager._initialized:
             self.collection_prefix = collection_prefix
             self.full_collection = config.QDRANT_FULL_COLLECTION
@@ -71,7 +72,7 @@ class QdrantRecipeManager:
             self.collections = {
                 self.full_collection: f"{collection_prefix}_{self.full_collection}",
                 self.mv_collection: f"{collection_prefix}_{self.mv_collection}",
-                self.images_collection: f"{collection_prefix}_{self.images_collection}_1152",
+                self.images_collection: f"{images_collection_prefix}_{self.images_collection}_1152",
             }
             self.connected = False
             

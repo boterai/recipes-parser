@@ -13,6 +13,7 @@ if __name__ == "__main__":
 
 from src.stages.parse.explorer import explore_site
 from src.repositories.site import SiteRepository
+from src.repositories.page import PageRepository
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +29,7 @@ class RecipeParserRunner:
         self.extractor_dir = Path(extractor_dir)
         self.available_extractors = self._get_available_extractors()
         self.site_repository = SiteRepository()
+        self.page_repository = PageRepository()
     
     def _get_available_extractors(self) -> list[str]:
         """
@@ -71,7 +73,8 @@ class RecipeParserRunner:
         max_urls: int = 5000,
         max_depth: int = 4,
         custom_logger: Optional[logging.Logger] = None,
-        max_no_recipe_pages: Optional[int] = None
+        max_no_recipe_pages: Optional[int] = None,
+        success_page_count_threshold: Optional[int] = 20
     ) -> tuple[bool, bool]:
         """
         Запуск парсинга с указанным или случайным модулем
@@ -83,10 +86,12 @@ class RecipeParserRunner:
             max_urls: Максимальное количество URL для исследования
             max_depth: Максимальная глубина исследования
             helper_links: Дополнительные URL для добавления в очередь
+            success_page_count_threshold: минимальное количество успешно распарсенных страниц рецептов для успешного завершения парсинга (если указано)
             
         Returns:
-            tuple[bool, bool]: (успех парсинга, фатальная ли это ошибка)
+            tuple[int, bool]: (сколько новых рецептов доабвлено, фатальная ли это ошибка)
         """
+        new_recipes_added: int = 0
         # Выбор модуля
         if module_name is None:
             module_name = self.get_random_extractor()
@@ -107,6 +112,8 @@ class RecipeParserRunner:
             custom_logger.error(f"URL для модуля '{module_name}' не найден в БД сайтов")
             return False, False
         
+        current_pages_count = self.page_repository.get_recipes_count_by_site(site_orm.id)
+        
         custom_logger.info("=" * 60)
         custom_logger.info("Запуск парсинга")
         custom_logger.info(f"  Модуль: {module_name}")
@@ -114,6 +121,7 @@ class RecipeParserRunner:
         custom_logger.info(f"  Порт отладки: {port}")
         custom_logger.info(f"  Макс. URL: {max_urls}")
         custom_logger.info(f"  Макс. глубина: {max_depth}")
+        custom_logger.info(f"  Рецептов на сайте до парсинга: {current_pages_count}")
         custom_logger.info("=" * 60)
 
         helper_links = None
@@ -136,18 +144,26 @@ class RecipeParserRunner:
             )
             
             custom_logger.info(f"Парсинг {module_name} завершен успешно")
-            return True, False
+            new_pages_count = self.page_repository.get_recipes_count_by_site(site_orm.id)
+            new_recipes_added = new_pages_count - current_pages_count
+            custom_logger.info(f"Новых рецептов добавлено: {new_recipes_added}")
+            if success_page_count_threshold is not None and new_recipes_added < success_page_count_threshold:
+                custom_logger.warning(f"Количество новых рецептов ({new_recipes_added}) меньше порога успешного завершения ({success_page_count_threshold})")
+                self.site_repository.increment_parsing_fail_count(site_orm.id)
+                return new_recipes_added, False  # Фатальная ошибка - парсер работает, но не приносит результаты
+
+            return new_recipes_added, False
 
         except WebDriverException as wde:
             if "Chrome не запущен на порту" in str(wde):
                 custom_logger.error(f"Ошибка подключения к Chrome на порту {port}: {wde}")
-                return False, True # Возвращаем флаг для перезапуска потока с новым портом
+                return 0, True # Возвращаем флаг для перезапуска потока с новым портом
             else:
                 custom_logger.error(f"WebDriverException при парсинге {module_name}: {wde}", exc_info=True)
-                return False, True
+                return 0, True
             
         except Exception as e:
             custom_logger.error(f"Ошибка при парсинге {module_name}: {e}", exc_info=True)
-            return False, False
+            return 0, False
 
 
