@@ -1,0 +1,12 @@
+{
+  "dish_name": "Zapečeni krumpir po receptu Jamieja Olivera",
+  "description": "Zapečeni krumpir sa sirom zamirisat će tvojom kuhinjom i osvojiti te neodoljivim okusom.",
+  "ingredients": "[{\"name\": \"krumpir\", \"amount\": 2, \"unit\": \"kg\"}, {\"name\": \"maslac\", \"amount\": 30, \"unit\": \"g\"}, {\"name\": \"bra\\u0161no\", \"amount\": 2, \"unit\": \"\\u017elice\"}, {\"name\": \"mlijeko\", \"amount\": 500, \"unit\": \"ml\"}, {\"name\": \"slatko vrhnje\", \"amount\": 300, \"unit\": \"ml\"}, {\"name\": \"cheddar\", \"amount\": 75, \"unit\": \"g\"}, {\"name\": \"Gruy\\u00e8re sir\", \"amount\": 75, \"unit\": \"g\"}]",
+  "instructions": "Zagrij pećnicu na 200 ° C. Oguli i nareži krumpir na ploške debljine tri mm, a zatim ga kuhaj u velikom loncu s kipućom slanom vodom dok ne omekša. Dobro ga ocijedi i prebaci u veliku posudu za pečenje. Na tavi otopi maslac, umiješaj brašno, zatim dodaj mlijeko i vrhnje. Pusti da krčka dok se umak ne zgusne, neprestano miješajući. Makni s vatre, u umak naribaj veći dio sira, a zatim začini soli i crnim paprom. Krumpir prelij umakom, naribaj preostali sir, a zatim peci 45 minuta ili dok krumpir ne poprimi lijepu zlatnu boju.",
+  "category": null,
+  "prep_time": null,
+  "cook_time": "45 minutes",
+  "total_time": null,
+  "notes": "Možeš ga poslužiti kao prilog uz različita mesna jela ili ga jesti samostalno uz zdjelu salate.",
+  "tags": "krumpir,recepti"
+}

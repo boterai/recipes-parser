@@ -1,0 +1,12 @@
+{
+  "dish_name": "Prefina krem juha od tikvica",
+  "description": "Ova krem juha od tikvica će te oduševiti, isprobaj naš recept!",
+  "ingredients": "[{\"name\": \"tikvice\", \"amount\": 400, \"unit\": \"g\"}, {\"name\": \"mlijeko\", \"amount\": 200, \"unit\": \"ml\"}, {\"name\": \"maslac\", \"amount\": 1, \"unit\": \"\\u017elica\"}, {\"name\": \"bra\\u0161no\", \"amount\": 1, \"unit\": \"\\u017elica\"}, {\"name\": \"listi\\u0107i svje\\u017eeg per\\u0161ina\", \"amount\": 1, \"unit\": \"\\u017elica\"}, {\"name\": \"kiselo vrhnje\", \"amount\": 80, \"unit\": \"g\"}, {\"name\": \"voda\", \"amount\": 800, \"unit\": \"ml\"}, {\"name\": \"sol\", \"amount\": null, \"unit\": null}, {\"name\": \"svje\\u017ee mljeveni crni papar\", \"amount\": null, \"unit\": null}]",
+  "instructions": "Očišćene i narezane tikvice stavi u posudu, prelij sa 700 ml vode pa pusti da krčka 10-ak minuta. Dodaj mlijeko i maslac i kuhaj još nekoliko minuta na laganoj vatri. Potom skini s vatre i izmiksaj štapnim mikserom. Brašno pomiješaj s preostalih 100 ml vode i dodaj juhi. Začini po želji, dodaj vrhnje i kuhaj još 5 minuta. Makni s vatre, dodaj nasjeckani peršin i posluži uz kockice prepečenca.",
+  "category": "Soup",
+  "prep_time": null,
+  "cook_time": "15 minutes",
+  "total_time": null,
+  "notes": "Ova fina krem juha od tikvica - niskokalorična.",
+  "tags": "juha,krem juha,recepti,tikvica"
+}

@@ -1,0 +1,12 @@
+{
+  "dish_name": "Ciasto na pizzę",
+  "description": "Prosty przepis na ciasto do pizzy, które można przygotować w domu.",
+  "ingredients": "[{\"name\": \"m\\u0105ka\", \"amount\": \"300-450\", \"unit\": \"g\"}, {\"name\": \"dro\\u017cd\\u017ce\", \"amount\": \"7\", \"unit\": \"g\"}, {\"name\": \"woda\", \"amount\": \"200-250\", \"unit\": \"ml\"}, {\"name\": \"oliwa\", \"amount\": \"1\", \"unit\": \"\\u0142y\\u017ceczka\"}, {\"name\": \"s\\u00f3l\", \"amount\": \"1\", \"unit\": \"p\\u0142aska \\u0142y\\u017ceczka\"}, {\"name\": \"cukier\", \"amount\": \"szczypta\", \"unit\": null}]",
+  "instructions": "1. Przygotuj zaczyn z drożdży, ciepłej wody, mąki i cukru. Odstaw na 10 minut. 2. W dużej misce połącz wszystkie składniki i wyrabiaj ciasto przez 10-15 minut. 3. Przykryj miskę i odstaw na 60 minut do wyrośnięcia. 4. Po wyrośnięciu formuj ciasto i piecz w nagrzanym piekarniku.",
+  "category": "Main Course",
+  "prep_time": "15 minutes",
+  "cook_time": "6-7 minutes",
+  "total_time": "1 hour 30 minutes",
+  "notes": "Możesz dostosować składniki do swoich preferencji. Użyj mąki typu 00 dla lepszej elastyczności.",
+  "tags": "Ciasto do pizzy, Domowa pizza, Prosty przepis na pizzę, Włoska pizzeria w domu"
+}

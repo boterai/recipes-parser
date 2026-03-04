@@ -1,0 +1,12 @@
+{
+  "dish_name": "spaghetti à la crème, aux lardons et au fromage en cocottes",
+  "description": "Trop bons ces délicieux spaghetti à la crème, aux lardons et au fromage en cocottes de Panzani !",
+  "ingredients": "[{\"name\": \"spaghetti\", \"amount\": 250, \"unit\": \"g\"}, {\"name\": \"lardons\", \"amount\": 200, \"unit\": \"g\"}, {\"name\": \"oignon\", \"amount\": 1, \"unit\": null}, {\"name\": \"cr\\u00e8me liquide\", \"amount\": 20, \"unit\": \"cl\"}, {\"name\": \"jaunes d\\u2019oeufs\", \"amount\": 2, \"unit\": null}, {\"name\": \"fromage r\\u00e2p\\u00e9\", \"amount\": 120, \"unit\": \"g\"}, {\"name\": \"ciboulette cisel\\u00e9e\", \"amount\": 1, \"unit\": \"cuill\\u00e8re \\u00e0 soupe\"}, {\"name\": \"sel\", \"amount\": null, \"unit\": null}, {\"name\": \"poivre\", \"amount\": null, \"unit\": null}]",
+  "instructions": "1. Commencez par faire cuire les spaghetti cuisson 3 min de Panzani dans une casserole d'eau bouillante. 2. Dans une grande poêle, faites revenir l'oignon émincé dans un peu d'huile, puis ajoutez vos lardons jusqu'à ce qu'ils soient dorés. 3. Ajoutez ensuite votre crème liquide, laissez chauffer le tout, en remuant de temps en temps. 4. Ajoutez les spaghetti cuisson 3 min de Panzani, cuits, puis ajoutez votre fromage râpé sur le tout. 5. Répartissez la préparation dans des mini cocottes. 6. Ajoutez les jaunes d'oeufs ainsi que la ciboulette ciselée, sur le dessus.",
+  "category": "Main Course",
+  "prep_time": null,
+  "cook_time": "3 minutes",
+  "total_time": null,
+  "notes": "N’attendez pas pour déguster, c’est tellement bon !",
+  "tags": null
+}

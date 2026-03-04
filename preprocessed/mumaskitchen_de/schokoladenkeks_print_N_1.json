@@ -1,0 +1,12 @@
+{
+  "dish_name": "Schokoladenkeks",
+  "description": "Dieses Rezept für Schokoladenkekse liefert außen knusprige, innen weiche Cookies voller geschmolzener Schokostückchen – einfach, schnell und unwiderstehlich.",
+  "ingredients": "[{\"name\": \"Weizenmehl\", \"amount\": 280, \"unit\": \"g\"}, {\"name\": \"Natron\", \"amount\": 1, \"unit\": \"TL\"}, {\"name\": \"Backpulver\", \"amount\": 0.5, \"unit\": \"TL\"}, {\"name\": \"feines Meersalz\", \"amount\": 0.5, \"unit\": \"TL\"}, {\"name\": \"weiche Butter\", \"amount\": 170, \"unit\": \"g\"}, {\"name\": \"brauner Zucker\", \"amount\": 150, \"unit\": \"g\"}, {\"name\": \"wei\\u00dfer Zucker\", \"amount\": 100, \"unit\": \"g\"}, {\"name\": \"Eier\", \"amount\": 2, \"unit\": null}, {\"name\": \"Vanilleextrakt\", \"amount\": 2, \"unit\": \"TL\"}, {\"name\": \"Schokoladenst\\u00fcckchen (Zartbitter oder Vollmilch)\", \"amount\": 300, \"unit\": \"g\"}]",
+  "instructions": "Backofen auf 190 °C Ober-/Unterhitze vorheizen und ein Backblech mit Backpapier auslegen. Mehl, Natron, Backpulver und Salz in einer Schüssel vermischen. Butter, braunen Zucker und weißen Zucker cremig rühren. Eier und Vanilleextrakt hinzufügen und kurz weiterrühren. Trockene Zutaten dazugeben und nur kurz unterrühren. Schokoladenstückchen unterheben. Teig zu Kugeln formen und mit Abstand auf das Blech setzen. 8–10 Minuten backen, bis die Ränder leicht goldbraun sind, die Mitte darf noch weich sein. 5 Minuten auf dem Blech ruhen lassen, danach auf einem Gitter auskühlen lassen oder warm servieren.",
+  "category": "Gebäck",
+  "prep_time": "15 Minuten",
+  "cook_time": "10 Minuten",
+  "total_time": "25 Minuten",
+  "notes": "Die Kekse nicht überbacken – sie garen auf dem heißen Blech nach. Teig lässt sich sehr gut einfrieren – Kugeln vorfrieren und dann in Behälter geben. Für mehr Geschmack können grob gehackte Zartbitterschokoladenstücke statt Chips verwendet werden. Glutenfreie Variante mit geeignetem Mehl ist möglich.",
+  "tags": null
+}

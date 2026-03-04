@@ -1,0 +1,12 @@
+{
+  "dish_name": "Butternut Kürbissuppe",
+  "description": "Koche deine eigene cremige Butternut Kürbissuppe mit diesem einfachen Rezept. Schnell zubereitet und perfekt für gemütliche Tage.",
+  "ingredients": "[{\"name\": \"Zwiebel\", \"amount\": 1, \"unit\": null}, {\"name\": \"Butternut-K\\u00fcrbis\", \"amount\": 1.3, \"unit\": \"kg\"}, {\"name\": \"Ingwer\", \"amount\": 10, \"unit\": \"g\"}, {\"name\": \"Speise\\u00f6l\", \"amount\": 2, \"unit\": \"EL\"}, {\"name\": \"Curry\", \"amount\": 2, \"unit\": \"TL\"}, {\"name\": \"Gem\\u00fcsebr\\u00fche\", \"amount\": 600, \"unit\": \"ml\"}, {\"name\": \"Dr. Oetker Cr\\u00e8me fra\\u00eeche Classic\", \"amount\": 300, \"unit\": \"g\"}, {\"name\": \"Salz\", \"amount\": null, \"unit\": null}, {\"name\": \"frisch gemahlener Pfeffer\", \"amount\": null, \"unit\": null}, {\"name\": \"Dr. Oetker Cr\\u00e8me fra\\u00eeche Classic\", \"amount\": 150, \"unit\": \"g\"}, {\"name\": \"Schnittlauchr\\u00f6llchen\", \"amount\": 1, \"unit\": \"EL\"}, {\"name\": \"K\\u00fcrbiskern\\u00f6l\", \"amount\": 1, \"unit\": \"EL\"}]",
+  "instructions": "1. Zwiebel abziehen und in Würfel schneiden. Butternut Kürbis schälen, Kerne entfernen und das Fruchtfleisch würfeln. Ingwer schälen und auf einer Reibe fein reiben oder hacken. 2. Speiseöl in einem großen Topf erhitzen, Zwiebel- und Kürbiswürfel darin andünsten. Ingwer und Curry dazugeben. Gemüsebrühe und Crème fraîche zugeben und alles etwa 20 Min. kochen. Dann pürieren. Mit Salz und Pfeffer abschmecken. 3. Die Butternut Kürbissuppe mit einen Klecks Crème fraîche, Schnittlauchröllchen und Kürbiskernöl verzieren.",
+  "category": null,
+  "prep_time": "40 minutes",
+  "cook_time": "20 minutes",
+  "total_time": "60 minutes",
+  "notes": "Die Butternut Kürbissuppe lässt sich prima einfrieren. Für eine vegane Butternut Kürbissuppe einfach Dr. Oetker Creme VEGA statt Crème fraîche Classic verwenden.",
+  "tags": null
+}

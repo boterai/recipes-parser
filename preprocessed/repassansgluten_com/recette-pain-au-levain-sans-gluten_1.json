@@ -1,0 +1,12 @@
+{
+  "dish_name": "Pain au levain sans gluten",
+  "description": "Une recette pain au levain sans gluten maison, digeste, croustillante et pleine de goût, à base de levain de teff et d’un trio de farines naturellement sans gluten.",
+  "ingredients": "[{\"name\": \"Psyllium bio\", \"amount\": 10, \"unit\": \"g\"}, {\"name\": \"Eau\", \"amount\": 300, \"unit\": \"ml\"}, {\"name\": \"Farine de teff bio\", \"amount\": 100, \"unit\": \"g\"}, {\"name\": \"Farine de quinoa bio\", \"amount\": 100, \"unit\": \"g\"}, {\"name\": \"F\\u00e9cule de tapioca bio\", \"amount\": 100, \"unit\": \"g\"}, {\"name\": \"Sel\", \"amount\": 4, \"unit\": \"g\"}, {\"name\": \"Levain sans gluten actif\", \"amount\": 200, \"unit\": \"g\"}, {\"name\": \"Levure de boulangerie fra\\u00eeche\", \"amount\": 4, \"unit\": \"g\"}]",
+  "instructions": "1. Dans un bol, mélangez le psyllium avec l’eau. Laissez reposer 10 minutes jusqu’à formation d’un gel. 2. Dans la cuve du robot, versez les farines, la fécule et le sel. 3. Ajoutez le gel de psyllium, la levure émiettée et le levain. Pétrissez 4 min à vitesse moyenne, puis 4 min à vitesse rapide. 4. Couvrez et laissez reposer 1 h à température ambiante. 5. Dégazez la pâte, farinez le plan de travail et divisez en deux. Façonnez en boudins. 6. Placez sur une plaque à baguettes ou une plaque recouverte de papier cuisson. Faites quelques incisions en biais. 7. Couvrez et laissez lever 2 h. 8. Préchauffez le four à 250°C avec un lèchefrite vide en bas. 9. Enfournez, versez 50 ml d’eau dans le lèchefrite pour la vapeur. Cuisez 15 min à 250°C, puis 10 min à 220°C. 10. Laissez refroidir sur une grille avant de déguster.",
+  "category": "Boulangerie sans gluten",
+  "prep_time": "20 minutes",
+  "cook_time": "25 minutes",
+  "total_time": null,
+  "notes": "Vous pouvez varier les farines en remplaçant le quinoa par du sarrasin ou du riz complet. Le pain se conserve 3 jours à température ambiante dans un torchon propre.",
+  "tags": "sans gluten, pain, levain, boulangerie"
+}

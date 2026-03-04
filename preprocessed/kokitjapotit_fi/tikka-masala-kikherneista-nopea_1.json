@@ -1,0 +1,12 @@
+{
+  "dish_name": "Tikka masala kikherneistä",
+  "description": "Nopea arkiruoka puolessa tunnissa, valmistettu kikherneistä ja mausteista.",
+  "ingredients": "[{\"name\": \"sipuli\", \"amount\": 1, \"unit\": \"kpl\"}, {\"name\": \"valkosipulinkynsi\", \"amount\": \"2-4\", \"unit\": \"kpl\"}, {\"name\": \"\\u00f6ljy\", \"amount\": 2, \"unit\": \"rkl\"}, {\"name\": \"jeeraa\", \"amount\": 2, \"unit\": \"tl\"}, {\"name\": \"garam masala\", \"amount\": \"1-2\", \"unit\": \"tl\"}, {\"name\": \"savupaprika\", \"amount\": \"1-2\", \"unit\": \"tl\"}, {\"name\": \"kurkuma\", \"amount\": 1, \"unit\": \"tl\"}, {\"name\": \"inkiv\\u00e4\\u00e4ri\", \"amount\": 1, \"unit\": \"tl\"}, {\"name\": \"korianteri\", \"amount\": 1, \"unit\": \"tl\"}, {\"name\": \"kikherneet\", \"amount\": \"300-400\", \"unit\": \"g\"}, {\"name\": \"tomaattimurska\", \"amount\": 400, \"unit\": \"g\"}, {\"name\": \"vesi\", \"amount\": 1, \"unit\": \"dl\"}, {\"name\": \"sokeri tai hunaja\", \"amount\": 2, \"unit\": \"tl\"}, {\"name\": \"kookoskerma\", \"amount\": \"noin 2\", \"unit\": \"dl\"}, {\"name\": \"suola\", \"amount\": \"noin 1\", \"unit\": \"tl\"}, {\"name\": \"sitruunamehu\", \"amount\": null, \"unit\": null}, {\"name\": \"tuore korianteri\", \"amount\": null, \"unit\": null}, {\"name\": \"cashewp\\u00e4hkin\\u00e4t\", \"amount\": null, \"unit\": null}, {\"name\": \"keitetty riisi\", \"amount\": null, \"unit\": null}, {\"name\": \"naanleip\\u00e4\", \"amount\": null, \"unit\": null}]",
+  "instructions": "Kuori ja hienonna sipuli sekä valkosipulinkynnet. Kuullota sipulisilppuja keskilämmöllä öljyssä viitisen minuuttia. Lisää mausteet ja anna niiden lämmetä. Lisää valutetut kikherneet sekä tomaattimurska. Huuhtele tomaattimurskapurkki desillä vettä ja kippaa vesi kastikkeen joukkoon. Anna hautua vähintään 15 minuuttia. Lisää sokeri, kookoskerma ja suola. Hauduta vielä viitisen minuuttia. Viimeistele sitruunamehulla. Tarjoa lisäkkeenä riisiä tai naanleipää.",
+  "category": "Main Course",
+  "prep_time": "5 minutes",
+  "cook_time": "30 minutes",
+  "total_time": "35 minutes",
+  "notes": "Mausteita kannattaa laittaa reilusti. Voit säätää makua sitruunamehulla.",
+  "tags": "tikka masala, kikherneet, nopea ruoka, arkiruoka"
+}

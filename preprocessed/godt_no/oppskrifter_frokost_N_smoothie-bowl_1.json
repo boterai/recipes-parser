@@ -1,0 +1,12 @@
+{
+  "dish_name": "Smoothie bowl",
+  "description": "“Smoothie bowl” er en smoothie med litt tykkere konsistens som spises med skje. Den er perfekt å toppe med ekstra frukt, bær, hakkede nøtter eller kokosflak.",
+  "ingredients": "[{\"name\": \"bl\\u00e5b\\u00e6r\", \"amount\": 2, \"unit\": \"dl\"}, {\"name\": \"yoghurt naturell\", \"amount\": 2, \"unit\": \"dl\"}, {\"name\": \"melk\", \"amount\": 1, \"unit\": \"dl\"}, {\"name\": \"banan\", \"amount\": 1, \"unit\": \"stk\"}, {\"name\": \"vaniljepulver\", \"amount\": 1, \"unit\": \"ts\"}, {\"name\": \"isbiter\", \"amount\": 1, \"unit\": \"h\\u00e5ndfull\"}, {\"name\": \"kiwi\", \"amount\": 1, \"unit\": \"stk\"}, {\"name\": \"banan\", \"amount\": 1, \"unit\": \"stk\"}, {\"name\": \"kokoschips\", \"amount\": 1, \"unit\": \"h\\u00e5ndfull\"}]",
+  "instructions": "Ha blåbær, banan, vanljepulver, melk og yoghurt i en blender og kjør sammen til smoothien har fått en jevn konsistens. Ha i isbiter også om du bruker ferske blåbær så blir smoothien kald og god. Hell smoothien over i to boller. Kutt opp kiwi og banan, eller den frukten du selv vil toppe med. Her har jeg også brukt litt kokosflak for god crunch. Topp smoothien med kiwi, banan og kokosflak - eller den toppingen du selv vil. Server og spis med skje!",
+  "category": "Frokost",
+  "prep_time": "15 min",
+  "cook_time": null,
+  "total_time": null,
+  "notes": "Du kan bruke valgfri type melk, og vil du gjøre smoothien melkefri kan du bruke kokoskrem i steden for yoghurt. Bruker du frosne blåbær kan du droppe isbitene.",
+  "tags": "smoothie, frokost, blåbær"
+}

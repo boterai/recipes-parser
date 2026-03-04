@@ -1,0 +1,12 @@
+{
+  "dish_name": "Sushi con Arroz Casero",
+  "description": "Receta para preparar sushi en casa utilizando arroz glutinoso y otros ingredientes frescos.",
+  "ingredients": "[{\"name\": \"Arroz para sushi\", \"amount\": 2, \"unit\": \"tazas\"}, {\"name\": \"Agua\", \"amount\": 2.25, \"unit\": \"tazas\"}, {\"name\": \"Vinagre de arroz\", \"amount\": 0.25, \"unit\": \"tazas\"}, {\"name\": \"Az\\u00facar\", \"amount\": 2, \"unit\": \"cucharadas\"}, {\"name\": \"Sal\", \"amount\": 1, \"unit\": \"cucharadita\"}, {\"name\": \"Nori (alga)\", \"amount\": 5, \"unit\": \"hojas\"}, {\"name\": \"Rellenos al gusto\", \"amount\": null, \"unit\": null}]",
+  "instructions": "1. Lavar el arroz bajo agua fría hasta que el agua salga clara. 2. Cocinar el arroz con agua en una olla durante 20 minutos. 3. Mezclar vinagre, azúcar y sal en un bol y calentar para disolver. 4. Aliñar el arroz cocido con la mezcla de vinagre. 5. Formar el sushi con alga nori y los rellenos deseados.",
+  "category": "Main Course",
+  "prep_time": "30 minutes",
+  "cook_time": "20 minutes",
+  "total_time": "50 minutes",
+  "notes": "Asegúrate de enjuagar bien el arroz antes de cocinarlo para obtener la textura adecuada. Puedes experimentar con diferentes rellenos.",
+  "tags": "sushi, arroz, japonés, receta casera"
+}

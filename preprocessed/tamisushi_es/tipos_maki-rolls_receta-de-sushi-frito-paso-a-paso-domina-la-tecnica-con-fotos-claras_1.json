@@ -1,0 +1,12 @@
+{
+  "dish_name": "Sushi Frito",
+  "description": "Receta de sushi frito paso a paso que combina la tradición japonesa con toques hispanos.",
+  "ingredients": "[{\"name\": \"arroz para sushi\", \"amount\": 200, \"unit\": \"g\"}, {\"name\": \"agua\", \"amount\": 500, \"unit\": \"ml\"}, {\"name\": \"vinagre de arroz\", \"amount\": 2, \"unit\": \"cucharadas\"}, {\"name\": \"az\\u00facar\", \"amount\": 1, \"unit\": \"cucharada\"}, {\"name\": \"sal\", \"amount\": 1, \"unit\": \"pizca\"}, {\"name\": \"hojas de alga nori\", \"amount\": 8, \"unit\": null}, {\"name\": \"camarones frescos fritos\", \"amount\": null, \"unit\": null}, {\"name\": \"aguacate maduro\", \"amount\": null, \"unit\": null}, {\"name\": \"mango\", \"amount\": null, \"unit\": null}, {\"name\": \"harina Panko\", \"amount\": null, \"unit\": null}, {\"name\": \"huevos\", \"amount\": 3, \"unit\": null}, {\"name\": \"aceite para fre\\u00edr\", \"amount\": null, \"unit\": null}]",
+  "instructions": "Lava el arroz en agua fría hasta que el agua salga clara, luego escúrrelo. Introduce el arroz en la arrocera con las 2 ½ tazas de agua y cocina según las instrucciones. Una vez cocido, déjalo reposar tapado durante 10 minutos. Mientras tanto, corta el pescado en tiras de aproximadamente 1 cm. Prepara la mezcla de tempura batiendo el huevo y mezclándolo con la harina y un poco de agua fría. Calienta el aceite en una sartén profunda a 180°C. Empana cada trozo de pescado en la mezcla de tempura y, si deseas, en pan rallado antes de freírlo hasta que esté dorado. Sirve el sushi frito con el arroz pendiente, y acompaña con salsa de soya o wasabi.",
+  "category": "Main Course",
+  "prep_time": "15 minutes",
+  "cook_time": "30 minutes",
+  "total_time": "45 minutes",
+  "notes": "Asegúrate de que el arroz esté bien cocido y pegajoso para facilitar su manipulación al formar los rollos de sushi.",
+  "tags": "sushi, frito, japonés, receta"
+}

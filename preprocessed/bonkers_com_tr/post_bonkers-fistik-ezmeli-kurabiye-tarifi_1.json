@@ -1,0 +1,12 @@
+{
+  "dish_name": "Bonkers Fıstık Ezmeli Kurabiye",
+  "description": "Şekersiz, kolay ve enerji dolu bu kurabiyelerle sevdiklerinize tatlı bir sürpriz yapabilirsiniz.",
+  "ingredients": "[{\"name\": \"Bonkers F\\u0131st\\u0131k Ezmesi\", \"amount\": \"1\", \"unit\": \"su barda\\u011f\\u0131\"}, {\"name\": \"esmer \\u015feker veya bal\", \"amount\": \"1/2\", \"unit\": \"su barda\\u011f\\u0131\"}, {\"name\": \"yumurta\", \"amount\": \"1\", \"unit\": null}, {\"name\": \"vanilin\", \"amount\": \"1\", \"unit\": \"\\u00e7ay ka\\u015f\\u0131\\u011f\\u0131\"}, {\"name\": \"kabartma tozu\", \"amount\": \"1/2\", \"unit\": \"\\u00e7ay ka\\u015f\\u0131\\u011f\\u0131\"}, {\"name\": \"tuz\", \"amount\": \"bir tutam\", \"unit\": null}, {\"name\": \"par\\u00e7a \\u00e7ikolata veya k\\u0131y\\u0131lm\\u0131\\u015f f\\u0131nd\\u0131k\", \"amount\": \"iste\\u011fe ba\\u011fl\\u0131\", \"unit\": null}]",
+  "instructions": "Fırını 180 dereceye ayarlayın ve bir fırın tepsisini yağlı kağıtla kaplayın. Geniş bir kapta Bonkers Fıstık Ezmesini, esmer şekeri (veya balı), yumurtayı, vanilini, kabartma tozunu ve bir tutam tuzu karıştırın. Tüm malzemeler iyice karışıp yumuşak bir hamur haline gelene kadar devam edin. Hamurdan ceviz büyüklüğünde parçalar alın ve yuvarlayarak fırın tepsisine yerleştirin. Üzerlerine hafifçe bastırarak düzleştirin. İsterseniz her bir kurabiyenin üzerine parça çikolata veya kıyılmış fındık serpebilirsiniz. Kurabiyeleri önceden ısıtılmış fırında yaklaşık 10-12 dakika pişirin. Kenarları hafifçe kızardığında fırından çıkarın, ancak tamamen sertleşmesi için soğumalarını bekleyin. Kurabiyeleri oda sıcaklığına geldikten sonra servis edin.",
+  "category": "Dessert",
+  "prep_time": null,
+  "cook_time": "10-12 minutes",
+  "total_time": null,
+  "notes": "Bu kurabiyeler, Bonkers Fıstık Ezmesinin doğal lezzeti ve besleyiciliği sayesinde tatlı krizlerine sağlıklı bir çözüm sunuyor.",
+  "tags": "kurabiye, tatlı, sağlıklı"
+}

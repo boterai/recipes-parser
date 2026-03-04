@@ -1,0 +1,12 @@
+{
+  "dish_name": "Coconut Rice Bowls",
+  "description": "Delicious Coconut Rice Bowl is healthy and adaptable! Curried jasmine rice cooked in coconut milk topped with your choice of protein, and seasonal vegetables all tossed with a simple sauce, fresh cilantro, mint and toasted coconut flakes.",
+  "ingredients": "[{\"name\": \"rice\", \"amount\": 2, \"unit\": \"cups\"}, {\"name\": \"coconut milk\", \"amount\": 1, \"unit\": \"can\"}, {\"name\": \"water\", \"amount\": 1.75, \"unit\": \"cups\"}, {\"name\": \"yellow curry powder\", \"amount\": 2, \"unit\": \"teaspoons\"}, {\"name\": \"sea salt\", \"amount\": 1, \"unit\": \"teaspoon\"}, {\"name\": \"ginger\", \"amount\": 1, \"unit\": \"teaspoon\"}, {\"name\": \"sriracha\", \"amount\": 2, \"unit\": \"tablespoons\"}, {\"name\": \"coconut sugar\", \"amount\": 2, \"unit\": \"teaspoons\"}, {\"name\": \"coconut oil\", \"amount\": 2, \"unit\": \"tablespoons\"}, {\"name\": \"tofu\", \"amount\": 16, \"unit\": \"oz\"}, {\"name\": \"garlic\", \"amount\": 4, \"unit\": \"cloves\"}, {\"name\": \"lemongrass\", \"amount\": 2, \"unit\": \"teaspoons\"}, {\"name\": \"asparagus\", \"amount\": 1, \"unit\": \"pound\"}, {\"name\": \"green onions\", \"amount\": 2, \"unit\": \"units\"}, {\"name\": \"peas\", \"amount\": 0.5, \"unit\": \"cup\"}, {\"name\": \"lime juice\", \"amount\": 2, \"unit\": \"tablespoons\"}, {\"name\": \"cilantro\", \"amount\": 0.25, \"unit\": \"cup\"}, {\"name\": \"mint\", \"amount\": 0.25, \"unit\": \"cup\"}, {\"name\": \"toasted coconut flakes\", \"amount\": 0.5, \"unit\": \"cup\"}]",
+  "instructions": "1. Cook the rice: Add rice, coconut milk, water, curry powder, salt, and ginger. Bring to a simmer and cook for 20 minutes. 2. Make the Sauce: Whisk together sriracha, soy sauce, and coconut sugar. Set aside. 3. Pat tofu dry and cut into thick strips. Prep veggies. 4. Sear Tofu: Heat a pan to med-high, add coconut oil, sear tofu for about 3 minutes on each side. 5. Sauté Veggies: In the same pan, sauté asparagus for about 1 minute, add garlic, lemongrass, ginger, and cook until tender. 6. Combine: Add tofu, sauce, peas, and lime juice, stirring to combine. Serve with rice and top with mint, cilantro, and coconut flakes.",
+  "category": "Main Course",
+  "prep_time": "15 minutes",
+  "cook_time": "30 minutes",
+  "total_time": "45 minutes",
+  "notes": "Leftovers can be kept in the fridge for 3-4 days. Coconut rice can be frozen for up to 3 months.",
+  "tags": "vegan, healthy, rice, bowl, coconut"
+}

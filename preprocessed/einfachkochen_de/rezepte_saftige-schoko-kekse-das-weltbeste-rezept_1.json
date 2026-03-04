@@ -1,0 +1,12 @@
+{
+  "dish_name": "Saftige Schoko-Kekse",
+  "description": "Das Rezept ist schnell gemacht - du wirst die Cookies mit Schokolade lieben!",
+  "ingredients": "[{\"name\": \"Mehl\", \"amount\": 350, \"unit\": \"g\"}, {\"name\": \"Backpulver\", \"amount\": 0.5, \"unit\": \"Pck.\"}, {\"name\": \"Backkakao\", \"amount\": 100, \"unit\": \"g\"}, {\"name\": \"Vollmilchschokolade\", \"amount\": 200, \"unit\": \"g\"}, {\"name\": \"weiche Butter\", \"amount\": 250, \"unit\": \"g\"}, {\"name\": \"feiner brauner Zucker\", \"amount\": 350, \"unit\": \"g\"}, {\"name\": \"Meersalz\", \"amount\": 1, \"unit\": \"Prise\"}, {\"name\": \"Eier\", \"amount\": 2, \"unit\": \"Gr\\u00f6\\u00dfe L\"}, {\"name\": \"Schokolade\", \"amount\": 200, \"unit\": \"g\"}]",
+  "instructions": "1. Den Backofen auf 190 Grad Ober- und Unterhitze (170 Grad Umluft) vorheizen und ein Backblech mit Backpapier auslegen. Mehl, Backpulver und Backkakao in einer kleinen Schüssel miteinander vermengen. Die Schokolade in Würfel hacken. 2. In einer weiteren Schüssel Butter, Zucker und eine Prise Meersalz schaumig schlagen. Anschließend die Eier einzeln unterrühren. Die Mehlmischung zur Buttermasse sieben, alles gleichmäßig vermischen und die Schokoladenstückchen unterheben. Du kannst den Teig auch ca. 1 Stunde kühl stellen, dann werden die Schoko-Kekse extra saftig! 3. Jeweils 2 EL Teig zu gleichmäßigen Kugeln formen. Teigkugeln mit großem Abstand auf das Backblech geben und leicht platt drücken. Im vorgeheizten Backofen für 12-15 Minuten backen. Die Kekse sollten im Inneren noch etwas weich und an den Rändern schön knusprig sein. Vor dem Servieren etwa 10 Minuten abkühlen lassen. 4. Für die Glasur die Schokolade grob hacken und im heißen Wasserbad langsam schmelzen. Die Kekse zur Hälfte in die Glasur tauchen und auf einem mit Backpapier ausgelegten Kuchengitter abkühlen lassen.",
+  "category": "Dessert",
+  "prep_time": "25 minutes",
+  "cook_time": "15 minutes",
+  "total_time": "50 minutes",
+  "notes": "Verfeinere die Kekse nach deinem Geschmack. Probier doch mal gehackte Nüsse, gewürfelte Karamellbonbons, getrocknete Sauerkirschen oder gemahlenen Zimt im Teig.",
+  "tags": "Kekse, Dessert, Schokolade"
+}

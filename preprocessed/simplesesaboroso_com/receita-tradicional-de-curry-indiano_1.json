@@ -1,0 +1,12 @@
+{
+  "dish_name": "Curry Indiano",
+  "description": "Curry Indiano é uma mistura saborosa de especiarias, carne ou vegetais e um molho rico e aromático.",
+  "ingredients": "[{\"name\": \"carne de frango ou cordeiro\", \"amount\": 500, \"unit\": \"g\"}, {\"name\": \"cebolas grandes picadas\", \"amount\": 2, \"unit\": \"unidades\"}, {\"name\": \"dentes de alho picados\", \"amount\": 3, \"unit\": \"unidades\"}, {\"name\": \"peda\\u00e7o de gengibre ralado\", \"amount\": 1, \"unit\": \"unidade\"}, {\"name\": \"colheres de sopa de pasta de tomate\", \"amount\": 3, \"unit\": \"colheres de sopa\"}, {\"name\": \"colheres de sopa de \\u00f3leo ou ghee\", \"amount\": 2, \"unit\": \"colheres de sopa\"}, {\"name\": \"colher de sopa de pimenta em p\\u00f3\", \"amount\": 1, \"unit\": \"colher de sopa\"}, {\"name\": \"colher de sopa de c\\u00farcuma\", \"amount\": 1, \"unit\": \"colher de sopa\"}, {\"name\": \"colher de sopa de cominho\", \"amount\": 1, \"unit\": \"colher de sopa\"}, {\"name\": \"colher de sopa de coentro em p\\u00f3\", \"amount\": 1, \"unit\": \"colher de sopa\"}, {\"name\": \"leite de coco\", \"amount\": 200, \"unit\": \"ml\"}, {\"name\": \"sal\", \"amount\": null, \"unit\": \"a gosto\"}]",
+  "instructions": "Refogar a cebola, alho e gengibre no óleo ou ghee até que fiquem dourados. Adicionar a carne e cozinhar até que esteja bem dourada. Incorporar as especiarias e a pasta de tomate, misturando bem. Despejar o leite de coco e deixar cozinhar em fogo baixo por cerca de 30 minutos. Tempere com sal a gosto. Sirva quente, idealmente com arroz basmati ou naan.",
+  "category": "Main Course",
+  "prep_time": null,
+  "cook_time": "30 minutes",
+  "total_time": null,
+  "notes": "Você pode substituir a carne por vegetais ou tofu. Sinta-se à vontade para ajustar as especiarias de acordo com sua preferência. O curry indiano é melhor servido com arroz basmati ou pão naan.",
+  "tags": "comida indiana, curry, receita tradicional"
+}

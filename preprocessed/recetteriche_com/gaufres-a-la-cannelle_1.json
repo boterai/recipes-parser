@@ -1,0 +1,12 @@
+{
+  "dish_name": "Gaufres à la cannelle",
+  "description": "Des gaufres croustillantes à l'extérieur et moelleuses à l'intérieur, nappées d'un glaçage au fromage à la crème.",
+  "ingredients": "[{\"name\": \"fromage \\u00e0 la cr\\u00e8me\", \"amount\": 4, \"unit\": \"oz\"}, {\"name\": \"sucre en poudre\", \"amount\": 0.5, \"unit\": \"tasse\"}, {\"name\": \"lait\", \"amount\": 0.25, \"unit\": \"tasse\"}, {\"name\": \"spray de cuisson antiadh\\u00e9sif\", \"amount\": null, \"unit\": null}, {\"name\": \"brioches \\u00e0 la cannelle Pillsbury\", \"amount\": 1, \"unit\": \"bo\\u00eete\"}]",
+  "instructions": "1. Préparez le glaçage au fromage à la crème en battant le fromage à la crème ramolli, le sucre en poudre et le lait jusqu'à obtenir une consistance lisse. 2. Préchauffez le gaufrier et vaporisez-le avec le spray de cuisson. 3. Placez un rouleau de pâte à la cannelle au centre du gaufrier et fermez-le. 4. Faites cuire pendant 2-3 minutes jusqu'à ce que la gaufre soit dorée. 5. Répétez avec les rouleaux restants et servez avec le glaçage.",
+  "category": "Dessert",
+  "prep_time": "5 minutes",
+  "cook_time": "10 minutes",
+  "total_time": "15 minutes",
+  "notes": "Pour un glaçage plus riche, ajoutez de l'extrait de vanille. Les gaufres sont meilleures fraîches mais peuvent être réchauffées.",
+  "tags": "gaufres, petit-déjeuner, dessert, cannelle"
+}

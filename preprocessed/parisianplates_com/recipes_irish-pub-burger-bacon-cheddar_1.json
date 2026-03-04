@@ -1,0 +1,12 @@
+{
+  "dish_name": "Délice Burger Pub Irlandais",
+  "description": "Burger copieux style irlandais avec bacon, cheddar et sauce moutarde.",
+  "ingredients": "[{\"name\": \"b\\u0153uf hach\\u00e9\", \"amount\": 450, \"unit\": \"grammes\"}, {\"name\": \"sauce anglaise\", \"amount\": 1, \"unit\": \"cuill\\u00e8re \\u00e0 soupe\"}, {\"name\": \"sel\", \"amount\": null, \"unit\": \"selon go\\u00fbt\"}, {\"name\": \"poivre\", \"amount\": null, \"unit\": \"selon go\\u00fbt\"}, {\"name\": \"cr\\u00e8me aigre\", \"amount\": 120, \"unit\": \"ml\"}, {\"name\": \"moutarde de Dijon\", \"amount\": 2, \"unit\": \"cuill\\u00e8res \\u00e0 soupe\"}, {\"name\": \"lard\", \"amount\": 4, \"unit\": \"tranches\"}, {\"name\": \"gros oignon\", \"amount\": 1, \"unit\": \"gros\"}, {\"name\": \"bi\\u00e8re brune irlandaise\", \"amount\": 120, \"unit\": \"ml\"}, {\"name\": \"fromage cheddar\", \"amount\": 120, \"unit\": \"ml\"}, {\"name\": \"pains \\u00e0 burger\", \"amount\": 4, \"unit\": \"pains\"}, {\"name\": \"beurre\", \"amount\": null, \"unit\": \"pour dorer les pains\"}]",
+  "instructions": "Étape 01: Fais dorer le lard dans une poêle à feu moyen jusqu'à ce qu'il soit croustillant. Retire-le et pose-le sur du papier absorbant. Étape 02: Dans la même poêle, mets les oignons tranchés et laisse-les cuire à feu moyen jusqu'à caramélisation, environ 10-15 minutes. Ajoute la bière et laisse réduire de moitié. Assaisonne avec sel et poivre. Mets de côté. Étape 03: Dans un bol, mélange le bœuf haché avec la sauce anglaise, le sel et le poivre. Façonne 4 galettes un peu plus grandes que les pains. Étape 04: Fais cuire les galettes sur un gril ou dans une poêle à feu moyen-vif pendant 3-4 minutes de chaque côté. Pendant la dernière minute, ajoute le cheddar pour qu'il fonde. Étape 05: Dans un petit bol, mélange la crème aigre, la moutarde de Dijon et une pincée de sel. Réserve. Étape 06: Fais fondre du beurre dans une poêle et fais dorer les pains jusqu'à ce qu'ils soient bien dorés. Étape 07: Monte les burgers avec les galettes, les oignons caramélisés, le lard, la sauce à la moutarde et le dessus des pains. Sers chaud.",
+  "category": "Plats Principaux",
+  "prep_time": "20 minutes",
+  "cook_time": "20 minutes",
+  "total_time": "40 minutes",
+  "notes": "Pour une touche irlandaise authentique, essaie l'agneau haché au lieu du bœuf. Tu peux changer le fromage ou ajouter des extras comme des piments jalapeños pour un goût plus relevé.",
+  "tags": "burger, irlandais, plat principal"
+}

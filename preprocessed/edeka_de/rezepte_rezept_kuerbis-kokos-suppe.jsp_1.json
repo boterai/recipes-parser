@@ -1,0 +1,12 @@
+{
+  "dish_name": "Kürbis-Kokos-Suppe",
+  "description": "Unsere Kürbis-Kokos-Suppe bringt einen Hauch Asien in deine Herbst-Küche! Wir peppen sie mit Kokosmilch, Chili und Limettensaft auf.",
+  "ingredients": "[{\"name\": \"Hokkaido-K\\u00fcrbis\", \"amount\": 400, \"unit\": \"g\"}, {\"name\": \"Orangensaft\", \"amount\": 100, \"unit\": \"ml\"}, {\"name\": \"Chiliflocken, getrocknet\", \"amount\": 1, \"unit\": \"TL\"}, {\"name\": \"Curry\", \"amount\": 1, \"unit\": \"TL\"}, {\"name\": \"Salz\", \"amount\": null, \"unit\": null}, {\"name\": \"Pfeffer\", \"amount\": null, \"unit\": null}, {\"name\": \"Gem\\u00fcsefond\", \"amount\": 400, \"unit\": \"ml\"}, {\"name\": \"Kokosmilch\", \"amount\": 250, \"unit\": \"ml\"}, {\"name\": \"Limettensaft\", \"amount\": null, \"unit\": \"Spritzer\"}, {\"name\": \"Kokosmilch\", \"amount\": 50, \"unit\": \"ml\"}, {\"name\": \"Chiliflocken, getrocknet\", \"amount\": null, \"unit\": \"einige\"}, {\"name\": \"Koriandergr\\u00fcn\", \"amount\": null, \"unit\": \"etwas\"}]",
+  "instructions": "Kürbisfruchtfleisch klein würfeln, mit Orangensaft, Chiliflocken, Currypulver, Salz, Pfeffer und Gemüsefond in einen Topf geben, zum Kochen bringen, Hitze reduzieren und zugedeckt 20-25 Minuten köcheln lassen, bis der Kürbis ganz weich ist. Die Suppe in einen Mixer geben und fein pürieren, dabei die Kokosmilch und Limettensaft zugeben. In den Topf zurückgießen, noch mal erhitzen und abschmecken. Anrichten, mit Kokosmilch, Chiliflocken und Korianderblättchen garnieren.",
+  "category": null,
+  "prep_time": "35 minutes",
+  "cook_time": "20-25 minutes",
+  "total_time": "35 minutes",
+  "notes": "Die Suppe kann problemlos eingefroren werden.",
+  "tags": "Suppe, Kürbis, Kokosmilch, Herbst"
+}

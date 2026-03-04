@@ -1,0 +1,12 @@
+{
+  "dish_name": "Smoothie med kirsebær og kokos",
+  "description": "Dette er en smoothie oppskrift med smak av kirsebær og kokos. Den inneholder kun naturlig sukker fra honningkirsebær.",
+  "ingredients": "[{\"name\": \"us\\u00f8tet kokosdrikk\", \"amount\": 1.5, \"unit\": \"dl\"}, {\"name\": \"frosne kirseb\\u00e6r\", \"amount\": 150, \"unit\": \"g\"}, {\"name\": \"honning\", \"amount\": 1.5, \"unit\": \"ts\"}]",
+  "instructions": "Kjør kokosdrikken, kirsebær og honningen i en blender. Ferdig! Topp med frukt og bær om du ønsker.",
+  "category": "Smoothie",
+  "prep_time": null,
+  "cook_time": null,
+  "total_time": null,
+  "notes": "Toppingen er ikke en del av ernæringsberegningen.",
+  "tags": "smoothie, kirsebær, kokos"
+}

@@ -1,0 +1,12 @@
+{
+  "dish_name": "Risotto de coquillettes aux lardons, à la crème et aux petits pois",
+  "description": "Un risotto de coquillettes et aux petits pois Bonduelle, il séduira toute la famille !",
+  "ingredients": "[{\"name\": \"coquillettes\", \"amount\": 1, \"unit\": \"sachet\"}, {\"name\": \"lardons\", \"amount\": 1, \"unit\": \"sachet\"}, {\"name\": \"petits pois doux pr\\u00e9par\\u00e9s vapeur Bonduelle\", \"amount\": 1, \"unit\": \"bo\\u00eete\"}, {\"name\": \"bouillon de volaille\", \"amount\": 60, \"unit\": \"cl\"}, {\"name\": \"cr\\u00e8me fra\\u00eeche \\u00e9paisse\", \"amount\": 4, \"unit\": \"cuill\\u00e8res \\u00e0 soupe\"}, {\"name\": \"oignon\", \"amount\": 1, \"unit\": null}, {\"name\": \"sel\", \"amount\": null, \"unit\": null}, {\"name\": \"poivre\", \"amount\": null, \"unit\": null}, {\"name\": \"parmesan r\\u00e2p\\u00e9\", \"amount\": null, \"unit\": null}]",
+  "instructions": "1. Commencez par émincer votre oignon. Une fois découpé, faites-le revenir quelques minutes dans une grande poêle huilée à feu moyen et ajoutez enfin les lardons. 2. Incorporez les coquillettes dans votre poêle et mélangez-les pendant une minute. Versez deux louches de votre bouillon au même niveau que les coquillettes : lorsque le bouillon est absorbé, recommencez l'opération et laissez mijoter pendant 10 minutes. 3. Lorsque le bouillon est absorbé, incorporez le contenu de votre boîte de petits pois doux préparés vapeur Bonduelle et ajoutez la crème fraîche. 4. Assaisonnez de sel, de poivre et de parmesan avant de servir, si vous souhaitez un résultat encore plus gourmand.",
+  "category": "Main Course",
+  "prep_time": null,
+  "cook_time": "10 minutes",
+  "total_time": null,
+  "notes": null,
+  "tags": "pâtes, risotto, facile"
+}

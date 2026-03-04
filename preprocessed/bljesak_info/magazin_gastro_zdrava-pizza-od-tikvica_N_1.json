@@ -1,0 +1,12 @@
+{
+  "dish_name": "Zdrava pizza od tikvica",
+  "description": "Ukusni, zdravi i brzi obrok s podlogom od tikvica.",
+  "ingredients": "[{\"name\": \"tikvice\", \"amount\": 3, \"unit\": null}, {\"name\": \"naribana gauda\", \"amount\": 150, \"unit\": \"g\"}, {\"name\": \"integralno bra\\u0161no\", \"amount\": 150, \"unit\": \"g\"}, {\"name\": \"jaja\", \"amount\": 2, \"unit\": null}, {\"name\": \"sol\", \"amount\": null, \"unit\": null}, {\"name\": \"papar\", \"amount\": null, \"unit\": null}, {\"name\": \"bosiljak\", \"amount\": null, \"unit\": null}, {\"name\": \"origano\", \"amount\": null, \"unit\": null}, {\"name\": \"mozzarella\", \"amount\": 150, \"unit\": \"g\"}, {\"name\": \"pasirana raj\\u010dica\", \"amount\": null, \"unit\": null}, {\"name\": \"\\u0161unka za pizzu\", \"amount\": 100, \"unit\": \"g\"}, {\"name\": \"masline\", \"amount\": null, \"unit\": null}, {\"name\": \"gljive\", \"amount\": null, \"unit\": null}]",
+  "instructions": "1. Pripremite podlogu od tikvica. Pećnicu zagrijete na 230 stupnjeva. Tikvice naribajte, posolite i dobro ocijedite. Pomiješajte brašno, tikvice, naribanu gaudu, razmućena jaja i dodajte začine po želji. Smjesu izlijte na papir za pečenje i pecite 15 minuta. 2. Smanjite temperaturu na 200 stupnjeva. Na vruću podlogu od tikvica stavite pasiranu rajčicu, šunku, sir i ostale dodatke. 3. Pecite nekoliko minuta, dok se sir ne rastopi.",
+  "category": "Main Course",
+  "prep_time": "20 minutes",
+  "cook_time": null,
+  "total_time": null,
+  "notes": "Na podlogu od tikvica možete staviti bilo koje dodatke, ovisno o vašem raspoloženju i onome što imate u hladnjaku.",
+  "tags": "pizza,tikvice,recepti"
+}

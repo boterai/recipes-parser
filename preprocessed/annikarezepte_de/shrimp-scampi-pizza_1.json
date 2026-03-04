@@ -1,0 +1,12 @@
+{
+  "dish_name": "Shrimp Scampi Pizza",
+  "description": "Diese Garnelen Scampi Pizza kombiniert zarte Garnelen mit aromatischem Knoblauch und geschmolzenem Käse auf einem knusprigen Pizzaboden.",
+  "ingredients": "[{\"name\": \"Pizzateig\", \"amount\": 1, \"unit\": \"fertiger\"}, {\"name\": \"gekochte Garnelen\", \"amount\": 1, \"unit\": \"Tasse\"}, {\"name\": \"Oliven\\u00f6l\", \"amount\": 2, \"unit\": \"Essl\\u00f6ffel\"}, {\"name\": \"Knoblauchzehen\", \"amount\": 3, \"unit\": \"St\\u00fcck\"}, {\"name\": \"rote Pfefferflocken\", \"amount\": 1, \"unit\": \"Teel\\u00f6ffel\"}, {\"name\": \"geriebener Mozzarella-K\\u00e4se\", \"amount\": 1, \"unit\": \"Tasse\"}, {\"name\": \"geriebener Parmesan-K\\u00e4se\", \"amount\": 0.25, \"unit\": \"Tasse\"}, {\"name\": \"frische Petersilie\", \"amount\": 2, \"unit\": \"Essl\\u00f6ffel\"}, {\"name\": \"Zitrone\", \"amount\": 1, \"unit\": \"St\\u00fcck\"}, {\"name\": \"Salz\", \"amount\": null, \"unit\": null}, {\"name\": \"Pfeffer\", \"amount\": null, \"unit\": null}]",
+  "instructions": "Heizen Sie Ihren Ofen auf 230°C vor. Erhitzen Sie das Olivenöl in einer Pfanne bei mittlerer Hitze. Fügen Sie den gehackten Knoblauch und die roten Pfefferflocken hinzu und braten Sie alles etwa 1 Minute lang. Geben Sie die Garnelen in die Pfanne und garen Sie sie 2-3 Minuten lang, bis sie rosa werden. Würzen Sie mit Salz, Pfeffer und Zitronensaft und nehmen Sie die Pfanne vom Herd. Rollen Sie den Pizzateig auf einer bemehlten Arbeitsfläche aus und legen Sie ihn auf ein Backblech oder einen Pizzastein. Verteilen Sie die angebratenen Garnelen gleichmäßig über den Pizzateig. Streuen Sie den geriebenen Mozzarella und den Parmesan über die Garnelen. Backen Sie die Pizza im vorgeheizten Ofen 12-15 Minuten lang. Garnieren Sie nach dem Backen mit der gehackten Petersilie und servieren Sie heiß.",
+  "category": "Hauptgericht",
+  "prep_time": "10 minutes",
+  "cook_time": "15 minutes",
+  "total_time": "25 minutes",
+  "notes": "Servieren Sie die Pizza auf einem großen Holzbrett und garnieren Sie sie mit Zitronenscheiben und frischen Kräutern.",
+  "tags": "einfach, Garnelen, Käse, Knoblauch, Pizza, schnell"
+}

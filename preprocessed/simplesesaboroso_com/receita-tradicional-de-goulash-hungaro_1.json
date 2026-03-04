@@ -1,0 +1,12 @@
+{
+  "dish_name": "Goulash Húngaro",
+  "description": "Goulash Húngaro é um prato tradicional da culinária da Hungria, conhecido por sua rica combinação de carne, vegetais e especiarias, especialmente o pimentão.",
+  "ingredients": "[{\"name\": \"carne bovina\", \"amount\": 500, \"unit\": \"g\"}, {\"name\": \"cebolas grandes\", \"amount\": 2, \"unit\": \"unidades\"}, {\"name\": \"dentes de alho\", \"amount\": 2, \"unit\": \"unidades\"}, {\"name\": \"piment\\u00f5es vermelhos\", \"amount\": 2, \"unit\": \"unidades\"}, {\"name\": \"piment\\u00e3o doce\", \"amount\": 3, \"unit\": \"colheres de sopa\"}, {\"name\": \"tomates maduros\", \"amount\": 2, \"unit\": \"unidades\"}, {\"name\": \"caldo de carne\", \"amount\": 500, \"unit\": \"ml\"}, {\"name\": \"\\u00f3leo vegetal\", \"amount\": 2, \"unit\": \"colheres de sopa\"}, {\"name\": \"sal\", \"amount\": null, \"unit\": null}, {\"name\": \"pimenta\", \"amount\": null, \"unit\": null}]",
+  "instructions": "Refogar a cebola e o alho no óleo até que fiquem dourados. Adicionar a carne e cozinhar até que esteja bem dourada. Incorporar os pimentões e os tomates e cozinhar por alguns minutos. Adicionar o pimentão doce, misturando bem. Despejar o caldo de carne e deixar cozinhar em fogo baixo por cerca de 2 horas. Tempere com sal e pimenta a gosto. Sirva quente, idealmente com pão fresco.",
+  "category": "Main Course",
+  "prep_time": null,
+  "cook_time": "120 minutes",
+  "total_time": null,
+  "notes": "Você pode usar diferentes tipos de carne, como carneiro ou frango. Sinta-se à vontade para adicionar outros vegetais de sua preferência. Algumas variações incluem cominho, louro e caril.",
+  "tags": "como fazer Goulash Húngaro, Goulash Húngaro, guisado tradicional da hungria, ingredientes Goulash Húngaro, passo a passo para fazer Goulash Húngaro, prato da hungria"
+}

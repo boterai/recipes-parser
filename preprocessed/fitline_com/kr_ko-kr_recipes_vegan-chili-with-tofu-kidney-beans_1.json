@@ -1,0 +1,12 @@
+{
+  "dish_name": "두부 & 강낭콩 비건 칠리",
+  "description": "식물성 단백질이 가득한 든든한 비건 칠리!",
+  "ingredients": "[{\"name\": \"\\ub450\\ubd80\", \"amount\": \"100\", \"unit\": \"g\"}, {\"name\": \"\\uac15\\ub0ad\\ucf69\", \"amount\": \"\\u00bd\", \"unit\": \"\\ucef5\"}, {\"name\": \"\\uc798\\uac8c \\uc36c \\ud1a0\\ub9c8\\ud1a0\", \"amount\": \"\\u00bd\", \"unit\": \"\\ucef5\"}, {\"name\": \"\\uce60\\ub9ac \\ud30c\\uc6b0\\ub354\", \"amount\": \"1\", \"unit\": \"\\uc791\\uc740\\uc220\"}, {\"name\": \"\\uc18c\\uae08, \\ud6c4\\ucd94\", \"amount\": \"\\uc57d\\uac04\", \"unit\": null}]",
+  "instructions": "1. 팬을 달군 후, 으깬 두부를 넣고 노릇하게 볶습니다.\n2. 강낭콩, 토마토, 칠리 파우더를 넣고 섞습니다.\n3. 약불에서 10분간 끓여 맛이 배도록 합니다.\n4. 간을 맞춘 뒤 따뜻하게 즐기세요!",
+  "category": "저녁",
+  "prep_time": "15 minutes",
+  "cook_time": "10 minutes",
+  "total_time": null,
+  "notes": null,
+  "tags": "비건, 칠리, 두부"
+}

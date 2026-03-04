@@ -1,0 +1,12 @@
+{
+  "dish_name": "Bolinho de Banana com Aveia e Pasta de Amendoim",
+  "description": "Um bolinho saudável, rápido e delicioso, ideal para fornecer energia antes do treino.",
+  "ingredients": "[{\"name\": \"bananas maduras\", \"amount\": 2, \"unit\": \"unidades\"}, {\"name\": \"aveia em flocos finos\", \"amount\": 1, \"unit\": \"x\\u00edcara\"}, {\"name\": \"pasta de amendoim integral\", \"amount\": 2, \"unit\": \"colheres de sopa\"}, {\"name\": \"ovo\", \"amount\": 1, \"unit\": \"unidade\"}, {\"name\": \"mel\", \"amount\": 1, \"unit\": \"colher de sopa\"}, {\"name\": \"fermento em p\\u00f3\", \"amount\": 1, \"unit\": \"colher de ch\\u00e1\"}, {\"name\": \"canela\", \"amount\": null, \"unit\": \"a gosto\"}, {\"name\": \"sal\", \"amount\": null, \"unit\": \"uma pitada\"}]",
+  "instructions": "Preaqueça o forno a 180 °C. Em uma tigela, amasse bem as bananas com um garfo. Adicione o ovo, a pasta de amendoim e o mel, misturando bem. Acrescente a aveia, a canela e a pitada de sal. Misture até formar uma massa homogênea. Por último, adicione o fermento e mexa suavemente. Distribua a massa em forminhas de silicone ou em uma forma untada. Leve ao forno por cerca de 20 a 25 minutos, ou até dourar levemente.",
+  "category": "Fit",
+  "prep_time": null,
+  "cook_time": "25 minutes",
+  "total_time": null,
+  "notes": "Faça o teste do palito — se sair limpo, está pronto! Adicione nibs de cacau para um toque crocante. Troque o mel por agave ou xarope de tâmaras para uma versão vegana.",
+  "tags": "alimentação saudável, aveia, bolinho de banana, dieta fitness, energia para treinar, lanche energético, pasta de amendoim, pré-treino saudável, receita fit"
+}

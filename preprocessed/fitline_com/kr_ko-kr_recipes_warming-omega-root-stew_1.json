@@ -1,0 +1,12 @@
+{
+  "dish_name": "따뜻한 오메가 뿌리채소 스튜",
+  "description": "추운 날에 어울리는 뿌리채소와 건강한 지방.",
+  "ingredients": "[{\"name\": \"\\ub2f9\\uadfc\", \"amount\": \"\\u00bd\", \"unit\": \"\\ucef5\"}, {\"name\": \"\\uace0\\uad6c\\ub9c8\", \"amount\": \"\\u00bd\", \"unit\": \"\\ucef5\"}, {\"name\": \"FitLine microSolve\\u207a Omega 3\", \"amount\": \"37\", \"unit\": \"\\ubc29\\uc6b8\"}, {\"name\": \"\\uc2e0\\uc120\\ud558\\uac70\\ub098 \\uac74\\uc870\\ud55c \\ud5c8\\ube0c\", \"amount\": null, \"unit\": null}, {\"name\": \"\\ubb3c \\ub610\\ub294 \\ucc44\\uc18c \\uc721\\uc218\", \"amount\": null, \"unit\": null}, {\"name\": \"\\uc18c\\uae08\\uacfc \\ud6c4\\ucd94\", \"amount\": null, \"unit\": null}]",
+  "instructions": "1. 중간 크기의 냄비에 당근과 고구마를 넣습니다. 물 또는 채소 육수를 부어 채소가 잠기도록 합니다.\n2. 끓기 시작하면 불을 줄이고 채소가 부드러워질 때까지 약 10~15분간 은근히 끓입니다.\n3. 불에서 내린 후 FitLine microSolve⁺ Omega 3를 넣고 잘 섞어줍니다.\n4. 허브와 소금, 후추로 기호에 맞게 간을 합니다.\n5. 따뜻하게 제공하세요. 더 부드럽고 크리미한 식감을 원하시면 제공 전에 블렌더로 갈아주세요.",
+  "category": null,
+  "prep_time": "10 minutes",
+  "cook_time": "15 minutes",
+  "total_time": null,
+  "notes": null,
+  "tags": "비건, 스튜"
+}

@@ -1,0 +1,12 @@
+{
+  "dish_name": "藜麦面条",
+  "description": "无麸质藜麦面条粉制作食谱，结合了营养价值高的天然糙米和有机荞麦，添加了藜麦。",
+  "ingredients": "[{\"name\": \"\\u85dc\\u9ea6\\u9762\\u6761\\u7c89\", \"amount\": null, \"unit\": null}, {\"name\": \"\\u5929\\u7136\\u7cd9\\u7c73\", \"amount\": null, \"unit\": null}, {\"name\": \"\\u6709\\u673a\\u835e\\u9ea6\", \"amount\": null, \"unit\": null}]",
+  "instructions": "藜麦面条可以采用几种机器来进行制。",
+  "category": "Main Course",
+  "prep_time": null,
+  "cook_time": null,
+  "total_time": null,
+  "notes": "此面粉可制作手工面条、板面、乌冬面、饺子皮等。",
+  "tags": "无麸质, 藜麦, 面条"
+}

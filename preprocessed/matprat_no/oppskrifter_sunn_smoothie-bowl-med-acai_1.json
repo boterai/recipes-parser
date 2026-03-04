@@ -1,0 +1,12 @@
+{
+  "dish_name": "Smoothie bowl med acai",
+  "description": null,
+  "ingredients": "[{\"name\": \"eplejuice\", \"amount\": 2.5, \"unit\": \"dl\"}, {\"name\": \"frosne mangobiter\", \"amount\": 200, \"unit\": \"g\"}, {\"name\": \"bl\\u00e5b\\u00e6r\", \"amount\": 100, \"unit\": \"g\"}, {\"name\": \"frossen acai\", \"amount\": 2, \"unit\": \"pk\"}, {\"name\": \"frossen banan\", \"amount\": 0.5, \"unit\": \"stk.\"}, {\"name\": \"egg\", \"amount\": 2, \"unit\": \"stk.\"}, {\"name\": \"revet frisk ingef\\u00e6r\", \"amount\": 0.5, \"unit\": \"ts\"}, {\"name\": \"yoghurt naturell\", \"amount\": 3, \"unit\": \"ss\"}, {\"name\": \"sesamfr\\u00f8\", \"amount\": 1, \"unit\": \"ss\"}]",
+  "instructions": "1. Hell eplejuice, eventuelt melk i blenderen. 2. Ha i frossen mango, blåbær, acai og banan i blenderen. Har du ikke frossen banan, kan smoothien søtes med honning. Ha også i egg og revet ingefær. Får du ikke tak i frossen acai, kan du erstatte med tilsvarende mengde blåbær og i tillegg bruke acai i pulverform. Det fås kjøpt på helsekostbutikker. Tilsett 1-2 ss i smoothieblandingen. 3. Kjør sammen til en jevn og tykk smoothie, ha i yoghurt. 4. Hell blandingen i to dype boller, og pynt eventuelt med mer mango og blåbær. Dryss også litt sesamfrø på toppen.",
+  "category": "Turmat",
+  "prep_time": null,
+  "cook_time": "Under 20 min",
+  "total_time": null,
+  "notes": "Får du ikke tak i frossen acai, kan du erstatte med tilsvarende mengde blåbær og i tillegg bruke acai i pulverform.",
+  "tags": "smoothie, bowl, acai"
+}

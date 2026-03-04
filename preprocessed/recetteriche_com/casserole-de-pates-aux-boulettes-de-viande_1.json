@@ -1,0 +1,12 @@
+{
+  "dish_name": "Casserole de pâtes aux boulettes de viande",
+  "description": "Une casserole de pâtes rapide et délicieuse avec des boulettes de viande, parfaite pour les soirs de semaine.",
+  "ingredients": "[{\"name\": \"p\\u00e2tes rotini\", \"amount\": 16, \"unit\": \"onces\"}, {\"name\": \"sauce spaghetti\", \"amount\": 24, \"unit\": \"onces\"}, {\"name\": \"lait\", \"amount\": 1, \"unit\": \"tasse\"}, {\"name\": \"eau\", \"amount\": 2, \"unit\": \"tasses\"}, {\"name\": \"boulettes de viande surgel\\u00e9es\", \"amount\": 14, \"unit\": \"onces\"}, {\"name\": \"poudre d'ail\", \"amount\": 1, \"unit\": \"cuill\\u00e8re \\u00e0 caf\\u00e9\"}, {\"name\": \"poudre d'oignon\", \"amount\": 1, \"unit\": \"cuill\\u00e8re \\u00e0 caf\\u00e9\"}, {\"name\": \"basilic s\\u00e9ch\\u00e9\", \"amount\": 1, \"unit\": \"cuill\\u00e8re \\u00e0 caf\\u00e9\"}, {\"name\": \"origan s\\u00e9ch\\u00e9\", \"amount\": 1, \"unit\": \"cuill\\u00e8re \\u00e0 caf\\u00e9\"}, {\"name\": \"sel\", \"amount\": 1, \"unit\": \"cuill\\u00e8re \\u00e0 caf\\u00e9\"}, {\"name\": \"fromage mozzarella r\\u00e2p\\u00e9\", \"amount\": 2, \"unit\": \"tasses\"}]",
+  "instructions": "1. Préchauffer le four à 425°F (220°C). 2. Dans un plat de cuisson, mélanger les pâtes, la sauce, le lait, l'eau, les boulettes de viande, et les épices. 3. Couvrir avec du papier d'aluminium et cuire pendant 45 minutes. 4. Vérifier la cuisson des pâtes, ajouter du fromage et cuire à découvert pendant 10-15 minutes.",
+  "category": "Main Course",
+  "prep_time": "10 minutes",
+  "cook_time": "55 minutes",
+  "total_time": "1 heure 5 minutes",
+  "notes": "Peut être personnalisé avec différents types de pâtes ou de légumes. Les restes se conservent bien au réfrigérateur.",
+  "tags": "casserole, pâtes, viande, rapide, dîner"
+}

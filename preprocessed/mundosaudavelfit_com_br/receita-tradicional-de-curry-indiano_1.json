@@ -1,0 +1,12 @@
+{
+  "dish_name": "Curry Indiano",
+  "description": "Um clássico cheio de sabor, este prato é uma explosão de sabores, cores e aromas que transporta para as ruas da Índia.",
+  "ingredients": "[{\"name\": \"carne de frango ou cordeiro\", \"amount\": 500, \"unit\": \"g\"}, {\"name\": \"cebolas grandes picadas\", \"amount\": 2, \"unit\": \"unidades\"}, {\"name\": \"dentes de alho picados\", \"amount\": 3, \"unit\": \"unidades\"}, {\"name\": \"peda\\u00e7o de gengibre ralado\", \"amount\": 1, \"unit\": \"unidade\"}, {\"name\": \"pasta de tomate\", \"amount\": 3, \"unit\": \"colheres de sopa\"}, {\"name\": \"\\u00f3leo ou ghee\", \"amount\": 2, \"unit\": \"colheres de sopa\"}, {\"name\": \"pimenta em p\\u00f3\", \"amount\": 1, \"unit\": \"colher de sopa\"}, {\"name\": \"c\\u00farcuma\", \"amount\": 1, \"unit\": \"colher de sopa\"}, {\"name\": \"cominho\", \"amount\": 1, \"unit\": \"colher de sopa\"}, {\"name\": \"coentro em p\\u00f3\", \"amount\": 1, \"unit\": \"colher de sopa\"}, {\"name\": \"leite de coco\", \"amount\": 200, \"unit\": \"ml\"}, {\"name\": \"sal\", \"amount\": null, \"unit\": \"a gosto\"}]",
+  "instructions": "1. Refogue a cebola, alho e gengibre. 2. Cozinhe a carne. 3. Misture as especiarias e pasta de tomate. 4. Cozinhe com leite de coco. 5. Ajuste o tempero. 6. Sirva quente.",
+  "category": "Main Course",
+  "prep_time": null,
+  "cook_time": "30 minutes",
+  "total_time": null,
+  "notes": "Versão Vegetariana: Troque a carne por vegetais como batata, couve-flor ou tofu.",
+  "tags": "curry indiano, receitas tradicionais indianas, especiarias indianas, comida asiática caseira"
+}

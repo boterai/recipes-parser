@@ -1,0 +1,12 @@
+{
+  "dish_name": "Bolonjez",
+  "description": "Gusti umak od mljevenog mesa klasik koji se može kombinirati s različitim namirnicama i jelima.",
+  "ingredients": "[{\"name\": \"mije\\u0161ano mljeveno meso\", \"amount\": 500, \"unit\": \"g\"}, {\"name\": \"velika glavica luka\", \"amount\": 1, \"unit\": null}, {\"name\": \"mrkva\", \"amount\": 1, \"unit\": null}, {\"name\": \"re\\u017enja \\u010de\\u0161njaka\", \"amount\": 2, \"unit\": null}, {\"name\": \"pasirana raj\\u010dica ili sjeckani pelati\", \"amount\": 500, \"unit\": \"ml\"}, {\"name\": \"ulja\", \"amount\": 2, \"unit\": \"\\u017elice\"}, {\"name\": \"crnog vina\", \"amount\": 1, \"unit\": \"dcl\"}, {\"name\": \"sol\", \"amount\": null, \"unit\": null}, {\"name\": \"papar\", \"amount\": null, \"unit\": null}, {\"name\": \"crvena paprika\", \"amount\": null, \"unit\": null}, {\"name\": \"per\\u0161in\", \"amount\": null, \"unit\": null}]",
+  "instructions": "Sitno nasjeckajte luk, naribajte mrkvu i protisnite češnjak. Na ulju dinstajte luk 5 minuta, zatim dodajte mrkvu i češnjak. Kad povrće omekša, dodajte meso i miješajte dok se grudice ne razbiju. Nakon 10 minuta podlijte vinom i po potrebi dodajte malo temeljca. Kuhajte 20 minuta, zatim dodajte rajčicu ili pelate i začine. Po želji dodajte još vode za rjeđi umak. Kuhajte još 10 minuta na laganoj vatri. Poslužite s tjesteninom, u tikvicama, lazanjama ili musaki.",
+  "category": "Main Course",
+  "prep_time": null,
+  "cook_time": "30 minutes",
+  "total_time": null,
+  "notes": "Sastojci za ovo jelo nisu skupi i jednostavno ih je nabaviti, no okus će biti bolji ako nabavite kvalitetno meso.",
+  "tags": "bolonjez, umak, talijanska kuhinja"
+}

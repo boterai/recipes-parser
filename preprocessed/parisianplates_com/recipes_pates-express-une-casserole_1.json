@@ -1,0 +1,12 @@
+{
+  "dish_name": "Pâtes en une casserole avec tomates et basilic",
+  "description": "Délicieuses pâtes rapides en une casserole prêtes en 15 minutes.",
+  "ingredients": "[{\"name\": \"p\\u00e2tes\", \"amount\": 250, \"unit\": \"g\"}, {\"name\": \"oignon\", \"amount\": 1, \"unit\": null}, {\"name\": \"gousse d'ail\", \"amount\": 1, \"unit\": null}, {\"name\": \"tomates cerises\", \"amount\": 250, \"unit\": \"g\"}, {\"name\": \"basilic\", \"amount\": \"1/2 bouquet\", \"unit\": null}, {\"name\": \"concentr\\u00e9 de tomate\", \"amount\": 2, \"unit\": \"cuill\\u00e8res \\u00e0 soupe\"}, {\"name\": \"eau\", \"amount\": 400, \"unit\": \"ml\"}, {\"name\": \"cr\\u00e8me\", \"amount\": 200, \"unit\": \"g\"}, {\"name\": \"parmesan r\\u00e2p\\u00e9\", \"amount\": 30, \"unit\": \"g\"}, {\"name\": \"sel\", \"amount\": \"1/2\", \"unit\": \"cuill\\u00e8re \\u00e0 caf\\u00e9\"}, {\"name\": \"poivre\", \"amount\": null, \"unit\": null}]",
+  "instructions": "1. Coupez l'oignon en fines lamelles et hachez finement l'ail. Coupez les tomates cerises en deux et déchirez grossièrement les feuilles de basilic. 2. Mettez les pâtes, les tomates préparées, l'oignon, l'ail, le concentré de tomate, l'eau, la crème, le basilic, le sel et le poivre dans une marmite et portez à ébullition avec le couvercle fermé. 3. Laissez mijoter les pâtes sans couvercle à feu moyen pendant 8-10 minutes. Remuez de temps en temps pour éviter que ça colle. Juste avant la fin, ajoutez le parmesan râpé et mélangez bien.",
+  "category": "Plats Principaux",
+  "prep_time": "5 minutes",
+  "cook_time": "10 minutes",
+  "total_time": "15 minutes",
+  "notes": "Ces pâtes rapides en une seule casserole sont idéales pour les journées chargées, car tous les ingrédients cuisent ensemble. Vous pouvez facilement modifier cette recette en ajoutant d'autres légumes comme des épinards, des courgettes ou des poivrons.",
+  "tags": "rapide, facile, végétarien, italien"
+}

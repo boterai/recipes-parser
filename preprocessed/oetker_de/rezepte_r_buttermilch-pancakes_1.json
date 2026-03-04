@@ -1,0 +1,12 @@
+{
+  "dish_name": "Buttermilch-Pancakes",
+  "description": "Probier dieses einfache Buttermilch-Pancakes Rezept aus und genieße fluffige Pfannkuchen mit Honig oder Ahornsirup.",
+  "ingredients": "[{\"name\": \"Eiwei\\u00df\", \"amount\": 3, \"unit\": \"\\u0448\\u0442.\"}, {\"name\": \"Weizenmehl\", \"amount\": 250, \"unit\": \"\\u0433\"}, {\"name\": \"Dr. Oetker Natron\", \"amount\": 1, \"unit\": \" gestr. TL\"}, {\"name\": \"Zucker\", \"amount\": 1, \"unit\": \"\\u0441\\u0442.\\u043b.\"}, {\"name\": \"Dr. Oetker Vanillin-Zucker\", \"amount\": 1, \"unit\": \"\\u043f\\u0430\\u043a\\u0435\\u0442\"}, {\"name\": \"Eigelb\", \"amount\": 3, \"unit\": \"\\u0448\\u0442.\"}, {\"name\": \"Buttermilch\", \"amount\": 500, \"unit\": \"\\u043c\\u043b\"}, {\"name\": \"Speise\\u00f6l\", \"amount\": null, \"unit\": \"\\u043f\\u043e \\u0432\\u043a\\u0443\\u0441\\u0443\"}, {\"name\": \"Butter\", \"amount\": null, \"unit\": \"\\u043f\\u043e \\u0432\\u043a\\u0443\\u0441\\u0443\"}, {\"name\": \"Honig oder Ahornsirup\", \"amount\": null, \"unit\": \"\\u043f\\u043e \\u0432\\u043a\\u0443\\u0441\\u0443\"}]",
+  "instructions": "1. Eiweiß in einem Rührbecher mit einem Mixer (Rührstäbe) auf höchster Stufe sehr steif schlagen. Mehl in einer Rührschüssel mit Natron, Zucker und Vanillin-Zucker mischen. Eigelb zugeben, zunächst mit wenig Mehl verrühren, dann Buttermilch nach und nach unterrühren, darauf achten, dass keine Klümpchen entstehen. Eischnee unterheben. 2. Öl in einer beschichteten Pfanne erhitzen. Für jeden Pfannkuchen etwa 2 Esslöffel Teig hineingeben und bei mittlerer Hitze von beiden Seiten goldbraun backen. Die heißen Pfannkuchen mit Butter und Honig oder Ahornsirup servieren.",
+  "category": "Dessert",
+  "prep_time": "20 minutes",
+  "cook_time": null,
+  "total_time": null,
+  "notes": "Für Heidelbeerpfannkuchen 1 Gl. Heidelbeeren (Abtropfgew. 205 g) auf einem Sieb gut abtropfen lassen und die Früchte kurz mit kaltem Wasser abspülen. Das Obst vorsichtig unter die Pfannkuchenmasse heben.",
+  "tags": "Pancakes, Buttermilch, Frühstück, Dessert"
+}

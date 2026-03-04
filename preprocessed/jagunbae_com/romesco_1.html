@@ -1,0 +1,1151 @@
+<html lang="ko" class="has-dark-text"><head>
+
+    <title>로메스코 소스 레시피</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="preload" as="style" href="/assets/built/screen.css?v=1a38054b2b">
+    <link rel="preload" as="script" href="/assets/built/source.js?v=1a38054b2b">
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.css?v=1a38054b2b">
+
+    <style>
+        :root {
+            --background-color: #ffffff
+        }
+    </style>
+
+    <script>
+        /* The script for calculating the color contrast has been taken from
+        https://gomakethings.com/dynamically-changing-the-text-color-based-on-background-color-contrast-with-vanilla-js/ */
+        var accentColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color');
+        accentColor = accentColor.trim().slice(1);
+        var r = parseInt(accentColor.substr(0, 2), 16);
+        var g = parseInt(accentColor.substr(2, 2), 16);
+        var b = parseInt(accentColor.substr(4, 2), 16);
+        var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+        var textColor = (yiq >= 128) ? 'dark' : 'light';
+
+        document.documentElement.className = `has-${textColor}-text`;
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.32.2/tocbot.css">
+    <meta name="description" content="파프리카의 잠재력을 최대로 뽑아낸 스페인식 소스 만들기.">
+    <link rel="icon" href="https://jagunbae.com/content/images/size/w256h256/2023/12/jagunbae-logo.png" type="image/png">
+    <link rel="canonical" href="https://jagunbae.com/romesco/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="작은배">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="로메스코 소스 레시피">
+    <meta property="og:description" content="파프리카의 잠재력을 최대로 뽑아낸 스페인식 소스 만들기.">
+    <meta property="og:url" content="https://jagunbae.com/romesco/">
+    <meta property="og:image" content="https://jagunbae.com/content/images/2022/03/IMG_5487-1.webp">
+    <meta property="article:published_time" content="2022-03-18T23:00:00.000Z">
+    <meta property="article:modified_time" content="2024-07-09T11:41:17.000Z">
+    <meta property="article:tag" content="비건 레시피">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="로메스코 소스 레시피">
+    <meta name="twitter:description" content="파프리카의 잠재력을 최대로 뽑아낸 스페인식 소스 만들기.">
+    <meta name="twitter:url" content="https://jagunbae.com/romesco/">
+    <meta name="twitter:image" content="https://jagunbae.com/content/images/2022/03/IMG_5487-1.webp">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="CHEESYLAZY">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="비건 레시피">
+    <meta property="og:image:width" content="800">
+    <meta property="og:image:height" content="600">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "작은배",
+        "url": "https://jagunbae.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://jagunbae.com/content/images/2023/12/jagunbae-logo-1.png",
+            "width": 60,
+            "height": 60
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "CHEESYLAZY",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://jagunbae.com/content/images/2022/03/---300.jpeg",
+            "width": 300,
+            "height": 300
+        },
+        "url": "https://jagunbae.com/author/cheesylazy/",
+        "sameAs": []
+    },
+    "headline": "로메스코 소스 레시피",
+    "url": "https://jagunbae.com/romesco/",
+    "datePublished": "2022-03-18T23:00:00.000Z",
+    "dateModified": "2024-07-09T11:41:17.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://jagunbae.com/content/images/2022/03/IMG_5487-1.webp",
+        "width": 800,
+        "height": 600
+    },
+    "keywords": "비건 레시피",
+    "description": "파프리카의 잠재력을 최대로 뽑아낸 스페인식 소스 만들기.",
+    "mainEntityOfPage": "https://jagunbae.com/romesco/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 6.19">
+    <link rel="alternate" type="application/rss+xml" title="작은배" href="https://jagunbae.com/rss/">
+    <script defer="" src="https://cdn.jsdelivr.net/ghost/portal@~2.64/umd/portal.min.js" data-i18n="true" data-ghost="https://jagunbae.com/" data-key="1ad7dde3b14aef10e6758bb5e5" data-api="https://jagunbae.com/ghost/api/content/" data-locale="ko" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style><script async="" src="https://js.stripe.com/v3/"></script>
+    <script defer="" src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="1ad7dde3b14aef10e6758bb5e5" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://jagunbae.com/" data-locale="ko" crossorigin="anonymous"></script>
+    
+    <link href="https://jagunbae.com/webmentions/receive/" rel="webmention">
+    <script defer="" src="/public/cards.min.js?v=1a38054b2b"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=1a38054b2b">
+    <script defer="" src="/public/member-attribution.min.js?v=1a38054b2b"></script><style>:root {--ghost-accent-color: #3737b3;}</style>
+    <link rel="stylesheet" as="style" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script src="https://unpkg.com/tachyonjs@2.0.1/tachyon.min.js" integrity="sha384-4iJteL1FYnj4Ju83AJvNthpx5gZ1QaXCamXhY3lxhAjTNXUN+NXq5LQV/fXOSRme" type="module" crossorigin="" defer=""></script>
+<style>
+  
+figcaption {
+  font-size: 1.5rem;
+}
+
+.gh-content.gh-canvas.is-body {
+  margin-bottom: clamp(12px,.45vw + 10.18px,16px);
+}
+
+.gh-content {
+    position: relative;
+ }
+
+.gh-toc {
+    position: relative !important;
+}
+
+.toc-list {
+    overflow: hidden;
+    list-style: none;
+    margin: 0;
+    padding-left: 10px;
+}
+
+@media (max-width: 767px) {
+    .gh-toc {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .gh-content {
+        font-size: 17px !important;
+    }
+}
+
+@media (min-width: 1300px) {
+    .gh-sidebar { /* Corrected from toc-sidebar to gh-sidebar */
+        bottom: 0;
+        grid-column: full-start/main-start;
+        margin-left: 2vmin;
+        margin-right: 4vmin;
+        margin-top: 4vmin;
+        position: absolute;
+        top: 0;
+        z-index: 99;
+    }
+
+    .gh-toc {
+        position: sticky;
+        top: 4vmin;
+    }
+}
+
+@media (min-width: 1600px) {
+    .gh-sidebar { /* Corrected from toc-sidebar to gh-sidebar */
+        margin-left: 16vmin;
+    }
+}
+
+.gh-toc .is-active-link::before {
+    background-color: var(--ghost-accent-color); 
+    font-weight: 700;
+}
+
+.toc {
+    overflow-y: auto;
+}
+
+.toc > .toc-list li {
+    list-style: none;
+}
+
+a.toc-link {
+    color: currentColor;
+    height: 100%;
+    text-decoration: none; /* Added based on the .gh-toc a rule */
+}
+
+.toc-link::before {
+    background-color: #eee;
+    content: " ";
+    display: inline-block;
+    height: inherit;
+    left: 0;
+    margin-top: -1px;
+    position: absolute;
+    width: 2px;
+}
+
+    .kg-image {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: cover;
+    }
+
+  .gh-article-image {
+    grid-column: main !important;
+  }
+  
+  .box {
+  margin: 0 auto;
+  margin-bottom: 20px;
+  width: 90%; /* Responsive width */
+  max-width: 600px; /* Maximum width for larger screens */
+  border-bottom: 30px solid #3737b3;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  }
+
+.box h2 {
+  color: #fff;
+  background: #3737b3;
+  padding: 10px 20px;
+  font-size: 20px;
+  font-weight: 700;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  margin: 0;
+}
+
+.box ul {
+  position: relative;
+  background: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.box ul:hover li {
+  opacity: 0.2;
+}
+
+.box ul li {
+  list-style: none;
+  padding: 10px;
+  width: 100%;
+  background: #fff;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+  transition: transform 0.5s;
+  box-sizing: border-box;
+  margin-top: 0;
+}
+
+.box ul li:hover {
+  transform: scale(1.05);
+  z-index: 5;
+  background: rgba(225, 71, 174, 0.11);
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  color: #444;
+  opacity: 1;
+}
+
+.box .box-link {
+  color: #444;
+}
+
+.box ul li span {
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  background: rgba(225, 71, 174, 0.11);
+  color: #333;
+  display: inline-block;
+  border-radius: 50%;
+  margin-right: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  transform: translateY(-2px);
+  transition: transform 0.3s ease-in-out, background 0.3s, color 0.3s;
+}
+
+.box ul li:hover span {
+  background: #fff;
+  color: #25bcff;
+  animation: heartbeat 1s infinite;
+}
+
+/* Responsive layout */
+@media (min-width: 769px) {
+  .box ul li {
+    flex: 1 0 48%; /* Two columns on larger screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .box ul li {
+    flex: 1 0 100%; /* Single column on smaller screens */
+    font-size: 16px;
+  }
+  .box h2 {
+    font-size: 18px;
+  }
+  .box {
+    max-width: 300px;
+  }
+}
+
+    @keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.2);
+    }
+    50% {
+        transform: scale(1);
+    }
+    75% {
+        transform: scale(1.2);
+    }
+    }
+
+    .gh-footer-logo img {
+      max-height: 35px;
+    }
+  
+    .home-highlight {
+      font-style: normal;
+      background-color: #ADD8E6;
+    }
+
+    .gh-canvas, .kg-width-full.kg-content-wide {
+      --main: min(var(--content-width,820px),100% - var(--container-gap) * 2) !important;
+    }
+
+    .gh-content a {
+      text-underline-offset: 4px;
+    }
+  
+    .home-description {
+      font-family: "Pretendard Variable", system-ui, sans-serif;
+      font-size: 38px;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 920px;
+      padding-bottom: clamp(40px,2.73vw + 29.09px,64px);
+    }
+
+    .Gothic {
+      font-family: system-ui, sans-serif;
+      color: #3737b3;
+      text-decoration: underline;
+      text-underline-offset: 8px;
+      font-weight: 700;
+      position: relative;
+      display: inline-block; /* Ensure the element is treated as inline-block for better animation control */
+    }
+
+    .Gothic:hover {
+      -webkit-mask-image: linear-gradient(-75deg, rgba(55, 55, 179, 0.3) 30%, #3737b3 50%, rgba(55, 55, 179, 0.3) 70%);
+      -webkit-mask-size: 200%;
+      animation: shine 2s infinite;
+    }
+
+    @-webkit-keyframes shine {
+      from {
+        -webkit-mask-position: 150%;
+      }
+      to {
+        -webkit-mask-position: -50%;
+      }
+    }
+
+    @media (max-width: 768px) {
+    .home-description {
+        font-size: 24px;
+        padding: 0 10px;
+      }
+    .gh-footer-signup-subhead {
+      font-size: 1.5rem;
+      }       
+    .page-template .gh-content>:last-child:not(.kg-width-full) {
+      margin-bottom: 20vw;
+    }
+    }
+
+    .page-template .gh-article-header {
+      margin-block: 80px 24px;
+    }
+  
+    .gh-navigation-menu li.nav-current a {
+        text-decoration: underline;
+        text-decoration-color: #3737b3;
+        text-decoration-style: wavy;
+        text-underline-offset: 3px;
+    }
+
+    .gh-footer-menu li.nav-current a {
+      text-decoration: underline;
+        text-decoration-color: #3737b3;
+        text-decoration-style: wavy;
+        text-underline-offset: 3px;
+    }
+  
+  .featured-star {
+    position: absolute;
+    top: 10px;
+    right: 10px; /* Change from left to right */
+    background: white;
+    color: black;
+    font-size: 18px;
+    padding: 5px 8px;
+    border-radius: 50%;
+    z-index: 1;
+  }
+
+  @media (max-width: 767px) {
+    .page-template .gh-article-header {
+    margin-block: 40px 4px !important;
+  }
+  }
+
+  .gh-content.gh-canvas.is-body {
+    margin-top: clamp(12px,.45vw + 10.18px,16px);
+  }
+  
+  .gh-viewport {
+    max-width: 100%;
+    overflow: clip;
+  }
+  
+  html, body {
+  scroll-behavior: smooth;
+  max-width: 100%;
+  }
+  
+  .centered-heading {
+    font-size: 3.5em; /* H1 size */
+    text-align: center;
+    max-width: 100%; /* Ensure the heading takes up full width to center align text */
+    padding-bottom: clamp(40px,2.73vw + 29.09px,64px);
+    margin-block: 72px 32px;
+  }
+  
+  ::selection {
+    background-color: #ADD8E6;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+    min-height: 0;
+    height: auto;
+    vertical-align: middle;
+    border-radius: 5px;
+    margin: 0 auto;
+  }
+
+  .gh-head {
+    opacity: 0.9;
+  }
+
+  .gh-navigation-logo img {
+    margin-left: unset;
+  }
+
+  li[class*="nav-"] a {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: fit-content;
+    line-height: 1.5;
+    font-weight: inherit;
+    white-space: nowrap;
+  }
+
+  li[class*="nav-"].nav-current a:after,
+  .home-template li[class*="nav-"].nav-current a:after,
+  li[class*="nav-"] a:active:after,
+  li[class*="nav-"] a:focus:after,
+  li[class*="nav-"] a:hover:after {
+    background-color: transparent;
+  }
+
+  /* Mobile Styles */
+  @media (max-width: 767px) {
+    .gh-archive {
+      margin-block: 40px 4px !important;
+    }
+    
+    .centered-heading {
+      font-size: 2.2em;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .centered-heading {
+      font-size: 2.6em;
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 991px) {
+    .gh-head-open #gh-head .gh-head-menu,
+    #gh-head .gh-head-menu .nav {
+      align-items: flex-start;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      margin: 0 auto;
+      max-width: 100%;
+    }
+    .gh-head-menu .nav li {
+      text-align: left;
+    }
+    .gh-head-menu .nav li.hasDropDown {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+    .gh-head-menu ul.isDropDown {
+      list-style: none;
+      text-align: left;
+      margin: 0;
+      padding: 0 0 0 10px;
+    }
+    .gh-head-menu ul.isDropDown li {
+      margin: 0;
+      padding: 0;
+      text-align: left;
+    }
+    .gh-head-menu ul.isDropDown li a:before {
+      content: " - ";
+    }
+    .gh-head-menu ul.isDropDown li a {
+      font-size: 2rem;
+      line-height: 1.5;
+    }
+    .has-cover.gh-head {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      flex-wrap: wrap;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      z-index: 10;
+      max-width: 100%;
+      height: 100vh;
+      padding-top: 72px;
+      background-color: var(--background-secondary);
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.96);
+    }
+    .has-cover.gh-head-open {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+      transition: all 0.5s cubic-bezier(0.694, 0, 0.335, 1);
+    }
+    .has-cover.gh-head-menu {
+      max-width: 100%;
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+    li[class*="nav-"] {
+      margin-bottom: 16px;
+    }
+    #gh-head .gh-head-inner {
+      grid-template-columns: 1fr;
+      height: auto;
+      position: relative !important;
+    }
+  }
+
+  /* Desktop Styles */
+  
+  @media (min-width: 768px) {
+    .gh-article-image img {
+    max-width: 100%;
+  }
+  }
+  
+  @media (min-width: 768px) {
+    .gh-footer {
+      margin-top: 4vw;
+    }
+  }
+
+  @media (min-width: 991.1px) {
+    .has-cover.gh-head {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      max-width: 100%;
+    }
+    .has-cover.gh-head-menu {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      max-width: 100%;
+    }
+    li[class*="nav-"]:not(:last-child) {
+      margin-right: 24px;
+    }
+    li[class*="nav-"][class*="--hasDropDown"] {
+      position: relative;
+    }
+    li[class*="nav-"][class*="--hasDropDown"] a:after {
+      content: "▼";
+      padding-left: 5px;
+      font-size: 12px;
+      color: inherit;
+    }
+    li[class*="nav-"][class*="--hasDropDown"] .isDropDown a:after {
+      display: none;
+    }
+    li[class*="nav-"][class*="--hasDropDown"]:focus-within > li[class*="nav-"]:after,
+    li[class*="nav-"][class*="--hasDropDown"]:hover > li[class*="nav-"]:after {
+      background-color: transparent;
+    }
+    li[class*="nav-"][class*="--hasDropDown"]:focus-within .isDropDown,
+    li[class*="nav-"][class*="--hasDropDown"]:hover .isDropDown {
+      opacity: 1;
+      visibility: visible;
+    }
+    .isDropDown {
+      z-index: 1;
+      opacity: 0;
+      visibility: hidden;
+      position: absolute;
+      margin: 0;
+      list-style: none;
+      padding: 10px;
+      border-radius: 6px;
+      background: #f4f0e8;
+      color: inherit;
+    }
+    .isDropDown li[class*="nav-"] {
+      margin-right: 0 !important;
+    }
+    .isDropDown li[class*="nav-"]:not(:last-child) {
+      margin-bottom: 0;
+    }
+    li[class*="nav-"] a:after {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 2px;
+      position: absolute;
+      bottom: -2px;
+      background-color: transparent;
+    }
+  }
+
+  mark {
+    background-color: #ADD8E6;
+  }
+  
+  .home-description {
+    margin-top: 2em;
+  }
+
+  .gh-form {
+    margin: 0 auto;
+    margin-top: 3em;
+  }
+
+  @media (max-width: 767px) {
+    .gh-form {
+      max-width: 320px !important;
+    }
+  }
+
+  .gh-container {
+    margin-top: 32px !important;
+  }
+
+  .gh-content {
+    font-size: 18px;
+  }
+
+  a.toc-link {
+    height: 0% !important;
+  }
+
+  /* === Improved pagination styling === */
+
+.gh-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 3rem 0 0;
+  padding: 1.5rem 0;
+}
+
+.gh-pagination a {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--accent-color, #111);
+  color: var(--accent-color, #111);
+  text-decoration: none;
+  border-radius: 999px;
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.gh-pagination a:hover {
+  background-color: var(--ghost-accent-color);;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* Smaller, secondary style for the "oldest" button */
+.gh-pagination .gh-pagination-oldest {
+  padding: 0.4rem 0.8rem;
+  border-color: rgba(0,0,0,0.3);
+}
+
+.gh-pagination .gh-pagination-oldest:hover {
+  border-color: var(--accent-color, #111);
+  opacity: 1;
+}
+
+/* Responsive adjustment */
+@media (max-width: 600px) {
+  .gh-pagination {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+  }
+}
+
+
+  .gh-navigation:not(.is-dropdown-loaded) .gh-navigation-menu .nav>li {
+    opacity: 1 !important;
+  }
+
+  .gh-oldest-top {
+    margin: 1.5rem 0 1rem;
+}
+
+.gh-oldest-top-link {
+    display: inline-block;
+    padding: 0.6em 1.2em;
+    border-radius: 999px;
+    background-color: var(--ghost-accent-color);
+    color: #fff;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.gh-oldest-top-link:hover,
+.gh-oldest-top-link:focus {
+    opacity: 0.9;
+}
+
+  @media (max-width: 600px) {
+    .gh-oldest-top-link {
+        font-size: 85%;
+        padding: 0.45em 1em;
+    }
+}
+
+  .gh-container.is-list .gh-card-image {
+    aspect-ratio: 16 / 9 !important;
+  }
+
+</style>
+
+<style>.App{text-align:center}.App-logo{height:40vmin;pointer-events:none}@media (prefers-reduced-motion: no-preference){.App-logo{animation:App-logo-spin infinite 20s linear}}.App-header{background-color:#282c34;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:calc(10px + 2vmin);color:#fff}.App-link{color:#61dafb}@keyframes App-logo-spin{0%{transform:rotate(0)}to{transform:rotate(360deg)}}
+/*$vite$:1*/</style></head>
+<body class="post-template tag-food has-sans-title has-sans-body">
+
+<div class="gh-viewport">
+    
+    <header id="gh-navigation" class="gh-navigation is-left-logo gh-outer">
+    <div class="gh-navigation-inner gh-inner">
+
+        <div class="gh-navigation-brand">
+            <a class="gh-navigation-logo is-title" href="https://jagunbae.com">
+                    <img src="https://jagunbae.com/content/images/2023/12/jagunbae-logo-1.png" alt="작은배">
+            </a>
+            <button class="gh-burger gh-icon-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"></path></svg>                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path></svg>            </button>
+        </div>
+
+        <nav class="gh-navigation-menu">
+            <ul class="nav">
+    <li class="nav-sogae"><a href="https://jagunbae.com/about/">소개</a></li>
+    <li class="nav-peurogeuraem"><a href="https://jagunbae.com/tag/event/">프로그램</a></li>
+    <li class="nav-caeg-zine"><a href="https://jagunbae.com/tag/books/">책&amp;Zine</a></li>
+    <li class="nav-paskaeseuteu"><a href="https://jagunbae.com/tag/podcast/">팟캐스트</a></li>
+    <li class="nav-akaibeu"><a href="https://jagunbae.com/tag/archive/">아카이브</a></li>
+    <li class="nav-huweonja-jeonyong"><a href="https://jagunbae.com/tag/premium/">후원자 전용</a></li>
+</ul>
+
+        </nav>
+
+        <div class="gh-navigation-actions">
+                <div class="gh-navigation-members">
+                            <a href="#/portal/signin" data-portal="signin" class="gh-portal-close">로그인</a>
+                                <a class="gh-button gh-portal-close" href="#/portal/signup" data-portal="signup">구독·후원</a>
+                </div>
+        </div>
+
+    </div>
+</header>
+
+    
+
+<main class="gh-main">
+
+    <article class="gh-article post tag-food">
+
+        <header class="gh-article-header gh-canvas">
+
+                <a class="gh-article-tag" href="https://jagunbae.com/tag/food/">비건 레시피</a>
+            <h1 class="gh-article-title is-title">로메스코 소스 레시피</h1>
+                <p class="gh-article-excerpt is-body">파프리카의 잠재력을 최대로 뽑아낸 스페인식 소스 만들기.</p>
+
+            <div class="gh-article-meta">
+                <div class="gh-article-author-image instapaper_ignore">
+                            <a href="/author/cheesylazy/">
+                                <img class="author-profile-image" src="/content/images/size/w160/2022/03/---300.jpeg" alt="CHEESYLAZY">
+                            </a>
+                </div>
+                <div class="gh-article-meta-wrapper">
+                    <h4 class="gh-article-author-name"><a href="/author/cheesylazy/">CHEESYLAZY</a></h4>
+                    <div class="gh-article-meta-content">
+                        <time class="gh-article-meta-date" datetime="2022-03-19">2022년 3월 19일</time>
+                            <span class="gh-article-meta-length"><span class="bull">—</span> 8 min read</span>
+                    </div>
+                </div>
+            </div>
+
+                <figure class="gh-article-image">
+        <img srcset="/content/images/size/w320/2022/03/IMG_5487-1.webp 320w,
+                    /content/images/size/w600/2022/03/IMG_5487-1.webp 600w,
+                    /content/images/size/w960/2022/03/IMG_5487-1.webp 960w,
+                    /content/images/size/w1200/2022/03/IMG_5487-1.webp 1200w,
+                    /content/images/size/w2000/2022/03/IMG_5487-1.webp 2000w" sizes="(max-width: 1200px) 100vw, 1120px" src="/content/images/size/w1200/2022/03/IMG_5487-1.webp" alt="로메스코 소스 레시피">
+    </figure>
+
+        </header>
+
+        <section class="gh-content gh-canvas is-body">
+            <aside class="gh-sidebar"><div class="gh-toc"><ol class="toc-list "><li class="toc-list-item is-active-li"><a href="#" class="toc-link node-name--H4  is-active-link">로메스코 소스 레시피</a></li><li class="toc-list-item"><a href="#%EC%9E%AC%EB%A3%8C" class="toc-link node-name--H2 ">재료</a><ol class="toc-list  is-collapsible is-collapsed"><li class="toc-list-item"><a href="#" class="toc-link node-name--H4 ">+ 더하고 뺄 수 있는 재료</a></li></ol></li><li class="toc-list-item"><a href="#%EC%88%9C%EC%84%9C" class="toc-link node-name--H2 ">순서</a></li><li class="toc-list-item"><a href="#%EB%A1%9C%EB%A9%94%EC%8A%A4%EC%BD%94-%EC%86%8C%EC%8A%A4-%ED%99%9C%EC%9A%A9%EB%B2%95" class="toc-link node-name--H2 ">로메스코 소스 활용법</a></li></ol></div></aside> 
+            <p>지난 주말 사라봉에 다녀왔습니다. 제주 시내에 위치한 오름이라 부담 없이 찾아가기 좋은 곳인데요. 경치가 좋아서 운동을 즐기는 어르신들의 뒷동산 같은 오름이기도 합니다.</p><p>사라봉 등산로 시작점에는 제철 식재료를 파는 작은 노점상이 있는데요. 꼬막부터 단감까지, 때마다 다른 것을 판매하셔서 '이번엔 무얼 파시나' 보는 것도 등산의 재미 중 하나입니다. 저희 아버지는 사라봉에 갈 때마다 장을 보시는데, 늘 엄마의 칭찬을 들을 만큼 퀄리티가 좋다며 뿌듯해하신답니다. 게다가 가격도 저렴하고요.</p><p>최근에는 크고 튼실한 파프리카 4개를 5,000원에 판매하고 계셨어요. 여쭤보니 제주도 애월에서 자란 파프리카라고 하시더라고요. 식자재 마트에선 볼 수 없는 가격과 크기였기에 망설임 없이 냉큼 집어왔습니다.</p><figure class="kg-card kg-image-card"><img src="https://jagunbae.com/content/images/2022/03/IMG_5305.webp" class="kg-image" alt="" loading="lazy" width="800" height="1067" srcset="https://jagunbae.com/content/images/size/w600/2022/03/IMG_5305.webp 600w, https://jagunbae.com/content/images/2022/03/IMG_5305.webp 800w" sizes="(min-width: 720px) 720px"></figure><p>빨갛고 커다란 파프리카! 이걸로 무얼 만들어볼까 고민하다가 스페인식 소스 '로메스코'(Romesco)를 만들었습니다. 직화로 구운 파프리카와 몇 가지 재료를 믹서기에 갈면 간단하게 완성할 수 있는 소스인데요. 파프리카의 불맛과 감칠맛이 너무나도 매력적인 소스랍니다. </p><p>시중에 파는 구운 파프리카 병조림을 사용할 수도 있지만 이번 기회에 파프리카를 직접 불에 구웠어요. 낯선 조리법이지만 전혀 어렵지 않습니다. 만들기 간단한 것에 비해 활용도가 참 좋은 소스이니 여러분도 꼭 한 번 만들어보세요. (소스 활용법은 글 아래에 정리해두었습니다.)</p><div class="kg-card kg-product-card">
+            <div class="kg-product-card-container">
+                <img src="https://jagunbae.com/content/images/2022/03/IMG_5471-1.webp" class="kg-product-card-image" loading="lazy">
+                <div class="kg-product-card-title-container">
+                    <h4 class="kg-product-card-title"><span style="white-space: pre-wrap;">로메스코 소스 레시피</span></h4>
+                </div>
+                
+                    <div class="kg-product-card-rating">
+                        <span class="kg-product-card-rating-active kg-product-card-rating-star"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.729,1.2l3.346,6.629,6.44.638a.805.805,0,0,1,.5,1.374l-5.3,5.253,1.965,7.138a.813.813,0,0,1-1.151.935L12,19.934,5.48,23.163a.813.813,0,0,1-1.151-.935L6.294,15.09.99,9.837a.805.805,0,0,1,.5-1.374l6.44-.638L11.271,1.2A.819.819,0,0,1,12.729,1.2Z"></path></svg></span>
+                        <span class="kg-product-card-rating-active kg-product-card-rating-star"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.729,1.2l3.346,6.629,6.44.638a.805.805,0,0,1,.5,1.374l-5.3,5.253,1.965,7.138a.813.813,0,0,1-1.151.935L12,19.934,5.48,23.163a.813.813,0,0,1-1.151-.935L6.294,15.09.99,9.837a.805.805,0,0,1,.5-1.374l6.44-.638L11.271,1.2A.819.819,0,0,1,12.729,1.2Z"></path></svg></span>
+                        <span class="kg-product-card-rating-active kg-product-card-rating-star"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.729,1.2l3.346,6.629,6.44.638a.805.805,0,0,1,.5,1.374l-5.3,5.253,1.965,7.138a.813.813,0,0,1-1.151.935L12,19.934,5.48,23.163a.813.813,0,0,1-1.151-.935L6.294,15.09.99,9.837a.805.805,0,0,1,.5-1.374l6.44-.638L11.271,1.2A.819.819,0,0,1,12.729,1.2Z"></path></svg></span>
+                        <span class="kg-product-card-rating-active kg-product-card-rating-star"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.729,1.2l3.346,6.629,6.44.638a.805.805,0,0,1,.5,1.374l-5.3,5.253,1.965,7.138a.813.813,0,0,1-1.151.935L12,19.934,5.48,23.163a.813.813,0,0,1-1.151-.935L6.294,15.09.99,9.837a.805.805,0,0,1,.5-1.374l6.44-.638L11.271,1.2A.819.819,0,0,1,12.729,1.2Z"></path></svg></span>
+                        <span class="kg-product-card-rating-active kg-product-card-rating-star"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.729,1.2l3.346,6.629,6.44.638a.805.805,0,0,1,.5,1.374l-5.3,5.253,1.965,7.138a.813.813,0,0,1-1.151.935L12,19.934,5.48,23.163a.813.813,0,0,1-1.151-.935L6.294,15.09.99,9.837a.805.805,0,0,1,.5-1.374l6.44-.638L11.271,1.2A.819.819,0,0,1,12.729,1.2Z"></path></svg></span>
+                    </div>
+                
+
+                <div class="kg-product-card-description"><ol><li value="1"><span style="white-space: pre-wrap;">파프리카 1개의 꼭지를 떼어내고 껍질이 모두 까맣게 될 때까지 직화로 굽습니다.</span></li><li value="2"><span style="white-space: pre-wrap;">다 구운 파프리카를 차가운 물에 담가 껍질을 벗겨낸 후 듬성듬성 썰어둡니다.</span></li><li value="3"><span style="white-space: pre-wrap;">아몬드 1/4컵을 팬에 살짝 구워줍니다.</span></li><li value="4"><span style="white-space: pre-wrap;">마늘 3쪽을 슬라이스한 후 올리브유에 살짝 볶아줍니다.</span></li><li value="5"><span style="white-space: pre-wrap;">썰어둔 파프리카, 구운 아몬드, 마늘, 올리브유 1/4컵, 영양 효모 1 테이블스푼, 소금 1 티스푼을 믹서에 넣어 곱게 갈아줍니다.</span></li><li value="6"><span style="white-space: pre-wrap;">밀폐용기에 옮겨 냉장 보관하고, 5일 내에 먹습니다.</span></li></ol></div>
+                
+            </div>
+        </div><h2 id="%EC%9E%AC%EB%A3%8C"><strong>재료</strong></h2><ul><li>빨간색 파프리카 1개 (175~180g)</li><li>마늘 3쪽</li><li>아몬드 1/4 cup (40g)</li><li>올리브유 1/4 컵</li><li>영양 효모 1 테이블스푼</li><li>소금 1 테이블스푼</li></ul><div class="kg-card kg-toggle-card" data-kg-toggle-state="close">
+            <div class="kg-toggle-heading">
+                <h4 class="kg-toggle-heading-text"><span style="white-space: pre-wrap;">+ 더하고 뺄 수 있는 재료</span></h4>
+                <button class="kg-toggle-card-icon" aria-label="Expand toggle to read content">
+                    <svg id="Regular" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path class="cls-1" d="M23.25,7.311,12.53,18.03a.749.749,0,0,1-1.06,0L.75,7.311"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="kg-toggle-content"><ul><li value="1"><b><strong style="white-space: pre-wrap;">영양효모 대신 볶은 토마토</strong></b><span style="white-space: pre-wrap;">를 넣어보세요. 잘 익은 토마토를 팬에 볶아 사용하면 영양효모의 감칠맛을 대신할 수 있습니다. 토마토를 볶기 전에 물에 살짝 데쳐 껍질을 벗겨주면 좋아요.</span></li><li value="2"><b><strong style="white-space: pre-wrap;">스모크드 파프리카 파우더와 케이엔 페퍼 가루</strong></b><span style="white-space: pre-wrap;">가 집에 있다면 소량 넣어주세요. 훈연의 맛과 매콤함이 파프리카와 아주 잘 어울립니다.</span></li></ul></div>
+        </div><h2 id="%EC%88%9C%EC%84%9C"><strong>순서</strong></h2><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://jagunbae.com/content/images/2022/03/IMG_5372.webp" class="kg-image" alt="" loading="lazy" width="800" height="600" srcset="https://jagunbae.com/content/images/size/w600/2022/03/IMG_5372.webp 600w, https://jagunbae.com/content/images/2022/03/IMG_5372.webp 800w" sizes="(min-width: 720px) 720px"><figcaption><span style="white-space: pre-wrap;">손질이 필요한 파프리카와 마늘을 깨끗하게 씻어줍니다.</span></figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://jagunbae.com/content/images/2022/03/IMG_5387.webp" class="kg-image" alt="" loading="lazy" width="800" height="600" srcset="https://jagunbae.com/content/images/size/w600/2022/03/IMG_5387.webp 600w, https://jagunbae.com/content/images/2022/03/IMG_5387.webp 800w" sizes="(min-width: 720px) 720px"><figcaption><span style="white-space: pre-wrap;">파프리카 꼭지를 따주세요. 가능하다면 안의 씨 부분도 함께 제거해줍니다.</span></figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://jagunbae.com/content/images/2022/03/IMG_5390.webp" class="kg-image" alt="" loading="lazy" width="800" height="600" srcset="https://jagunbae.com/content/images/size/w600/2022/03/IMG_5390.webp 600w, https://jagunbae.com/content/images/2022/03/IMG_5390.webp 800w" sizes="(min-width: 720px) 720px"><figcaption><span style="white-space: pre-wrap;">파프리카 겉면의 물기를 닦아준 후 직화로 태우듯 굽습니다. 뜨거운 불에 손이 데이지 않도록 주의해주세요.</span></figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://jagunbae.com/content/images/2022/03/IMG_5394.webp" class="kg-image" alt="" loading="lazy" width="800" height="600" srcset="https://jagunbae.com/content/images/size/w600/2022/03/IMG_5394.webp 600w, https://jagunbae.com/content/images/2022/03/IMG_5394.webp 800w" sizes="(min-width: 720px) 720px"><figcaption><span style="white-space: pre-wrap;">겉면에 그으름이 생기기 시작합니다. 타는 듯 보이지만 정상이니 걱정 마세요!</span></figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://jagunbae.com/content/images/2022/03/IMG_5400.webp" class="kg-image" alt="" loading="lazy" width="800" height="600" srcset="https://jagunbae.com/content/images/size/w600/2022/03/IMG_5400.webp 600w, https://jagunbae.com/content/images/2022/03/IMG_5400.webp 800w" sizes="(min-width: 720px) 720px"><figcaption><span style="white-space: pre-wrap;">굴곡진 겉면 까지 까맣게 구워주면 직화 파프리카 준비 완료.</span></figcaption></figure><div class="kg-card kg-callout-card kg-callout-card-yellow"><div class="kg-callout-emoji">🔥</div><div class="kg-callout-text">찌기, 굽기, 볶기, 데치기. 같은 채소라도 조리방법에 따라 맛이 달라집니다. 특히 고온에 채소를 구우면 본연의 향이 강해지고, 채즙이 밖으로 빠져나오지 않아서 촉촉하게 먹을 수 있는데요. 같은 원리로 소스나 채수를 만들 때 베이스가 되는 채소를 볶거나 구워서 사용하면 맛이 진해집니다.</div></div><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://jagunbae.com/content/images/2022/03/IMG_5414.webp" class="kg-image" alt="" loading="lazy" width="800" height="600" srcset="https://jagunbae.com/content/images/size/w600/2022/03/IMG_5414.webp 600w, https://jagunbae.com/content/images/2022/03/IMG_5414.webp 800w" sizes="(min-width: 720px) 720px"><figcaption><span style="white-space: pre-wrap;">차가운 물로 파프리카를 씻어내며 껍질을 벗겨냅니다. 껍질이 잘 구워졌다면 손으로 문질러서 쉽게 벗길 수 있어요.</span></figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://jagunbae.com/content/images/2022/03/IMG_5421.webp" class="kg-image" alt="" loading="lazy" width="800" height="600" srcset="https://jagunbae.com/content/images/size/w600/2022/03/IMG_5421.webp 600w, https://jagunbae.com/content/images/2022/03/IMG_5421.webp 800w" sizes="(min-width: 720px) 720px"><figcaption><span style="white-space: pre-wrap;">깨끗하게 씻은 파프리카를 적당한 크기로 썰어주세요.</span></figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://jagunbae.com/content/images/2022/03/IMG_5425.webp" class="kg-image" alt="" loading="lazy" width="800" height="600" srcset="https://jagunbae.com/content/images/size/w600/2022/03/IMG_5425.webp 600w, https://jagunbae.com/content/images/2022/03/IMG_5425.webp 800w" sizes="(min-width: 720px) 720px"><figcaption><span style="white-space: pre-wrap;">아몬드 1/2 컵을 물에 살짝 구워줍니다. 고소한 맛이 강해져요.</span></figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://jagunbae.com/content/images/2022/03/IMG_5434.webp" class="kg-image" alt="" loading="lazy" width="800" height="600" srcset="https://jagunbae.com/content/images/size/w600/2022/03/IMG_5434.webp 600w, https://jagunbae.com/content/images/2022/03/IMG_5434.webp 800w" sizes="(min-width: 720px) 720px"><figcaption><span style="white-space: pre-wrap;">슬라이스한 마늘 3쪽을 올리브유에 살짝 볶아서 알싸한 매운맛을 없애줍니다. 생마늘 향이나 매콤한 맛을 좋아하신다면 생마늘을 그대로 사용해주세요.</span></figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://jagunbae.com/content/images/2022/03/IMG_5441.webp" class="kg-image" alt="" loading="lazy" width="800" height="600" srcset="https://jagunbae.com/content/images/size/w600/2022/03/IMG_5441.webp 600w, https://jagunbae.com/content/images/2022/03/IMG_5441.webp 800w" sizes="(min-width: 720px) 720px"><figcaption><span style="white-space: pre-wrap;">준비한 재료와 올리브유 1/4 컵, 영양효모 1 테이블스푼, 소금 1 티스푼을 믹서기에 넣습니다.</span></figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://jagunbae.com/content/images/2022/03/IMG_5451.webp" class="kg-image" alt="" loading="lazy" width="700" height="525" srcset="https://jagunbae.com/content/images/size/w600/2022/03/IMG_5451.webp 600w, https://jagunbae.com/content/images/2022/03/IMG_5451.webp 700w"><figcaption><span style="white-space: pre-wrap;">믹서기에 담긴 재료 빛깔이 참 예뻐요.</span></figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://jagunbae.com/content/images/2022/03/IMG_5453.webp" class="kg-image" alt="" loading="lazy" width="800" height="600" srcset="https://jagunbae.com/content/images/size/w600/2022/03/IMG_5453.webp 600w, https://jagunbae.com/content/images/2022/03/IMG_5453.webp 800w" sizes="(min-width: 720px) 720px"><figcaption><span style="white-space: pre-wrap;">적당한 소스의 농도가 될 때까지 갈아줍니다. (1단계에서 2~3분 소요)</span></figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://jagunbae.com/content/images/2022/03/IMG_5471.webp" class="kg-image" alt="" loading="lazy" width="800" height="600" srcset="https://jagunbae.com/content/images/size/w600/2022/03/IMG_5471.webp 600w, https://jagunbae.com/content/images/2022/03/IMG_5471.webp 800w" sizes="(min-width: 720px) 720px"><figcaption><span style="white-space: pre-wrap;">로메스코 소스 완성! 밀폐용기에 옮긴 후 냉장 보관합니다.</span></figcaption></figure><hr><h2 id="%EB%A1%9C%EB%A9%94%EC%8A%A4%EC%BD%94-%EC%86%8C%EC%8A%A4-%ED%99%9C%EC%9A%A9%EB%B2%95"><strong>로메스코 소스 활용법</strong></h2><ol><li><strong>구운 빵에 슥슥 발라먹기. </strong>한 입 크기로 자른 빵 위에 로메스코 소스를 두껍게 발라주세요. 여기에 마른 허브를 뿌려주면 간단한 안주나 에피타이저로 활용할 수 있어요.</li><li><strong>샐러드에 한 스푼 곁들여 먹기. </strong>발사믹 같은 기본적인 드레싱이 질리는 날엔 로메스코 소스를 더해주세요. 한 스푼 만으로도 샐러드를 매콤 짭짜롭한 한 끼 식사로 만들어 줍니다.</li><li><strong>야채스틱 푹 찍어 먹기. </strong>오이, 샐러리, 당근 무엇이든 좋아요. 집에 남는 자투리 채소가 있다면 반듯하게 잘라서 함께 드셔 보세요.</li></ol><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://jagunbae.com/content/images/2022/03/IMG_5482.webp" class="kg-image" alt="" loading="lazy" width="800" height="600" srcset="https://jagunbae.com/content/images/size/w600/2022/03/IMG_5482.webp 600w, https://jagunbae.com/content/images/2022/03/IMG_5482.webp 800w" sizes="(min-width: 720px) 720px"><figcaption><span style="white-space: pre-wrap;">강단이 구운 사워도우 빵에 로메스코 소스를 발라 먹었어요. 아무 빵에나 슥슥 발라 먹어도 한 통은 금방 비운답니다.</span></figcaption></figure>
+        </section>
+
+        <section class="article-comments gh-canvas">
+        <script src="https://cdn.fastcomments.com/js/embed-v2.min.js"></script>
+        <div id="fastcomments-widget"><iframe src="https://fastcomments.com/embed?config=%7B%22tenantId%22%3A%22-VjxT661VVXz%22%2C%22urlId%22%3A%22https%3A%2F%2Fjagunbae.com%2Fromesco%2F%22%2C%22url%22%3A%22https%3A%2F%2Fjagunbae.com%2Fromesco%2F%22%2C%22pageTitle%22%3A%22%EB%A1%9C%EB%A9%94%EC%8A%A4%EC%BD%94%20%EC%86%8C%EC%8A%A4%20%EB%A0%88%EC%8B%9C%ED%94%BC%22%2C%22instanceId%22%3A%220.13825183281570397.1772176200723%22%2C%22originalReferrer%22%3A%22jagunbae.com%22%7D&amp;wId=comment-ui-v2" horizontalscrolling="no" verticalscrolling="no" allowtransparency="true" frameborder="0" scrolling="no" title="FastComments" width="100%" style="width: 1px !important; min-width: 100% !important; border: none !important; overflow: hidden !important; color-scheme: normal !important;" height="1208"></iframe></div>
+        <script>
+        FastCommentsUI(document.getElementById('fastcomments-widget'), {
+        tenantId: '-VjxT661VVXz'
+        });
+        </script>
+
+    </section></article>
+
+</main>
+
+
+<section class="gh-container is-grid gh-outer">
+    <div class="gh-container-inner gh-inner">
+        <h2 class="gh-container-title">더 보기</h2>
+        <div class="gh-feed">
+
+                    <div class="post-preview">
+                        <a href="/chilli/">
+                            <h3>비건 칠리 레시피</h3>
+                                <p>6가지 향신료와 토마토가 들어간 뜨끈하고 매콤한 비건 칠리 만들기.</p>
+                        </a>
+                    </div>
+
+                    <div class="post-preview">
+                        <a href="/tofu-cheese/">
+                            <h3>두부 리코타 치즈 레시피</h3>
+                                <p>식초, 올리브유, 소금만 있다면 10분 만에 완성할 수 있습니다.</p>
+                        </a>
+                    </div>
+                    <div class="post-preview">
+                        <a href="/soy-mayo/">
+                            <h3>두유 마요네즈 레시피</h3>
+                                <p>어디에나 잘 어울리는 바로 그 소스.</p>
+                        </a>
+                    </div>
+                    <div class="post-preview">
+                        <a href="/kombucha/">
+                            <h3>콤부차 발효 101</h3>
+                                <p>치지레이지가 자랑하는 월드 클래스 콤부차 레시피.</p>
+                        </a>
+                    </div>
+
+        </div>
+    </div>
+</section>
+
+
+    
+    <footer class="gh-footer gh-outer">
+    <div class="gh-footer-inner gh-inner">
+
+        <div class="gh-footer-bar">
+            <a class="gh-footer-logo is-title" href="https://jagunbae.com/team/">
+                    <img src="/assets/images/kangandko.jpg?v=1a38054b2b">
+            </a>
+            <nav class="gh-footer-menu">
+                <ul class="nav">
+    <li class="nav-gudog-huweon"><a href="https://jagunbae.com/subscribe/">구독·후원</a></li>
+    <li class="nav-hyeobeob-jean"><a href="https://jagunbae.com/contact/">협업 제안</a></li>
+    <li class="nav-dareun-caeneol"><a href="https://jagunbae.com/channel/">다른 채널</a></li>
+    <li class="nav-bangmyeongrog"><a href="https://jagunbae.com/q-a/">방명록</a></li>
+</ul>
+
+            </nav>
+            <div class="gh-footer-copyright">
+                 hey@jagunbae.com
+            </div>
+        </div>
+        
+                <section class="gh-footer-signup">
+                    <h2 class="gh-footer-signup-header is-title">
+                        작은배
+                    </h2>
+                    <p class="gh-footer-signup-subhead is-body">
+                        Small, independent, and spirited.
+                    </p>
+                    <form class="gh-form" data-members-form="">
+    <input class="gh-form-input" type="email" placeholder="hey@jagunbae.com" required="" data-members-email="">
+    <button class="gh-button" type="submit">
+        <span><span>구독</span> <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256"><path d="M224.49,136.49l-72,72a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L135.51,64.48a12,12,0,0,1,17-17l72,72A12,12,0,0,1,224.49,136.49Z"></path></svg></span>
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+    <g stroke-linecap="round" stroke-width="2" fill="currentColor" stroke="none" stroke-linejoin="round" class="nc-icon-wrapper">
+        <g class="nc-loop-dots-4-24-icon-o">
+            <circle cx="4" cy="12" r="3"></circle>
+            <circle cx="12" cy="12" r="3"></circle>
+            <circle cx="20" cy="12" r="3"></circle>
+        </g>
+        <style data-cap="butt">
+            .nc-loop-dots-4-24-icon-o{--animation-duration:0.8s}
+            .nc-loop-dots-4-24-icon-o *{opacity:.4;transform:scale(.75);animation:nc-loop-dots-4-anim var(--animation-duration) infinite}
+            .nc-loop-dots-4-24-icon-o :nth-child(1){transform-origin:4px 12px;animation-delay:-.3s;animation-delay:calc(var(--animation-duration)/-2.666)}
+            .nc-loop-dots-4-24-icon-o :nth-child(2){transform-origin:12px 12px;animation-delay:-.15s;animation-delay:calc(var(--animation-duration)/-5.333)}
+            .nc-loop-dots-4-24-icon-o :nth-child(3){transform-origin:20px 12px}
+            @keyframes nc-loop-dots-4-anim{0%,100%{opacity:.4;transform:scale(.75)}50%{opacity:1;transform:scale(1)}}
+        </style>
+    </g>
+</svg>        <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+    <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"></path>
+    <style>
+        .checkmark {
+            width: 40px;
+            height: 40px;
+            display: block;
+            stroke-width: 2.5;
+            stroke: currentColor;
+            stroke-miterlimit: 10;
+        }
+
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke .3s cubic-bezier(0.650, 0.000, 0.450, 1.000) forwards;
+        }
+
+        @keyframes stroke {
+            100% { stroke-dashoffset: 0; }
+        }
+    </style>
+</svg>    </button>
+</form>                </section>
+
+    </div>
+</footer>    
+</div>
+
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="pswp__bg"></div>
+
+    <div class="pswp__scroll-wrap">
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/built/source.js?v=1a38054b2b"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.32.2/tocbot.min.js"></script>
+
+<script>
+    tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.gh-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.gh-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3, h4',
+        // Ensure correct positioning
+        hasInnerContainers: true,
+    });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('a[href^="http"]:not([href*="jagunbae.com"])')
+    .forEach(a => a.target = '_blank');
+});
+</script>
+
+
+
+<div id="ghost-portal-root" data-testid="portal-root"></div><div id="sodo-search-root"></div><iframe name="__privateStripeMetricsController5770" frameborder="0" allowtransparency="true" scrolling="no" role="presentation" allow="payment *" src="https://js.stripe.com/v3/m-outer-3437aaddcdf6922d623e172c2d6f9278.html#url=https%3A%2F%2Fjagunbae.com%2Fromesco%2F&amp;title=%EB%A1%9C%EB%A9%94%EC%8A%A4%EC%BD%94%20%EC%86%8C%EC%8A%A4%20%EB%A0%88%EC%8B%9C%ED%94%BC&amp;referrer=&amp;muid=7564eeab-0f9b-4b28-b329-3297e0364c0e13c2e2&amp;sid=3a09a8e2-806f-4812-bc68-1ab05b11607341dc00&amp;version=6&amp;preview=false&amp;metaReferrerPolicy=no-referrer-when-downgrade&amp;__shared_params__[version]=v3" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important; user-select: none !important;"></iframe></body></html>

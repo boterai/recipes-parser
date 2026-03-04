@@ -1,0 +1,12 @@
+{
+  "dish_name": "无麸质香蕉面包",
+  "description": "简单美味的无麸质香蕉面包食谱",
+  "ingredients": "[{\"name\": \"\\u9ec4\\u6cb9\", \"amount\": 270, \"unit\": \"\\u514b\"}, {\"name\": \"\\u7cd6\", \"amount\": 160, \"unit\": \"\\u514b\"}, {\"name\": \"\\u5927\\u86cb\\u9ec4\", \"amount\": 4, \"unit\": \"\\u4e2a\"}, {\"name\": \"\\u5927\\u86cb\\u767d\", \"amount\": 4, \"unit\": \"\\u4e2a\"}, {\"name\": \"\\u5927\\u9999\\u8549\", \"amount\": 2, \"unit\": \"\\u6839\"}, {\"name\": \"\\u67e0\\u6aac\\u6c41\", \"amount\": 1, \"unit\": \"\\u6c64\\u5319\"}, {\"name\": \"\\u65e0\\u9eb8\\u8d28\\u901a\\u7528\\u9762\\u7c89\", \"amount\": 250, \"unit\": \"\\u514b\"}, {\"name\": \"\\u6ce1\\u6253\\u7c89\", \"amount\": 1, \"unit\": \"\\u8336\\u5319\"}, {\"name\": \"\\u8089\\u6842\", \"amount\": 1, \"unit\": \"\\u8336\\u5319\"}, {\"name\": \"\\u5207\\u788e\\u5c71\\u6838\\u6843\", \"amount\": 50, \"unit\": \"\\u514b\"}]",
+  "instructions": "1- 将柠檬汁和香蕉混合，备用\n2- 低速搅拌黄油、糖和蛋黄，然后逐渐加快速度至中等。\n3- 分批加入蛋白\n4- 添加香蕉并搅拌，偶尔刮擦碗底和碗边。\n5- 加入面粉、发酵粉和肉桂，搅拌均匀。\n6- 搅拌时，添加山核桃并继续搅拌直至所有材料混合均匀。\n7- 将面糊倒入面包盘中，在 355 F°/ 180 C° 下烘烤 45 分钟（烘烤温度可能因烤箱而异）",
+  "category": null,
+  "prep_time": null,
+  "cook_time": "45 minutes",
+  "total_time": null,
+  "notes": null,
+  "tags": null
+}

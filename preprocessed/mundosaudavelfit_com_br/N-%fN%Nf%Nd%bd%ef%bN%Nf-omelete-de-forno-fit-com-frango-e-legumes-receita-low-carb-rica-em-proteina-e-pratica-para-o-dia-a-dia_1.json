@@ -1,0 +1,12 @@
+{
+  "dish_name": "Omelete de Forno Fit com Frango e Legumes",
+  "description": "Uma refeição saudável, prática e saborosa, rica em proteínas e ideal para dietas low carb.",
+  "ingredients": "[{\"name\": \"ovos inteiros\", \"amount\": 3, \"unit\": \"pcs\"}, {\"name\": \"clara extra\", \"amount\": 1, \"unit\": \"pcs\"}, {\"name\": \"frango cozido e desfiado\", \"amount\": 1, \"unit\": \"cup\"}, {\"name\": \"cenoura ralada\", \"amount\": 0.5, \"unit\": \"cup\"}, {\"name\": \"abobrinha ralada\", \"amount\": 0.5, \"unit\": \"cup\"}, {\"name\": \"cebola picada\", \"amount\": 0.25, \"unit\": \"cup\"}, {\"name\": \"requeij\\u00e3o light ou creme de ricota\", \"amount\": 1, \"unit\": \"tablespoon\"}, {\"name\": \"temperos a gosto\", \"amount\": null, \"unit\": null}, {\"name\": \"azeite ou \\u00f3leo de coco\", \"amount\": null, \"unit\": null}]",
+  "instructions": "Pré-aqueça o forno a 200°C. Em uma tigela, bata os ovos e a clara até ficar levemente espumoso. Acrescente o frango desfiado, os legumes e os temperos. Misture bem até todos os ingredientes estarem incorporados. Adicione o requeijão light para dar mais cremosidade (opcional). Unte uma travessa pequena com azeite ou óleo de coco. Despeje a mistura e espalhe com uma colher. Leve ao forno por cerca de 25 a 30 minutos, ou até dourar levemente. Sirva quente ou leve à geladeira para consumir depois!",
+  "category": "Main Course",
+  "prep_time": null,
+  "cook_time": "30 minutes",
+  "total_time": null,
+  "notes": "Essa omelete é muito versátil! Você pode adaptar conforme os ingredientes disponíveis ou o seu objetivo nutricional. Pode congelar por até 3 meses.",
+  "tags": "alimentação saudável, emagrecimento, frango, low carb, marmita fitness, receitas fit, refeição saudável"
+}
