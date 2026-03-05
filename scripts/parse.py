@@ -11,6 +11,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
 import queue
 from typing import Optional
+from dataclasses import dataclass
 # Добавление корневой директории в PYTHONPATH
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -32,6 +33,26 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+@dataclass
+class RecipeParserConfig:
+    """
+    Конфигурация для парсера рецептов
+
+    Args:
+        max_urls: максимальное количество просмотренных URL для каждого модуля, включая те, что не содержат рецептов
+        max_depth: максимальная глубина обхода сайта (сколько кликов от главной страницы)
+        max_no_recipe_pages: макс кол-во страниц без рецептов подряд, после которого парсер перестает обрабатывать сайт (может помочь отсеть сайты с большим количеством рецептов, но плохой структурой или с большим количеством мусорных
+        страниц)
+        success_page_count_threshold: минимальное количество страниц с рецептами, чтобы считать сайт успешным (по умолчанию: 15)
+        max_failed_parsing_attempts: максимальное количество неудачных попыток парсинга для модуля перед исключением его из списка (по
+    """
+    max_urls: int = config.PARSER_DEFAULT_MAX_CHECKED_URLS
+    max_no_recipe_pages: Optional[int] = config.PARSER_DEFAULT_MAX_NO_RECIPE_PAGES
+    max_depth: int = config.PARSER_DEFAULT_CRAWL_DEPTH
+    success_page_count_threshold: Optional[int] = config.PARSER_DEFAULT_SUCCESS_PAGE_COUNT_THRESHOLD
+    max_failed_parsing_attempts: Optional[int] = config.PARSER_DEFAULT_MAX_FAILED_PARSING_ATTEMPTS
+    max_recies_per_module: Optional[int] = None
+    min_recipes_per_module: Optional[int] = None
 
 def setup_thread_logger(module_name: str, port: int) -> logging.Logger:
     """
@@ -76,9 +97,7 @@ def setup_thread_logger(module_name: str, port: int) -> logging.Logger:
     
     return thread_logger
 
-
-def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_depth: int = 4, 
-                      max_no_recipe_pages: Optional[int] = 30) -> tuple[int, bool]:
+def run_parser_thread(module_name: str, port: int, parser_config: RecipeParserConfig) -> tuple[int, bool]:
     """
     Запуск парсера в отдельном потоке с собственным логгером
     
@@ -88,6 +107,7 @@ def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_dep
         max_urls: Максимальное количество URL
         max_depth: Максимальная глубина обхода
         max_no_recipe_pages: Максимальное количество страниц без рецептов перед остановкой
+        success_page_count_threshold: Минимальное количество страниц с рецептами, чтобы считать сайт успешным (по умолчанию: 15)
 
     Returns:
         tuple[bool, bool]: (кол-во полученных новых рецептов, фатальная ли это ошибка)
@@ -98,7 +118,6 @@ def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_dep
     thread_logger.info(f"{'='*60}")
     thread_logger.info(f"ЗАПУСК ПАРСЕРА ДЛЯ {module_name}")
     thread_logger.info(f"Порт: {port}")
-    thread_logger.info(f"Max URLs: {max_urls}, Max Depth: {max_depth}")
     thread_logger.info(f"{'='*60}")
     
     try:
@@ -107,11 +126,11 @@ def run_parser_thread(module_name: str, port: int, max_urls: int = 5000, max_dep
         return parser.run_parser(
             module_name=module_name, 
             port=port, 
-            max_urls=max_urls, 
-            max_depth=max_depth,
+            max_urls=parser_config.max_urls, 
+            max_depth=parser_config.max_depth,
             custom_logger=thread_logger,
-            max_no_recipe_pages=max_no_recipe_pages,
-            success_page_count_threshold=15 # если собрано больше 15 страниц, то сайт считается успешным
+            max_no_recipe_pages=parser_config.max_no_recipe_pages,
+            success_page_count_threshold=parser_config.success_page_count_threshold # если собрано больше 15 рецептов, то сайт считается успешным
         )
     except Exception as e:
         thread_logger.error(f"✗ Ошибка при парсинге {module_name}: {e}", exc_info=True)
@@ -142,25 +161,23 @@ def main(module_name: str = "24kitchen_nl", port: int = 9222):
     )
 
 
-def run_parallel(ports: list[int], modules: Optional[list[str]] = None, max_urls: int = 4000, 
-                 max_depth: int = 4, max_recipes_per_module: Optional[int] = 4000, max_failed_parsing_attempts: Optional[int] = None):
+def run_parallel(ports: list[int], modules: Optional[list[str]], parser_config: RecipeParserConfig):
     """
     Запуск парсеров в нескольких потоках с отдельными логами
     
     Args:
         ports: Список портов для парсинга
-        max_workers: Максимальное количество потоков (по умолчанию = len(ports))
-        max_recipes_per_module: Максимальное количество URL для каждого модуля (далее уже этотт модуль игнорируется)
-        max_failed_parsing_attempts: Максимальное количество неудачных попыток парсинга для модуля перед исключением его из списка (по умолчанию: None)
+        modules: Список модулей для парсинга (по умолчанию: все доступные модули, можно указать конкретные, например: ["24kitchen_nl", "allrecipes_com"])
+        parser_config: Конфигурация для парсера (макс кол-во URL, макс кол-во страниц без рецептов, порог успешности сайта и т.д.)
     """
-    logger.info(f"{'='*60}")
-    logger.info(f"ПАРАЛЛЕЛЬНЫЙ ЗАПУСК {len(ports)} ПАРСЕРОВ")
-    logger.info(f"{'='*60}")
+    logger.info(f"параллельный запуск {len(ports)} парсеров на портах: {ports}")
     
-    parser = RecipeParserRunner(extractor_dir="extractor")
+    parser = RecipeParserRunner(extractor_dir=config.EXTRACTOR_FOLDER)
 
     # получаем модули для парсинга с учетом max_recipes_per_module и сортируя по убыванию количества рецептов
-    site_names = parser.site_repository.get_extractors(max_recipes=max_recipes_per_module, order="asc", min_recipes=2, maximum_parsing_failures=max_failed_parsing_attempts)
+    site_names = parser.site_repository.get_extractors(max_recipes=parser_config.max_recies_per_module, order="asc", 
+                                                       min_recipes=parser_config.min_recipes_per_module, 
+                                                       maximum_parsing_failures=parser_config.max_failed_parsing_attempts)
 
     if not modules:
         modules = [site_name for site_name in site_names if site_name in parser.available_extractors]
@@ -199,8 +216,7 @@ def run_parallel(ports: list[int], modules: Optional[list[str]] = None, max_urls
                 run_parser_thread,
                 module,
                 port,
-                max_urls,
-                max_depth
+                parser_config
             )
             futures[future] = (module, port)
             logger.info(f"▶ Запущен: {module} → port {port}")
@@ -241,8 +257,7 @@ def run_parallel(ports: list[int], modules: Optional[list[str]] = None, max_urls
                         run_parser_thread,
                         next_module,
                         freed_port,
-                        max_urls,
-                        max_depth
+                        parser_config
                     )
                     futures[new_future] = (next_module, freed_port)
                     logger.info(f"▶ Запущен: {next_module} → port {freed_port} (после {module})")
@@ -309,7 +324,14 @@ if __name__ == "__main__":
         clear_folder(config.PARSER_LOG_FOLDER, max_size_bytes=args.max_space_bytes)
     
     if args.parallel:
-        run_parallel(ports=args.ports,  modules=None, max_recipes_per_module=args.max_recipes_per_module, max_urls=args.max_urls,
-                     max_depth=5, max_failed_parsing_attempts=1)
+        run_parallel(ports=args.ports,  modules=None, 
+                     parser_config=RecipeParserConfig(
+                                                        max_urls=args.max_urls,
+                                                        max_no_recipe_pages=30,
+                                                        max_failed_parsing_attempts=1,
+                                                        success_page_count_threshold=15,
+                                                        max_recies_per_module=args.max_recipes_per_module,
+                                                        min_recipes_per_module=3
+                                                    ))
     else:
         main("allrecipes_com", args.ports[0])
