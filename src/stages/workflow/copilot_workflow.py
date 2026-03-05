@@ -215,7 +215,7 @@ class CopilotWorkflow:
         """
         prs = self.github_client.list_pr()
         completed_prs = [pr for pr in prs if self.is_pr_completed_by_copilot(pr['number'])]
-        logger.info(f"Найдено {len(prs)} PR с запрошенным ревью.")
+        logger.info(f"Найдено {len(completed_prs)} PR с завершенной работой Copilot.")
         for pr in completed_prs:
             logger.info(f"Проверка PR #{pr['number']}: {pr['title']}")
             # проверяем были ли новые коммиты с момента последней проверки
