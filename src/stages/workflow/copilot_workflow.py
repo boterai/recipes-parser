@@ -250,7 +250,7 @@ class CopilotWorkflow:
             # удаление ветки после мерджа pr и получение изменений в локальную ветку
             self.branch_manager.delete_branch(pr['head']['ref'])
         try:
-            self.branch_manager.commit_specific_directory(config.EXTRACTOR_FOLDER, "Автокоммит после проверки парсеров", push=True)
+            self.branch_manager.commit_specific_directory(config.EXTRACTOR_FOLDER, "Автокоммит после проверки парсеров", push=False)
         except Exception as e:
             logger.error(f"Не удалось обновить текущую ветку автоматически: {e}, пожалуйста, выполните git pull вручную.")
 
