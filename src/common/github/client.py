@@ -84,39 +84,6 @@ class GitHubClient:
         else:
             logger.error(f"Failed to create issue '{title}': {response.status_code} - {response.text}")
             return None
-
-    def create_issue_from_file(
-        self,
-        title: str,
-        filepath: str,
-        assignees: list[str] = None,
-        labels: list[str] = None
-    ) -> Optional[dict]:
-        """
-        Создает issue из файла с описанием
-        
-        Args:
-            title: заголовок
-            body_file: путь к файлу с телом issue (Markdown)
-            assignees: кому назначить
-            labels: метки
-        
-        Returns:
-            Данные созданного issue
-        """        
-        if not os.path.exists(filepath):
-            print(f"❌ Body file not found: {filepath}")
-            return None
-        
-        with open(filepath, 'r', encoding='utf-8') as f:
-            body = f.read()
-        
-        return self.create_issue_from_dict(
-            title=title,
-            body=body,
-            assignees=assignees,
-            labels=labels
-        )
     
     def list_repository_issues(self, state: str = "open") -> Optional[list[dict]]:
         """
@@ -150,20 +117,6 @@ class GitHubClient:
             else:
                 logger.error(f"Failed to fetch issues: {response.status_code} - {response.text}")
                 return None
-        
-    def list_branches(self) -> Optional[list[dict]]:
-        """
-        Получает список веток репозитория
-        
-        Returns:
-            Список веток
-        """
-        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/branches"
-
-        params = {
-            "per_page": 100
-        }
-        return self.get_json_response(url, params=params)
         
     def list_pr(self) -> Optional[list[dict]]:
         """

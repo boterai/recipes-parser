@@ -3,8 +3,6 @@ from src.common.gpt.client import GPTClient
 from src.models.recipe import Recipe
 from typing import Optional
 import logging
-import json
-from src.models.search_config import ComponentWeights, SearchProfiles
 logger = logging.getLogger(__name__)
 
 class SearchSimilarInClickhouse:

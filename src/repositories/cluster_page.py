@@ -13,10 +13,15 @@ logger = logging.getLogger(__name__)
 
 class ClusterPageRepository(BaseRepository[ClusterPageORM]):
 
-    def __init__(self, mysql_manager=None):
+    def __init__(self, mysql_manager=None, table_name: Optional[str] = None):
         # Используем общее подключение если не передано явно
         if mysql_manager is None:
             mysql_manager = get_db_connection()
+
+        if table_name:
+            ClusterPageORM.__tablename__ = table_name
+            ClusterPageORM.__table__.name = table_name
+
         super().__init__(ClusterPageORM, mysql_manager)
 
 

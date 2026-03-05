@@ -263,6 +263,25 @@ class Page(BaseModel):
         
         # Если уже есть единицы измерения, возвращаем как есть
         return v_str
+    
+    def ingredients_with_amounts_to_json(self) -> list[dict[str, Any]]:
+        if not self.ingredients:
+            return []
+        try:
+            ingredients_with_amounts: list[dict[str, Any]] = json.loads(self.ingredients)
+            if any(i.get("units") for i in ingredients_with_amounts if isinstance(i, dict)):
+                # Если есть поле "units", используем его, иначе fallback на "unit"
+                new_ingredients = []
+                for i in ingredients_with_amounts:
+                    new_ingredients.append({
+                        "name": str(i.get("name", "")).strip(),
+                        "amount": str(i.get("amount", "")).strip(),
+                        "unit": str(i.get("unit", "")).strip() or str(i.get("units", "")).strip()
+                    })
+                return new_ingredients
+            return ingredients_with_amounts
+        except json.JSONDecodeError:
+            return []
 
     def to_recipe(self) -> Recipe:
         """Преобразование Page в модель Recipe"""
@@ -273,7 +292,7 @@ class Page(BaseModel):
             description=self.description,
             tags=self.tags_to_json(),
             ingredients=self.ingredients_to_json(),
-            ingredients_with_amounts=json.loads(self.ingredients) if self.ingredients else [],
+            ingredients_with_amounts=self.ingredients_with_amounts_to_json(),
             instructions=self.instructions or "",
             cook_time=self.cook_time or "",
             prep_time=self.prep_time or "",

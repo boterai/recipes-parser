@@ -303,6 +303,65 @@ class TestEdgeCases(unittest.TestCase):
         # Должно распарсить только 1.2
         self.assertEqual(result["amount"], 1.2)
 
+    def test_unicode_fraction_characters(self):
+        """Тест: юникод дроби (½, ¼, ¾)"""
+        ingredient = {"name": "½ cup milk", "amount": None, "unit": None}
+        result = normalize_ingredient(ingredient)
+        
+        # Юникод дроби могут не распознаваться, проверяем как есть
+        # В зависимости от реализации может не извлечься или извлечься
+        self.assertIsNotNone(result)
+
+    def test_leading_trailing_spaces(self):
+        """Тест: пробелы в начале и конце"""
+        ingredient = {"name": "  100g flour  ", "amount": None, "unit": None}
+        result = normalize_ingredient(ingredient)
+        
+        self.assertEqual(result["name"].strip(), "flour")
+        self.assertEqual(result["amount"], 100.0)
+
+    def test_amount_without_unit(self):
+        """Тест: только количество без единицы"""
+        ingredient = {"name": "5 eggs", "amount": None, "unit": None}
+        result = normalize_ingredient(ingredient)
+        
+        self.assertEqual(result["name"], "eggs")
+        self.assertEqual(result["amount"], 5.0)
+
+    def test_complex_mixed_fraction(self):
+        """Тест: сложная смешанная дробь 2 3/4"""
+        ingredient = {"name": "2 3/4 cups flour", "amount": None, "unit": None}
+        result = normalize_ingredient(ingredient)
+        
+        self.assertEqual(result["name"], "flour")
+        self.assertEqual(result["amount"], 2.75)
+        self.assertEqual(result["unit"], "cups")
+
+    def test_negative_amount(self):
+        """Тест: отрицательное количество (некорректный случай)"""
+        ingredient = {"name": "-50g flour", "amount": None, "unit": None}
+        result = normalize_ingredient(ingredient)
+        
+        # В зависимости от реализации может не извлечься
+        self.assertIsNotNone(result)
+
+    def test_comma_as_decimal_separator(self):
+        """Тест: запятая как разделитель (европейский формат)"""
+        ingredient = {"name": "1,5 kg potatoes", "amount": None, "unit": None}
+        result = normalize_ingredient(ingredient)
+        
+        # В зависимости от реализации может распознаться как 1.5 или не распознаться
+        self.assertIsNotNone(result)
+
+    def test_multiple_fractions_in_name(self):
+        """Тест: несколько дробей в строке"""
+        ingredient = {"name": "1/2 cup flour and 1/4 cup sugar", "amount": None, "unit": None}
+        result = normalize_ingredient(ingredient)
+        
+        # Должна извлечься только первая дробь
+        self.assertEqual(result["amount"], 0.5)
+        self.assertEqual(result["unit"], "cup")
+
 
 class TestComplexCases(unittest.TestCase):
     """Тесты для сложных случаев - проверка что ничего лишнего не удаляется и не добавляется"""

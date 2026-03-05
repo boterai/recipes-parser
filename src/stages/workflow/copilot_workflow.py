@@ -197,10 +197,9 @@ class CopilotWorkflow:
             logger.warning(f"Не удалось получить timeline для PR #{pr_number}")
             return False
         
-        # проверяем до последнего коммита, а если коммита нет то фолс
         for event in reversed(timeline_events):
-            if event.get('event') == 'committed':
-                break
+            if event.get('event') == 'committed' or event.get('event') == 'copilot_work_started':
+                return False  # если видим коммит или старт работы, значит copilot еще не закончил
             if event.get('event') == 'copilot_work_finished':
                 return True
 
@@ -215,7 +214,8 @@ class CopilotWorkflow:
         """
         prs = self.github_client.list_pr()
         completed_prs = [pr for pr in prs if self.is_pr_completed_by_copilot(pr['number'])]
-        logger.info(f"Найдено {len(prs)} PR с запрошенным ревью.")
+        logger.info(f"Найдено {len(completed_prs)} PR с завершенной работой Copilot.")
+        new_files_added: bool = False
         for pr in completed_prs:
             logger.info(f"Проверка PR #{pr['number']}: {pr['title']}")
             # проверяем были ли новые коммиты с момента последней проверки
@@ -244,15 +244,21 @@ class CopilotWorkflow:
             if self.branch_manager.pull_extractor_changes(pr['head']['ref'], only_new=True) is False:
                 logger.error(f"Не удалось забрать изменения из PR #{pr['number']}. .")
                 continue
-            
+
+            new_files_added = True
             self.github_client.close_pr(pr['number'])
             self.github_client.close_pr_linked_issue(pr['number'], pr)
             # удаление ветки после мерджа pr и получение изменений в локальную ветку
             self.branch_manager.delete_branch(pr['head']['ref'])
+
+        if not new_files_added:
+            logger.info("Новые файлы не были добавлены, пропуск автокоммита.")
+            return
+        
         try:
-            self.branch_manager.commit_specific_directory(config.EXTRACTOR_FOLDER, "Автокоммит после проверки парсеров", push=True)
+            self.branch_manager.commit_specific_directory(config.EXTRACTOR_FOLDER, "Автокоммит после проверки парсеров", push=False)
         except Exception as e:
-            logger.error(f"Не удалось обновить текущую ветку автоматически: {e}, пожалуйста, выполните git pull вручную.")
+            logger.error(f"Не удалось закоммитить текущую ветку автоматически: {e}.")
 
 if __name__ == "__main__":
     workflow = CopilotWorkflow()
