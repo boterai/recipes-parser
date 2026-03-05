@@ -120,6 +120,20 @@ class BioNaturalCzExtractor(BaseRecipeExtractor):
 
         return None
 
+    def _find_ingredient_tables(self, container) -> list:
+        """Return all tables in *container* that have Ingredience/Složka and Množství headers."""
+        return [
+            t for t in container.find_all("table")
+            if any(
+                h in ("ingredience", "složka")
+                for h in [th.get_text().strip().lower() for th in t.find_all("th")]
+            )
+            and any(
+                h in ("množství",)
+                for h in [th.get_text().strip().lower() for th in t.find_all("th")]
+            )
+        ]
+
     # ------------------------------------------------------------------ #
     # Ingredients
     # ------------------------------------------------------------------ #
@@ -261,15 +275,20 @@ class BioNaturalCzExtractor(BaseRecipeExtractor):
                 if ingredients:
                     return json.dumps(ingredients, ensure_ascii=False)
 
-        # --- Strategy 2: Any article table with Ingredience/Množství ---
-        for table in article.find_all("table"):
-            headers = [th.get_text().strip().lower() for th in table.find_all("th")]
-            if any(h in ("ingredience", "složka") for h in headers) and any(
-                h in ("množství",) for h in headers
-            ):
-                ingredients = self._parse_ingredients_from_table(table)
-                if ingredients:
-                    return json.dumps(ingredients, ensure_ascii=False)
+        # --- Strategy 2: All article tables with Ingredience/Množství headers ---
+        # Collect from ALL matching tables and merge (deduplicate by lowercase name)
+        all_table_ingredients: list = []
+        seen_names: set = set()
+        for table in self._find_ingredient_tables(article):
+            for item in self._parse_ingredients_from_table(table):
+                if not item.get("name"):
+                    continue
+                key = item["name"].lower()
+                if key not in seen_names:
+                    seen_names.add(key)
+                    all_table_ingredients.append(item)
+        if all_table_ingredients:
+            return json.dumps(all_table_ingredients, ensure_ascii=False)
 
         # --- Strategy 3: any UL where majority of items are quantified ---
         entry_content = self._get_entry_content()
@@ -341,12 +360,35 @@ class BioNaturalCzExtractor(BaseRecipeExtractor):
         re.IGNORECASE,
     )
 
+    def _is_recipe_list_ul(self, ul_elem) -> bool:
+        """
+        Return True if the UL looks like a recipe-listing UL (not an ingredient list
+        or tip list), i.e. most items are long multi-sentence recipe descriptions
+        containing cooking verbs.
+        """
+        lis = ul_elem.find_all("li")
+        if len(lis) < 2:
+            return False
+        if self._is_quantified_list(ul_elem):
+            return False
+        verb_items = 0
+        total_len = 0
+        for li in lis:
+            text = li.get_text()
+            total_len += len(text)
+            if self._COOKING_VERBS_RE.search(text):
+                verb_items += 1
+        avg_len = total_len / len(lis)
+        return verb_items / len(lis) >= 0.6 and avg_len > 80
+
     def extract_steps(self) -> Optional[str]:
         """
         Extract recipe instructions using multiple strategies:
         1. section.recipe-preparation → OL/UL steps + paragraphs
-        2. H2 heading "Postup" / "Příprava" / "Krok" → OL, UL, or paragraphs
-        3. Paragraphs in the article that contain cooking action verbs
+        2. When multiple ingredient tables exist, use recipe-listing UL from the
+           section of the first ingredient table (multi-recipe article indicator)
+        3. H2 heading "Postup" / "Příprava" / "Krok" → OL, UL, or paragraphs
+        4. Paragraphs in the article that contain cooking action verbs
         """
         article = self._get_article()
         if not article:
@@ -359,7 +401,22 @@ class BioNaturalCzExtractor(BaseRecipeExtractor):
             if steps:
                 return steps
 
-        # --- Strategy 2: H2/H3 heading with postup / příprava / krok keywords
+        # --- Strategy 2: multi-recipe article (multiple ingredient tables) ---
+        # When the page has 2+ ingredient tables, it's likely a general article
+        # covering multiple recipes.  Use the recipe-listing UL from the section
+        # of the first ingredient table as instructions.
+        ing_tables = self._find_ingredient_tables(article)
+        if len(ing_tables) >= 2:
+            first_table = ing_tables[0]
+            parent_section = first_table.find_parent("section")
+            if parent_section:
+                for ul in parent_section.find_all("ul"):
+                    if self._is_recipe_list_ul(ul):
+                        steps = self._steps_from_ul_as_steps(ul)
+                        if steps:
+                            return steps
+
+        # --- Strategy 3: H2/H3 heading with postup / příprava / krok keywords
         # but NOT ingredient headings ---
         entry_content = self._get_entry_content()
         if entry_content:
@@ -415,7 +472,7 @@ class BioNaturalCzExtractor(BaseRecipeExtractor):
                     if texts:
                         return " ".join(texts)
 
-        # --- Strategy 3: any article paragraph with dense cooking verbs ---
+        # --- Strategy 4: any article paragraph with dense cooking verbs ---
         if entry_content:
             candidates = []
             for p in entry_content.find_all("p"):
