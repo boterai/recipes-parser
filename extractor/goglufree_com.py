@@ -21,6 +21,21 @@ CHINESE_NUMERALS = {
     '半': 0.5,
 }
 
+# Keywords that indicate a process/instruction heading in pages content
+PAGE_PROCESS_KEYWORDS = ['可以采用', '制作方法', '烹饪方法']
+
+# Max number of machine/method names to include in page instructions
+PAGE_INSTRUCTION_MAX_ITEMS = 8
+
+# Regex pattern for extracting ingredient names from composition paragraphs.
+# Matches common Chinese prefix-noun food items (天然X, 有机X) and specific
+# key ingredients like 藜麦 that appear in product description text on this site.
+COMPOSITION_INGREDIENT_PATTERN = re.compile(
+    r'天然[\u4e00-\u9fff]{2}'
+    r'|有机[\u4e00-\u9fff]{2}'
+    r'|藜麦(?:面条粉|面粉)?'
+)
+
 
 class GogluFreeExtractor(BaseRecipeExtractor):
     """Экстрактор для goglufree.com"""
@@ -202,6 +217,86 @@ class GogluFreeExtractor(BaseRecipeExtractor):
 
         return {"name": name, "amount": amount, "unit": unit}
 
+    def _extract_composition_ingredients(self, lines: list[str]) -> list[dict]:
+        """
+        Извлечение ингредиентов из абзаца, описывающего состав продукта.
+        Используется как запасной метод, когда структурированный список ингредиентов
+        недоступен. Ищет упоминания типа '天然糙米', '有机荞麦', '藜麦' в тексте.
+        Ищет первый абзац, в котором COMPOSITION_INGREDIENT_PATTERN находит
+        хотя бы 2 совпадения (признак перечисления состава).
+        """
+        for line in lines:
+            matches = COMPOSITION_INGREDIENT_PATTERN.findall(line)
+            if len(matches) < 2:
+                # Not a composition paragraph — too few ingredients mentioned
+                continue
+            seen: set[str] = set()
+            result = []
+            for item in matches:
+                # Remove parenthetical annotations e.g. "藜麦（Quinoa）"
+                item = re.sub(r'\s*[（(][^）)]*[）)]\s*', '', item).strip()
+                if item and item not in seen:
+                    seen.add(item)
+                    result.append({"name": item, "amount": None, "unit": None})
+            if result:
+                return result
+        return []
+        return []
+
+    def _extract_page_instructions(self) -> Optional[str]:
+        """
+        Извлечение инструкций для страниц-продуктов, где способы приготовления
+        представлены в виде перечня методов/машин после вводного заголовка.
+        Например: '藜麦面条可以采用几种机器来进行制: 《谷留香》无线手持制面机, ...'
+        """
+        content = self._get_main_content()
+        if not content:
+            return None
+
+        process_keywords = PAGE_PROCESS_KEYWORDS
+
+        for p in content.find_all('p'):
+            text = p.get_text(strip=True)
+            if not any(kw in text for kw in process_keywords):
+                continue
+            if len(text) > 120:
+                continue
+
+            # Found the heading — collect machine/method names from subsequent headline paragraphs
+            heading = re.sub(r'[：:]\s*$', '', text)
+            machine_names = []
+
+            sibling = p.find_next_sibling('p')
+            while sibling and len(machine_names) < PAGE_INSTRUCTION_MAX_ITEMS:
+                sib_text = sibling.get_text(strip=True)
+                sib_itemprop = sibling.get('itemprop', '')
+
+                if not sib_text:
+                    sibling = sibling.find_next_sibling('p')
+                    continue
+
+                # Skip navigation / "still in progress" lines
+                if '中文' in sib_text or '👈' in sib_text or 'still in progress' in sib_text.lower():
+                    sibling = sibling.find_next_sibling('p')
+                    continue
+
+                # Only collect headline paragraphs that contain Chinese text
+                if (sib_itemprop == 'headline'
+                        and re.search(r'[\u4e00-\u9fff]', sib_text)
+                        and len(sib_text) <= 80):
+                    # Keep the Chinese portion (before "/" in bilingual headings)
+                    chinese_part = self.clean_text(sib_text.split('/')[0])
+                    if chinese_part and len(chinese_part) >= 3:
+                        machine_names.append(chinese_part)
+
+                sibling = sibling.find_next_sibling('p')
+
+            if machine_names:
+                return heading + ': ' + ', '.join(machine_names)
+            return heading + '。'
+
+        return None
+
     def extract_ingredients(self) -> Optional[str]:
         """Извлечение ингредиентов"""
         lines = self._get_content_lines()
@@ -225,6 +320,10 @@ class GogluFreeExtractor(BaseRecipeExtractor):
             elif in_ingredients and (line.endswith('：') or line.endswith(':')):
                 # Section headers like "ENO效果材料：" - continue collecting
                 continue
+
+        if not ingredients:
+            # Fallback: extract from composition description paragraph
+            ingredients = self._extract_composition_ingredients(lines)
 
         if not ingredients:
             return None
@@ -251,16 +350,8 @@ class GogluFreeExtractor(BaseRecipeExtractor):
         if steps:
             return ' '.join(steps)
 
-        # For pages without numbered steps, look for a process description paragraph
-        # e.g., "藜麦面条可以采用几种机器来进行制:"
-        process_keywords = ['可以采用', '制作方法', '烹饪方法', '做法', '步骤']
-        for line in lines:
-            if any(kw in line for kw in process_keywords):
-                # Clean up trailing colon
-                text = re.sub(r'[：:]\s*$', '。', line)
-                return self.clean_text(text)
-
-        return None
+        # For pages without numbered steps, look for a process description with machine/method list
+        return self._extract_page_instructions()
 
     def extract_category(self) -> Optional[str]:
         """Извлечение категории"""
