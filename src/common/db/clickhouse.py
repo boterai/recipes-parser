@@ -539,6 +539,48 @@ class ClickHouseManager:
             import traceback
             traceback.print_exc()
             return 0
+        
+    def get_existing_page_ids(self, page_ids: list[int]) -> list[int]:
+        """
+        Получение списка существующих page_id из переданного списка
+        
+        Args:
+            page_ids: Список page_id для проверки
+            
+        Returns:
+            Список существующих page_id (отсортированный по возрастанию)
+        """
+        if not self.client:
+            logger.error(CLIENT_ERROR)
+            return []
+        
+        if not page_ids:
+            logger.warning("Пустой список page_ids для проверки существования")
+            return []
+        
+        try:
+            query = f"""
+                SELECT DISTINCT page_id
+                FROM {self.default_table}
+                WHERE page_id IN %(page_ids)s
+                ORDER BY page_id
+            """
+            
+            df = self.client.query_df(query, parameters={'page_ids': page_ids})
+            
+            if len(df) == 0:
+                logger.info("Нет существующих page_id из переданного списка")
+                return []
+            
+            existing_page_ids = df['page_id'].astype(int).tolist()
+            logger.info(f"Найдено {len(existing_page_ids)}/{len(page_ids)} существующих page_id")
+            return existing_page_ids
+            
+        except Exception as e:
+            logger.error(f"Ошибка получения существующих page_id: {e}")
+            import traceback
+            traceback.print_exc()
+            return []
 
     def close(self):
         """Закрытие подключения"""
