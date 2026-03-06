@@ -132,6 +132,20 @@ class HowtocookingRuExtractor(BaseRecipeExtractor):
 
         return ' '.join(parts)
 
+    @staticmethod
+    def _fix_merged_words(text: str) -> str:
+        """
+        Исправляет слипшиеся слова с предлогами, характерные для опечаток на сайте.
+        Например: «приправадля» → «приправа для».
+
+        Использует только длинные (4+ букв) предлоги, которые не являются
+        стандартными окончаниями русских слов, чтобы избежать ложных срабатываний.
+        """
+        # Вставляем пробел перед предлогом, если он слиплся с предыдущим русским словом.
+        # Lookahead: после предлога должна идти русская буква или пробел (конец слипшейся цепочки).
+        long_prepositions = r'(?<=[а-яё])(для|через|между|после|перед|около|против)(?=\s|[а-яё])'
+        return re.sub(long_prepositions, r' \1', text, flags=re.IGNORECASE)
+
     def _parse_ingredient_ru(self, text: str) -> Optional[dict]:
         """
         Парсинг строки ингредиента в русском формате.
@@ -145,9 +159,8 @@ class HowtocookingRuExtractor(BaseRecipeExtractor):
             return None
 
         text = self.clean_text(text)
-
-        # Убираем скобочные пояснения (лопатка или окорок)
-        text_clean = re.sub(r'\s*\([^)]*\)', '', text).strip()
+        # Исправляем слипшиеся слова (например, «приправадля» → «приправа для»)
+        text = self._fix_merged_words(text)
 
         # Нормализуем дроби: ½ → 1/2
         fraction_map = {
@@ -155,12 +168,12 @@ class HowtocookingRuExtractor(BaseRecipeExtractor):
             '⅓': '1/3', '⅔': '2/3', '⅛': '1/8',
         }
         for f, r in fraction_map.items():
-            text_clean = text_clean.replace(f, r)
+            text = text.replace(f, r)
 
         # --- Формат 1: начинается с числа («amount unit name») ---
         amount_first = re.match(
             r'^(' + _RU_AMOUNT_PATTERN + r')\s+(' + _RU_UNITS_PATTERN + r')\s+(.+)$',
-            text_clean, re.IGNORECASE
+            text, re.IGNORECASE
         )
         if amount_first:
             raw_amount, unit, name = amount_first.group(1), amount_first.group(2), amount_first.group(3)
@@ -173,9 +186,9 @@ class HowtocookingRuExtractor(BaseRecipeExtractor):
         # Формат 1b: начинается с числа, но без единицы («3 луковицы»)
         amount_no_unit = re.match(
             r'^(' + _RU_AMOUNT_PATTERN + r')\s+(.+)$',
-            text_clean, re.IGNORECASE
+            text, re.IGNORECASE
         )
-        if amount_no_unit and re.match(r'^\d', text_clean):
+        if amount_no_unit and re.match(r'^\d', text):
             raw_amount, name = amount_no_unit.group(1), amount_no_unit.group(2)
             return {
                 "name": name.strip(),
@@ -186,7 +199,7 @@ class HowtocookingRuExtractor(BaseRecipeExtractor):
         # --- Формат 2: имя первым («name amount unit» или «name amount») ---
         name_first = re.match(
             r'^(.+?)\s+(' + _RU_AMOUNT_PATTERN + r')\s*(' + _RU_UNITS_PATTERN + r')?$',
-            text_clean, re.IGNORECASE
+            text, re.IGNORECASE
         )
         if name_first:
             name, raw_amount, unit = (
@@ -206,47 +219,56 @@ class HowtocookingRuExtractor(BaseRecipeExtractor):
 
         # --- Формат 3: только имя, без количества ---
         # Обрабатываем «по вкусу» как единицу
-        if 'по вкусу' in text_clean.lower():
-            name = re.sub(r'\s*по\s+вкусу\s*', '', text_clean, flags=re.IGNORECASE).strip()
-            return {"name": name or text_clean, "amount": None, "unit": "по вкусу"}
+        if 'по вкусу' in text.lower():
+            name = re.sub(r'\s*по\s+вкусу\s*', '', text, flags=re.IGNORECASE).strip()
+            return {"name": name or text, "amount": None, "unit": "по вкусу"}
 
-        return {"name": text_clean, "amount": None, "unit": None}
+        return {"name": text, "amount": None, "unit": None}
 
     # ------------------------------------------------------------------ #
     #  Основные методы извлечения                                          #
     # ------------------------------------------------------------------ #
 
     def extract_dish_name(self) -> Optional[str]:
-        """Извлечение названия блюда."""
-        json_ld = self._get_json_ld()
-        if json_ld and json_ld.get('name'):
-            return self.clean_text(json_ld['name'])
-
+        """Извлечение названия блюда (h1 имеет правильный регистр)."""
+        # Предпочитаем h1 — он содержит название в правильном регистре.
+        # JSON-LD.name на howtocooking.ru всегда в нижнем регистре.
         h1 = self.soup.find('h1')
         if h1:
             return self.clean_text(h1.get_text())
 
+        json_ld = self._get_json_ld()
+        if json_ld and json_ld.get('name'):
+            return self.clean_text(json_ld['name'])
+
         og_title = self.soup.find('meta', property='og:title')
         if og_title and og_title.get('content'):
-            return self.clean_text(og_title['content'])
+            title = og_title['content']
+            # Убираем шаблонный суффикс «— Лучший Рецепт ... на HowtoCooking.ru!»
+            title = re.sub(r'\s*—\s*Лучший\s+Рецепт.*$', '', title, flags=re.IGNORECASE)
+            return self.clean_text(title) or None
 
         return None
 
     def extract_description(self) -> Optional[str]:
-        """Извлечение краткого описания рецепта."""
+        """Извлечение краткого описания рецепта (анонс/intro)."""
+        # 1. .preview — краткий анонс под заголовком
         preview = self.soup.find(class_='preview')
         if preview:
             text = self.clean_text(preview.get_text())
             if text:
                 return text
 
-        meta_desc = self.soup.find('meta', attrs={'name': 'description'})
-        if meta_desc and meta_desc.get('content'):
-            return self.clean_text(meta_desc['content'])
+        # 2. og:title — содержит имя рецепта; используем как описание-заглушку
+        # когда .preview отсутствует (meta description загрязнён списком ингредиентов).
+        og_title = self.soup.find('meta', property='og:title')
+        if og_title and og_title.get('content'):
+            return self.clean_text(og_title['content'])
 
-        og_desc = self.soup.find('meta', property='og:description')
-        if og_desc and og_desc.get('content'):
-            return self.clean_text(og_desc['content'])
+        # 3. JSON-LD description как последний вариант
+        json_ld = self._get_json_ld()
+        if json_ld and json_ld.get('description'):
+            return self.clean_text(json_ld['description'])
 
         return None
 
