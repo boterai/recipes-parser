@@ -556,7 +556,7 @@ class ClusterVariationGenerator:
             variation_count = random.randint(1, 4) # Случайное количество рецептов для вариации
 
             logger.error("Нет рецептов для создания вариации, ищем подходящие рецепты для вариации...")
-            possible_sources = self.cluster_page_repository.get_similar_pages(canonical_recipe.base_recipe_id)
+            possible_sources = self.cluster_page_repository.get_same_cluster_pages(canonical_recipe.base_recipe_id)
             if not possible_sources:
                 logger.error(f"Не найдено похожих рецептов для base_recipe_id={canonical_recipe.base_recipe_id}")
                 return None

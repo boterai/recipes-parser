@@ -154,7 +154,7 @@ class ClusterPageRepository(BaseRepository[ClusterPageORM]):
         result = self.create_update_cluster_pages_batch({cluster_centroid_page_id: page_ids})
         return result[cluster_centroid_page_id]
     
-    def get_similar_pages(self, page_id: int) -> list[int]:
+    def get_same_cluster_pages(self, page_id: int) -> list[int]:
         """Получить страницы, принадлежащие тому же кластеру, что и данная страница"""
         session = self.get_session()
         try:
