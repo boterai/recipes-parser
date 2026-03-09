@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kraljica slavskog stola – čokoladne kocke sa susamom i orasima",
+    "description": "Tradicionalni kolač bogatog ukusa, jednostavan za pripremu, sa slojevima čokolade, susama i oraha, idealan za svečane prilike.",
+    "ingredients": "[{\"name\": \"mleveni keks\", \"unit\": \"g\", \"amount\": \"300\"}, {\"name\": \"mleveni orasi\", \"unit\": \"g\", \"amount\": \"150\"}, {\"name\": \"šećer\", \"unit\": \"g\", \"amount\": \"150\"}, {\"name\": \"margarin\", \"unit\": \"g\", \"amount\": \"150\"}, {\"name\": \"voda\", \"unit\": \"ml\", \"amount\": \"150\"}, {\"name\": \"prženi susam\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"kakao\", \"unit\": \"kašike\", \"amount\": \"3\"}, {\"name\": \"tamna čokolada\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"ulje\", \"unit\": \"kašike\", \"amount\": \"2\"}, {\"name\": \"ekstrakt vanile ili vanilin šećer\", \"unit\": \"kašičica\", \"amount\": \"1\"}]",
+    "instructions": "1. U manjoj šerpi zagrejte vodu i šećer dok se potpuno ne otope. 2. Dodajte margarin i mešajte dok se ne sjedini. 3. Dodajte kakao i umešajte da dobijete čokoladni sirup. 4. Ostavite da se prohladi pa umešajte mleveni keks, orahe i prženi susam. 5. Po potrebi dodajte još keksa ili vode da dobijete meku, oblikovanu masu. 6. Smesu prebacite u pleh obložen papirom za pečenje i utisnite ravno. 7. Otopite tamnu čokoladu sa uljem i prelijte preko podloge. 8. Ostavite kolač u frižideru nekoliko sati da se stegne. 9. Isecite na kocke i poslužite.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Susam je najbolje blago propržiti da pojača aromu. Masa treba biti mekana ali oblikovana, po potrebi prilagoditi količinu keksa ili vode.",
+    "tags": "čokolada, kolač, desert, tradicionalno, orasi, susam"
+}

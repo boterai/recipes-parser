@@ -1,0 +1,12 @@
+{
+    "dish_name": "Smoothie bowl med kakao",
+    "description": "En tykk og god sjokoladesmoothie toppet med bringebær, pistasjenøtter, kakaonibs og bokhvete.",
+    "ingredients": "[{\"name\": \"Biola® Bringebær\", \"unit\": \"dl\", \"amount\": \"6\"}, {\"name\": \"frosne banan\", \"unit\": \"stykk\", \"amount\": \"2\"}, {\"name\": \"avokado\", \"unit\": \"stykk\", \"amount\": \"1\"}, {\"name\": \"kakao\", \"unit\": \"ss\", \"amount\": \"2\"}, {\"name\": \"mandelmel\", \"unit\": \"dl\", \"amount\": \"2\"}, {\"name\": \"bokhvete\", \"unit\": \"ts\", \"amount\": \"4\"}, {\"name\": \"olivenolje\", \"unit\": \"ss\", \"amount\": \"1\"}, {\"name\": \"bringebær\", \"unit\": \"dl\", \"amount\": \"2\"}, {\"name\": \"pistasjnøtter\", \"unit\": \"ss\", \"amount\": \"4\"}, {\"name\": \"kakaonibs\", \"unit\": \"ts\", \"amount\": \"4\"}]",
+    "instructions": "Frys banan i skiver over natten. Kjør Biola®, frosne bananer, avokado, kakao og mandelmel i en blender til en jevn og kremet smoothie. Skyll bokhveten godt. Varm olje i en stepanne og rist bokhveten til den er sprø og gyllen, ca. 2 minutter. Rør hele tiden. La den renne av seg på litt kjøkkenpapir. Hakk pistasjnøtter og fordel smoothie i dype boller. Dekorer med bringebær, hakkede nøtter, ristet bokhvete og kakaonibs. Pynt eventuelt med et mynteblad og server med en gang.",
+    "category": "drikke",
+    "prep_time": "20 min",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Du kan kjøre mandler i en blender til grovt mel om du ikke får tak i mandelmel der du bor. For å gjøre denne smoothien så sunn som mulig kan du bruke råkakao som du får kjøpt i helsekostforretninger. Tilsett eventuelt litt agavesirup om du ønsker mer sødme.",
+    "tags": "frokost,smoothie,drikke"
+}

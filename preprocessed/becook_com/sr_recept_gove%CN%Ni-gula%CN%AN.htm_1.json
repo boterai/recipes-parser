@@ -1,0 +1,12 @@
+{
+    "dish_name": "Goveđi gulaš",
+    "description": "Recept za pripremu goveđeg gulaša sa detaljnim uputstvima i sastojcima za 4 osobe.",
+    "ingredients": "[{\"name\": \"mlevena crvena paprika\", \"unit\": \"kašičice\", \"amount\": \"2\"}, {\"name\": \"goveđe meso\", \"unit\": \"g\", \"amount\": \"600\"}, {\"name\": \"biber\", \"unit\": null, \"amount\": \"malo\"}, {\"name\": \"lovorov list\", \"unit\": \"kom\", \"amount\": \"2\"}, {\"name\": \"suncokretovo ulje\", \"unit\": \"kašike\", \"amount\": \"6\"}, {\"name\": \"sok od paradajza\", \"unit\": \"ml\", \"amount\": \"250\"}, {\"name\": \"vegeta\", \"unit\": \"kašike\", \"amount\": \"2\"}, {\"name\": \"bosiljak\", \"unit\": \"kašičica\", \"amount\": \"1\"}, {\"name\": \"so\", \"unit\": null, \"amount\": \"po ukusu\"}, {\"name\": \"crni luk\", \"unit\": \"g\", \"amount\": \"600\"}, {\"name\": \"peršun\", \"unit\": \"kašičica\", \"amount\": \"1\"}]",
+    "instructions": "1. Oljuštite crni luk i sitno ga iseckajte. Na prethodno zagrejanom ulju pržite luk dok ne dobije tamno žutu boju.\n2. Dolijte vodu i ostavite da se dinsta oko 20 minuta.\n3. Isecite meso na kocke.\n4. Kada je luk prodinstan, dodajte mlevenu crvenu papriku, lovorov list i govedinu.\n5. Dolijte vodu, promešajte, dodajte peršun i ostavite da se krčka. Po potrebi dolivajte vodu.\n6. Petnaestak minuta pre kraja kuvanja dodajte vegetu i paradajz sok, pa posolite i pobiberite po ukusu.\n7. Što se duže kuva, gulaš je lepši. Povremeno promešajte.\n8. Na kraju dodajte kašičicu bosiljka i kuvajte još 2-3 minuta.\n9. Poslužite sa makaronama ili krompir pireom.",
+    "category": "Main Course",
+    "prep_time": "null",
+    "cook_time": "120 minutes",
+    "total_time": "120 minutes",
+    "notes": "Gulaš se može služiti sa makaronama ili krompir pireom. Što se duže kuva, ukus je bolji. Povremeno dolivati vodu po potrebi. Moguće su varijacije u začinima i dodacima po ukusu.",
+    "tags": "gulaš, stew"
+}

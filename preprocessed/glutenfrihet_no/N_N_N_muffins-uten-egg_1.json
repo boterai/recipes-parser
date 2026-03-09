@@ -1,0 +1,12 @@
+{
+    "dish_name": "Muffins uten egg",
+    "description": "Myke, luftige og knallgode muffins uten egg, glutenfrie og melkefrie, populære hos både store og små.",
+    "ingredients": "[{\"name\": \"smør\", \"unit\": \"g\", \"amount\": \"50\"}, {\"name\": \"bakekakao\", \"unit\": \"g\", \"amount\": \"30\"}, {\"name\": \"vann\", \"unit\": \"g\", \"amount\": \"170\"}, {\"name\": \"sukker\", \"unit\": \"g\", \"amount\": \"170\"}, {\"name\": \"GF mel\", \"unit\": \"g\", \"amount\": \"150\"}, {\"name\": \"natron\", \"unit\": \"ts\", \"amount\": \"1.5\"}, {\"name\": \"vaniljesukker\", \"unit\": \"ts\", \"amount\": \"1.5\"}, {\"name\": \"salt\", \"unit\": \"klyper\", \"amount\": \"2\"}, {\"name\": \"yoghurt naturell\", \"unit\": \"g\", \"amount\": \"175\"}, {\"name\": \"smør til glasur\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"melis\", \"unit\": \"g\", \"amount\": \"250\"}, {\"name\": \"bakekakao til glasur\", \"unit\": \"g\", \"amount\": \"35\"}, {\"name\": \"kaffe (evt. melk)\", \"unit\": \"ss\", \"amount\": \"3\"}, {\"name\": \"vaniljesukker til glasur\", \"unit\": \"ts\", \"amount\": \"2\"}, {\"name\": \"havsalt\", \"unit\": \"klyper\", \"amount\": \"2\"}, {\"name\": \"pynt etter ønske\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Sett ovnen på 180 grader (over- og undervarme). Del opp smøret til glasuren i terninger og sett til side. Ha smør, bakekakao og vann i en relativt stor kjele. Varm opp til smøret er smeltet. Ta kjelen av platen og tilsett sukkeret. Rør sammen. Tilsett så resten av de tørre ingrediensene og visp så blandingen klumpefri. Tilsett yoghurten helt til slutt og rør sammen. Bruk et muffinsbrett om du har. Fordel deigen i muffinsformer og stek midt i ovnen i 10-12 minutter. Følg med mot slutten av steketiden, når muffinsene er helt faste når du dytter på brettet, er de ferdige. La avkjøles på rist. Ha det romtempererte smøret, melis, bakekakao, vaniljesukker og salt i en bakebolle. Visp alt sammen til blandingen korner seg. Tilsett så en og en spiseskje med avkjølt kaffe til du har ønsket konsistens. Visp glasuren til ønsket luftighet. Fyll smørkremen over i en sprøytepose og fordel glasuren over muffinsene. Pynt så etter ønske.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "10-12 minutes",
+    "total_time": null,
+    "notes": "For melkefritt eller vegansk alternativt bruk plantebasert margarin uten melk og soyayoghurt naturell. Kakepynt kan inneholde allergener, så les godt på ingredienslisten.",
+    "tags": "muffins, glutenfri, melkefri, uten egg, dessert"
+}

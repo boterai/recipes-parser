@@ -1,0 +1,12 @@
+{
+    "dish_name": "Paste cu ton și lămâie",
+    "description": "Rețetă rapidă de paste cu ton și lămâie din bucătăria italiană, cu ingrediente puține și la îndemâna oricui.",
+    "ingredients": "[{\"name\": \"paste lungi, spaghete sau tagliatelle\", \"unit\": \"gr\", \"amount\": \"200\"}, {\"name\": \"file de ton în ulei de măsline\", \"unit\": \"gr\", \"amount\": \"300\"}, {\"name\": \"căței de usturoi\", \"unit\": \"bucăți\", \"amount\": \"2\"}, {\"name\": \"fulgi de ardei iute\", \"unit\": \"linguriță\", \"amount\": \"1/4\"}, {\"name\": \"pătrunjel verde\", \"unit\": \"legătură\", \"amount\": \"1\"}, {\"name\": \"suc de lămâie\", \"unit\": null, \"amount\": \"sucul de la o\"}, {\"name\": \"sare\", \"unit\": \"linguriță\", \"amount\": \"1\"}, {\"name\": \"ulei de măsline extravirgin\", \"unit\": \"linguri\", \"amount\": \"3-4\"}, {\"name\": \"parmezan răzuit\", \"unit\": \"gr\", \"amount\": \"100\"}, {\"name\": \"apă\", \"unit\": \"litri\", \"amount\": \"2.5\"}]",
+    "instructions": "Pune apa într-o oală cu pereți înalți, la foc mediu. Lasă apa să atingă punctul de fierbere apoi adaugă sarea și amestecă până sarea se topește. Adaugă pastele și lasă-le să fiarbă conform instrucțiunilor de pe pachet, până rămân al dente. În timp ce fierb pastele, pune o tigaie cu uleiul de măsline la încins. Adaugă cățeii de usturoi striviți și sotează 1-2 minute, apoi îndepărtează usturoiul. Adaugă fileul de ton scurs, fulgii de ardei chili, sucul de lămâie și un polonic din apa în care fierb pastele. Lasă să fiarbă 2-3 minute, apoi adaugă pastele fierte și scurse. Amestecă ușor, adaugă jumătate din pătrunjelul tocat și amestecă din nou. Stinge focul, răzuiește parmezanul și presară-l deasupra pastelor. La servire, adaugă restul de pătrunjel și, opțional, suc de lămâie și piper proaspăt măcinat.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Pastele trebuie să rămână al dente. Se poate adăuga suc de lămâie și piper proaspăt măcinat după gust pentru un plus de aromă.",
+    "tags": "paste, ton, lămâie, bucătărie italiană, rețetă rapidă"
+}

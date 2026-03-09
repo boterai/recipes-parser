@@ -1,0 +1,12 @@
+{
+    "dish_name": "banana sereal pancake",
+    "description": "Kue basah pancake diolah bersama sereal dan banana atau pisang. Pilih pisang yang sudah matang, supaya rasa manisnya lebih terasa dan lembut di mulut. Untuk toppingnya bisa pakai madu maupun sirup.",
+    "ingredients": "[{\"name\": \"pisang Ambon putih matang\", \"unit\": \"buah\", \"amount\": \"4\"}, {\"name\": \"sereal\", \"unit\": \"sdm\", \"amount\": \"12\"}, {\"name\": \"telur\", \"unit\": \"butir\", \"amount\": \"2\"}, {\"name\": \"garam\", \"unit\": null, \"amount\": \"sejumput\"}, {\"name\": \"pasta vanila\", \"unit\": null, \"amount\": \"secukupnya\"}, {\"name\": \"margarin atau minyak\", \"unit\": \"untuk olesan\", \"amount\": null}, {\"name\": \"maple sirup atau madu\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Lumatkan pisang di wadah, tambahkan sereal, telur, garam, dan vanila. Aduk rata. Panaskan teflon antilengket, oleskan margarin atau minyak, dan tuang adonan pancake secukupnya. Tutup wajan dan gunakan api paling kecil. Jika sudah set dan berwarna kecokelatan bagian bawahnya, balik pancake secara perlahan dengan spatula yang sudah dioles minyak atau margarin, tutup wajan, dan masak kembali hingga matang seluruhnya. Angkat dan sajikan dengan maple sirup atau madu.",
+    "category": "Kue basah",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Pilih pisang yang sudah matang supaya rasa manisnya lebih terasa dan lembut di mulut. Untuk topping bisa pakai madu maupun sirup.",
+    "tags": "Olahan Pisang, Resep Pancake, Resep Kue Basah"
+}

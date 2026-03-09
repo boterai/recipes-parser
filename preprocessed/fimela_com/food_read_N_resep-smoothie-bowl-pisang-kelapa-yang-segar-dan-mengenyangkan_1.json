@@ -1,0 +1,12 @@
+{
+    "dish_name": "Smoothie Bowl Pisang Kelapa",
+    "description": "Smoothie bowl pisang kelapa yang segar dan mengenyangkan, perpaduan manis alami pisang dan aroma khas kelapa yang menutrisi tubuh.",
+    "ingredients": "[{\"name\": \"pisang matang\", \"unit\": \"buah\", \"amount\": \"2\"}, {\"name\": \"santan atau susu kelapa\", \"unit\": \"ml\", \"amount\": \"100\"}, {\"name\": \"madu\", \"unit\": \"sdm\", \"amount\": \"1\"}, {\"name\": \"kelapa parut kering atau kelapa serut panggang\", \"unit\": \"sdm\", \"amount\": \"2\"}, {\"name\": \"chia seed atau biji selasih\", \"unit\": \"sdm\", \"amount\": \"1\"}, {\"name\": \"potongan pisang segar\", \"unit\": null, \"amount\": null}, {\"name\": \"buah beri (stroberi, blueberry, atau raspberry)\", \"unit\": null, \"amount\": null}, {\"name\": \"granola\", \"unit\": null, \"amount\": null}, {\"name\": \"taburan kelapa kering atau kelapa panggang\", \"unit\": null, \"amount\": null}, {\"name\": \"biji chia atau biji labu\", \"unit\": null, \"amount\": \"sedikit\"}]",
+    "instructions": "Masukkan pisang beku, santan atau susu kelapa, dan madu ke dalam blender. Proses hingga halus dan kental. Jika terlalu pekat, tambahkan sedikit santan. Tuang smoothie ke dalam mangkuk saji. Hias dengan potongan buah, granola, dan taburan kelapa sesuai selera. Sajikan segera selagi segar.",
+    "category": "Minuman sehat",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Madu opsional dan bisa disesuaikan selera. Topping sesuai selera.",
+    "tags": "Smoothie Bowl, Pisang Kelapa, Sarapan Sehat, Gaya Hidup Sehat, Nutrisi, Makanan Sehat, Diet sehat, Minuman sehat"
+}

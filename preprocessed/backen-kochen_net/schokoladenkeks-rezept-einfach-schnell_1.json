@@ -1,0 +1,12 @@
+{
+    "dish_name": "Schokoladenkekse",
+    "description": "Dieses klassische Schokoladenkeks-Rezept ist einfach zuzubereiten und ergibt jedes Mal perfekt weiche und zähe Kekse. Mit einer perfekten Balance aus Süße und Reichhaltigkeit sind diese Kekse ideal für jede Gelegenheit, vom Snack bis zur besonderen Leckerei.",
+    "ingredients": "[{\"name\": \"Butter\", \"unit\": \"g\", \"amount\": \"115\"}, {\"name\": \"Weißer Zucker\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"Brauner Zucker\", \"unit\": \"g\", \"amount\": \"150\"}, {\"name\": \"Ei\", \"unit\": \"large\", \"amount\": \"1\"}, {\"name\": \"Vanilleextrakt\", \"unit\": \"tsp\", \"amount\": \"1\"}, {\"name\": \"Weizenmehl\", \"unit\": \"g\", \"amount\": \"200\"}, {\"name\": \"Backpulver\", \"unit\": \"tsp\", \"amount\": \"0.5\"}, {\"name\": \"Salz\", \"unit\": \"tsp\", \"amount\": \"0.5\"}, {\"name\": \"Schokoladenstückchen\", \"unit\": \"g\", \"amount\": \"200\"}]",
+    "instructions": "Heize deinen Ofen auf 190°C vor und lege Backpapier auf ein Backblech. Vermische in einer Schüssel Mehl, Backpulver und Salz und stelle die Mischung beiseite. Schlage die weiche Butter mit weißem und braunem Zucker cremig. Füge das Ei und den Vanilleextrakt hinzu und schlage alles gut durch. Rühre die trockenen Zutaten unter die Butter-Zucker-Mischung, bis alles gerade so zusammenkommt. Mische die Schokoladenstückchen unter den Teig. Forme mit einem Esslöffel Teigportionen zu Kugeln und platziere sie auf dem Backblech. Backe die Kekse 8-10 Minuten, bis die Ränder goldbraun sind, die Mitte aber noch weich aussieht. Lasse die Kekse 5 Minuten auf dem Backblech ruhen, bevor du sie auf ein Gitter zum vollständigen Abkühlen legst.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "10 minutes",
+    "total_time": null,
+    "notes": "Nicht zu lange backen, um weiche Kekse zu erhalten. Für reicheren Geschmack dunkle oder gemischte Schokoladenstückchen verwenden. Teig kann bei Bedarf gekühlt werden. Vegane und glutenfreie Varianten möglich.",
+    "tags": "Schokoladenkekse, Kekse, Dessert, Backen, Schokolade"
+}

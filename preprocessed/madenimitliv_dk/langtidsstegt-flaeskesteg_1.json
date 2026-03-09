@@ -1,0 +1,12 @@
+{
+    "dish_name": "Langtidsstegt flæskesteg",
+    "description": "Langtidsstegt flæskesteg med sprøde svær, en saftig og mør flæskesteg tilberedt ved lave temperaturer i ovnen med sprøde svær på toppen.",
+    "ingredients": "[{\"name\": \"ridset svinekam uden ben\", \"unit\": \"stk\", \"amount\": \"1\"}, {\"name\": \"kogende vand\", \"unit\": \"dl\", \"amount\": \"5\"}, {\"name\": \"salt (groft salt)\", \"unit\": null, \"amount\": null}, {\"name\": \"laurbærblade\", \"unit\": \"stk\", \"amount\": \"5\"}, {\"name\": \"smør\", \"unit\": \"gr\", \"amount\": \"40\"}, {\"name\": \"hvedemel\", \"unit\": \"spsk\", \"amount\": \"5\"}, {\"name\": \"madlavnings- eller piskefløde\", \"unit\": \"dl\", \"amount\": \"1\"}, {\"name\": \"ribegelé\", \"unit\": \"spsk\", \"amount\": \"2\"}, {\"name\": \"saucekulør\", \"unit\": null, \"amount\": null}, {\"name\": \"salt og peber\", \"unit\": null, \"amount\": null}]",
+    "instructions": "1. Gå sværen efter og kontrollér, at den er ridset helt ned til kødet, men ikke i selve kødet. Skær evt. selv sværen efter.\n2. Læg stegen på en rist i en bradepande og sørg for, at den ligger nogenlunde jævnt.\n3. Hæld kogende vand over sværen ned i stegepanden, så sværene adskilles let. Drys salt imellem hvert svær og stik evt. laurbærblade ned.\n4. Sæt stegen i en kold ovn, tænd på 125 °C (varmluft) og steg i 2 timer.\n5. Hæv temperaturen til 200 °C (varmluft) og steg i yderligere 30 minutter. Hold øje med bradepanden og tilsæt evt. mere vand.\n6. Tag stegen ud og hæld skyen over i en skål.\n7. Skru ovnen op på 230-250 °C (varmluft), sæt flæskestegen tilbage i ovnen og steg i ca. 10 minutter, indtil sværen er gylden og sprød.\n8. Lad stegen hvile utildækket i 10-15 minutter, imens saucen laves.\n9. Brun sauce: Smelt smørret i en gryde og udrør melet heri. Hæld evt. stegeskyen igennem en si og tilsæt ca. 5-6 dl til saucen. Pisk grundigt og lad koge til tyknet. Tilsæt fløde, juster farven med saucekulør og smag til med ribsgelé, salt og peber. Server stegen skåret i skiver med brun sauce, kogte kartofler, brunede kartofler og rødkål.",
+    "category": "Hovedretter",
+    "prep_time": null,
+    "cook_time": "3 hours",
+    "total_time": "3 hours",
+    "notes": "For sprøde svær skal sværen være ridset godt ned til kødet, men ikke i kødet. Salt mellem sværene og høj ovntemperatur til sidst er vigtigt. Kernetemperatur ca. 65-70 °C. Sværene kan genopfriskes i mikrobølgeovn hvis nødvendigt.",
+    "tags": "Langtidsstegt, flæskesteg, svinekød, hovedret, julemad, sprøde svær"
+}

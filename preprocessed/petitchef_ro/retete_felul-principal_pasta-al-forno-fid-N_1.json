@@ -1,0 +1,12 @@
+{
+    "dish_name": "Paste al forno",
+    "description": "Rețetă de paste al forno cu sos Ragu și sos Bechamel, paste fierte al dente, presărate cu parmesan și coapte la cuptor până se rumenesc.",
+    "ingredients": "[{\"name\": \"carne tocata, amestec de vita si porc\", \"unit\": \"g\", \"amount\": \"800\"}, {\"name\": \"ceapa\", \"unit\": \"buc\", \"amount\": \"1\"}, {\"name\": \"morcov\", \"unit\": \"buc\", \"amount\": \"1\"}, {\"name\": \"usturoi\", \"unit\": \"catei\", \"amount\": \"3\"}, {\"name\": \"suc de rosii sau rosii cubulete la cutie\", \"unit\": \"g\", \"amount\": \"1200\"}, {\"name\": \"vin sec\", \"unit\": \"ml\", \"amount\": \"50\"}, {\"name\": \"foi de dafin\", \"unit\": \"buc\", \"amount\": \"2-3\"}, {\"name\": \"cimbru\", \"unit\": \"fire\", \"amount\": \"2-3\"}, {\"name\": \"piper proaspat macinat\", \"unit\": null, \"amount\": null}, {\"name\": \"unt\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"faina\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"nucsoara\", \"unit\": null, \"amount\": \"un praf\"}, {\"name\": \"lapte dulce\", \"unit\": \"ml\", \"amount\": \"10000\"}, {\"name\": \"paste scurte fierte al dente\", \"unit\": \"g\", \"amount\": \"800\"}, {\"name\": \"parmesan sau alta branza sarata\", \"unit\": \"g\", \"amount\": \"200\"}, {\"name\": \"mozzarella sau casacaval\", \"unit\": null, \"amount\": null}]",
+    "instructions": "1. Prepară sosul Ragu: toacă ceapa, usturoiul și dă morcovul pe răzătoare. Călește-le cu ulei de măsline, dafin și cimbru. Adaugă carnea și rumenește. Stinge cu vin, apoi adaugă sosul de roșii și fierbe la foc mic 3-4 ore, amestecând periodic. 2. Prepară sosul Bechamel: topește untul, adaugă făina și laptele alternativ, amestecând până devine omogen. Pune pe foc și adaugă nucșoară, amestecând până se îngroașă. 3. Fierbe pastele al dente. 4. Amestecă pastele cu sosul Ragu. 5. Într-o tavă, pune jumătate din paste, presară parmezan, adaugă restul pastelor, acoperă cu sos Bechamel și presară mozzarella sau cașcaval. 6. Coace la cuptor 30-45 minute până se rumenesc.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "35 minutes",
+    "total_time": null,
+    "notes": "Sosul Ragu se poate lăsa să fiarbă mai mult pentru un gust mai bogat. Nu adăuga prea multă sare în sosul Ragu deoarece se va condensa. Poți adăuga cârnați de casă în sosul Ragu pentru un plus de savoare.",
+    "tags": "paste, cuptor, sos ragu, sos bechamel, carne tocata, parmesan"
+}

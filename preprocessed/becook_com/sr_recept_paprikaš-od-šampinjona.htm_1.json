@@ -1,0 +1,12 @@
+{
+    "dish_name": "Paprikaš od šampinjona",
+    "description": "Jela sa šampinjonima su toliko omiljena da je već uobičajen scenario da, koliko god da ste spremili, pojelo bi se i da je bilo više. Evo jednog recepta koji vam omogućava da dobijete na količini, a ne izgubite na ukusu i kvalitetu.",
+    "ingredients": "[{\"name\": \"ulja\", \"unit\": \"ml\", \"amount\": \"30\"}, {\"name\": \"svežih šampinjona\", \"unit\": \"g\", \"amount\": \"400\"}, {\"name\": \"vegete\", \"unit\": \"kašičice\", \"amount\": \"2\"}, {\"name\": \"crnog luka\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"bibera\", \"unit\": null, \"amount\": \"po ukusu\"}, {\"name\": \"mlevene crvene paprike\", \"unit\": \"kašičice\", \"amount\": \"1\"}, {\"name\": \"soka od paradajza\", \"unit\": \"ml\", \"amount\": \"150\"}, {\"name\": \"lovorovog lista\", \"unit\": \"kom\", \"amount\": \"2\"}, {\"name\": \"čilija\", \"unit\": \"kašičice\", \"amount\": \"0.5\"}]",
+    "instructions": "1. Očistite crni luk i isecite ga na kockice.\n2. Očistite šampinjone i isecite na krupne komade.\n3. Zagrejte ulje u šerpi odgovarajuće veličine.\n4. Kada je ulje dovoljno zagrejano, dodajte nasečeni crni luk i pržite ga dok blago ne porumeni (oko 10 minuta).\n5. Dodajte šampinjone i dinstajte ih dok ne omekšaju.\n6. Dodajte mlevenu papriku i čili (po želji).\n7. Začinite vegetom i biberom.\n8. Dodajte lovorov list i sok od paradajza.\n9. Paprikaš kuvajte oko 10 minuta uz povremeno mešanje.\n10. Ukoliko je suviše tečan, dodajte kašičicu skrobnog brašna (gustina).\n11. Poslužite paprikaš sa kuvanim pirinčem.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "50 minutes",
+    "notes": "Šampinjoni treba da budu krupno isečeni. Veće primerke isecite na 4 dela, a manje na 2 dela. Paprikaš možete poslužiti sa kuvanim pirinčem. Po želji dodajte čili za ljutinu. Ukoliko je paprikaš previše tečan, dodajte kašičicu skrobnog brašna za gustinu.",
+    "tags": "pečurke,gulaš,Jela sa šampinjonima"
+}

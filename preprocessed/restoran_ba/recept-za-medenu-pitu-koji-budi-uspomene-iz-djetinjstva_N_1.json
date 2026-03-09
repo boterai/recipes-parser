@@ -1,0 +1,12 @@
+{
+    "dish_name": "Medena Pita",
+    "description": "Tradicionalni kolač koji budi uspomene iz djetinjstva, sa domaćim medom koji daje bogat i pun okus.",
+    "ingredients": "[{\"name\": \"glatko brašno\", \"unit\": \"g\", \"amount\": \"200\"}, {\"name\": \"oštro brašno\", \"unit\": \"g\", \"amount\": \"200\"}, {\"name\": \"šećer\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"mlijeko\", \"unit\": \"kašike\", \"amount\": \"4\"}, {\"name\": \"med\", \"unit\": \"kašike\", \"amount\": \"4\"}, {\"name\": \"maslac\", \"unit\": \"g\", \"amount\": \"50\"}, {\"name\": \"soda bikarbona\", \"unit\": \"kašičice\", \"amount\": \"2\"}, {\"name\": \"jaje\", \"unit\": \"kom\", \"amount\": \"1\"}, {\"name\": \"cimet\", \"unit\": null, \"amount\": \"prstohvat\"}, {\"name\": \"mlijeko\", \"unit\": \"ml\", \"amount\": \"400\"}, {\"name\": \"med\", \"unit\": \"kašike\", \"amount\": \"3\"}, {\"name\": \"glatko brašno\", \"unit\": \"kašika\", \"amount\": \"5\"}, {\"name\": \"šećer\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"vanilin šećer\", \"unit\": \"pakovanje\", \"amount\": \"1\"}, {\"name\": \"maslac\", \"unit\": \"g\", \"amount\": \"200\"}]",
+    "instructions": "Maslac, mlijeko, med i šećer staviti u šerpu i zagrijavati na laganoj vatri, uz stalno miješanje, dok se šećer potpuno ne otopi. Dodati brašno, cimet, sodu bikarbonu i jedno razmućeno jaje. Umijesiti tijesto i ostaviti da odmori oko pola sata. Podijeliti tijesto na nekoliko jednakih dijelova i razvaljati tanko. Peći kore na papiru za pečenje u rerni zagrijanoj na 180°C oko pet minuta. Za kremu, mlijeko, šećer, vanilin šećer i med zagrijavati na laganoj vatri. Dodati brašno i kuhati dok ne postane gušća smjesa. Ohladiti smjesu, dodati maslac i izmiksati dok ne postane glatka krema. Filovati pečene kore kremom i ostaviti da se ohladi prije posluživanja.",
+    "category": "Dessert",
+    "prep_time": "30 minutes",
+    "cook_time": "5 minutes per layer",
+    "total_time": null,
+    "notes": "Važno je paziti da smjesa ne zagori prilikom zagrijavanja. Broj kora zavisi od željenog broja i veličine pleha.",
+    "tags": "medena pita, tradicionalni recept, desert, kolač, med"
+}

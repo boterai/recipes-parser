@@ -1,0 +1,12 @@
+{
+    "dish_name": "Falafel",
+    "description": "Rețetă de chiftele libaneze din năut, cunoscute sub denumirea de falafel, preparate cu năut hidratat, ierburi aromatice și condimente.",
+    "ingredients": "[{\"name\": \"boabe de năut\", \"unit\": \"gr\", \"amount\": \"250\"}, {\"name\": \"apă pentru hidratat năutul\", \"unit\": null, \"amount\": null}, {\"name\": \"ceapă galbenă\", \"unit\": \"bucată\", \"amount\": \"1\"}, {\"name\": \"căței de usturoi\", \"unit\": \"bucăți\", \"amount\": \"3-4\"}, {\"name\": \"pătrunjel verde\", \"unit\": \"legătură\", \"amount\": \"1\"}, {\"name\": \"coriandru verde\", \"unit\": \"legătură\", \"amount\": \"1\"}, {\"name\": \"sare\", \"unit\": \"linguriță\", \"amount\": \"1\"}, {\"name\": \"bicarbonat de sodiu\", \"unit\": \"linguriță\", \"amount\": \"1/2\"}, {\"name\": \"chimion\", \"unit\": \"linguriță\", \"amount\": \"1\"}, {\"name\": \"piper negru, proaspăt măcinat\", \"unit\": \"linguriță\", \"amount\": \"1/2\"}, {\"name\": \"făină\", \"unit\": \"linguri\", \"amount\": \"2-3\"}, {\"name\": \"ulei de măsline pentru prăjit\", \"unit\": \"ml\", \"amount\": \"100\"}]",
+    "instructions": "Clătește boabele de năut cu apă rece și lasă-le la hidratat peste noapte. A doua zi, scurge năutul și pune-l în blender. Toacă pătrunjelul și coriandrul, adaugă-le în blender împreună cu ceapa tocată mărunt și usturoiul presat. Procesează până obții o pastă cremoasă. Adaugă sare, bicarbonat, chimion, piper și făină, amestecă bine. Modelează chiftele și prăjește-le în ulei de măsline încins până se rumenesc pe toate părțile. Scoate-le pe hârtie absorbantă pentru a elimina excesul de ulei.",
+    "category": "Aperitive",
+    "prep_time": "10 hours",
+    "cook_time": "15 minutes",
+    "total_time": null,
+    "notes": "Poți folosi năut din conservă dacă nu ai timp să îl hidratezi. Opțional, poți trece chiftelele prin semințe de susan înainte de prăjire. Se pot servi cu sos de iaurt, hummus sau salată tabbouleh.",
+    "tags": "falafel,năut,rețetă libaneză,aperitiv,bucătărie orientală"
+}

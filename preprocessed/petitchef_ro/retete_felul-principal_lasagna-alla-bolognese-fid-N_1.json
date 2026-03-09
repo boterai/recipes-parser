@@ -1,0 +1,12 @@
+{
+    "dish_name": "lasagna alla bolognese",
+    "description": "Rețetă de lasagna alla bolognese cu sos ragu și sos bechamel, stratificată cu foi de lasagna, carne tocată, legume și brânzeturi.",
+    "ingredients": "[{\"name\": \"foi de lasagna\", \"unit\": \"cutie\", \"amount\": \"1\"}, {\"name\": \"carne tocata de porc\", \"unit\": null, \"amount\": null}, {\"name\": \"carne tocata de vita\", \"unit\": null, \"amount\": null}, {\"name\": \"cepe medii\", \"unit\": \"buc\", \"amount\": \"2\"}, {\"name\": \"morcovi\", \"unit\": \"buc\", \"amount\": \"2\"}, {\"name\": \"ciuperci\", \"unit\": \"maini\", \"amount\": \"3\"}, {\"name\": \"vin rosu\", \"unit\": \"ml\", \"amount\": \"250\"}, {\"name\": \"ulei pentru prajit carnea\", \"unit\": null, \"amount\": \"putin\"}, {\"name\": \"condimente\", \"unit\": null, \"amount\": \"dupa gust\"}, {\"name\": \"suc de rosii\", \"unit\": \"g\", \"amount\": \"250\"}, {\"name\": \"parmezan\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"mozarella\", \"unit\": \"g\", \"amount\": \"200\"}, {\"name\": \"unt\", \"unit\": \"g\", \"amount\": \"50\"}, {\"name\": \"faina\", \"unit\": \"linguri\", \"amount\": \"2-3\"}, {\"name\": \"lapte\", \"unit\": null, \"amount\": null}]",
+    "instructions": "1. Se taie ceapa si morcovii marunt. 2. Se calesc in ulei sau unt. 3. Se adauga carnea tocata si ciupercile. 4. Se adauga vinul rosu si se lasa sa evapore alcoolul. 5. Se condimenteaza si se adauga sosul de rosii, se lasa sa scada. 6. Se prepara sosul bechamel topind untul, adaugand faina si apoi lapte, amestecand continuu. 7. Se unge tava cu ulei si faina. 8. Se pun straturi de foi de lasagna, ragu, parmezan, mozarella si sos bechamel, repetand straturile. 9. Se coace la cuptor la foc mediu timp de 20 de minute.",
+    "category": "Main Course",
+    "prep_time": "45 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "65 minutes",
+    "notes": "Reteta nu include laptele la ingrediente, dar este mentionat in instructiuni pentru sosul bechamel. Se pot pune mai multe straturi dupa preferinta.",
+    "tags": "lasagna,bolognese,italian,fel principal,carne,branza,sos bechamel"
+}

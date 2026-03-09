@@ -1,0 +1,12 @@
+{
+    "dish_name": "Taco mexicano",
+    "description": "Delicioso e super fácil de fazer, esse molho rápido vai deixar seu taco ainda mais delicioso.",
+    "ingredients": "[{\"name\": \"carne moída sem gordura\", \"unit\": \"g\", \"amount\": \"500\"}, {\"name\": \"azeite\", \"unit\": \"colher de sopa\", \"amount\": \"1/2\"}, {\"name\": \"cominho em pó\", \"unit\": \"colher de chá\", \"amount\": \"1\"}, {\"name\": \"pimenta caiena ou chilli em pó\", \"unit\": \"colher de sopa\", \"amount\": \"1\"}, {\"name\": \"cebola em pó\", \"unit\": \"colher de chá\", \"amount\": \"1\"}, {\"name\": \"alho em pó\", \"unit\": \"colher de chá\", \"amount\": \"1\"}, {\"name\": \"molho de tomate\", \"unit\": \"xícara\", \"amount\": \"1\"}, {\"name\": \"sal\", \"unit\": \"colher de chá\", \"amount\": \"1\"}]",
+    "instructions": "Em uma frigideira, adicione o azeite e, em seguida, a carne moída; Em fogo alto e misturando de vez em quando, deixe a mesma cozinhar; Então, retire o excesso de líquido que possa formar na sua frigideira; Logo após, adicione o molho de tomate e os temperos. Diminua o fogo, mexa bem e deixe cozinhar por mais alguns minutos; Antes de adicionar o seu molho ao taco, deixe o mesmo esfriar um pouco; Finalize adicionando os compelementos que desejar, indicamos sour cream, guacamole, alface e tomate.",
+    "category": "Carnes e Aves",
+    "prep_time": "5 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "25 minutes",
+    "notes": "Caso deseje, você pode usar cebola e alho ralado ou picado em pedaços bem pequenos. Nesse caso, comece refogando esses 2 ingredientes e somente depois adicione a carne moída.",
+    "tags": "comida mexicana, molho chilli, molho para taco, receita de taco, receita taco, taco"
+}

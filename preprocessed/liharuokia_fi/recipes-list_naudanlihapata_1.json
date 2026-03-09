@@ -1,0 +1,12 @@
+{
+    "dish_name": "Naudanlihapata",
+    "description": "Kokeile kermaista naudanlihapataa uunissa! Tämä helppo ja herkullinen resepti sisältää punaviiniä ja tuoreita raaka-aineita. Nauti mehevästä lihasta ja syvistä mausta – täydellinen viileille päiville.",
+    "ingredients": "[{\"name\": \"naudan paistilihaa\", \"unit\": \"g\", \"amount\": \"800\"}, {\"name\": \"sipulia\", \"unit\": \"kpl\", \"amount\": \"2\"}, {\"name\": \"valkosipulinkynsiä\", \"unit\": \"kpl\", \"amount\": \"4\"}, {\"name\": \"porkkanaa\", \"unit\": \"kpl\", \"amount\": \"4\"}, {\"name\": \"hillosipuleita\", \"unit\": \"tlk\", \"amount\": \"0.5\"}, {\"name\": \"liemikuutiota\", \"unit\": \"kpl\", \"amount\": \"2\"}, {\"name\": \"vehnäjauhoja\", \"unit\": \"rkl\", \"amount\": \"3\"}, {\"name\": \"tomaattimurskaa\", \"unit\": \"prk\", \"amount\": \"1\"}, {\"name\": \"timjamia\", \"unit\": \"tl\", \"amount\": \"2\"}, {\"name\": \"vettä\", \"unit\": \"l\", \"amount\": \"1-2\"}, {\"name\": \"punaviiniä\", \"unit\": \"dl\", \"amount\": \"2-3\"}, {\"name\": \"ruokakermaa\", \"unit\": \"prk\", \"amount\": \"1\"}]",
+    "instructions": "Ota liha huoneenlämpöön vähintään tunti ennen valmistusta. Leikkaa liha kuutioiksi ja sekoita niihin jauhot. Paista liha runsaassa voissa kuumalla pannulla, kunnes se saa kauniin ruskean värin. Paista lihat erissä, jotta pannu pysyy kuumana ja liha ruskistuu tasaisesti. Siirrä ruskistuneet lihat pataan. Pilko sipulit reilun kokoisiksi paloiksi (ei liian pieniksi), ja puolita valkosipulin kynnet. Ruskista sipulit ja valkosipuli samalla pannulla. Lisää pannulle kuoritut ja pilkotut porkkanat, valutetut herkkusienet sekä hillosipulit. Pyöräytä ne pannulla hetken ajan. Kaada pataan paseerattu tomaatti, lisää mustapippuria, suolaa ja timjami. Valmista lihaliemi liuottamalla lihaliemikuutiot noin 1–2 litraan vettä. Kun liemikuutiot ovat liuenneet, kaada liemi pataan niin, että kaikki ainekset peittyvät. Paista pata 150 asteessa uunissa 1½–2 tuntia. Jos haluat, voit lisätä pataan punaviiniä oman maun mukaan. Kun liha on kypsää, lisää pataan purkki kermaa ja anna padan olla uunissa vielä 10–15 minuuttia. Tarjoile keitettyjen perunoiden ja persilja-etikkakurkkujen kanssa.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "1.5-2 hours",
+    "total_time": "3 hours",
+    "notes": "Valmistusaika noin 3 tuntia. Annosmäärä 8. Voit lisätä pataan punaviiniä oman maun mukaan. Tarjoile keitettyjen perunoiden ja persilja-etikkakurkkujen kanssa.",
+    "tags": "naudanlihapata, lihapata, uuniruoka, pääruoka, kerma, punaviini"
+}

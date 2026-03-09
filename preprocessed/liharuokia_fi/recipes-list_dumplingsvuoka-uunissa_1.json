@@ -1,0 +1,12 @@
+{
+    "dish_name": "Dumplingsvuoka uunissa",
+    "description": "Mehevä dumplings-vuoka syntyy alle puolessa tunnissa suoraan uunista. Täyteläinen kermainen liemi ja pakastedumplingit – helppo arjen lihaherkku!",
+    "ingredients": "[{\"name\": \"pakastettuja lihadumplinkeja\", \"unit\": \"g\", \"amount\": \"500\"}, {\"name\": \"kuohukermaa\", \"unit\": \"dl\", \"amount\": \"2\"}, {\"name\": \"soijakastiketta\", \"unit\": \"rkl\", \"amount\": \"3\"}, {\"name\": \"seesamiöljyä\", \"unit\": \"tl\", \"amount\": \"1\"}, {\"name\": \"valkosipulitahnaa\", \"unit\": \"tl\", \"amount\": \"1\"}, {\"name\": \"inkivääritahnaa\", \"unit\": \"tl\", \"amount\": \"1\"}, {\"name\": \"sriracha-kastiketta tai chilikastiketta\", \"unit\": \"tl\", \"amount\": \"1\"}, {\"name\": \"muscovadosokeria tai hunajaa\", \"unit\": \"tl\", \"amount\": \"1\"}, {\"name\": \"mustapippuria\", \"unit\": null, \"amount\": \"ripaus\"}, {\"name\": \"keväsipulin vartta\", \"unit\": null, \"amount\": \"2\"}]",
+    "instructions": "Kuumenna uuni 225°C:een. Ota esiin riittävän suuri uunivuoka. Valmista kermainen kastike. Kaada kerma suoraan vuokaan. Lisää soijakastike, seesamiöljy, valkosipulitahna, inkivääritahna sekä mausteet. Sekoita ainekset huolellisesti suoraan vuoassa. Aseta pakastedumplingit vuokaan. Levitä jäiset lihadumplingit tasaisesti kermaisen kastikkeen sekaan. Varmista, että ne uppoavat hieman nesteeseen. Kypsennä uunissa. Paista 220–225°C:een uunissa noin 20–25 minuuttia, kunnes dumplingit ovat kypsiä ja kastike on kuplinut ja paksuuntunut hieman. Viimeistele ja tarjoile. Nosta vuoka uunista. Ripottele päälle tuoretta kevätsipulia ja halutessasi hieman chiliä. Tarjoa välittömästi riisin tai leivän kera.",
+    "category": null,
+    "prep_time": "30 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Tarjoa sellaisenaan tai riisin kera – kumpi tahansa toimii täydellisesti.",
+    "tags": "dumplings, uuniruoka, liharuoka, helppo, arki"
+}

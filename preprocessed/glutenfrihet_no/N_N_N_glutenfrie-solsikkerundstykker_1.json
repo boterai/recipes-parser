@@ -1,0 +1,12 @@
+{
+    "dish_name": "Glutenfrie Solsikkerundstykker",
+    "description": "Disse glutenfrie rundstykkene er myke, luftige og med rund, god smak av de grove kornsortene. Oppskriften er nøye satt sammen for å sikre en deig som ikke bare gir gode og saftige glutenfrie rundstykker, men deigen er også lett å jobbe med.",
+    "ingredients": "[{\"name\": \"glutenfri havregryn\", \"unit\": \"g\", \"amount\": \"140\"}, {\"name\": \"bokhvetemel\", \"unit\": \"g\", \"amount\": \"120\"}, {\"name\": \"maismel\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"rismel\", \"unit\": \"g\", \"amount\": \"50\"}, {\"name\": \"solsikkekjerner\", \"unit\": \"g\", \"amount\": \"70\"}, {\"name\": \"solsikkekjerner til pynt\", \"unit\": null, \"amount\": null}, {\"name\": \"fiberhusk\", \"unit\": \"g\", \"amount\": \"20\"}, {\"name\": \"tørrgjær\", \"unit\": \"g\", \"amount\": \"5\"}, {\"name\": \"bakepulver\", \"unit\": \"ts\", \"amount\": \"1.5\"}, {\"name\": \"salt\", \"unit\": \"ts\", \"amount\": \"1-1.5\"}, {\"name\": \"flytende honning\", \"unit\": \"ts\", \"amount\": \"1\"}, {\"name\": \"vann, kaldt\", \"unit\": \"dl\", \"amount\": \"6.5\"}]",
+    "instructions": "Ta frem kjøkkenmaskin og k-spade. Bland sammen alle de tørre ingrediensene. Tilsett vannet og honningen, litt etter litt. Bland først sammen på lav hastighet. Sjekk så at det ikke er melrester i bunnen av bakebollen. Øk hastigheten og elt deigen i 10 minutter. Bruk en slikkepott og samle deigen i bollen. Dekk med plastfolie og sett til heving på kjøkkenbenken i ca. 90 minutter. Elt deigen i bakebollen ved bruk av en slikkepotten. Bruk litt mel på benkeplaten og kna deigen videre der. Form deigen til en pølse og del i 12 emner som du så triller ut til rundstykker. Sett rundstykkene på et bakepapirkledd stekebrett. Fordel solsikkefrø over og dekk med et kjøkkenhåndkle. La heve tildekket i 60 minutter. Mot slutten av hevetiden setter du ovnen på 225 grader. Når ovnen er varm setter du de inn på midterste rille og lar de steke i 25 – 30 minutter. Rundstykkene er ferdige når de har en fin farge og stekeskorpe. La avkjøles på rist og nyt!",
+    "category": "Bakst",
+    "prep_time": "90 minutes",
+    "cook_time": "25-30 minutes",
+    "total_time": null,
+    "notes": "Deigen skal være litt klissete, men ikke så klissete at du ikke får formet den til rundstykker. Bruk mer mel om nødvendig. Stek heller litt for lenge enn for kort om du er usikker.",
+    "tags": "glutenfri, rundstykker, bakst, solsikkefrø"
+}

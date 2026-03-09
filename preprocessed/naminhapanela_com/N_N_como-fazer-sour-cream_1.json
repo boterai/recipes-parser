@@ -1,0 +1,12 @@
+{
+    "dish_name": "sour cream",
+    "description": "Receita gostosa, fácil de fazer e saudável de sour cream",
+    "ingredients": "[{\"name\": \"iogurte natural sem açúcar\", \"unit\": \"potes\", \"amount\": \"2\"}, {\"name\": \"suco de limão\", \"unit\": \"colher de sopa\", \"amount\": \"1\"}, {\"name\": \"sal\", \"unit\": null, \"amount\": \"a gosto\"}]",
+    "instructions": "Comece fazendo o creme de iogurte, para isso, transfira o mesmo para um funil com filtro e deixe na geladeira por no mínimo 6 horas para escorrer o soro Depois desse tempo, misture o suco de limão ao creme de iogurte Finalize acertando o sal",
+    "category": "Acompanhamentos",
+    "prep_time": "5 minutes",
+    "cook_time": null,
+    "total_time": "6 hours 5 minutes",
+    "notes": "Para fazer seu creme, basta deixar o iogurte escorrendo o soro por 6h a 12h. Quanto mais tempo escorrendo, mais firme será seu creme. Fica tão bom, que dá pra comer assim mesmo, só adicionando um pouco de sal. Sour cream combina demais com comidinhas mexicanas, como guacamole, salsa de tomate, chilli beans, salsa de manga e tortillas.",
+    "tags": "creme azedo, receita de sour cream, sour cream de iogurte, sour cream saudável"
+}

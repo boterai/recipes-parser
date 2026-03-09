@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pain Nuage Simple",
+    "description": "Pain nuage léger et duveteux préparé avec seulement des œufs, du fromage frais et de la crème de tartre - idéal pour les régimes pauvres en glucides et keto.",
+    "ingredients": "[{\"name\": \"œufs\", \"unit\": \"unités\", \"amount\": \"3\"}, {\"name\": \"fromage à la crème entier\", \"unit\": \"cuillères à soupe\", \"amount\": \"3\"}, {\"name\": \"crème de tartre\", \"unit\": \"cuillère à café\", \"amount\": \"1/4\"}]",
+    "instructions": "Chauffez le four à 150°C. Séparez les blancs des jaunes d'œufs. Mélangez les jaunes avec le fromage à la crème jusqu'à obtenir une texture lisse. Fouettez les blancs d'œufs avec la crème de tartre jusqu'à formation de pics fermes. Incorporez doucement le mélange de jaunes dans les blancs montés sans casser la mousse. Formez des ronds sur une plaque couverte de papier sulfurisé. Faites cuire 30 minutes jusqu'à ce qu'ils soient dorés.",
+    "category": "Pains",
+    "prep_time": "10 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "40 minutes",
+    "notes": "Prenez du fromage à la crème entier pour un meilleur goût. Se conserve 3 jours à température ambiante ou 7 jours au frigo. Peut être congelé entre des feuilles de papier sulfurisé.",
+    "tags": "Pauvre en glucides, Végétarien, Sans gluten, Keto"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kirschen einkochen",
+    "description": "Kirschen einkochen ist eine einfache und effektive Methode, um die frischen Kirschen des Sommers für das ganze Jahr zu bewahren. Ob als Kompott oder Marmelade – eingekochte Kirschen sind vielseitig einsetzbar und behalten ihren leckeren, süßen Geschmack.",
+    "ingredients": "[{\"name\": \"Kirschen\", \"unit\": \"kg\", \"amount\": \"1\"}, {\"name\": \"Zucker\", \"unit\": \"g\", \"amount\": \"200–400\"}, {\"name\": \"Wasser\", \"unit\": \"l\", \"amount\": \"1\"}, {\"name\": \"Essigwasser zur Sterilisation der Gläser\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Sterilisiere die Einmachgläser und Deckel, indem du sie entweder im Backofen oder mit Essigwasser aufkochst. Wasche die Kirschen gründlich und entsteine sie. Fülle die Kirschen in die sterilisierten Gläser und lasse einen Rand von etwa 3 cm frei. Koche das Wasser mit Zucker auf, bis sich der Zucker vollständig aufgelöst hat. Gieße die Zuckerlösung über die Kirschen in den Gläsern und lasse dabei einen Rand von 2 cm frei. Wische die Glasränder mit einem sauberen Tuch ab, um eine gute Versiegelung zu gewährleisten. Verschließe die Gläser und stelle sie in einen Topf mit heißem Wasser. Koche sie für etwa 30 Minuten bei 90°C. Lass die Gläser nach dem Einkochen auf einem Geschirrtuch abkühlen und überprüfe, ob sich ein Vakuum gebildet hat.",
+    "category": "Konservierung",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Du kannst den Zucker nach Belieben anpassen, je nachdem, wie süß du deine Kirschen haben möchtest. Für eine weniger süße Variante kannst du den Zucker durch einen alternativen Süßstoff ersetzen. Die Kirschen können auch mit Gewürzen wie Zimt oder Nelken verfeinert werden. Die eingekochten Kirschen sind im richtigen Glas mindestens 12 Monate haltbar.",
+    "tags": "Einkochen, Kirschen, Konservierung, Marmelade, Kompott, Deutsch"
+}

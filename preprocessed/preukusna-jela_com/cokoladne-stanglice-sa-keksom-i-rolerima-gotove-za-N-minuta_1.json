@@ -1,0 +1,12 @@
+{
+    "dish_name": "Čokoladne štanglice sa keksom i rolerima",
+    "description": "Brz, jednostavan i ukusan kolač koji ne zahteva pečenje i gotov je za 15 minuta. Kombinacija keksa, čokolade i rolera daje bogat ukus, a masa se lepo steže i lako se seče na uredne komade.",
+    "ingredients": "[{\"name\": \"mleveni keks\", \"unit\": \"g\", \"amount\": \"300\"}, {\"name\": \"lomljeni keks (komadići)\", \"unit\": \"g\", \"amount\": \"150\"}, {\"name\": \"posni roleri isečeni na ploškice\", \"unit\": \"kom\", \"amount\": \"10–12\"}, {\"name\": \"margarin\", \"unit\": \"g\", \"amount\": \"150\"}, {\"name\": \"čokolada\", \"unit\": \"g\", \"amount\": \"150\"}, {\"name\": \"šećer\", \"unit\": \"g\", \"amount\": \"120\"}, {\"name\": \"voda\", \"unit\": \"ml\", \"amount\": \"150\"}, {\"name\": \"kakao prah\", \"unit\": \"kašike\", \"amount\": \"2\"}, {\"name\": \"vanilin šećer\", \"unit\": \"kašičica\", \"amount\": \"1\"}]",
+    "instructions": "U šerpi pomešajte vodu i šećer pa zagrejte dok se šećer ne otopi. Dodajte margarin i mešajte dok se potpuno ne rastopi. Umešajte kakao i vanilin šećer, pa sklonite sa vatre. Odmah dodajte izlomljenu čokoladu i mešajte dok se dobije glatka, topla čokoladna smesa. U većoj činiji sjedinite mleveni keks, lomljeni keks i isečene roler štapiće. Prelijte toplim čokoladnim sirupom i dobro izmešajte dok se masa ne ujednači i postane kompaktna. Po potrebi dodajte još malo keksa ili kašiku vode, zavisno od teksture. Obložite manji pleh ili kalup folijom ili papirom za pečenje. Utisnite smesu u ravnomernom sloju, poravnajte dlanovima ili špatulom i ostavite u frižideru oko sat vremena da se stegne. Kada masa očvrsne, isecite na štanglice željene veličine.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Može se napraviti i verzija sa dodatkom oraha, kokosa ili čokoladne glazure.",
+    "tags": "čokolada,keks,roleri,kolač,brzi recept"
+}

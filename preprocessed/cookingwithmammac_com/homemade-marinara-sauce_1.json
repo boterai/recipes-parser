@@ -1,0 +1,12 @@
+{
+    "dish_name": "Easy Pasta Sauce (Marinara)",
+    "description": "Quick and delicious homemade marinara sauce with no added sugar, perfect for pasta and other Italian dishes.",
+    "ingredients": "[{\"name\": \"crushed tomatoes\", \"unit\": \"ounces\", \"amount\": \"28\"}, {\"name\": \"olive oil\", \"unit\": \"cup\", \"amount\": \"1/4\"}, {\"name\": \"garlic cloves\", \"unit\": \"cloves\", \"amount\": \"2\"}, {\"name\": \"small onion\", \"unit\": \"small (optional)\", \"amount\": \"1\"}, {\"name\": \"bay leaf\", \"unit\": \"leaf\", \"amount\": \"1\"}, {\"name\": \"salt\", \"unit\": \"teaspoon\", \"amount\": \"1/4\"}, {\"name\": \"red pepper flakes\", \"unit\": \"teaspoon\", \"amount\": \"1/4\"}, {\"name\": \"fresh basil leaves\", \"unit\": \"leaves\", \"amount\": \"2\"}]",
+    "instructions": "Heat olive oil in a large skillet on medium-high. Add onion if using and cook until soft (~4 minutes). Add garlic and cook for 1 minute, stirring. Add crushed tomatoes, bay leaf, salt, and red pepper flakes; stir. When sauce boils, lower heat and loosely cover with lid propped open. Simmer 20-30 minutes, stirring occasionally. Taste and adjust salt or olive oil if needed. Add basil leaves before serving. Serve with pasta, zucchini noodles, or pizza. Refrigerate leftovers for one week or freeze.",
+    "category": "Main Course",
+    "prep_time": "5 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "25 minutes",
+    "notes": "Use good-tasting tomatoes like San Marzano or Tuttorosso. Use regular olive oil, not extra virgin. Avoid oregano to prevent bitterness. Fresh garlic without green shoots recommended. Onion is optional. Add baking soda to reduce acidity if needed. Cooking times increase with larger batches.",
+    "tags": "Italian, marinara, pasta sauce, homemade, quick, no sugar"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Zitronenkuchen",
+    "description": "Zitronenkuchen ist schnell gebacken und schmeckt köstlich mit Zuckerguss.",
+    "ingredients": "[{\"name\": \"Bio-Zitronen\", \"unit\": \"Stück\", \"amount\": \"3\"}, {\"name\": \"Bio-Eier\", \"unit\": \"Kl. M\", \"amount\": \"6\"}, {\"name\": \"Zucker\", \"unit\": \"g\", \"amount\": \"350\"}, {\"name\": \"Mehl\", \"unit\": \"g\", \"amount\": \"350\"}, {\"name\": \"Backpulver\", \"unit\": \"Tl\", \"amount\": \"2\"}, {\"name\": \"Vanillezucker\", \"unit\": \"Pk.\", \"amount\": \"1\"}, {\"name\": \"Margarine (weich)\", \"unit\": \"g\", \"amount\": \"350\"}, {\"name\": \"Puderzucker\", \"unit\": \"g\", \"amount\": \"300\"}]",
+    "instructions": "Backofen auf 180 Grad vorheizen und ein Backblech mit Backpapier auslegen. Zitronen heiß abwaschen, trocken tupfen und Zitronenschale fein abreiben. Anschließend Zitronen auspressen. 3–4 EL Zitronensaft für den Guss beiseitestellen. In einer Schüssel Eier und Zucker schaumig schlagen. Mehl und Backpulver sieben und Vanillezucker untermischen. Abwechselnd mit der Margarine unter die Ei-Zucker-Masse rühren. Zitronenabrieb und restlichen Saft zugeben. Auf das Backblech geben und glatt streichen. Im Backofen auf der 2. Schiene von unten 20–30 Minuten backen. Stäbchenprobe machen. Für die Zitronenglasur Puderzucker erst mit 2 EL Zitronensaft verrühren. Ist der Guss noch zu fest, einen oder zwei weitere EL Zitronensaft zugeben und glatt rühren. Kuchen aus dem Backofen nehmen und noch warm mit einer Gabel einstechen. Glasur auf dem Kuchen verstreichen und abkühlen lassen.",
+    "category": "Kuchen - Torte",
+    "prep_time": null,
+    "cook_time": "20-30 minutes",
+    "total_time": "35 minutes",
+    "notes": "Für ein luftiges Ergebnis Eier und Zucker schaumig schlagen. Zitronenkuchen wird besonders saftig, wenn man ihn nach dem Backen mit Zitronensaft beträufelt. Alternativ kann man Pflanzenöl oder griechischen Joghurt verwenden. Backzeit und Temperatur können variieren je nach Backform.",
+    "tags": "Kinderrezepte,Kaffeetrinken,Party,Kuchen - Torte,Backen,Eier,Getreide,Milch + Milchprodukte,Obst,Zitrone,Mehl,Zucker"
+}

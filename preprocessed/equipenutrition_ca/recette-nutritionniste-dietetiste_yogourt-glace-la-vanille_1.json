@@ -1,0 +1,12 @@
+{
+    "dish_name": "Yogourt glacé à la vanille",
+    "description": "Ce yogourt glacé à la vanille est une collation santé et facile à préparer, idéale pour se rafraîchir lors des chaudes journées d’été. Riche en protéines grâce au yogourt grec, il allie simplicité et gourmandise avec la douce saveur de la vanille naturelle.",
+    "ingredients": "[{\"name\": \"yogourt grec nature 2 %\", \"unit\": \"ml\", \"amount\": \"500\"}, {\"name\": \"miel\", \"unit\": \"ml\", \"amount\": \"45\"}, {\"name\": \"extrait de vanille pur\", \"unit\": \"ml\", \"amount\": \"10\"}, {\"name\": \"Copeaux de chocolat noir\", \"unit\": null, \"amount\": null}, {\"name\": \"Noix hachées\", \"unit\": null, \"amount\": null}, {\"name\": \"Petits fruits, frais ou surgelés\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Dans un bol moyen, mélanger le yogourt grec, le miel et l’extrait de vanille jusqu’à ce que la préparation soit homogène. Verser dans un contenant hermétique. Ajouter les garnitures, si désirées. Congeler 1 heure et demie en remuant aux 30 minutes pour éviter la formation de cristaux de glace et obtenir une texture crémeuse. Servir immédiatement ou conserver au congélateur et sortir 30 minutes avant de consommer.",
+    "category": null,
+    "prep_time": "5 minutes",
+    "cook_time": "0 minutes",
+    "total_time": "95 minutes",
+    "notes": "Se conserve jusqu’à 1 mois au congélateur, dans un contenant hermétique.",
+    "tags": null
+}
