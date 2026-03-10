@@ -226,7 +226,7 @@ class JennieRecipesComExtractor(BaseRecipeExtractor):
             parsed_amount, parsed_unit, parsed_name = match.groups()
             if amount is None:
                 amount = parsed_amount.strip() if parsed_amount else None
-            if unit is None and not unit_override:
+            if unit is None:
                 unit = parsed_unit.strip() if parsed_unit else None
             name = parsed_name.strip() if parsed_name else cleaned
         elif amount_override:
