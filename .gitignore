@@ -30,3 +30,4 @@ parser_issue.md
 /wm_img/
 /parsers/
 /clusters/
+scripts/fix_recipes.py

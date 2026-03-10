@@ -68,6 +68,7 @@ CREATE TABLE IF NOT EXISTS images (
     remote_storage_url VARCHAR(500),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     vectorised BOOLEAN DEFAULT FALSE,
+    download_failed BOOLEAN DEFAULT FALSE, -- помечаем, если не удалось скачать изображение
     FOREIGN KEY (page_id) REFERENCES pages(id) ON DELETE CASCADE,
     INDEX idx_page_id (page_id),
     UNIQUE KEY unique_image_url_hash (image_url_hash)

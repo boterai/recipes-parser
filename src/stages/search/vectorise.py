@@ -144,7 +144,7 @@ class RecipeVectorizer:
         self.vector_db.create_collections(image_dims=image_dims)
         
         while processed < total:
-            images = self.image_repository.get_not_vectorised(limit=image_retrieve_limit, last_page_id=last_page_id)
+            images = self.image_repository.get_not_vectorised(limit=image_retrieve_limit, last_page_id=last_page_id, download_failed=False)
             if not images:
                 logger.info("Нет невекторизованных изображений для обработки")
                 return
@@ -153,7 +153,8 @@ class RecipeVectorizer:
                 images=images,
                 embedding_function=embed_function,
                 batch_size=batch_size,
-                mark_vectorised_callback=self.image_repository.mark_as_vectorised
+                mark_vectorised_callback=self.image_repository.mark_as_vectorised,
+                mark_failed_download_callback=self.image_repository.mark_as_download_failed
             )
             logger.info(f"Всего векторизовано изображений: {processed}/{total}")
             last_page_id = images[-1].page_id #чтобы не повторяться

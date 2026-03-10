@@ -5,16 +5,15 @@
 import sys
 import logging
 from pathlib import Path
-from typing import List, Optional
-from sqlalchemy import text
+from typing import Optional
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
-from src.common.db.mysql import MySQlManager
 from src.common.gpt.client import GPTClient
 from utils.languages import LANGUAGE_NAME_TO_CODE
-from src.models.search_query import SearchQueryORM, SearchQuery
+from src.models.search_query import SearchQueryORM
 from src.repositories.search_query import SearchQueryRepository
 from src.repositories.page import PageRepository
+from config.config import config
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +38,7 @@ class SearchQueryGenerator:
         if self.query_repository.close():
             logger.info("Закрыто подключение к БД")
     
-    def generate_search_queries(self, count: int = 10) -> List[str]:
+    def generate_search_queries(self, count: int = 10) -> list[str]:
         """
         Генерация эффективных поисковых запросов через ChatGPT
         
@@ -56,14 +55,16 @@ class SearchQueryGenerator:
 Return ONLY a JSON array of strings, without any additional text, explanations, or markdown formatting.
 
 Example format:
-["best chocolate cake recipe", "easy chicken dinner recipe", "vegetarian pasta recipe"]
+["korean kimchi jjigae recipe", "moroccan bastilla pigeon pie", "brazilian moqueca fish stew"]
 
 Requirements for queries:
-- Diverse (different cuisines, meal types, cooking methods)
-- Mix specific and general queries
-- Include popular recipe search patterns
-- Focus on finding actual recipe websites
-- Focus on finding concrete recipe pages
+- MAXIMUM DIVERSITY: avoid common dishes like chicken, pasta, pizza, lasagna, burgers
+- Include cuisines from all regions: East Asian (Korean, Vietnamese, Thai), Middle Eastern (Lebanese, Persian, Turkish), African (Ethiopian, Moroccan), Latin American (Peruvian, Brazilian, Mexican), Eastern European (Polish, Georgian, Ukrainian), Nordic (Swedish, Finnish, Norwegian), etc.
+- Mix specific authentic dishes with their native names (e.g., "pho bo", "shakshuka", "pierogi")
+- Include uncommon ingredients and cooking methods (fermented, smoked, steamed, clay pot)
+- Vary dish types: soups, stews, dumplings, pickles, flatbreads, street food, desserts
+- Mix specificity levels: some very specific traditional dishes, some broader searches
+- Focus on finding actual recipe websites with concrete recipe pages
 
 Generate {count} queries now:"""
 
@@ -73,7 +74,7 @@ Generate {count} queries now:"""
             response = self.gpt_client.request(
                 system_prompt=system_prompt,
                 user_prompt=prompt,
-                model="gpt-4o-mini",
+                model=config.GPT_SEARCH_QUERIES_MODEL,
                 temperature=0.8,
                 max_tokens=500
             )
@@ -94,7 +95,7 @@ Generate {count} queries now:"""
             logger.error(f"Ошибка генерации запросов: {e}")
             return []
     
-    def get_queries_from_existing_recipes(self, count: int = 10) -> List[str]:
+    def get_queries_from_existing_recipes(self, count: int = 10) -> list[str]:
         """
         Генерация поисковых запросов на основе существующих рецептов в БД
         Берет случайные рецепты и использует их названия для поиска похожих на других сайтах
@@ -139,7 +140,7 @@ Generate {count} queries now:"""
             traceback.print_exc()
             return []
     
-    def translate_query(self, query: str, target_languages: List[str]) -> dict[str, str]:
+    def translate_query(self, query: str, target_languages: list[str]) -> dict[str, str]:
         """
         Перевод поискового запроса на несколько языков через ChatGPT
         
@@ -171,7 +172,7 @@ Translate now:"""
             response = self.gpt_client.request(
                 system_prompt=system_prompt,
                 user_prompt=prompt,
-                model="gpt-4o-mini",
+                model=config.GPT_MODEL_TRANSLATE,
                 temperature=0.3,
                 max_tokens=1000
             )
@@ -210,7 +211,7 @@ Translate now:"""
         saved_count = 0
         
         try:            
-            for _, translations in queries_with_translations.items():
+            for translations in queries_with_translations.values():
                 for lang, query_text in translations.items():
                     lang_code = LANGUAGE_NAME_TO_CODE.get(lang, lang)
                     query_orm = SearchQueryORM(

@@ -329,7 +329,7 @@ if __name__ == "__main__":
                                                         max_urls=args.max_urls,
                                                         max_no_recipe_pages=30,
                                                         max_failed_parsing_attempts=1,
-                                                        success_page_count_threshold=15,
+                                                        success_page_count_threshold=15, # set to None to skip adding fail count to sites
                                                         max_recies_per_module=args.max_recipes_per_module,
                                                         min_recipes_per_module=3
                                                     ))

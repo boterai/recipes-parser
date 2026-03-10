@@ -20,9 +20,10 @@ class Config:
     
     # OpenAI настройки
     GPT_API_KEY: str = os.getenv('GPT_API_KEY', '')
-    GPT_MODEL_MINI: str = os.getenv('GPT_MODEL_MINI', 'gpt-4o-mini')
-    GPT_MODEL_MERGE: str = os.getenv('GPT_MODEL_MERGE', 'gpt-4o-mini')
+    GPT_MODEL_MINI: str = os.getenv('GPT_MODEL_MINI', 'gpt-4.1-mini')
+    GPT_MODEL_MERGE: str = os.getenv('GPT_MODEL_MERGE', 'gpt-4.1-mini')
     GPT_MODEL_TRANSLATE: str = os.getenv('GPT_MODEL_TRANSLATE', 'gpt-3.5-turbo')
+    GPT_SEARCH_QUERIES_MODEL: str = os.getenv('GPT_SEARCH_QUERIES_MODEL', 'gpt-4.1-mini')
     PROXY: Optional[str] = os.getenv('PROXY')
     SOCKS5: Optional[str] = os.getenv('SOCKS5')
     

@@ -37,6 +37,7 @@ class ImageORM(Base):
     remote_storage_url = Column(String(500))
     created_at = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'))
     vectorised = Column(Boolean, default=False)
+    download_failed = Column(Boolean, default=False)
     
     # Relationships
     page = relationship("PageORM", back_populates="images")
@@ -106,6 +107,7 @@ class Image(BaseModel):
     local_path: Optional[str] = None
     remote_storage_url: Optional[str] = None
     vectorised: Optional[bool] = False
+    download_failed: Optional[bool] = False 
     
     # Метаданные
     created_at: Optional[datetime] = None

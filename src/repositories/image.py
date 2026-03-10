@@ -26,7 +26,8 @@ class ImageRepository(BaseRepository[ImageORM]):
         self,
         limit: Optional[int] = None,
         page_id: Optional[int] = None,
-        last_page_id: Optional[int] = None
+        last_page_id: Optional[int] = None,
+        download_failed: bool = False
     ) -> List[ImageORM]:
         """
         Получить невекторизованные изображения
@@ -34,13 +35,13 @@ class ImageRepository(BaseRepository[ImageORM]):
         Args:
             limit: Максимальное количество
             page_id: Фильтр по ID страницы (опционально)
-        
+            download_failed: Фильтр по статусу неудачной загрузки (по умолчанию False)
         Returns:
             Список невекторизованных изображений
         """
         session = self.get_session()
         try:
-            query = session.query(ImageORM).filter(ImageORM.vectorised == False)
+            query = session.query(ImageORM).filter(ImageORM.vectorised == False, ImageORM.download_failed == download_failed)
             
             if page_id:
                 query = query.filter(ImageORM.page_id == page_id)
@@ -57,7 +58,7 @@ class ImageRepository(BaseRepository[ImageORM]):
         finally:
             session.close()
 
-    def get_not_vectorised_count(self) -> int:
+    def get_not_vectorised_count(self, download_failed: bool = False) -> int:
         """
         Получить количество невекторизованных изображений
         
@@ -66,7 +67,7 @@ class ImageRepository(BaseRepository[ImageORM]):
         """
         session = self.get_session()
         try:
-            count = session.query(func.count(ImageORM.id)).filter(ImageORM.vectorised == False).scalar()
+            count = session.query(func.count(ImageORM.id)).filter(ImageORM.vectorised == False, ImageORM.download_failed == download_failed).scalar()
             return count
         finally:
             session.close()
@@ -159,6 +160,34 @@ class ImageRepository(BaseRepository[ImageORM]):
         except Exception as e:
             session.rollback()
             logger.error(f"Ошибка при пометке изображений как векторизованные: {e}")
+            raise
+        finally:
+            session.close()
+
+    def mark_as_download_failed(self, image_ids: List[int]) -> int:
+        """
+        Пометить изображения как неудачные при загрузке
+        
+        Args:
+            image_ids: Список ID изображений
+        
+        Returns:
+            Количество обновленных записей
+        """
+        session = self.get_session()
+        try:
+            count = session.query(ImageORM).filter(
+                ImageORM.id.in_(image_ids)
+            ).update(
+                {'download_failed': True},
+                synchronize_session=False
+            )
+            session.commit()
+            logger.info(f"Помечено {count} изображений как неудачные при загрузке")
+            return count
+        except Exception as e:
+            session.rollback()
+            logger.error(f"Ошибка при пометке изображений как неудачные при загрузке: {e}")
             raise
         finally:
             session.close()

@@ -445,13 +445,23 @@ class QdrantRecipeManager:
         
         logger.info(f"✓ Итого добавлено: {added_count} рецептов в {len(self.collections) - 2} коллекций")
         return added_count
+
+    def _execute_callback(self, callback, items: list[int], operation_name: str):
+        """Общий метод для выполнения callback'ов с обработкой ошибок"""
+        if callback and items:
+            try:
+                callback(items)
+                logger.debug(f"✓ {operation_name}: {len(items)}")
+            except Exception as e:
+                logger.warning(f"⚠ Ошибка при {operation_name.lower()}: {e}")
     
     async def vectorise_images_async(
             self,
             images: list[ImageORM],
             embedding_function: ImageEmbeddingFunction,
             batch_size: int = 10,
-            mark_vectorised_callback: callable = None
+            mark_vectorised_callback: callable = None,
+            mark_failed_download_callback: callable = None
         ) -> int:
         """
         Добавление изображений рецептов в коллекцию images
@@ -461,6 +471,7 @@ class QdrantRecipeManager:
             embedding_function: Функция для создания эмбеддингов изображений
             batch_size: Размер батча для upsert
             mark_vectorised_callback: Callback для пометки изображений как векторизованных (принимает list[int] image_ids)
+            mark_failed_download_callback: Callback для пометки изображений, которые не удалось скачать (принимает list[int] image_ids)
         Returns:
             Количество успешно добавленных изображений
         """
@@ -478,6 +489,7 @@ class QdrantRecipeManager:
             try:
                 # Проверяем наличие локальных путей и загружаем по URL если нужно
                 mark_as_vectorised: list[int] = []
+                mark_as_failed_download: list[int] = []
                 batch_to_process = []  # Только изображения с валидными данными
 
                 img_to_upload = []
@@ -493,8 +505,6 @@ class QdrantRecipeManager:
                     else:
                         logger.warning(f"⚠ Изображение ID={img.id} без local_path и image_url, пропускаем")
 
-                    mark_as_vectorised.append(img.id) # все равно отмечаем как векторизованные, чтобы повторно не скачивать 
-
                 # Выполняем асинхронную загрузку изображений по URL
                 if img_pil_tasks:
                     downloaded_images = await asyncio.gather(*img_pil_tasks)
@@ -502,17 +512,13 @@ class QdrantRecipeManager:
                         if img_pil:
                             img_to_upload.append(img_pil)
                             batch_to_process.append(batch_images[idx])
+                            mark_as_vectorised.append(batch_images[idx].id) # все равно отмечаем как векторизованные, чтобы повторно не скачивать 
                         else:
-                            logger.warning(f"⚠ Не удалось загрузить изображение: {batch_images[idx].image_url}")
+                            mark_as_failed_download.append(batch_images[idx].id)
                 
                 if not img_to_upload:
                     logger.warning(f"⚠ Батч {batch_num} не содержит валидных изображений")
-                    if mark_as_vectorised:
-                        try:
-                            mark_vectorised_callback(mark_as_vectorised)
-                            logger.debug(f"✓ Помечено {len(mark_as_vectorised)} изображений как векторизованные")
-                        except Exception as e:
-                            logger.warning(f"⚠ Ошибка при пометке изображений: {e}")
+                    self._execute_callback(mark_failed_download_callback, mark_as_failed_download, "Пометка неудачных загрузок")
                     continue
                 
                 # Создаем векторы изображений
@@ -535,13 +541,9 @@ class QdrantRecipeManager:
                 added_count += len(points)
                 logger.info(f"✓ Батч {batch_num}, 'images': {len(points)} изображений")
             
-                # Помечаем изображения как векторизованные
-                if mark_vectorised_callback and mark_as_vectorised:
-                    try:
-                        mark_vectorised_callback(mark_as_vectorised)
-                        logger.debug(f"✓ Помечено {len(mark_as_vectorised)} изображений как векторизованные")
-                    except Exception as e:
-                        logger.warning(f"⚠ Ошибка при пометке изображений: {e}")
+                # Помечаем изображения как векторизованные и как неудачные закгрзуки
+                self._execute_callback(mark_failed_download_callback, mark_as_failed_download, "Пометка неудачных загрузок")
+                self._execute_callback(mark_vectorised_callback, mark_as_vectorised, "Пометка векторизованных изображений")
                 
             except Exception as e:
                 logger.error(f"✗ Ошибка батча {batch_num}: {e}")
