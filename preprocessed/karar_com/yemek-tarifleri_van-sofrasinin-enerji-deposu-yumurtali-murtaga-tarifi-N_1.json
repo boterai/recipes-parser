@@ -1,0 +1,12 @@
+{
+    "dish_name": "Yumurtalı Murtağa",
+    "description": "Van mutfağının en meşhur kahvaltılıklarından biri olan Murtağa, un ve tereyağının muhteşem uyumunu yumurtayla taçlandırıyor. Hazırlanışı oldukça pratik, tadı ise damaklarda iz bırakan bu yöresel lezzet, güne zinde başlamak isteyenlerin favorisi.",
+    "ingredients": "[{\"name\": \"tereyağı\", \"unit\": \"gram\", \"amount\": 125}, {\"name\": \"un\", \"unit\": \"su bardağı\", \"amount\": 1}, {\"name\": \"yumurta\", \"unit\": \"adet\", \"amount\": 2}, {\"name\": \"yumurta\", \"unit\": \"adet\", \"amount\": 3}, {\"name\": \"tuz\", \"unit\": \"çay kaşığı\", \"amount\": 1}, {\"name\": \"toz şeker\", \"unit\": \"çay kaşığı (isteğe bağlı)\", \"amount\": 1}]",
+    "instructions": "1. Tereyağını geniş ve tercihen derin bir tavada eritin. Yağ tamamen eriyip hafifçe köpürmeye başladığında altını biraz kısın.\n2. Eriyen yağın üzerine unu yavaş yavaş ilave edin. Tahta bir kaşık yardımıyla sürekli karıştırarak unu kavurun. Unun rengi hafifçe dönene ve kavrulmuş kokusu çıkana kadar yaklaşık 10-15 dakika kavurun.\n3. Ayrı bir kasede yumurtaları tuz ile birlikte çırpın. Kavrulan unun üzerine çırptığınız yumurtaları gezdirin. Yumurtalar unlu karışımla bütünleşene kadar hızlıca karıştırın. Yumurtalar piştiğinde (yaklaşık 1-2 dakika içinde) tencereyi ocaktan alın.\n4. Murtağa sıcak servis edilir. Tavadan tabağa almadan, tavanın kendi sıcaklığıyla servis edilmesi önerilir. Yanında taze Van çöreği veya sıcak ekmekle tüketilmesi lezzetini artırır.",
+    "category": "Breakfast",
+    "prep_time": null,
+    "cook_time": "15 minutes",
+    "total_time": null,
+    "notes": "Unun kokusunun tam çıkması için sabırla kavurmak lezzetin anahtarıdır. Murtağa çok kuru olmamalıdır; hafif yağlı ve yumuşak bir yapıda kalması makbuldür. Van'da bazı yörelerde üzerine bal veya reçel dökülerek tatlı niyetine de tüketilir.",
+    "tags": "Van mutfağı, kahvaltılık, yöresel, yumurta, tereyağı, un"
+}

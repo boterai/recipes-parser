@@ -1,0 +1,12 @@
+{
+    "dish_name": "Veganska juha od jabuke i celera s hrskavim kestenima",
+    "description": null,
+    "ingredients": "[{\"name\": \"celer\", \"unit\": \"g\", \"amount\": \"500\"}, {\"name\": \"luk\", \"unit\": \"kom\", \"amount\": \"1\"}, {\"name\": \"jabuka\", \"unit\": \"kom\", \"amount\": \"1\"}, {\"name\": \"Biljno ulje\", \"unit\": \"žlica\", \"amount\": \"1\"}, {\"name\": \"povrtnoga temeljaca\", \"unit\": \"ml\", \"amount\": \"600\"}, {\"name\": \"Vemondo bio sojino vrhnje za kuhanje\", \"unit\": \"ml\", \"amount\": \"200\"}, {\"name\": \"soli\", \"unit\": null, \"amount\": \"po želji\"}, {\"name\": \"papra\", \"unit\": null, \"amount\": \"po želji\"}, {\"name\": \"muškatna oraščića\", \"unit\": null, \"amount\": \"po želji\"}, {\"name\": \"stabljike celera\", \"unit\": \"kom\", \"amount\": \"3\"}, {\"name\": \"crnog raženog kruha\", \"unit\": \"kom\", \"amount\": \"2\"}, {\"name\": \"kestena\", \"unit\": \"g\", \"amount\": \"50\"}, {\"name\": \"margarin\", \"unit\": \"žlica\", \"amount\": \"1\"}, {\"name\": \"timijan\", \"unit\": \"grana\", \"amount\": \"1\"}]",
+    "instructions": "Za juhu: Korijen celera, luk i jabuku oguliti. Jabuku narezati na četvrtine i odstraniti koštice. Jabuku i luk sitno nasjeckati, a celer narezati na komade veličine oraha. U loncu zagrijati ulje, dodati luk i pirjati dok ne postane staklast, zatim podliti povrtnim temeljcem. Dodati celer i sve zajedno zakuhati. Dodati ¾ nasjeckanih jabuka, poklopiti i kuhati na laganoj vatri oko 30 minuta dok sve ne omekša. Zatim juhu usitniti štapnim mikserom u glatku kremu. Uliti zobeno vrhnje za kuhanje i začiniti solju, paprom i muškatnim oraščićem. Za preljev: Dok se juha kuha, celer u stabljici oprati, osušiti i narezati na sitne komadiće. Kriške kruha narezati na kockice veličine otprilike 1,5 × 1,5 cm. Kestene prerezati na četvrtine. U tavi otopiti margarin pa na njemu popržiti (predhodno kuhani) kestene i kruh. Dodati celer u stabljici i jabuku, kratko propržiti uz miješanje. Timijan oprati, otrgnuti listiće i dodati u tavu. Posluživanje: Krem juhu rasporediti u duboke tanjure i poslužiti s hrskavim dodatkom od kestena i pumpernickel kruha.",
+    "category": "Juhe i umaci",
+    "prep_time": "15 min",
+    "cook_time": "35 min",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

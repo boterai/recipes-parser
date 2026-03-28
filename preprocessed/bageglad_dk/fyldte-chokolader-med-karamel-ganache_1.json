@@ -1,0 +1,12 @@
+{
+    "dish_name": "Fyldte chokolader med karamel ganache",
+    "description": "Nemme og lækre fyldte chokolader af mælkechokolade skaller fyldt med en fantastisk Callebaut Gold ganache.",
+    "ingredients": "[{\"name\": \"god mælkechokolade\", \"unit\": \"g\", \"amount\": \"250\"}, {\"name\": \"karamelliseret hvid chokolade (f.eks. Callebaut Gold)\", \"unit\": \"g\", \"amount\": \"75\"}, {\"name\": \"usaltet smør\", \"unit\": \"g\", \"amount\": \"20\"}, {\"name\": \"piskefløde\", \"unit\": \"dl\", \"amount\": \"½\"}]",
+    "instructions": "Smelt og temperer 3/4 af den lyse chokolade. Fyld 12 huller i en chokoladeform med mælkechokolade. Bank formen i bordet for at fjerne eventuelle luftbobler. Vend bunden i vejret på formen og hæld den overskydende chokolade ud på et stykke bagepapir. Skrab langs toppen af chokoladeformen med en paletkniv, så den overskydende chokolade fjernes og du har perfekte skaller tilbage. Stil formen i køleskabet til den er størknet. Skær smørret i stykker og kom den i en skål sammen med den karamelliserede hvide chokolade. Kom piskefløde i en lille gryde og varm det op under omrøring til lige under kogepunktet. Hæld piskefløden over chokoladen og smørret, og lad det stå i et par minutter. Rør så blandingen langsomt sammen til en ensartet ganache. Lad ganachen stå til den er lunken, hvorefter den kan hældes i chokoladeskallerne. Fyld dem kun 2/3 op, så der er plads til et låg af chokolade. Stil chokoladeformen i køleskabet i minimum 1 time. Smelt og temperer den resterende lyse chokolade. Hæld den oven på den nu stivnede karamelganache, så der dannes et låg på alle chokoladerne. Skrab med en paletkniv langs toppen af formen for at fjerne overskydende chokolade. Stil formen i køleskabet indtil chokoladen er størknet, og bank så chokoladerne ud af formen.",
+    "category": "Dessert",
+    "prep_time": "2 hours",
+    "cook_time": "1 hour",
+    "total_time": "2-3 hours",
+    "notes": "Holdbarhed: Fyldte chokolader kan holde sig i cirka 7-10 dage ved 16-18 grader. Temperering af chokolade er vigtigt for et godt resultat. Ganachen skal køle af til stuetemperatur inden fyldning.",
+    "tags": "chokolade, karamel, ganache, dessert, konfekt"
+}

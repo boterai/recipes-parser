@@ -1,0 +1,12 @@
+{
+    "dish_name": "Bulut Yumurta (Cloud Eggs)",
+    "description": "Hafta sonu kahvaltısını sıradanlığın dışına taşımak isteyenler için hem görsel olarak çarpıcı hem de lezzetiyle unutulmaz bir tarif: Bulut Yumurta (Cloud Eggs). Hazırlaması yalnızca 15 dakika süren bu pratik lezzet, yumurtanın beyazının bulut gibi kabarık ve çıtır, sarısının ise akışkan kalmasıyla sofraların yeni yıldızı olmaya aday.",
+    "ingredients": "[{\"name\": \"büyük boy yumurta\", \"unit\": \"adet\", \"amount\": \"2\"}, {\"name\": \"tuz\", \"unit\": null, \"amount\": \"bir tutam\"}, {\"name\": \"taze çekilmiş karabiber\", \"unit\": null, \"amount\": \"bir tutam\"}, {\"name\": \"rendelenmiş Parmesan peyniri\", \"unit\": \"yemek kaşığı\", \"amount\": \"1\"}, {\"name\": \"doğranmış taze maydanoz veya frenk soğanı\", \"unit\": null, \"amount\": null}]",
+    "instructions": "1. Fırını 200°C’ye ayarlayın ve pişirme kağıdı serilmiş fırın tepsisini hazırlayın.\n2. Yumurtaların beyazlarını ve sarılarını birbirinden dikkatlice ayırın. Sarıları küçük bir kaseye alın ve bir kenarda bekletin.\n3. Yumurta beyazlarını, bir tutam tuz ve karabiber ekleyerek mikser yardımıyla kar gibi sertleşene kadar çırpın. Kabı ters çevirdiğinizde dökülmeyecek kıvama gelmelidir.\n4. İsteğe bağlı olarak rendelenmiş Parmesan peynirini çırpılmış beyazlara yavaşça ekleyip spatula ile nazikçe karıştırın.\n5. Çırpılmış beyazları kaşık yardımıyla fırın tepsisine iki ayrı \"bulut\" şeklinde yerleştirin. Her bulutun ortasına sarılar için küçük bir çukur açmayı unutmayın.\n6. Bulutları fırında yaklaşık 5-7 dakika kadar, kenarları hafifçe kızarana kadar pişirin.\n7. Tepsiyi fırından çıkarın ve hazırladığınız çukurlara yumurta sarılarını yavaşça yerleştirin.\n8. Tepsiyi fırına geri koyun ve sarılar istediğiniz akışkanlığa gelene kadar 3 dakika daha pişirin.\n9. Üzerine doğranmış yeşillikleri serpip, kızarmış ekmek veya avokado dilimleri eşliğinde hemen servis yapın.",
+    "category": null,
+    "prep_time": "15 minutes",
+    "cook_time": "10 minutes",
+    "total_time": null,
+    "notes": "Parmesan peyniri isteğe bağlıdır, çıtırlık katmak için kullanılabilir.",
+    "tags": "kahvaltı, yumurta, pratik tarif, bulut yumurta"
+}

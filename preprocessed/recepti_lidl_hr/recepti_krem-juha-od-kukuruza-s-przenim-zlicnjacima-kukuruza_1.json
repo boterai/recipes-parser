@@ -1,0 +1,12 @@
+{
+    "dish_name": "Krem juha od kukuruza s prženim žličnjacima kukuruza",
+    "description": null,
+    "ingredients": "[{\"name\": \"kukuruz\", \"unit\": \"g\", \"amount\": \"600\"}, {\"name\": \"luk\", \"unit\": \"kom\", \"amount\": \"1\"}, {\"name\": \"mrkva\", \"unit\": \"kom\", \"amount\": \"1\"}, {\"name\": \"celera\", \"unit\": null, \"amount\": \"po želji\"}, {\"name\": \"maslaca\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"vrhnje za kuhanje\", \"unit\": \"l\", \"amount\": \"0.5\"}, {\"name\": \"jaja\", \"unit\": \"kom\", \"amount\": \"3\"}, {\"name\": \"kukuruznoga brašna\", \"unit\": \"žlice\", \"amount\": \"3-4\"}, {\"name\": \"peršina\", \"unit\": null, \"amount\": \"po želji\"}, {\"name\": \"limun\", \"unit\": \"kom\", \"amount\": \"1\"}, {\"name\": \"bijelo vino\", \"unit\": \"dl\", \"amount\": \"1\"}, {\"name\": \"kurkuma\", \"unit\": \"prstohvat\", \"amount\": \"1\"}, {\"name\": \"suncokretova ulja\", \"unit\": null, \"amount\": \"po želji\"}, {\"name\": \"soli\", \"unit\": null, \"amount\": \"po želji\"}, {\"name\": \"papra\", \"unit\": null, \"amount\": \"po želji\"}]",
+    "instructions": "Kukuruz iz konzerve ocijedimo, 100 g odvojimo za žličnjake. Nasjeckamo luk, kojega prodinstamo na ulju. Dodamo komadiće mrkve i celera, kratko provrtimo i dodamo kukuruz. Dodamo 50 g maslaca i dinstamo da kukuruz dobije karamelizaciju. Začinimo sa soli, paprom i prstohvatom kurkume, zalijemo bijelim vinom i dodamo temeljca ili vode da duplo prekrijemo sadržaj u loncu. Poklopimo i kuhamo da povrće omekša, oko pola sata. Jaja lagano posolimo i popaprimo. Dodamo im malo sjeckanog peršina i razmutimo. Dodamo kukuruznog brašna i promiješamo da dobijemo gustu smjesu. Dodamo preostali kukuruz, kojega umiješamo u smjesu. Nakon što smjesa malo odstoji, radimo žličnjake, koje pržimo u dubokom ulju. Žličnjake nakon prženja ocijedimo od viška masnoće na kuhinjskom ubrusu. U juhu pred kraj dodamo vrhnje za kuhanje te razradimo štapnim mikserom. Dodamo preostali maslac i par kapi limuna. U gotovu juhu, pri serviranju, stavimo par žličnjaka od kukuruza i ukrasimo grančicom peršina.",
+    "category": "Juhe i umaci",
+    "prep_time": "40 min",
+    "cook_time": "30 min",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

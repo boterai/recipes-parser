@@ -1,0 +1,12 @@
+{
+    "dish_name": "Bezglutenski vafli",
+    "description": "UÅ¾ivajte u vikendu uz Bakine mekane i prozraÄne bezglutenske vafle.",
+    "ingredients": "[{\"name\": \"jaja\", \"unit\": null, \"amount\": \"2\"}, {\"name\": \"Å¡eÄ‡er\", \"unit\": \"zÌŒlice\", \"amount\": \"2\"}, {\"name\": \"mlijeko\", \"unit\": \"ml\", \"amount\": \"360\"}, {\"name\": \"sol\", \"unit\": null, \"amount\": \"prstohvat\"}, {\"name\": \"ekstrakt vanilije\", \"unit\": \"zÌŒlicÌŒica\", \"amount\": \"1\"}, {\"name\": \"ribana korica naranÄe\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"biljno ulje\", \"unit\": \"ml\", \"amount\": \"60\"}, {\"name\": \"praÅ¡ak za pecivo\", \"unit\": \"Å¾liÄice\", \"amount\": \"2\"}, {\"name\": \"Bakin'mix Bread&Pizza\", \"unit\": \"g\", \"amount\": \"220\"}]",
+    "instructions": "U zdjeli dobro razmutite jaja. Dodajte Å¡eÄ‡er, mlijeko, sol, ulje, ekstrakt vanilije i koricu naranÄe pa izmijeÅ¡ajte uz pomoÄ‡ pjenjaÄe. BraÅ¡no u zasebnoj posudi pomijeÅ¡ajte s praÅ¡kom za pecivo, pa umijeÅ¡ajte u smjesu s jajima. Pustite da odstoji 15 minuta (da se zgusne), a za to vrijeme zagrijte aparat za vafle. Vafle ispecite prema uputama proizvoÄ‘aÄa. U slast!",
+    "category": "Slatko",
+    "prep_time": "20 min",
+    "cook_time": "10 min",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}
