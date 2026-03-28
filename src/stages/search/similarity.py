@@ -69,7 +69,6 @@ class _DSU:
         """Возвращает размер кластера, содержащего элемент x."""
         root = self.find(x)
         return self.size.get(root, 1)
-        repo = ClusterPageRepository()
 
 
 def build_clusters_from_dsu(dsu: _DSU, min_cluster_size: int) -> list[list[int]]:
