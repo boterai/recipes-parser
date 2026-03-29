@@ -519,7 +519,6 @@ class BakinMixComExtractor(BaseRecipeExtractor):
 
 
 def main():
-    import os
     # Process the preprocessed/bakin-mix_com directory relative to the repo root
     repo_root = Path(__file__).parent.parent
     recipes_dir = repo_root / 'preprocessed' / 'bakin-mix_com'
