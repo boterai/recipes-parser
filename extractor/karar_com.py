@@ -31,27 +31,29 @@ TURKISH_NUMBER_WORDS = {
     "yarım": "0.5", "çeyrek": "0.25",
 }
 
-# Keywords that signal the ingredients section (normalized to Python .lower() output)
+# Keywords that signal the ingredients section
+# (normalized via _normalize_tr before comparison)
 INGREDIENT_KEYWORDS = [
     "malzemeler", "malzeme", "gerekli malzeme", "gerekli malzemeler",
     "ingredients",
 ]
 
-# Keywords that signal the instructions section (normalized to Python .lower() output)
-# Note: Turkish I (U+0049) → i (U+0069) in Python .lower(), so use 'i' not 'ı'
+# Keywords that signal the instructions section
+# (normalized via _normalize_tr before comparison)
 INSTRUCTION_KEYWORDS = [
-    "hazirlanişi", "hazirlanis", "hazirlanisi",
-    "yapilişi", "yapilis",
+    "hazirlanisi", "hazirlanis",
+    "yapilisi", "yapilis",
     "adim adim", "adimlar",
     "nasil yapilir", "pisirme",
     "instructions",
 ]
 
 # Keywords that signal the notes section
+# (normalized via _normalize_tr before comparison)
 NOTES_KEYWORDS = [
-    "püf noktas", "puf noktas",
-    "ipucu", "ipuclari", "ipuçları",
-    "not:", "notlar", "öneriler", "tavsiyeler",
+    "puf nokta",
+    "ipucu", "ipuclari",
+    "not:", "notlar", "oneriler", "tavsiyeler",
     "tips",
 ]
 
@@ -103,20 +105,23 @@ class KararComExtractor(BaseRecipeExtractor):
         Нормализует турецкий текст для регистронезависимого сравнения.
         Конвертирует спец. символы к ASCII-эквивалентам.
         """
+        # Replace "İ" (U+0130) BEFORE .lower() because Python converts it to
+        # "i" + combining dot above (U+0069 + U+0307), not plain "i".
         return (
-            text.lower()
-            .replace("ı", "i")   # Turkish dotless i → i
-            .replace("İ", "i")   # Turkish dotted capital I → i
-            .replace("ğ", "g")
+            text
+            .replace("İ", "i")   # U+0130 Turkish dotted capital I → i (before lower!)
+            .replace("ı", "i")   # U+0131 Turkish dotless i → i
             .replace("Ğ", "g")
-            .replace("ş", "s")
+            .replace("ğ", "g")
             .replace("Ş", "s")
-            .replace("ç", "c")
+            .replace("ş", "s")
             .replace("Ç", "c")
-            .replace("ö", "o")
+            .replace("ç", "c")
             .replace("Ö", "o")
-            .replace("ü", "u")
+            .replace("ö", "o")
             .replace("Ü", "u")
+            .replace("ü", "u")
+            .lower()             # lower() AFTER replacements
         )
 
     @staticmethod
@@ -129,25 +134,82 @@ class KararComExtractor(BaseRecipeExtractor):
 
     def extract_dish_name(self) -> Optional[str]:
         """Извлечение названия блюда."""
-        # 1. content-title div
+        if self._is_gallery_page():
+            return self._extract_dish_name_gallery()
+        else:
+            return self._extract_dish_name_article()
+
+    def _extract_dish_name_gallery(self) -> Optional[str]:
+        """
+        Для галерейных страниц ищем название рецепта в описании.
+        Паттерн: "bir tarif: <название>." в тексте описания.
+        """
+        desc_raw = ""
+        cd = self.soup.find(class_="content-description")
+        if cd:
+            desc_raw = cd.get_text(strip=True)
+        if not desc_raw:
+            meta = self.soup.find("meta", {"name": "description"})
+            if meta:
+                desc_raw = meta.get("content", "")
+        if desc_raw:
+            m = re.search(r"bir tarif:\s*([^\n.]+(?:\([^)]*\))?)", desc_raw, re.IGNORECASE)
+            if m:
+                return self.clean_text(m.group(1).rstrip(". "))
+
+        # Fallback: content-title tag
         ct = self.soup.find(class_="content-title")
         if ct:
             text = self.clean_text(ct.get_text())
             if text:
                 return text
-
-        # 2. h1 tag
         h1 = self.soup.find("h1")
         if h1:
-            text = self.clean_text(h1.get_text())
+            return self.clean_text(h1.get_text())
+        return None
+
+    def _extract_dish_name_article(self) -> Optional[str]:
+        """
+        Для статейных страниц ищем название рецепта в заголовках text-content.
+        Очищаем от временных префиксов (X DAKİKADA) и суффиксов (TARİFİ).
+        """
+        tc = self._get_article_text_content()
+        if tc:
+            for heading in tc.find_all(["h2", "h3", "h4"]):
+                text = self.clean_text(heading.get_text())
+                if not text:
+                    continue
+                norm = self._normalize_tr(text)
+                # Skip instruction / notes / ingredient section headings
+                if any(kw in norm for kw in INSTRUCTION_KEYWORDS):
+                    continue
+                if any(kw in norm for kw in NOTES_KEYWORDS):
+                    continue
+                if any(kw in norm for kw in INGREDIENT_KEYWORDS):
+                    continue
+                # Strip leading "X DAKİKADA " prefix from original text
+                # (detect using normalized form, strip same char count from original)
+                prefix_m = re.match(r"^\d+\s*dakikada\s+", norm)
+                if prefix_m:
+                    text = text[len(prefix_m.group(0)):]
+                    norm = norm[len(prefix_m.group(0)):]
+                # Strip trailing " tarifi" / " TARİFİ"
+                suffix_m = re.search(r"\s+tarifi?\s*$", norm)
+                if suffix_m:
+                    text = text[:len(text) - (len(norm) - suffix_m.start())]
+                text = self.clean_text(text)
+                if text and len(text) > 3:
+                    return text
+
+        # Fallback: content-title or h1
+        ct = self.soup.find(class_="content-title")
+        if ct:
+            text = self.clean_text(ct.get_text())
             if text:
                 return text
-
-        # 3. og:title meta
-        og_title = self.soup.find("meta", property="og:title")
-        if og_title and og_title.get("content"):
-            return self.clean_text(og_title["content"])
-
+        h1 = self.soup.find("h1")
+        if h1:
+            return self.clean_text(h1.get_text())
         return None
 
     # ----------------------------------------------------------- description
@@ -159,6 +221,8 @@ class KararComExtractor(BaseRecipeExtractor):
         if cd:
             text = self.clean_text(cd.get_text())
             if text:
+                # Strip trailing ellipsis
+                text = re.sub(r"\.{2,}\s*$", ".", text).rstrip()
                 return text
 
         # 2. meta description
@@ -471,12 +535,11 @@ class KararComExtractor(BaseRecipeExtractor):
 
         steps = []
 
-        # Look for <ol> lists (numbered steps)
+        # 1. Try <ol> list (numbered steps like makarna)
         ol = tc.find("ol")
         if ol:
-            items = ol.find_all("li")
-            for item in items:
-                # Remove ads from inside li
+            for item in ol.find_all("li"):
+                # Remove ad banners from inside li
                 for ad in item.find_all("div"):
                     ad.decompose()
                 text = self.clean_text(item.get_text(separator=" ", strip=True))
@@ -484,45 +547,45 @@ class KararComExtractor(BaseRecipeExtractor):
                     steps.append(text)
 
         if steps:
-            # Add numbering
             numbered = []
             for i, step in enumerate(steps, 1):
                 numbered.append(f"{i}. {step}")
             return "\n".join(numbered)
 
-        # Fallback: look for heading with instruction keyword, collect following content
+        # 2. Fallback: find instruction heading + collect following p elements
+        #    Skip bold "N. LABEL:" paragraphs (like "1. TEREYAĞININ HAZIRLANMASI:")
+        #    to get clean step descriptions only
         for heading in tc.find_all(["h2", "h3", "h4"]):
             h_text = self._normalize_tr(heading.get_text(strip=True))
             if any(kw in h_text for kw in INSTRUCTION_KEYWORDS):
                 collected_steps = []
                 for sib in heading.find_next_siblings():
                     if sib.name in ("h2", "h3", "h4"):
-                        # Stop at next heading that is NOT a step heading
-                        sib_text = self._normalize_tr(sib.get_text(strip=True))
-                        if not any(kw in sib_text for kw in INSTRUCTION_KEYWORDS):
+                        sib_norm = self._normalize_tr(sib.get_text(strip=True))
+                        if not any(kw in sib_norm for kw in INSTRUCTION_KEYWORDS):
                             break
-                    # Gather <li> items
-                    list_items = sib.find_all("li")
-                    if list_items:
-                        for li in list_items:
+                    lis = sib.find_all("li")
+                    if lis:
+                        for li in lis:
                             text = self.clean_text(li.get_text(separator=" ", strip=True))
                             if text:
                                 collected_steps.append(text)
-                    elif sib.name == "p":
+                    elif sib.name == "p" and not sib.get("class"):  # skip rel-link paragraphs
                         text = self.clean_text(sib.get_text(separator=" ", strip=True))
-                        if text and not sib.get("class"):
-                            collected_steps.append(text)
+                        if not text:
+                            continue
+                        # Skip bold step-number heading paragraphs: "1. LABEL:"
+                        strong = sib.find("strong")
+                        if strong and re.match(r"^\d+\.", text):
+                            continue
+                        collected_steps.append(text)
                 steps = collected_steps
                 break
-
-        # Murtağa-style: numbered bold paragraphs followed by explanation paragraphs
-        if not steps:
-            steps = self._extract_instructions_from_bold_paragraphs(tc)
 
         if not steps:
             return None
 
-        # Re-check / add numbering
+        # Add numbering
         numbered = []
         step_num = 1
         for step in steps:
@@ -533,40 +596,6 @@ class KararComExtractor(BaseRecipeExtractor):
                 step_num += 1
 
         return "\n".join(numbered)
-
-    def _extract_instructions_from_bold_paragraphs(self, tc) -> list:
-        """
-        Извлечение шагов из формата: <p><strong>N. ЗАГОЛОВОК:</strong></p><p>текст</p>
-        Характерно для страниц типа murtağa.
-        """
-        steps = []
-        all_paragraphs = tc.find_all("p")
-        i = 0
-        while i < len(all_paragraphs):
-            p = all_paragraphs[i]
-            # Check if paragraph is a step heading: starts with "N. " or "N."
-            text = self.clean_text(p.get_text(separator=" ", strip=True))
-            strong = p.find("strong")
-            if strong and re.match(r"^\d+\.", text):
-                # This is a step heading; collect the next paragraph(s) as the step body
-                step_title = text.rstrip(":")
-                body_parts = [step_title]
-                j = i + 1
-                while j < len(all_paragraphs):
-                    next_p = all_paragraphs[j]
-                    next_text = self.clean_text(next_p.get_text(separator=" ", strip=True))
-                    next_strong = next_p.find("strong")
-                    # Stop if next paragraph is also a step heading
-                    if next_strong and re.match(r"^\d+\.", next_text):
-                        break
-                    if next_text and not next_p.get("class"):
-                        body_parts.append(next_text)
-                    j += 1
-                steps.append(" ".join(body_parts))
-                i = j
-            else:
-                i += 1
-        return steps
 
     # --------------------------------------------------------------- category
 
@@ -598,23 +627,22 @@ class KararComExtractor(BaseRecipeExtractor):
 
     # --------------------------------------------------------------- time helpers
 
-    @staticmethod
-    def _extract_time_from_text(text: str) -> Optional[str]:
+    def _extract_time_from_text(self, text: str) -> Optional[str]:
         """
         Пытается извлечь время из текста.
         Примеры: "15 dakika", "12-15 dakika", "1 saat 30 dakika".
         """
         if not text:
             return None
-        # Pattern: number(s) + dakika/saat
         m = re.search(
             r"(\d+(?:\s*-\s*\d+)?)\s*(dakika|saat|minute|hour)",
             text,
             re.IGNORECASE,
         )
         if m:
-            value = re.sub(r"\s+", "", m.group(1))  # compress spaces in range
-            unit = m.group(2).lower()
+            value = re.sub(r"\s+", "", m.group(1))
+            # Normalize to avoid Turkish i-dot encoding artifacts (DAKİKA → dakika)
+            unit = self._normalize_tr(m.group(2))
             return f"{value} {unit}"
         return None
 
@@ -669,29 +697,27 @@ class KararComExtractor(BaseRecipeExtractor):
 
     def extract_total_time(self) -> Optional[str]:
         """Извлечение общего времени приготовления."""
-        # From description: "toplamda X dakika" or "X dakikada hazır"
+        # Only match "toplamda" (total time) — "yalnızca" is prep time
         desc = self.extract_description() or ""
         total_patterns = [
             r"toplamda\s+(?:sadece\s+)?(\d+(?:\s*-\s*\d+)?\s*dakikayı\b|\d+(?:\s*-\s*\d+)?\s*dakika\b)",
-            r"yalnızca\s+(\d+(?:\s*-\s*\d+)?\s*dakika)",
             r"(\d+(?:\s*-\s*\d+)?\s*dakikada(?:\s+hazır)?)",
         ]
         for pat in total_patterns:
             m = re.search(pat, desc, re.IGNORECASE)
             if m:
                 raw = m.group(1)
-                # Extract number + dakika
                 t = self._extract_time_from_text(raw)
                 return t if t else self.clean_text(raw)
 
-        # Also check in the recipe title heading inside text-content
+        # Check recipe title heading inside text-content: "X DAKİKADA RECIPE_NAME"
         tc = self._get_article_text_content()
         if tc:
             for heading in tc.find_all(["h2", "h3", "h4"]):
-                h_text = heading.get_text(strip=True)
-                m = re.match(r"^(\d+)\s*DAKİKADA\b", h_text, re.IGNORECASE)
-                if m:
-                    return f"{m.group(1)} dakika"
+                h_norm = self._normalize_tr(heading.get_text(strip=True))
+                mm = re.match(r"^(\d+)\s*dakikada\b", h_norm)
+                if mm:
+                    return f"{mm.group(1)} dakika"
         return None
 
     # --------------------------------------------------------------- notes
@@ -699,25 +725,26 @@ class KararComExtractor(BaseRecipeExtractor):
     def extract_notes(self) -> Optional[str]:
         """Извлечение заметок и советов."""
         tc = self._get_article_text_content()
-        if not tc:
-            # For gallery pages, check last figures
-            if self._is_gallery_page():
-                return self._extract_notes_gallery()
-            return None
+        if tc:
+            # Look for notes heading in article
+            for heading in tc.find_all(["h2", "h3", "h4"]):
+                h_text = self._normalize_tr(heading.get_text(strip=True))
+                if any(kw in h_text for kw in NOTES_KEYWORDS):
+                    parts = []
+                    for sib in heading.find_next_siblings():
+                        if sib.name in ("h2", "h3", "h4"):
+                            break
+                        if sib.name == "div":
+                            continue  # skip ad banners
+                        text = self.clean_text(sib.get_text(separator=" ", strip=True))
+                        if text:
+                            parts.append(text)
+                    if parts:
+                        return " ".join(parts)
 
-        # Look for notes heading in article
-        for heading in tc.find_all(["h2", "h3", "h4"]):
-            h_text = self._normalize_tr(heading.get_text(strip=True))
-            if any(kw in h_text for kw in NOTES_KEYWORDS):
-                parts = []
-                for sib in heading.find_next_siblings():
-                    if sib.name in ("h2", "h3", "h4"):
-                        break
-                    text = self.clean_text(sib.get_text(separator=" ", strip=True))
-                    if text:
-                        parts.append(text)
-                if parts:
-                    return " ".join(parts)
+        # Gallery format
+        if self._is_gallery_page():
+            return self._extract_notes_gallery()
 
         return None
 
