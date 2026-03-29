@@ -64,11 +64,26 @@ _INGR_KEYWORDS = re.compile(
     re.IGNORECASE,
 )
 
-# Keywords that precede instruction steps
+# Keywords that precede instruction steps (OL/UL-based)
 _STEP_KEYWORDS = re.compile(
     r'(?:спосіб\s+приготування|як\s+(?:зробити|приготувати|готувати)|рецепт\s+(?:білого\s+)?соусу|приготування)',
     re.IGNORECASE,
 )
+
+# Labels / short markers to skip when collecting paragraph instructions
+_SKIP_LABELS = re.compile(
+    r'^(?:інгредієнти|склад|спосіб\s+подачі|порада|нам\s+знадобиться):?\s*$',
+    re.IGNORECASE,
+)
+
+# Pattern: "note" paragraph starting with "Порада"
+_NOTE_RE = re.compile(r'^порад[аи]?:', re.IGNORECASE)
+
+# Pattern: ingredient-listing prose paragraphs that start with "Для приготування…" or "Щоб приготувати…"
+_INGR_PROSE_RE = re.compile(r'^(?:для\s+приготування|щоб\s+приготувати)\b', re.IGNORECASE)
+
+# Minimum character length for a paragraph to be considered as an instruction step
+_MIN_PARAGRAPH_LEN = 30
 
 
 class ZmorshkiInUaExtractor(BaseRecipeExtractor):
@@ -225,67 +240,107 @@ class ZmorshkiInUaExtractor(BaseRecipeExtractor):
         return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
 
     def extract_instructions(self) -> Optional[str]:
-        """Витягує інструкції з приготування."""
+        """Витягує інструкції з приготування.
+
+        Primary strategy: collect OL/UL items that follow a step-keyword paragraph
+        within each h2 section.
+        Fallback (per section): if no list-based steps were found for a section,
+        collect substantive paragraphs that are not notes/labels/ingredient listings.
+        The intro section (before the first h2) is always skipped.
+        """
         content = self._get_entry_content()
         if not content:
             return None
 
-        steps: List[str] = []
-        notes_buf: List[str] = []
-        section_idx = 0
+        # --- Phase 1: build per-section data structures ---
+        # section = {'title': str, 'list_steps': [...], 'para_steps': [...], 'notes': [...]}
+        sections: List[dict] = []
+        current: dict = {'title': '', 'list_steps': [], 'para_steps': [], 'notes': []}
+        prev_is_step_keyword = False
 
         try:
             elements = content.find_all(['p', 'h2', 'h3', 'ul', 'ol'])
-            prev_is_step_keyword = False
-            current_section_title = ''
 
             for elem in elements:
                 if 'table-of-contents' in ' '.join(elem.get('class') or []):
                     prev_is_step_keyword = False
                     continue
 
-                text = elem.get_text(separator=' ', strip=True)
+                text = self.clean_text(elem.get_text(separator=' ', strip=True))
 
                 if elem.name == 'h2':
-                    current_section_title = self.clean_text(text)
+                    # Save the current section and start a new one
+                    sections.append(current)
+                    current = {'title': text, 'list_steps': [], 'para_steps': [], 'notes': []}
                     prev_is_step_keyword = False
                     continue
 
                 if elem.name in ('p', 'h3'):
                     prev_is_step_keyword = bool(_STEP_KEYWORDS.search(text))
+                    # Collect paragraph-level content
+                    if text:
+                        if _NOTE_RE.match(text):
+                            note_text = re.sub(r'^порад[аи]?:\s*', '', text, flags=re.IGNORECASE).strip()
+                            if note_text:
+                                current['notes'].append(note_text)
+                        elif (
+                            not _SKIP_LABELS.match(text)
+                            and len(text) >= _MIN_PARAGRAPH_LEN
+                            # Skip ingredient-listing prose paragraphs:
+                            #   "Для приготування X знадобиться ..." or "Щоб приготувати X знадобиться ..."
+                            and not _INGR_PROSE_RE.match(text)
+                        ):
+                            current['para_steps'].append(text)
                     continue
 
                 if elem.name in ('ul', 'ol') and prev_is_step_keyword:
-                    section_idx += 1
-                    section_steps = []
+                    # Primary: list-based steps
                     for li in elem.find_all('li', recursive=False):
                         li_text = self.clean_text(li.get_text(separator=' ', strip=True))
                         if not li_text:
                             continue
-                        # Separate notes (tips) from actual steps
-                        if re.match(r'^порад[аи]?:', li_text, re.IGNORECASE):
-                            notes_buf.append(re.sub(r'^порад[аи]?:\s*', '', li_text, flags=re.IGNORECASE).strip())
+                        if _NOTE_RE.match(li_text):
+                            note_text = re.sub(r'^порад[аи]?:\s*', '', li_text, flags=re.IGNORECASE).strip()
+                            if note_text:
+                                current['notes'].append(note_text)
                         else:
-                            section_steps.append(li_text)
-                    if section_steps:
-                        # Format: "N. SectionTitle: step1 step2 step3"
-                        header = f"{section_idx}. "
-                        if current_section_title:
-                            header += f"{current_section_title}: "
-                        section_text = ' '.join(section_steps)
-                        steps.append(f"{header}{section_text}")
+                            current['list_steps'].append(li_text)
                     prev_is_step_keyword = False
                     continue
 
                 prev_is_step_keyword = False
 
+            # Don't forget the last section
+            sections.append(current)
+
         except Exception as exc:
             logger.warning("Помилка при витягу інструкцій з %s: %s", self.html_path, exc)
 
-        # Store collected notes for later retrieval via extract_notes()
-        self._notes_buf = notes_buf
+        # --- Phase 2: assemble final instruction string ---
+        all_notes: List[str] = []
+        result_parts: List[str] = []
+        section_idx = 0
 
-        return ' '.join(steps) if steps else None
+        for sec in sections:
+            all_notes.extend(sec['notes'])
+
+            # Skip the intro section (before the first h2, title='')
+            if not sec['title']:
+                continue
+
+            # Prefer list-based steps; fall back to paragraph-based
+            steps = sec['list_steps'] if sec['list_steps'] else sec['para_steps']
+
+            if not steps:
+                continue
+
+            section_idx += 1
+            header = f"{section_idx}. {sec['title']}: "
+            result_parts.append(header + ' '.join(steps))
+
+        self._notes_buf = all_notes
+
+        return ' '.join(result_parts) if result_parts else None
 
     def extract_category(self) -> Optional[str]:
         """Витягує категорію рецепту з хлібних крихт або мета-тегів."""
