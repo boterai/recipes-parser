@@ -470,7 +470,7 @@ class AdamfaliqComExtractor(BaseRecipeExtractor):
         if tags_div:
             links = [a.get_text().strip() for a in tags_div.find_all('a') if a.get_text().strip()]
             if links:
-                return ' ,'.join(links)
+                return ', '.join(links)
 
         # 2. meta keywords
         meta_kw = self.soup.find('meta', {'name': 'keywords'})
@@ -484,7 +484,7 @@ class AdamfaliqComExtractor(BaseRecipeExtractor):
             if a.get_text().strip()
         ]
         if tag_links:
-            return ' ,'.join(tag_links)
+            return ', '.join(tag_links)
 
         return None
 
