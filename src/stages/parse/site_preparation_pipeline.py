@@ -18,6 +18,7 @@ from src.stages.analyse.analyse import RecipeAnalyzer
 from src.repositories.site import SiteRepository
 from src.repositories.page import PageRepository
 from src.models.site import SiteORM, get_name_base_url_from_url
+from config.config import config
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +34,8 @@ class SitePreparationPipeline:
     """
     
     def __init__(self, 
-                 debug_port: int = 9222,
+                 debug_port: int = None,
+                 debug_host: str = None,
                  batch_size: int = 30,
                  max_depth: int = 4,
                  max_urls_per_pattern: int = 4, # рекомендуется ставить на 1 больше чем min_recipes
@@ -41,13 +43,15 @@ class SitePreparationPipeline:
                  preprocessed_recipe_folder: str = "preprocessed"):
         """
         Args:
-            debug_port: Порт для подключения к Chrome
+            debug_port: Порт для подключения к Chrome (по умолчанию из PARSER_DEFAULT_CHROME_PORT)
+            debug_host: Хост для подключения к Chrome (по умолчанию из PARSER_DEFAULT_CHROME_HOST)
             batch_size: Размер одного батча исследования
             max_depth: Максимальная глубина обхода
             max_urls_per_pattern: Лимит URL на паттерн при первичном сборе
             min_recipes: Минимальное количество рецептов для поиска паттерна и для признания сайта сайтом с рецептами
         """
-        self.debug_port = debug_port
+        self.debug_port = debug_port or config.PARSER_DEFAULT_CHROME_PORT
+        self.debug_host = debug_host or config.PARSER_DEFAULT_CHROME_HOST
         self.batch_size = batch_size
         self.max_depth = max_depth
         self.max_urls_per_pattern = max_urls_per_pattern
@@ -137,7 +141,8 @@ class SitePreparationPipeline:
                     url: str,
                     max_pages: int = 150,
                     driver: Optional[webdriver.Chrome] = None,
-                    custom_logger: Optional[logging.Logger] = None) -> bool:
+                    custom_logger: Optional[logging.Logger] = None,
+                    ) -> bool:
         """
         Подготовка данных для создания парсера рецептов
         
@@ -192,7 +197,8 @@ class SitePreparationPipeline:
             debug_port=self.debug_port,
             max_urls_per_pattern=self.max_urls_per_pattern,
             driver=driver,
-            custom_logger=logger
+            custom_logger=logger,
+            debug_host=self.debug_host
         )
 
         if site_orm.search_url:
@@ -370,7 +376,8 @@ class SitePreparationPipeline:
             debug_port=self.debug_port,
             max_urls_per_pattern=self.max_urls_per_pattern - 2,  # Уменьшаем лимит
             driver=driver,
-            custom_logger=custom_logger
+            custom_logger=custom_logger,
+            debug_host=self.debug_host
         )
         
         new_explorer.import_state(state)

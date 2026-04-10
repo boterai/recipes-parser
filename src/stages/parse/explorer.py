@@ -44,7 +44,7 @@ class SiteExplorer:
     def __init__(self, base_url: str, debug_mode: bool = True, recipe_pattern: str = None,
                  max_errors: int = 3, max_urls_per_pattern: int = None, debug_port: int = None,
                  driver: webdriver.Chrome = None, custom_logger: logging.Logger = None, 
-                 max_no_recipe_pages: Optional[int] = None, proxy: str = None):
+                 max_no_recipe_pages: Optional[int] = None, proxy: str = None, debug_host: str = None):
         """
         Args:
             base_url: Базовый URL сайта
@@ -91,6 +91,7 @@ class SiteExplorer:
         
         parsed_url = urlparse(base_url)
         self.base_domain = parsed_url.netloc.replace('www.', '')
+        self.debug_host = debug_host or config.PARSER_DEFAULT_CHROME_HOST
         
         # Множества для отслеживания
         self.visited_urls: Set[str] = set()
@@ -192,7 +193,7 @@ class SiteExplorer:
             
             chrome_options.add_experimental_option(
                 "debuggerAddress", 
-                f"localhost:{self.debug_port}"
+                f"{self.debug_host}:{self.debug_port}"
             )
             self.logger.info(f"Подключение к Chrome на порту {self.debug_port}")
         else:
@@ -250,7 +251,7 @@ class SiteExplorer:
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(1)
-            result = sock.connect_ex(('localhost', port))
+            result = sock.connect_ex((self.debug_host, port))
             sock.close()
             return result == 0
         except Exception:
@@ -1134,7 +1135,8 @@ def explore_site(url: str, max_urls: int = 1000, max_depth: int = 4, recipe_patt
                  max_urls_per_pattern: int = None, debug_port: int = 9222,
                  helper_links: List[str] = None,
                  custom_logger: Optional[logging.Logger] = None,
-                 max_no_recipe_pages: Optional[int] = None) -> int:
+                 max_no_recipe_pages: Optional[int] = None,
+                 debug_host: str = None) -> int:
     """
     Функция для исследования сайта с обработкой ошибок и прерываний
     
@@ -1166,7 +1168,8 @@ def explore_site(url: str, max_urls: int = 1000, max_depth: int = 4, recipe_patt
             recipe_pattern=recipe_pattern, 
             max_urls_per_pattern=max_urls_per_pattern,
             custom_logger=custom_logger,
-            max_no_recipe_pages=max_no_recipe_pages
+            max_no_recipe_pages=max_no_recipe_pages,
+            debug_host=debug_host
         )
         
         if helper_links:
