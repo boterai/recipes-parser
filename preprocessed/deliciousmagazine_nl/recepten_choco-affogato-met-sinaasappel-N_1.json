@@ -1,0 +1,12 @@
+{
+    "dish_name": "Choco-affogato met sinaasappel",
+    "description": "Koffie en chocolade-ijs met sinaasappel, een perfecte afsluiter van een Italiaans diner, makkelijk te maken.",
+    "ingredients": "[{\"name\": \"melk\", \"unit\": \"ml\", \"amount\": \"175\"}, {\"name\": \"bruine basterdsuiker\", \"unit\": \"g\", \"amount\": \"35\"}, {\"name\": \"cacaopoeder\", \"unit\": \"el\", \"amount\": \"1\"}, {\"name\": \"pure chocolade, fijngesneden\", \"unit\": \"g\", \"amount\": \"25\"}, {\"name\": \"zeste van sinaasappel (½ bio)\", \"unit\": \"stuk\", \"amount\": \"½\"}, {\"name\": \"mascarpone\", \"unit\": \"g\", \"amount\": \"325\"}, {\"name\": \"sterke espresso, afgekoeld\", \"unit\": \"kopjes\", \"amount\": \"4\"}, {\"name\": \"ziplockzakken\", \"unit\": \"stuk\", \"amount\": \"1-2\"}]",
+    "instructions": "Verwarm 50 ml melk en los er de basterdsuiker, cacaopoeder en chocolade in op. Laat afkoelen tot kamertemperatuur. Snijd de helft van de sinaasappelzeste klein. Klop het mengsel samen met de rest van de melk, een snufje zout en de sinaasappelzeste door de mascarpone. Doe het mengsel in ziplockzakken, druk lucht eruit en vries 2,5-3 uur. Breek het ijs in stukken en draai in keukenmachine tot gladde massa. Zet 4 kopjes espresso. Doe in elk glaasje 1-2 bolletjes ijs en giet espresso erbij. Versier met sinaasappelzeste.",
+    "category": "nagerecht",
+    "prep_time": "20 minutes",
+    "cook_time": null,
+    "total_time": "3 hours 20 minutes",
+    "notes": "Voor een snelle versie kan ijs uit de supermarkt gebruikt worden. Alternatief recept: affogato-muffins met mokkasuiker.",
+    "tags": "feestelijk, kerst, italiaans"
+}

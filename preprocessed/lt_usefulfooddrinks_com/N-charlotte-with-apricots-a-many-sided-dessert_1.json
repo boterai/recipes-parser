@@ -1,0 +1,12 @@
+{
+    "dish_name": "Šarlotė su abrikosais",
+    "description": "Viščiukas su abrikosais – įvairiapusis desertas, pagamintas iš sausainių tešlos ir abrikosų, kepamas orkaitėje.",
+    "ingredients": "[{\"name\": \"kiaušiniai\", \"unit\": \"pieces\", \"amount\": \"4-5\"}, {\"name\": \"cukraus\", \"unit\": \"stiklinė\", \"amount\": \"1\"}, {\"name\": \"miltų\", \"unit\": \"puodelis\", \"amount\": \"1\"}, {\"name\": \"kepimo milteliai\", \"unit\": null, \"amount\": null}, {\"name\": \"abrikosų\", \"unit\": \"pieces\", \"amount\": \"10-15\"}]",
+    "instructions": "Įjunkite orkaitę, kad kepimo režimu įkaistų iki 180 laipsnių. Abrikosus nuplaukite ir patikrinkite, ar visi vaisiai lygūs, sveiki, tankūs. Sulaužykite kiekvieną abrikosą ir išimkite kauliuką. Atšaldytą formą sutepkite keliais lašais augalinio aliejaus. Jei reikia, iškirpkite kepimo popieriaus apskritimą ir padėkite jį ant keptuvės dugno, aptepkite aliejumi. Abrikosus padėkite lygiu sluoksniu ant dugno. Sumuškite kiaušinius į aukštą dubenį, plakite vidutiniu maišytuvo greičiu, palaipsniui didindami greitį. Įpilkite cukraus ir plakite tol, kol cukrus ištirps. Persijokite miltus į dubenį ir lėtai įmaišykite į kiaušinių ir cukraus mišinį. Įdėkite kepimo miltelių. Nedelsdami supilkite tešlą į formą su abrikosais. Kepkite apie 35-40 minučių. Patikrinkite paruošimą mediniu dantų krapštuku.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "35-40 minutes",
+    "total_time": null,
+    "notes": "Tešlos ingredientai turi būti gerai atšaldyti. Kepimo indą taip pat reikia pailsėti šaldytuve. Miltus geriau persijoti du kartus. Galima įdėti šaukštą medaus į tešlą. Orkaitę reikia įkaitinti iki 180 laipsnių prieš kepimą. Formą tepti tik aliejumi, nebarstyti manų kruopomis ar miltais.",
+    "tags": "šarlotė, abrikosai, desertas, pyragas, biskvitas"
+}

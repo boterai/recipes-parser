@@ -1,0 +1,12 @@
+{
+    "dish_name": "tiramisu affogato",
+    "description": "Tiramisu affogato is an easy dessert combining tiramisu and affogato, ideal for 1 or 2 persons or a large group.",
+    "ingredients": "[{\"name\": \"slagroom\", \"unit\": \"ml\", \"amount\": \"50\"}, {\"name\": \"suiker\", \"unit\": \"el\", \"amount\": \"8\"}, {\"name\": \"mascarpone\", \"unit\": \"g\", \"amount\": \"250\"}, {\"name\": \"lange vingers\", \"unit\": \"pieces\", \"amount\": \"10\"}, {\"name\": \"vanille ijs\", \"unit\": \"grote bollen\", \"amount\": \"4\"}, {\"name\": \"espresso\", \"unit\": \"cups\", \"amount\": \"4\"}, {\"name\": \"koffielikeur\", \"unit\": null, \"amount\": \"scheutje\"}, {\"name\": \"cacao\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Klop de slagroom met de suiker stijf. Roer de mascarpone los, schep er een deel van de slagroom door en meng goed. Meng de rest van de slagroom erdoor en zet in de koelkast tot gebruik. Breek de lange vingers in grove stukken. Verdeel het roommengsel over 4 wijnglazen, glaasjes of bakjes. Verdeel er de lange vingers en het ijs over. Top met de cacao. Meng eventueel de koffie met de koffielikeur. Schenk aan tafel de koffie erover en eet gelijk op.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "15 minuten",
+    "total_time": "15 minuten",
+    "notes": "Optioneel: scheutje koffielikeur naar smaak, zoals Baileys, Kahlua, Tia Maria, etc. Ook lekker met choco, koffie, kokos of karamel ijs of een mix.",
+    "tags": "dessert,nagerecht,zoet,feestelijk,kerst,oudjaar,weekend,italiaans"
+}

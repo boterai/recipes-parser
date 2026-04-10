@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tom kha gai - thailandsk kokossuppe",
+    "description": "Aromatic Thai soup with chicken, coconut milk and authentic spices. Perfect balance between sweet, sour and spicy flavors.",
+    "ingredients": "[{\"name\": \"Kyllingebouillon\", \"unit\": \"ml\", \"amount\": \"800\"}, {\"name\": \"Kokosmælk\", \"unit\": \"ml\", \"amount\": \"400\"}, {\"name\": \"Citrongræs\", \"unit\": \"stængler\", \"amount\": \"3\"}, {\"name\": \"Galanga\", \"unit\": \"skiver\", \"amount\": \"4\"}, {\"name\": \"Kaffirlimeblade\", \"unit\": \"stk\", \"amount\": \"6\"}, {\"name\": \"Thai chili\", \"unit\": \"stk\", \"amount\": \"2\"}, {\"name\": \"Kyllingebryst\", \"unit\": \"g\", \"amount\": \"400\"}, {\"name\": \"Champignoner\", \"unit\": \"g\", \"amount\": \"200\"}, {\"name\": \"Cherrytomater\", \"unit\": \"g\", \"amount\": \"150\"}, {\"name\": \"Bambusskud\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"Fiskesauce\", \"unit\": \"spsk\", \"amount\": \"3\"}, {\"name\": \"Limesaft\", \"unit\": \"spsk\", \"amount\": \"3\"}, {\"name\": \"Brunt sukker\", \"unit\": \"spsk\", \"amount\": \"1\"}, {\"name\": \"Koriander\", \"unit\": \"g\", \"amount\": \"50\"}, {\"name\": \"Forårsløg\", \"unit\": \"stk\", \"amount\": \"3\"}]",
+    "instructions": "Bring bouillon i kog i en stor gryde. Tilsæt citrongræs, galanga, kaffirlimeblade og chili. Lad simre i 10 minutter så aromaterne trækker ud. Tilsæt kokosmælk og bring til simmer. Tilsæt kyllingestrimler til den simmrende suppe. Kog i 5 minutter til kyllingen er hvid. Tilsæt champignoner og bambusskud, kog 3 minutter. Tilsæt tomater til sidst og kog 1 minut. Smag suppen til med fiskesauce, limesaft og sukker. Balancer smagen - den skal være salty, sød og sur. Fjern citrongræs og galanga før servering. Servér straks pyntet med koriander og forårsløg.",
+    "category": "Aftensmad",
+    "prep_time": null,
+    "cook_time": "40 min",
+    "total_time": null,
+    "notes": "AI is used in the recipe and the image is AI-generated and for guidance only.",
+    "tags": "Aftensmad, Glutenfri, Høj protein, Kogt, Thai, Asiatisk, Hverdag, Gæster"
+}

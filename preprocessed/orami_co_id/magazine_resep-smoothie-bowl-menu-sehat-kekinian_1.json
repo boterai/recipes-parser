@@ -1,0 +1,12 @@
+{
+    "dish_name": "Smoothies Bowl Buah Naga",
+    "description": "Resep smoothies bowl dengan bahan utama buah naga yang menghasilkan smoothie berwarna ungu.",
+    "ingredients": "[{\"name\": \"buah naga\", \"unit\": \"gram\", \"amount\": \"200\"}, {\"name\": \"pisang cavendish\", \"unit\": \"buah\", \"amount\": \"1\"}, {\"name\": \"Pisang (topping)\", \"unit\": null, \"amount\": null}, {\"name\": \"Oatmeal (topping)\", \"unit\": null, \"amount\": null}, {\"name\": \"Kismis (topping)\", \"unit\": null, \"amount\": null}, {\"name\": \"Chiaseed (topping)\", \"unit\": null, \"amount\": null}, {\"name\": \"Chococip (topping)\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Potong-potong buah naga dan pisang lalu bekukan. Masukkan buah beku ke chopper. Chopper hingga halus lalu masukkan ke bowl. Ratakan bagian atasnya dan beri topping irisan pisang. Tambahkan chococip, kismis, oatmeal dan chiaseed. Siap disajikan.",
+    "category": "Healthy Breakfast",
+    "prep_time": "15 minutes",
+    "cook_time": null,
+    "total_time": "15 minutes",
+    "notes": "Smoothies bowl bisa dibuat dengan berbagai bahan dasar dan topping sesuai selera. Pilih bahan dasar cair seperti susu nabati, air kelapa, atau jus buah. Tambahkan sumber protein dan lemak sehat untuk nutrisi seimbang.",
+    "tags": "smoothies bowl, healthy, breakfast, buah naga, smoothie"
+}

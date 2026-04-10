@@ -1,0 +1,12 @@
+{
+    "dish_name": "Cheesy Ranch Sausage and Potato Skillet",
+    "description": "A fast, comforting cheesy ranch chicken and potato skillet made with tender potatoes, browned chicken sausage, melted cheddar, and ranch seasoning. Pork-free and perfect for busy nights.",
+    "ingredients": "[{\"name\": \"smoked chicken sausage\", \"unit\": \"lb\", \"amount\": \"1\"}, {\"name\": \"baby potatoes\", \"unit\": \"lb\", \"amount\": \"1\"}, {\"name\": \"olive oil\", \"unit\": \"tbsp\", \"amount\": \"1\"}, {\"name\": \"butter\", \"unit\": \"tbsp\", \"amount\": \"1\"}, {\"name\": \"ranch seasoning\", \"unit\": \"packet\", \"amount\": \"1\"}, {\"name\": \"small onion\", \"unit\": \"small\", \"amount\": \"1\"}, {\"name\": \"garlic cloves\", \"unit\": \"cloves\", \"amount\": \"2\"}, {\"name\": \"chicken broth\", \"unit\": \"cup\", \"amount\": \"0.5\"}, {\"name\": \"shredded cheddar cheese\", \"unit\": \"cups\", \"amount\": \"1.25\"}, {\"name\": \"chopped parsley\", \"unit\": \"tbsp\", \"amount\": \"2\"}, {\"name\": \"Salt and pepper\", \"unit\": null, \"amount\": \"to taste\"}]",
+    "instructions": "Heat a skillet over medium heat. Add olive oil and chicken sausage; cook 4 minutes until lightly browned. Add butter, potatoes, and onion. Cook 6–7 minutes until potatoes begin to soften. Stir in garlic and ranch seasoning. Add broth, cover, and simmer 5 minutes until potatoes are tender. Sprinkle cheddar on top, cover, and melt. Finish with parsley, salt, and pepper. Serve warm.",
+    "category": "Main Course",
+    "prep_time": "5 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "19 minutes",
+    "notes": "Meal Prep: Parboil potatoes ahead to shorten cooking. Storage: Refrigerate up to 3 days in an airtight container. Substitution: Use Monterey Jack for a milder cheese flavor. Serving Idea: Add a fried egg on top for a breakfast twist.",
+    "tags": "cheesy ranch chicken skillet, chicken and potatoes skillet"
+}

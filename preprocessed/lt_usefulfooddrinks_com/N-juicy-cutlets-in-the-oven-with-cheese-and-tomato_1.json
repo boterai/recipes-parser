@@ -1,0 +1,12 @@
+{
+    "dish_name": "Sultingi kotletai orkaitėje su sūriu ir pomidoru",
+    "description": "Sultingi kotletai orkaitėje su sūriu ir pomidoru – skanus ir sotus patiekalas, kurio gaminimas orkaitėje leidžia išlaikyti mėsos sultingumą ir sumažinti aliejaus naudojimą.",
+    "ingredients": "[{\"name\": \"maltos mėsos\", \"unit\": \"g\", \"amount\": \"500-700\"}, {\"name\": \"sūrio\", \"unit\": \"g\", \"amount\": \"100-150\"}, {\"name\": \"saulėgrąžų aliejaus\", \"unit\": null, \"amount\": null}, {\"name\": \"druskos\", \"unit\": null, \"amount\": null}, {\"name\": \"prieskonių\", \"unit\": null, \"amount\": null}, {\"name\": \"pomidorų\", \"unit\": \"kg\", \"amount\": \"1.0-1.5\"}, {\"name\": \"grietinės\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"pipirų\", \"unit\": null, \"amount\": null}, {\"name\": \"česnako\", \"unit\": \"skiltelės\", \"amount\": \"2\"}, {\"name\": \"svogūno\", \"unit\": \"vnt\", \"amount\": \"1\"}, {\"name\": \"žaliųjų\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Nuplaukite ir lengvai patepkite kepimo skardą saulėgrąžų aliejumi. Sudrėkinkite rankas ir suformuokite delno dydžio paplotėlius iš maltos mėsos. Sudėkite kotletus ant kepimo skardos 1-2 cm atstumu. Įdėkite padėklą į orkaitę, pasirinkite konvekcinį režimą ir 190 laipsnių temperatūrą. Po 15 minučių atsargiai apverskite kotletus. Patikrinkite orkaitę dar po 25 minučių, jei iš kotletų išsiskiria skaidrios sultys, jie baigti kepti. Pomidorų padažui nuplaukite, supjaustykite ir sutrinkite pomidorus trintuvu arba sutarkuokite. Pagardinkite pomidorų padažą pipirais, prieskoniais, česnaku ir grietine (pasirinktinai). Užpilkite kotletus padažu ir kepkite orkaitėje 15 minučių 190 laipsnių temperatūroje konvekciniu režimu. Po 15 minučių išimkite formą, apibarstykite tarkuotu sūriu ir kepkite dar 25 minutes.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "40 minutes",
+    "total_time": null,
+    "notes": "Galima naudoti 60% jautienos ir 40% kiaulienos maltą mėsą. Jei kiauliena neriebi, į faršą galima įberti šiek tiek riebalų. Patiekiant kotletus, juos galima papuošti pomidoro skiltele ir susmulkintomis žolelėmis.",
+    "tags": "kotletai, orkaitėje, sūris, pomidorai, mėsos patiekalas"
+}

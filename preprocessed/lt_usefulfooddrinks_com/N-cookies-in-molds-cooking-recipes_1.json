@@ -1,0 +1,12 @@
+{
+    "dish_name": "Žvaigždės formos sausainiai",
+    "description": "Sausainiai kepti silikoninėse formelėse, tinkami pasiimti su savimi, su glajumi.",
+    "ingredients": "[{\"name\": \"miltai\", \"unit\": \"puodeliai\", \"amount\": \"3\"}, {\"name\": \"kiaušiniai\", \"unit\": \"vnt.\", \"amount\": \"3\"}, {\"name\": \"cukrus\", \"unit\": \"g\", \"amount\": \"140\"}, {\"name\": \"sviestas\", \"unit\": \"g\", \"amount\": \"180\"}, {\"name\": \"vanilinas\", \"unit\": \"g\", \"amount\": \"10\"}, {\"name\": \"soda\", \"unit\": null, \"amount\": \"žiupsnelis\"}, {\"name\": \"cukraus pudra\", \"unit\": \"arbatiniai šaukšteliai\", \"amount\": \"4\"}, {\"name\": \"kiaušiniai (glajui)\", \"unit\": \"vnt.\", \"amount\": \"2\"}, {\"name\": \"cukraus pudra (glajui)\", \"unit\": \"g\", \"amount\": \"300\"}]",
+    "instructions": "1. Į dubenį sumuškite kiaušinius, sumaišykite su cukrumi. Maišyti.\n2. Sviestą įkaitinkite mikrobangų krosnelėje, kol suminkštės. Įdėkite jį į dubenį. Sumaišykite su likusiais ingredientais.\n3. Įdėkite vanilino ir sodos, išmaišykite.\n4. Lėtai suberkite miltus, gerai išmaišykite.\n5. Uždenkite kepimo skardą pergamentu, ant viršaus sudėkite formeles ir užpildykite jas tešla.\n6. Kepkite 20-25 minutes, kol iškeps 180 laipsnių temperatūroje.\n7. Kai sausainiai atvės, galite užtepti glajų. Glazavimo receptas: atskirkite kiaušinių baltymus nuo trynių, plakite baltymus iki tirštų putų, po truputį dėkite miltelių, plakite mažu greičiu iki norimo tankio.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "20-25 minutes",
+    "total_time": null,
+    "notes": "Glajų geriau virti naudojant maišytuvą arba blenderį, nes baltymus plakti reikia ilgai ir kokybiškai.",
+    "tags": "sausainiai, desertai, silikoninės formos, glajus"
+}

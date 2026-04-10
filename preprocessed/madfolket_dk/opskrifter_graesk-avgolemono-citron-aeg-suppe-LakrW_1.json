@@ -1,0 +1,12 @@
+{
+    "dish_name": "Græsk avgolemono - citron og æg suppe",
+    "description": "Traditionel græsk avgolemono suppe - en cremet, varmende suppe med kylling, ris og den karakteristiske citron-æg sauce der giver silkeblød tekstur",
+    "ingredients": "[{\"name\": \"Hel kylling\", \"unit\": \"stk\", \"amount\": \"1\"}, {\"name\": \"Løg\", \"unit\": \"stk\", \"amount\": \"1\"}, {\"name\": \"Gulerødder\", \"unit\": \"stk\", \"amount\": \"2\"}, {\"name\": \"Bladselleri\", \"unit\": \"stk\", \"amount\": \"2\"}, {\"name\": \"Laurbærblade\", \"unit\": \"stk\", \"amount\": \"3\"}, {\"name\": \"Salt\", \"unit\": \"tsk\", \"amount\": \"2\"}, {\"name\": \"Vand\", \"unit\": \"l\", \"amount\": \"2\"}, {\"name\": \"Langkornet ris\", \"unit\": \"g\", \"amount\": \"150\"}, {\"name\": \"Kyllingbouillon\", \"unit\": \"l\", \"amount\": \"1.5\"}, {\"name\": \"Salt\", \"unit\": \"tsk\", \"amount\": \"1\"}, {\"name\": \"Æg\", \"unit\": \"stk\", \"amount\": \"3\"}, {\"name\": \"Citron\", \"unit\": \"stk\", \"amount\": \"2\"}, {\"name\": \"Majsstivelse\", \"unit\": \"spsk\", \"amount\": \"1\"}, {\"name\": \"Koldt vand\", \"unit\": \"spsk\", \"amount\": \"2\"}]",
+    "instructions": "Læg kylling, løg, gulerødder og selleri i en stor gryde. Tilsæt laurbærblade, salt og dæk med vand. Bring til kog og skum af overfladen. Lad simre i 1 time til kyllingen er mør. Tag kyllingen op og lad den køle. Si bouillonen og bevar 1,5 liter til suppen. Riv kyllingekødet fra benene når det er kølet. Bring kyllingebouillonen til kog i den store gryde. Tilsæt ris og salt. Lad simre i 15-18 minutter til risen er mør. Tilsæt det revne kyllingekød tilbage til gryden. Hold suppen varm på laveste blus. Pisk æg grundigt i en medium skål. Tilsæt friskpresset citronsaft til æggene. Bland majsstivelse med koldt vand til en glat blanding. Rør majsstivelse blandingen i æg-citron blandingen. Tag en øse varm bouillon og tilsæt meget langsomt til æggene mens du pisker. Fortsæt med at tilsætte varm bouillon gradvist, øse for øse. Hæld den tempererede æggeblanding tilbage i gryden mens du rører. Varm forsigtigt op uden at koge - avgolemono må ikke koge efter æggene er tilsat. Server straks i varme skåle med frisk citron på siden.",
+    "category": "Aftensmad",
+    "prep_time": null,
+    "cook_time": "60 minutes",
+    "total_time": null,
+    "notes": "AI er brugt i selve opskriften. Billedet er lavet med AI og er kun vejledende.",
+    "tags": "Aftensmad,Høj protein,Kogt,Græsk,Hverdag"
+}

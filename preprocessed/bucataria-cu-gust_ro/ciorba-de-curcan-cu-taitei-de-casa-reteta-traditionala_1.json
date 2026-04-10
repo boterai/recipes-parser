@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ciorbă de Curcan cu Tăiței de Casă",
+    "description": "O zeamă aurie, limpede, plină de legume și bucăți fragede de carne, completată de tăiței făcuți în casă exact așa cum îi făcea bunica.",
+    "ingredients": "[{\"name\": \"Carne de curcan (aripi, gât, spinări sau pulpe)\", \"unit\": \"kg\", \"amount\": \"1\"}, {\"name\": \"Morcovi mari\", \"unit\": \"pieces\", \"amount\": \"2\"}, {\"name\": \"Rădăcină de Pătrunjel\", \"unit\": \"piece\", \"amount\": \"1\"}, {\"name\": \"Păstârnac\", \"unit\": \"piece\", \"amount\": \"1\"}, {\"name\": \"Țelină mică\", \"unit\": \"piece\", \"amount\": \"1\"}, {\"name\": \"Cepe medii\", \"unit\": \"pieces\", \"amount\": \"2\"}, {\"name\": \"Ardei gras (roșu sau galben)\", \"unit\": \"piece\", \"amount\": \"1\"}, {\"name\": \"Ou\", \"unit\": \"piece\", \"amount\": \"1\"}, {\"name\": \"Făină\", \"unit\": \"g\", \"amount\": \"aprox 100\"}, {\"name\": \"Sare\", \"unit\": null, \"amount\": null}, {\"name\": \"Borș sau Zeamă de lămâie\", \"unit\": null, \"amount\": null}, {\"name\": \"Leuștean proaspăt\", \"unit\": null, \"amount\": null}, {\"name\": \"Pătrunjel proaspăt\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Pune carnea în apă rece cu puțină sare și fierbe-o la foc mic. Spumuiește ori de câte ori este nevoie până când zeama rămâne limpede. Acest pas durează aproximativ 40-50 minute. Când carnea este aproape fiartă, adaugă legumele tocate cubulețe (ceapa, morcovul, țelina, păstârnacul, ardeiul). Lasă să fiarbă împreună încă 20 de minute. Într-un bol mic, bate oul cu un praf de sare și adaugă făină treptat până obții un aluat tare. Întinde o foaie subțire, las-o 10 minute la zvântat, apoi rulează și taie fâșii fine. Adaugă tăițeii în ciorba clocotindă. Fierbe încă 5 minute. Acrește cu borș (fiert separat în prealabil) sau lămâie după gust. Stinge focul și presară verdeața tocată mărunt.",
+    "category": "Supe & Ciorbe",
+    "prep_time": "20 minutes",
+    "cook_time": "90 minutes",
+    "total_time": null,
+    "notes": "Pentru a obține o zeamă clară și aurie, fierbe ciorba la foc mic, fără să clocotească violent. Tăițeii de casă se fac ușor doar din făină și ou.",
+    "tags": "ciorbă, curcan, tăiței de casă, supă, tradițional"
+}

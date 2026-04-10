@@ -1,0 +1,12 @@
+{
+    "dish_name": "Koreansk kimchi jjigae - krydret kimchi suppe",
+    "description": "Autentisk koreansk kimchi jjigae - en varmende og krydret suppe med fermenteret kimchi, svinekød og tofu, perfekt til kolde dage",
+    "ingredients": "[{\"name\": \"Kimchi\", \"unit\": \"g\", \"amount\": \"400\"}, {\"name\": \"Kimchi juice\", \"unit\": \"ml\", \"amount\": \"120\"}, {\"name\": \"Svinekød\", \"unit\": \"g\", \"amount\": \"200\"}, {\"name\": \"Sesamolie\", \"unit\": \"spsk\", \"amount\": \"2\"}, {\"name\": \"Hvidløg\", \"unit\": \"fed\", \"amount\": \"4\"}, {\"name\": \"Ingefær\", \"unit\": \"cm\", \"amount\": \"2\"}, {\"name\": \"Gochugaru\", \"unit\": \"tsk\", \"amount\": \"2\"}, {\"name\": \"Kyllingefond\", \"unit\": \"ml\", \"amount\": \"600\"}, {\"name\": \"Vand\", \"unit\": \"ml\", \"amount\": \"300\"}, {\"name\": \"Gochujang\", \"unit\": \"spsk\", \"amount\": \"2\"}, {\"name\": \"Sojasauce\", \"unit\": \"spsk\", \"amount\": \"2\"}, {\"name\": \"Firm tofu\", \"unit\": \"g\", \"amount\": \"200\"}, {\"name\": \"Sukker\", \"unit\": \"tsk\", \"amount\": \"1\"}, {\"name\": \"Forårsløg\", \"unit\": \"stk\", \"amount\": \"4\"}, {\"name\": \"Sesamolie\", \"unit\": \"spsk\", \"amount\": \"1\"}, {\"name\": \"Kortkornede ris\", \"unit\": \"g\", \"amount\": \"300\"}, {\"name\": \"Kimchi\", \"unit\": \"g\", \"amount\": \"100\"}]",
+    "instructions": "Hak kimchi groft i 3-4 cm stykker og gem saften separat. Varm sesamolie i en tung gryde ved medium varme. Steg svinekødet i 5-6 minutter til det er brunet på alle sider. Tilsæt hvidløg, ingefær og gochugaru og steg i 1 minut. Tilsæt kimchi og steg i 8-10 minutter til det karamelliserer let. Tilsæt kyllingefond, vand og kimchi juice til gryden. Rør gochujang og sojasauce ind til det er opløst. Bring til kogepunktet og lad det simre i 10 minutter. Tilsæt tofutern og sukker og simmer i 5 minutter mere. Smag til og juster krydderistyrke med mere gochujang efter behov. Tilsæt de hvide dele af forårsløg og kog i 2 minutter. Rør sesamolie i suppen lige før servering. Hæld jjigae i dybe skåle og drys de grønne dele af forårsløg over. Server med dampet ris og ekstra kimchi på siden.",
+    "category": "Aftensmad",
+    "prep_time": null,
+    "cook_time": "40 min",
+    "total_time": null,
+    "notes": "AI er brugt i selve opskriften. Billedet er lavet med AI og er kun vejledende.",
+    "tags": "Aftensmad,Kogt,Koreansk,Hverdag"
+}
