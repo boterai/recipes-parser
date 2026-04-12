@@ -520,9 +520,14 @@ class AdamfaliqComExtractor(BaseRecipeExtractor):
         def add_url(url: str) -> None:
             url = url.strip()
             if url and url not in seen:
-                # Отфильтровываем миниатюры (gravatar/avatar, очень маленькие)
-                if 'gravatar.com' in url:
-                    return
+                # Skip gravatar/avatar images (profile pictures, not recipe photos)
+                try:
+                    from urllib.parse import urlparse
+                    hostname = urlparse(url).hostname or ''
+                    if hostname == 'gravatar.com' or hostname.endswith('.gravatar.com'):
+                        return
+                except Exception:
+                    pass
                 seen.add(url)
                 urls.append(url)
 
