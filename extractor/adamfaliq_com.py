@@ -8,6 +8,7 @@ import re
 import sys
 from pathlib import Path
 from typing import Optional
+from urllib.parse import urlparse
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
@@ -521,13 +522,9 @@ class AdamfaliqComExtractor(BaseRecipeExtractor):
             url = url.strip()
             if url and url not in seen:
                 # Skip gravatar/avatar images (profile pictures, not recipe photos)
-                try:
-                    from urllib.parse import urlparse
-                    hostname = urlparse(url).hostname or ''
-                    if hostname == 'gravatar.com' or hostname.endswith('.gravatar.com'):
-                        return
-                except Exception:
-                    pass
+                hostname = urlparse(url).hostname or ''
+                if 'gravatar.com' in hostname:
+                    return
                 seen.add(url)
                 urls.append(url)
 
