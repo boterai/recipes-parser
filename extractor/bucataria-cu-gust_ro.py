@@ -1,7 +1,8 @@
 """
-Экстрактор данных рецептов для сайта bucataria-cu-gust.ro
+Recipe data extractor for bucataria-cu-gust.ro
 """
 
+import copy
 import json
 import logging
 import re
@@ -45,7 +46,7 @@ _AMOUNT_ONLY_RE = re.compile(
 
 
 class BucatariaCuGustRoExtractor(BaseRecipeExtractor):
-    """Экстрактор для bucataria-cu-gust.ro"""
+    """Extractor for bucataria-cu-gust.ro"""
 
     # ------------------------------------------------------------------ #
     # ISO 8601 duration helper                                            #
@@ -280,7 +281,7 @@ class BucatariaCuGustRoExtractor(BaseRecipeExtractor):
             steps = []
             for li in inst_ol.find_all('li'):
                 # Remove the <strong> title node so we get only the body text
-                clone = li.__copy__()
+                clone = copy.copy(li)
                 for strong in clone.find_all('strong'):
                     strong.decompose()
                 step_text = self.clean_text(clone.get_text(' ', strip=True))
@@ -518,7 +519,7 @@ def main():
     if preprocessed_dir.exists() and preprocessed_dir.is_dir():
         process_directory(BucatariaCuGustRoExtractor, str(preprocessed_dir))
         return
-    print(f"Директория не найдена: {preprocessed_dir}")
+    print(f"Directory not found: {preprocessed_dir}")
 
 
 if __name__ == "__main__":
