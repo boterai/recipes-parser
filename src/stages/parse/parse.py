@@ -74,7 +74,8 @@ class RecipeParserRunner:
         max_depth: int = 4,
         custom_logger: Optional[logging.Logger] = None,
         max_no_recipe_pages: Optional[int] = None,
-        success_page_count_threshold: Optional[int] = 20
+        success_page_count_threshold: Optional[int] = 20,
+        debug_host: str = "localhost"
     ) -> tuple[bool, bool]:
         """
         Запуск парсинга с указанным или случайным модулем
@@ -140,7 +141,8 @@ class RecipeParserRunner:
                 debug_port=port,
                 helper_links=helper_links,
                 custom_logger=custom_logger,
-                max_no_recipe_pages=max_no_recipe_pages
+                max_no_recipe_pages=max_no_recipe_pages,
+                debug_host=debug_host
             )
             
             custom_logger.info(f"Парсинг {module_name} завершен успешно")

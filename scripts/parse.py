@@ -130,7 +130,8 @@ def run_parser_thread(module_name: str, port: int, parser_config: RecipeParserCo
             max_depth=parser_config.max_depth,
             custom_logger=thread_logger,
             max_no_recipe_pages=parser_config.max_no_recipe_pages,
-            success_page_count_threshold=parser_config.success_page_count_threshold # если собрано больше 15 рецептов, то сайт считается успешным
+            success_page_count_threshold=parser_config.success_page_count_threshold, # если собрано больше 15 рецептов, то сайт считается успешным
+            debug_host=config.PARSER_DEFAULT_CHROME_HOST
         )
     except Exception as e:
         thread_logger.error(f"✗ Ошибка при парсинге {module_name}: {e}", exc_info=True)
@@ -157,7 +158,8 @@ def main(module_name: str = "24kitchen_nl", port: int = 9222):
         max_urls=5000, 
         max_depth=4,
         custom_logger=main_logger,
-        max_no_recipe_pages=20
+        max_no_recipe_pages=20,
+        debug_host=config.PARSER_DEFAULT_CHROME_HOST
     )
 
 
