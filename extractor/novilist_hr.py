@@ -529,12 +529,15 @@ class NovilistHrExtractor(BaseRecipeExtractor):
                     # Prefer original src over small thumbnails
                     src = img.get('src') or ''
                     # Skip external embed images from Instagram, Gravatar, etc.
-                    # Use hostname comparison to avoid incomplete substring checks.
+                    # Use exact or subdomain hostname matching to avoid bypass attacks.
                     try:
                         host = urlparse(src).hostname or ''
                     except Exception:
                         host = ''
-                    if host.endswith('instagram.com') or host.endswith('gravatar.com'):
+                    if (
+                        host == 'instagram.com' or host.endswith('.instagram.com')
+                        or host == 'gravatar.com' or host.endswith('.gravatar.com')
+                    ):
                         continue
                     if src.startswith('http'):
                         _add(src)
