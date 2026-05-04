@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 from typing import Optional, List, Dict, Any
 
-from bs4 import NavigableString
+from bs4 import BeautifulSoup as _BS, NavigableString
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
@@ -481,7 +481,6 @@ class EtenEnDrinkenInfonuNlExtractor(BaseRecipeExtractor):
             raw_steps = re.split(r'<br\s*/?>', m.group(1), flags=re.IGNORECASE)
             steps = []
             for raw in raw_steps:
-                from bs4 import BeautifulSoup as _BS
                 text = self.clean_text(_BS(raw, 'lxml').get_text())
                 if text:
                     steps.append(text)
