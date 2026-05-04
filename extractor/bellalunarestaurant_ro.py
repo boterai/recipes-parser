@@ -16,6 +16,8 @@ logger = logging.getLogger(__name__)
 
 # Minimum character length for a paragraph to be considered an instruction step
 _MIN_INSTRUCTION_LENGTH = 15
+# Number of leading characters used to build step deduplication keys
+_DEDUP_KEY_LENGTH = 60
 
 
 # ---------------------------------------------------------------------------
@@ -219,7 +221,7 @@ class BellalunarestaurantRoExtractor(BaseRecipeExtractor):
                     if val > 1:
                         unit = 'bucăți'
                 except ValueError:
-                    pass
+                    logger.debug("Could not parse amount '%s' as float for unit inference", amount_str)
 
             return {'name': name, 'amount': amount_str, 'unit': unit}
 
@@ -242,8 +244,8 @@ class BellalunarestaurantRoExtractor(BaseRecipeExtractor):
             )
             if m:
                 name = m.group(1).strip()
-                # Capitalize first letter
-                return name[0].upper() + name[1:] if name else None
+                # Capitalize first letter, guarding against empty string
+                return (name[0].upper() + name[1:]) if name else None
             # Pattern 2: "DishName – subtitle" → strip subtitle after em-dash/hyphen
             text = re.sub(r'\s*[–-]\s+\S.+$', '', text).strip()
             return text or None
@@ -336,7 +338,7 @@ class BellalunarestaurantRoExtractor(BaseRecipeExtractor):
                 for li in elem.find_all('li', recursive=False):
                     raw = self.clean_text(li.get_text(separator=' ', strip=True))
                     if raw:
-                        key = re.sub(r'\s+', ' ', raw).lower()[:60]
+                        key = re.sub(r'\s+', ' ', raw).lower()[:_DEDUP_KEY_LENGTH]
                         if key not in seen_steps:
                             seen_steps.add(key)
                             steps.append(raw)
@@ -352,7 +354,7 @@ class BellalunarestaurantRoExtractor(BaseRecipeExtractor):
                     if re.match(r'^\d+[\.\)]\s', raw) or len(raw) > _MIN_INSTRUCTION_LENGTH:
                         # Strip leading step number prefix for cleaner output
                         raw_clean = re.sub(r'^\d+[\.\)]\s*', '', raw)
-                        key = re.sub(r'\s+', ' ', raw_clean).lower()[:60]
+                        key = re.sub(r'\s+', ' ', raw_clean).lower()[:_DEDUP_KEY_LENGTH]
                         if key not in seen_steps:
                             seen_steps.add(key)
                             steps.append(raw_clean)
