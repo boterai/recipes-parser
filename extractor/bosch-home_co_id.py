@@ -36,6 +36,14 @@ class BoschHomeCoIdExtractor(BaseRecipeExtractor):
     #  Internal helpers
     # ------------------------------------------------------------------ #
 
+    def _safe_extract(self, method, field_name: str) -> Optional[str]:
+        """Call method(), returning None and logging on any exception."""
+        try:
+            return method()
+        except Exception as e:
+            logger.error("Error extracting %s from %s: %s", field_name, self.html_path, e)
+            return None
+
     def _get_guten_appetit_section(self):
         """Return the 'Guten Appetit' teaser div or None."""
         for h2 in self.soup.find_all('h2'):
@@ -430,6 +438,7 @@ class BoschHomeCoIdExtractor(BaseRecipeExtractor):
             'home', 'experience bosch', 'living with bosch', 'cookbook',
             'tentang bosch',  # Indonesian
         }
+        skip_with_home = skip | {'home'}
 
         breadcrumb_div = self.soup.find('div', class_='header-breadcrumb')
         if breadcrumb_div:
@@ -453,7 +462,7 @@ class BoschHomeCoIdExtractor(BaseRecipeExtractor):
                     # Remove generic navigation items from the tail
                     for item in reversed(items):
                         name = item.get('name', '')
-                        if name.lower() not in skip | {'home'}:
+                        if name.lower() not in skip_with_home:
                             return self.clean_text(name) or None
             except (json.JSONDecodeError, AttributeError):
                 continue
@@ -531,7 +540,7 @@ class BoschHomeCoIdExtractor(BaseRecipeExtractor):
             src = img.get('src') or img.get('data-src') or ''
             if not src:
                 continue
-            # Normalise protocol-relative URLs
+            # Normalize protocol-relative URLs
             if src.startswith('//'):
                 src = 'https:' + src
 
@@ -612,12 +621,12 @@ class BoschHomeCoIdExtractor(BaseRecipeExtractor):
             "ingredients": ingredients,
             "instructions": instructions,
             "category": category,
-            "prep_time": self.extract_prep_time(),
-            "cook_time": self.extract_cook_time(),
-            "total_time": self.extract_total_time(),
+            "prep_time": self._safe_extract(self.extract_prep_time, "prep_time"),
+            "cook_time": self._safe_extract(self.extract_cook_time, "cook_time"),
+            "total_time": self._safe_extract(self.extract_total_time, "total_time"),
             "notes": notes,
             "tags": tags,
-            "image_urls": self.extract_image_urls(),
+            "image_urls": self._safe_extract(self.extract_image_urls, "image_urls"),
         }
 
 
