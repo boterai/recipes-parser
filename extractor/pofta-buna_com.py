@@ -20,12 +20,11 @@ logger = logging.getLogger(__name__)
 
 # Romanian measurement units recognised on pofta-buna.com
 _RO_UNITS = [
-    r'lingurițe?',
-    r'linguriță',
-    r'linguri',
-    r'lingură',
-    r'cești?',
-    r'ceașcă',
+    r'lingurițe?',      # teaspoon(s) – also matches 'linguriță' via optional 'e'
+    r'linguri',         # tablespoons
+    r'lingură',         # tablespoon (singular)
+    r'cești?',          # cups (cești = plural)
+    r'ceașcă',          # cup (singular with different stem)
     r'pahare?',
     r'pahar',
     r'pachet(?:e)?',
@@ -540,6 +539,7 @@ class PoftaBunaComExtractor(BaseRecipeExtractor):
                     if isinstance(it.get('item'), dict) and 'name' in it['item']
                 ]
                 if len(names) >= 2:
+                    # names[0] = site root, names[1] = category, names[-1] = current page
                     return self.clean_text(names[1])
 
             # Fallback: article category-* classes
