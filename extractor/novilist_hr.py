@@ -8,6 +8,7 @@ import re
 import sys
 from pathlib import Path
 from typing import Optional, List, Dict, Any
+from urllib.parse import urlparse
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
@@ -527,8 +528,13 @@ class NovilistHrExtractor(BaseRecipeExtractor):
                 for img in uc.find_all('img'):
                     # Prefer original src over small thumbnails
                     src = img.get('src') or ''
-                    # Skip Instagram/external embed images (contain instagram.com)
-                    if 'instagram.com' in src or 'gravatar.com' in src:
+                    # Skip external embed images from Instagram, Gravatar, etc.
+                    # Use hostname comparison to avoid incomplete substring checks.
+                    try:
+                        host = urlparse(src).hostname or ''
+                    except Exception:
+                        host = ''
+                    if host.endswith('instagram.com') or host.endswith('gravatar.com'):
                         continue
                     if src.startswith('http'):
                         _add(src)
