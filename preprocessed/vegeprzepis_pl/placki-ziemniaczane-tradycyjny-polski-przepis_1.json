@@ -1,0 +1,12 @@
+{
+    "dish_name": "Placki Ziemniaczane",
+    "description": "Tradycyjne polskie placki ziemniaczane, chrupiące na zewnątrz i delikatne w środku, podawane jako danie główne lub dodatek.",
+    "ingredients": "[{\"name\": \"ziemniaki\", \"unit\": \"kg\", \"amount\": \"1\"}, {\"name\": \"cebule\", \"unit\": \"sztuki\", \"amount\": \"2\"}, {\"name\": \"ząbki czosnku\", \"unit\": \"sztuki\", \"amount\": \"2\"}, {\"name\": \"wędzony boczek\", \"unit\": \"g\", \"amount\": \"200\"}, {\"name\": \"jajka\", \"unit\": \"sztuki\", \"amount\": \"4\"}, {\"name\": \"mąka\", \"unit\": \"łyżki\", \"amount\": \"2\"}, {\"name\": \"sól\", \"unit\": null, \"amount\": null}, {\"name\": \"pieprz\", \"unit\": null, \"amount\": null}, {\"name\": \"olej do smażenia\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Obierz i zetrzyj na tarce ziemniaki, a następnie odcisnij nadmiar płynu. Z drobno pokrojonych cebuli i czosnku. Pokrój boczek na małe kawałki. W dużej misce wymieszaj starte ziemniaki, cebulę, czosnek i boczek. Dodaj jajka i mąkę, aby połączyć składniki. Dopraw solą i pieprzem. Rozgrzej olej w patelni. Formuj małe placuszki z mieszanki i smaż je z obu stron na złoty kolor. Serwuj gorące, opcjonalnie z kwaśną śmietaną lub sałatką. Możesz również spróbować piec placki ziemniaczane w piekarniku, aby uzyskać lżejszą wersję. Wystarczy rozgrzać piekarnik do 200°C i piec placuszki aż do uzyskania złotego koloru.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "3-4 minutes per side",
+    "total_time": null,
+    "notes": "Można zastąpić składniki mięsne bezmięsnymi alternatywami lub dodać więcej warzyw. Można piec placki w piekarniku dla lżejszej wersji.",
+    "tags": "placki ziemniaczane, polski przepis, tradycyjne danie, ziemniaki, smażone placki"
+}

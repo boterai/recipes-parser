@@ -1,0 +1,12 @@
+{
+    "dish_name": "Nasi Goreng Kimchi ala Korea",
+    "description": "Resep nasi goreng kimchi ala Korea dengan cita rasa unik dan praktis dibuat, menggunakan kimchi sebagai bahan utama.",
+    "ingredients": "[{\"name\": \"kimchi\", \"unit\": \"sdm\", \"amount\": \"2 – 3\"}, {\"name\": \"minyak goreng\", \"unit\": \"sdm\", \"amount\": \"2\"}, {\"name\": \"nasi putih\", \"unit\": \"mangkuk\", \"amount\": \"1\"}, {\"name\": \"telur\", \"unit\": \"butir\", \"amount\": \"1\"}, {\"name\": \"air kimchi\", \"unit\": \"sdm\", \"amount\": \"2\"}, {\"name\": \"minyak wijen\", \"unit\": \"sdt\", \"amount\": \"1\"}, {\"name\": \"daun bawang\", \"unit\": \"batang\", \"amount\": \"1\"}, {\"name\": \"bubuk cabai\", \"unit\": \"sdm\", \"amount\": \"½\"}, {\"name\": \"biji wijen\", \"unit\": \"sdt\", \"amount\": \"1\"}, {\"name\": \"garam\", \"unit\": null, \"amount\": \"secukupnya\"}, {\"name\": \"lada bubuk\", \"unit\": null, \"amount\": \"secukupnya\"}, {\"name\": \"gula\", \"unit\": null, \"amount\": \"secukupnya\"}, {\"name\": \"rumput laut kemasan\", \"unit\": null, \"amount\": null}, {\"name\": \"keju mozarella\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Panaskan minyak goreng di dalam wajan. Masukkan kimchi dan tumis hingga layu. Tambahkan sejumput gula, aduk hingga rata. Tambahkan nasi, aduk hingga rata. Tambahkan garam, lada, dan sedikit gula. Tambahkan air kimchi, koreksi rasa, dan aduk hingga semua bumbu merata. Sebarkan nasi ke seluruh permukaan wajan. Tambahkan rumput laut dan keju mozarella. Tutup wajan dengan penutup dan tunggu selama 1 menit. Buka penutup wajan, keju mozarella sudah meleleh. Nasi goreng kimchi siap disantap.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Untuk sensasi makan ala Korea, makan nasi goreng kimchi langsung dari wajan.",
+    "tags": "nasi goreng, kimchi, Korea, resep praktis, masakan Asia"
+}

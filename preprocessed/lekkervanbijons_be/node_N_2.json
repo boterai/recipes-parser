@@ -1,0 +1,12 @@
+{
+    "dish_name": "Yoghurtijs met frambozen en braambessen",
+    "description": "Fris, fruitig en simpelweg zalig! Dit yoghurtijs met frambozen en braambessen is hét ultieme zomerdessert. Een perfecte afsluiter voor elke maaltijd.",
+    "ingredients": "[{\"name\": \"yoghurt\", \"unit\": \"ml\", \"amount\": \"250\"}, {\"name\": \"frambozen\", \"unit\": \"g\", \"amount\": \"50\"}, {\"name\": \"braambessen\", \"unit\": \"g\", \"amount\": \"50\"}, {\"name\": \"citroensap\", \"unit\": \"el\", \"amount\": \"1\"}, {\"name\": \"honing\", \"unit\": \"el\", \"amount\": \"2\"}, {\"name\": \"suiker\", \"unit\": \"g\", \"amount\": \"25\"}]",
+    "instructions": "Meng de bessen en frambozen met de suiker, citroensap in een pannetje en breng aan de kook. Laat afkoelen. Meng de honing door de yoghurt, roer er de afgekoelde bessencompote door. Vul er ijslollyvormpjes mee en zet 3 à 4 uur in de diepvries.",
+    "category": "Dessert",
+    "prep_time": "20 min",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Hrskavi bezglutenski tost",
+    "description": null,
+    "ingredients": "[{\"name\": \"MIX B, Schar brašna\", \"unit\": \"g\", \"amount\": \"500\"}, {\"name\": \"suhog kvasca\", \"unit\": \"g\", \"amount\": \"10\"}, {\"name\": \"mlake vode\", \"unit\": \"ml\", \"amount\": \"420\"}, {\"name\": \"maslinovog ulja\", \"unit\": \"ml\", \"amount\": \"80\"}, {\"name\": \"soli\", \"unit\": \"žličica\", \"amount\": \"1\"}, {\"name\": \"šećera\", \"unit\": \"žličica\", \"amount\": \"1\"}, {\"name\": \"kiselog vrhnja\", \"unit\": \"jušna žlica\", \"amount\": \"1\"}]",
+    "instructions": "U veću zdjelu stavite brašno, maslinovo ulje, kiselo vrhnje i sol. Napravite udubljenje u sredini za kvasac. Dodajte šećer i pripremite toplu vodu. U to udubljenje dodajte malo tople vode, izmiješajte kvasac i šećer, pa pokrijte krpom. Ostavite da se kvasac digne. Kada je kvasac spreman, dodajte ostatak vode i zamijesite tijesto mikserom sa spiralnim nastavcima. Kalup za tost (onaj uski, visoki) premaži uljem. Tijesto prebaci u kalup, površinu lagano premaži maslinovim uljem, a zatim mokrom rukom (umočenom u vodu) zagladi da bude ravna. Pokrij krpom i ostavi dizati 45–60 minuta dok skoro ne dođe do ruba kalupa. Pećnicu zagrij na 190°C (ventilator). Peci 45 minuta. Dobar tek!",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "45 minutes",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

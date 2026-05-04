@@ -1,0 +1,12 @@
+{
+    "dish_name": "Carne Cozida com Legumes",
+    "description": "Carne cozida com legumes suculenta, macia e cheia de sabor. Receita perfeita para reunir a família ao redor da mesa, combinando ingredientes acessíveis com um sabor autêntico irresistível.",
+    "ingredients": "[{\"name\": \"carne bovina músculo ou acém\", \"unit\": \"kg\", \"amount\": \"1\"}, {\"name\": \"batatas grandes cortadas em cubos\", \"unit\": \"unidades\", \"amount\": \"3\"}, {\"name\": \"cenouras cortadas em rodelas\", \"unit\": \"unidades\", \"amount\": \"2\"}, {\"name\": \"cebola média picada\", \"unit\": \"unidade\", \"amount\": \"1\"}, {\"name\": \"dentes de alho picados\", \"unit\": \"unidades\", \"amount\": \"3\"}, {\"name\": \"folhas de louro\", \"unit\": \"unidades\", \"amount\": \"2\"}, {\"name\": \"colher de chá de gengibre ralado\", \"unit\": \"colher de chá\", \"amount\": \"1\"}, {\"name\": \"colheres de sopa de óleo\", \"unit\": \"colheres de sopa\", \"amount\": \"2\"}, {\"name\": \"Sal e pimenta\", \"unit\": null, \"amount\": \"a gosto\"}, {\"name\": \"Água quente suficiente para cobrir\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Corte a carne em cubos médios e tempere com sal e pimenta. Aqueça o óleo na panela de pressão e sele a carne até dourar bem. Adicione a cebola, o alho, o gengibre e as folhas de louro. Refogue por alguns minutos. Acrescente água quente até cobrir a carne. Feche a panela e cozinhe por 20 a 25 minutos após pegar pressão. Abra a panela, adicione as batatas e cenouras. Cozinhe por mais 10 a 15 minutos até os legumes ficarem macios. Ajuste o sal, deixe o molho reduzir se necessário e sirva quente.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "40 minutes",
+    "total_time": "55 minutes",
+    "notes": "Corte os legumes em pedaços grandes para evitar que desmanchem. O músculo bovino deixa a carne mais macia e suculenta. Selar a carne antes do cozimento intensifica o sabor. Para um molho mais encorpado, deixe reduzir sem tampa após o cozimento.",
+    "tags": "carne cozida com legumes, carne cozida simples, carne de panela com legumes, comida caseira brasileira, ensopado de carne, receita de carne com batata"
+}

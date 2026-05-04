@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ayam Goreng Bawang Putih",
+    "description": "Ayam goreng bawang putih yang gurih dan renyah, dimasak dengan metode dua kali penggorengan, cocok untuk teman makan nasi atau snack.",
+    "ingredients": "[{\"name\": \"daging ayam\", \"unit\": \"kg\", \"amount\": \"½\"}, {\"name\": \"bawang putih\", \"unit\": \"siung\", \"amount\": \"10\"}, {\"name\": \"minyak goreng\", \"unit\": null, \"amount\": \"secukupnya\"}, {\"name\": \"bawang putih (bumbu marinasi)\", \"unit\": \"siung\", \"amount\": \"8\"}, {\"name\": \"bawang merah\", \"unit\": \"siung\", \"amount\": \"5\"}, {\"name\": \"jahe\", \"unit\": \"ruas\", \"amount\": \"1\"}, {\"name\": \"kunyit\", \"unit\": \"ruas\", \"amount\": \"1\"}, {\"name\": \"ketumbar\", \"unit\": \"sdt\", \"amount\": \"1\"}, {\"name\": \"merica butir\", \"unit\": \"sdt\", \"amount\": \"1\"}, {\"name\": \"tepung maizena\", \"unit\": \"gram\", \"amount\": \"75\"}, {\"name\": \"telur\", \"unit\": \"butir\", \"amount\": \"1\"}, {\"name\": \"garam\", \"unit\": null, \"amount\": \"secukupnya\"}]",
+    "instructions": "Siapkan ayam potong yang sudah dibersihkan. Haluskan bumbu marinasi kecuali tepung maizena dan telur menggunakan food processor atau blender. Masukkan bumbu ke dalam wadah berisi ayam dan pijat agar bumbu meresap. Tambahkan tepung maizena dan telur, aduk hingga rata. Marinasi ayam selama 2 jam atau seharian lebih baik. Panaskan minyak goreng di wajan dengan api sedang, goreng ayam. Setelah setengah matang, tambahkan bawang putih yang belum dikupas. Goreng hingga bawang kuning kecoklatan, angkat ayam dan bawang, tiriskan. Setelah minyak tiris, goreng kembali ayam di minyak panas dengan api besar hingga luarnya krispi, angkat dan tiriskan. Sajikan ayam goreng bawang putih bersama bawang putih goreng dan irisan jeruk lemon.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Marinasi ayam sebaiknya selama 2 jam atau lebih agar bumbu meresap dengan baik. Metode penggorengan dua kali membuat ayam lebih renyah dan juicy.",
+    "tags": "ayam goreng,bawang putih,viral,tiktok,resep indonesia"
+}

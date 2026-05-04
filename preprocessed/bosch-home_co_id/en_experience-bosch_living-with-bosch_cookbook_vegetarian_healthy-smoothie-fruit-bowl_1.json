@@ -1,0 +1,12 @@
+{
+    "dish_name": "Healthy Smoothie Fruit Bowl",
+    "description": null,
+    "ingredients": "[{\"name\": \"Honey\", \"unit\": \"Tablespoons\", \"amount\": \"2\"}, {\"name\": \"Pumpkin Seeds (Deshelled)\", \"unit\": \"g\", \"amount\": \"30\"}, {\"name\": \"Plain Greek Yoghurt\", \"unit\": \"Tablespoons\", \"amount\": \"4\"}, {\"name\": \"Green Kiwi\", \"unit\": \"g\", \"amount\": \"50\"}, {\"name\": \"Banana (Sliced)\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"Blueberries\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"Mango (Cubed)\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"Raspberries\", \"unit\": \"g\", \"amount\": \"200\"}, {\"name\": \"Chia Seeds\", \"unit\": \"g\", \"amount\": \"10\"}, {\"name\": \"Strawberries\", \"unit\": \"g\", \"amount\": \"200\"}, {\"name\": \"Dried Cranberries\", \"unit\": \"g\", \"amount\": \"30\"}]",
+    "instructions": "Remove the green cap and stem of the strawberries and cut them into halves. Place the raspberries, strawberry halves and blueberries into a clean storage box. Freeze the berries for about 5 hours or until the berries turn solid. Peel the kiwi and mango, and cut them into cubes. Peel the banana, and cut into slices. In a Vacuum Blender Jar, add the frozen berries, plain Greek yoghurt and honey. Blend using the ‘Auto’ function, until smooth. If needed, add about 100ml of water. Portion the smoothie into bowls, and top with the mango and kiwi cubes, banana slices, dried cranberries, deshelled pumpkin seeds and chia seeds. Enjoy while fresh!",
+    "category": null,
+    "prep_time": "300 mins",
+    "cook_time": "20 mins",
+    "total_time": null,
+    "notes": "Tip: To seal in freshness, use the ‘Vacuum’ function with the Storage Box of the VitaMaxx Vacuum Blender. The Vacuum Blender will first start vacuuming, and proceed to blend.",
+    "tags": "Smoothie,Fruit Bowl,Healthy,Vegetarian"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Engelske teboller",
+    "description": "Himmelske teboller, bedst når de er nybagte. Nemme og hurtige at lave.",
+    "ingredients": "[{\"name\": \"mel\", \"unit\": \"g\", \"amount\": \"300\"}, {\"name\": \"bagepulver\", \"unit\": \"tsk\", \"amount\": \"2\"}, {\"name\": \"sukker\", \"unit\": \"spsk\", \"amount\": \"5\"}, {\"name\": \"smør\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"appelsinskal\", \"unit\": \"stk\", \"amount\": \"1\"}, {\"name\": \"appelsinsaft\", \"unit\": \"spsk\", \"amount\": \"4\"}, {\"name\": \"mælk\", \"unit\": \"dl\", \"amount\": \"1\"}, {\"name\": \"æggehvider\", \"unit\": null, \"amount\": null}, {\"name\": \"tesukker\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Bland mel, bagepulver og sukker. Findel smør i. Tilsæt revet appelsinskal og appelsinsaft. Bland mælk i og saml dejen. Form 8 boller og sæt på bagepapir. Pensel med æggehvider og drys med tesukker. Bag ved 200 grader i ca. 15 minutter.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": "15 minutes",
+    "total_time": null,
+    "notes": "Bollerne smager bedst nybagte og er ikke så gode dagen efter. Det anbefales at bage en ny portion.",
+    "tags": "boller, engelsk, teboller, bagning, dessert"
+}

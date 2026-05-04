@@ -1,0 +1,12 @@
+{
+    "dish_name": "Karulaugupesto",
+    "description": "Karulaugupesto on kohustuslik toit kevadel, valmistatud värsketest karulaugu lehtedest, oliiviõlist, Parmesani juustust ja röstitud seedermänni seemnetest.",
+    "ingredients": "[{\"name\": \"värskeid karulaugu lehti\", \"unit\": null, \"amount\": \"suur punt\"}, {\"name\": \"Extra Virgin oliiviõli / salatiõli\", \"unit\": \"sl\", \"amount\": \"2-3\"}, {\"name\": \"riivitud Parmesani juustu või muud sarnast kõva juustu\", \"unit\": \"g\", \"amount\": \"50\"}, {\"name\": \"röstitud seedermänni seemneid\", \"unit\": \"sl\", \"amount\": \"2\"}, {\"name\": \"musti kivideta oliive (valikuline)\", \"unit\": \"sl\", \"amount\": \"2\"}, {\"name\": \"päikesekuivatatud tomat (valikuline)\", \"unit\": null, \"amount\": null}, {\"name\": \"tšillikaun (valikuline)\", \"unit\": \"tšillikaunast\", \"amount\": \"1/4\"}]",
+    "instructions": "Pese karulaugu lehed ja kuivata salativurris. Pane koostisained blenderisse välja arvatud seedermänni seemned ja lase kõik ühtlaseks seguks, kuid mitte liiga pudiks. Lisa jämedalt hakitud seedermänni seemned hiljem ja sega pesto läbi. Karulaugupesto seisab külmikus suletud purgis umbes 5-6 päeva.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Karulauk on ise küüslaugu maitsega ja karulaugupestole ei ole vaja küüslauku lisada. Võid proovida varianti vähese tšilliga. Sama pestot saab valmistada ka nõgesest ja basiilikust, siis lisa küüslauguküüned.",
+    "tags": "pesto, karulauk, kevadine, taimetoit"
+}

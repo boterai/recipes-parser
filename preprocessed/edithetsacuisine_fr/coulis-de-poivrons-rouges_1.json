@@ -1,0 +1,12 @@
+{
+    "dish_name": "Coulis de poivrons rouges froids",
+    "description": "Sauce froide aux poivrons rouges, douce, subtile et légèrement sucrée, parfaite pour accompagner viandes froides, poissons grillés ou légumes rôtis.",
+    "ingredients": "[{\"name\": \"poivrons rouges\", \"unit\": \"pièces\", \"amount\": \"2\"}, {\"name\": \"gros sel\", \"unit\": \"pincée\", \"amount\": \"1\"}, {\"name\": \"sucre\", \"unit\": \"cuillère à café\", \"amount\": \"½\"}, {\"name\": \"huile d'olive vierge extra\", \"unit\": \"cl\", \"amount\": \"10\"}]",
+    "instructions": "Laver soigneusement les poivrons. Couper les poivrons en deux, retirer les graines, puis tailler en petits dés. Faire cuire les poivrons 15 à 20 minutes dans une casserole d'eau bouillante salée. Égoutter en gardant un peu d'eau de cuisson. Mixer les poivrons avec l'huile d'olive et 1 à 2 cuillères d'eau de cuisson pour obtenir une texture onctueuse. Ajouter le sucre pour équilibrer l'acidité. Passer la préparation au chinois pour un coulis parfaitement lisse. Réserver au frais au moins 1 heure avant de servir.",
+    "category": "sauce",
+    "prep_time": "10 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "20 minutes",
+    "notes": "Variantes possibles : ajouter un poivron jaune, paprika fumé ou un quart de gousse d'ail blanchi. Conservation 3 à 4 jours au réfrigérateur ou congélation en petites portions. Conseils d'accords mets & vins inclus.",
+    "tags": "sauce, végétalien, sans gluten, sans lactose, recette de métropole"
+}

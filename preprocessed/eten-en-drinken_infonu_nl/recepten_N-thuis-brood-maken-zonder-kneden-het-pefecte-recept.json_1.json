@@ -1,0 +1,12 @@
+{
+    "dish_name": "Thuis brood maken zonder kneden",
+    "description": "Een recept voor het maken van brood thuis zonder kneden, met bloem, gist, zout en water als ingrediënten. Het brood heeft een sterke korst en grote, luchtige gaten binnenin.",
+    "ingredients": "[{\"name\": \"bloem\", \"unit\": \"gr\", \"amount\": \"430\"}, {\"name\": \"gedroogde gist\", \"unit\": \"gr\", \"amount\": \"1\"}, {\"name\": \"zout\", \"unit\": \"gr\", \"amount\": \"8\"}, {\"name\": \"water\", \"unit\": \"ml\", \"amount\": \"355\"}, {\"name\": \"olijfolie\", \"unit\": null, \"amount\": null}, {\"name\": \"bloem, zemelen of maisblom\", \"unit\": null, \"amount\": \"een handvol\"}]",
+    "instructions": "Doe de bloem, het zout en de gist in een mengkom. Meng de ingrediënten. Doe er water bij en roer met je hand tot alles aan elkaar hangt. Laat dit mengsel 12 uur staan op kamertemperatuur. Haal het uit de pot en leg het op de tafel. Maak er een platte schijf van. Neem de 4 kanten van de schijf en plooi ze naar het midden, herhaal dat nog eens. Laat het deeg 15 minuten rusten op het werkoppervlak of in de mengkom. Maak van het deeg een bal. Prepareer de theedoek door deze open te leggen en er bloem, tarwe zemelen of maïsmeel over te strooien. Leg de bal deeg op een kant van de theedoek, duw hem plat tot een schijf, en strooi wat van de zemelen op de andere kant van de schijf. Laat het deeg in de theedoek 1 a 2 uur rijzen tot het volume meer dan verdubbeld is. Verwarm de oven 232°C tot 260°C een half uur voor het bakken. Plaats de kookpot mee in de oven zodat hij voorverwarmd is. Haal de hete kookpot uit de oven en doe het deeg in de kookpot met behulp van de theedoek. Doe het deksel op de kookpot en bak 30 minuten met het deksel erop. Bak daarna 15 tot 30 minuten verder zonder deksel tot het brood mooi bruin is. Haal het brood uit de oven en laat het afkoelen.",
+    "category": "Bread",
+    "prep_time": "12 hours",
+    "cook_time": "45 minutes",
+    "total_time": null,
+    "notes": "Om het proces te versnellen kan ¼ theelepel wijnazijn aan het water worden toegevoegd en zeer warm water worden gebruikt, waarna het deeg 3 tot 4 uur rijst in plaats van 12 uur.",
+    "tags": "brood,bakken,zonder kneden,huisgemaakt"
+}

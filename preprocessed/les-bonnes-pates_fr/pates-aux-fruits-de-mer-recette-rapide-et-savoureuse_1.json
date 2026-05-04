@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pâtes aux fruits de mer",
+    "description": "Recette rapide et savoureuse de pâtes aux fruits de mer associant crevettes, moules, calamars et autres fruits de mer avec des pâtes longues comme les linguines ou spaghettis.",
+    "ingredients": "[{\"name\": \"crevettes\", \"unit\": null, \"amount\": null}, {\"name\": \"moules\", \"unit\": null, \"amount\": null}, {\"name\": \"calamars\", \"unit\": null, \"amount\": null}, {\"name\": \"pâtes longues (spaghettis ou linguines)\", \"unit\": null, \"amount\": null}, {\"name\": \"huile d’olive extra vierge\", \"unit\": null, \"amount\": null}, {\"name\": \"ail\", \"unit\": null, \"amount\": null}, {\"name\": \"échalotes\", \"unit\": null, \"amount\": null}, {\"name\": \"persil frais\", \"unit\": null, \"amount\": null}, {\"name\": \"basilic\", \"unit\": null, \"amount\": null}, {\"name\": \"crème fraîche (optionnel)\", \"unit\": null, \"amount\": null}, {\"name\": \"citron (zestes et filet)\", \"unit\": null, \"amount\": null}, {\"name\": \"sel\", \"unit\": null, \"amount\": null}, {\"name\": \"poivre\", \"unit\": null, \"amount\": null}]",
+    "instructions": "1. Rincer et préparer les fruits de mer (éplucher crevettes, nettoyer moules). 2. Cuire les pâtes dans une eau bouillante salée 8 à 10 minutes jusqu'à al dente. 3. Sauter les fruits de mer dans une poêle avec huile d’olive, ail et échalotes pendant 3 à 5 minutes. 4. Égoutter les pâtes en réservant un peu d'eau de cuisson. 5. Mélanger délicatement les pâtes et les fruits de mer dans une grande poêle. 6. Ajouter un filet d’huile d’olive, herbes fraîches, crème fraîche optionnelle et zestes de citron. 7. Assaisonner avec sel, poivre et servir immédiatement avec une rondelle de citron.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "30 minutes",
+    "total_time": null,
+    "notes": "Utiliser des fruits de mer frais ou surgelés déjà décortiqués pour gagner du temps. Préparer les ingrédients à l'avance. Ajouter du parmesan râpé pour plus de saveur. Ajuster la sauce avec l'eau de cuisson réservée. Ajouter une pincée de piment pour relever le goût.",
+    "tags": "pâtes, fruits de mer, rapide, savoureux, italien, linguine, spaghetti"
+}

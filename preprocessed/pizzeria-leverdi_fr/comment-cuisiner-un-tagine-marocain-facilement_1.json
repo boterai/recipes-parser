@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tagine marocain",
+    "description": "Recette traditionnelle marocaine de tagine, plat mijoté aux épices exotiques, viande et légumes, cuisiné lentement dans un plat en terre cuite.",
+    "ingredients": "[{\"name\": \"Ras el hanout\", \"unit\": null, \"amount\": null}, {\"name\": \"Cannelle en bâton\", \"unit\": null, \"amount\": null}, {\"name\": \"Safran\", \"unit\": null, \"amount\": null}, {\"name\": \"Viande d’agneau ou de poulet\", \"unit\": null, \"amount\": null}, {\"name\": \"Légumes de saison (carottes, courgettes, poivrons, tomates)\", \"unit\": null, \"amount\": null}, {\"name\": \"Cumin\", \"unit\": null, \"amount\": null}, {\"name\": \"Curcuma\", \"unit\": null, \"amount\": null}, {\"name\": \"Gingembre\", \"unit\": null, \"amount\": null}, {\"name\": \"Oignons\", \"unit\": null, \"amount\": null}, {\"name\": \"Ail\", \"unit\": null, \"amount\": null}, {\"name\": \"Huile d’olive\", \"unit\": null, \"amount\": null}, {\"name\": \"Eau\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Découper la viande en morceaux réguliers. Faire revenir la viande dans l’huile d’olive. Ajouter les oignons émincés et l’ail pressé. Incorporer les épices : cumin, curcuma, gingembre. Ajouter les légumes choisis. Couvrir avec le couvercle du plat à tagine. Laisser mijoter à feu doux. Vérifier la cuisson et ajuster l’assaisonnement. Servir chaud avec du pain ou de la semoule.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Utiliser un feu doux pour une cuisson lente, ajouter de l’eau progressivement pour éviter le dessèchement, préférer un couvercle hermétique. Peut être adapté avec des ustensiles modernes comme cocotte en fonte ou multicuiseur.",
+    "tags": "tagine, marocain, cuisine marocaine, plat mijoté, épices, agneau, poulet, légumes"
+}

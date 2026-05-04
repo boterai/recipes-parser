@@ -1,0 +1,12 @@
+{
+    "dish_name": "Caprese con mozzarella e pomodoro",
+    "description": "Insalata caprese fresca e semplice con pomodori maturi, mozzarella, basilico e olio extravergine d'oliva, piatto estivo tipico della dieta mediterranea.",
+    "ingredients": "[{\"name\": \"mozzarella\", \"unit\": \"grammi\", \"amount\": \"100\"}, {\"name\": \"pomodori\", \"unit\": \"pezzi\", \"amount\": \"2\"}, {\"name\": \"olio extravergine d'oliva\", \"unit\": null, \"amount\": \"q.b.\"}, {\"name\": \"basilico fresco\", \"unit\": null, \"amount\": \"qualche foglia\"}]",
+    "instructions": "Affettare i pomodori e la mozzarella in fette regolari. Disporre alternando le fette di pomodoro e mozzarella. Aggiungere foglie di basilico fresco e irrora con un filo d'olio extravergine d'oliva. Servire a temperatura ambiente senza aggiungere pepe, sale in eccesso o aceto balsamico.",
+    "category": "Insalata",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Servire la mozzarella a temperatura ambiente per apprezzarne meglio sapore e cremosità. Varianti possibili includono olive, avocado, granella di pistacchi, pane tostato, acciughe o burrata.",
+    "tags": "insalata, estivo, mediterranea, mozzarella, pomodoro, basilico"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tojásmentes vaníliás palacsinta",
+    "description": "Puha, könnyen tekerhető, vékony tésztás, kellemesen vanília illatú és ízű tojásmentes palacsinta.",
+    "ingredients": "[{\"name\": \"Szafi Free tekerhető hajdinás palacsinta lisztkeverék\", \"unit\": \"g\", \"amount\": \"65\"}, {\"name\": \"Szafi Free vaníliás zabpuding por\", \"unit\": \"g\", \"amount\": \"35\"}, {\"name\": \"Szafi Reform négyszeres erejű édesítő\", \"unit\": \"g\", \"amount\": \"5\"}, {\"name\": \"só\", \"unit\": \"g\", \"amount\": \"2\"}, {\"name\": \"kókuszkrém\", \"unit\": \"g\", \"amount\": \"40\"}, {\"name\": \"víz\", \"unit\": \"g\", \"amount\": \"350\"}, {\"name\": \"kókuszolaj a serpenyő kenéséhez\", \"unit\": \"g\", \"amount\": \"0.5\"}]",
+    "instructions": "A száraz és a folyékony hozzávalókat külön-külön elkeverjük, összeöntjük és kézi habverővel csomómentesre dolgozzuk. Pihentetjük 15 percet, majd kiolajozott serpenyőben kisütjük őket. Oldalanként kb. 1,5-2 perc, amikor elválik a széle a serpenyőtől, akkor lehet fordítani.",
+    "category": "Palacsinták-lepényfélék",
+    "prep_time": "15 minutes",
+    "cook_time": "14 minutes",
+    "total_time": "29 minutes",
+    "notes": "Nekem 7 db palacsinta lett ebből az adagból. Köszönet a receptért Julikának.",
+    "tags": "gluténmentes,palacsinta,szafi free palacsinta liszt,szafi free palacsinta lisztkeverék,szafi free vaníliás zabpuding,szafi free zabpuding,szafifree,tojásmentes"
+}

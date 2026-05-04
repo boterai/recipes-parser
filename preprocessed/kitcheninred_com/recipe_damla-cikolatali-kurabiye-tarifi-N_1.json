@@ -1,0 +1,12 @@
+{
+    "dish_name": "Damla Çikolatalı Kurabiye",
+    "description": "Kurabiye tarifi, tereyağı soğuk kullanılıyor, büyük boyutlarda çikolatalı dev kurabiyeler.",
+    "ingredients": "[{\"name\": \"Tereyağı\", \"unit\": \"gr\", \"amount\": \"110\"}, {\"name\": \"Toz Şeker\", \"unit\": \"gr\", \"amount\": \"100\"}, {\"name\": \"Esmer Şeker\", \"unit\": \"gr\", \"amount\": \"90\"}, {\"name\": \"Yumurta\", \"unit\": \"büyük\", \"amount\": \"1\"}, {\"name\": \"Vanilya Özütü (Ekstresi)\", \"unit\": \"çay kaşığı\", \"amount\": \"1/2\"}, {\"name\": \"Un\", \"unit\": \"gr\", \"amount\": \"165\"}, {\"name\": \"Tuz\", \"unit\": \"çay kaşığı\", \"amount\": \"1/2\"}, {\"name\": \"Karbonat\", \"unit\": null, \"amount\": \"çay kaşığının ucuyla\"}, {\"name\": \"Kabartma Tozu\", \"unit\": null, \"amount\": \"çay kaşığının ucuyla\"}, {\"name\": \"Bitter Çikolata\", \"unit\": \"gr\", \"amount\": \"190\"}]",
+    "instructions": "Fırını 190 dereceye önceden ısıtın Geniş ve derin bir karıştırma kalıbının içinde tereyağı ve şekeri (esmer+beyaz) mikserle önce yavaş sonra en yüksek devirde karışım homojen kıvama gelene kadar çırpın Yumurtayı ve ardından vanilyayı ekleyin Üzerine un, kabartma tozu, karbonat ve tuzu eleyip, düşük devirde çırpmaya devam edin Son olarak çikolataları koyup bir kez daha karıştırın Hamuru streç filme sarıp, sonradan pişirmek üzere buzdolabında 2 gün saklayabilirsiniz Hamurdan ceviz büyüklüğünde toplar yapıp, yağlı kağıt serdiğiniz bir fırın tepsisine aralıklı olarak dizin Önceden ısıttığınız 190 dereceli fırında 12-15 dk. kadar pişirin ve soğuyup sertleşene kadar ellemeyin Sonra, 2 tepsi kurabiyenin yarım saat içinde nasıl yarıya indiğini keyifle seyredin",
+    "category": "Kurabiye ve Bisküvi",
+    "prep_time": "not specified",
+    "cook_time": "12-15 minutes",
+    "total_time": "45 minutes",
+    "notes": "Kullanacağınız su bardağı 240 ml ölçüsünde olmalıdır. Hamur soğukken kullanılır. Hamur buzdolabında 2 gün saklanabilir.",
+    "tags": "Çay Saati, Çikolatalı, Kurabiye ve Bisküvi, Parti, Vejetaryen"
+}

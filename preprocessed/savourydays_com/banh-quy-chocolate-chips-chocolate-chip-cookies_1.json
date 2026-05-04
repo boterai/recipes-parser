@@ -1,0 +1,12 @@
+{
+    "dish_name": "bánh quy Chocolate Chips - Chocolate Chip Cookies",
+    "description": "Công thức làm bánh quy Chocolate Chips giòn, xốp, ngậy và thơm mùi chocolate chip, làm được khoảng 25-30 cái đường kính tầm 5cm.",
+    "ingredients": "[{\"name\": \"bột mỳ thường/ bột mỳ đa dụng (all-purpose flour/ plain flour)\", \"unit\": \"gram\", \"amount\": \"150\"}, {\"name\": \"bơ nhạt\", \"unit\": \"gram\", \"amount\": \"115\"}, {\"name\": \"đường trắng\", \"unit\": \"gram\", \"amount\": \"60\"}, {\"name\": \"đường nâu\", \"unit\": \"gram\", \"amount\": \"80\"}, {\"name\": \"quả trứng cỡ lớn\", \"unit\": \"quả\", \"amount\": \"1\"}, {\"name\": \"vanilla dạng lỏng\", \"unit\": \"teaspoon\", \"amount\": \"3/4\"}, {\"name\": \"baking soda (muối nở)\", \"unit\": \"teaspoon\", \"amount\": \"1/2\"}, {\"name\": \"muối\", \"unit\": \"teaspoon\", \"amount\": \"1/4\"}, {\"name\": \"chocolate chips\", \"unit\": \"gram\", \"amount\": \"100-130\"}, {\"name\": \"hạt óc chó (walnuts) hoặc hạt hồ đào (pecan) (không bắt buộc)\", \"unit\": \"gram\", \"amount\": \"50\"}]",
+    "instructions": "Đong bột mỳ, muối nở và muối. Dùng cây đánh trứng (whisk) trộn đều. Để máy đánh trứng ở tốc độ chậm, đánh bơ trong khoảng 10-15s cho bơ mềm, nhuyễn. Cho đường vào, để tốc độ gần cao nhất, đánh bơ với đường, không cần đánh quá bông. Cho trứng vào, đánh cho hòa quyện. Cho vanilla, đánh tiếp khoảng 20-30s. Rây bột vào âu, đánh đến khi hỗn hợp hòa quyện. Cuối cùng cho chocolate chip & hạt (nếu có), trộn đều. Bọc kín âu, cho hỗn hợp bột vào tủ lạnh, để khoảng 30 – 60 phút cho bột cứng lại. Vặn lò 170 độ C. Chuẩn bị khay nướng, lót giấy nến (giấy nướng bánh) lên khay. Viên bột thành các phần nhỏ bằng nhau (mỗi phần khoảng 10-15gram). Đặt lên khay nướng, để chừa khoảng cách khoảng 3-5cm giữa các viên bột. Nướng ở rãnh giữa của lò, nhiệt độ 170-175 độ C trong khoảng 15 phút hoặc đến khi bánh chín vàng và phần viền bánh hơi nâu nhạt. Sau khi bánh chín, tắt lò, chỉ để đèn và để bánh thêm 3-5 phút để bánh giòn. Lấy bánh ra khỏi khay nướng, để trên rack đến khi nguội hẳn. Bảo quản trong hộp kín.",
+    "category": "Dessert",
+    "prep_time": "30-60 minutes",
+    "cook_time": "15 minutes",
+    "total_time": null,
+    "notes": "Đường nâu có thể thay bằng đường trắng nhưng nên giảm bớt lượng đường. Có thể sấy bánh thêm ở nhiệt độ 100-110 độ C khoảng 10 phút để bánh giòn hơn. Lưu ý kích thước viên bột đồng đều và nhiệt độ nướng chính xác để tránh bánh cháy.",
+    "tags": "bánh quy, chocolate chip cookies, dessert, baking, cookies"
+}

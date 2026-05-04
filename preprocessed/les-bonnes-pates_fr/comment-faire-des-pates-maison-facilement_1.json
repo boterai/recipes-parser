@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pâtes maison",
+    "description": "Recette pour faire des pâtes maison facilement avec des ingrédients de base et des étapes simples pour réussir une pâte savoureuse et authentique.",
+    "ingredients": "[{\"name\": \"Farine de blé dur ou farine type 00\", \"unit\": null, \"amount\": null}, {\"name\": \"Œufs frais\", \"unit\": null, \"amount\": null}, {\"name\": \"Sel\", \"unit\": null, \"amount\": \"une pincée\"}, {\"name\": \"Eau ou lait végétal (alternative aux œufs)\", \"unit\": null, \"amount\": null}, {\"name\": \"Curcuma ou safran (optionnel)\", \"unit\": null, \"amount\": null}, {\"name\": \"Tofu soyeux (option vegan)\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Versez la farine en fontaine sur un plan de travail propre. Ajoutez les œufs au centre et mélangez progressivement. Pétrissez la pâte jusqu’à obtenir une texture homogène. Laissez reposer sous un linge humide pendant 30 minutes. Farinez légèrement le plan de travail pour éviter que la pâte ne colle. Étalez la pâte avec un rouleau à pâtisserie en tournant d’un quart de tour après chaque passage. Découpez la pâte avec une machine à pâtes ou un couteau tranchant selon la forme désirée. Plongez les pâtes dans une grande quantité d’eau salée bouillante. Respectez un temps de cuisson entre 2 et 4 minutes pour une texture al dente. Égouttez rapidement puis ajoutez un filet d’huile d’olive pour éviter qu’elles ne collent. Servez immédiatement avec la sauce de votre choix.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "2-4 minutes",
+    "total_time": null,
+    "notes": "Pour une pâte vegan, remplacez les œufs par du tofu soyeux. Ajoutez du curcuma ou du safran pour rehausser la couleur. Utilisez un linge humide pour le repos de la pâte. Saupoudrez légèrement de farine pour éviter que les pâtes collent après découpe.",
+    "tags": "pâtes maison, pâte fraîche, cuisine italienne, recette facile, vegan option"
+}

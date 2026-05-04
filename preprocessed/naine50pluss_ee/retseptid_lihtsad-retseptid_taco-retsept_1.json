@@ -1,0 +1,12 @@
+{
+    "dish_name": "Taco retsept hakklihaga",
+    "description": "Lihtne taco retsept hakklihaga, valmib 30 minutiga.",
+    "ingredients": "[{\"name\": \"veisehakkliha\", \"unit\": \"g\", \"amount\": \"300\"}, {\"name\": \"punane paprika\", \"unit\": \"tk\", \"amount\": \"1\"}, {\"name\": \"küüslaugu küüned\", \"unit\": \"tk\", \"amount\": \"4\"}, {\"name\": \"väiksem sibul\", \"unit\": \"tk\", \"amount\": \"1\"}, {\"name\": \"tšillipipar\", \"unit\": \"cm\", \"amount\": \"1\"}, {\"name\": \"täistera tacosid või tortillasid\", \"unit\": \"pakk\", \"amount\": \"1\"}, {\"name\": \"extra virgin oliiviõli\", \"unit\": null, \"amount\": null}, {\"name\": \"sool\", \"unit\": null, \"amount\": null}, {\"name\": \"musta jahvatatud pipart\", \"unit\": null, \"amount\": null}, {\"name\": \"konservoad (mustad või punased)\", \"unit\": \"purk\", \"amount\": \"1/2\"}, {\"name\": \"konservmais\", \"unit\": \"purk\", \"amount\": \"1\"}, {\"name\": \"tomatine salsa / kaste\", \"unit\": null, \"amount\": null}, {\"name\": \"värsked peterselli lehed\", \"unit\": null, \"amount\": null}, {\"name\": \"kappareid\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Lase õli pannil kuumaks, lisa hakitud küüslauk ja sibul ning kuumuta 2-3 minutit. Lisa hakkliha ja pruunista mõlemalt poolt kuni 5 minutit, segades aeg-ajalt. Pese ja puhasta paprika, lõika tükkideks. Lisa oad ja mais, hauta kaane all 8-10 minutit. Lisa paprikatükid, maitsesta soola ja pipraga, kuumuta 2-3 minutit. Lisa salsa, kuumuta veelkord läbi, ära hauta. Soojenda tacod pannil mõlemalt poolt 1-2 minutit, murra pooleks, lisa täidis ja serveeri.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "30 minutes",
+    "total_time": "30 minutes",
+    "notes": "Täidise võid teha ka ilma ubade ja maisita. Tacod soojendades jälgi, et need ei läheks mustaks ega põleks. Võid lisada spinatit, lehtsalatit või peedilehti. Salsat lisa serveerimisel.",
+    "tags": "taco, hakkliha, lihtne retsept, maisitortilla, tacod, kiire toit"
+}

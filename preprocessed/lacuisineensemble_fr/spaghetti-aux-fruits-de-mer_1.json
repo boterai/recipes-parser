@@ -1,0 +1,12 @@
+{
+    "dish_name": "spaghetti aux fruits de mer",
+    "description": "Recette traditionnelle italienne de spaghettis cuits al dente nappés d’une sauce onctueuse à base de fruits de mer, tomates concassées et épices.",
+    "ingredients": "[{\"name\": \"spaghettis\", \"unit\": \"grammes\", \"amount\": \"400\"}, {\"name\": \"fruits de mer frais (moules, crevettes, calamars, palourdes, coques etc)\", \"unit\": \"grammes\", \"amount\": \"300\"}, {\"name\": \"gousses d’ail\", \"unit\": null, \"amount\": \"2\"}, {\"name\": \"oignon\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"huile d’olive\", \"unit\": \"cuillère à soupe\", \"amount\": \"1\"}, {\"name\": \"tomates concassées\", \"unit\": \"boîte\", \"amount\": \"1\"}, {\"name\": \"bouillon cube de légumes\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"vin blanc\", \"unit\": \"cl\", \"amount\": \"10\"}, {\"name\": \"sel\", \"unit\": null, \"amount\": null}, {\"name\": \"poivre\", \"unit\": null, \"amount\": null}, {\"name\": \"persil frais\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Faire chauffer de l’eau salée dans une grande casserole. Ajouter les spaghettis une fois l’eau portée à ébullition et cuire al dente selon les instructions du paquet. Égoutter les spaghettis et les refroidir sous l’eau froide, puis réserver. Émincer l’oignon et les gousses d’ail. Faire suer l’oignon et l’ail dans une poêle avec de l’huile d’olive jusqu’à ce que les oignons soient translucides. Ajouter les fruits de mer dans la poêle chaude, en plusieurs fois si nécessaire, en commençant par les plus gros. Déglacer avec le vin blanc et cuire les fruits de mer 4 à 5 minutes. Ajouter les tomates concassées et le bouillon cube préalablement dilué dans un peu d’eau, puis mélanger. Laisser mijoter environ 10 minutes à feu moyen/doux pour réduire la sauce. Ajouter les spaghettis cuits et mélanger, laisser réchauffer quelques instants. Assaisonner avec sel, poivre et parsemer de persil haché. Optionnel : ajouter du parmesan râpé au moment de servir.",
+    "category": "Plat principal",
+    "prep_time": "10 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "20 minutes",
+    "notes": "Vous pouvez utiliser toutes sortes de pâtes pour cette recette aux fruits de mer. Veillez à ne pas trop cuire les fruits de mer pour éviter qu’ils deviennent caoutchouteux.",
+    "tags": "Pâtes, fruits de mer, italienne, plat principal"
+}

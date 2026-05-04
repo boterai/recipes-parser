@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kimchi-jjigae",
+    "description": "Kimchi-jjigae er en af de mest berømte koreanske stew, hvor man bruger en ældre velfermenteret kimchi så smagen rigtig kommer frem.",
+    "ingredients": "[{\"name\": \"velfermanteret kimchi\", \"unit\": \"g\", \"amount\": \"500\"}, {\"name\": \"svinekød (mave eller skulder)\", \"unit\": \"g\", \"amount\": \"500\"}, {\"name\": \"løg\", \"unit\": \"stk\", \"amount\": \"1\"}, {\"name\": \"forårsløg\", \"unit\": \"stk\", \"amount\": \"4\"}, {\"name\": \"gochujang\", \"unit\": \"spsk\", \"amount\": \"1\"}, {\"name\": \"gochugaru\", \"unit\": \"spsk\", \"amount\": \"1\"}, {\"name\": \"sukker\", \"unit\": \"tsk\", \"amount\": \"2\"}, {\"name\": \"salt\", \"unit\": \"tsk\", \"amount\": \"1\"}, {\"name\": \"ristet sesam olie\", \"unit\": \"tsk\", \"amount\": \"2\"}, {\"name\": \"kyllingefond\", \"unit\": \"ml\", \"amount\": \"600\"}, {\"name\": \"fast tofu\", \"unit\": \"g\", \"amount\": \"250\"}]",
+    "instructions": "I en stor gryde ligges kimchi, svinekød, løg og forårsløg lag på lag. Oven på tilsættes gochujang, gochugaru, sukker, salt og sesam olie. Hæld kyllinge fonden ved og tænd for middel varme. Når det kommer op og koger skruges ned for varmen. Rør lidt rundt så det hele bliver blandet godt. Lad det stå og simre i cirka 30 minutter. Tilsæt tofu skåret i cirka 1 cm tykke skiver. Lad det simre yderlig 10 minutter. Kødet burde være mørt nu. Hvis ikke så lad det simre indtil kødet er mørt. Server med ris.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "40 minutes",
+    "total_time": null,
+    "notes": "Retten bliver kun bedre af at stå natten over så smagen virkelig kan sætte sig i kødet. Gochujang og gochugaru er essentielle ingredienser i koreansk madlavning.",
+    "tags": "koreansk, kimchi, stew, svinekød, tofu"
+}

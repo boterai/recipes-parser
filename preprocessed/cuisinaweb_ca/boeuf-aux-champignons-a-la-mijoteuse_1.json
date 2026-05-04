@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ragoût de bœuf aux champignons à la mijoteuse",
+    "description": "Un ragoût de bœuf aux champignons incroyablement facile à la mijoteuse. Les cubes de bœuf sont cuits dans une délicieuse sauce et sont très tendres.",
+    "ingredients": "[{\"name\": \"cubes de bœuf\", \"unit\": \"lb\", \"amount\": \"2\"}, {\"name\": \"bouillon de bœuf\", \"unit\": \"tasse\", \"amount\": \"½\"}, {\"name\": \"champignons tranchés\", \"unit\": null, \"amount\": \"1 paquet de 8 oz\"}, {\"name\": \"crème de champignons\", \"unit\": null, \"amount\": \"1 boîte 10 oz\"}, {\"name\": \"soupe à l'oignon déshydratée\", \"unit\": \"enveloppe\", \"amount\": \"1\"}, {\"name\": \"oignons en quartiers\", \"unit\": null, \"amount\": \"2\"}, {\"name\": \"gousse d'ail hachée\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"mini carottes\", \"unit\": \"petit sac\", \"amount\": \"1\"}, {\"name\": \"sauce Worcestershire\", \"unit\": \"c. à table\", \"amount\": \"1\"}, {\"name\": \"feuille de laurier\", \"unit\": null, \"amount\": \"1\"}]",
+    "instructions": "Déposer la viande, les carottes, l’oignon et les champignons dans la mijoteuse. Mélanger le bouillon de bœuf, la crème de champignons, l'ail, la sauce Worcestershire et l'enveloppe de soupe à l'oignon dans un bol moyen à l'aide d'un fouet. Verser dans la mijoteuse et ajouter la feuille de laurier. Cuire pendant 8 heures à Low ou 4 heures à High. Retirer la feuille de laurier et servir.",
+    "category": "Plat principal",
+    "prep_time": "5 minutes",
+    "cook_time": "8 hours",
+    "total_time": "8 hours 5 minutes",
+    "notes": "Ce ragoût se garde jusqu’à 4 jours au réfrigérateur. Servir avec des pommes de terre en purée ou en cubes.",
+    "tags": "mijoteuse, bœuf, plat principal, cuisine canadienne"
+}

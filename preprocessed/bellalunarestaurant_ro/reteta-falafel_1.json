@@ -1,0 +1,12 @@
+{
+    "dish_name": "Falafel",
+    "description": "Falafel – chifteluțe de năut crocante la exterior și fragede la interior, preparat oriental vegetarian popular.",
+    "ingredients": "[{\"name\": \"Năut\", \"unit\": null, \"amount\": null}, {\"name\": \"Usturoi\", \"unit\": null, \"amount\": null}, {\"name\": \"Ceapă\", \"unit\": null, \"amount\": null}, {\"name\": \"Ardei iute\", \"unit\": null, \"amount\": null}, {\"name\": \"Ardei gras\", \"unit\": null, \"amount\": null}, {\"name\": \"Pastă de susan (tahini)\", \"unit\": null, \"amount\": null}, {\"name\": \"Roșii\", \"unit\": null, \"amount\": null}, {\"name\": \"Pătrunjel verde\", \"unit\": null, \"amount\": null}, {\"name\": \"Lămâie\", \"unit\": null, \"amount\": null}, {\"name\": \"Coriandru\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Lasă năutul la înmuiat în apă rece, timp de 12–18 ore. După ce s-a hidratat, scurge-l bine și adaugă-l într-un blender sau robot de bucătărie. Adaugă pe rând: ceapa, usturoiul, ardeiul iute, ardeiul gras, roșiile, pătrunjelul și condimentele. Mixează totul până obții o compoziție omogenă, dar nu complet fină – chifteluța de năut trebuie să aibă textură. Lasă compoziția la frigider cel puțin 30 de minute. Formează biluțe de dimensiunea unei nuci. Prăjește-le în baie de ulei până devin aurii și crocante. Alternativ, poți coace chifteluțele în cuptor pentru o variantă mai ușoară.",
+    "category": "Main Course",
+    "prep_time": "12–18 hours soaking + 30 minutes chilling",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Poți coace chifteluțele în cuptor pentru o variantă mai ușoară. Falafelul este potrivit pentru dietă dacă este copt și nu prăjit.",
+    "tags": "falafel, vegetarian, oriental, năut, falafel rețetă, mâncare orientală"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Hurmaava mansikkapavlova",
+    "description": "Hurmaava mansikkapavlova on ihanan kesäinen jälkiruoka! Pavlova on luontaisesti gluteeniton ja helppo valmistaa.",
+    "ingredients": "[{\"name\": \"kananmunan valkuaista\", \"unit\": \"kpl\", \"amount\": \"4\"}, {\"name\": \"kidesokeria\", \"unit\": \"g\", \"amount\": \"250\"}, {\"name\": \"valkoviinietikkaa\", \"unit\": \"tl\", \"amount\": \"1\"}, {\"name\": \"maissijauhoja\", \"unit\": \"tl\", \"amount\": \"1\"}, {\"name\": \"mansikoita puolitettuna\", \"unit\": \"g\", \"amount\": \"500\"}, {\"name\": \"tomusokeria\", \"unit\": \"rkl\", \"amount\": \"3\"}, {\"name\": \"vispikermaa\", \"unit\": \"ml\", \"amount\": \"350\"}]",
+    "instructions": "Laita uuni lämpeämään 150 asteeseen. Jos haluat, voit merkitä leivinpaperiin lyijykynällä, minkä kokoiseksi haluat pavlovan. Vatkaa valkuaiset vaahdoksi sähkövatkaimella. Lisää sokeri valkuaisten joukkoon noin yksi ruokalusikallinen kerrallaan koko ajan sekoittaen. Sekoita joukkoon valkoviinietikka, maissijauho ja vaniljauute. Kaada marenki leivinpaperille merkitsemiesi kohtien päälle. Jätä pavlova reunoilta korkeammaksi, jotta koristeet pysyvät myöhemmin paremmin kakun päällä. Paista uunissa noin yhden tunnin ajan. Sammuta uuni ja anna pavlovan jäähtyä. Vatkaa kermavaahto ja levitä se jäähtyneen pavlovan päälle. Koristele marjoilla ja tomusokerilla.",
+    "category": "jälkiruoka",
+    "prep_time": null,
+    "cook_time": "1 hour",
+    "total_time": null,
+    "notes": null,
+    "tags": "jälkiruoka,marenki,pavlova"
+}

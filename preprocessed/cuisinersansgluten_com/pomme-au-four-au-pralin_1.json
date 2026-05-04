@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pomme au four au pralin",
+    "description": "Simple et rapide à faire, cette recette vous offre un dessert léger parfait pour terminer le repas sur une petite note sucrée savoureuse et gourmande.",
+    "ingredients": "[{\"name\": \"pommes Golden\", \"unit\": \"pieces\", \"amount\": \"4\"}, {\"name\": \"miel\", \"unit\": \"c. à soupe\", \"amount\": \"1\"}, {\"name\": \"beurre\", \"unit\": \"g\", \"amount\": \"40\"}, {\"name\": \"noisettes de beurre\", \"unit\": \"pieces\", \"amount\": \"4\"}, {\"name\": \"pralin (ou amandes effilées, ou noix concassées)\", \"unit\": \"c. à soupe\", \"amount\": \"2\"}]",
+    "instructions": "1. Préchauffez votre four à 180 °C.\n2. Lavez les pommes, pelez-les et ôtez leur cœur à l'aide d'un évideur ou d'un couteau.\n3. Coupez la base des pommes si elles ne sont pas stables.\n4. Faites fondre le beurre coupé en dés avec le miel à feu doux.\n5. Badigeonnez les pommes avec ce mélange.\n6. Posez les pommes dans un plat allant au four.\n7. Mélangez le pralin dans le reste du mélange beurre/miel.\n8. Mettez une noisette de beurre dans le cœur des pommes.\n9. Répartissez le pralin dans le cœur et sur le dessus des pommes.\n10. Enfournez 45 minutes à 180°C.\n11. Contrôlez la cuisson avec la pointe d'un couteau ou un cure-dents.",
+    "category": "Dessert",
+    "prep_time": "10 minutes",
+    "cook_time": "45 minutes",
+    "total_time": "55 minutes",
+    "notes": "Facultatif : utiliser un pinceau pour badigeonner les pommes. Le pralin peut être remplacé par des amandes effilées ou des noix concassées.",
+    "tags": "sans gluten, dessert, fruits, pomme, pralin, rapide, facile"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Salmão Assado com Limão e Ervas",
+    "description": "Prepare-se para uma explosão de sabor com este salmão assado, marinado em limão e ervas frescas. Simples de fazer e perfeito para qualquer ocasião!",
+    "ingredients": "[{\"name\": \"filés de salmão\", \"unit\": \"cerca de 150g cada\", \"amount\": \"2\"}, {\"name\": \"limão (suco e raspas)\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"batatas médias, cortadas em cubos\", \"unit\": null, \"amount\": \"2\"}, {\"name\": \"azeite de oliva\", \"unit\": \"colheres de sopa\", \"amount\": \"2\"}, {\"name\": \"ervas frescas picadas (salsa, dill, tomilho)\", \"unit\": \"colher de sopa\", \"amount\": \"1\"}, {\"name\": \"Sal\", \"unit\": null, \"amount\": \"a gosto\"}, {\"name\": \"pimenta do reino\", \"unit\": null, \"amount\": \"a gosto\"}]",
+    "instructions": "1. Pré-aqueça o forno a 200°C.\n2. Em uma tigela, misture o suco e as raspas de limão, o azeite, as ervas picadas, sal e pimenta.\n3. Coloque os cubos de batata em uma assadeira e tempere com sal, pimenta e um fio de azeite. Leve ao forno por 15 minutos.\n4. Enquanto as batatas assam, coloque os filés de salmão em um prato e regue com a marinada de limão e ervas. Deixe marinar por alguns minutos.\n5. Retire a assadeira do forno, coloque os filés de salmão sobre as batatas e volte ao forno por mais 12-15 minutos, ou até o salmão ficar cozido e macio.\n6. Sirva o salmão imediatamente, acompanhado das batatas assadas. Decore com fatias de limão e mais ervas frescas, se desejar.",
+    "category": null,
+    "prep_time": "10 minutes",
+    "cook_time": "27-30 minutes",
+    "total_time": null,
+    "notes": "Prefira ingredientes frescos para obter o melhor sabor. Você pode substituir alguns ingredientes de acordo com sua preferência. Ajuste o sal conforme seu gosto pessoal.",
+    "tags": "salmão,limão,ervas,batata,assado,fácil,receita"
+}

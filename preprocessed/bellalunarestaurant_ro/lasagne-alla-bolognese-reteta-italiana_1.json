@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lasagne alla Bolognese",
+    "description": "Lasagne alla bolognese este o rețetă tradițională italiană, cu straturi de foi de lasagna, sos ragu bogat de carne de vită, mozzarella și parmezan, coaptă până capătă o crustă aurie și cremoasă la interior.",
+    "ingredients": "[{\"name\": \"Foi de lasagna proaspete\", \"unit\": null, \"amount\": null}, {\"name\": \"Carne tocată de vită\", \"unit\": null, \"amount\": null}, {\"name\": \"Morcov\", \"unit\": null, \"amount\": null}, {\"name\": \"Țelină\", \"unit\": null, \"amount\": null}, {\"name\": \"Ceapă galbenă\", \"unit\": null, \"amount\": null}, {\"name\": \"Roșii pasate\", \"unit\": null, \"amount\": null}, {\"name\": \"Lapte integral\", \"unit\": null, \"amount\": null}, {\"name\": \"Mozzarella\", \"unit\": null, \"amount\": null}, {\"name\": \"Parmezan ras\", \"unit\": null, \"amount\": null}, {\"name\": \"Sare\", \"unit\": null, \"amount\": \"un strop\"}]",
+    "instructions": "Tocăm mărunt legumele: morcovul, țelina și ceapa. Le sotăm ușor în puțin ulei, până își eliberează aroma. Adăugăm carnea de vită și o lăsăm să se rumenească lent. Turnăm roșiile pasate și laptele integral, apoi lăsăm sosul să fiarbă la foc mic cel puțin 2 ore. Între timp, pregătim foile de lasagna și radem mozzarella și parmezanul proaspăt. Începem asamblarea: un strat subțire de sos, foi de lasagna, sos ragu bogat, mozzarella și parmezan; repetăm până la 4 straturi. Coacem lasagna în cuptorul preîncălzit la 180°C timp de 30-40 minute, până capătă o crustă aurie, ușor crocantă la margini, dar cremoasă și moale la interior.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "2 hours 40 minutes",
+    "total_time": null,
+    "notes": "Rețeta nu folosește sos bechamel, laptele este folosit pentru a reduce aciditatea roșiilor și a adăuga cremozitate. Se folosesc mozzarella și parmezan pentru textura și gustul specific.",
+    "tags": "Italian, Lasagne, Main Course, Traditional, Meat"
+}

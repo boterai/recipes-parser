@@ -1,0 +1,12 @@
+{
+    "dish_name": "Bœuf aux Carottes à la Mijoteuse",
+    "description": "Un bœuf aux carottes ultra-tendre, cuit lentement à la mijoteuse dans une sauce riche et savoureuse. Préparez ce plat réconfortant en 10 minutes pour un souper copieux et sans effort.",
+    "ingredients": "[{\"name\": \"cubes de bœuf à ragoût\", \"unit\": \"lb (1 kg)\", \"amount\": \"2,2\"}, {\"name\": \"carottes en tronçons\", \"unit\": \"unités\", \"amount\": \"6\"}, {\"name\": \"oignons coupés en quartiers\", \"unit\": \"unités\", \"amount\": \"2\"}, {\"name\": \"sauce demi-glace Knorr\", \"unit\": \"enveloppe\", \"amount\": \"1\"}, {\"name\": \"soupe aux tomates\", \"unit\": \"boîte\", \"amount\": \"1\"}, {\"name\": \"eau\", \"unit\": \"tasse (375 ml)\", \"amount\": \"1-1/2\"}, {\"name\": \"sauce Worcestershire\", \"unit\": \"c. à soupe (15 ml)\", \"amount\": \"1\"}]",
+    "instructions": "1- Chauffez l'huile dans une grande poêle et y saisir les cubes de viande (cette étape est facultative). 2- Déposez les cubes de bœuf, les carottes et les oignons dans la mijoteuse. 3- Dans un bol, mélangez le reste des ingrédients et versez dans la mijoteuse. Mélangez. 4- Cuire environ 8 heures à Low ou 4 heures à High.",
+    "category": "Plat principal",
+    "prep_time": "10 minutes",
+    "cook_time": "8 heures",
+    "total_time": "8 heures 10 minutes",
+    "notes": "L’étape de brunissement de la viande est recommandée mais facultative. Ce ragoût se conserve jusqu’à 4 jours au réfrigérateur dans un plat hermétique.",
+    "tags": "Mijoteuse, Boeuf, Canadienne, Plat principal"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ev Yapımı Tavuk Suyu",
+    "description": "Ev yapımı tavuk suyu, doğal kollajen ve şifa kaynağı olarak kullanılan, özellikle kış aylarında soğuk algınlığı ve grip gibi hastalıklara karşı koruyucu özellikleri olan bir çorba suyu.",
+    "ingredients": "[{\"name\": \"Tavuk\", \"unit\": \"bütün organik\", \"amount\": \"1\"}, {\"name\": \"Elma Sirkesi\", \"unit\": \"çorba kaşığı\", \"amount\": \"2\"}, {\"name\": \"Kereviz Sapı\", \"unit\": \"sap\", \"amount\": \"1\"}, {\"name\": \"Kereviz\", \"unit\": \"orta boy\", \"amount\": \"1\"}, {\"name\": \"Havuç\", \"unit\": \"büyük boy\", \"amount\": \"1\"}, {\"name\": \"Kuru Soğan\", \"unit\": \"adet\", \"amount\": \"1\"}, {\"name\": \"Defne Yaprağı\", \"unit\": \"adet\", \"amount\": \"1\"}, {\"name\": \"Sarımsak\", \"unit\": \"diş\", \"amount\": \"1-2\"}, {\"name\": \"Kök Zencefil\", \"unit\": null, \"amount\": \"minicik bir parça\"}, {\"name\": \"Maydanoz\", \"unit\": \"dal\", \"amount\": \"7-8\"}, {\"name\": \"Taze Kekik\", \"unit\": \"dal\", \"amount\": \"2-3\"}, {\"name\": \"Karabiber\", \"unit\": \"tatlı kaşığı\", \"amount\": \"1\"}, {\"name\": \"Su\", \"unit\": \"litre\", \"amount\": \"3\"}]",
+    "instructions": "Tavuk parçalarını tercihen 1 gece ya da gün boyunca aralarda suyunu sürekli değiştirerek soğuk su içinde bekletin. Parçaları ister yüksek ateşte tavada, ister 180 derecede fırında önden pişirip hafif kahverengileştirin, sonrasında derilerini çıkarabilirsiniz. Tavuk parçalarını büyük bir tencerenin içine alarak, üzerine 6-7 litre su ve 2 çorba kaşığı elma sirkesi ilave edip orta ateşte ocağa alın. Su kaynamaya başlayınca hemen altını kısın, fokur fokur değil tıkır tıkır olmalı. Suyun yüzeyinde oluşan kahverengi köpükleri bir kevgir yardımıyla alın. 2 saat sonra sebzeleri, baharat ve otları ekleyin. İlave olarak kök veya toz turmeric (zerdeçal), kimyon tohumu, taze veya bilye kişniş kullanabilirsiniz. En az 2.5-3 en çok 4.5-5 saat pişirin. Piştikten sonra önce bir tel süzgeçten, gerekirse içine bir de tülbent sererek süzün. Kullanacağınız miktardaki suyu porsiyonlayıp kalanı 3 gün buzdolabında ve 3 ay derin dondurucuda muhafaza edebilirsiniz.",
+    "category": "Çorba",
+    "prep_time": null,
+    "cook_time": "2.5-5 hours",
+    "total_time": null,
+    "notes": "Tavuk suyu yaparken organik tavuk kullanılması önerilir. Köpükler düzenli olarak alınmalıdır. Tuz yerine sebzelerden gelen tuz yeterlidir. Tavuk suyu derin dondurucuda 3 ay saklanabilir.",
+    "tags": "Dört Mevsim,Glutensiz,Hafif ve Sağlıklı,Sebzeli Yemekler,Tavuklu Yemekler,Temel Tarifler"
+}

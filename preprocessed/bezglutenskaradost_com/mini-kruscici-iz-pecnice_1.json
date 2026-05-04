@@ -1,0 +1,12 @@
+{
+    "dish_name": "Mini kruščići iz pećnice",
+    "description": "Jednostavni bezglutenski kruščići iz pećnice prilagođeni za celijakiju.",
+    "ingredients": "[{\"name\": \"MIX B brašno, Schar\", \"unit\": \"g\", \"amount\": \"400\"}, {\"name\": \"topla voda\", \"unit\": \"ml\", \"amount\": \"250\"}, {\"name\": \"krem sir (sobne temperature)\", \"unit\": \"g\", \"amount\": \"270\"}, {\"name\": \"suhi kvasac\", \"unit\": \"g\", \"amount\": \"10\"}, {\"name\": \"sol\", \"unit\": \"čajna žlica\", \"amount\": \"1\"}, {\"name\": \"šećer\", \"unit\": \"čajna žlica\", \"amount\": \"1\"}, {\"name\": \"maslinovo ulje\", \"unit\": null, \"amount\": \"malo\"}, {\"name\": \"maslinovo ulje (premaz)\", \"unit\": null, \"amount\": null}, {\"name\": \"palenta (žganci)\", \"unit\": null, \"amount\": null}]",
+    "instructions": "U veću zdjelu stavite krem sir, brašno i sol. Napravite udubljenje u sredini za kvasac. Dodajte šećer i pripremite toplu vodu. U to udubljenje dodajte malo tople vode, izmiješajte kvasac i šećer, pa pokrijte krpom. Ostavite da se kvasac digne. Kada je kvasac spreman, dodajte ostatak vode i zamijesite tijesto mikserom sa spiralnim nastavcima. Tijesto prebacite u zdjelu koju ste prethodno premazali maslinovim uljem. Rukom lagano izmijesite da se ulje poveže s tijestom. Pokrijte krpom i ostavite da se diže 40 minuta. Kad je tijesto spremno, oblikujte kruščiće i stavite ih na papir za pečenje. Peciva premažite s malo maslinovog ulja i pospite palentom. Oblikujte peciva kako god želite – budite kreativni! Zagrijte pećnicu na 190°C i pecite 25 do 30 minuta. Pazite da peciva ne zagore. Ako imate veću obitelj, slobodno povećajte količine sastojaka. Dobar tek!",
+    "category": null,
+    "prep_time": "40 minutes",
+    "cook_time": "25-30 minutes",
+    "total_time": null,
+    "notes": "Recept je prilagođen bezglutenskoj prehrani zbog celijakije. Količine sastojaka mogu se povećati za veću obitelj.",
+    "tags": "bezglutensko, kruščići, pećnica, celijakija"
+}

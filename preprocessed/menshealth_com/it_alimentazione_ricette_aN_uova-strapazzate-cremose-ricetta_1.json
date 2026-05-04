@@ -1,0 +1,12 @@
+{
+    "dish_name": "Uova strapazzate cremose",
+    "description": "Ricetta per le uova strapazzate più cremose con yogurt greco che conferisce una consistenza soffice e formaggiosa.",
+    "ingredients": "[{\"name\": \"uova grandi\", \"unit\": null, \"amount\": \"2\"}, {\"name\": \"yogurt greco al 2% o latte intero\", \"unit\": \"cucchiai\", \"amount\": \"2\"}, {\"name\": \"sale kosher\", \"unit\": null, \"amount\": null}, {\"name\": \"pepe nero appena macinato\", \"unit\": null, \"amount\": null}, {\"name\": \"burro non salato\", \"unit\": \"cucchiaio\", \"amount\": \"1/2\"}, {\"name\": \"erba cipollina tagliata sottile\", \"unit\": \"cucchiai\", \"amount\": \"2\"}]",
+    "instructions": "Prendi una ciotola di medie dimensioni. Sbatti le uova e lo yogurt fino ad amalgamarli, poi aggiungi sale e pepe al tutto. In una padella antiaderente media a fuoco medio-basso, sciogli il burro. Aggiungi il composto di uova e cuoci il tutto, indisturbato, finché le uova non iniziano a rapprendersi, circa 2 minuti. Con una spatola di gomma, muovi delicatamente le uova nella padella per strapazzarle. Quando le uova sono quasi cotte, aggiungi l'erba cipollina. Continua a cuocere, mescolando, fino a quando non saranno strapazzate a piacimento, circa 1 minuto in più.",
+    "category": null,
+    "prep_time": "5 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "La ricetta non richiede tecniche speciali e utilizza ingredienti comuni. Lo yogurt greco conferisce una consistenza cremosa e soffice.",
+    "tags": "uova, colazione, proteine, yogurt greco, ricetta cremosa"
+}

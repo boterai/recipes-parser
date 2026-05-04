@@ -1,0 +1,12 @@
+{
+    "dish_name": "Beignets de butternut croustillants",
+    "description": "Recette réconfortante de beignets salés de butternut, parfaite pour les repas d'automne et d'hiver, avec une touche de cannelle et de citron pour réveiller les saveurs.",
+    "ingredients": "[{\"name\": \"chair de butternut\", \"unit\": \"gr\", \"amount\": \"400\"}, {\"name\": \"citrons (jaune ou vert)\", \"unit\": null, \"amount\": \"2\"}, {\"name\": \"farine\", \"unit\": \"gr\", \"amount\": \"200\"}, {\"name\": \"levure chimique\", \"unit\": \"sachet\", \"amount\": \"0.5\"}, {\"name\": \"œufs\", \"unit\": null, \"amount\": \"3\"}, {\"name\": \"beurre\", \"unit\": \"gr\", \"amount\": \"40\"}, {\"name\": \"cannelle en poudre\", \"unit\": \"pincées\", \"amount\": \"3\"}, {\"name\": \"eau\", \"unit\": \"cl\", \"amount\": \"20\"}, {\"name\": \"sel\", \"unit\": \"pincée\", \"amount\": \"1\"}, {\"name\": \"huile de friture\", \"unit\": \"bain\", \"amount\": \"1\"}]",
+    "instructions": "Couper la chair du butternut en morceaux et cuire 20 minutes dans de l'eau bouillante salée. Égoutter et écraser en purée. Prélever le zeste d'un citron, le blanchir quelques secondes dans l'eau bouillante, égoutter et ajouter à la purée avec le beurre en parcelles. Mélanger. Tamisser la farine avec la levure et le sel dans un saladier. Ajouter l'eau et amalgamer la pâte. Incorporer les œufs un à un, puis la purée de butternut parfumée à la cannelle. Couvrir et laisser reposer 1 heure. Chauffer l'huile à 170 °C. Déposer des cuillerées de pâte et laisser dorer 4 minutes en retournant à mi-cuisson. Égoutter sur du papier absorbant.",
+    "category": "apéro, entrée",
+    "prep_time": "25 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "55 minutes",
+    "notes": "Pour varier les saveurs, ajouter 50 gr de parmesan râpé à la pâte. Pour une version plus parfumée, intégrer des herbes fraîches comme du persil ou de la coriandre. Pour une touche plus festive, remplacer la cannelle par du curry doux.",
+    "tags": "apéro, entrée, régime normal, cuisine française, beignets, butternut"
+}

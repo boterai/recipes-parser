@@ -1,0 +1,12 @@
+{
+    "dish_name": "Frango com Arroz e Carne",
+    "description": "Nossa receita de frango com arroz e carne combina a suculência do frango, a maciez da carne e o sabor reconfortante do arroz, tudo em um só prato. Perfeito para um almoço especial ou um jantar delicioso!",
+    "ingredients": "[{\"name\": \"peito de frango\", \"unit\": \"g\", \"amount\": \"500\"}, {\"name\": \"carne (patinho, coxão mole)\", \"unit\": \"g\", \"amount\": \"200\"}, {\"name\": \"arroz\", \"unit\": \"xícara\", \"amount\": \"1\"}, {\"name\": \"cebola média\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"dentes de alho\", \"unit\": null, \"amount\": \"2\"}, {\"name\": \"azeite\", \"unit\": \"colheres de sopa\", \"amount\": \"2\"}, {\"name\": \"pimentão (opcional)\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"Sal e pimenta do reino\", \"unit\": null, \"amount\": \"a gosto\"}, {\"name\": \"Cheiro verde picado\", \"unit\": null, \"amount\": \"a gosto\"}, {\"name\": \"água\", \"unit\": \"xícaras\", \"amount\": \"2\"}, {\"name\": \"cubo de caldo de galinha (opcional)\", \"unit\": null, \"amount\": \"1\"}]",
+    "instructions": "Em uma panela grande, aqueça o azeite em fogo médio. Adicione a cebola picada e refogue até ficar transparente. Acrescente o alho picado e refogue por mais um minuto, até perfumar. Junte os cubos de frango e carne à panela. Tempere com sal e pimenta do reino a gosto. Cozinhe até dourar. Se estiver usando pimentão, adicione-o à panela e refogue por alguns minutos. Adicione o arroz e misture bem, para que ele absorva os sabores. Adicione a água e o cubo de caldo de galinha (se estiver usando). Ajuste o sal e a pimenta, se necessário. Deixe ferver, abaixe o fogo, tampe a panela e cozinhe por cerca de 15-20 minutos, ou até que o arroz esteja cozido e a água tenha secado. Desligue o fogo, salpique com cheiro verde picado e sirva quente.",
+    "category": null,
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Prefira ingredientes frescos para obter o melhor sabor. Você pode substituir alguns ingredientes de acordo com sua preferência. Ajuste o sal conforme seu gosto pessoal.",
+    "tags": "frango, arroz, carne, almoço, jantar, receita fácil, receita caseira"
+}

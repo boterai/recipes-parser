@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lækre nudler med hvidkål og grøntsager",
+    "description": "Nudler med grøntsager hører til i kategorien fast food i Japan. Det er en yderst populær ret man også finder som street food og det er utrolig nemt selv at lave det.",
+    "ingredients": "[{\"name\": \"kogte nudler\", \"unit\": \"g\", \"amount\": \"250\"}, {\"name\": \"hvidkål\", \"unit\": null, \"amount\": \"1/4\"}, {\"name\": \"gulerod\", \"unit\": null, \"amount\": \"1/2\"}, {\"name\": \"bønnespirer\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"forårsløg\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"sesamolie\", \"unit\": null, \"amount\": null}, {\"name\": \"grøntsagsboullion\", \"unit\": \"kop\", \"amount\": \"1/4\"}, {\"name\": \"salt\", \"unit\": null, \"amount\": null}, {\"name\": \"peber\", \"unit\": null, \"amount\": null}, {\"name\": \"hvidløg i skiver\", \"unit\": \"fed\", \"amount\": \"1\"}]",
+    "instructions": "Hvidkål skæres i grove stykker. Guleroden skæres i stave. Hvidkål, gulerod, bønnespirer, forårsløg og hvidløg lynsteges på en varm pande med sesamolie. Når hvidkålene begynder at falde sammen tages det af panden. Nudlerne kommes på panden sammen med grøntsags boullion og det hele blandes med grøntsagerne. Når vandet er fordampet smages til med salt og peber. Drys med sesamfrø lige inden servering.",
+    "category": "Fast food",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Kan man ikke lige finde nogle nudler kan man bruge spaghetti i stedet for. Sesamolie er den mest brugte olie i Japan og den er heller ikke særlig dyr i forhold til i Danmark.",
+    "tags": "Japansk mad, opskrifter, nudler, grøntsager, fast food"
+}

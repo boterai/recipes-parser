@@ -1,0 +1,12 @@
+{
+    "dish_name": "Bibimbap",
+    "description": "Bibimbap adalah nasi campur khas Korea yang lezat dan bergizi, terdiri dari nasi, daging sapi, aneka sayuran, telur mata sapi, dan saus gochujang.",
+    "ingredients": "[{\"name\": \"daging sapi\", \"unit\": \"gram\", \"amount\": \"100\"}, {\"name\": \"kecap asin\", \"unit\": \"sdt\", \"amount\": \"2\"}, {\"name\": \"bayam\", \"unit\": \"gram\", \"amount\": \"50\"}, {\"name\": \"wortel\", \"unit\": \"buah\", \"amount\": \"1\"}, {\"name\": \"jamur kancing\", \"unit\": \"buah\", \"amount\": \"8\"}, {\"name\": \"telur\", \"unit\": \"butir\", \"amount\": \"2\"}, {\"name\": \"minyak wijen\", \"unit\": \"sdt\", \"amount\": \"0.5\"}, {\"name\": \"jahe\", \"unit\": \"ruas\", \"amount\": \"1\"}, {\"name\": \"biji wijen putih\", \"unit\": \"sdt\", \"amount\": \"0.5\"}, {\"name\": \"nasi putih\", \"unit\": \"porsi\", \"amount\": \"2\"}, {\"name\": \"extra virgin olive oil\", \"unit\": \"sdm\", \"amount\": \"1\"}, {\"name\": \"gochujang\", \"unit\": \"sdt\", \"amount\": \"2\"}, {\"name\": \"biji wijen putih (sangrai)\", \"unit\": \"sdt\", \"amount\": \"2\"}, {\"name\": \"cuka\", \"unit\": \"sdt\", \"amount\": \"2\"}, {\"name\": \"kecap asin (saus)\", \"unit\": \"sdt\", \"amount\": \"4\"}]",
+    "instructions": "Marinasi daging sapi dengan kecap asin selama 10 sampai 20 menit. Tumis daging hingga berubah warna menjadi kecoklatan, lalu sisihkan. Tumis wortel, bayam, tauge, dan jamur secara bergantian hingga layu. Sisihkan sayuran yang telah ditumis. Ceplok telur dengan wajan yang sama hingga setengah matang atau matang, lalu sisihkan. Campurkan gochujang, biji wijen sangrai, cuka, dan kecap asin untuk membuat saus, aduk hingga rata. Siapkan nasi dalam mangkuk, tambahkan semua kondimen dan saus, beri irisan jahe dan biji wijen. Bibimbap ala Korea siap disajikan.",
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "30 minutes",
+    "notes": "Bibimbap bisa disantap kapan saja, baik sarapan, makan siang, atau makan malam. Bahan-bahan mudah ditemukan di pasar atau supermarket.",
+    "tags": "Korea, nasi campur, bibimbap, resep, masakan Asia"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Cous cous con verdure",
+    "description": "Il cous cous con verdure è un piatto semplice e leggero, preparato con semola di grano duro e verdure fresche o cotte, ideale per un pasto equilibrato e versatile.",
+    "ingredients": "[{\"name\": \"cous cous\", \"unit\": \"grammi\", \"amount\": \"80\"}, {\"name\": \"zucchine\", \"unit\": null, \"amount\": null}, {\"name\": \"peperoni\", \"unit\": null, \"amount\": null}, {\"name\": \"melanzane\", \"unit\": null, \"amount\": null}, {\"name\": \"carote\", \"unit\": null, \"amount\": null}, {\"name\": \"cipolla rossa\", \"unit\": null, \"amount\": null}, {\"name\": \"pomodorini\", \"unit\": null, \"amount\": null}, {\"name\": \"olio extravergine di oliva\", \"unit\": \"cucchiaino\", \"amount\": \"1\"}, {\"name\": \"acqua leggermente salata\", \"unit\": \"rapporto con cous cous\", \"amount\": \"1:1\"}, {\"name\": \"spezie (curcuma, menta fresca, scorza di limone)\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Porta a ebollizione dell’acqua leggermente salata (rapporto 1:1 con il cous cous) e versala sulla semola precotta in una ciotola capiente. Copri con un piatto e lascia che il cous cous assorba il liquido per circa cinque minuti. Sgrana i chicchi con una forchetta, aggiungendo un filo d’olio. Taglia le verdure a cubetti piccoli e cuocile rapidamente in padella con poco olio, mantenendole croccanti. Unisci alcune verdure a crudo come pomodorini, cetriolo o cipolla rossa. Mescola cous cous e verdure, condisci con spezie, erbe aromatiche e succo di limone se desideri. Lascia riposare in frigorifero per almeno mezz’ora prima di servire.",
+    "category": "Main Course",
+    "prep_time": "5 minutes",
+    "cook_time": "varies (quick sauté vegetables)",
+    "total_time": null,
+    "notes": "Puoi aggiungere legumi, frutta secca o una fonte proteica leggera per rendere il piatto più completo. Le spezie possono variare a seconda della stagione e del gusto personale.",
+    "tags": "cous cous, verdure, piatto vegetariano, cucina veloce, piatto estivo, ricetta sana"
+}

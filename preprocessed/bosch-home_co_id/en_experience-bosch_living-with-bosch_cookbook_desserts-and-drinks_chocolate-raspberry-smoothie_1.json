@@ -1,0 +1,12 @@
+{
+    "dish_name": "Chocolate Raspberry Smoothie",
+    "description": null,
+    "ingredients": "[{\"name\": \"Cocoa Powder\", \"unit\": \"Tsps\", \"amount\": \"2\"}, {\"name\": \"Pitted Cherries\", \"unit\": \"Cup\", \"amount\": \"1\"}, {\"name\": \"Raspberry\", \"unit\": \"Cup\", \"amount\": \"1\"}, {\"name\": \"Almond Milk\", \"unit\": \"Cup\", \"amount\": \"½\"}, {\"name\": \"Vanilla Flavoured Yoghurt\", \"unit\": \"Cup\", \"amount\": \"½\"}, {\"name\": \"Ice Cubes\", \"unit\": \"No.s\", \"amount\": \"5\"}]",
+    "instructions": "Blend the above ingredients. Add ice or water according to your preferred consistency.",
+    "category": null,
+    "prep_time": "25 mins",
+    "cook_time": "0 mins",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

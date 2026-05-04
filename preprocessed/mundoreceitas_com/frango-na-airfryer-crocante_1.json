@@ -1,0 +1,12 @@
+{
+    "dish_name": "Frango na Airfryer Crocante",
+    "description": "Receita para preparar frango crocante e suculento usando airfryer, com passo a passo simples e resultado profissional.",
+    "ingredients": "[{\"name\": \"peito ou coxa de frango\", \"unit\": \"g\", \"amount\": \"500\"}, {\"name\": \"ovos\", \"unit\": \"unidades\", \"amount\": \"2\"}, {\"name\": \"farinha de trigo\", \"unit\": \"xícara\", \"amount\": \"1\"}, {\"name\": \"farinha de rosca ou panko\", \"unit\": \"xícara\", \"amount\": \"1\"}, {\"name\": \"amido de milho\", \"unit\": \"colheres de sopa\", \"amount\": \"2\"}, {\"name\": \"azeite\", \"unit\": \"colheres de sopa\", \"amount\": \"2\"}, {\"name\": \"páprica\", \"unit\": \"colher de chá\", \"amount\": \"1\"}, {\"name\": \"alho em pó\", \"unit\": \"colher de chá\", \"amount\": \"1\"}, {\"name\": \"cebola em pó\", \"unit\": \"colher de chá\", \"amount\": \"1\"}, {\"name\": \"Sal e pimenta\", \"unit\": null, \"amount\": \"a gosto\"}, {\"name\": \"Suco de limão ou vinagre para marinada\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Corte o frango em pedaços médios e tempere com sal, pimenta e limão. Deixe marinar por pelo menos 30 minutos na geladeira. Passe o frango na farinha de trigo, depois nos ovos batidos e por fim na farinha de rosca misturada com amido de milho. Pré-aqueça a airfryer a 180°C por 5 minutos. Coloque os pedaços no cesto sem sobrepor. Asse por 15 a 25 minutos, dependendo do corte. Vire os pedaços na metade do tempo para dourar por igual. Retire quando estiver crocante e dourado. Sirva quente.",
+    "category": "Main Course",
+    "prep_time": "35 minutes",
+    "cook_time": "20 minutes",
+    "total_time": "55 minutes",
+    "notes": "Não encha demais o cesto para permitir circulação do ar. O amido de milho ajuda a deixar o frango mais crocante. Pincele ou borrife azeite para um dourado perfeito. Use cortes com osso para um resultado mais suculento.",
+    "tags": "como fazer frango na airfryer, frango crocante airfryer, frango empanado na airfryer, frango na airfryer crocante, frango sem óleo airfryer, receita frango airfryer fácil"
+}

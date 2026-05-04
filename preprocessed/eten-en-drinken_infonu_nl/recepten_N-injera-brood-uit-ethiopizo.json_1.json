@@ -1,0 +1,12 @@
+{
+    "dish_name": "Injera",
+    "description": "Injera is een licht gefermenteerd plat brood, eigenlijk een soort pannenkoek. Het is een typisch recept uit Eritrea en Ethiopië. Dit brood wordt gegeten samen met Doro Wat, een kipgerecht.",
+    "ingredients": "[{\"name\": \"witte bloem\", \"unit\": \"kop\", \"amount\": \"1¾\"}, {\"name\": \"zelfrijzend bakmeel\", \"unit\": \"kop\", \"amount\": \"½\"}, {\"name\": \"tarwebloem\", \"unit\": \"kop\", \"amount\": \"¼\"}, {\"name\": \"droge gist\", \"unit\": \"pakje\", \"amount\": \"1\"}, {\"name\": \"warm water\", \"unit\": \"dl\", \"amount\": \"6\"}, {\"name\": \"baksoda\", \"unit\": \"theelepel\", \"amount\": \"½\"}, {\"name\": \"zout\", \"unit\": \"theelepel\", \"amount\": \"½\"}]",
+    "instructions": "Doe de witte bloem, tarwebloem, zelfrijzend bakmeel en de gist in de kom. Voeg het water erbij. Mengen tot een tamelijk dun en glad deeg. Het deeg 3 dagen op kamertemperatuur laten rusten, 1x per dag één keer doorroeren. Na 3 dagen het baksoda toevoegen. Nu het geheel nog 10 tot 15 minuten laten rusten. Koekenpan verhitten. 1/3 kop beslag in de pan gieten en de bodem van de pan hiermee bedekken. Injera wordt aan één kant gebakken en de onderkant mag niet bruin worden. Zodra het vocht verdampt is en er “gaten” in de Injera komen, het brood uit de pan halen. Laten afkoelen. Is deze eerste brood (pannenkoek) niet geheel gaar, dan verder gaan met minder beslag in de koekenpan doen, bijvoorbeeld maar ¼ kop. De Injera iets langer laten bakken, maar let op dat de onderkant niet bruin wordt. Ook weer niet te lang bakken, van het brood moet zacht en makkelijk vouwbaar zijn.",
+    "category": "Eten en Drinken",
+    "prep_time": "3 days",
+    "cook_time": "10 to 15 minutes",
+    "total_time": null,
+    "notes": "Eén kop is gelijk aan 2,4 dl. Oorspronkelijk is Injera gemaakt van teff, maar hier wordt de teff vervangen door tarwemeel.",
+    "tags": "Ethiopië, brood, Injera, traditioneel, pannenkoek"
+}

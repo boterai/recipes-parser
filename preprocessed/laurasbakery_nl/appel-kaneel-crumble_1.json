@@ -1,0 +1,12 @@
+{
+    "dish_name": "Appel crumble",
+    "description": "Deze appel-kaneel crumble is zowel warm als koud een heerlijk dessert. Met een bolletje ijs of toef slagroom wordt het helemaal een feestje!",
+    "ingredients": "[{\"name\": \"flinke appels\", \"unit\": null, \"amount\": \"3\"}, {\"name\": \"fijne kristalsuiker\", \"unit\": \"gram\", \"amount\": \"50\"}, {\"name\": \"kaneel\", \"unit\": \"tl\", \"amount\": \"2\"}, {\"name\": \"ongezouten roomboter\", \"unit\": \"gram\", \"amount\": \"75\"}, {\"name\": \"bloem\", \"unit\": \"gram\", \"amount\": \"100\"}, {\"name\": \"fijne kristalsuiker\", \"unit\": \"gram\", \"amount\": \"100\"}, {\"name\": \"zout\", \"unit\": null, \"amount\": \"snuf\"}]",
+    "instructions": "Schil de appels, verwijder het klokhuis en snijd in blokjes. Meng suiker en kaneel door de appels en stort in de ovenschaal. Doe alle ingrediënten voor de crumble tegelijk in een kom. Wrijf de boter tussen je vingers fijn en kneed tot een stevig, maar kruimelig deeg. Strooi het kruimeldeeg gelijkmatig over het appelmengsel. Bak de apple crumble in 30 minuten op 200 °C (boven- en onderwarmte).",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": "Appel crumble is erg lekker op zichzelf, maar kan geserveerd worden met vanille-ijs, slagroom, Griekse yoghurt of karamelsaus. Bewaar afgedekt in de koelkast tot 3 dagen of vries in tot 3 maanden. Opwarmen kan in een voorverwarmde oven op 180 °C gedurende ongeveer 10 minuten.",
+    "tags": "appel, crumble, dessert, kaneel, bakrecept"
+}

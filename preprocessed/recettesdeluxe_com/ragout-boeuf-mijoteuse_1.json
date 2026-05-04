@@ -1,0 +1,12 @@
+{
+    "dish_name": "Ragoût Boeuf Mijoteuse",
+    "description": "Ragoût de bœuf mijoté lentement à la mijoteuse avec pommes de terre, carottes et bouillon parfumé. Un plat familial réconfortant, idéal pour les repas d’hiver.",
+    "ingredients": "[{\"name\": \"bœuf à ragoût\", \"unit\": \"lb\", \"amount\": \"1\"}, {\"name\": \"gros oignon, coupé en dés\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"carottes, coupées en cubes\", \"unit\": null, \"amount\": \"2\"}, {\"name\": \"grosses pommes de terre, coupées en morceaux\", \"unit\": null, \"amount\": \"2\"}, {\"name\": \"bouillon de bœuf\", \"unit\": \"tasses (750 ml)\", \"amount\": \"3\"}, {\"name\": \"feuille de laurier\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"thym frais\", \"unit\": \"cuillère à thé\", \"amount\": \"1\"}, {\"name\": \"gousse d’ail, émincée\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"cassonade\", \"unit\": \"cuillères à soupe\", \"amount\": \"2\"}, {\"name\": \"sauce Worcestershire\", \"unit\": \"cuillères à thé\", \"amount\": \"2\"}, {\"name\": \"pâte de tomates\", \"unit\": \"cuillères à thé\", \"amount\": \"2\"}, {\"name\": \"farine\", \"unit\": \"cuillères à soupe\", \"amount\": \"3\"}, {\"name\": \"Sel\", \"unit\": \"au goût\", \"amount\": null}, {\"name\": \"Poivre du moulin\", \"unit\": \"au goût\", \"amount\": null}]",
+    "instructions": "Faire saisir les cubes de bœuf dans une casserole avec un peu d’huile jusqu’à coloration. Déposer le bœuf et tous les autres ingrédients, sauf la farine, dans la mijoteuse. Mélanger soigneusement. Couvrir et cuire à basse température pendant 8 à 9 heures ou à température élevée pendant 4 à 5 heures. Trente minutes avant la fin, délayer la farine dans de l’eau froide et l’incorporer au ragoût. Poursuivre la cuisson jusqu’à épaississement, puis servir chaud.",
+    "category": "Main course",
+    "prep_time": "20 minutes",
+    "cook_time": "8 hours",
+    "total_time": null,
+    "notes": "Le ragoût gagne en saveur après un repos et est excellent réchauffé le lendemain. Servir avec du pain croustillant pour profiter de la sauce.",
+    "tags": "ragoût boeuf mijoteuse, plat mijoté, boeuf carottes, recette économique, plat hiver, cuisine familiale"
+}

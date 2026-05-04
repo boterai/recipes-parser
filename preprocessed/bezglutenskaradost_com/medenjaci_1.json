@@ -1,0 +1,12 @@
+{
+    "dish_name": "Medenjaci",
+    "description": null,
+    "ingredients": "[{\"name\": \"MIX C brašna\", \"unit\": \"g\", \"amount\": \"290\"}, {\"name\": \"brašna za brašniti\", \"unit\": \"g\", \"amount\": \"30\"}, {\"name\": \"maslaca\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"jaja\", \"unit\": null, \"amount\": \"2\"}, {\"name\": \"šećera u prahu\", \"unit\": \"g\", \"amount\": \"70\"}, {\"name\": \"meda\", \"unit\": \"g\", \"amount\": \"80\"}, {\"name\": \"sode bikarbone\", \"unit\": \"čajne žličice\", \"amount\": \"pola\"}, {\"name\": \"vanilin šećer\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"mješavine za medenjake\", \"unit\": \"čajna žlica\", \"amount\": \"1\"}]",
+    "instructions": "Od navedenih sastojaka umijesite tijesto. Tijesto stavite u hladnjak na pola sata da se maslac stisne. Kad je tijesto spremno oblikujte kuglice. Stavite ih u kalup obložen papirom za pečenje. Pecite 8–10 minuta na 180 °C, dok ne poprime lijepu boju. Ostavite kekse da se potpuno ohlade. Čuvajte ih u metalnoj kutiji za kekse.",
+    "category": null,
+    "prep_time": "30 minutes",
+    "cook_time": "8-10 minutes",
+    "total_time": null,
+    "notes": "Čuvajte kekse u metalnoj kutiji za kekse.",
+    "tags": null
+}

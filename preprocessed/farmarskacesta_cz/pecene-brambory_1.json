@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pečené Brambory",
+    "description": "Lahodný pokrm s křupavou slupkou a měkkým vnitřkem, ideální jako příloha nebo hlavní chod.",
+    "ingredients": "[{\"name\": \"střední brambory\", \"unit\": \"pieces\", \"amount\": \"4\"}, {\"name\": \"olivový olej\", \"unit\": \"lžíce\", \"amount\": \"2\"}, {\"name\": \"sůl\", \"unit\": \"lžička\", \"amount\": \"1\"}, {\"name\": \"černý pepř\", \"unit\": \"lžičky\", \"amount\": \"0.5\"}, {\"name\": \"paprika\", \"unit\": \"lžička\", \"amount\": \"1\"}, {\"name\": \"strouhaný sýr (např. čedar)\", \"unit\": \"g\", \"amount\": \"50\"}, {\"name\": \"zakysaná smetana\", \"unit\": \"lžíce\", \"amount\": \"2\"}, {\"name\": \"jarní cibulky\", \"unit\": \"pieces\", \"amount\": \"2\"}, {\"name\": \"nasekaná petrželka\", \"unit\": \"lžíce\", \"amount\": \"1\"}, {\"name\": \"slanina\", \"unit\": \"volitelně\", \"amount\": null}]",
+    "instructions": "Brambory důkladně umyjte a osušte. Každou bramboru propíchněte vidlicí několikrát, aby mohla uniknout pára. Olivový olej smíchejte se solí, pepřem a paprikou. Brambory poté potřete touto směsí. Rozložte brambory na plech vyložený pečicím papírem. Předehřejte troubu na 200 °C. Plechem vložte do trouby a pečte 45 minut, dokud nejsou měkké. Po upečení brambory vyjměte a nechte chvíli vychladnout. Přetněte je podélně a opatrně vyjměte část dužiny. Přidejte zakysanou smetanu, sýr a slaninu, pokud používáte.",
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "45 minutes",
+    "total_time": "55 minutes",
+    "notes": "Pokud nemáte po ruce čedar, můžete použít jakýkoliv jiný sýr, který se dobře taví. Také můžete vyzkoušet různé bylinky nebo koření podle chuti. Přidejte bylinky během pečení pro lepší chuť. Vyzkoušejte různé druhy sýrů pro variabilitu. Nechte brambory vychladnout před plněním, aby se náplň nerozpustila. Podávejte s čerstvou zeleninou nebo omáčkami jako kečup či barbecue.",
+    "tags": "pečené brambory, příloha, česká kuchyně, jednoduché recepty, brambory, vaření"
+}

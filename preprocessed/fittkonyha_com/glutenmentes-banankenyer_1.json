@@ -1,0 +1,12 @@
+{
+    "dish_name": "Gluténmentes banánkenyér",
+    "description": "Gluténmentes banánkenyér a kedvenc Szafi Free lisztemből, mézes sütemény fűszerkeverékkel, tojással készült, zabos banánkenyér recept.",
+    "ingredients": "[{\"name\": \"Szafi Free csökkentett rosttartalmú lisztkeverék\", \"unit\": \"g\", \"amount\": \"200\"}, {\"name\": \"banán (héj nélkül)\", \"unit\": \"g\", \"amount\": \"280\"}, {\"name\": \"édesítő\", \"unit\": \"g\", \"amount\": \"25\"}, {\"name\": \"mézes sütemény fűszerkeverék vagy fahéj\", \"unit\": \"g\", \"amount\": \"2\"}, {\"name\": \"sütőpor\", \"unit\": \"g\", \"amount\": \"10\"}, {\"name\": \"só\", \"unit\": null, \"amount\": \"csipetnyi\"}, {\"name\": \"citromlé\", \"unit\": \"g\", \"amount\": \"20\"}, {\"name\": \"víz\", \"unit\": \"g\", \"amount\": \"80\"}, {\"name\": \"kókuszkrém\", \"unit\": \"g\", \"amount\": \"30\"}, {\"name\": \"aszalt sárgabarack\", \"unit\": \"g\", \"amount\": \"10\"}, {\"name\": \"goji bogyó\", \"unit\": \"g\", \"amount\": \"10\"}, {\"name\": \"kakaóbab töret\", \"unit\": \"g\", \"amount\": \"10\"}]",
+    "instructions": "A hozzávalókat kézi habverővel csomómentesre keverjük, szilikon formába öntjük és előmelegített sütőben megsütjük. 180 fokon kb. 40-45 percig sütjük, 20 cm-es kenyérformát használva.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "40-45 minutes",
+    "total_time": null,
+    "notes": "Ízlés szerint tovább turbózható több és egyéb aszalvánnyal, maggal, csokival is.",
+    "tags": "banán,gluténmentes,szafi free élesztős liszt,szafifree,tojásmentes"
+}

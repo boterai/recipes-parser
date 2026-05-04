@@ -1,0 +1,12 @@
+{
+    "dish_name": "Bravčové karé na omáčke zo sušených paradajok",
+    "description": "Rýchle a chutné jedlo, alebo čo chladnička a mraznička dala.",
+    "ingredients": "[{\"name\": \"karé bravčové\", \"unit\": \"kg\", \"amount\": \"0.5\"}, {\"name\": \"zmes zeleninová pod sviečkovú\", \"unit\": \"g\", \"amount\": \"250\"}, {\"name\": \"paradajky sušené\", \"unit\": \"g\", \"amount\": \"200\"}, {\"name\": \"vývar\", \"unit\": \"l\", \"amount\": \"0.5\"}, {\"name\": \"cibuľa\", \"unit\": \"ks\", \"amount\": \"1\"}, {\"name\": \"cesnak\", \"unit\": \"strúčikov\", \"amount\": \"6\"}, {\"name\": \"horčica\", \"unit\": \"PL\", \"amount\": \"2\"}, {\"name\": \"kečup\", \"unit\": \"PL\", \"amount\": \"2\"}, {\"name\": \"paprika červená údená mletá\", \"unit\": null, \"amount\": null}, {\"name\": \"soľ\", \"unit\": null, \"amount\": null}, {\"name\": \"korenie čierne mleté\", \"unit\": null, \"amount\": null}, {\"name\": \"múka hladká\", \"unit\": \"PL\", \"amount\": \"2\"}, {\"name\": \"masť bravčová\", \"unit\": null, \"amount\": null}, {\"name\": \"maslo\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Bravčové karé nakrájame na plátky, osolíme, okoreníme, posypeme mletou červenou údenou paprikou a v hrnci na rozpálenenej bravčovej masti opečieme z oboch strán. Mäso po opečení vyberieme. Do výpeku pridáme na kocky nakrájanú cibuľu, na pásiky nakrájané sušené paradajky a na plátky nakrájaný cesnak. Opečieme. Keď je základ opečený, pridáme k nemu 2 PL horčice, 2PL lyžice kečupu a zalejeme vývarom. Do pripraveného základu vložíme mäso a dusíme cca 30 minút. Po 30 minútach, ak je mäso mäkké, vyberieme ho z omáčky, do omáčky pridáme zátrepku (2 PL múky rozrobenej v 200 ml vody) a omáčku krátko povaríme. Následne ju rozmixujeme a prepasírujeme cez jemné sitko. Do omáčky pridáme 250 g zeleninovej zmesi pod sviečkovú a varíme kým zeleninová zmes nie je mäkká. Na záver pridáme plátok masla na zjemnenie. Podávame s pečenými zemiačkami, knedľou, cestovinami, alebo inou ľubovoľnou prílohou. Vrch mäska môžeme ozdobiť hoblinkami nastrúhaného parmezánu.",
+    "category": "Main Course",
+    "prep_time": "15 minutes",
+    "cook_time": "30 minutes",
+    "total_time": "45 minutes",
+    "notes": null,
+    "tags": "bravcovekare,bravcovemaso,dusenemaso,suseneparadajky,omacka"
+}

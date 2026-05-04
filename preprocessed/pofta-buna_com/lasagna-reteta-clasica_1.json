@@ -1,0 +1,12 @@
+{
+    "dish_name": "Lasagna reteta clasica",
+    "description": "Lasagna clasica italiana facuta cu carne tocata si sos de rosii – sos ragu, cu parmezan si sos bechamel. Nu se fierb foile inainte. Reteta scrisa si video pas cu pas.",
+    "ingredients": "[{\"name\": \"foi de lasagna\", \"unit\": \"g\", \"amount\": \"500\"}, {\"name\": \"parmezan\", \"unit\": \"g\", \"amount\": \"200-300\"}, {\"name\": \"unt pentru uns tava\", \"unit\": \"g\", \"amount\": \"50\"}, {\"name\": \"lapte\", \"unit\": \"l\", \"amount\": \"1\"}, {\"name\": \"unt\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"faina\", \"unit\": \"g\", \"amount\": \"120\"}, {\"name\": \"piper alb\", \"unit\": \"g\", \"amount\": \"2\"}, {\"name\": \"nucsoara\", \"unit\": null, \"amount\": null}, {\"name\": \"carne de vita\", \"unit\": \"g\", \"amount\": \"700\"}, {\"name\": \"carne de porc\", \"unit\": \"g\", \"amount\": \"300\"}, {\"name\": \"ceapa\", \"unit\": \"g\", \"amount\": \"200\"}, {\"name\": \"morcov\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"telina\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"suc de rosii\", \"unit\": \"ml\", \"amount\": \"600\"}, {\"name\": \"vin alb sec\", \"unit\": \"ml\", \"amount\": \"100\"}, {\"name\": \"lapte\", \"unit\": \"ml\", \"amount\": \"100\"}, {\"name\": \"ulei\", \"unit\": \"linguri\", \"amount\": \"3\"}, {\"name\": \"busuioc\", \"unit\": null, \"amount\": null}, {\"name\": \"sare\", \"unit\": null, \"amount\": null}, {\"name\": \"piper\", \"unit\": null, \"amount\": null}, {\"name\": \"frunza de dafin\", \"unit\": \"bucata\", \"amount\": \"1\"}]",
+    "instructions": "Se prepara sosul ragu bolognez conform retetei originale. Se prepara sosul bechamel conform retetei. Se asambleaza lasagna in tava unsa cu unt, alternand straturi de foi, sos ragu si sos bechamel, presarand parmezan. Se coace la cuptor aproximativ 30 de minute, verificand inmuierea foilor si rumenirea lasagnei. Se lasa sa se odihneasca putin inainte de servire.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "1 hour",
+    "total_time": "1 hour 30 minutes",
+    "notes": "Faceti sos din belsug, lasati sosul ragu mai lichid pentru a hidrata foile. Deasupra turnati strat generos de sos bechamel. Lasagna se poate congela cruda sau coapta si pastra pana la 6 luni. Se poate pastra in frigider 3-4 zile invelita cu folie de plastic. Puteti face foile de lasagna in casa din 2 oua si 200 g faina.",
+    "tags": "lasagna, reteta clasica, retete italiene, carne tocata, sos ragu, sos bechamel, parmezan"
+}

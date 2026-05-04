@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tamales",
+    "description": "Tradiční mexický pokrm z kukuřičného těsta plněného masem a vařeného v kukuřičných listech.",
+    "ingredients": "[{\"name\": \"kukuřičná mouka (masa harina)\", \"unit\": \"šálky\", \"amount\": \"2\"}, {\"name\": \"sádlo nebo rostlinný olej\", \"unit\": \"šálku\", \"amount\": \"1/2\"}, {\"name\": \"kuřecí vývar\", \"unit\": \"šálek\", \"amount\": \"1\"}, {\"name\": \"prášek do pečiva\", \"unit\": \"lžička\", \"amount\": \"1\"}, {\"name\": \"sůl\", \"unit\": \"lžičky\", \"amount\": \"1/2\"}, {\"name\": \"maso (kuřecí, vepřové nebo zelenina)\", \"unit\": \"šálky\", \"amount\": \"2\"}, {\"name\": \"omáčka (salsa verde nebo červená omáčka)\", \"unit\": \"šálek\", \"amount\": \"1\"}, {\"name\": \"kukuřičné listy (namočené ve vodě)\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Namáčejte kukuřičné listy ve vodě alespoň 30 minut. V míse smíchejte kukuřičnou mouku, prášek do pečiva a sůl. Přidejte sádlo a mícháním vytvořte drobenku. Postupně přidávejte kuřecí vývar a hněťte, dokud nevznikne hladké těsto. Na každý kukuřičný list položte 2-3 lžíce těsta. Na těsto přidejte 1-2 lžíce náplně (maso a omáčku). Listy přeložte tak, aby náplň byla uvnitř. Postavte tamales do pařáku a vařte 1 hodinu. Po uvaření nechte vychladnout před podáváním. Podávejte s extra omáčkou a užívejte si!",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "1 hour",
+    "total_time": "1 hour 30 minutes",
+    "notes": "Pokud nemáte kukuřičné mouky, můžete použít pšeničnou mouku, ale chuť a textura budou odlišné. Můžete experimentovat s náplněmi jako fazole, sýry nebo zelenina. Uchovávejte tamales v chladničce až 3 dny nebo je zmrazte. Před podáváním ohřejte v páře nebo mikrovlnné troubě.",
+    "tags": "tamales, mexické jídlo, tradiční recept, hlavní chod"
+}

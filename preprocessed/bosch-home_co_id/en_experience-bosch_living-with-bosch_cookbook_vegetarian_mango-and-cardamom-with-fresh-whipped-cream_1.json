@@ -1,0 +1,12 @@
+{
+    "dish_name": "Mango & Cardamom with Fresh Whipped Cream",
+    "description": null,
+    "ingredients": "[{\"name\": \"Large Mangoes\", \"unit\": \"pcs\", \"amount\": \"2\"}, {\"name\": \"Green Cardamom Pods\", \"unit\": \"pcs\", \"amount\": \"5\"}, {\"name\": \"Large Lime\", \"unit\": \"pcs\", \"amount\": \"2\"}, {\"name\": \"Icing Sugar\", \"unit\": \"g\", \"amount\": \"50\"}, {\"name\": \"Dark Rum\", \"unit\": \"Tablespoons\", \"amount\": \"4\"}, {\"name\": \"Whipping Cream\", \"unit\": \"ml\", \"amount\": \"400\"}]",
+    "instructions": "Purée the flesh of one mango with the Liquidizer attachment of the MCM6 Food Processor. Cut the other mango into cubes and coat them evenly with icing sugar. Scoop the puree into shot glasses, then place mango cubes on the puree. Grind the seeds of the green cardamom pods into powder. Mix lime juice, rum and the powder into a bowl. In a separate bowl, stir the whipping cream with a whisk attachment. Pour the cardamom seeds, lime juice and rum mixture into the cream during the whipping process. Place the cream mixture on top of the mango purée. Finally, garnish with lime zest.",
+    "category": null,
+    "prep_time": "30 mins",
+    "cook_time": "60 mins",
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Riz sauté aux légumes",
+    "description": "Recette rapide et savoureuse de riz sauté aux légumes croquants, idéale pour un repas complet et équilibré en moins de 15 minutes.",
+    "ingredients": "[{\"name\": \"Riz basmati ou jasmin\", \"unit\": null, \"amount\": null}, {\"name\": \"Carottes\", \"unit\": null, \"amount\": null}, {\"name\": \"Poivrons\", \"unit\": null, \"amount\": null}, {\"name\": \"Petits pois\", \"unit\": null, \"amount\": null}, {\"name\": \"Sauce soja\", \"unit\": null, \"amount\": null}, {\"name\": \"Oignons verts\", \"unit\": null, \"amount\": null}, {\"name\": \"Ail\", \"unit\": null, \"amount\": null}, {\"name\": \"Huile d'olive\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Faites cuire le riz basmati jusqu’à ce qu’il soit tendre. Chauffez une poêle avec de l’huile d’olive. Ajoutez l’oignon émincé et l’ail. Incorporez les légumes coupés en dés. Ajoutez le riz cuit. Assaisonnez avec de la sauce soja. Faites revenir 2 minutes les oignons et l’ail. Faites cuire les légumes 5 minutes. Mélangez bien avec le riz et remuez encore 3 minutes.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "15 minutes",
+    "total_time": "15 minutes",
+    "notes": "Vous pouvez substituer les carottes par des courgettes, ajouter des pois chiches pour plus de protéines, ou utiliser de l’huile de sésame pour un goût asiatique. Préparez le riz à l’avance pour gagner du temps. Ajoutez des protéines comme du tofu ou du poulet selon vos préférences.",
+    "tags": "riz sauté, légumes, recette rapide, repas complet, cuisine asiatique"
+}

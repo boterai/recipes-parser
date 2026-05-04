@@ -1,0 +1,12 @@
+{
+    "dish_name": "Bowl Cake Chocolat Beurre de cacahuètes",
+    "description": "Recette minute pour un bowl cake chocolat beurre de cacahuètes sans gluten, moelleux et prêt en 5 minutes, parfait pour petit-déjeuner, goûter ou dessert.",
+    "ingredients": "[{\"name\": \"Oeuf\", \"unit\": \"unit\", \"amount\": \"1\"}, {\"name\": \"Flocons de Riz (ou sarrasin, quinoa, ...)\", \"unit\": \"g\", \"amount\": \"40\"}, {\"name\": \"Yaourt nature\", \"unit\": \"c. à soupe\", \"amount\": \"3\"}, {\"name\": \"Compote de pommes (ou banane mûre)\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"Sucre\", \"unit\": \"c. à café\", \"amount\": \"1\"}, {\"name\": \"Levure chimique (sans gluten)\", \"unit\": \"c. à café\", \"amount\": \"1\"}, {\"name\": \"Beurre de Cacahuètes\", \"unit\": \"c. à soupe\", \"amount\": \"1\"}, {\"name\": \"Chocolat Noir\", \"unit\": \"carrés\", \"amount\": \"3\"}, {\"name\": \"Noisettes concassées\", \"unit\": \"unit\", \"amount\": \"5\"}, {\"name\": \"Toppings (mélanges de noix, ...)\", \"unit\": null, \"amount\": null}]",
+    "instructions": "1. Dans votre bol, battre l'oeuf et le sucre. 2. Ajouter tous les ingrédients : flocons de riz, compote, yaourt, levure chimique, le chocolat coupé en pépites et les noisettes concassées. Mélanger. 3. Déposer le beurre de cacahuètes au centre. 4. Cuire 2 à 3 minutes au micro-ondes. 5. Démouler dans une assiette. 6. Décorer de toppings. 7. Déguster.",
+    "category": "Dessert, Goûter, Petit déjeuner",
+    "prep_time": "2 minutes",
+    "cook_time": "3 minutes",
+    "total_time": "5 minutes",
+    "notes": "La pâte doit atteindre au maximum les 2/3 du bol en hauteur car le Bowl Cake va gonfler à la cuisson. Astuce : si pas de micro-ondes, enfourner 20 minutes à 180°C chaleur tournante. Idées de variations avec fruits ou version salée.",
+    "tags": "sans gluten, bowl cake, chocolat, beurre de cacahuètes, dessert, petit déjeuner, rapide, healthy"
+}

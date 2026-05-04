@@ -1,0 +1,12 @@
+{
+    "dish_name": "Piftie in forma de purcel",
+    "description": "Reteta pas cu pas pentru prepararea piftiei in forma de purcel, un preparat traditional romanesc din carne de porc.",
+    "ingredients": "[{\"name\": \"rasol de porc\", \"unit\": \"kg\", \"amount\": \"aprox 1\"}, {\"name\": \"doua picioare de porc\", \"unit\": \"pieces\", \"amount\": \"2\"}, {\"name\": \"sare\", \"unit\": null, \"amount\": null}, {\"name\": \"catei de usturoi\", \"unit\": \"pieces\", \"amount\": \"5-6\"}, {\"name\": \"apa\", \"unit\": \"l\", \"amount\": \"5-6\"}, {\"name\": \"morcov\", \"unit\": \"piece\", \"amount\": \"1\"}, {\"name\": \"radacina patrunjel\", \"unit\": \"piece\", \"amount\": \"1\"}, {\"name\": \"piper boabe\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Pasul 1: Curatam si portionam carnea. Punem carnea la fiert in apa rece cu putina sare, cu apa cu doua palme mai sus decat nivelul carnii. Spumam bine si adaugam restul ingredientelor. Fierbem aproximativ 4 ore, fara a acoperi vasul. Carnea este gata cand se desprinde usor de pe oase. Cu 5 minute inainte de a opri focul, gustam de sare si adaugam usturoiul zdrobit dupa inchiderea focului. Pasul 2: Scoatem carnea din zeama si o taiem. Alegem oasele si le dam deoparte. Impartim carnea si soriciul in vase, turnam zeama strecurata peste carne cat sa o acopere. Lasam la rece sa se inchege, evitand sa punem compozitia calda in frigider si sa inghete piftia.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "4 hours",
+    "total_time": null,
+    "notes": "Nu se adauga apa in timpul fierberii pentru a nu tulbura compozitia. Usturoiul se adauga doar dupa inchiderea focului pentru a nu fierbe in zeama. Piftia nu trebuie sa inghete.",
+    "tags": "piftie, porc, traditional, reteta romaneasca, aperitiv"
+}

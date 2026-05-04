@@ -1,0 +1,12 @@
+{
+    "dish_name": "Dakgangjeong",
+    "description": "Dakgangjeong adalah ayam pedas manis asal Korea Selatan yang populer sebagai cemilan atau hidangan keluarga.",
+    "ingredients": "[{\"name\": \"dada ayam tanpa tulang\", \"unit\": \"potong dadu\", \"amount\": \"2\"}, {\"name\": \"bawang putih cincang halus\", \"unit\": \"siung\", \"amount\": \"2\"}, {\"name\": \"garam\", \"unit\": \"secukupnya\", \"amount\": null}, {\"name\": \"tepung beras\", \"unit\": \"sdm\", \"amount\": \"8\"}, {\"name\": \"tepung terigu\", \"unit\": \"sdm\", \"amount\": \"8\"}, {\"name\": \"telur kocok lepas\", \"unit\": \"butir\", \"amount\": \"2\"}, {\"name\": \"bawang putih cincang halus (saus)\", \"unit\": \"siung\", \"amount\": \"2\"}, {\"name\": \"gochujang\", \"unit\": \"sdm\", \"amount\": \"2\"}, {\"name\": \"corn syrup (boleh diganti madu)\", \"unit\": \"sdm\", \"amount\": \"3\"}, {\"name\": \"madu\", \"unit\": \"sdm\", \"amount\": \"2\"}, {\"name\": \"gula\", \"unit\": null, \"amount\": \"secukupnya\"}, {\"name\": \"air\", \"unit\": null, \"amount\": \"secukupnya\"}, {\"name\": \"cabai bubuk (opsional)\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Lumuri ayam dengan garam dan bawang putih cincang, diamkan selama 30 menit agar bumbu meresap. Masukkan ayam ke telur kocok, kemudian lumuri dengan campuran tepung beras dan terigu. Ulangi sekali lagi untuk tekstur lebih renyah. Goreng ayam dalam minyak banyak dengan api sedang. Tuang sedikit minyak ke teflon, masukkan campuran saus gochujang, madu atau corn syrup, aduk sebentar. Masukkan air dan gula, masukkan ayam goreng, tes rasa. Aduk sampai bumbu meresap dan kering. Angkat dan susun di piring, taburi dengan wijen putih yang sudah disangrai.",
+    "category": null,
+    "prep_time": "30 minutes",
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Corn syrup dapat diganti dengan madu. Cabai bubuk bersifat opsional.",
+    "tags": "ayam, Korea Selatan, Dakgangjeong, pedas manis, cemilan"
+}

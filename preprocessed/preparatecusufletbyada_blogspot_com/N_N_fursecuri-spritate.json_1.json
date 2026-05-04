@@ -1,0 +1,12 @@
+{
+    "dish_name": "Fursecuri Spritate",
+    "description": "Rețetă pentru fursecuri spritate cu margarină sau unt, zahăr pudră și esență, preparate pas cu pas.",
+    "ingredients": "[{\"name\": \"făină\", \"unit\": \"g\", \"amount\": \"400\"}, {\"name\": \"sare\", \"unit\": null, \"amount\": \"Un praf\"}, {\"name\": \"margarină (70% grăsime) sau unt moale\", \"unit\": \"g\", \"amount\": \"250\"}, {\"name\": \"zahăr pudră\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"esență\", \"unit\": null, \"amount\": \"O fiolă\"}, {\"name\": \"ou\", \"unit\": null, \"amount\": \"1\"}]",
+    "instructions": "Într-un vas se pune margarina (untul) moale împreună cu zahărul pudră și se mixează 5-6 minute până se omogenizează. Se adaugă praful de sare, esența și oul, mixând încă 3 minute. La final se adaugă treptat făina și se mixează două minute. Aluatul se pune în aparatul pentru fursecuri și se formează pe tava unsă cu ulei. Se coc în cuptorul preîncălzit la 180°-190° timp de aproximativ 15 minute. Se servesc reci, opțional pudrate cu zahăr.",
+    "category": "Dessert",
+    "prep_time": "10 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "25 minutes",
+    "notes": "Fursecurile se pot pudra cu zahăr după ce s-au răcit. Timpul de coacere poate varia în funcție de cuptor.",
+    "tags": "fursecuri, desert, prăjituri, rețetă tradițională"
+}

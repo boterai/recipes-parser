@@ -1,0 +1,12 @@
+{
+    "dish_name": "Spaghetti aux fruits de mer (facile & délicieux)",
+    "description": "Notre recette inratable de pâtes aux fruits de mer.",
+    "ingredients": "[{\"name\": \"spaghetti\", \"unit\": \"grammes\", \"amount\": \"400\"}, {\"name\": \"fruits de mer\", \"unit\": \"grammes\", \"amount\": \"300\"}, {\"name\": \"gousses d'ail\", \"unit\": null, \"amount\": \"2\"}, {\"name\": \"oignon\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"huile d'olive\", \"unit\": \"c. à soupe\", \"amount\": \"1\"}, {\"name\": \"tomates concassées\", \"unit\": \"boite\", \"amount\": \"1\"}, {\"name\": \"bouillon cube de légumes\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"vin blanc de cuisine\", \"unit\": \"cl\", \"amount\": \"10\"}, {\"name\": \"persil frais\", \"unit\": null, \"amount\": null}, {\"name\": \"sel\", \"unit\": null, \"amount\": null}, {\"name\": \"poivre\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Faire cuire les spaghetti dans une casserole d'eau bouillante salée. Laisser 1 minute de moins que le temps indiqué sur le paquet pour avoir une cuisson al dente. Égoutter et refroidir les pâtes. Émincer l'oignon et les gousses d'ail. Les faire suer dans une grande poêle avec un peu d'huile d'olive. Ajouter les fruits de mer. Déglacer au vin blanc. Bien mélanger. Ajouter les tomates concassées et le bouillon cube déjà délayé dans un peu d'eau. Mélanger et laisser réduire. Ajouter les spaghetti et mélanger. Laisser réchauffer à feu doux/moyen.",
+    "category": "Plat principal",
+    "prep_time": "10 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "20 minutes",
+    "notes": "Vous pouvez utiliser toutes sortes de pâtes pour cette recette aux fruits de mer.",
+    "tags": "Pâtes"
+}

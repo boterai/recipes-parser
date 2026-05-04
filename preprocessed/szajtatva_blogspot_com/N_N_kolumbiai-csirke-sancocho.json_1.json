@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kolumbiai Csirke Sancocho",
+    "description": "Kolumbiai Csirke Sancocho egy latin-amerikai leves, amely csirkéből, főzőbanánból, burgonyából és kukoricából készül, fűszerezve római köménnyel és korianderrel.",
+    "ingredients": "[{\"name\": \"olivaolaj\", \"unit\": \"evőkanál\", \"amount\": \"2\"}, {\"name\": \"vöröshagyma\", \"unit\": \"fej\", \"amount\": \"1\"}, {\"name\": \"fokhagyma\", \"unit\": \"gerezd\", \"amount\": \"2\"}, {\"name\": \"kukorica\", \"unit\": \"cső\", \"amount\": \"1\"}, {\"name\": \"burgonya\", \"unit\": \"nagy\", \"amount\": \"1\"}, {\"name\": \"főzőbanán\", \"unit\": \"db\", \"amount\": \"2\"}, {\"name\": \"csirke felsőcomb\", \"unit\": \"db\", \"amount\": \"3\"}, {\"name\": \"római kömény\", \"unit\": \"teáskanál\", \"amount\": \"0.5\"}, {\"name\": \"zöldkoriander\", \"unit\": \"csokor\", \"amount\": \"1\"}, {\"name\": \"só\", \"unit\": null, \"amount\": null}]",
+    "instructions": "1. Kevés olajon megdínszteljük az apróra vágott vöröshagymát, majd hozzáadjuk az apróra vágott fokhagymát.\n2. Hozzáadjuk a megmosott csirkecombokat, barnásra pirítjuk, megszórjuk sóval, római köménnyel és apróra vágott zöld korianderrel.\n3. Felkockázott főzőbanánt hozzáadjuk, felöntjük annyi vízzel, hogy a csirkéket ellepje, és 40 percig főzzük.\n4. Hozzáadjuk a felkockázott burgonyát, további 15 percig főzzük.\n5. Beletesszük a kettévágott kukoricacsövet, és még 7 percig főzzük, amíg a kukorica megpuhul.\n6. Kóstoljuk, szükség szerint ízesítjük, majd tálaljuk.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "62 minutes",
+    "total_time": null,
+    "notes": "Az eredeti recept yukkát is tartalmaz, de helyette több burgonyát és főzőbanánt használtak. Lehet apróra vágott csirkemellel és morzsolt kukoricával is készíteni kevésbé rusztikus változatban.",
+    "tags": "csirke, kolumbiai, koriander, kukorica, római kömény"
+}

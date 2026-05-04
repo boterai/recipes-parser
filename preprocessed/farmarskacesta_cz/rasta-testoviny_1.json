@@ -1,0 +1,12 @@
+{
+    "dish_name": "Rasta Těstoviny",
+    "description": "Rasta těstoviny jsou nejen chutné, ale také vizuálně atraktivní. Spojení různobarevných paprik, rajčat a čerstvých bylinek vytváří pokrm, který osvěží vaše smysly. Tento recept je skvělou volbou pro rychlou a zdravou večeři, kterou zvládne každý.",
+    "ingredients": "[{\"name\": \"těstoviny\", \"unit\": \"g\", \"amount\": \"250\"}, {\"name\": \"červená paprika\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"žlutá paprika\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"zelená paprika\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"rajčata\", \"unit\": null, \"amount\": \"2\"}, {\"name\": \"stroužky česneku\", \"unit\": null, \"amount\": \"2\"}, {\"name\": \"olivový olej\", \"unit\": \"ml\", \"amount\": \"50\"}, {\"name\": \"čerstvá bazalka\", \"unit\": null, \"amount\": null}, {\"name\": \"oregano\", \"unit\": null, \"amount\": null}, {\"name\": \"sůl a pepř\", \"unit\": null, \"amount\": \"podle chuti\"}]",
+    "instructions": "Uvařte těstoviny podle pokynů na obalu. Mezitím nakrájejte papriky a rajčata na tenké plátky. Na pánvi zahřejte olivový olej. Přidejte nasekaný česnek a restujte do zlatova. Přidejte nakrájenou zeleninu a restujte několik minut. Osolte a opepřete podle chuti. Přimíchejte uvařené těstoviny k zelenině. Přidejte čerstvé bylinky a promíchejte. Podávejte ihned, ozdobte dalším bylinkami. Na talíři můžete posypat čerstvě mletým pepřem.",
+    "category": "Main Course",
+    "prep_time": "10 minutes",
+    "cook_time": "15 minutes",
+    "total_time": "25 minutes",
+    "notes": "Místo těstovin můžete použít rýži nebo quinoa. Papriky můžete nahradit jinou zeleninou, jako je cuketa nebo mrkev. Pokrmy můžete uchovávat v lednici maximálně 3 dny. Před podáváním je ohřejte na pánvi nebo v mikrovlnce. Rasta těstoviny se nedoporučuje zmrazovat, protože zelenina ztrácí texturu. Používejte čerstvé bylinky pro intenzivnější chuť. Experimentujte s různými druhy těstovin. Pokud máte rádi pikantní jídla, přidejte chilli papričky.",
+    "tags": "rasta těstoviny, vegetariánské, zdravé, recepty, těstoviny, rychlá večeře"
+}

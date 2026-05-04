@@ -1,0 +1,12 @@
+{
+    "dish_name": "Crème Brûlée",
+    "description": "Ukusni francuski desert sa kremastom smjesom jaja s okusom vanilije prekriven tankim slojem karameliziranog šećera, pripremljen sa samo 3 sastojka bez potrebe za plamenikom.",
+    "ingredients": "[{\"name\": \"sladoled od vanilije\", \"unit\": \"šalice\", \"amount\": \"2\"}, {\"name\": \"žumanjak\", \"unit\": \"komada\", \"amount\": \"2\"}, {\"name\": \"šećer\", \"unit\": \"žličice\", \"amount\": \"2\"}]",
+    "instructions": "Otopite sladoled u mikrovalnoj pećnici pa umiješajte žumanjak. Smjesu izlijte u male zdjelice. Stavite zdjelice u posudu za pečenje napunjenu vodom do polovice zdjelica. Pecite u pećnici 40 do 50 minuta na 170 stupnjeva. Gotovu kremu prekrijte prozirnom folijom i stavite u hladnjak na oko dva sata. Prije posluživanja otopite šećer u tavi na srednjoj vatri i brzo prelijte u tankom sloju preko kreme.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "40 to 50 minutes",
+    "total_time": null,
+    "notes": "Recept ne zahtijeva vrhnje ni skupu vaniliju, niti plamenik za karamelizaciju šećera.",
+    "tags": "desert, francuska kuhinja, creme brulee"
+}

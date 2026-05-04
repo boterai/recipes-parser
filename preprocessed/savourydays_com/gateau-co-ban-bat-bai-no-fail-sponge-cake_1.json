@@ -1,0 +1,12 @@
+{
+    "dish_name": "Bánh bông lan cơ bản bất bại (No-fail sponge cake)",
+    "description": "Công thức làm bánh bông lan cơ bản với cách đánh trứng tách riêng lòng trắng và lòng đỏ, không cần kỹ thuật fold bột, phù hợp cho người mới học làm bánh.",
+    "ingredients": "[{\"name\": \"bột ngô (corn starch)\", \"unit\": \"gram\", \"amount\": \"30\"}, {\"name\": \"bột mì đa dụng (all purpose flour)\", \"unit\": \"gram\", \"amount\": \"30\"}, {\"name\": \"dầu ăn\", \"unit\": \"gram\", \"amount\": \"20\"}, {\"name\": \"sữa tươi không đường\", \"unit\": \"gram\", \"amount\": \"10\"}, {\"name\": \"trứng gà\", \"unit\": \"quả\", \"amount\": \"3\"}, {\"name\": \"đường\", \"unit\": \"gram\", \"amount\": \"60\"}, {\"name\": \"cream of tartar\", \"unit\": \"thìa café\", \"amount\": \"½\"}, {\"name\": \"muối\", \"unit\": null, \"amount\": \"1 nhúm nhỏ\"}]",
+    "instructions": "1. Vặn lò 175 độ C hoặc 165 độ C cho khuôn sẫm màu. Lót giấy nến hoặc giấy trắng ở đáy khuôn.\n2. Rây bột mì và bột ngô, trộn đều. Đong sữa và dầu ăn vào chung một bát. Tách riêng lòng đỏ và lòng trắng trứng.\n3. Đánh lòng trắng trứng với muối và cream of tartar đến khi bọt khí nhỏ lại, hỗn hợp mịn, cho đường vào từng chút một, đánh đến khi trứng nổi đặc, có vân và bóng dẻo.\n4. Đánh lòng đỏ trứng vào hỗn hợp lòng trắng ở tốc độ thấp.\n5. Đánh đều dầu ăn và sữa rồi đổ từ từ vào hỗn hợp trứng.\n6. Chia bột làm 2-3 phần, rây từng phần vào hỗn hợp trứng, đánh nhẹ nhàng, không đánh quá lâu.\n7. Đổ bột vào khuôn, gõ khuôn để vỡ bọt khí to, nướng 25-35 phút ở 175 độ C hoặc 165 độ C.\n8. Lấy bánh ra khỏi khuôn, để nguội trên rack.",
+    "category": "Dessert",
+    "prep_time": "20 - 25 minutes",
+    "cook_time": "25 - 35 minutes",
+    "total_time": null,
+    "notes": "Có thể thay dầu ăn bằng bơ đun chảy, cream of tartar có thể thay bằng nước cốt chanh hoặc dấm. Nếu dùng cake flour thì thay theo tỉ lệ 3 phần cake flour: 1 phần bột ngô. Nhiệt độ nướng có thể điều chỉnh tùy lò nướng. Công thức phù hợp cho người mới học làm bánh, không cần kỹ thuật fold bột.",
+    "tags": "bánh bông lan, sponge cake, baking, dessert, no-fail, cơ bản, bánh ngọt"
+}

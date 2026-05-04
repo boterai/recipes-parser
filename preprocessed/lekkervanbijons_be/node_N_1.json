@@ -1,0 +1,12 @@
+{
+    "dish_name": "Trifle met vanillepudding en frambozen",
+    "description": "Vanillepudding is een oerklassieker onder de desserts. Voeg frambozen, mascarpone en plakjes cake toe, stapel de ingrediënten en je hebt een leuk en modern nagerecht.",
+    "ingredients": "[{\"name\": \"frambozen\", \"unit\": \"g\", \"amount\": \"400\"}, {\"name\": \"kandijsuiker\", \"unit\": \"el\", \"amount\": \"2\"}, {\"name\": \"vanillepudding\", \"unit\": \"ml\", \"amount\": \"600\"}, {\"name\": \"cake\", \"unit\": \"stuk\", \"amount\": \"1\"}, {\"name\": \"mascarpone\", \"unit\": \"g\", \"amount\": \"350\"}, {\"name\": \"vanillesuiker\", \"unit\": \"g\", \"amount\": \"16\"}, {\"name\": \"poedersuiker\", \"unit\": \"el\", \"amount\": \"2\"}]",
+    "instructions": "Plet 2/3 van de frambozen met de kandijsuiker fijn. Roer de vanillesuiker onder de mascarpone. Snijd de cake in blokjes. Vul een grote serveerschaal met een laag cake, schep er wat mascarpone, pudding en geplette frambozen op. Herhaal deze stappen. Eindig met een laagje mascarpone en frambozen. Strooi er wat poedersuiker over.",
+    "category": "Dessert",
+    "prep_time": "15 min",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Mákos-gyömbéres püspökkenyér",
+    "description": "Egy nem túl édes sütemény, amely egész mákszemeket és kandírozott gyömbért tartalmaz, pikáns ízvilággal.",
+    "ingredients": "[{\"name\": \"puha vaj\", \"unit\": \"dkg\", \"amount\": \"15\"}, {\"name\": \"tejföl\", \"unit\": \"dl\", \"amount\": \"2\"}, {\"name\": \"cukor\", \"unit\": \"dkg\", \"amount\": \"20\"}, {\"name\": \"vaníliásrúd\", \"unit\": \"rúd\", \"amount\": \"0.5\"}, {\"name\": \"tojás\", \"unit\": \"db\", \"amount\": \"2\"}, {\"name\": \"rétesliszt\", \"unit\": \"dkg\", \"amount\": \"25\"}, {\"name\": \"sütőpor\", \"unit\": \"csomag\", \"amount\": \"0.5\"}, {\"name\": \"só\", \"unit\": \"csipet\", \"amount\": \"1\"}, {\"name\": \"darálatlan mák\", \"unit\": \"evőkanál\", \"amount\": \"4\"}, {\"name\": \"kandírozott gyömbér\", \"unit\": \"dkg\", \"amount\": \"10\"}]",
+    "instructions": "1. Melegítsük elő a sütőt 175 fokra és béleljünk ki egy püspökkenyér formát sütőpapírral. 2. Egy tálban keverjük össze a puha vajat, tejfölt, cukrot, vaníliamagot és az egyik tojást robotgéppel. 3. Adjuk hozzá a második tojást és habosítsuk 5 percig. 4. Egy másik tálban keverjük össze a lisztet, sütőport, sót és mákot. 5. Adjuk hozzá a lisztes keveréket a vajas keverékhez és forgassuk össze. 6. A kandírozott gyömbért apró kockákra vágjuk, lisztbe forgatjuk, majd a tésztához adjuk. 7. Öntsük a tésztát a formába, rázogassuk, hogy egyenletes legyen. 8. Süssük 50-55 percig, majd hagyjuk a formában kihűlni. 9. Vágjuk 1 cm-es szeletekre és tálaljuk.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "50-55 minutes",
+    "total_time": null,
+    "notes": "A recepthez mindenképpen vajat használjunk, margarinnal kevésbé finom. Kandírozott gyömbér helyett kandírozott papaja vagy narancshéj is használható. A tetejét opcionálisan megszórhatjuk sütőporral, de el is hagyható.",
+    "tags": "gyömbér,mák,püspökkenyér,Dessert"
+}

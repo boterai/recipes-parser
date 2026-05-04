@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pâtes à la carbonara",
+    "description": "Recette carbonara authentique italienne avec guanciale, pecorino romano, œufs et poivre noir, sans crème, pour un plat traditionnel savoureux.",
+    "ingredients": "[{\"name\": \"Guanciale\", \"unit\": null, \"amount\": null}, {\"name\": \"Pecorino Romano\", \"unit\": null, \"amount\": null}, {\"name\": \"Œufs\", \"unit\": null, \"amount\": null}, {\"name\": \"Poivre noir fraîchement moulu\", \"unit\": null, \"amount\": null}, {\"name\": \"Spaghetti ou rigatoni\", \"unit\": null, \"amount\": null}, {\"name\": \"Sel marin\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Cuire les pâtes al dente dans une eau salée. Couper le guanciale en petits morceaux et le faire revenir jusqu’à dorure. Râper le pecorino romano. Fouetter les œufs avec le pecorino râpé dans un bol. Égoutter les pâtes en gardant un peu d’eau de cuisson. Mélanger les pâtes avec le guanciale hors du feu. Incorporer le mélange œufs-fromage aux pâtes en ajustant la consistance avec l’eau de cuisson. Ajouter du poivre noir fraîchement moulu. Servir immédiatement.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Éviter la crème pour respecter l’authenticité. Utiliser des jaunes d’œufs uniquement pour une sauce riche. Mélanger hors du feu pour éviter de cuire les œufs. Alternatives urbaines : pancetta à la place du guanciale, parmesan à la place du pecorino. Accompagner avec un vin blanc italien comme Soave ou Pinot Grigio.",
+    "tags": "carbonara, pâtes, recette italienne, guanciale, pecorino romano, œufs, cuisine traditionnelle"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Oreo-milkshake",
+    "description": "Goed nieuws voor alle Oreo lovers: deze milkshake met Oreo koekjes kan je makkelijk zelf thuis klaarmaken. Genieten maar!",
+    "ingredients": "[{\"name\": \"melk\", \"unit\": \"ml\", \"amount\": \"150\"}, {\"name\": \"vanille-ijs\", \"unit\": \"bollen\", \"amount\": \"2\"}, {\"name\": \"oreo's\", \"unit\": \"stuks\", \"amount\": \"3\"}, {\"name\": \"opgeklopte slagroom\", \"unit\": null, \"amount\": null}, {\"name\": \"chocoladesiroop\", \"unit\": null, \"amount\": null}, {\"name\": \"oreo\", \"unit\": \"stuk\", \"amount\": \"1\"}]",
+    "instructions": "Verkruimel de koekjes en mix ze samen met de melk en het vanille-ijs tot een shake. Schenk de shake in een gekoeld glas en werk af met wat slagroom, chocoladesiroop en een oreokoekje.",
+    "category": "Dranken",
+    "prep_time": "5 min",
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": null
+}

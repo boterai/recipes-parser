@@ -1,0 +1,12 @@
+{
+    "dish_name": "Pâtes aux fruits de mer",
+    "description": "Un plat simple et savoureux combinant des fruits de mer frais avec des pâtes, relevé d'herbes aromatiques et d'une marinade citronnée.",
+    "ingredients": "[{\"name\": \"pâtes (spaghetti ou linguine)\", \"unit\": \"g\", \"amount\": \"300\"}, {\"name\": \"fruits de mer variés (crevettes, moules, calamars)\", \"unit\": \"g\", \"amount\": \"500\"}, {\"name\": \"gousses d’ail, hachées\", \"unit\": \"unités\", \"amount\": \"2\"}, {\"name\": \"huile d’olive\", \"unit\": null, \"amount\": null}, {\"name\": \"jus de citron\", \"unit\": null, \"amount\": null}, {\"name\": \"persil haché\", \"unit\": null, \"amount\": null}, {\"name\": \"sel\", \"unit\": null, \"amount\": \"pincée\"}, {\"name\": \"poivre noir\", \"unit\": null, \"amount\": \"pincée\"}]",
+    "instructions": "Rincer les fruits de mer sous l’eau froide, retirer les coquilles et découper les calamars en anneaux. Préparer une marinade avec huile d’olive, jus de citron, ail écrasé, persil haché, sel et poivre noir. Laisser reposer les fruits de mer dans la marinade pendant 30 minutes. Porter une grande casserole d’eau salée à ébullition et cuire les pâtes al dente selon le temps indiqué (8-10 minutes pour spaghetti). Égoutter les pâtes rapidement pour éviter qu’elles ne deviennent trop molles. Chauffer un peu d’huile d’olive dans une poêle, ajouter les fruits de mer marinés et faire sauter jusqu’à cuisson complète. Incorporer les pâtes égouttées aux fruits de mer et mélanger délicatement pour enrober les pâtes de la sauce. Assaisonner avec sel, poivre, un filet d’huile d’olive et parsemer de persil frais. Servir dans des assiettes chaudes.",
+    "category": "Main Course",
+    "prep_time": "30 minutes",
+    "cook_time": "8-10 minutes",
+    "total_time": null,
+    "notes": "Ajouter du vin blanc pour rehausser les saveurs marines. Cuire les fruits de mer séparément pour préserver leur texture. Variantes possibles avec légumes comme épinards ou tomates cerises. Accompagner d’un vin blanc sec ou salade verte.",
+    "tags": "pâtes, fruits de mer, italien, plat principal, cuisine méditerranéenne"
+}

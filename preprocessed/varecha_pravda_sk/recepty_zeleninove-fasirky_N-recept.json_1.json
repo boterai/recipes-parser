@@ -1,0 +1,12 @@
+{
+    "dish_name": "Zeleninové fašírky",
+    "description": null,
+    "ingredients": "[{\"name\": \"brokolica (ružičky)\", \"unit\": \"g\", \"amount\": \"200\"}, {\"name\": \"mrkva (očistená)\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"strúhanka\", \"unit\": \"g\", \"amount\": \"50\"}, {\"name\": \"olej\", \"unit\": \"g\", \"amount\": \"15\"}, {\"name\": \"vajce\", \"unit\": \"ks\", \"amount\": \"1\"}, {\"name\": \"cesnak (strúčik)\", \"unit\": \"ks\", \"amount\": \"1\"}, {\"name\": \"soľ\", \"unit\": \"g\", \"amount\": \"3\"}, {\"name\": \"strúhanka (na obalenie)\", \"unit\": null, \"amount\": null}, {\"name\": \"olej (na vyprážanie)\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Brokolicové ružičky pokrájame nadrobno, očistenú mrkvu postrúhame na jemné rezance. Na oleji chvíľku osmažíme mrkvu, pridáme brokolicu a trochu vody, odkryté dusíme do polomäkka. Keď sa voda odparí, ešte chvíľu smažíme do sucha, vidličkou popučíme a necháme vychladnúť. Do vlažnej zeleniny pridáme soľ, prelisovaný cesnak, vajce a strúhanku podľa potreby, aby fašírky držali tvar. Zmes rozdelíme na 4 - 5 častí, vytvarujeme fašírky a obalíme v strúhanke. Vyprážame z oboch strán na oleji strednej teploty.",
+    "category": null,
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": null,
+    "tags": "zeleninovefasirky,zelenina,fasirky,fasirkybezmasa"
+}

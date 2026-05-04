@@ -1,0 +1,12 @@
+{
+    "dish_name": "Makaron z kurczakiem",
+    "description": "Makaron z kurczakiem w pysznym sosie śmietanowym to szybki przepis, który z pewnością zaspokoi apetyt na pyszny obiad. Z dodatkiem pomidorów, szpinaku i aromatycznych przypraw, danie jest pełne smaku i prostoty.",
+    "ingredients": "[{\"name\": \"pierś z kurczaka\", \"unit\": \"około 500 g\", \"amount\": \"1\"}, {\"name\": \"olej\", \"unit\": \"łyżki\", \"amount\": \"2\"}, {\"name\": \"masło klarowane\", \"unit\": \"łyżka\", \"amount\": \"1\"}, {\"name\": \"śmietanka 30%\", \"unit\": \"szklanki\", \"amount\": \"1/3\"}, {\"name\": \"ser Cheddar lub Parmezan\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"ząbki czosnku\", \"unit\": null, \"amount\": \"4\"}, {\"name\": \"cebula\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"szpinak baby\", \"unit\": \"garść\", \"amount\": \"1\"}, {\"name\": \"duży pomidor\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"makaron Tagliatelle\", \"unit\": \"g\", \"amount\": \"300\"}, {\"name\": \"sól\", \"unit\": null, \"amount\": null}, {\"name\": \"pieprz\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Pokrój pierś z kurczaka na kawałki, przypraw solą i pieprzem. Podsmaż mięso na rozgrzanym oleju i maśle przez 6 minut, aż się zarumieni. Na tej samej patelni podsmaż cebulę i czosnek przez kilka minut, aż zmiękną. Dodaj pokrojonego pomidora i szpinak. Smaż przez 5 minut. Wlej śmietankę, dodaj starty ser i wymieszaj, aż sos zgęstnieje. Ugotuj makaron w osolonej wodzie, odcedź i wymieszaj z sosem. Na talerzach podawaj makaron z kurczakiem i warzywami, posypany świeżym serem.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "11 minutes",
+    "total_time": null,
+    "notes": "Danie jest szybkie, kremowe i pełne smaku. Idealne na codzienne posiłki.",
+    "tags": "makaron, kurczak, sos śmietanowy, szybki przepis, obiad"
+}

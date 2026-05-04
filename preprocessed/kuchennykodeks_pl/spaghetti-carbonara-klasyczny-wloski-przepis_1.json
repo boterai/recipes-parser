@@ -1,0 +1,12 @@
+{
+    "dish_name": "Spaghetti Carbonara",
+    "description": "Klasyczny włoski przepis na spaghetti carbonara – kremowe, intensywne w smaku i niezwykle proste w przygotowaniu danie z sosem na bazie żółtek, sera pecorino romano i wody z gotowania makaronu.",
+    "ingredients": "[{\"name\": \"spaghetti\", \"unit\": \"g\", \"amount\": \"200\"}, {\"name\": \"guanciale (lub pancetta, ewentualnie boczek)\", \"unit\": \"g\", \"amount\": \"100\"}, {\"name\": \"ser pecorino romano (można zastąpić parmezanem)\", \"unit\": \"g\", \"amount\": \"50\"}, {\"name\": \"żółtka\", \"unit\": \"szt\", \"amount\": \"2\"}, {\"name\": \"całe jajko\", \"unit\": \"szt\", \"amount\": \"1\"}, {\"name\": \"świeżo mielony pieprz\", \"unit\": null, \"amount\": null}, {\"name\": \"sól do gotowania makaronu\", \"unit\": null, \"amount\": null}]",
+    "instructions": "1. Ugotuj makaron w osolonej wodzie al dente. Odlej około 100 ml wody z gotowania makaronu.\n2. Pokrój guanciale w cienkie paski i podsmaż na suchej patelni na średnim ogniu, aż stanie się chrupiące i wytopi się tłuszcz.\n3. W misce wymieszaj żółtka, całe jajko i starty ser pecorino, dodaj dużo świeżo mielonego pieprzu.\n4. Przełóż makaron na patelnię z guanciale (nie odcedzaj do sucha, powinien być lekko mokry).\n5. Zdejmij patelnię z ognia i powoli wlej mieszankę jajeczną, energicznie mieszając – ciepło makaronu sprawi, że sos zgęstnieje. Jeśli trzeba, dodaj odrobinę wody z gotowania makaronu, aby uzyskać aksamitną konsystencję.\n6. Dopraw dodatkowym serem i pieprzem.\n7. Podawaj od razu, opcjonalnie z dodatkową porcją startego pecorino, świeżo mielonym pieprzem oraz listkami bazylii lub pietruszki.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Oryginalna carbonara nie zawiera śmietany, czosnku ani cebuli – kremowy efekt pochodzi z emulgacji jajek, sera i skrobi z makaronu. Do sosu można dodać wodę z gotowania makaronu, aby uzyskać aksamitną konsystencję.",
+    "tags": "spaghetti,carbonara,włoska kuchnia,makaron,klasyczny przepis"
+}

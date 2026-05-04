@@ -1,0 +1,12 @@
+{
+    "dish_name": "Tiramisu rețetă originală italiană",
+    "description": "Tiramisu rețetă originală italiană cu pișcoturi de șampanie (savoiardi), cremă de mascarpone cu ouă și cafea. Rețeta originală se face cu ouă crude, eu o fac cu ouă bătute pe abur.",
+    "ingredients": "[{\"name\": \"ouă proaspete\", \"unit\": \"bucăți\", \"amount\": \"6\"}, {\"name\": \"mascarpone\", \"unit\": \"g\", \"amount\": \"500\"}, {\"name\": \"zahăr tos\", \"unit\": \"g\", \"amount\": \"150\"}, {\"name\": \"cafea espresso concentrată, îndulcită și răcită\", \"unit\": \"ml\", \"amount\": \"200\"}, {\"name\": \"cacao naturală, neîndulcită, pentru decor\", \"unit\": \"linguri\", \"amount\": \"1-2\"}, {\"name\": \"pișcoturi de șampanie (savoiardi)\", \"unit\": \"g\", \"amount\": \"300\"}]",
+    "instructions": "1. Puneți ouăle împreună cu zahărul într-o oală pe foc mic sau pe bain-marie. Amestecați continuu până crema devine vâscoasă la aproximativ 80°C.\n2. Lăsați crema să se răcească puțin, amestecând pentru a preveni pojghița.\n3. Adăugați treptat mascarponele la temperatura camerei, amestecând bine.\n4. Bateți crema cu mixerul la viteză medie până devine aerată și lucioasă. Răciți cel puțin 30 de minute.\n5. Înmuiați rapid pișcoturile în cafeaua răcită, câte o secundă pe fiecare parte.\n6. Așezați un strat de pișcoturi înmuiate într-un vas, apoi un strat generos de cremă.\n7. Repetați cu un al doilea strat de pișcoturi și cremă.\n8. Presărați cacao naturală neîndulcită uniform deasupra.\n9. Puneți la frigider pentru cel puțin 2-3 ore, ideal peste noapte, înainte de servire.",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": "2-3 hours",
+    "notes": "Toate ingredientele pentru cremă trebuie să fie la temperatura camerei. Cafeaua folosită pentru înmuiat pișcoturi trebuie să fie răcită complet. Folosiți cacao naturală, neîndulcită, pentru decor. Mascarponele de calitate este esențial. Tiramisul se păstrează la frigider maximum 2-3 zile și nu se congelează. Pentru variantă fără alcool, folosiți cafea simplă; pentru aromă tradițională, adăugați 1-2 linguri de Marsala sau Amaretto în cafea.",
+    "tags": "tiramisu, desert, italian, mascarpone, cafea, pișcoturi, rețetă originală"
+}

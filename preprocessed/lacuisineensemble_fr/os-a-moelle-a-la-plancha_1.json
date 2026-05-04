@@ -1,0 +1,12 @@
+{
+    "dish_name": "Os à moelle grillés à la plancha",
+    "description": "Recette d'os à moelle grillés à la plancha, avec une croûte caramélisée et un cœur fondant, accompagnés de pain de campagne frotté à l’ail.",
+    "ingredients": "[{\"name\": \"os à moelle de bœuf\", \"unit\": \"pièces\", \"amount\": \"8\"}, {\"name\": \"gros sel\", \"unit\": null, \"amount\": \"quelques pincées\"}, {\"name\": \"poivre noir fraîchement moulu\", \"unit\": null, \"amount\": \"selon goût\"}, {\"name\": \"thym frais en branches\", \"unit\": null, \"amount\": \"une petite poignée\"}, {\"name\": \"gousses d’ail écrasées\", \"unit\": null, \"amount\": \"quelques\"}, {\"name\": \"huile d’olive extra vierge\", \"unit\": null, \"amount\": \"pour badigeonner\"}]",
+    "instructions": "Rincez soigneusement les os à moelle sous l’eau froide pour éliminer les résidus éventuels. Séchez-les avec un torchon propre. Badigeonnez légèrement les extrémités des os d’huile d’olive. Préchauffez la plancha à feu vif jusqu’à ce qu’elle soit bien chaude. Disposez les os sur la plancha, côté coupé vers le haut. Laissez saisir pendant 4 à 6 minutes jusqu’à ce que le dessus soit doré. Retournez délicatement les os pour griller légèrement les côtés pendant 2 à 3 minutes. Saupoudrez de gros sel, poivre, ajoutez thym et ail écrasé à proximité pour parfumer. Retirez les os dès que la moelle est fondante et chaude.",
+    "category": "Plat principal",
+    "prep_time": "12 minutes",
+    "cook_time": "10 minutes",
+    "total_time": "22 minutes",
+    "notes": "Évitez de trop cuire pour conserver une moelle fondante. Choisissez des os de taille homogène. Surveillez la cuisson et ajustez l’assaisonnement avec parcimonie.",
+    "tags": "Viandes, Française, Plancha"
+}

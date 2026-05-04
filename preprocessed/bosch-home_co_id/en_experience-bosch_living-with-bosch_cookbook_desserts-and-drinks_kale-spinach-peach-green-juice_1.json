@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kale Spinach Peach Green Juice",
+    "description": null,
+    "ingredients": "[{\"name\": \"Kale with Stems Discarded\", \"unit\": \"Cup\", \"amount\": \"½\"}, {\"name\": \"Spinach with Stems Discarded\", \"unit\": \"Cup\", \"amount\": \"½\"}, {\"name\": \"Parsley\", \"unit\": \"Stalks\", \"amount\": \"2-3\"}, {\"name\": \"Peach\", \"unit\": \"Cups\", \"amount\": \"2\"}, {\"name\": \"Banana\", \"unit\": \"Slice\", \"amount\": \"½\"}, {\"name\": \"Ginger\", \"unit\": \"Tsp\", \"amount\": \"½\"}, {\"name\": \"Honey\", \"unit\": \"Tsp\", \"amount\": \"½\"}, {\"name\": \"Coconut Water\", \"unit\": \"Cup\", \"amount\": \"1\"}, {\"name\": \"Ice Cubes\", \"unit\": \"No.s\", \"amount\": \"5\"}, {\"name\": \"Chia Seeds\", \"unit\": \"Tbsp\", \"amount\": \"1\"}]",
+    "instructions": "Soak Chia Seeds in water for 10 to 15 minutes. Blend the above ingredients, except for the Chia Seeds in. Pour Chia Seeds to the smoothie. Add ice or water according to your preferred consistency.",
+    "category": null,
+    "prep_time": "20 mins",
+    "cook_time": "0 mins",
+    "total_time": "20 mins",
+    "notes": null,
+    "tags": null
+}

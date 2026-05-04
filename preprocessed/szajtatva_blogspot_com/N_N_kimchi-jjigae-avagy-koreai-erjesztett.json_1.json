@@ -1,0 +1,12 @@
+{
+    "dish_name": "Kimchi jjigae",
+    "description": "Koreai erjesztett káposztás sertéslapocka ragu, csípős, selymes ízharmóniával, tofut és zöldhagymát tartalmazó sűrű leves.",
+    "ingredients": "[{\"name\": \"sertéslapocka vagy tarja\", \"unit\": \"dkg\", \"amount\": \"20-25\"}, {\"name\": \"kimcsi\", \"unit\": \"dkg\", \"amount\": \"25-30\"}, {\"name\": \"közepes keménységű levesbe való tofu (dubu)\", \"unit\": \"dkg\", \"amount\": \"10-15\"}, {\"name\": \"vöröshagyma\", \"unit\": \"fej\", \"amount\": \"0.5\"}, {\"name\": \"újhagyma\", \"unit\": \"szál\", \"amount\": \"2-4\"}, {\"name\": \"jégretek\", \"unit\": \"szelet\", \"amount\": \"4-5\"}, {\"name\": \"szárított tengeri alga (kelp, dashima)\", \"unit\": \"tenyérnyi\", \"amount\": \"1\"}, {\"name\": \"kristálycukor\", \"unit\": \"teáskanálnyi\", \"amount\": \"1\"}, {\"name\": \"anchovi (szardella) szósz\", \"unit\": \"kanálnyi\", \"amount\": \"2\"}, {\"name\": \"szárított szardella (anchovi)\", \"unit\": \"közepes nagyságú\", \"amount\": \"2-3\"}, {\"name\": \"gochujang (csilipaprikakrém)\", \"unit\": \"kanálnyi\", \"amount\": \"1-2\"}, {\"name\": \"gochugaru (csilipaprika pehely)\", \"unit\": \"teáskanálnyi vagy ízlés szerint\", \"amount\": \"1\"}]",
+    "instructions": "1. Elkészítjük az alaplét: retket, algát, szardellát és zöldhagyma gyökeret 6-7 dl hideg vízben főzzük, majd szűrjük.\n2. Kimchi levét kinyomkodjuk, káposztát 2-3 cm-es kockákra vágjuk.\n3. Sertéslapockát 2-3 cm hosszú, 1 cm széles csíkokra, vöröshagymát félhold alakúra vágjuk.\n4. Újhagyma törzsét rombusz alakúra, zöldjét karikákra vágjuk.\n5. Az alaplevet a kimchis fazékba öntjük, fedő alatt kb. 20 percig főzzük.\n6. Hozzáadjuk a cukrot, gochujangot és csilipaprika pelyhet.\n7. Tofut felszeleteljük, a tetejére tesszük, lefedve további 7-10 percig főzzük.\n8. Tálaláskor újhagyma zöldjével díszítjük, főtt rizzsel kínáljuk.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Az étel nagyon csípős, téli estékre ajánlott. A főtt algát és retket külön is elfogyaszthatjuk. A koreai ételek ízharmóniájára figyeljünk: csípős, sós, enyhén édes és savanyú egyszerre legyen.",
+    "tags": "kimchi, koreai, leves, csípős, sertéshús, tofu"
+}

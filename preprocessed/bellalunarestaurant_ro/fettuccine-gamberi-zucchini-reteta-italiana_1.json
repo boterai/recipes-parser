@@ -1,0 +1,12 @@
+{
+    "dish_name": "Fettuccine gamberi e zucchini",
+    "description": "Rețeta italiană care te cucerește, o combinație ușoară, sănătoasă și rafinată, cu paste fettuccine, creveți și dovlecei, gata în mai puțin de 30 de minute.",
+    "ingredients": "[{\"name\": \"unt\", \"unit\": \"linguri\", \"amount\": \"2\"}, {\"name\": \"usturoi zdrobit\", \"unit\": \"căței\", \"amount\": \"2\"}, {\"name\": \"ardei iute mic (pepperoncino)\", \"unit\": \"bucată\", \"amount\": \"1\"}, {\"name\": \"creveți decorticați\", \"unit\": \"g\", \"amount\": \"200\"}, {\"name\": \"dovlecel zucchini tăiat rondele subțiri\", \"unit\": \"bucată\", \"amount\": \"1\"}, {\"name\": \"roșii cherry tăiate pe jumătate\", \"unit\": \"bucăți\", \"amount\": \"6-8\"}, {\"name\": \"fettuccine (sau tagliatelle proaspete)\", \"unit\": \"g\", \"amount\": \"160\"}, {\"name\": \"sare și piper\", \"unit\": null, \"amount\": null}, {\"name\": \"zeamă de lămâie\", \"unit\": null, \"amount\": null}, {\"name\": \"pătrunjel proaspăt tocat\", \"unit\": null, \"amount\": null}]",
+    "instructions": "Fierbe fettuccinele în apă cu sare, conform instrucțiunilor de pe ambalaj sau cu 1 minut mai puțin dacă sunt proaspete. Păstrează o cană din apa în care au fiert. Într-o tigaie mare, topește untul și călește ușor usturoiul împreună cu ardeiul iute. Adaugă creveții și gătește-i câte 1-2 minute pe fiecare parte, până devin rozalii. Pune în tigaie zucchini și roșiile cherry, amestecă ușor și lasă totul să se pătrundă 3-4 minute. Adaugă pastele scurse și puțin din apa în care au fiert, apoi amestecă bine. Oprește focul și adaugă pătrunjelul, puțin suc de lămâie și piper proaspăt.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": "less than 30 minutes",
+    "total_time": null,
+    "notes": "Creveții pot fi înlocuiți cu piept de pui la grătar, somon sau tofu marinat pentru o variantă vegetariană. Zucchini poate fi înlocuit cu dovlecel românesc sau sparanghel tăiat subțire. Se recomandă servirea cu vin alb sec, precum Pinot Grigio sau Vermentino.",
+    "tags": "Italian, pasta, shrimp, zucchini, main course, quick recipe, healthy"
+}

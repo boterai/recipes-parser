@@ -1,0 +1,12 @@
+{
+    "dish_name": "Banánkenyér",
+    "description": "Általában az ilyen banános sütik úgy születnek, hogy van egy-két szomorkodó, felhasználásra váró banán a konyhapulton… Nálam viszont most nem így történt, én kimondottan sütikészítéshez vettem banánt, így nem volt idejük szomorkodni : )",
+    "ingredients": "[{\"name\": \"tojás\", \"unit\": null, \"amount\": \"1\"}, {\"name\": \"zabpehelyliszt\", \"unit\": \"g\", \"amount\": \"70\"}, {\"name\": \"Diawellness Zero6 liszt\", \"unit\": \"g\", \"amount\": \"60\"}, {\"name\": \"zabkorpa\", \"unit\": null, \"amount\": null}, {\"name\": \"holland kakaópor\", \"unit\": \"g\", \"amount\": \"20\"}, {\"name\": \"sütőpor\", \"unit\": \"csapott tk\", \"amount\": \"1\"}, {\"name\": \"kekszfűszer vagy fahéj\", \"unit\": \"kk\", \"amount\": \"1\"}, {\"name\": \"só\", \"unit\": null, \"amount\": \"csipetnyi\"}, {\"name\": \"édesítő (Diawellness négyszeres erejű édesítő)\", \"unit\": \"g\", \"amount\": \"20\"}, {\"name\": \"tej\", \"unit\": \"dl\", \"amount\": \"1\"}, {\"name\": \"olvasztott kókuszolaj\", \"unit\": \"ek\", \"amount\": \"1\"}, {\"name\": \"banán (héj nélkül)\", \"unit\": \"g\", \"amount\": \"85\"}]",
+    "instructions": "A száraz hozzávalókat összekeverjük. A banánt villával áttörjük, hozzáadjuk a tojást, olajat, tejet, elkeverjük, majd beleöntjük a lisztes keveréket. Formába öntjük és előmelegített sütőben megsütjük. (Gázsütőben 4-es fokozaton – ez kb. 180 fok – 35 percig sütöttem, 20 cm-es szilikon formát használtam.)",
+    "category": "Dessert",
+    "prep_time": null,
+    "cook_time": "35 minutes",
+    "total_time": null,
+    "notes": "A Diawellness Zero6 liszt helyettesíthető zabkorpával. A sütő hőmérséklete kb. 180 fok, sütési idő 35 perc, 20 cm-es szilikon formában sütve.",
+    "tags": "banán,ch csökkentett,diawellness,egyszerű,zabpehelyliszt,zero6"
+}

@@ -1,0 +1,12 @@
+{
+    "dish_name": "Poêlée de kielbasa et de chou",
+    "description": "Une poêlée facile et savoureuse de saucisse kielbasa fumée, oignon, chou et vinaigrette piquante à la moutarde moulue sur pierre.",
+    "ingredients": "[{\"name\": \"huile d'olive\", \"unit\": \"tasse\", \"amount\": \"1/4\"}, {\"name\": \"vinaigre de vin rouge\", \"unit\": \"cuillères à soupe\", \"amount\": \"2\"}, {\"name\": \"moutarde moulue sur pierre\", \"unit\": \"cuillères à soupe\", \"amount\": \"1.5\"}, {\"name\": \"poudre d’ail\", \"unit\": \"cuillère à café\", \"amount\": \"1/4\"}, {\"name\": \"sel\", \"unit\": \"cuillère à café\", \"amount\": \"1/4\"}, {\"name\": \"poivre fraîchement concassé\", \"unit\": null, \"amount\": null}, {\"name\": \"kielbasa\", \"unit\": \"oz\", \"amount\": \"14\"}, {\"name\": \"huile d'olive\", \"unit\": \"cuillère à soupe\", \"amount\": \"1\"}, {\"name\": \"oignon\", \"unit\": null, \"amount\": null}, {\"name\": \"chou\", \"unit\": \"tasses\", \"amount\": \"6\"}, {\"name\": \"eau\", \"unit\": null, \"amount\": \"quelques cuillères à soupe\"}]",
+    "instructions": "1. Préparer la vinaigrette en mélangeant huile d'olive, vinaigre de vin rouge, moutarde moulue, poudre d'ail, sel et poivre. 2. Trancher le kielbasa et le faire sauter dans une grande poêle avec de l'huile d'olive jusqu'à coloration. 3. Ajouter l'oignon coupé en dés et faire sauter jusqu'à tendreté. 4. Ajouter le chou en lanières avec sel, poivre et un peu d'eau, faire sauter jusqu'à tendreté. 5. Ajouter la vinaigrette en deux fois en remuant bien. 6. Servir chaud.",
+    "category": "Main Course",
+    "prep_time": null,
+    "cook_time": null,
+    "total_time": null,
+    "notes": "Le persil frais est optionnel pour la décoration. On peut ajouter des nouilles aux œufs larges cuites pour une version plus consistante.",
+    "tags": "kielbasa,chou,poêlée,saucisse,moutarde,recette facile"
+}

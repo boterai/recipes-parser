@@ -1,0 +1,12 @@
+{
+    "dish_name": "Bánh Flan - Crème Caramel - Kem Caramel",
+    "description": "Cách làm bánh Flan với hai công thức kiểu Pháp và kiểu Việt Nam, bao gồm phần Flan và Caramel, hướng dẫn chi tiết từng bước từ chuẩn bị nguyên liệu, chưng caramel, làm hỗn hợp trứng sữa, đến nướng hoặc hấp bánh.",
+    "ingredients": "[{\"name\": \"trứng gà\", \"unit\": \"quả\", \"amount\": \"3\"}, {\"name\": \"lòng đỏ trứng gà\", \"unit\": \"lòng đỏ\", \"amount\": \"2\"}, {\"name\": \"đường\", \"unit\": \"gram\", \"amount\": \"70\"}, {\"name\": \"sữa tươi không đường\", \"unit\": \"ml\", \"amount\": \"400\"}, {\"name\": \"kem tươi (whipping cream)\", \"unit\": \"ml\", \"amount\": \"150\"}, {\"name\": \"vanilla extract\", \"unit\": \"thìa cafe\", \"amount\": \"1\"}, {\"name\": \"đường (phần caramel)\", \"unit\": \"gram\", \"amount\": \"70\"}, {\"name\": \"nước\", \"unit\": \"ml\", \"amount\": \"30-40\"}, {\"name\": \"nước cốt chanh\", \"unit\": \"thìa cafe\", \"amount\": \"1\"}, {\"name\": \"sữa đặc có đường\", \"unit\": \"gram\", \"amount\": \"150\"}, {\"name\": \"sữa tươi không đường (công thức kiểu Việt Nam)\", \"unit\": \"ml\", \"amount\": \"500\"}]",
+    "instructions": "Chuẩn bị khuôn làm Flan, quét một lớp bơ mỏng lên thành trong của khuôn. Chưng nước đường Caramel: cho đường và nước vào nồi, đun lửa vừa đến khi nước đường chuyển màu vàng mật ong, tắt bếp, cho nước cốt chanh vào, chia đều ra các khuôn và để đông cứng. Làm Flan: đánh tan trứng và đường, đun nóng sữa và kem tươi (hoặc sữa đặc và sữa tươi theo công thức kiểu Việt Nam) đến ấm, từ từ đổ vào hỗn hợp trứng, thêm vanilla, lọc qua rây, chia vào khuôn. Nướng hoặc hấp Flan đến chín: nướng cách thủy ở 150-160 độ C trong 25-40 phút hoặc hấp cách thủy trong 25-35 phút, kiểm tra bằng que tăm. Để Flan nguội rồi cho vào tủ lạnh tối thiểu 2-3 tiếng hoặc qua đêm. Khi ăn, ngâm cốc đựng Flan vào nước nóng, dùng dao lách quanh thành khuôn rồi úp ra đĩa.",
+    "category": "Dessert",
+    "prep_time": "15 minutes",
+    "cook_time": "25-35 minutes",
+    "total_time": "40-50 minutes",
+    "notes": "Có hai công thức: kiểu Pháp dùng sữa tươi và kem tươi; kiểu Việt Nam dùng sữa tươi và sữa đặc có đường. Lưu ý khi chưng caramel không để cháy quá đậm để tránh vị đắng. Nên đun sữa ấm trước khi trộn với trứng để bánh mịn và thơm hơn. Có nhiều mẹo khắc phục các vấn đề thường gặp khi làm Flan như rỗ, mặt khô, không đông, mùi trứng tanh, vỡ bánh khi lấy ra.",
+    "tags": "Flan, Crème Caramel, Kem Caramel, Dessert, Vietnamese recipe, French recipe, caramel, custard"
+}
