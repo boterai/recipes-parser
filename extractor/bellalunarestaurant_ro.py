@@ -14,6 +14,9 @@ from extractor.base import BaseRecipeExtractor, process_directory
 
 logger = logging.getLogger(__name__)
 
+# Minimum character length for a paragraph to be considered an instruction step
+_MIN_INSTRUCTION_LENGTH = 15
+
 
 # ---------------------------------------------------------------------------
 # Romanian ingredient unit patterns
@@ -143,8 +146,9 @@ class BellalunarestaurantRoExtractor(BaseRecipeExtractor):
         text = raw.strip()
 
         # Strip em-dash / hyphen descriptions: "Ingredient – description"
-        # Only strip when there is a space before the dash to avoid stripping ranges like "6-8"
-        text = re.sub(r'\s+[–-]\s+.+$', '', text).strip()
+        # The lookahead (?=[A-Za-zÀ-ÿ]) ensures we only strip when followed by text,
+        # preventing accidental stripping of numeric ranges like "6 - 8"
+        text = re.sub(r'\s+[–-]\s+(?=[A-Za-zÀ-ÿ]).+$', '', text).strip()
 
         # Remove only advisory parenthetical notes (not ingredient identifiers like "(pepperoncino)")
         text = re.sub(
@@ -206,8 +210,16 @@ class BellalunarestaurantRoExtractor(BaseRecipeExtractor):
             unit: Optional[str] = None
             if re.match(r'^1$', amount_str):
                 unit = 'bucată'
-            elif re.search(r'[-–]', amount_str) or (amount_str.isdigit() and int(amount_str) > 1):
+            elif re.search(r'[-–]', amount_str):
+                # Range like "6-8"
                 unit = 'bucăți'
+            else:
+                try:
+                    val = float(amount_str.replace(',', '.'))
+                    if val > 1:
+                        unit = 'bucăți'
+                except ValueError:
+                    pass
 
             return {'name': name, 'amount': amount_str, 'unit': unit}
 
@@ -336,8 +348,8 @@ class BellalunarestaurantRoExtractor(BaseRecipeExtractor):
                         continue
                     # Include only if it looks like an instruction:
                     # - starts with a step number, OR
-                    # - is a meaningful sentence (longer than 15 chars)
-                    if re.match(r'^\d+[\.\)]\s', raw) or len(raw) > 15:
+                    # - is a meaningful sentence (longer than _MIN_INSTRUCTION_LENGTH chars)
+                    if re.match(r'^\d+[\.\)]\s', raw) or len(raw) > _MIN_INSTRUCTION_LENGTH:
                         # Strip leading step number prefix for cleaner output
                         raw_clean = re.sub(r'^\d+[\.\)]\s*', '', raw)
                         key = re.sub(r'\s+', ' ', raw_clean).lower()[:60]
