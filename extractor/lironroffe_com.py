@@ -9,6 +9,7 @@ import re
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
+from urllib.parse import urlparse
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
@@ -591,7 +592,6 @@ class LironroffeComExtractor(BaseRecipeExtractor):
                 if src and not src.startswith('data:'):
                     # Only include images hosted on the recipe site itself
                     try:
-                        from urllib.parse import urlparse
                         parsed = urlparse(src)
                         if parsed.netloc in ('lironroffe.com', 'www.lironroffe.com'):
                             urls.append(src)
@@ -602,7 +602,7 @@ class LironroffeComExtractor(BaseRecipeExtractor):
             return None
 
         # Deduplicate preserving order
-        seen: set = set()
+        seen: set[str] = set()
         unique: List[str] = []
         for url in urls:
             if url and url not in seen:
