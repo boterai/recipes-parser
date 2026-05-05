@@ -14,6 +14,7 @@ import re
 import sys
 from pathlib import Path
 from typing import Optional
+from urllib.parse import urlparse
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
@@ -504,18 +505,25 @@ class DagbogfrajapanBlogspotComExtractor(BaseRecipeExtractor):
         urls: list[str] = []
         seen: set[str] = set()
 
+        def _is_blogger_cdn(url: str) -> bool:
+            """Return True only if the URL's hostname is the Blogger CDN domain."""
+            try:
+                return urlparse(url).hostname == 'blogger.googleusercontent.com'
+            except Exception:
+                return False
+
         for img in content.find_all('img'):
             # Try parent anchor first (full-size image)
             parent = img.parent
             if hasattr(parent, 'name') and parent.name == 'a':
                 href = parent.get('href', '')
-                if href and 'blogger.googleusercontent.com' in href and href not in seen:
+                if href and _is_blogger_cdn(href) and href not in seen:
                     seen.add(href)
                     urls.append(href)
                     continue
             # Fallback: img src (thumbnail)
             src = img.get('src', '')
-            if src and 'blogger.googleusercontent.com' in src and src not in seen:
+            if src and _is_blogger_cdn(src) and src not in seen:
                 seen.add(src)
                 urls.append(src)
 
@@ -569,7 +577,7 @@ def main() -> None:
         process_directory(DagbogfrajapanBlogspotComExtractor, directory)
         return
     print(f'Directory not found: {directory}')
-    print('Usage: python dagbogfrajapan_blogspot_com.py')
+    print('Usage: python extractor/dagbogfrajapan_blogspot_com.py')
 
 
 if __name__ == '__main__':
