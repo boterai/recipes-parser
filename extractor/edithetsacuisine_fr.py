@@ -185,7 +185,7 @@ class EdithetsacuisineFrExtractor(BaseRecipeExtractor):
         Returns (cleaned_name, extracted_unit_or_None).
         """
         for unit in _FRENCH_UNITS_SORTED:
-            pattern = rf"^({re.escape(unit)})\s+(?:de\s+|d[e\u2019']\s*)(.+)$"
+            pattern = rf"^({re.escape(unit)})\s+(?:de\s+|d['\u2019]\s*)(.+)$"
             m = re.match(pattern, name, re.IGNORECASE)
             if m:
                 return cls._clean_name(m.group(2)), m.group(1)
@@ -497,20 +497,21 @@ class EdithetsacuisineFrExtractor(BaseRecipeExtractor):
             return None
 
         tags: list = []
+        seen_lower: set = set()
 
         def _add(value):
             """Add a tag if it's non-empty and not already present (case-insensitive)."""
-            lower_tags = [t.lower() for t in tags]
             if isinstance(value, list):
                 for v in value:
                     v_str = str(v).strip()
-                    if v_str and v_str.lower() not in lower_tags:
+                    if v_str and v_str.lower() not in seen_lower:
                         tags.append(v_str)
-                        lower_tags.append(v_str.lower())
+                        seen_lower.add(v_str.lower())
             elif value:
                 v_str = str(value).strip()
-                if v_str and v_str.lower() not in lower_tags:
+                if v_str and v_str.lower() not in seen_lower:
                     tags.append(v_str)
+                    seen_lower.add(v_str.lower())
 
         _add(recipe.get("recipeCategory"))
         _add(recipe.get("recipeCuisine"))
