@@ -16,7 +16,7 @@ from extractor.base import BaseRecipeExtractor, process_directory
 logger = logging.getLogger(__name__)
 
 
-class CuinawebCaExtractor(BaseRecipeExtractor):
+class CuisinawebCaExtractor(BaseRecipeExtractor):
     """Экстрактор для cuisinaweb.ca (использует WPRM и JSON-LD)"""
 
     # ------------------------------------------------------------------
@@ -474,7 +474,7 @@ def main():
     preprocessed_dir = os.path.join('preprocessed', 'cuisinaweb_ca')
 
     if os.path.exists(preprocessed_dir) and os.path.isdir(preprocessed_dir):
-        process_directory(CuinawebCaExtractor, preprocessed_dir)
+        process_directory(CuisinawebCaExtractor, preprocessed_dir)
         return
 
     print(f'Директория не найдена: {preprocessed_dir}')
