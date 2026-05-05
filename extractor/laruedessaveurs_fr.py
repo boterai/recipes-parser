@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 class LaruedessaveursExtractor(BaseRecipeExtractor):
     """Экстрактор для laruedessaveurs.fr"""
 
-    # French units regex for ingredient parsing
+    # French units regex for ingredient parsing (ordered longest-first)
     _FRENCH_UNITS = (
         r'cuillères? à soupe'
         r'|cuillères? à café'
@@ -35,15 +35,31 @@ class LaruedessaveursExtractor(BaseRecipeExtractor):
         r'|pointes?'
         r'|feuilles?'
         r'|tranches?'
-        r'|oz'
-        r'|lb'
+        r'|oz\.?'
+        r'|lb\.?'
         r'|kg'
         r'|ml'
         r'|cl'
         r'|dl'
-        r'|g'
-        r'|l'
+        r'|g\b'
+        r'|l\b'
     )
+
+    # Stop words / prepositions that end an ingredient name or prevent name start
+    _NAME_STOP = (
+        r'(?:\s*[,.]'
+        r'|\s+(?:et\b|ou\b|dans\b|avec\b|sur\b|en\b|au\b|aux\b|pour\b|puis\b|jusqu\b)'
+        r'|$)'
+    )
+    _NAME_ANTI_START = (
+        r'(?![Ee]n\b|[Dd]ans\b|[Aa]vec\b|[Ss]ur\b|[Pp]our\b|[Àà]\b|[Pp]uis\b|[Oo]u\b)'
+    )
+
+    # Non-food words to filter out of prose-extracted ingredient names
+    _NON_FOOD_NAMES = frozenset([
+        'pouces', 'cm', 'mm', 'minutes', 'secondes', 'heures', 'degrés',
+        'fois', 'peu', 'environ', 'environ', 'moitié', 'quart', 'tiers',
+    ])
 
     def _get_yoast_article_data(self) -> Optional[dict]:
         """Извлечение Article-блока из Yoast JSON-LD"""
@@ -224,10 +240,119 @@ class LaruedessaveursExtractor(BaseRecipeExtractor):
                         if ingredients:
                             break
 
+        # 3. Последний вариант: извлечение из прозаического текста инструкций
+        if not ingredients:
+            ingredients = self._extract_ingredients_from_prose()
+
         if not ingredients:
             return None
 
         return json.dumps(ingredients, ensure_ascii=False)
+
+    def _extract_ingredients_from_prose(self) -> List[dict]:
+        """
+        Извлекает ингредиенты из прозаических параграфов (пошаговые инструкции).
+        Используется, когда на странице нет структурированного блока ингредиентов.
+        """
+        # Compile patterns lazily using class constants
+        # Include typographic apostrophes (U+2019 ' and U+2018 ') in name char class
+        _name_chars = r"A-Za-zÀ-ÿœæ\s\d'\u2019\u2018\-"
+        # First char must be a letter (prevents space-bypassing the anti-start lookahead)
+        _name_pat = r'[A-Za-zÀ-ÿœæ][' + _name_chars + r']*?'
+        ingr_unit_pat = re.compile(
+            r'(?<![A-Za-zÀ-ÿœæ])'
+            r'((?:\d+\s+)?\d+(?:[,./]\d+)?)\s*'
+            r'(' + self._FRENCH_UNITS + r')(?!\w)\s*'
+            r"(?:de?\s+|d['\u2019\u2018]\s*)?"
+            + self._NAME_ANTI_START
+            + r'(' + _name_pat + r')'
+            + self._NAME_STOP,
+            re.IGNORECASE
+        )
+        ingr_no_unit_pat = re.compile(
+            r'(?<![A-Za-zÀ-ÿœæ/])'
+            r'((?:\d+\s+)?\d+(?:[,./]\d+)?)\s+'
+            r'(?!' + self._FRENCH_UNITS + r')'
+            + self._NAME_ANTI_START
+            + r'(' + _name_pat + r')'
+            + self._NAME_STOP,
+            re.IGNORECASE
+        )
+
+        # Collect step paragraphs from the step-by-step section
+        paragraphs = self._get_step_paragraphs()
+        if not paragraphs:
+            # Fall back to all paragraphs in entry-content
+            entry = self.soup.find('div', class_='entry-content')
+            if entry:
+                paragraphs = [
+                    p.get_text(separator=' ', strip=True)
+                    for p in entry.find_all('p')
+                    if len(p.get_text(strip=True)) > 30
+                ]
+
+        ingredients: List[dict] = []
+        seen_names: set = set()
+
+        for para in paragraphs:
+            # Normalise fractions and decimal comma
+            para = para.replace('¼', '1/4').replace('½', '1/2').replace('¾', '3/4')
+            para = para.replace('⅓', '1/3').replace('⅔', '2/3').replace('⅛', '1/8')
+            para = re.sub(r'(\d),(\d)', r'\1.\2', para)
+
+            for m in ingr_unit_pat.finditer(para):
+                amount_str, unit, name = m.group(1), m.group(2), m.group(3).strip()
+                name = re.sub(r'\s+', ' ', name).strip().rstrip('.,')
+                name_key = name.lower()
+                if not name or len(name) < 2 or name_key in self._NON_FOOD_NAMES:
+                    continue
+                if name_key not in seen_names:
+                    seen_names.add(name_key)
+                    # Normalise unit: strip trailing dot from "oz." / "lb."
+                    unit = unit.rstrip('.')
+                    ingredients.append({
+                        'name': name,
+                        'amount': self._parse_amount(amount_str),
+                        'unit': unit,
+                    })
+
+            for m in ingr_no_unit_pat.finditer(para):
+                amount_str, name = m.group(1), m.group(2).strip()
+                name = re.sub(r'\s+', ' ', name).strip().rstrip('.,')
+                name_key = name.lower()
+                if not name or len(name) < 2 or name_key in self._NON_FOOD_NAMES:
+                    continue
+                if name_key not in seen_names:
+                    seen_names.add(name_key)
+                    ingredients.append({
+                        'name': name,
+                        'amount': self._parse_amount(amount_str),
+                        'unit': None,
+                    })
+
+        return ingredients
+
+    def _get_step_paragraphs(self) -> List[str]:
+        """Возвращает текстовые параграфы из секции пошаговых фото/инструкций."""
+        entry = self.soup.find('div', class_='entry-content')
+        if not entry:
+            return []
+        paragraphs = []
+        for h2 in entry.find_all('h2'):
+            h2_text = h2.get_text().lower()
+            if any(kw in h2_text for kw in ['étape', 'step', 'comment faire', 'comment préparer', 'préparation']):
+                sibling = h2.find_next_sibling()
+                while sibling:
+                    if sibling.name in ['h2', 'h3'] and sibling != h2:
+                        break
+                    if sibling.name == 'p':
+                        text = sibling.get_text(separator=' ', strip=True)
+                        if text and len(text) > 20:
+                            paragraphs.append(text)
+                    sibling = sibling.find_next_sibling()
+                if paragraphs:
+                    break
+        return paragraphs
 
     def extract_instructions(self) -> Optional[str]:
         """Извлечение инструкций приготовления"""
@@ -246,22 +371,9 @@ class LaruedessaveursExtractor(BaseRecipeExtractor):
                 return '. '.join(steps) + '.'
 
         # 2. Секция "Photos étape par étape" или аналогичная
-        entry = self.soup.find('div', class_='entry-content')
-        if entry:
-            for h2 in entry.find_all('h2'):
-                h2_text = h2.get_text().lower()
-                if any(kw in h2_text for kw in ['étape', 'step', 'comment faire', 'comment préparer', 'préparation']):
-                    sibling = h2.find_next_sibling()
-                    while sibling:
-                        if sibling.name in ['h2', 'h3'] and sibling != h2:
-                            break
-                        if sibling.name == 'p':
-                            text = self.clean_text(sibling.get_text(separator=' ', strip=True))
-                            if text and len(text) > 20:
-                                steps.append(text)
-                        sibling = sibling.find_next_sibling()
-                    if steps:
-                        return ' '.join(steps)
+        paragraphs = self._get_step_paragraphs()
+        if paragraphs:
+            return ' '.join(self.clean_text(p) for p in paragraphs)
 
         return None
 
