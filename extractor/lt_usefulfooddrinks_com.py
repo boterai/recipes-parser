@@ -228,7 +228,7 @@ class LtUsefulfooddrinksComExtractor(BaseRecipeExtractor):
 
         # ── Reversed format: "name - amount [unit]" ────────────────────────────
         rev = re.match(
-            r'^(.+?)\s*[-–]\s*(\d+(?:\.\d+)?(?:\s*[-–]\s*\d+(?:\.\d+)?)?)'
+            r'^(.+?)\s*[-–]\s*(\d+(?:/\d+)?(?:\.\d+)?(?:\s*[-–]\s*\d+(?:/\d+)?(?:\.\d+)?)?)'
             r'\s*(' + LT_UNITS_SHORT_PATTERN + r')?\s*$',
             text, re.IGNORECASE
         )
@@ -239,8 +239,9 @@ class LtUsefulfooddrinksComExtractor(BaseRecipeExtractor):
             if r_name:
                 return {'name': r_name, 'amount': r_amount, 'unit': r_unit}
 
-        # Amount pattern: integer, decimal, range with - or –
-        amount_pat = r'(\d+(?:\.\d+)?(?:\s*[-–]\s*\d+(?:\.\d+)?)?)'
+        # Amount pattern: integer, decimal, fraction (1/3), or range with - or –
+        # Examples: "1", "1.5", "1/3", "500-700", "0.5-0.7", "1/3-1/2"
+        amount_pat = r'(\d+(?:/\d+)?(?:\.\d+)?(?:\s*[-–]\s*\d+(?:/\d+)?(?:\.\d+)?)?)'
 
         # ── Amount+unit concatenated (no space): "180g sviesto" ────────────────
         m_concat = re.match(
@@ -297,11 +298,23 @@ class LtUsefulfooddrinksComExtractor(BaseRecipeExtractor):
     @staticmethod
     def _strip_lt_qualifiers(name: str) -> str:
         """Remove common Lithuanian parenthetical qualifiers from an ingredient name."""
+        # Remove trailing parenthetical expressions: "(priklausomai nuo dydžio)", "(pasirinktinai)", etc.
+        name = re.sub(r'\s*\([^)]+\)\s*$', '', name)
         # ", priklausomai nuo ..." (depending on …)
         name = re.sub(r',\s*priklausomai\s+nuo\s+.*$', '', name, flags=re.IGNORECASE)
         # ", pagal skonį" (to taste)
         name = re.sub(r',?\s*pagal\s+skon[įi]\s*$', '', name, flags=re.IGNORECASE)
+        # "keptuvės sutepimui" (for greasing the pan) and similar cooking-purpose phrases
+        name = re.sub(r',?\s*keptuvės\s+sutepimui\s*$', '', name, flags=re.IGNORECASE)
+        name = re.sub(r',?\s*sutepimui\s*$', '', name, flags=re.IGNORECASE)
         return name.strip()
+
+    def _primary_section_has_ol(self, elements=None) -> bool:
+        """Return True if the primary recipe section contains at least one OL element."""
+        if elements is None:
+            elements = self._get_elements()
+        section_elements = self._get_recipe_section_elements(elements)
+        return any(e.name == 'ol' for e in section_elements)
 
     def _extract_ingredients_from_section(self, section_elements) -> List[Dict[str, Any]]:
         """Extract ingredients from ALL non-TOC UL elements in *section_elements*."""
@@ -320,15 +333,39 @@ class LtUsefulfooddrinksComExtractor(BaseRecipeExtractor):
         return ingredients
 
     def extract_ingredients(self) -> Optional[str]:
-        """Extract ingredients from ALL ULs in the primary recipe section."""
+        """
+        Extract ingredients from recipe ULs.
+
+        When the primary recipe section contains an OL (a proper recipe card with
+        ordered steps), only the ULs within that section are used — this prevents
+        multi-recipe "collection" articles (e.g., Cookies) from merging dozens of
+        unrelated ingredient lists.
+
+        When the primary section has NO OL (paragraph-based steps, e.g., the cutlets
+        page where each section describes a different recipe variant), ALL non-TOC ULs
+        in the article body are collected and deduplicated by normalised name so that
+        ingredients from every variant are represented.
+        """
         try:
             elements = self._get_elements()
-            section_elements = self._get_recipe_section_elements(elements)
-            ingredients = self._extract_ingredients_from_section(section_elements)
 
-            # Fallback: use entire article body
-            if not ingredients:
-                ingredients = self._extract_ingredients_from_section(elements)
+            if self._primary_section_has_ol(elements):
+                # Single-recipe card: use only the detected recipe section's ULs
+                section_elements = self._get_recipe_section_elements(elements)
+                ingredients = self._extract_ingredients_from_section(section_elements)
+                # Final fallback
+                if not ingredients:
+                    ingredients = self._extract_ingredients_from_section(elements)
+            else:
+                # Multi-variant article: collect from ALL ULs, deduplicate by name
+                all_ingredients = self._extract_ingredients_from_section(elements)
+                seen_names: set = set()
+                ingredients: List[Dict[str, Any]] = []
+                for ing in all_ingredients:
+                    norm = ing['name'].lower().strip()
+                    if norm not in seen_names:
+                        seen_names.add(norm)
+                        ingredients.append(ing)
 
             return json.dumps(ingredients, ensure_ascii=False) if ingredients else None
 
@@ -338,30 +375,45 @@ class LtUsefulfooddrinksComExtractor(BaseRecipeExtractor):
 
     def extract_instructions(self) -> Optional[str]:
         """
-        Extract cooking instructions from the primary recipe section.
+        Extract cooking instructions.
 
-        Priority order within the section:
-        1. OL (ordered list) elements
-        2. Numbered paragraphs (starting with "1.", "2.", …) that follow the
-           ingredients UL
-        3. Regular paragraphs that follow the ingredients UL (Charlotte-style)
+        When the primary recipe section contains an OL, only that section's first OL
+        is used (prevents "collection" articles from merging dozens of unrelated step
+        lists).
+
+        When the primary section has NO OL (paragraph-based article like the cutlets
+        page), ALL OLs in the article body are collected and re-numbered in sequence,
+        capturing every recipe variant's steps.
+
+        Paragraph fallback is used only when no OLs exist in the article at all.
         """
         try:
             elements = self._get_elements()
             section_elements = self._get_recipe_section_elements(elements)
             steps: List[str] = []
 
-            # ── 1. OL elements within recipe section ──────────────────────────
-            for elem in section_elements:
-                if elem.name == 'ol':
-                    for idx, li in enumerate(elem.find_all('li'), 1):
-                        text = self.clean_text(li.get_text(separator=' ', strip=True))
-                        if text:
-                            steps.append(f"{idx}. {text}")
-                    if steps:
-                        break  # Use only the first OL found
+            if self._primary_section_has_ol(elements):
+                # ── Single-recipe card: use the first OL in the recipe section ──
+                for elem in section_elements:
+                    if elem.name == 'ol':
+                        for idx, li in enumerate(elem.find_all('li'), 1):
+                            text = self.clean_text(li.get_text(separator=' ', strip=True))
+                            if text:
+                                steps.append(f"{idx}. {text}")
+                        if steps:
+                            break  # First OL only
+            else:
+                # ── Multi-variant article: collect ALL OLs in article, re-numbered ──
+                step_idx = 1
+                for elem in elements:
+                    if elem.name == 'ol':
+                        for li in elem.find_all('li'):
+                            text = self.clean_text(li.get_text(separator=' ', strip=True))
+                            if text:
+                                steps.append(f"{step_idx}. {text}")
+                                step_idx += 1
 
-            # ── 2 & 3. Paragraphs after the first non-TOC UL in the section ──
+            # ── Paragraph fallback (article with no OLs anywhere) ────────────
             if not steps:
                 ul_passed = False
                 for elem in section_elements:
@@ -376,7 +428,7 @@ class LtUsefulfooddrinksComExtractor(BaseRecipeExtractor):
                         ):
                             steps.append(clean)
                     elif ul_passed and elem.name in ('h2', 'h3'):
-                        break  # Left the recipe section
+                        break
 
             return '\n'.join(steps) if steps else None
 
