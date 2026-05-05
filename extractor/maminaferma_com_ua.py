@@ -6,7 +6,7 @@ import json
 import logging
 import re
 import sys
-from copy import copy as _copy_tag
+from copy import copy as _shallow_copy
 from pathlib import Path
 from typing import Optional
 
@@ -115,7 +115,7 @@ def _li_clean_text(li_tag) -> str:
     Return clean text of an ingredient <li> tag.
     Removes <a> link text (promotional/navigation links) and strips extra whitespace.
     """
-    tag = _copy_tag(li_tag)
+    tag = _shallow_copy(li_tag)
     # Remove anchor tags (keep their text only for now — strip the surrounding context)
     for a in tag.find_all("a"):
         a.decompose()
@@ -413,7 +413,7 @@ class MaminafermaComUaExtractor(BaseRecipeExtractor):
 
         step_texts: list[str] = []
         in_notes = False
-        passed_notes = False   # once we enter notes we disable instruction sub-headings
+        encountered_notes_section = False   # once we enter notes we disable instruction sub-headings
         step_counter = 0
         next_ul_is_instruction: bool = False
         pending_heading: Optional[str] = None   # buffered section header
@@ -427,15 +427,15 @@ class MaminafermaComUaExtractor(BaseRecipeExtractor):
                 txt = el.get_text(strip=True)
                 if notes_heading.search(txt):
                     in_notes = True
-                    passed_notes = True
+                    encountered_notes_section = True
                     next_ul_is_instruction = False
                     pending_heading = None
                     continue
                 in_notes = False
                 if instruction_signal.search(txt):
                     next_ul_is_instruction = True
-                    if passed_notes:
-                        passed_notes = False
+                    if encountered_notes_section:
+                        encountered_notes_section = False
                     # Buffer the heading — only add it once we actually collect steps
                     if step_counter > 0:
                         pending_heading = self.clean_text(txt)
