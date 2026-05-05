@@ -546,9 +546,13 @@ class LacuisinedemamereFrExtractor(BaseRecipeExtractor):
             ingredients = self.extract_ingredients()
             instructions = self.extract_instructions()
             category = self.extract_category()
-            prep_time = self.extract_prep_time()
-            cook_time = self.extract_cook_time()
-            total_time = self.extract_total_time()
+
+            # Parse all times in a single pass to avoid re-parsing the same section
+            times = self._extract_times_from_section()
+            prep_time = times.get('prep')
+            cook_time = times.get('cook')
+            total_time = _sum_durations([prep_time, cook_time, times.get('rest')])
+
             notes = self.extract_notes()
             tags = self.extract_tags()
             image_urls = self.extract_image_urls()
