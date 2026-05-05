@@ -68,7 +68,15 @@ class EncyclopediacookingComExtractor(BaseRecipeExtractor):
     # ------------------------------------------------------------------
 
     def _get_content_area(self):
-        """Return the main content element (center or p tag inside data div)."""
+        """Return tuple of (main content element, layout type string).
+
+        Layout types:
+          'font'    — <center> with direct <font> children
+          'b'       — <center> with a direct <b> child
+          'p'       — no <center>, but a <p> inside data div
+          'center'  — <center> without recognised child structure
+          'unknown' — no data div found
+        """
         data_div = self.soup.find('div', class_='data')
         if not data_div:
             return None, 'unknown'
@@ -766,7 +774,13 @@ class EncyclopediacookingComExtractor(BaseRecipeExtractor):
 
         urls = []
         for img in content.find_all('img'):
-            src = img.get('src') or img.get('alt') or ''
+            # On encyclopediacooking.com the alt attribute often mirrors the src URL
+            src = img.get('src', '') or ''
+            if not src.startswith('http'):
+                # Fallback: check alt only if it looks like an absolute URL
+                alt = img.get('alt', '') or ''
+                if alt.startswith('http'):
+                    src = alt
             if src.startswith('http') and 'encyclopediacooking' in src:
                 if src not in urls:
                     urls.append(src)
