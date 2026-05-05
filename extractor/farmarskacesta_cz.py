@@ -1,5 +1,5 @@
 """
-Экстрактор данных рецептов для сайта farmarskacesta.cz
+Recipe data extractor for farmarskacesta.cz
 """
 
 import json
@@ -118,7 +118,7 @@ class FarmarskacestaExtractor(BaseRecipeExtractor):
         hours = 0
         minutes = 0
 
-        h_match = re.search(r'(\d+)\s*hodin[ua]?', raw, re.IGNORECASE)
+        h_match = re.search(r'(\d+)\s*hodin[au]?', raw, re.IGNORECASE)
         m_match = re.search(r'(\d+)\s*minut', raw, re.IGNORECASE)
 
         if h_match:
@@ -126,10 +126,11 @@ class FarmarskacestaExtractor(BaseRecipeExtractor):
         if m_match:
             minutes = int(m_match.group(1))
 
+        hour_word = 'hour' if hours == 1 else 'hours'
         if hours and minutes:
-            return f'{hours} hour {minutes} minutes'
+            return f'{hours} {hour_word} {minutes} minutes'
         if hours:
-            return f'{hours} hour'
+            return f'{hours} {hour_word}'
         if minutes:
             return f'{minutes} minutes'
 
@@ -430,39 +431,10 @@ class FarmarskacestaExtractor(BaseRecipeExtractor):
             return f'{minutes} minutes'
         hours = minutes // 60
         mins = minutes % 60
+        hour_word = 'hour' if hours == 1 else 'hours'
         if mins:
-            return f'{hours} hour {mins} minutes'
-        return f'{hours} hour'
-
-    @staticmethod
-    def _normalize_time_value(raw: str) -> Optional[str]:
-        """
-        Convert a Czech time fragment like '10 minut', '45 minut',
-        '1 hodina', '1 hodinu', '1 hodina 30 minut' into English.
-        """
-        raw = raw.strip()
-        hours = 0
-        minutes = 0
-
-        h_match = re.search(r'(\d+)\s*hodin[au]?', raw, re.IGNORECASE)
-        m_match = re.search(r'(\d+)\s*minut', raw, re.IGNORECASE)
-
-        if h_match:
-            hours = int(h_match.group(1))
-        if m_match:
-            minutes = int(m_match.group(1))
-
-        if hours and minutes:
-            return f'{hours} hour {minutes} minutes'
-        if hours:
-            return f'{hours} hour'
-        if minutes:
-            return f'{minutes} minutes'
-
-        num = re.search(r'\d+', raw)
-        if num:
-            return f'{num.group()} minutes'
-        return None
+            return f'{hours} {hour_word} {mins} minutes'
+        return f'{hours} {hour_word}'
 
     def extract_category(self) -> Optional[str]:
         """Extract category from JSON-LD articleSection."""
