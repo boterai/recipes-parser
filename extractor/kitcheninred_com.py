@@ -251,7 +251,7 @@ class KitcheninredComExtractor(BaseRecipeExtractor):
                 unit = unit_m.group(1).lower()
             elif rest and len(rest.split()) <= 3:
                 # Если оставшийся фрагмент короткий — считаем его единицей
-                unit = rest if rest else None
+                unit = rest or None
 
             return num_str, unit
 
