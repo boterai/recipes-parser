@@ -534,10 +534,10 @@ class Naine50PlusEeExtractor(BaseRecipeExtractor):
         promo_patterns = [
             r"leiad siit",
             r"e-raamat",
-            r"minu (uue|uhiuue|maitsvate|uhiuue)",
+            r"minu (uue|uhiuue|maitsvate)",
             r"retsepti leiad",
             r"vaata siit",
-            r"vaata\s+\w+\s+(retsept|koogi|tordi|k\u00fcpse)",
+            r"vaata\s+\w+\s+(retsept|koogi|tordi|küpsetis)",
             r"ostunimekirjaga",
             r"tellimuse kinnituse",
             r"veel ideesid",
@@ -881,8 +881,6 @@ class Naine50PlusEeExtractor(BaseRecipeExtractor):
 
 def main() -> None:
     """Process all HTML files in the preprocessed/naine50pluss_ee directory."""
-    import os
-
     repo_root = Path(__file__).parent.parent
     recipes_dir = repo_root / "preprocessed" / "naine50pluss_ee"
 
