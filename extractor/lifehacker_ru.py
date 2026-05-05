@@ -28,9 +28,41 @@ from extractor.base import BaseRecipeExtractor, process_directory
 
 logger = logging.getLogger(__name__)
 
+# Regex pattern for parsing ingredient amount strings:
+# Matches integers, decimals, ranges (e.g. "2–3", "800–900"), and Unicode fractions (½, ¼, etc.)
+_INGREDIENT_AMOUNT_RE = re.compile(
+    r'^('
+    r'[\d]+(?:[.,]\d+)?'                    # integer or decimal
+    r'(?:\s*[–—\-]\s*[\d]+(?:[.,]\d+)?)?'  # optional range (en-dash, em-dash, or hyphen)
+    r'|[½¼¾⅓⅔⅛⅜⅝⅞]'                        # single unicode fraction
+    r')\s*(.*)',
+    re.UNICODE,
+)
+
 
 class LifehackerRuExtractor(BaseRecipeExtractor):
     """Экстрактор для lifehacker.ru"""
+
+    def __init__(self, html_path: str) -> None:
+        super().__init__(html_path)
+        self._cached_steps_notes: Optional[tuple] = None
+
+    @staticmethod
+    def _extract_direct_text(name_el) -> str:
+        """
+        Извлекает только прямой текстовый контент элемента, игнорируя вложенные <p>-теги.
+
+        На lifehacker.ru элементы base-list__item-name могут содержать вложенный <p>
+        с описанием (например, "(требуется ваше участие)" в секции времени).
+        Для ингредиентов нужен только прямой текст — название компонента.
+        """
+        parts = [
+            child.get_text(strip=True) if hasattr(child, 'get_text')
+            else str(child).strip()
+            for child in name_el.children
+            if not (hasattr(child, 'name') and child.name == 'p')
+        ]
+        return ' '.join(t for t in parts if t)
 
     def _get_recipe_jsonld(self) -> Optional[dict]:
         """Получение данных рецепта из JSON-LD (тип Recipe)"""
@@ -161,14 +193,7 @@ class LifehackerRuExtractor(BaseRecipeExtractor):
             return count_str, None
 
         # Числовой паттерн: целое / диапазон с en-dash или дефисом / Unicode дробь
-        amount_re = (
-            r'^('
-            r'[\d]+(?:[.,]\d+)?'                      # integer or decimal
-            r'(?:\s*[–—\-]\s*[\d]+(?:[.,]\d+)?)?'    # optional range
-            r'|[½¼¾⅓⅔⅛⅜⅝⅞]'                          # single unicode fraction
-            r')\s*(.*)'
-        )
-        m = re.match(amount_re, count_str, re.UNICODE)
+        m = _INGREDIENT_AMOUNT_RE.match(count_str)
         if m:
             amount = m.group(1).strip()
             unit = m.group(2).strip() or None
@@ -248,14 +273,8 @@ class LifehackerRuExtractor(BaseRecipeExtractor):
                 if not name_el:
                     continue
 
-                # Используем только прямые текстовые узлы name_el (не вложенные теги)
-                direct_texts = [
-                    child.get_text(strip=True) if hasattr(child, 'get_text')
-                    else str(child).strip()
-                    for child in name_el.children
-                    if not (hasattr(child, 'name') and child.name == 'p')
-                ]
-                name = self.clean_text(' '.join(t for t in direct_texts if t))
+                # Используем только прямые текстовые узлы name_el (не вложенные <p>-теги)
+                name = self.clean_text(self._extract_direct_text(name_el))
 
                 amount = None
                 unit = None
@@ -315,7 +334,7 @@ class LifehackerRuExtractor(BaseRecipeExtractor):
         Returns:
             (steps: list[str], notes: list[str])
         """
-        if hasattr(self, '_cached_steps_notes'):
+        if self._cached_steps_notes is not None:
             return self._cached_steps_notes
 
         steps = []
@@ -496,8 +515,8 @@ class LifehackerRuExtractor(BaseRecipeExtractor):
 
     def extract_image_urls(self) -> Optional[str]:
         """Извлечение URL изображений рецепта"""
-        urls = []
-        seen: set = set()
+        urls: list[str] = []
+        seen: set[str] = set()
 
         def add_url(url: Optional[str]) -> None:
             if url and url.startswith('http') and url not in seen:
