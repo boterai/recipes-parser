@@ -7,7 +7,7 @@ import logging
 import re
 import sys
 from pathlib import Path
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Set
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
@@ -359,7 +359,7 @@ class LtUsefulfooddrinksComExtractor(BaseRecipeExtractor):
             else:
                 # Multi-variant article: collect from ALL ULs, deduplicate by name
                 all_ingredients = self._extract_ingredients_from_section(elements)
-                seen_names: set = set()
+                seen_names: Set[str] = set()
                 ingredients: List[Dict[str, Any]] = []
                 for ing in all_ingredients:
                     norm = ing['name'].lower().strip()
@@ -428,7 +428,7 @@ class LtUsefulfooddrinksComExtractor(BaseRecipeExtractor):
                         ):
                             steps.append(clean)
                     elif ul_passed and elem.name in ('h2', 'h3'):
-                        break
+                        break  # Left the recipe section
 
             return '\n'.join(steps) if steps else None
 
