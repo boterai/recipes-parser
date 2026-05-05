@@ -295,7 +295,7 @@ class FarmarskacestaExtractor(BaseRecipeExtractor):
                 ul = h2.find_next_sibling('ul')
                 if ul:
                     for li in ul.find_all('li'):
-                        text = self.clean_text(li.get_text(separator=' ', strip=True))
+                        text = self.clean_text(li.get_text(separator=' '))
                         if text:
                             parsed = self._parse_ingredient_line(text)
                             if parsed:
@@ -453,12 +453,12 @@ class FarmarskacestaExtractor(BaseRecipeExtractor):
         except Exception:
             logger.exception('Error extracting category from %s', self.html_path)
 
-        # Fallback: breadcrumb second link
+        # Fallback: breadcrumb second link (position 1, after Home)
         breadcrumb = self.soup.find('nav', id='breadcrumb')
         if breadcrumb:
             links = breadcrumb.find_all('a')
             if len(links) >= 2:
-                return self.clean_text(links[-1].get_text())
+                return self.clean_text(links[1].get_text())
 
         return None
 
