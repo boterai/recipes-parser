@@ -52,7 +52,8 @@ _UNITS_PAT = "(?:" + "|".join(re.escape(u) for u in _ROMANIAN_UNITS) + ")"
 _RE_NUM_UNIT_NAME = re.compile(
     rf"^([\d.,/\-]+)\s*({_UNITS_PAT})\s+(.+)$", re.IGNORECASE
 )
-# "(number unit)" at end: "apa (5-6 l)"
+# Minimum prep time in minutes to avoid filtering incidental mentions
+_MIN_PREP_TIME_MINUTES = 5
 _RE_PAREN_NUM_UNIT = re.compile(
     rf"^([\d.,/\-]+)\s*({_UNITS_PAT})$", re.IGNORECASE
 )
@@ -109,12 +110,21 @@ class PreparatecusufletbyadaBlogspotComExtractor(BaseRecipeExtractor):
     def _split_sections(self) -> Tuple[List[str], List[str]]:
         """Split post-body text nodes into ingredient and instruction sections.
 
+        Layout of text nodes (representative example):
+            0: "Ingrediente:"           ← ingredient section header
+            1: "Ingrediente aluat:"     ← sub-header (skipped during parsing)
+            2…N: ingredient items
+            N+1: "Mod de preparare"     ← prep_header_idx
+            N+2…M: instruction items
+            M+1: "Poftă bună!"          ← end_idx
+
         Returns:
             (ingredient_nodes, instruction_nodes)
         """
         nodes = self._get_text_nodes()
 
         ingredient_start = -1
+        prep_header_idx = -1  # index of the "Mod de preparare" line itself
         instruction_start = -1
         end_idx = len(nodes)
 
@@ -131,6 +141,7 @@ class PreparatecusufletbyadaBlogspotComExtractor(BaseRecipeExtractor):
             if re.match(
                 r"^mod\s+de\s+preparare\s*[:\.\s]*$", tl, re.IGNORECASE
             ):
+                prep_header_idx = i
                 instruction_start = i + 1
                 continue
 
@@ -141,10 +152,14 @@ class PreparatecusufletbyadaBlogspotComExtractor(BaseRecipeExtractor):
 
         if ingredient_start == -1:
             ingredient_start = 0
+
+        # Slice up to the "Mod de preparare" header (exclusive) when found,
+        # otherwise include everything up to the end marker.
+        ing_end = prep_header_idx if prep_header_idx >= 0 else end_idx
+        ingredient_nodes = nodes[ingredient_start:ing_end]
+
         if instruction_start == -1:
             instruction_start = end_idx
-
-        ingredient_nodes = nodes[ingredient_start : instruction_start - 1]
         instruction_nodes = nodes[instruction_start:end_idx]
         return ingredient_nodes, instruction_nodes
 
@@ -328,7 +343,7 @@ class PreparatecusufletbyadaBlogspotComExtractor(BaseRecipeExtractor):
         for m in re.finditer(r"\b([\d]+)\s+minute\b", text, re.IGNORECASE):
             if not _in_oven_context(m.start()):
                 val = int(m.group(1))
-                if val >= 5:  # ignore very short incidental mentions
+                if val >= _MIN_PREP_TIME_MINUTES:  # ignore very short incidental mentions
                     candidates.append((val, m.group(1)))
 
         if not candidates:
@@ -469,11 +484,11 @@ class PreparatecusufletbyadaBlogspotComExtractor(BaseRecipeExtractor):
                 if src and src not in urls:
                     urls.append(src)
 
-        seen: set = set()
+        seen_urls: set = set()
         unique: List[str] = []
         for url in urls:
-            if url and url not in seen:
-                seen.add(url)
+            if url and url not in seen_urls:
+                seen_urls.add(url)
                 unique.append(url)
 
         return ",".join(unique) if unique else None
