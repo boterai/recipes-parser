@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 import json
 import re
-from typing import Optional, List
+from typing import Optional, List, Set
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractor.base import BaseRecipeExtractor, process_directory
@@ -56,10 +56,39 @@ class LaruedessaveursExtractor(BaseRecipeExtractor):
     )
 
     # Non-food words to filter out of prose-extracted ingredient names
-    _NON_FOOD_NAMES = frozenset([
+    _NON_FOOD_NAMES: frozenset = frozenset([
         'pouces', 'cm', 'mm', 'minutes', 'secondes', 'heures', 'degrés',
-        'fois', 'peu', 'environ', 'environ', 'moitié', 'quart', 'tiers',
+        'fois', 'peu', 'environ', 'moitié', 'quart', 'tiers',
     ])
+
+    # Compiled regex patterns for prose ingredient extraction (built from class attrs above)
+    # These are defined after the string attrs they depend on, using a classmethod/property
+    # approach is overkill; we compile them once at import time as a class attribute.
+    @classmethod
+    def _build_prose_patterns(cls):
+        """Возвращает скомпилированные regex-паттерны для прозаического парсинга."""
+        _name_chars = r"A-Za-zÀ-ÿœæ\s\d'\u2019\u2018\-"
+        _name_pat = r'[A-Za-zÀ-ÿœæ][' + _name_chars + r']*?'
+        ingr_unit = re.compile(
+            r'(?<![A-Za-zÀ-ÿœæ])'
+            r'((?:\d+\s+)?\d+(?:[,./]\d+)?)\s*'
+            r'(' + cls._FRENCH_UNITS + r')(?!\w)\s*'
+            r"(?:de?\s+|d['\u2019\u2018]\s*)?"
+            + cls._NAME_ANTI_START
+            + r'(' + _name_pat + r')'
+            + cls._NAME_STOP,
+            re.IGNORECASE
+        )
+        ingr_no_unit = re.compile(
+            r'(?<![A-Za-zÀ-ÿœæ/])'
+            r'((?:\d+\s+)?\d+(?:[,./]\d+)?)\s+'
+            r'(?!' + cls._FRENCH_UNITS + r')'
+            + cls._NAME_ANTI_START
+            + r'(' + _name_pat + r')'
+            + cls._NAME_STOP,
+            re.IGNORECASE
+        )
+        return ingr_unit, ingr_no_unit
 
     def _get_yoast_article_data(self) -> Optional[dict]:
         """Извлечение Article-блока из Yoast JSON-LD"""
@@ -254,30 +283,7 @@ class LaruedessaveursExtractor(BaseRecipeExtractor):
         Извлекает ингредиенты из прозаических параграфов (пошаговые инструкции).
         Используется, когда на странице нет структурированного блока ингредиентов.
         """
-        # Compile patterns lazily using class constants
-        # Include typographic apostrophes (U+2019 ' and U+2018 ') in name char class
-        _name_chars = r"A-Za-zÀ-ÿœæ\s\d'\u2019\u2018\-"
-        # First char must be a letter (prevents space-bypassing the anti-start lookahead)
-        _name_pat = r'[A-Za-zÀ-ÿœæ][' + _name_chars + r']*?'
-        ingr_unit_pat = re.compile(
-            r'(?<![A-Za-zÀ-ÿœæ])'
-            r'((?:\d+\s+)?\d+(?:[,./]\d+)?)\s*'
-            r'(' + self._FRENCH_UNITS + r')(?!\w)\s*'
-            r"(?:de?\s+|d['\u2019\u2018]\s*)?"
-            + self._NAME_ANTI_START
-            + r'(' + _name_pat + r')'
-            + self._NAME_STOP,
-            re.IGNORECASE
-        )
-        ingr_no_unit_pat = re.compile(
-            r'(?<![A-Za-zÀ-ÿœæ/])'
-            r'((?:\d+\s+)?\d+(?:[,./]\d+)?)\s+'
-            r'(?!' + self._FRENCH_UNITS + r')'
-            + self._NAME_ANTI_START
-            + r'(' + _name_pat + r')'
-            + self._NAME_STOP,
-            re.IGNORECASE
-        )
+        ingr_unit_pat, ingr_no_unit_pat = self._build_prose_patterns()
 
         # Collect step paragraphs from the step-by-step section
         paragraphs = self._get_step_paragraphs()
@@ -292,7 +298,7 @@ class LaruedessaveursExtractor(BaseRecipeExtractor):
                 ]
 
         ingredients: List[dict] = []
-        seen_names: set = set()
+        seen_names: Set[str] = set()
 
         for para in paragraphs:
             # Normalise fractions and decimal comma
