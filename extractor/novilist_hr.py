@@ -428,8 +428,23 @@ class NovilistHrExtractor(BaseRecipeExtractor):
 
                 if tag.name == 'p':
                     text = self.clean_text(tag.get_text(separator=' ', strip=True))
-                    if text:
-                        paragraphs.append(text)
+                    if not text:
+                        continue
+                    # Skip descriptive/explanatory paragraphs that are not
+                    # instructions (e.g. "X sastoji se od Y" = "X consists of Y").
+                    if re.search(
+                        r'\b(?:se\s+(?:sastoji|radi)|(?:sastoji|radi)\s+se)\s+od\b',
+                        text,
+                        re.IGNORECASE,
+                    ):
+                        continue
+                    # Strip the "Za pripremu " (For preparation) lead-in phrase
+                    # that sometimes precedes the first actual instruction step,
+                    # then capitalize the resulting first character.
+                    stripped = re.sub(r'^Za\s+pripremu\s+', '', text, flags=re.IGNORECASE)
+                    if stripped != text:
+                        stripped = stripped[:1].upper() + stripped[1:]
+                    paragraphs.append(stripped)
 
             return ' '.join(paragraphs) if paragraphs else None
 
