@@ -65,6 +65,30 @@ class LesBonnesPatesFrExtractor(BaseRecipeExtractor):
     # Минимальная длина текста (символов), чтобы считаться значимым фрагментом
     _MIN_TEXT_LENGTH = 20
 
+    # Допустимые границы длины имени ингредиента (символов)
+    _MIN_INGREDIENT_NAME_LEN = 2   # «ай» / «sel»
+    _MAX_INGREDIENT_NAME_LEN = 60  # «pâtes longues (spaghettis ou linguines)»
+
+    # Минимальная длина абзаца-инструкции — длиннее _MIN_TEXT_LENGTH,
+    # чтобы фильтровать однословные глагольные предложения
+    _MIN_INSTRUCTION_PARA_LENGTH = 40
+
+    # Глаголы кулинарного действия (используется для выявления параграфов-инструкций)
+    # Примечания по дизайну:
+    #   • saute(?:[rz]\w*)?\b — соответствует «saute», «sauter», «sautez», но НЕ «sauté»
+    #     (поскольку «é» — символ Unicode и не входит в [rz], а также образует
+    #     границу слова после «saute» только если следующий символ не является словесным)
+    #   • cuis(?:ez|ent|ons|iez)\b — только спряжённые формы «cuire»; исключает
+    #     «cuisine» (кухня) и «cuisson» (время готовки)
+    _COOKING_ACTION_RE = re.compile(
+        r"\b(?:rinc|plonge|égoutt|mélange|verse|incorpore|ajoute|assaisonn|porte|préchauff|bouill)\w*\b"
+        r"|\bsaute(?:[rz]\w*)?\b"
+        r"|\bfais\s+(?:chauffer|sauter|revenir|cuire|bouillir)\b"
+        r"|\bfaites\s+\w+\b"
+        r"|\bcuire\b|\bcuis(?:ez|ent|ons|iez)\b",
+        re.IGNORECASE,
+    )
+
     def _get_entry_content(self):
         """Возвращает основной контейнер содержимого .entry-content"""
         return self.soup.find("div", class_="entry-content")
@@ -92,6 +116,131 @@ class LesBonnesPatesFrExtractor(BaseRecipeExtractor):
                     return  # следующий h2 завершает секцию
             elif in_section:
                 yield el
+
+    def _get_first_para_before_h3(self, entry, h2_keywords: List[str]) -> Optional[str]:
+        """
+        Возвращает текст первого элемента <p> в разделе h2 (до появления первого h3).
+
+        Используется для извлечения вводного абзаца раздела, который часто содержит
+        ключевые ингредиенты или краткое изложение инструкций.
+        """
+        h3_seen = False
+        for el in self._iter_section(entry, h2_keywords):
+            if el.name == "h3":
+                h3_seen = True
+            elif el.name == "p" and not h3_seen:
+                text = el.get_text(separator=" ", strip=True)
+                if text:
+                    return self.clean_text(text)
+        return None
+
+    def _extract_prose_ingredients_from_text(self, text: str) -> List[dict]:
+        """
+        Извлекает упоминания ингредиентов из прозаического французского текста.
+
+        Применяет четыре паттерна:
+          1. «comme des/les X, Y et Z»
+          2. «Opte pour des X comme les Y ou les Z» → «X (Y ou Z)»
+          3. «avec de l'/du/des/quelques X[, Y et Z]»
+          4. «Privilégie l'X et de l'Y»
+        """
+
+        def _split_and_clean(items_text: str) -> List[str]:
+            """Разбивает перечень «X, Y et Z» и очищает артикли."""
+            parts = re.split(r",\s*|\s+et\s+|\s+ou\s+", items_text)
+            cleaned = []
+            for p in parts:
+                p = p.strip()
+                # Убираем ведущие «et »/«ou » (остаток после «, et» разбивки)
+                p = re.sub(r"^(?:et|ou)\s+", "", p, flags=re.IGNORECASE)
+                # Убираем неопределённые артикли / предлоги
+                p = re.sub(
+                    r"^(?:des?\s+|les?\s+|l[\u2019\u2018]?\s*|de\s+la\s+"
+                    r"|du\s+|d[\u2019\u2018]\s*|quelques\s+"
+                    r"|un\s+peu\s+de\s+|un\s+filet\s+de\s+|une\s+\w+\s+de\s+)",
+                    "",
+                    p,
+                    flags=re.IGNORECASE,
+                )
+                # Убираем хвостовую фразу «pour ...» / «afin de ...»
+                p = re.sub(
+                    r"\s+(?:pour|afin\s+de|afin\s+d[\u2019])\s+.+$",
+                    "",
+                    p,
+                    flags=re.IGNORECASE,
+                )
+                p = p.strip().rstrip(".,;()")
+                if self._MIN_INGREDIENT_NAME_LEN < len(p) < self._MAX_INGREDIENT_NAME_LEN:
+                    cleaned.append(p)
+            return cleaned
+
+        found: List[str] = []
+
+        # Паттерн 1: «comme des/les/le X, Y et Z»
+        for m in re.finditer(
+            r"comme\s+(?:des?\s*|les?\s*|l[\u2019\u2018]?\s*)([^.]+?)(?:\.|$)",
+            text,
+            re.IGNORECASE,
+        ):
+            found.extend(_split_and_clean(m.group(1)))
+
+        # Паттерн 2: «Opte pour des X [comme les Y ou les Z]» → «X (Y ou Z)»
+        for m in re.finditer(
+            r"[Oo]pte\s+pour\s+(?:des?\s*|les?\s*)(.+?)(?:\.|$)",
+            text,
+            re.IGNORECASE,
+        ):
+            raw = m.group(1).strip().rstrip(".,;")
+            like_m = re.search(
+                r"^(.+?)\s+comme\s+(?:les?\s*|des?\s*)(.+)", raw, re.IGNORECASE
+            )
+            if like_m:
+                main_part = like_m.group(1).strip().rstrip(",")
+                specs = re.sub(
+                    r"\s*(les?\s+|des?\s+)", " ", like_m.group(2)
+                ).strip().rstrip(".,;")
+                found.append(f"{main_part} ({specs})")
+            else:
+                item = re.sub(
+                    r"^(?:des?\s+|les?\s+|l[\u2019]?\s*)", "", raw, flags=re.IGNORECASE
+                )
+                if self._MIN_INGREDIENT_NAME_LEN < len(item.strip()) < self._MAX_INGREDIENT_NAME_LEN:
+                    found.append(item.strip())
+
+        # Паттерн 3: «avec de l'/du/des/quelques X[, Y et Z]»
+        for m in re.finditer(
+            r"\bavec\s+(?:de\s+(?:l[\u2019\u2018]\s*|la\s+|les?\s+)"
+            r"|du\s+|des?\s+|l[\u2019\u2018]\s*|quelques\s+|un\s+filet\s+de\s+)"
+            r"([^.]+?)(?:\.|$)",
+            text,
+            re.IGNORECASE,
+        ):
+            found.extend(_split_and_clean(m.group(1)))
+
+        # Паттерн 4: «Privilégie l'X et de l'Y»
+        for m in re.finditer(
+            r"[Pp]rivilégi\w+\s+(?:l[\u2019\u2018]|les?\s+|des?\s+|du\s+)"
+            r"([^.]+?)(?:\s+pour\s+|\.|$)",
+            text,
+            re.IGNORECASE,
+        ):
+            items_text = m.group(1)
+            items = re.split(
+                r"\s+et\s+(?:(?:de\s+)?(?:l[\u2019\u2018]|les?\s+|des?\s+|du\s+))?",
+                items_text,
+            )
+            for item in items:
+                item = re.sub(
+                    r"^(?:des?\s+|les?\s+|l[\u2019]?\s*|de\s+la\s+|du\s+)",
+                    "",
+                    item.strip(),
+                    flags=re.IGNORECASE,
+                )
+                item = item.strip().rstrip(".,;")
+                if self._MIN_INGREDIENT_NAME_LEN < len(item) < self._MAX_INGREDIENT_NAME_LEN:
+                    found.append(item)
+
+        return [{"name": item, "amount": None, "unit": None} for item in found]
 
     def _clean_ingredient_text(self, text: str) -> str:
         """
@@ -289,7 +438,13 @@ class LesBonnesPatesFrExtractor(BaseRecipeExtractor):
 
     def extract_ingredients(self) -> Optional[str]:
         """
-        Извлечение ингредиентов из первого UL в разделе h2 «ingrédient».
+        Извлечение ингредиентов из раздела h2 «ingrédient».
+
+        Стратегия (три прохода):
+          1. Структурированные UL/OL из раздела «ingrédient».
+          2. Прозаические паттерны из вводного абзаца раздела «ingrédient».
+          3. Прозаические паттерны из первых абзацев разделов «cuisson des» и «assemblage»
+             — для захвата приправ и трав, упомянутых в шагах готовки.
 
         Возвращает JSON-строку со списком словарей {"name", "amount", "unit"}.
         """
@@ -301,10 +456,17 @@ class LesBonnesPatesFrExtractor(BaseRecipeExtractor):
         ingredients: list = []
         seen_names: set = set()
 
+        def _add(ingr_dict: dict) -> None:
+            key = ingr_dict["name"].lower().strip()
+            if key and key not in seen_names:
+                seen_names.add(key)
+                ingredients.append(ingr_dict)
+
+        # 1. Структурированные списки из раздела «ingrédient»
         for el in self._iter_section(entry, ["ingrédient", "ingredient"]):
             if el.name not in ("ul", "ol"):
                 continue
-            # Используем первый список; пропускаем OL-«замены/варианты» под h3 с ними
+            # Пропускаем OL-«замены/варианты» под h3 с ними
             parent_h3 = el.find_previous_sibling("h3")
             if parent_h3:
                 h3_text = parent_h3.get_text(strip=True).lower()
@@ -318,11 +480,21 @@ class LesBonnesPatesFrExtractor(BaseRecipeExtractor):
                 raw = li.get_text(separator=" ", strip=True)
                 parsed = self._parse_ingredient_french(raw)
                 if parsed:
-                    # Дедупликация по нормализованному имени
-                    key = parsed["name"].lower().strip()
-                    if key not in seen_names:
-                        seen_names.add(key)
-                        ingredients.append(parsed)
+                    _add(parsed)
+
+        # 2. Прозаические паттерны из вводного абзаца раздела «ingrédient»
+        ingr_intro = self._get_first_para_before_h3(entry, ["ingrédient", "ingredient"])
+        if ingr_intro:
+            for ingr in self._extract_prose_ingredients_from_text(ingr_intro):
+                _add(ingr)
+
+        # 3. Прозаические паттерны из первых абзацев разделов готовки
+        #    (перехватывает приправы / зелень, упоминаемые в кулинарных инструкциях)
+        for cooking_kw in (["cuisson des"], ["assemblage"]):
+            para = self._get_first_para_before_h3(entry, cooking_kw)
+            if para:
+                for ingr in self._extract_prose_ingredients_from_text(para):
+                    _add(ingr)
 
         if not ingredients:
             logger.warning("les-bonnes-pates: no ingredients found")
@@ -335,8 +507,10 @@ class LesBonnesPatesFrExtractor(BaseRecipeExtractor):
         Извлечение инструкций приготовления.
 
         Сканирует h2-разделы «préparation»/«étapes»/«cuisson»/«assemblage».
-        Предпочитает OL (нумерованные шаги), исключая OL под h3 «astuce»/«conseil».
-        При отсутствии OL использует первый UL из раздела «préparation».
+        Собирает:
+          - параграфы с кулинарными глаголами (prose-шаги из разделов без OL);
+          - OL-элементы из не-исключённых h3-подразделов.
+        При полном отсутствии контента — используется первый UL из раздела «préparation».
         """
         entry = self._get_entry_content()
         if not entry:
@@ -347,11 +521,13 @@ class LesBonnesPatesFrExtractor(BaseRecipeExtractor):
         step_h2_keywords = [
             "préparation", "étapes", "etapes", "cuisson", "assemblage", "technique"
         ]
-        # h3, под которыми OL содержат советы/варианты, а не шаги рецепта
+        # h3, под которыми OL/P содержат советы/варианты, а не шаги рецепта
         exclude_h3_keywords = [
-            "astuce", "conseil", "option", "substitution", "variante", "gagner"
+            "astuce", "conseil", "option", "substitution", "variante", "gagner",
+            "présentation", "personnelle", "herbe", "épice", "nutritionnel",
         ]
 
+        para_steps: list = []  # параграфы с кулинарными глаголами (в порядке документа)
         ol_items: list = []
         ul_first: list = []
         current_h2: Optional[str] = None
@@ -375,6 +551,10 @@ class LesBonnesPatesFrExtractor(BaseRecipeExtractor):
             if not in_step_section:
                 continue
 
+            is_excluded_h3 = current_h3 and any(
+                kw in current_h3 for kw in exclude_h3_keywords
+            )
+
             if el.name == "ul" and not ul_first:
                 ul_first = [
                     self.clean_text(li.get_text(separator=" ", strip=True))
@@ -384,15 +564,23 @@ class LesBonnesPatesFrExtractor(BaseRecipeExtractor):
 
             elif el.name == "ol":
                 # Пропускаем OL под заголовком h3 с советами/вариантами
-                if current_h3 and any(kw in current_h3 for kw in exclude_h3_keywords):
+                if is_excluded_h3:
                     continue
                 for li in el.find_all("li"):
                     text = self.clean_text(li.get_text(separator=" ", strip=True))
                     if text:
                         ol_items.append(text)
 
-        # Предпочитаем OL (нумерованные шаги); при их отсутствии берём первый UL
-        steps = ol_items if ol_items else ul_first
+            elif el.name == "p" and not is_excluded_h3:
+                # Включаем параграф, если он содержит кулинарные глаголы действия
+                text = self.clean_text(el.get_text(separator=" ", strip=True))
+                if text and len(text) > self._MIN_INSTRUCTION_PARA_LENGTH and self._COOKING_ACTION_RE.search(text):
+                    para_steps.append(text)
+
+        # Объединяем: prose-шаги + OL. Если ничего нет — fallback на первый UL
+        steps = para_steps + ol_items
+        if not steps:
+            steps = ul_first
 
         if not steps:
             logger.warning("les-bonnes-pates: no instructions found")
