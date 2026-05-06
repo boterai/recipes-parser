@@ -70,7 +70,10 @@ _COOKING_VERB_RE = re.compile(
     re.IGNORECASE,
 )
 
-# Patterns that end an ingredient object extracted from a narrative line
+# Patterns that end an ingredient object extracted from a narrative line.
+# "انا" is intentionally included: in colloquial Arabic cooking narratives it marks
+# a first-person sub-step ("بصل مقلي انا اضيف له ملح" = "fried onion, then I add salt")
+# so everything from "انا" onward is a new action, not part of the ingredient.
 _OBJ_CUT_RE = re.compile(
     r'\s+(?:واترك[ه]?|ويترك|ويقلى|ويقلب|ويقدم|حتى\s|على\s+النار|'
     r'تقريبا|ثم\s|ونقلب|وبعد\s|ولما\s|انا(?:\s|$)|تالي\s|واصفيه|ولحين)',
@@ -476,7 +479,7 @@ class EncyclopediacookingComExtractor(BaseRecipeExtractor):
                     candidates.extend(self._split_ingredient_list(obj_str))
 
         # Deduplicate while preserving order; skip very short tokens
-        seen: set = set()
+        seen: Set[str] = set()
         result: List[str] = []
         for item in candidates:
             item = item.strip()
@@ -504,9 +507,10 @@ class EncyclopediacookingComExtractor(BaseRecipeExtractor):
             part = part.strip()
             if not part:
                 continue
-            # Try splitting on ' و ' (with spaces on both sides)
-            # Split on Arabic conjunction و: it's written without a following space
-            # (e.g. "ملح وفلفل" → و is attached to فلفل). Use lookahead for non-space.
+            # Split on Arabic conjunction و: in Arabic script و is written directly
+            # attached to the following word without a space (e.g. "ملح وفلفل" has
+            # space before و but و is directly prepended to فلفل). The lookahead
+            # (?=\S) confirms و is attached to the next word (no space after it).
             sub_parts = re.split(r'\s+و(?=\S)', part)
             if len(sub_parts) > 1 and all(len(sp.strip()) <= 50 for sp in sub_parts):
                 result.extend(sp.strip() for sp in sub_parts if sp.strip())
