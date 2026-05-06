@@ -288,6 +288,35 @@ class DagbogfrajapanBlogspotComExtractor(BaseRecipeExtractor):
                 seen_names.add(name_key)
                 items.append({'name': name, 'amount': amount, 'unit': unit})
 
+        # Additional flat-page patterns for ingredients without standard amount+unit format.
+
+        # Pattern: "skal af NUMBER appelsin[er]?" → appelsinskal, N, stk
+        # Danish idiom for orange/lemon zest: "revne skal af 1 appelsin"
+        skal_re = re.compile(
+            r'\bskal\s+af\s+(\d+)\s+([A-Za-zæøåÆØÅ]+)',
+            re.IGNORECASE,
+        )
+        for m in skal_re.finditer(body_text):
+            amount, fruit = m.group(1), m.group(2).lower()
+            name = fruit + 'skal'
+            name_key = name.lower()
+            if name_key not in seen_names:
+                seen_names.add(name_key)
+                items.append({'name': name, 'amount': amount, 'unit': 'stk'})
+
+        # Pattern: action verb + "med INGREDIENT" for items used without a quantity
+        # e.g. "Pensel med æggehvider", "drys med tesukker"
+        action_med_re = re.compile(
+            r'\b(?:pensel?|drys|strø|dryp|bestøv|overhæld|vend|bland|dæk)\s+med\s+([A-Za-zæøåÆØÅ][A-Za-zæøåÆØÅ-]*)',
+            re.IGNORECASE,
+        )
+        for m in action_med_re.finditer(body_text):
+            name = m.group(1).strip()
+            name_key = name.lower()
+            if name_key not in seen_names and len(name) >= 3:
+                seen_names.add(name_key)
+                items.append({'name': name, 'amount': None, 'unit': None})
+
         if items:
             return json.dumps(items, ensure_ascii=False)
 
