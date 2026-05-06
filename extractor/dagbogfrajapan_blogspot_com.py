@@ -290,28 +290,36 @@ class DagbogfrajapanBlogspotComExtractor(BaseRecipeExtractor):
 
         # Additional flat-page patterns for ingredients without standard amount+unit format.
 
-        # Pattern: "skal af NUMBER appelsin[er]?" → appelsinskal, N, stk
-        # Danish idiom for orange/lemon zest: "revne skal af 1 appelsin"
+        # Pattern: "skal af NUMBER FRUIT_WORDS" → FRUITskal, N, stk
+        # Danish idiom for citrus zest: "revne skal af 1 appelsin"
+        # Captures multi-word fruit names (e.g., "grøn citron").
         skal_re = re.compile(
-            r'\bskal\s+af\s+(\d+)\s+([A-Za-zæøåÆØÅ]+)',
+            r'\bskal\s+af\s+(\d+)\s+([A-Za-zæøåÆØÅ][A-Za-zæøåÆØÅ\s-]*?)(?=\s+(?:og|med|i|til|,|\.|$))',
             re.IGNORECASE,
         )
         for m in skal_re.finditer(body_text):
-            amount, fruit = m.group(1), m.group(2).lower()
+            amount = m.group(1)
+            fruit = re.sub(r'\s+', ' ', m.group(2)).strip().lower()
+            # Strip leading/trailing conjunction leftovers
+            fruit = re.sub(r'\s+(?:og|med|i|til)$', '', fruit).strip()
+            if not fruit:
+                continue
             name = fruit + 'skal'
             name_key = name.lower()
             if name_key not in seen_names:
                 seen_names.add(name_key)
                 items.append({'name': name, 'amount': amount, 'unit': 'stk'})
 
-        # Pattern: action verb + "med INGREDIENT" for items used without a quantity
-        # e.g. "Pensel med æggehvider", "drys med tesukker"
+        # Pattern: action verb + "med INGREDIENT" for items used without a quantity.
+        # e.g. "Pensel med æggehvider", "drys med tesukker", "bland med flydende honning".
+        # Captures multi-word ingredient names, stopping at conjunctions / punctuation.
         action_med_re = re.compile(
-            r'\b(?:pensel?|drys|strø|dryp|bestøv|overhæld|vend|bland|dæk)\s+med\s+([A-Za-zæøåÆØÅ][A-Za-zæøåÆØÅ-]*)',
+            r'\b(?:pensel?|drys|strø|dryp|bestøv|overhæld|vend|bland|dæk)\s+med\s+'
+            r'([A-Za-zæøåÆØÅ][A-Za-zæøåÆØÅ\s-]*?)(?=\s+og\b|\s*[,.;]|\s*$)',
             re.IGNORECASE,
         )
         for m in action_med_re.finditer(body_text):
-            name = m.group(1).strip()
+            name = re.sub(r'\s+', ' ', m.group(1)).strip()
             name_key = name.lower()
             if name_key not in seen_names and len(name) >= 3:
                 seen_names.add(name_key)
