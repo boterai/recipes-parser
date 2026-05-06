@@ -59,6 +59,24 @@ _NOTES_MARKERS = re.compile(
     re.IGNORECASE,
 )
 
+# Arabic cooking verbs that introduce ingredient objects in narrative text
+_COOKING_VERB_RE = re.compile(
+    r'(?:^|(?<=[\s،,]))'
+    r'(?:نسلق|نضيف|أضيفي|اضيف|ونضيف|يضاف|نحضر|نقطع|'
+    r'نتبلها?|ونتبلها?|نحمس|أحمس|اسلق|أسلق|احمس|نخلط|'
+    r'نرش|ونرش|احط|نصب|نقدم|وتقدم|نقدمه?\s+مع)'
+    r'(?:\s+(?:له\b|لها?\b))?'
+    r'\s+',
+    re.IGNORECASE,
+)
+
+# Patterns that end an ingredient object extracted from a narrative line
+_OBJ_CUT_RE = re.compile(
+    r'\s+(?:واترك[ه]?|ويترك|ويقلى|ويقلب|ويقدم|حتى\s|على\s+النار|'
+    r'تقريبا|ثم\s|ونقلب|وبعد\s|ولما\s|انا(?:\s|$)|تالي\s|واصفيه|ولحين)',
+    re.IGNORECASE,
+)
+
 
 class EncyclopediacookingComExtractor(BaseRecipeExtractor):
     """Экстрактор для encyclopediacooking.com"""
@@ -126,12 +144,13 @@ class EncyclopediacookingComExtractor(BaseRecipeExtractor):
         # Skip obvious section headers (no digits, ends with ':')
         if line.endswith(':'):
             return None
-        # Single Arabic word that ends in -ات (plural form) is likely a section header
-        # e.g. "البهارات", "الخضروات", "المكسرات" — but NOT "حبات", "ملاعق" etc.
+        # Single Arabic word with the definite article 'ال' + plural suffix '-ات'
+        # is likely a section header: "البهارات", "الخضروات", "المكسرات"
+        # BUT do NOT filter bare words like "بهارات" (spices) or "خضروات" (vegetables)
+        # which are valid ingredients.
         words = line.split()
         if len(words) == 1 and not any(ch.isdigit() for ch in line) \
-                and re.match(r'^[\u0600-\u06FF]+$', line) \
-                and len(line) >= 6 and line.endswith('ات') \
+                and re.match(r'^ال[\u0600-\u06FF]+ات$', line) \
                 and line not in _ARABIC_UNITS:
             return None
 
@@ -386,8 +405,8 @@ class EncyclopediacookingComExtractor(BaseRecipeExtractor):
     def _ingredients_b(self, b_tag) -> List[str]:
         """
         B-tag layout: lines between 'لعمل' and 'الطريقة' marker.
-        Usually returns empty list — ingredients in this layout are inline
-        in instructions narrative.
+        Falls back to extracting ingredients from the instruction narrative
+        when no explicit ingredient list is found.
         """
         text = b_tag.get_text()
         lines = self._split_lines(text)
@@ -400,15 +419,13 @@ class EncyclopediacookingComExtractor(BaseRecipeExtractor):
             # A line with 'لعمل' triggers ingredient section start
             m = re.search(r'لعمل\s', line)
             if m:
-                # If line ends with ':' the section IS the recipe start — no
-                # ingredient list follows; return nothing.
+                # If line ends with ':' there is no separate ingredient list
                 if line.rstrip().endswith(':') or line.rstrip().endswith('،'):
-                    return []
+                    break
                 in_section = True
                 continue
             if in_section:
                 if _INSTRUCTIONS_MARKERS.search(line) and len(line) < 40:
-                    # Reached explicit instruction header → stop collecting
                     break
                 # Lines that look like ingredient entries (short, no verb prefix)
                 if len(line) <= 80 and not re.match(
@@ -416,7 +433,87 @@ class EncyclopediacookingComExtractor(BaseRecipeExtractor):
                     line,
                 ):
                     result.append(line)
+
+        # Whenever no explicit ingredient list was found, fall back to narrative
+        if not result:
+            return self._extract_ingredients_from_b_narrative(b_tag)
         return result
+
+    def _extract_ingredients_from_b_narrative(self, b_tag) -> List[str]:
+        """
+        For b-layout pages where ingredients are embedded in instruction steps:
+        scan every line for Arabic cooking verbs and extract the objects that follow.
+        """
+        text = b_tag.get_text()
+        lines = self._split_lines(text)
+        candidates: List[str] = []
+
+        for line in lines:
+            line = self.clean_text(line)
+            if not line or len(line) < 3:
+                continue
+            # Skip notes / section headers
+            if _NOTES_MARKERS.search(line) and len(line) < 25:
+                continue
+
+            # Find ALL cooking verb occurrences in this line
+            verb_matches = list(_COOKING_VERB_RE.finditer(line))
+            if not verb_matches:
+                continue
+
+            for i, vm in enumerate(verb_matches):
+                obj_start = vm.end()
+                # Object ends at next verb occurrence or end of line
+                obj_end = verb_matches[i + 1].start() if i + 1 < len(verb_matches) else len(line)
+                obj_str = line[obj_start:obj_end].strip()
+
+                # Cut at stop markers (cooking modifiers that follow the ingredients)
+                stop_m = _OBJ_CUT_RE.search(obj_str)
+                if stop_m:
+                    obj_str = obj_str[:stop_m.start()].strip()
+
+                if obj_str:
+                    candidates.extend(self._split_ingredient_list(obj_str))
+
+        # Deduplicate while preserving order; skip very short tokens
+        seen: set = set()
+        result: List[str] = []
+        for item in candidates:
+            item = item.strip()
+            if not item or len(item) < 2:
+                continue
+            key = re.sub(r'\s+', ' ', item.lower())
+            if key not in seen:
+                seen.add(key)
+                result.append(item)
+        return result
+
+    @staticmethod
+    def _split_ingredient_list(text: str) -> List[str]:
+        """
+        Split a raw Arabic ingredient string on commas and the conjunction و.
+        Splits on و only when all resulting sub-parts are ≤ 50 chars, to avoid
+        splitting compound word phrases like 'وحده' (alone/one).
+        """
+        if not text or len(text) < 2:
+            return []
+        # Split on Arabic comma / Western comma first
+        comma_parts = re.split(r'[،,]\s*', text)
+        result: List[str] = []
+        for part in comma_parts:
+            part = part.strip()
+            if not part:
+                continue
+            # Try splitting on ' و ' (with spaces on both sides)
+            # Split on Arabic conjunction و: it's written without a following space
+            # (e.g. "ملح وفلفل" → و is attached to فلفل). Use lookahead for non-space.
+            sub_parts = re.split(r'\s+و(?=\S)', part)
+            if len(sub_parts) > 1 and all(len(sp.strip()) <= 50 for sp in sub_parts):
+                result.extend(sp.strip() for sp in sub_parts if sp.strip())
+            else:
+                result.append(part)
+        return [r for r in result if r and len(r) > 2]
+
 
     def _ingredients_p(self, p_tag) -> List[str]:
         """P-layout: lines prefixed with bullet char (•, ُ, ف020, etc.)."""
